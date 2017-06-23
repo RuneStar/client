@@ -3,9 +3,10 @@ package com.runesuite.client.base.access;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
 
 public interface XGraphicsProvider extends Accessor, XAbstractGraphicsProvider {
     @Field

@@ -3,9 +3,9 @@ package com.runesuite.client.base.access;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
-import org.jetbrains.annotations.NotNull;
-
+import java.lang.String;
 import java.lang.management.GarbageCollectorMXBean;
+import org.jetbrains.annotations.NotNull;
 
 public interface XClient extends Accessor, XGameShell {
     @Field
@@ -537,10 +537,10 @@ public interface XClient extends Accessor, XGameShell {
     void setWidgetYs(int[] value);
 
     @Field
-    XWidget[] getWidgets();
+    XWidget[][] getWidgets();
 
     @Field
-    void setWidgets(XWidget[] value);
+    void setWidgets(XWidget[][] value);
 
     @Field
     String getWorldHost();
