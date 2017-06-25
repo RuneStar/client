@@ -8,29 +8,48 @@ import java.awt.Graphics;
 import java.awt.Image;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XGraphicsProvider extends Accessor, XAbstractGraphicsProvider {
-    @Field
+    /**
+     *  field
+     */
     Component getComponent();
 
-    @Field
+    /**
+     *  field
+     */
     void setComponent(Component value);
 
-    @Field
+    /**
+     *  field
+     */
     Image getImage();
 
-    @Field
+    /**
+     *  field
+     */
     void setImage(Image value);
 
-    @Method
+    /**
+     * public final method
+     */
     void draw(int x, int y, int width, int height);
 
-    @Method
+    /**
+     * final method
+     */
     void draw0(Graphics graphics, int x, int y, int width, int height);
 
-    @Method
+    /**
+     * public final method
+     */
     void drawFull(int x, int y);
 
-    @Method
+    /**
+     * final method
+     */
     void drawFull0(Graphics graphics, int x, int y);
 
     final class draw {

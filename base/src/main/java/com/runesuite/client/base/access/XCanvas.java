@@ -7,17 +7,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
+/**
+ * public final class
+ */
 public interface XCanvas extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     Component getComponent();
 
-    @Field
+    /**
+     *  field
+     */
     void setComponent(Component value);
 
-    @Method
+    /**
+     * public final method
+     */
     void paint(Graphics g);
 
-    @Method
+    /**
+     * public final method
+     */
     void update(Graphics g);
 
     final class paint {

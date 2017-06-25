@@ -3,148 +3,247 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.lang.String;
 
+/**
+ * public class
+ */
 public interface XWidget extends Accessor, XNode {
-    @Field
+    /**
+     * public field
+     */
     int getChildIndex();
 
-    @Field
+    /**
+     * public field
+     */
     void setChildIndex(int value);
 
-    @Field
+    /**
+     * public field
+     */
     XWidget[] getChildren();
 
-    @Field
+    /**
+     * public field
+     */
     void setChildren(XWidget[] value);
 
-    @Field
+    /**
+     * public field
+     */
     int getCycle();
 
-    @Field
+    /**
+     * public field
+     */
     void setCycle(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getHeight();
 
-    @Field
+    /**
+     * public field
+     */
     void setHeight(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getId();
 
-    @Field
+    /**
+     * public field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getIndex();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndex(int value);
 
-    @Field
+    /**
+     * public field
+     */
     boolean getIsHidden();
 
-    @Field
+    /**
+     * public field
+     */
     void setIsHidden(boolean value);
 
-    @Field
+    /**
+     * public field
+     */
     int getItemId();
 
-    @Field
+    /**
+     * public field
+     */
     void setItemId(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getItemQuantity();
 
-    @Field
+    /**
+     * public field
+     */
     void setItemQuantity(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getPaddingX();
 
-    @Field
+    /**
+     * public field
+     */
     void setPaddingX(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getPaddingY();
 
-    @Field
+    /**
+     * public field
+     */
     void setPaddingY(int value);
 
-    @Field
+    /**
+     * public field
+     */
     XWidget getParent();
 
-    @Field
+    /**
+     * public field
+     */
     void setParent(XWidget value);
 
-    @Field
+    /**
+     * public field
+     */
     int getParentId();
 
-    @Field
+    /**
+     * public field
+     */
     void setParentId(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getScrollMax();
 
-    @Field
+    /**
+     * public field
+     */
     void setScrollMax(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getScrollX();
 
-    @Field
+    /**
+     * public field
+     */
     void setScrollX(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getScrollY();
 
-    @Field
+    /**
+     * public field
+     */
     void setScrollY(int value);
 
-    @Field
+    /**
+     * public field
+     */
     String getSpell();
 
-    @Field
+    /**
+     * public field
+     */
     void setSpell(String value);
 
-    @Field
+    /**
+     * public field
+     */
     String getText();
 
-    @Field
+    /**
+     * public field
+     */
     void setText(String value);
 
-    @Field
+    /**
+     * public field
+     */
     int getTextColor();
 
-    @Field
+    /**
+     * public field
+     */
     void setTextColor(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getTextureId();
 
-    @Field
+    /**
+     * public field
+     */
     void setTextureId(int value);
 
-    @Field
+    /**
+     * public field
+     */
     String getTooltip();
 
-    @Field
+    /**
+     * public field
+     */
     void setTooltip(String value);
 
-    @Field
+    /**
+     * public field
+     */
     int getWidth();
 
-    @Field
+    /**
+     * public field
+     */
     void setWidth(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getX();
 
-    @Field
+    /**
+     * public field
+     */
     void setX(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getY();
 
-    @Field
+    /**
+     * public field
+     */
     void setY(int value);
 }

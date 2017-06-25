@@ -6,86 +6,143 @@ import com.runesuite.client.base.MethodEvent;
 import java.lang.String;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public abstract class
+ */
 public interface XActor extends Accessor, XEntity {
-    @Field
+    /**
+     *  field
+     */
     int getAnimation();
 
-    @Field
+    /**
+     *  field
+     */
     void setAnimation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getAnimationDelay();
 
-    @Field
+    /**
+     *  field
+     */
     void setAnimationDelay(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XNodeDeque2 getHealthBars();
 
-    @Field
+    /**
+     *  field
+     */
     void setHealthBars(XNodeDeque2 value);
 
-    @Field
+    /**
+     *  field
+     */
     String getOverheadMessage();
 
-    @Field
+    /**
+     *  field
+     */
     void setOverheadMessage(String value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPathLength();
 
-    @Field
+    /**
+     *  field
+     */
     void setPathLength(int value);
 
-    @Field
+    /**
+     *  field
+     */
     byte[] getPathTraversed();
 
-    @Field
+    /**
+     *  field
+     */
     void setPathTraversed(byte[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getPathX();
 
-    @Field
+    /**
+     *  field
+     */
     void setPathX(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getPathY();
 
-    @Field
+    /**
+     *  field
+     */
     void setPathY(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int getRunAnimation();
 
-    @Field
+    /**
+     *  field
+     */
     void setRunAnimation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getStandAnimation();
 
-    @Field
+    /**
+     *  field
+     */
     void setStandAnimation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getTargetIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setTargetIndex(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getX();
 
-    @Field
+    /**
+     *  field
+     */
     void setX(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getY();
 
-    @Field
+    /**
+     *  field
+     */
     void setY(int value);
 
-    @Method
+    /**
+     *  method
+     */
     boolean isVisible();
 
     final class isVisible {

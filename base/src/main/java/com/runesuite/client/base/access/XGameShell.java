@@ -13,38 +13,63 @@ import java.awt.event.WindowListener;
 import java.lang.Runnable;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public abstract class
+ */
 public interface XGameShell extends Accessor, Runnable, FocusListener, WindowListener {
-    @Field
+    /**
+     *  field
+     */
     Canvas getCanvas();
 
-    @Field
+    /**
+     *  field
+     */
     void setCanvas(Canvas value);
 
-    @Field
+    /**
+     *  field
+     */
     Clipboard getClipboard();
 
-    @Field
+    /**
+     *  field
+     */
     void setClipboard(Clipboard value);
 
-    @Field
+    /**
+     * final field
+     */
     EventQueue getEventQueue();
 
-    @Field
+    /**
+     *  field
+     */
     Frame getFrame();
 
-    @Field
+    /**
+     *  field
+     */
     void setFrame(Frame value);
 
-    @Field
+    /**
+     *  field
+     */
     XMouseWheelHandler getMouseWheelHandler();
 
-    @Field
+    /**
+     *  field
+     */
     void setMouseWheelHandler(XMouseWheelHandler value);
 
-    @Method
+    /**
+     * public final synchronized method
+     */
     void paint(Graphics g);
 
-    @Method
+    /**
+     * public final method
+     */
     void update(Graphics g);
 
     final class paint {

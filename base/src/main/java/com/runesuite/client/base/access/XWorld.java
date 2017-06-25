@@ -3,46 +3,77 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.lang.String;
 
+/**
+ * public class
+ */
 public interface XWorld extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     String getActivity();
 
-    @Field
+    /**
+     *  field
+     */
     void setActivity(String value);
 
-    @Field
+    /**
+     *  field
+     */
     String getHost();
 
-    @Field
+    /**
+     *  field
+     */
     void setHost(String value);
 
-    @Field
+    /**
+     *  field
+     */
     int getId();
 
-    @Field
+    /**
+     *  field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setIndex(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getLocation();
 
-    @Field
+    /**
+     *  field
+     */
     void setLocation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPopulation();
 
-    @Field
+    /**
+     *  field
+     */
     void setPopulation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getProperties();
 
-    @Field
+    /**
+     *  field
+     */
     void setProperties(int value);
 }

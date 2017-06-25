@@ -4,22 +4,37 @@ import com.runesuite.client.base.Accessor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * public class
+ */
 public interface XClassInfo extends Accessor, XNode {
-    @Field
+    /**
+     * public field
+     */
     byte[][][] getBytes();
 
-    @Field
+    /**
+     * public field
+     */
     void setBytes(byte[][][] value);
 
-    @Field
+    /**
+     * public field
+     */
     Field[] getFields();
 
-    @Field
+    /**
+     * public field
+     */
     void setFields(Field[] value);
 
-    @Field
+    /**
+     * public field
+     */
     Method[] getMethods();
 
-    @Field
+    /**
+     * public field
+     */
     void setMethods(Method[] value);
 }

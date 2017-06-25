@@ -5,29 +5,48 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public class
+ */
 public interface XNode extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XNode getNext();
 
-    @Field
+    /**
+     *  field
+     */
     void setNext(XNode value);
 
-    @Field
+    /**
+     * public field
+     */
     XNode getPrevious();
 
-    @Field
+    /**
+     * public field
+     */
     void setPrevious(XNode value);
 
-    @Field
+    /**
+     * public field
+     */
     long getUid();
 
-    @Field
+    /**
+     * public field
+     */
     void setUid(long value);
 
-    @Method
+    /**
+     * public method
+     */
     boolean hasNext();
 
-    @Method
+    /**
+     * public method
+     */
     void remove();
 
     final class hasNext {

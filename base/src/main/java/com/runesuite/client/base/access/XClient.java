@@ -7,587 +7,978 @@ import java.lang.String;
 import java.lang.management.GarbageCollectorMXBean;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XClient extends Accessor, XGameShell {
-    @Field
+    /**
+     * static field
+     */
     int getBaseX();
 
-    @Field
+    /**
+     * static field
+     */
     void setBaseX(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getBaseY();
 
-    @Field
+    /**
+     * static field
+     */
     void setBaseY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCameraPitch();
 
-    @Field
+    /**
+     * static field
+     */
     void setCameraPitch(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCameraX();
 
-    @Field
+    /**
+     * static field
+     */
     void setCameraX(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCameraY();
 
-    @Field
+    /**
+     * static field
+     */
     void setCameraY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCameraYaw();
 
-    @Field
+    /**
+     * static field
+     */
     void setCameraYaw(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCameraZ();
 
-    @Field
+    /**
+     * static field
+     */
     void setCameraZ(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XClanMate[] getClanChat();
 
-    @Field
+    /**
+     * static field
+     */
     void setClanChat(XClanMate[] value);
 
-    @Field
+    /**
+     * static field
+     */
     String getClanChatOwner();
 
-    @Field
+    /**
+     * static field
+     */
     void setClanChatOwner(String value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeDeque2 getClassInfos();
 
-    @Field
+    /**
+     * public static field
+     */
     void setClassInfos(XNodeDeque2 value);
 
-    @Field
+    /**
+     * static field
+     */
     XClientPreferences getClientPreferences();
 
-    @Field
+    /**
+     * static field
+     */
     void setClientPreferences(XClientPreferences value);
 
-    @Field
+    /**
+     * static field
+     */
     XCollisionMap[] getCollisionMaps();
 
-    @Field
+    /**
+     * static field
+     */
     void setCollisionMaps(XCollisionMap[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     int[] getCosineTable();
 
-    @Field
+    /**
+     * public static field
+     */
     void setCosineTable(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getCurrentLevels();
 
-    @Field
+    /**
+     * static field
+     */
     void setCurrentLevels(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCursorColor();
 
-    @Field
+    /**
+     * static field
+     */
     void setCursorColor(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getCycle();
 
-    @Field
+    /**
+     * static field
+     */
     void setCycle(int value);
 
-    @Field
+    /**
+     * static field
+     */
     boolean getDisplayFps();
 
-    @Field
+    /**
+     * static field
+     */
     void setDisplayFps(boolean value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getExperience();
 
-    @Field
+    /**
+     * static field
+     */
     void setExperience(int[] value);
 
-    @Field
+    /**
+     * protected static field
+     */
     int getFps();
 
-    @Field
+    /**
+     * protected static field
+     */
     void setFps(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XFriend[] getFriendsList();
 
-    @Field
+    /**
+     * static field
+     */
     void setFriendsList(XFriend[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getGameDrawingMode();
 
-    @Field
+    /**
+     * static field
+     */
     void setGameDrawingMode(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XGameShell getGameShell();
 
-    @Field
+    /**
+     * static field
+     */
     void setGameShell(XGameShell value);
 
-    @Field
+    /**
+     * static field
+     */
     int getGameState();
 
-    @Field
+    /**
+     * static field
+     */
     void setGameState(int value);
 
-    @Field
+    /**
+     * static field
+     */
     GarbageCollectorMXBean getGarbageCollector();
 
-    @Field
+    /**
+     * static field
+     */
     void setGarbageCollector(GarbageCollectorMXBean value);
 
-    @Field
+    /**
+     * static field
+     */
     XGrandExchangeOffer[] getGrandExchangeOffers();
 
-    @Field
+    /**
+     * static field
+     */
     void setGrandExchangeOffers(XGrandExchangeOffer[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     XAbstractGraphicsProvider getGraphicsProvider();
 
-    @Field
+    /**
+     * public static field
+     */
     void setGraphicsProvider(XAbstractGraphicsProvider value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeDeque[][][] getGroundItems();
 
-    @Field
+    /**
+     * static field
+     */
     void setGroundItems(XNodeDeque[][][] value);
 
-    @Field
+    /**
+     * static field
+     */
     XGzipDecompressor getGzipDecompressor();
 
-    @Field
+    /**
+     * static field
+     */
     void setGzipDecompressor(XGzipDecompressor value);
 
-    @Field
+    /**
+     * static field
+     */
     XIgnored[] getIgnoreList();
 
-    @Field
+    /**
+     * static field
+     */
     void setIgnoreList(XIgnored[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     boolean getIsMembersWorld();
 
-    @Field
+    /**
+     * public static field
+     */
     void setIsMembersWorld(boolean value);
 
-    @Field
+    /**
+     * static field
+     */
     boolean getIsMenuOpen();
 
-    @Field
+    /**
+     * static field
+     */
     void setIsMenuOpen(boolean value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeHashTable getItemContainers();
 
-    @Field
+    /**
+     * static field
+     */
     void setItemContainers(XNodeHashTable value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getItemDefinitionCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setItemDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * public static field
+     */
     XKeyHandler getKeyHandler();
 
-    @Field
+    /**
+     * public static field
+     */
     void setKeyHandler(XKeyHandler value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeCache getKitDefinitionCache();
 
-    @Field
+    /**
+     * static field
+     */
     void setKitDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getLevels();
 
-    @Field
+    /**
+     * static field
+     */
     void setLevels(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     XPlayer getLocalPlayer();
 
-    @Field
+    /**
+     * static field
+     */
     void setLocalPlayer(XPlayer value);
 
-    @Field
+    /**
+     * static field
+     */
     String[] getMenuActions();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuActions(String[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getMenuArguments0();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuArguments0(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getMenuArguments1();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuArguments1(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getMenuArguments2();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuArguments2(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuHeight();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuHeight(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getMenuOpcodes();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuOpcodes(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuOptionsCount();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuOptionsCount(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuOptionsCount2();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuOptionsCount2(int value);
 
-    @Field
+    /**
+     * static field
+     */
     String[] getMenuTargetNames();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuTargetNames(String[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuWidth();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuWidth(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuX();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuX(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMenuY();
 
-    @Field
+    /**
+     * static field
+     */
     void setMenuY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMinimapOrientation();
 
-    @Field
+    /**
+     * static field
+     */
     void setMinimapOrientation(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMinimapOrientationOffset();
 
-    @Field
+    /**
+     * static field
+     */
     void setMinimapOrientationOffset(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getMinimapScale();
 
-    @Field
+    /**
+     * static field
+     */
     void setMinimapScale(int value);
 
-    @Field
+    /**
+     * public static field
+     */
     XMouseHandler getMouseHandler();
 
-    @Field
+    /**
+     * public static field
+     */
     void setMouseHandler(XMouseHandler value);
 
-    @Field
+    /**
+     * static field
+     */
     XMouseWheel getMouseWheel();
 
-    @Field
+    /**
+     * static field
+     */
     void setMouseWheel(XMouseWheel value);
 
-    @Field
+    /**
+     * public static field
+     */
     int getMouseX();
 
-    @Field
+    /**
+     * public static field
+     */
     void setMouseX(int value);
 
-    @Field
+    /**
+     * public static field
+     */
     int getMouseY();
 
-    @Field
+    /**
+     * public static field
+     */
     void setMouseY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeCache getNpcDefinitionCache();
 
-    @Field
+    /**
+     * static field
+     */
     void setNpcDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * static field
+     */
     XNpc[] getNpcs();
 
-    @Field
+    /**
+     * static field
+     */
     void setNpcs(XNpc[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getObjectDefinitionCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setObjectDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * static field
+     */
     int getPlane();
 
-    @Field
+    /**
+     * static field
+     */
     void setPlane(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XPlatformInfo getPlatformInfo();
 
-    @Field
+    /**
+     * static field
+     */
     void setPlatformInfo(XPlatformInfo value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getPlayerRegions();
 
-    @Field
+    /**
+     * static field
+     */
     void setPlayerRegions(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     XPlayer[] getPlayers();
 
-    @Field
+    /**
+     * static field
+     */
     void setPlayers(XPlayer[] value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeDeque getProjectiles();
 
-    @Field
+    /**
+     * static field
+     */
     void setProjectiles(XNodeDeque value);
 
-    @Field
+    /**
+     * static field
+     */
     int getRights();
 
-    @Field
+    /**
+     * static field
+     */
     void setRights(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getRunEnergy();
 
-    @Field
+    /**
+     * static field
+     */
     void setRunEnergy(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XScene getScene();
 
-    @Field
+    /**
+     * static field
+     */
     void setScene(XScene value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getSequenceDefinitionCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setSequenceDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * public static field
+     */
     int[] getSineTable();
 
-    @Field
+    /**
+     * public static field
+     */
     void setSineTable(int[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getSpotAnimationDefinitionCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setSpotAnimationDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getSpriteCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setSpriteCache(XNodeCache value);
 
-    @Field
+    /**
+     * static field
+     */
     int[][][] getTileHeights();
 
-    @Field
+    /**
+     * static field
+     */
     void setTileHeights(int[][][] value);
 
-    @Field
+    /**
+     * static field
+     */
     byte[][][] getTileRenderFlags();
 
-    @Field
+    /**
+     * static field
+     */
     void setTileRenderFlags(byte[][][] value);
 
-    @Field
+    /**
+     * public static field
+     */
     XNodeCache getVarbitDefinitionCache();
 
-    @Field
+    /**
+     * public static field
+     */
     void setVarbitDefinitionCache(XNodeCache value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportHeight();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportHeight(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportScale();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportScale(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportTempX();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportTempX(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportTempY();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportTempY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportWidth();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportWidth(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportX();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportX(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getViewportY();
 
-    @Field
+    /**
+     * static field
+     */
     void setViewportY(int value);
 
-    @Field
+    /**
+     * static field
+     */
     boolean[][] getVisibleTiles();
 
-    @Field
+    /**
+     * static field
+     */
     void setVisibleTiles(boolean[][] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getWeight();
 
-    @Field
+    /**
+     * static field
+     */
     void setWeight(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getWidgetHeights();
 
-    @Field
+    /**
+     * static field
+     */
     void setWidgetHeights(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     XNodeHashTable getWidgetNodes();
 
-    @Field
+    /**
+     * static field
+     */
     void setWidgetNodes(XNodeHashTable value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getWidgetWidths();
 
-    @Field
+    /**
+     * static field
+     */
     void setWidgetWidths(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getWidgetXs();
 
-    @Field
+    /**
+     * static field
+     */
     void setWidgetXs(int[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int[] getWidgetYs();
 
-    @Field
+    /**
+     * static field
+     */
     void setWidgetYs(int[] value);
 
-    @Field
+    /**
+     * public static field
+     */
     XWidget[][] getWidgets();
 
-    @Field
+    /**
+     * public static field
+     */
     void setWidgets(XWidget[][] value);
 
-    @Field
+    /**
+     * static field
+     */
     String getWorldHost();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorldHost(String value);
 
-    @Field
+    /**
+     * static field
+     */
     int getWorldId();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorldId(int value);
 
-    @Field
+    /**
+     * static field
+     */
     int getWorldProperties();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorldProperties(int value);
 
-    @Field
+    /**
+     * static field
+     */
     XWorld[] getWorlds();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorlds(XWorld[] value);
 
-    @Field
+    /**
+     * static field
+     */
     int getWorldsCount();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorldsCount(int value);
 
-    @Field
+    /**
+     * static field
+     */
     String getWorldsUrl();
 
-    @Field
+    /**
+     * static field
+     */
     void setWorldsUrl(String value);
 
-    @Method
+    /**
+     * public static method
+     */
     XNpcDefinition getNpcDefinition(int id);
 
-    @Method
+    /**
+     * public final method
+     */
     void init();
 
-    @Method
+    /**
+     * final method
+     */
     void openMenu(int x, int y);
 
-    @Method
+    /**
+     * static method
+     */
     void updateGameState(int gameState);
 
     final class getNpcDefinition {

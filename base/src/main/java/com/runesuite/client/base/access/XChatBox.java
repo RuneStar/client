@@ -2,10 +2,17 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XChatBox extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XMessage[] getMessages();
 
-    @Field
+    /**
+     *  field
+     */
     void setMessages(XMessage[] value);
 }

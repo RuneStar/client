@@ -2,22 +2,37 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XGroundItemPile extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XEntity getBottom();
 
-    @Field
+    /**
+     *  field
+     */
     void setBottom(XEntity value);
 
-    @Field
+    /**
+     *  field
+     */
     XEntity getMiddle();
 
-    @Field
+    /**
+     *  field
+     */
     void setMiddle(XEntity value);
 
-    @Field
+    /**
+     *  field
+     */
     XEntity getTop();
 
-    @Field
+    /**
+     *  field
+     */
     void setTop(XEntity value);
 }

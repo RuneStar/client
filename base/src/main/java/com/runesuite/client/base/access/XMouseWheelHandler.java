@@ -7,20 +7,33 @@ import java.awt.Component;
 import java.awt.event.MouseWheelListener;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XMouseWheelHandler extends Accessor, XMouseWheel, MouseWheelListener {
-    @Field
+    /**
+     *  field
+     */
     int getRotation();
 
-    @Field
+    /**
+     *  field
+     */
     void setRotation(int value);
 
-    @Method
+    /**
+     *  method
+     */
     void addTo(Component component);
 
-    @Method
+    /**
+     *  method
+     */
     void removeFrom(Component component);
 
-    @Method
+    /**
+     * public synchronized method
+     */
     int useRotation();
 
     final class addTo {

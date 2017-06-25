@@ -5,20 +5,33 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XGroundItem extends Accessor, XEntity {
-    @Field
+    /**
+     *  field
+     */
     int getId();
 
-    @Field
+    /**
+     *  field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getQuantity();
 
-    @Field
+    /**
+     *  field
+     */
     void setQuantity(int value);
 
-    @Method
+    /**
+     * protected final method
+     */
     XModel getModel();
 
     final class getModel {

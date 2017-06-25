@@ -5,17 +5,28 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XNpc extends Accessor, XActor {
-    @Field
+    /**
+     *  field
+     */
     XNpcDefinition getDefinition();
 
-    @Field
+    /**
+     *  field
+     */
     void setDefinition(XNpcDefinition value);
 
-    @Method
+    /**
+     * protected final method
+     */
     XModel getModel();
 
-    @Method
+    /**
+     * final method
+     */
     boolean isVisible();
 
     final class getModel {

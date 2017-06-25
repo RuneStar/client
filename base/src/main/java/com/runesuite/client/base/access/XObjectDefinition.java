@@ -3,16 +3,27 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.lang.String;
 
+/**
+ * public class
+ */
 public interface XObjectDefinition extends Accessor, XCacheNode {
-    @Field
+    /**
+     * public field
+     */
     String[] getActions();
 
-    @Field
+    /**
+     * public field
+     */
     void setActions(String[] value);
 
-    @Field
+    /**
+     * public field
+     */
     String getName();
 
-    @Field
+    /**
+     * public field
+     */
     void setName(String value);
 }

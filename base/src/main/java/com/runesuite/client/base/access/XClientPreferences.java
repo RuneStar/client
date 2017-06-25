@@ -6,32 +6,53 @@ import com.runesuite.client.base.MethodEvent;
 import java.util.LinkedHashMap;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public class
+ */
 public interface XClientPreferences extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     LinkedHashMap getParameters();
 
-    @Field
+    /**
+     *  field
+     */
     void setParameters(LinkedHashMap value);
 
-    @Field
+    /**
+     *  field
+     */
     boolean getRoofsHidden();
 
-    @Field
+    /**
+     *  field
+     */
     void setRoofsHidden(boolean value);
 
-    @Field
+    /**
+     *  field
+     */
     boolean getTitleMusicDisabled();
 
-    @Field
+    /**
+     *  field
+     */
     void setTitleMusicDisabled(boolean value);
 
-    @Field
+    /**
+     *  field
+     */
     int getWindowMode();
 
-    @Field
+    /**
+     *  field
+     */
     void setWindowMode(int value);
 
-    @Method
+    /**
+     *  method
+     */
     XByteBuffer toBuffer();
 
     final class toBuffer {

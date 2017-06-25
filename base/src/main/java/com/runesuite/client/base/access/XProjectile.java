@@ -5,158 +5,263 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XProjectile extends Accessor, XEntity {
-    @Field
+    /**
+     *  field
+     */
     double getAccelerationZ();
 
-    @Field
+    /**
+     *  field
+     */
     void setAccelerationZ(double value);
 
-    @Field
+    /**
+     *  field
+     */
     int getId();
 
-    @Field
+    /**
+     *  field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt1();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt1(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt2();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt2(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt3();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt3(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt4();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt4(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt5();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt5(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt6();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt6(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt7();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt7(int value);
 
-    @Field
+    /**
+     *  field
+     */
     boolean getIsMoving();
 
-    @Field
+    /**
+     *  field
+     */
     void setIsMoving(boolean value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPitch();
 
-    @Field
+    /**
+     *  field
+     */
     void setPitch(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPlane();
 
-    @Field
+    /**
+     *  field
+     */
     void setPlane(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XSequenceDefinition getSequenceDefinition();
 
-    @Field
+    /**
+     *  field
+     */
     void setSequenceDefinition(XSequenceDefinition value);
 
-    @Field
+    /**
+     *  field
+     */
     int getSourceX();
 
-    @Field
+    /**
+     *  field
+     */
     void setSourceX(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getSourceY();
 
-    @Field
+    /**
+     *  field
+     */
     void setSourceY(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getSourceZ();
 
-    @Field
+    /**
+     *  field
+     */
     void setSourceZ(int value);
 
-    @Field
+    /**
+     *  field
+     */
     double getSpeed();
 
-    @Field
+    /**
+     *  field
+     */
     void setSpeed(double value);
 
-    @Field
+    /**
+     *  field
+     */
     double getSpeedX();
 
-    @Field
+    /**
+     *  field
+     */
     void setSpeedX(double value);
 
-    @Field
+    /**
+     *  field
+     */
     double getSpeedY();
 
-    @Field
+    /**
+     *  field
+     */
     void setSpeedY(double value);
 
-    @Field
+    /**
+     *  field
+     */
     double getSpeedZ();
 
-    @Field
+    /**
+     *  field
+     */
     void setSpeedZ(double value);
 
-    @Field
+    /**
+     *  field
+     */
     int getTargetIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setTargetIndex(int value);
 
-    @Field
+    /**
+     *  field
+     */
     double getX();
 
-    @Field
+    /**
+     *  field
+     */
     void setX(double value);
 
-    @Field
+    /**
+     *  field
+     */
     double getY();
 
-    @Field
+    /**
+     *  field
+     */
     void setY(double value);
 
-    @Field
+    /**
+     *  field
+     */
     int getYaw();
 
-    @Field
+    /**
+     *  field
+     */
     void setYaw(int value);
 
-    @Field
+    /**
+     *  field
+     */
     double getZ();
 
-    @Field
+    /**
+     *  field
+     */
     void setZ(double value);
 
-    @Method
+    /**
+     * protected final method
+     */
     XModel getModel();
 
     final class getModel {

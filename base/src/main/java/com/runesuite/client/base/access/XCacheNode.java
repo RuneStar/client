@@ -5,20 +5,33 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public class
+ */
 public interface XCacheNode extends Accessor, XNode {
-    @Field
+    /**
+     * public field
+     */
     XCacheNode getCacheNext();
 
-    @Field
+    /**
+     * public field
+     */
     void setCacheNext(XCacheNode value);
 
-    @Field
+    /**
+     * public field
+     */
     XCacheNode getCachePrevious();
 
-    @Field
+    /**
+     * public field
+     */
     void setCachePrevious(XCacheNode value);
 
-    @Method
+    /**
+     * public method
+     */
     void cacheRemove();
 
     final class cacheRemove {

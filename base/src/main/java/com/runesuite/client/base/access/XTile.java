@@ -2,52 +2,87 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XTile extends Accessor, XNode {
-    @Field
+    /**
+     *  field
+     */
     XBoundaryObject getBoundaryObject();
 
-    @Field
+    /**
+     *  field
+     */
     void setBoundaryObject(XBoundaryObject value);
 
-    @Field
+    /**
+     *  field
+     */
     XFloorDecoration getFloorDecoration();
 
-    @Field
+    /**
+     *  field
+     */
     void setFloorDecoration(XFloorDecoration value);
 
-    @Field
+    /**
+     *  field
+     */
     XGameObject[] getGameObjects();
 
-    @Field
+    /**
+     *  field
+     */
     void setGameObjects(XGameObject[] value);
 
-    @Field
+    /**
+     *  field
+     */
     XGroundItemPile getGroundItemPile();
 
-    @Field
+    /**
+     *  field
+     */
     void setGroundItemPile(XGroundItemPile value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPlane();
 
-    @Field
+    /**
+     *  field
+     */
     void setPlane(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XWallDecoration getWallDecoration();
 
-    @Field
+    /**
+     *  field
+     */
     void setWallDecoration(XWallDecoration value);
 
-    @Field
+    /**
+     *  field
+     */
     int getX();
 
-    @Field
+    /**
+     *  field
+     */
     void setX(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getY();
 
-    @Field
+    /**
+     *  field
+     */
     void setY(int value);
 }

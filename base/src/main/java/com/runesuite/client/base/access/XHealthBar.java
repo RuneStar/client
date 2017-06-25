@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XHealthBar extends Accessor, XNode {
-    @Field
+    /**
+     *  field
+     */
     XHealthBarDefinition getDefinition();
 
-    @Field
+    /**
+     *  field
+     */
     void setDefinition(XHealthBarDefinition value);
 
-    @Field
+    /**
+     *  field
+     */
     XNodeDeque2 getHitSplats();
 
-    @Field
+    /**
+     *  field
+     */
     void setHitSplats(XNodeDeque2 value);
 }

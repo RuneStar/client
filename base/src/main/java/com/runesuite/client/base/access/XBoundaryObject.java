@@ -2,58 +2,97 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XBoundaryObject extends Accessor {
-    @Field
+    /**
+     * public field
+     */
     XEntity getEntity1();
 
-    @Field
+    /**
+     * public field
+     */
     void setEntity1(XEntity value);
 
-    @Field
+    /**
+     * public field
+     */
     XEntity getEntity2();
 
-    @Field
+    /**
+     * public field
+     */
     void setEntity2(XEntity value);
 
-    @Field
+    /**
+     *  field
+     */
     int getFlags();
 
-    @Field
+    /**
+     *  field
+     */
     void setFlags(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getHeight();
 
-    @Field
+    /**
+     *  field
+     */
     void setHeight(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getId();
 
-    @Field
+    /**
+     * public field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getOrientation();
 
-    @Field
+    /**
+     *  field
+     */
     void setOrientation(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPlane();
 
-    @Field
+    /**
+     *  field
+     */
     void setPlane(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getX();
 
-    @Field
+    /**
+     *  field
+     */
     void setX(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getY();
 
-    @Field
+    /**
+     *  field
+     */
     void setY(int value);
 }

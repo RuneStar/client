@@ -3,22 +3,37 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.lang.String;
 
+/**
+ * public class
+ */
 public interface XItemDefinition extends Accessor, XCacheNode {
-    @Field
+    /**
+     * public field
+     */
     String[] getGroundActions();
 
-    @Field
+    /**
+     * public field
+     */
     void setGroundActions(String[] value);
 
-    @Field
+    /**
+     * public field
+     */
     String[] getInventoryActions();
 
-    @Field
+    /**
+     * public field
+     */
     void setInventoryActions(String[] value);
 
-    @Field
+    /**
+     * public field
+     */
     String getName();
 
-    @Field
+    /**
+     * public field
+     */
     void setName(String value);
 }

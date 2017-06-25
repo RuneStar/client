@@ -5,41 +5,68 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XNodeCache extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     int getCapacity();
 
-    @Field
+    /**
+     *  field
+     */
     void setCapacity(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XCacheNodeDeque getDeque();
 
-    @Field
+    /**
+     *  field
+     */
     void setDeque(XCacheNodeDeque value);
 
-    @Field
+    /**
+     *  field
+     */
     XNodeHashTable getHashTable();
 
-    @Field
+    /**
+     *  field
+     */
     void setHashTable(XNodeHashTable value);
 
-    @Field
+    /**
+     *  field
+     */
     int getRemainingCapacity();
 
-    @Field
+    /**
+     *  field
+     */
     void setRemainingCapacity(int value);
 
-    @Method
+    /**
+     * public method
+     */
     void clear();
 
-    @Method
+    /**
+     * public method
+     */
     XCacheNode get(long key);
 
-    @Method
+    /**
+     * public method
+     */
     void put(XCacheNode cacheNode, long key);
 
-    @Method
+    /**
+     * public method
+     */
     void remove(long key);
 
     final class clear {

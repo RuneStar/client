@@ -6,35 +6,58 @@ import com.runesuite.client.base.MethodEvent;
 import java.lang.Iterable;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public class
+ */
 public interface XNodeDeque2 extends Accessor, Iterable {
-    @Field
+    /**
+     *  field
+     */
     XNode getCurrent();
 
-    @Field
+    /**
+     *  field
+     */
     void setCurrent(XNode value);
 
-    @Field
+    /**
+     *  field
+     */
     XNode getSentinel();
 
-    @Field
+    /**
+     *  field
+     */
     void setSentinel(XNode value);
 
-    @Method
+    /**
+     * public method
+     */
     void addFirst(XNode node);
 
-    @Method
+    /**
+     * public method
+     */
     void addLast(XNode node);
 
-    @Method
+    /**
+     * public method
+     */
     XNode last();
 
-    @Method
+    /**
+     * public method
+     */
     XNode previous();
 
-    @Method
+    /**
+     *  method
+     */
     XNode previousOrLast(XNode node);
 
-    @Method
+    /**
+     * public method
+     */
     XNode removeLast();
 
     final class addFirst {

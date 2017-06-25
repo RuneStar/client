@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XByteBuffer extends Accessor, XNode {
-    @Field
+    /**
+     * public field
+     */
     byte[] getBuffer();
 
-    @Field
+    /**
+     * public field
+     */
     void setBuffer(byte[] value);
 
-    @Field
+    /**
+     * public field
+     */
     int getIndex();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndex(int value);
 }

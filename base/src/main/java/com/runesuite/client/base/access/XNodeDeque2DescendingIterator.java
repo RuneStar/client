@@ -3,10 +3,17 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.util.Iterator;
 
+/**
+ * public class
+ */
 public interface XNodeDeque2DescendingIterator extends Accessor, Iterator {
-    @Field
+    /**
+     *  field
+     */
     XNodeDeque2 getDeque();
 
-    @Field
+    /**
+     *  field
+     */
     void setDeque(XNodeDeque2 value);
 }

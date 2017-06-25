@@ -2,34 +2,57 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XNodeHashTable extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XNode[] getBuckets();
 
-    @Field
+    /**
+     *  field
+     */
     void setBuckets(XNode[] value);
 
-    @Field
+    /**
+     *  field
+     */
     XNode getCurrent();
 
-    @Field
+    /**
+     *  field
+     */
     void setCurrent(XNode value);
 
-    @Field
+    /**
+     *  field
+     */
     XNode getCurrentGet();
 
-    @Field
+    /**
+     *  field
+     */
     void setCurrentGet(XNode value);
 
-    @Field
+    /**
+     *  field
+     */
     int getIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setIndex(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getSize();
 
-    @Field
+    /**
+     *  field
+     */
     void setSize(int value);
 }

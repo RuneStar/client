@@ -2,10 +2,17 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XSprite extends Accessor, XRasterizer2D {
-    @Field
+    /**
+     * public field
+     */
     int[] getPixels();
 
-    @Field
+    /**
+     * public field
+     */
     void setPixels(int[] value);
 }

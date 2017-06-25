@@ -6,22 +6,37 @@ import java.io.OutputStream;
 import java.lang.Runnable;
 import java.net.Socket;
 
+/**
+ * public final class
+ */
 public interface XNetSocket extends Accessor, Runnable {
-    @Field
+    /**
+     *  field
+     */
     InputStream getInputStream();
 
-    @Field
+    /**
+     *  field
+     */
     void setInputStream(InputStream value);
 
-    @Field
+    /**
+     *  field
+     */
     OutputStream getOutputStream();
 
-    @Field
+    /**
+     *  field
+     */
     void setOutputStream(OutputStream value);
 
-    @Field
+    /**
+     *  field
+     */
     Socket getSocket();
 
-    @Field
+    /**
+     *  field
+     */
     void setSocket(Socket value);
 }

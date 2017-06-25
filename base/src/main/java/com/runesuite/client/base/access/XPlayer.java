@@ -6,59 +6,98 @@ import com.runesuite.client.base.MethodEvent;
 import java.lang.String;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public final class
+ */
 public interface XPlayer extends Accessor, XActor {
-    @Field
+    /**
+     *  field
+     */
     String[] getActions();
 
-    @Field
+    /**
+     *  field
+     */
     void setActions(String[] value);
 
-    @Field
+    /**
+     *  field
+     */
     XPlayerAppearance getAppearance();
 
-    @Field
+    /**
+     *  field
+     */
     void setAppearance(XPlayerAppearance value);
 
-    @Field
+    /**
+     *  field
+     */
     int getCombatLevel();
 
-    @Field
+    /**
+     *  field
+     */
     void setCombatLevel(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XModel getModel0();
 
-    @Field
+    /**
+     *  field
+     */
     void setModel0(XModel value);
 
-    @Field
+    /**
+     *  field
+     */
     String getName();
 
-    @Field
+    /**
+     *  field
+     */
     void setName(String value);
 
-    @Field
+    /**
+     *  field
+     */
     int getPrayerIcon();
 
-    @Field
+    /**
+     *  field
+     */
     void setPrayerIcon(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getSkullIcon();
 
-    @Field
+    /**
+     *  field
+     */
     void setSkullIcon(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getTeam();
 
-    @Field
+    /**
+     *  field
+     */
     void setTeam(int value);
 
-    @Method
+    /**
+     * protected final method
+     */
     XModel getModel();
 
-    @Method
+    /**
+     * final method
+     */
     boolean isVisible();
 
     final class getModel {

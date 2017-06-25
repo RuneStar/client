@@ -2,10 +2,17 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XFloorDecoration extends Accessor {
-    @Field
+    /**
+     * public field
+     */
     XEntity getEntity();
 
-    @Field
+    /**
+     * public field
+     */
     void setEntity(XEntity value);
 }

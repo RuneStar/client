@@ -2,28 +2,47 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XHitSplat extends Accessor, XNode {
-    @Field
+    /**
+     *  field
+     */
     int getCycle();
 
-    @Field
+    /**
+     *  field
+     */
     void setCycle(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getHealth();
 
-    @Field
+    /**
+     *  field
+     */
     void setHealth(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt1();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt1(int value);
 
-    @Field
+    /**
+     *  field
+     */
     int getInt2();
 
-    @Field
+    /**
+     *  field
+     */
     void setInt2(int value);
 }

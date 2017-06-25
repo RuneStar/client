@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XClanMate extends Accessor, XNode {
-    @Field
+    /**
+     *  field
+     */
     byte getRank();
 
-    @Field
+    /**
+     *  field
+     */
     void setRank(byte value);
 
-    @Field
+    /**
+     *  field
+     */
     int getWorld();
 
-    @Field
+    /**
+     *  field
+     */
     void setWorld(int value);
 }

@@ -2,22 +2,37 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XVarbitDefinition extends Accessor, XCacheNode {
-    @Field
+    /**
+     * public field
+     */
     int getFirst();
 
-    @Field
+    /**
+     * public field
+     */
     void setFirst(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getIndex();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndex(int value);
 
-    @Field
+    /**
+     * public field
+     */
     int getLast();
 
-    @Field
+    /**
+     * public field
+     */
     void setLast(int value);
 }

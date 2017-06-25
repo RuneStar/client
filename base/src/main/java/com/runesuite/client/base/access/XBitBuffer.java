@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public final class
+ */
 public interface XBitBuffer extends Accessor, XByteBuffer {
-    @Field
+    /**
+     *  field
+     */
     int getBitIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setBitIndex(int value);
 
-    @Field
+    /**
+     *  field
+     */
     XIsaacCipher getIsaacCipher();
 
-    @Field
+    /**
+     *  field
+     */
     void setIsaacCipher(XIsaacCipher value);
 }

@@ -3,10 +3,17 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.util.Iterator;
 
+/**
+ * public class
+ */
 public interface XCacheNodeQueueIterator extends Accessor, Iterator {
-    @Field
+    /**
+     *  field
+     */
     XCacheNodeQueue getQueue();
 
-    @Field
+    /**
+     *  field
+     */
     void setQueue(XCacheNodeQueue value);
 }

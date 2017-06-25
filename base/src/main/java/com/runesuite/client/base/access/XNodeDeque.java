@@ -5,44 +5,73 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public class
+ */
 public interface XNodeDeque extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XNode getCurrent();
 
-    @Field
+    /**
+     *  field
+     */
     void setCurrent(XNode value);
 
-    @Field
+    /**
+     * public field
+     */
     XNode getSentinel();
 
-    @Field
+    /**
+     * public field
+     */
     void setSentinel(XNode value);
 
-    @Method
+    /**
+     * public method
+     */
     void addFirst(XNode node);
 
-    @Method
+    /**
+     * public method
+     */
     void addLast(XNode node);
 
-    @Method
+    /**
+     * public method
+     */
     void clear();
 
-    @Method
+    /**
+     * public method
+     */
     XNode first();
 
-    @Method
+    /**
+     * public method
+     */
     XNode last();
 
-    @Method
+    /**
+     * public method
+     */
     XNode next();
 
-    @Method
+    /**
+     * public method
+     */
     XNode previous();
 
-    @Method
+    /**
+     * public method
+     */
     XNode removeFirst();
 
-    @Method
+    /**
+     * public method
+     */
     XNode removeLast();
 
     final class addFirst {

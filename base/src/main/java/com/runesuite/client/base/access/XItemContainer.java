@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XItemContainer extends Accessor, XNode {
-    @Field
+    /**
+     *  field
+     */
     int[] getIds();
 
-    @Field
+    /**
+     *  field
+     */
     void setIds(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getQuantities();
 
-    @Field
+    /**
+     *  field
+     */
     void setQuantities(int[] value);
 }

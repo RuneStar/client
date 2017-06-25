@@ -3,28 +3,47 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.lang.String;
 
+/**
+ * public class
+ */
 public interface XMessage extends Accessor, XCacheNode {
-    @Field
+    /**
+     *  field
+     */
     String getPrefix();
 
-    @Field
+    /**
+     *  field
+     */
     void setPrefix(String value);
 
-    @Field
+    /**
+     *  field
+     */
     String getSender();
 
-    @Field
+    /**
+     *  field
+     */
     void setSender(String value);
 
-    @Field
+    /**
+     *  field
+     */
     String getText();
 
-    @Field
+    /**
+     *  field
+     */
     void setText(String value);
 
-    @Field
+    /**
+     *  field
+     */
     int getType();
 
-    @Field
+    /**
+     *  field
+     */
     void setType(int value);
 }

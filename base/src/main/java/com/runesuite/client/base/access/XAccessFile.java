@@ -3,41 +3,67 @@ package com.runesuite.client.base.access;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
-import java.io.RandomAccessFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.RandomAccessFile;
+
+/**
+ * public final class
+ */
 public interface XAccessFile extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     long getCapacity();
 
-    @Field
+    /**
+     *  field
+     */
     void setCapacity(long value);
 
-    @Field
+    /**
+     *  field
+     */
     RandomAccessFile getFile();
 
-    @Field
+    /**
+     *  field
+     */
     void setFile(RandomAccessFile value);
 
-    @Field
+    /**
+     *  field
+     */
     long getIndex();
 
-    @Field
+    /**
+     *  field
+     */
     void setIndex(long value);
 
-    @Method
+    /**
+     * public final method
+     */
     void close();
 
-    @Method
+    /**
+     * public final method
+     */
     long length();
 
-    @Method
+    /**
+     * public final method
+     */
     int read(byte[] bytes, int offset, int length);
 
-    @Method
+    /**
+     * final method
+     */
     void seek(long index);
 
-    @Method
+    /**
+     * public final method
+     */
     void write(byte[] bytes, int offset, int length);
 
     final class close {

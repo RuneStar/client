@@ -2,28 +2,47 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XPlayerAppearance extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     int[] getBodyColors();
 
-    @Field
+    /**
+     *  field
+     */
     void setBodyColors(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getEquipment();
 
-    @Field
+    /**
+     *  field
+     */
     void setEquipment(int[] value);
 
-    @Field
+    /**
+     * public field
+     */
     int getId();
 
-    @Field
+    /**
+     * public field
+     */
     void setId(int value);
 
-    @Field
+    /**
+     * public field
+     */
     boolean getIsFemale();
 
-    @Field
+    /**
+     * public field
+     */
     void setIsFemale(boolean value);
 }

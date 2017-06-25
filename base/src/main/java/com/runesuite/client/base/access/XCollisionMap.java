@@ -2,10 +2,17 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XCollisionMap extends Accessor {
-    @Field
+    /**
+     * public field
+     */
     int[][] getFlags();
 
-    @Field
+    /**
+     * public field
+     */
     void setFlags(int[][] value);
 }

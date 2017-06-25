@@ -5,14 +5,23 @@ import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * public abstract class
+ */
 public interface XEntity extends Accessor, XCacheNode {
-    @Field
+    /**
+     * public field
+     */
     int getHeight();
 
-    @Field
+    /**
+     * public field
+     */
     void setHeight(int value);
 
-    @Method
+    /**
+     * protected method
+     */
     XModel getModel();
 
     final class getModel {

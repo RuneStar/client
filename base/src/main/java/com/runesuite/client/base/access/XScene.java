@@ -2,16 +2,27 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XScene extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XGameObject[] getGameObjects();
 
-    @Field
+    /**
+     *  field
+     */
     void setGameObjects(XGameObject[] value);
 
-    @Field
+    /**
+     *  field
+     */
     XTile[][][] getTiles();
 
-    @Field
+    /**
+     *  field
+     */
     void setTiles(XTile[][][] value);
 }

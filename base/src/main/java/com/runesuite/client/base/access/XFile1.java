@@ -2,10 +2,17 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XFile1 extends Accessor {
-    @Field
+    /**
+     *  field
+     */
     XAccessFile getFile();
 
-    @Field
+    /**
+     *  field
+     */
     void setFile(XAccessFile value);
 }

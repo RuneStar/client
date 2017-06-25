@@ -3,10 +3,17 @@ package com.runesuite.client.base.access;
 import com.runesuite.client.base.Accessor;
 import java.util.Iterator;
 
+/**
+ * public class
+ */
 public interface XNodeHashTable2Iterator extends Accessor, Iterator {
-    @Field
+    /**
+     *  field
+     */
     XNodeHashTable2 getHashTable();
 
-    @Field
+    /**
+     *  field
+     */
     void setHashTable(XNodeHashTable2 value);
 }

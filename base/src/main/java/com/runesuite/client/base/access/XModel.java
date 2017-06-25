@@ -2,40 +2,67 @@ package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
 
+/**
+ * public class
+ */
 public interface XModel extends Accessor, XEntity {
-    @Field
+    /**
+     * public field
+     */
     int[] getIndicesX();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndicesX(int[] value);
 
-    @Field
+    /**
+     * public field
+     */
     int[] getIndicesY();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndicesY(int[] value);
 
-    @Field
+    /**
+     * public field
+     */
     int[] getIndicesZ();
 
-    @Field
+    /**
+     * public field
+     */
     void setIndicesZ(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getVerticesX();
 
-    @Field
+    /**
+     *  field
+     */
     void setVerticesX(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getVerticesY();
 
-    @Field
+    /**
+     *  field
+     */
     void setVerticesY(int[] value);
 
-    @Field
+    /**
+     *  field
+     */
     int[] getVerticesZ();
 
-    @Field
+    /**
+     *  field
+     */
     void setVerticesZ(int[] value);
 }
