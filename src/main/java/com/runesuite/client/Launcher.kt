@@ -4,32 +4,24 @@ import com.runesuite.client.base.Client
 import com.runesuite.client.base.access.XClient
 import com.runesuite.client.dev.plugins.PluginLoader
 import com.runesuite.client.dev.plugins.newJarClassLoader
+import com.runesuite.client.game.live.Game
 import com.runesuite.general.JavConfig
 import com.runesuite.general.RuneScape
 import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.nio.file.Files
 import java.nio.file.Paths
 import javax.swing.JFrame
 import javax.swing.WindowConstants
 
-val RUNESUITE_DIR = Paths.get(System.getProperty("user.home"), "RuneSuite").apply {
-    Files.createDirectories(this)
-}
+val RUNESUITE_DIR = Paths.get(System.getProperty("user.home"), "RuneSuite")
 
-val PLUGINS_DIR = RUNESUITE_DIR.resolve("plugins").apply {
-    Files.createDirectories(this)
-}
+val PLUGINS_DIR = RUNESUITE_DIR.resolve("plugins")
 
-val PLUGINS_SETTINGS_DIR = RUNESUITE_DIR.resolve("plugins-settings").apply {
-    Files.createDirectories(this)
-}
+val PLUGINS_SETTINGS_DIR = RUNESUITE_DIR.resolve("plugins-settings")
 
-val GAMEPACKS_DIR = RUNESUITE_DIR.resolve("gamepacks").apply {
-    Files.createDirectories(this)
-}
+val GAMEPACKS_DIR = RUNESUITE_DIR.resolve("gamepacks")
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
@@ -60,6 +52,8 @@ fun main(args: Array<String>) {
         start()
     }
 
+    waitForTitle()
+
     val pluginLoader = PluginLoader(PLUGINS_DIR, PLUGINS_SETTINGS_DIR)
 
     jframe.addWindowListener(object : WindowAdapter() {
@@ -77,4 +71,11 @@ private fun Applet.preInit(javConfig: JavConfig) {
     maximumSize = javConfig.appletMaxSize
     preferredSize = javConfig.appletMinSize
     size = preferredSize
+}
+
+private fun waitForTitle() {
+    // wait for most fields to be initialized
+    Game.stateChanges.takeUntil { it == Game.State.TITLE }
+            .ignoreElements()
+            .blockingAwait()
 }

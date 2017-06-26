@@ -4,6 +4,7 @@ import com.runesuite.client.dev.plugins.DisposablePlugin
 import com.runesuite.client.dev.plugins.FileReadWriter
 import com.runesuite.client.dev.plugins.Plugin
 import com.runesuite.client.game.live.Canvas
+import com.runesuite.client.game.live.Game
 import com.runesuite.client.game.live.Keyboard
 import com.runesuite.client.game.live.Mouse
 import java.awt.event.KeyEvent
@@ -18,6 +19,11 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>(), FileRe
         val s = settings
         if (s.focus) {
             add(Canvas.Live.focusEvents.subscribe {
+                logger.debug { it }
+            })
+        }
+        if (s.window) {
+            add(Game.windowEvents.subscribe {
                 logger.debug { it }
             })
         }
@@ -46,6 +52,7 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>(), FileRe
     class Settings : Plugin.Settings() {
         val focus = false
         val component = false
+        val window = false
         val mouse = Mouse()
         val keyboard = Keyboard()
 

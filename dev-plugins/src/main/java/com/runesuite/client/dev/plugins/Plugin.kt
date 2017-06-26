@@ -100,7 +100,7 @@ abstract class Plugin<T : Plugin.Settings> : FileReadWriter<T> {
                     start()
                 }
             }
-            else -> error(event)
+            else -> logger.warn { "Unknown event: $event" }
         }
     }
 

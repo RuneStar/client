@@ -5,14 +5,14 @@ import io.reactivex.internal.disposables.ListCompositeDisposable
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class DisposablePlugin<T : Plugin.Settings>(
-        private val disposeOnStopList: ListCompositeDisposable
-) : Plugin<T>(), DisposableContainer by disposeOnStopList {
+        private val listCompositeDisposable: ListCompositeDisposable
+) : Plugin<T>(), DisposableContainer by listCompositeDisposable {
 
     constructor() : this(ListCompositeDisposable())
 
     @OverridingMethodsMustInvokeSuper
     override fun stop() {
         super.stop()
-        disposeOnStopList.clear()
+        listCompositeDisposable.clear()
     }
 }
