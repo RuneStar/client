@@ -68,6 +68,11 @@ public interface XGameShell extends Accessor, Runnable, FocusListener, WindowLis
     void paint(Graphics g);
 
     /**
+     * final synchronized method
+     */
+    void replaceCanvas();
+
+    /**
      * public final method
      */
     void update(Graphics g);
@@ -80,6 +85,17 @@ public interface XGameShell extends Accessor, Runnable, FocusListener, WindowLis
         public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
 
         private paint() {
+        }
+    }
+
+    final class replaceCanvas {
+        @NotNull
+        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
+
+        @NotNull
+        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
+
+        private replaceCanvas() {
         }
     }
 

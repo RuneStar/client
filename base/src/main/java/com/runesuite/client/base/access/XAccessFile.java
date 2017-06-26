@@ -3,9 +3,8 @@ package com.runesuite.client.base.access;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
 import com.runesuite.client.base.MethodEvent;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.RandomAccessFile;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * public final class
