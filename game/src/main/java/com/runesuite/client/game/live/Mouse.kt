@@ -1,7 +1,11 @@
 package com.runesuite.client.game.live
 
 import com.runesuite.client.base.Client.accessor
+import com.runesuite.client.base.access.XGameShell
+import hu.akarnokd.rxjava2.swing.SwingObservable
+import io.reactivex.Observable
 import java.awt.Point
+import java.awt.event.MouseEvent
 
 object Mouse {
 
@@ -12,6 +16,12 @@ object Mouse {
     val location get() = Point(x, y)
 
     val crosshair get() = checkNotNull(Crosshair.LOOKUP[accessor.cursorColor]) { accessor.cursorColor }
+
+    /**
+     * @see[java.awt.event.MouseListener][java.awt.event.MouseMotionListener][java.awt.event.MouseWheelListener]
+     */
+    val events: Observable<MouseEvent> = XGameShell.replaceCanvas.EXIT.map { Unit }.startWith(Unit)
+            .flatMap { SwingObservable.mouse(accessor.canvas) }
 
     override fun toString(): String {
         return "Mouse(location=$location, crosshair=$crosshair)"

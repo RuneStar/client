@@ -22,7 +22,7 @@ class Model(
         if (orientation.value == 0) return
         val sin = orientation.sinInternal
         val cos = orientation.cosInternal
-        for (i in 0..verticesZ.size - 1) {
+        for (i in 0 until verticesZ.size) {
             val x = verticesX[i]
             val z = verticesZ[i]
             verticesX[i] = z * sin + x * cos shr 16
