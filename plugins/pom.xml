@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.runesuite</groupId>
-    <artifactId>client</artifactId>
+    <groupId>com.runesuite.client</groupId>
+    <artifactId>client-plugins</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -19,8 +19,18 @@
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>com.runesuite.client</groupId>
-            <artifactId>client-base</artifactId>
+            <artifactId>client-dev-plugins</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -29,14 +39,9 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.runesuite.client</groupId>
-            <artifactId>client-dev-plugins</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.runesuite</groupId>
-            <artifactId>general</artifactId>
-            <version>0.145.2</version>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 
@@ -49,7 +54,7 @@
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <phase>compile</phase>
+                        <phase>process-sources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
