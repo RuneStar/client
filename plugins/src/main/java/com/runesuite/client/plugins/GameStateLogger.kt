@@ -12,7 +12,7 @@ class GameStateLogger : DisposablePlugin<Plugin.Settings>(), FileReadWriter.Yaml
     override fun start() {
         super.start()
         add(Game.stateChanges.subscribe {
-            logger.debug { "${it.first} -> ${it.second}" }
+            logger.debug { it }
         })
     }
 }

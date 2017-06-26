@@ -12,8 +12,8 @@ object Game {
 
     val state get() = checkNotNull(State.LOOKUP[accessor.gameState]) { accessor.gameState }
 
-    val stateChanges: Observable<Pair<Game.State, Game.State>> = XClient.updateGameState.enter.map {
-        state to checkNotNull(State.LOOKUP[it.arguments[0]]) { it.arguments[0] }
+    val stateChanges: Observable<Game.State> = XClient.updateGameState.exit.map {
+        checkNotNull(State.LOOKUP[it.arguments[0]]) { it.arguments[0] }
     }
 
     val cycle get() = accessor.cycle
@@ -30,7 +30,7 @@ object Game {
      * @see[java.awt.event.WindowListener][java.awt.event.WindowStateListener][java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
-            checkNotNull(SwingUtilities.getWindowAncestor(Client.accessor as Applet)) { "Applet has no window" }
+            checkNotNull(SwingUtilities.getWindowAncestor(Client.accessor as Applet)) { "Client has no window" }
     )
 
     enum class State(val id: Int) {
