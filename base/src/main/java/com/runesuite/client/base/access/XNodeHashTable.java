@@ -1,11 +1,27 @@
 package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * public final class
  */
 public interface XNodeHashTable extends Accessor {
+    @NotNull
+    MethodExecution clear = new MethodExecution();
+
+    @NotNull
+    MethodExecution first = new MethodExecution();
+
+    @NotNull
+    MethodExecution get = new MethodExecution();
+
+    @NotNull
+    MethodExecution next = new MethodExecution();
+
+    @NotNull
+    MethodExecution put = new MethodExecution();
+
     /**
      *  field
      */
@@ -55,4 +71,29 @@ public interface XNodeHashTable extends Accessor {
      *  field
      */
     void setSize(int value);
+
+    /**
+     *  method
+     */
+    void clear();
+
+    /**
+     * public method
+     */
+    XNode first();
+
+    /**
+     * public method
+     */
+    XNode get(long key);
+
+    /**
+     * public method
+     */
+    XNode next();
+
+    /**
+     * public method
+     */
+    void put(XNode node, long key);
 }
