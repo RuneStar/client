@@ -1,8 +1,6 @@
 package com.runesuite.client.base.access;
 
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
-import com.runesuite.client.base.MethodEvent;
 import java.io.RandomAccessFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +8,21 @@ import org.jetbrains.annotations.NotNull;
  * public final class
  */
 public interface XAccessFile extends Accessor {
+    @NotNull
+    MethodExecution close = new MethodExecution();
+
+    @NotNull
+    MethodExecution length = new MethodExecution();
+
+    @NotNull
+    MethodExecution read = new MethodExecution();
+
+    @NotNull
+    MethodExecution seek = new MethodExecution();
+
+    @NotNull
+    MethodExecution write = new MethodExecution();
+
     /**
      *  field
      */
@@ -64,59 +77,4 @@ public interface XAccessFile extends Accessor {
      * public final method
      */
     void write(byte[] bytes, int offset, int length);
-
-    final class close {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private close() {
-        }
-    }
-
-    final class length {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private length() {
-        }
-    }
-
-    final class read {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private read() {
-        }
-    }
-
-    final class seek {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private seek() {
-        }
-    }
-
-    final class write {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private write() {
-        }
-    }
 }

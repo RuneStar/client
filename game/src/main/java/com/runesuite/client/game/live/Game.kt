@@ -12,7 +12,7 @@ object Game {
 
     val state get() = checkNotNull(State.LOOKUP[accessor.gameState]) { accessor.gameState }
 
-    val stateChanges: Observable<Pair<Game.State, Game.State>> = XClient.updateGameState.ENTER.map {
+    val stateChanges: Observable<Pair<Game.State, Game.State>> = XClient.updateGameState.enter.map {
         state to checkNotNull(State.LOOKUP[it.arguments[0]]) { it.arguments[0] }
     }
 

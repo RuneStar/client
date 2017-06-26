@@ -11,6 +11,6 @@ object Keyboard {
     /**
      * @see[java.awt.event.KeyListener]
      */
-    val events: Observable<KeyEvent> = XGameShell.replaceCanvas.EXIT.map { Client.accessor.canvas }.startWith(Client.accessor.canvas)
+    val events: Observable<KeyEvent> = XGameShell.replaceCanvas.exit.map { Client.accessor.canvas }.startWith(Client.accessor.canvas)
             .flatMap { SwingObservable.keyboard(it) }
 }

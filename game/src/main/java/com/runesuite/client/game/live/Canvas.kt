@@ -16,9 +16,13 @@ interface Canvas {
 
     object Live : Canvas {
 
+        init {
+            accessor.gameDrawingMode = 2
+        }
+
         override val shape get() = Rectangle(accessor.canvas.size)
 
-        val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.ENTER.map {
+        val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.enter.map {
             val gp = it.instance as XGraphicsProvider
             gp.image.graphics as Graphics2D
         }
@@ -26,13 +30,13 @@ interface Canvas {
         /**
          * @see[java.awt.event.FocusListener]
          */
-        val focusEvents: Observable<FocusEvent> = XGameShell.replaceCanvas.EXIT.map { accessor.canvas }.startWith(accessor.canvas)
+        val focusEvents: Observable<FocusEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
                 .flatMap { SwingObservable.focus(it) }
 
         /**
          * @see[java.awt.event.ComponentListener]
          */
-        val componentEvents: Observable<ComponentEvent> = XGameShell.replaceCanvas.EXIT.map { accessor.canvas }.startWith(accessor.canvas)
+        val componentEvents: Observable<ComponentEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
                 .flatMap { SwingObservable.component(it) }
 
         override fun toString(): String {

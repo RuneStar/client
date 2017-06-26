@@ -1,16 +1,26 @@
 package com.runesuite.client.base.access;
 
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
-import com.runesuite.client.base.MethodEvent;
-import java.lang.String;
-import java.lang.management.GarbageCollectorMXBean;
 import org.jetbrains.annotations.NotNull;
+
+import java.lang.management.GarbageCollectorMXBean;
 
 /**
  * public final class
  */
 public interface XClient extends Accessor, XGameShell {
+    @NotNull
+    MethodExecution getNpcDefinition = new MethodExecution();
+
+    @NotNull
+    MethodExecution init = new MethodExecution();
+
+    @NotNull
+    MethodExecution openMenu = new MethodExecution();
+
+    @NotNull
+    MethodExecution updateGameState = new MethodExecution();
+
     /**
      * static field
      */
@@ -980,48 +990,4 @@ public interface XClient extends Accessor, XGameShell {
      * static method
      */
     void updateGameState(int gameState);
-
-    final class getNpcDefinition {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private getNpcDefinition() {
-        }
-    }
-
-    final class init {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private init() {
-        }
-    }
-
-    final class openMenu {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private openMenu() {
-        }
-    }
-
-    final class updateGameState {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private updateGameState() {
-        }
-    }
 }

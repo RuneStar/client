@@ -1,8 +1,6 @@
 package com.runesuite.client.base.access;
 
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
-import com.runesuite.client.base.MethodEvent;
 import java.awt.Canvas;
 import java.awt.EventQueue;
 import java.awt.Frame;
@@ -17,6 +15,15 @@ import org.jetbrains.annotations.NotNull;
  * public abstract class
  */
 public interface XGameShell extends Accessor, Runnable, FocusListener, WindowListener {
+    @NotNull
+    MethodExecution paint = new MethodExecution();
+
+    @NotNull
+    MethodExecution replaceCanvas = new MethodExecution();
+
+    @NotNull
+    MethodExecution update = new MethodExecution();
+
     /**
      *  field
      */
@@ -76,37 +83,4 @@ public interface XGameShell extends Accessor, Runnable, FocusListener, WindowLis
      * public final method
      */
     void update(Graphics g);
-
-    final class paint {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private paint() {
-        }
-    }
-
-    final class replaceCanvas {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private replaceCanvas() {
-        }
-    }
-
-    final class update {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private update() {
-        }
-    }
 }

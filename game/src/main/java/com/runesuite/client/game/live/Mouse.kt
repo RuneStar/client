@@ -20,7 +20,7 @@ object Mouse {
     /**
      * @see[java.awt.event.MouseListener][java.awt.event.MouseMotionListener][java.awt.event.MouseWheelListener]
      */
-    val events: Observable<MouseEvent> = XGameShell.replaceCanvas.EXIT.map { accessor.canvas }.startWith(accessor.canvas)
+    val events: Observable<MouseEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
             .flatMap { SwingObservable.mouse(it) }
 
     override fun toString(): String {

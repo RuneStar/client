@@ -1,8 +1,6 @@
 package com.runesuite.client.base.access;
 
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
-import com.runesuite.client.base.MethodEvent;
 import java.lang.String;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +8,12 @@ import org.jetbrains.annotations.NotNull;
  * public final class
  */
 public interface XPlayer extends Accessor, XActor {
+    @NotNull
+    MethodExecution getModel = new MethodExecution();
+
+    @NotNull
+    MethodExecution isVisible = new MethodExecution();
+
     /**
      *  field
      */
@@ -99,26 +103,4 @@ public interface XPlayer extends Accessor, XActor {
      * final method
      */
     boolean isVisible();
-
-    final class getModel {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private getModel() {
-        }
-    }
-
-    final class isVisible {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private isVisible() {
-        }
-    }
 }

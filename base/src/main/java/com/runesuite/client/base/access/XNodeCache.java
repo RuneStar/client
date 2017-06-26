@@ -1,14 +1,24 @@
 package com.runesuite.client.base.access;
 
-import com.jakewharton.rxrelay2.PublishRelay;
 import com.runesuite.client.base.Accessor;
-import com.runesuite.client.base.MethodEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * public final class
  */
 public interface XNodeCache extends Accessor {
+    @NotNull
+    MethodExecution clear = new MethodExecution();
+
+    @NotNull
+    MethodExecution get = new MethodExecution();
+
+    @NotNull
+    MethodExecution put = new MethodExecution();
+
+    @NotNull
+    MethodExecution remove = new MethodExecution();
+
     /**
      *  field
      */
@@ -68,48 +78,4 @@ public interface XNodeCache extends Accessor {
      * public method
      */
     void remove(long key);
-
-    final class clear {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private clear() {
-        }
-    }
-
-    final class get {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private get() {
-        }
-    }
-
-    final class put {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private put() {
-        }
-    }
-
-    final class remove {
-        @NotNull
-        public static final PublishRelay<MethodEvent.Enter> ENTER = PublishRelay.create();
-
-        @NotNull
-        public static final PublishRelay<MethodEvent.Exit> EXIT = PublishRelay.create();
-
-        private remove() {
-        }
-    }
 }

@@ -55,8 +55,6 @@ fun main(args: Array<String>) {
         minimumSize = applet.minimumSize
     }
 
-    Client.accessor.gameDrawingMode = 2
-
     applet.apply {
         init()
         start()
