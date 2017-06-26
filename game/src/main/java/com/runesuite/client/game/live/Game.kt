@@ -1,8 +1,12 @@
 package com.runesuite.client.game.live
 
+import com.runesuite.client.base.Client
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XClient
+import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import java.applet.Applet
+import javax.swing.SwingUtilities
 
 object Game {
 
@@ -21,6 +25,8 @@ object Game {
     val weight get() = accessor.weight
 
     val windowMode get() = checkNotNull(WindowMode.LOOKUP[accessor.clientPreferences.windowMode]) { accessor.clientPreferences.windowMode }
+
+    val windowEvents = SwingObservable.window(SwingUtilities.getWindowAncestor(Client.accessor as Applet))
 
     enum class State(val id: Int) {
 
