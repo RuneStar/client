@@ -26,14 +26,14 @@ interface Canvas {
         /**
          * @see[java.awt.event.FocusListener]
          */
-        val focusEvents: Observable<FocusEvent> = XGameShell.replaceCanvas.EXIT.map { Unit }.startWith(Unit)
-                .flatMap { SwingObservable.focus(accessor.canvas) }
+        val focusEvents: Observable<FocusEvent> = XGameShell.replaceCanvas.EXIT.map { accessor.canvas }.startWith(accessor.canvas)
+                .flatMap { SwingObservable.focus(it) }
 
         /**
          * @see[java.awt.event.ComponentListener]
          */
-        val componentEvents: Observable<ComponentEvent> = XGameShell.replaceCanvas.EXIT.map { Unit }.startWith(Unit)
-                .flatMap { SwingObservable.component(accessor.canvas) }
+        val componentEvents: Observable<ComponentEvent> = XGameShell.replaceCanvas.EXIT.map { accessor.canvas }.startWith(accessor.canvas)
+                .flatMap { SwingObservable.component(it) }
 
         override fun toString(): String {
             return "Canvas.Live(shape=$shape)"

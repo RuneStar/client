@@ -70,14 +70,6 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
     })
-
-//    XGameShell.replaceCanvas.EXIT.subscribe {
-//        println(it)
-//    }
-//
-//    Mouse.events.subscribe {
-//        println(it)
-//    }
 }
 
 private fun Applet.preInit(javConfig: JavConfig) {
