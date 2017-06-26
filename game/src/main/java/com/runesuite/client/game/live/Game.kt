@@ -26,7 +26,12 @@ object Game {
 
     val windowMode get() = checkNotNull(WindowMode.LOOKUP[accessor.clientPreferences.windowMode]) { accessor.clientPreferences.windowMode }
 
-    val windowEvents = SwingObservable.window(SwingUtilities.getWindowAncestor(Client.accessor as Applet))
+    /**
+     * @see[java.awt.event.WindowListener][java.awt.event.WindowStateListener][java.awt.event.WindowFocusListener]
+     */
+    val windowEvents = SwingObservable.window(
+            checkNotNull(SwingUtilities.getWindowAncestor(Client.accessor as Applet)) { "Applet has no window" }
+    )
 
     enum class State(val id: Int) {
 
