@@ -1,7 +1,7 @@
 package com.runesuite.client.game
 
 /**
- * Exact point in 3D game space
+ * Exact point in the loaded 3D game space
  */
 data class Position(
         val x: Int,
