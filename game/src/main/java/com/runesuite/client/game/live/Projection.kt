@@ -7,11 +7,15 @@ interface Projection {
 
     fun toGame(point: Point): Position
 
-    fun toScreen(position: Position): Point
+    fun toScreen(position: Position): Point {
+        return toScreen(position, position)
+    }
+
+    fun toScreen(position: Position, tileHeight: Position): Point
 
     open class Minimap(val minimap: com.runesuite.client.game.live.Minimap) : Projection {
 
-        override fun toScreen(position: Position): Point {
+        override fun toScreen(position: Position, tileHeight: Position): Point {
             val dx = (position.localX - minimap.reference.localX) shr 5
             val dy = (position.localY - minimap.reference.localY) shr 5
             val sin = minimap.orientation.sinInternal * 256 / (minimap.scale + 256)
@@ -36,8 +40,8 @@ interface Projection {
 
     open class Viewport(val camera: Camera, val viewport: com.runesuite.client.game.live.Viewport, val scene: Scene) : Projection {
 
-        fun toScreen(position: Position, tileHeight: Position): Point {
-            require(position.isLoaded && tileHeight.isLoaded) { "$position, $tileHeight" }
+        override fun toScreen(position: Position, tileHeight: Position): Point {
+            require(tileHeight.isLoaded) { tileHeight }
             var x1 = position.localX
             var y1 = position.localY
             var z1 = scene.getTileHeight(tileHeight) - position.height
@@ -59,11 +63,6 @@ interface Projection {
             }
             return Point(viewport.width / 2 + x1 * viewport.scale / y1 + viewport.x,
                     viewport.height / 2 + z1 * viewport.scale / y1 + viewport.y)
-        }
-
-        override fun toScreen(position: Position): Point {
-            require(position.isLoaded) { position }
-            return toScreen(position, position)
         }
 
         override fun toGame(point: Point): Position {

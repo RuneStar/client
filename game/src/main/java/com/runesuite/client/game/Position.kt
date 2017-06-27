@@ -1,5 +1,8 @@
 package com.runesuite.client.game
 
+import com.runesuite.client.game.live.Projection
+import java.awt.Point
+
 /**
  * Exact point in the loaded 3D game space
  */
@@ -28,6 +31,11 @@ data class Position(
 
     operator fun plus(position: Position) =
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
+
+    fun toScreen(projection: Projection = Projection.Viewport.Live): Point {
+        check(isLoaded) { this }
+        return projection.toScreen(this)
+    }
 
     companion object {
         const val MAX_SUB = 127
