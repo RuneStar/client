@@ -12,8 +12,8 @@ object Worlds {
     val all: Sequence<World> get() = accessor.worlds?.copyOf()?.asSequence()?.filterNotNull()?.map { it.toWorld() } ?:
             backup.values.asSequence()
 
-    operator fun get(worldId: Int): World = accessor.worlds?.copyOf()?.firstOrNull { it.id == worldId }?.toWorld() ?:
-            checkNotNull(backup[worldId]) { "Invalid worldId: $worldId" }
+    operator fun get(id: Int): World = accessor.worlds?.copyOf()?.firstOrNull { it.id == id }?.toWorld() ?:
+            checkNotNull(backup[id]) { "Invalid id: $id" }
 
     val local get() = get(accessor.worldId)
 }

@@ -32,6 +32,11 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>(), FileRe
                 logger.debug { it }
             })
         }
+        if (s.container) {
+            add(Game.containerEvents.subscribe {
+                logger.debug { it }
+            })
+        }
         if (s.mouse.others || s.mouse.motion || s.mouse.wheel) {
             add(Mouse.events.subscribe {
                 when (it.id) {
@@ -53,6 +58,7 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>(), FileRe
         val focus = false
         val component = false
         val window = false
+        val container = false
         val mouse = Mouse()
         val keyboard = Keyboard()
 
