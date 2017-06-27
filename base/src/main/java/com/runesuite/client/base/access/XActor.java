@@ -1,7 +1,6 @@
 package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
-import java.lang.String;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,6 +39,16 @@ public interface XActor extends Accessor, XEntity {
      *  field
      */
     void setHealthBars(XNodeDeque2 value);
+
+    /**
+     *  field
+     */
+    int getOrientation();
+
+    /**
+     *  field
+     */
+    void setOrientation(int value);
 
     /**
      *  field
