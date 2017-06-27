@@ -62,6 +62,11 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
     })
+
+//    Observable.interval(1000, TimeUnit.MILLISECONDS).subscribe {
+//        val p = Players.local ?: return@subscribe
+//        println("${p.location} ${p.position.sceneTile}")
+//    }
 }
 
 private fun Applet.preInit(javConfig: JavConfig) {
