@@ -21,9 +21,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
 
     override val model: Model? get() {
         if (!accessor.isMoving) return null
-        return accessor.getModel()?.run { Model(position, orientation,
-                indicesX, indicesY, indicesZ,
-                verticesX, verticesY, verticesZ) }
+        return accessor.model?.let { Model(position, orientation, it) }
     }
 
     override val npcTargetIndex: Int?

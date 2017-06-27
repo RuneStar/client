@@ -22,7 +22,5 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
     val overheadText: String? get() = accessor.overheadMessage
 
     override val model: Model?
-        get() = accessor.getModel()?.run { Model(position.copy(height = 0), orientation,
-                    indicesX, indicesY, indicesZ,
-                    verticesX, verticesY, verticesZ) }
+        get() = accessor.model?.let { Model(position.copy(height = 0), orientation, it) }
 }

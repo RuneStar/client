@@ -8,7 +8,7 @@ class GroundItem(override val accessor: XGroundItem, val location: SceneTile) : 
 
     override val position get() = location.center
 
-    override val model: Model? get() = TODO("not implemented")
+    override val model: Model? get() = accessor.model?.let { Model(position, orientation, it) }
 
     val id get() = accessor.id
 

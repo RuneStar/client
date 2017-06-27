@@ -1,17 +1,15 @@
 package com.runesuite.client.game
 
 
+import com.runesuite.client.base.access.XModel
+import com.runesuite.client.game.live.Projection
+import java.awt.Polygon
 import java.util.*
 
 class Model(
-        private val base: Position,
-        private val orientation: Angle = Angle(0),
-        private val indicesX: IntArray,
-        private val indicesY: IntArray,
-        private val indicesZ: IntArray,
-        private val verticesX: IntArray,
-        private val verticesY: IntArray,
-        private val verticesZ: IntArray
+        val base: Position,
+        val orientation: Angle,
+        val model: XModel
 ) {
 
     init {
@@ -22,22 +20,27 @@ class Model(
         if (orientation.value == 0) return
         val sin = orientation.sinInternal
         val cos = orientation.cosInternal
-        for (i in 0 until verticesZ.size) {
-            val x = verticesX[i]
-            val z = verticesZ[i]
-            verticesX[i] = z * sin + x * cos shr 16
-            verticesZ[i] = z * cos - x * sin shr 16
+        for (i in 0 until model.verticesZ.size) {
+            val x = model.verticesX[i]
+            val z = model.verticesZ[i]
+            model.verticesX[i] = z * sin + x * cos shr 16
+            model.verticesZ[i] = z * cos - x * sin shr 16
         }
     }
 
-    val triangles: List<List<Position>> by lazy {
-        val list = ArrayList<List<Position>>(indicesX.size)
-        for (i in 0..indicesX.size - 1) {
-            val p0 = base.plusLocal(verticesX[indicesX[i]], verticesZ[indicesX[i]], -1 * verticesY[indicesX[i]])
-            val p1 = base.plusLocal(verticesX[indicesY[i]], verticesZ[indicesY[i]], -1 * verticesY[indicesY[i]])
-            val p2 = base.plusLocal(verticesX[indicesZ[i]], verticesZ[indicesZ[i]], -1 * verticesY[indicesZ[i]])
+    fun getTriangles(): List<List<Position>> {
+        val list = ArrayList<List<Position>>(model.indicesX.size)
+        for (i in 0..model.indicesX.size - 1) {
+            val p0 = base.plusLocal(model.verticesX[model.indicesX[i]], model.verticesZ[model.indicesX[i]], -1 * model.verticesY[model.indicesX[i]])
+            val p1 = base.plusLocal(model.verticesX[model.indicesY[i]], model.verticesZ[model.indicesY[i]], -1 * model.verticesY[model.indicesY[i]])
+            val p2 = base.plusLocal(model.verticesX[model.indicesZ[i]], model.verticesZ[model.indicesZ[i]], -1 * model.verticesY[model.indicesZ[i]])
             list.add(listOf(p0, p1, p2))
         }
-        list
+        return list
+    }
+
+    fun trianglesToScreen(projection: Projection = Projection.Viewport.Live): List<Polygon> {
+        return getTriangles().map { it.map { projection.toScreen(it, base) } }
+                .map { Polygon(it.map { it.x }.toIntArray(), it.map { it.y }.toIntArray(), 3) }
     }
 }
