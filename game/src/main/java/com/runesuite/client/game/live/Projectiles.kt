@@ -7,14 +7,16 @@ import java.util.*
 
 object Projectiles {
 
-    val all: Sequence<Projectile> get() {
+    fun get(): List<Projectile> {
         val nodes = accessor.projectiles
-        val list = ArrayList<XProjectile>()
-        var node = nodes.last() as XProjectile?
-        while (node != null) {
-            list.add(node)
-            node = nodes.previous() as XProjectile?
+        val list = ArrayList<Projectile>()
+        var node = nodes.sentinel.previous
+        while (node != nodes.sentinel) {
+            list.add(Projectile(node as XProjectile))
+            node = node.previous
         }
-        return list.asSequence().map { Projectile(it) }
+        return list
     }
+
+    val all get() = get().asSequence()
 }

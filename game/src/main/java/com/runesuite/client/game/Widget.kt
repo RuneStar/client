@@ -27,6 +27,7 @@ class Widget(override val accessor: XWidget) : Wrapper() {
     val parent: Widget? get() {
         var pId = accessor.parentId
         if (pId == -1) {
+            // todo
             val groupId = group.id
             val table = Client.accessor.widgetNodes
             var node = table.first() as XWidgetNode?

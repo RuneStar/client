@@ -3,10 +3,10 @@ package com.runesuite.client.game.live
 import com.runesuite.client.base.Client
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XClient
+import com.runesuite.client.ext.swing.getWindowAncestor
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.applet.Applet
-import javax.swing.SwingUtilities
 
 object Game {
 
@@ -30,8 +30,13 @@ object Game {
      * @see[java.awt.event.WindowListener][java.awt.event.WindowStateListener][java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
-            checkNotNull(SwingUtilities.getWindowAncestor(Client.accessor as Applet)) { "Client has no window" }
+            checkNotNull((accessor as Applet).getWindowAncestor()) { "Client has no window" }
     )
+
+    /**
+     * @see[java.awt.event.ContainerListener]
+     */
+    val containerEvents = SwingObservable.container(Client.accessor as Applet)
 
     enum class State(val id: Int) {
 
