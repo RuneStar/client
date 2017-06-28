@@ -1,6 +1,7 @@
 package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
+import java.lang.String;
 import org.jetbrains.annotations.NotNull;
 
 /**
