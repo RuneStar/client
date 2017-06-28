@@ -9,7 +9,7 @@ import java.awt.Polygon
  *
  * @see[Scene]
  */
-data class SceneTile(val x: Int, val y: Int, val plane: Int = 0) {
+data class SceneTile(val x: Int, val y: Int, val plane: Int) {
 
     val center get() = Position(x, Position.MID_SUB, y, Position.MID_SUB, 0, plane)
 

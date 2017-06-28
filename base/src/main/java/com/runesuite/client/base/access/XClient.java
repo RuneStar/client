@@ -16,6 +16,9 @@ public interface XClient extends Accessor, XGameShell {
     MethodExecution init = new MethodExecution();
 
     @NotNull
+    MethodExecution menuAction = new MethodExecution();
+
+    @NotNull
     MethodExecution openMenu = new MethodExecution();
 
     @NotNull
@@ -464,12 +467,12 @@ public interface XClient extends Accessor, XGameShell {
     /**
      * static field
      */
-    int getMenuOptionsCount2();
+    int getMenuShiftClickDropIndex();
 
     /**
      * static field
      */
-    void setMenuOptionsCount2(int value);
+    void setMenuShiftClickDropIndex(int value);
 
     /**
      * static field
@@ -980,6 +983,12 @@ public interface XClient extends Accessor, XGameShell {
      * public final method
      */
     void init();
+
+    /**
+     * static final method
+     */
+    void menuAction(int argument1, int argument2, int opcode, int argument0, String action,
+                    String targetName, int mouseX, int mouseY);
 
     /**
      * final method
