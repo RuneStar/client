@@ -2,7 +2,7 @@ package com.runesuite.client.game
 
 import com.runesuite.client.game.live.Scene
 
-data class GlobalTile(val x: Int, val y: Int, val plane: Int = 0) {
+data class GlobalTile(val x: Int, val y: Int, val plane: Int) {
 
     val region get() = Region(x / Region.SIZE, y / Region.SIZE, plane)
 
