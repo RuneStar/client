@@ -63,9 +63,8 @@ fun main(args: Array<String>) {
         }
     })
 
-//    Observable.interval(1000, TimeUnit.MILLISECONDS).subscribe {
-//        val p = Players.local ?: return@subscribe
-//        println("${p.location} ${p.position.sceneTile}")
+//    Observable.interval(2000, TimeUnit.MILLISECONDS).subscribe {
+//
 //    }
 }
 
