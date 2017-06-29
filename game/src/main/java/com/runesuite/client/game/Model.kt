@@ -2,6 +2,7 @@ package com.runesuite.client.game
 
 
 import com.runesuite.client.base.access.XModel
+import com.runesuite.client.ext.swing.toPolygon
 import com.runesuite.client.game.live.Projection
 import java.awt.Polygon
 import java.util.*
@@ -41,6 +42,6 @@ class Model(
 
     fun trianglesToScreen(projection: Projection = Projection.Viewport.Live): List<Polygon> {
         return getTriangles().map { it.map { projection.toScreen(it, base) } }
-                .map { Polygon(it.map { it.x }.toIntArray(), it.map { it.y }.toIntArray(), 3) }
+                .map { it.toPolygon() }
     }
 }

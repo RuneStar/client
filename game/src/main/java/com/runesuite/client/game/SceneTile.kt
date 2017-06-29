@@ -1,5 +1,6 @@
 package com.runesuite.client.game
 
+import com.runesuite.client.ext.swing.toPolygon
 import com.runesuite.client.game.live.Projection
 import com.runesuite.client.game.live.Scene
 import java.awt.Polygon
@@ -38,7 +39,6 @@ data class SceneTile(val x: Int, val y: Int, val plane: Int) {
 
     fun outline(projection: Projection = Projection.Viewport.Live): Polygon {
         check(isLoaded) { this }
-        val pts = corners.map { it.toScreen(projection) }
-        return Polygon(pts.map { it.x }.toIntArray(), pts.map { it.y }.toIntArray(), 4)
+        return corners.map { it.toScreen(projection) }.toPolygon()
     }
 }

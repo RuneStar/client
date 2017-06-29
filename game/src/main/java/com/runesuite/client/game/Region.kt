@@ -1,7 +1,7 @@
 package com.runesuite.client.game
 
 
-data class Region(val x: Int, val y: Int, val plane: Int = 0) {
+data class Region(val x: Int, val y: Int, val plane: Int) {
 
     internal constructor(packed: Int) : this(packed shr 14 and 255, packed and 255 , packed shr 28)
 
