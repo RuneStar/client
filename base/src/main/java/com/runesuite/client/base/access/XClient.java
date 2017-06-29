@@ -617,6 +617,16 @@ public interface XClient extends Accessor, XGameShell {
     /**
      * static field
      */
+    String getPassword();
+
+    /**
+     * static field
+     */
+    void setPassword(String value);
+
+    /**
+     * static field
+     */
     int getPlane();
 
     /**
@@ -753,6 +763,16 @@ public interface XClient extends Accessor, XGameShell {
      * static field
      */
     void setTileRenderFlags(byte[][][] value);
+
+    /**
+     * static field
+     */
+    String getUsername();
+
+    /**
+     * static field
+     */
+    void setUsername(String value);
 
     /**
      * public static field
