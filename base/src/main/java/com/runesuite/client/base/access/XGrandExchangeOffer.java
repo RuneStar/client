@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface XGrandExchangeOffer extends Accessor {
     @NotNull
-    MethodExecution state = new MethodExecution();
+    MethodExecution status = new MethodExecution();
 
     @NotNull
     MethodExecution type = new MethodExecution();
@@ -34,16 +34,6 @@ public interface XGrandExchangeOffer extends Accessor {
     void setCurrentQuantity(int value);
 
     /**
-     *  field
-     */
-    byte getFlags();
-
-    /**
-     *  field
-     */
-    void setFlags(byte value);
-
-    /**
      * public field
      */
     int getId();
@@ -52,6 +42,16 @@ public interface XGrandExchangeOffer extends Accessor {
      * public field
      */
     void setId(int value);
+
+    /**
+     *  field
+     */
+    byte getState();
+
+    /**
+     *  field
+     */
+    void setState(byte value);
 
     /**
      * public field
@@ -76,7 +76,7 @@ public interface XGrandExchangeOffer extends Accessor {
     /**
      * public method
      */
-    int state();
+    int status();
 
     /**
      * public method
