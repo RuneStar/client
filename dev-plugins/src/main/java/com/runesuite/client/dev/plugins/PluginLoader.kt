@@ -1,49 +1,25 @@
 package com.runesuite.client.dev.plugins
 
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import mu.KotlinLogging
 import java.io.Closeable
 import java.lang.reflect.Modifier
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.concurrent.ConcurrentHashMap
 
 class PluginLoader(val pluginsDirectory: Path, val settingsDirectory: Path) : Closeable {
 
-    private companion object {
-        val BUFFER_TIME_MS = 50L
-    }
+    private val pluginsWatchService = FileSystems.getDefault().newWatchService()
+
+    private val settingsWatchService = FileSystems.getDefault().newWatchService()
 
     private val logger = KotlinLogging.logger {  }
 
     private val plugins = HashMap<Path, Collection<Plugin<*>>>()
 
-    private val settings = HashMap<String, Plugin<*>>()
-
-    private val jarWatchService: WatchService = FileSystems.getDefault().newWatchService().apply {
-        pluginsDirectory.registerAll(this)
-    }
-
-    private val settingsWatchService: WatchService = FileSystems.getDefault().newWatchService().apply {
-        settingsDirectory.registerAll(this)
-    }
-
-    private val jarThread = Thread(fileWatcher(jarWatchService, BUFFER_TIME_MS) {
-        val path = pluginsDirectory.resolve(it.context() ?: return@fileWatcher)
-        if (path.toFile().extension == "jar") {
-            plugins.remove(path)?.forEach {
-                settings.remove(it.javaClass.name)
-                it.destroy()
-            }
-            if (verifyJar(path)) {
-                loadJar(path)
-            }
-        }
-    }, pluginsDirectory.toString())
-
-    private val settingsThread = Thread(fileWatcher(settingsWatchService, BUFFER_TIME_MS)  {
-        val path = settingsDirectory.resolve(it.context() ?: return@fileWatcher)
-        val plugin = settings[path.toFile().nameWithoutExtension] ?: return@fileWatcher
-        plugin.settingsFileChanged(it.kind())
-    }, settingsDirectory.toString())
+    private val settings = ConcurrentHashMap<String, Plugin<*>>()
 
     init {
         Files.walkFileTree(pluginsDirectory, object : SimpleFileVisitor<Path>() {
@@ -54,15 +30,36 @@ class PluginLoader(val pluginsDirectory: Path, val settingsDirectory: Path) : Cl
                 return super.visitFile(file, attrs)
             }
         })
-        jarThread.start()
-        settingsThread.start()
+
+        newDirectoryWatchObservable(pluginsDirectory, pluginsWatchService)
+                .filter { it.context() != null }
+                .filter { it.context().toFile().extension == "jar" }
+                .subscribe { we ->
+                    val path = pluginsDirectory.resolve(we.context())
+                    plugins.remove(path)?.forEach { p ->
+                        settings.remove(p.javaClass.name)
+                        p.destroy()
+                    }
+                    if (verifyJar(path)) {
+                        loadJar(path)
+                    }
+                }
+
+        newDirectoryWatchObservable(settingsDirectory, settingsWatchService)
+                .filter { it.context() != null }
+                .subscribe { we ->
+                    val path = pluginsDirectory.resolve(we.context())
+                    val plugin = settings[path.toFile().nameWithoutExtension] ?: return@subscribe
+                    plugin.settingsFileChanged(we.kind())
+                }
     }
 
     private fun loadJar(jar: Path) {
         logger.debug { "Loading plugin jar: $jar" }
         val jarClassLoader = newJarClassLoader(jar)
         @Suppress("UNCHECKED_CAST")
-        val jarPlugins = jarClassLoader.urlClasses.filter { Plugin::class.java.isAssignableFrom(it) }
+        val jarPlugins = jarClassLoader.urlClasses
+                .filter { Plugin::class.java.isAssignableFrom(it) }
                 .map { it as Class<out Plugin<*>> }
                 .filter { !Modifier.isAbstract(it.modifiers) }
                 .map { it.newInstance() }
@@ -75,34 +72,38 @@ class PluginLoader(val pluginsDirectory: Path, val settingsDirectory: Path) : Cl
     }
 
     override fun close() {
-        jarThread.interrupt()
-        settingsThread.interrupt()
         plugins.values.flatMap { it }.forEach { it.destroy() }
         plugins.clear()
         settings.clear()
+        pluginsWatchService.close()
+        settingsWatchService.close()
     }
 
-    private inline fun fileWatcher(watchService: WatchService, bufferTimeMs: Long, crossinline onEvent: (WatchEvent<Path>) -> Unit): Runnable {
-        return Runnable {
+    fun newDirectoryWatchObservable(directory: Path, watchService: WatchService): Observable<WatchEvent<Path>> {
+        return Observable.create<WatchEvent<Path>> { emitter ->
+            directory.registerAll(watchService)
             while (true) {
                 val key: WatchKey
                 try {
                     key = watchService.take() // blocks
-                    Thread.sleep(bufferTimeMs) // accumulate duplicate events
+                    Thread.sleep(50L) // accumulates duplicate events
+                } catch (e: ClosedWatchServiceException) {
+                    emitter.onComplete()
+                    return@create
                 } catch (e: InterruptedException) {
-                    logger.warn { "Stopping. Interrupted." }
-                    return@Runnable
+                    emitter.onError(e)
+                    return@create
                 }
                 @Suppress("UNCHECKED_CAST")
                 for (event in key.pollEvents() as Collection<WatchEvent<Path>>) {
-                    logger.debug { "WatchEvent(kind=${event.kind()}, context=${event.context()}, count=${event.count()})" }
-                    onEvent(event)
+                    logger.debug { "$directory: onNext. Event(${event.kind()}, ${event.context()}, ${event.count()})" }
+                    emitter.onNext(event)
                 }
                 if (!key.reset()) {
-                    logger.error { "Stopping. Error." }
-                    return@Runnable
+                    emitter.onComplete()
+                    return@create
                 }
             }
-        }
+        }.subscribeOn(Schedulers.newThread())
     }
 }

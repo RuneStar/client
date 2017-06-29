@@ -7,11 +7,13 @@ import com.runesuite.client.dev.plugins.newJarClassLoader
 import com.runesuite.client.game.live.Game
 import com.runesuite.general.JavConfig
 import com.runesuite.general.RuneScape
+import io.reactivex.Observable
 import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.nio.file.Paths
+import java.util.concurrent.TimeUnit
 import javax.swing.JFrame
 import javax.swing.WindowConstants
 
@@ -62,10 +64,6 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
     })
-
-//    Observable.interval(2000, TimeUnit.MILLISECONDS).subscribe {
-//
-//    }
 }
 
 private fun Applet.preInit(javConfig: JavConfig) {
