@@ -11,8 +11,8 @@ class GrandExchangeOfferDebug : DisposablePlugin<Plugin.Settings>(), FileReadWri
 
     override val defaultSettings = Plugin.Settings()
 
-    override fun create() {
-        super.create()
+    override fun start() {
+        super.start()
         Canvas.Live.repaints.subscribe { g ->
             val x = 5
             var y = 40
