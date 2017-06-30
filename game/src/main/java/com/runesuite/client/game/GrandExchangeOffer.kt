@@ -33,9 +33,13 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
         else -> false
     }
 
+    override fun toString(): String {
+        return "GrandExchangeOffer(type=$type, id=$id, unitPrice=$unitPrice, currentQuantity=$currentQuantity, totalQuantity=$totalQuantity, status=$status)"
+    }
+
     enum class Type(val id: Int) {
         BUY(0),
-        SELL(8);
+        SELL(1);
 
         companion object {
             val LOOKUP = values().associateBy { it.id }

@@ -60,8 +60,8 @@ class PluginLoader(val pluginsDirectory: Path, val settingsDirectory: Path) : Cl
         @Suppress("UNCHECKED_CAST")
         val jarPlugins = jarClassLoader.urlClasses
                 .filter { Plugin::class.java.isAssignableFrom(it) }
-                .map { it as Class<out Plugin<*>> }
                 .filter { !Modifier.isAbstract(it.modifiers) }
+                .map { it as Class<out Plugin<*>> }
                 .map { it.newInstance() }
         jarPlugins.forEach {
             it.loader = this
