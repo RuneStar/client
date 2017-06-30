@@ -7,7 +7,7 @@ import java.util.*
 
 object Projectiles {
 
-    fun get(): List<Projectile> {
+    val all: List<Projectile> get() {
         val nodes = accessor.projectiles
         val list = ArrayList<Projectile>()
         var node = nodes.sentinel.previous
@@ -17,6 +17,4 @@ object Projectiles {
         }
         return list
     }
-
-    val all get() = get().asSequence()
 }

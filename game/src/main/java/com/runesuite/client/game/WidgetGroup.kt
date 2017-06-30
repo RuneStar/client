@@ -6,12 +6,12 @@ data class WidgetGroup(val id: Int) {
 
     val size get() = Client.accessor.widgets[id]?.size
 
-    val all: Sequence<Widget> get() {
-        return get().asSequence().flatMap { it.all }
+    val flat: List<Widget> get() {
+        return all.flatMap { it.flat }
     }
 
-    fun get(): List<Widget> {
-        return Client.accessor.widgets[id]?.copyOf()?.map { Widget(it) } ?: emptyList()
+    val all: List<Widget> get() {
+        return Client.accessor.widgets[id]?.map { Widget(it) } ?: emptyList()
     }
 
     operator fun get(id: Int): Widget? {

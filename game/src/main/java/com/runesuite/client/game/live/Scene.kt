@@ -61,7 +61,7 @@ interface Scene {
             return accessor.tileHeights[sceneTile.plane][sceneTile.x][sceneTile.y]
         }
 
-        override val base get() = GlobalTile(accessor.baseX, accessor.baseY)
+        override val base get() = GlobalTile(accessor.baseX, accessor.baseY, 0)
 
         override fun toString(): String {
             return "Scene.Live(base=$base)"

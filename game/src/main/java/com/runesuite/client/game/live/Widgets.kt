@@ -4,11 +4,11 @@ import com.runesuite.client.game.Widget
 
 object Widgets {
 
-    val all: Sequence<Widget> get() {
-        return WidgetGroups.all.flatMap { it.all }
+    val flat: List<Widget> get() {
+        return WidgetGroups.all.flatMap { it.flat }
     }
 
     fun get(): List<List<Widget>?> {
-        return WidgetGroups.get().map { it?.get() }
+        return WidgetGroups.get().map { it?.all }
     }
 }

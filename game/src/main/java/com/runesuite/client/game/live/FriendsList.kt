@@ -7,7 +7,7 @@ object FriendsList {
 
     val SIZE = accessor.friendsList.size
 
-    fun get(): List<Friend?> = accessor.friendsList.copyOf().map { it?.let { Friend(it) } }
+    fun get(): List<Friend?> = accessor.friendsList.map { it?.let { Friend(it) } }
 
-    val all: Sequence<Friend> get() = accessor.friendsList.copyOf().asSequence().filterNotNull().map { Friend(it) }
+    val all: List<Friend> get() = accessor.friendsList.mapNotNull { it?.let { Friend(it) } }
 }

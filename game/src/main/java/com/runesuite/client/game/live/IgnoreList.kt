@@ -7,7 +7,7 @@ object IgnoreList {
 
     val SIZE = accessor.ignoreList.size
 
-    fun get(): List<Ignored?> = accessor.ignoreList.copyOf().map { it?.let { Ignored(it) } }
+    fun get(): List<Ignored?> = accessor.ignoreList.map { it?.let { Ignored(it) } }
 
-    val all: Sequence<Ignored> get() = accessor.ignoreList.copyOf().asSequence().filterNotNull().map { Ignored(it) }
+    val all: List<Ignored> get() = accessor.ignoreList.mapNotNull { it?.let { Ignored(it) } }
 }

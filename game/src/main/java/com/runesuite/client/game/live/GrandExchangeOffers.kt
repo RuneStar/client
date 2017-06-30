@@ -7,12 +7,12 @@ object GrandExchangeOffers {
 
     val SIZE = accessor.grandExchangeOffers.size
 
-    val all: Sequence<GrandExchangeOffer> get() {
-        return accessor.grandExchangeOffers.copyOf().asSequence().filterNotNull().filter { it.id != 0 }.map { GrandExchangeOffer(it) }
+    val all: List<GrandExchangeOffer> get() {
+        return accessor.grandExchangeOffers.mapNotNull { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }
     }
 
     fun get(): List<GrandExchangeOffer?> {
-        return accessor.grandExchangeOffers.copyOf().map { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }
+        return accessor.grandExchangeOffers.map { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }
     }
 
     operator fun get(index: Int): GrandExchangeOffer? {

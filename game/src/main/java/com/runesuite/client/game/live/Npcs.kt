@@ -7,9 +7,9 @@ object Npcs {
 
     val SIZE = accessor.npcs.size
 
-    val all: Sequence<Npc> get() = accessor.npcs.copyOf().asSequence().filterNotNull().map { Npc(it) }
+    val all: List<Npc> get() = accessor.npcs.mapNotNull { it?.let { Npc(it) } }
 
-    fun get(): List<Npc?> =  accessor.npcs.copyOf().map { it?.let { Npc(it) } }
+    fun get(): List<Npc?> =  accessor.npcs.map { it?.let { Npc(it) } }
 
     operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it) }
 }

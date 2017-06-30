@@ -9,9 +9,9 @@ object Players {
 
     val local: Player? get() = accessor.localPlayer?.let { Player(it) }
 
-    val all: Sequence<Player> get() = accessor.players.copyOf().asSequence().filterNotNull().map { Player(it) }
+    val all: List<Player> get() = accessor.players.mapNotNull { it?.let { Player(it) } }
 
-    fun get(): List<Player?> =  accessor.players.copyOf().map { it?.let { Player(it) } }
+    fun get(): List<Player?> =  accessor.players.map { it?.let { Player(it) } }
 
     operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
 }

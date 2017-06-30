@@ -7,7 +7,7 @@ object ClanChat {
 
     val SIZE = 100
 
-    fun get(): List<ClanMate?> = accessor.clanChat?.copyOf()?.map { it?.let { ClanMate(it) } } ?: emptyList()
+    fun get(): List<ClanMate?> = accessor.clanChat?.map { it?.let { ClanMate(it) } } ?: emptyList()
 
-    val all: Sequence<ClanMate> get() = accessor.clanChat?.copyOf()?.asSequence()?.filterNotNull()?.map { ClanMate(it) } ?: emptySequence()
+    val all: List<ClanMate> get() = accessor.clanChat?.mapNotNull { it?.let { ClanMate(it) } } ?: emptyList()
 }

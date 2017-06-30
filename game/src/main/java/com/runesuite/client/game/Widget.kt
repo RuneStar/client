@@ -10,12 +10,12 @@ import java.awt.Rectangle
 
 class Widget(override val accessor: XWidget) : Wrapper() {
 
-    val children: List<Widget> get() = accessor.children?.copyOf()?.map { Widget(it) } ?: emptyList()
+    val children: List<Widget> get() = accessor.children?.map { Widget(it) } ?: emptyList()
 
     val childrenSize get() = accessor.children?.size ?: 0
 
-    val all: Sequence<Widget> get() {
-        return sequenceOf(this) + children.asSequence()
+    val flat: List<Widget> get() {
+        return listOf(this) + children
     }
 
     operator fun get(childId: Int) : Widget? = accessor.children?.get(childId)?.let { Widget(it) }

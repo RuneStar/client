@@ -27,12 +27,12 @@ class Player(override val accessor: XPlayer) : Actor(accessor) {
     class Appearance(override val accessor: XPlayerAppearance) : Wrapper() {
 
         val equipment: Map<EquipmentSlot, Int>
-            get() = accessor.equipment.copyOf().withIndex()
+            get() = accessor.equipment.withIndex()
                     .filter { EquipmentSlot.LOOKUP.containsKey(it.index) }
                     .associate { EquipmentSlot.LOOKUP[it.index]!! to it.value }
 
         val bodyColors: Map<BodyPart, Int>
-            get() = accessor.bodyColors.copyOf().withIndex()
+            get() = accessor.bodyColors.withIndex()
                     .associate { BodyPart.LOOKUP[it.index]!! to it.value }
 
         val sex get() = if (accessor.isFemale) Sex.FEMALE else Sex.MALE
