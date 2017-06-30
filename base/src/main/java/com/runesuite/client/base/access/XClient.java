@@ -237,6 +237,16 @@ public interface XClient extends Accessor, XGameShell {
     /**
      * static field
      */
+    XGameObject[] getGameObjects();
+
+    /**
+     * static field
+     */
+    void setGameObjects(XGameObject[] value);
+
+    /**
+     * static field
+     */
     XGameShell getGameShell();
 
     /**
@@ -365,12 +375,12 @@ public interface XClient extends Accessor, XGameShell {
     void setKeyHandler(XKeyHandler value);
 
     /**
-     * static field
+     * public static field
      */
     XNodeCache getKitDefinitionCache();
 
     /**
-     * static field
+     * public static field
      */
     void setKitDefinitionCache(XNodeCache value);
 
@@ -585,12 +595,12 @@ public interface XClient extends Accessor, XGameShell {
     void setMouseY(int value);
 
     /**
-     * static field
+     * public static field
      */
     XNodeCache getNpcDefinitionCache();
 
     /**
-     * static field
+     * public static field
      */
     void setNpcDefinitionCache(XNodeCache value);
 
@@ -605,12 +615,12 @@ public interface XClient extends Accessor, XGameShell {
     void setNpcs(XNpc[] value);
 
     /**
-     * public static field
+     * static field
      */
     XNodeCache getObjectDefinitionCache();
 
     /**
-     * public static field
+     * static field
      */
     void setObjectDefinitionCache(XNodeCache value);
 
@@ -725,12 +735,12 @@ public interface XClient extends Accessor, XGameShell {
     void setSineTable(int[] value);
 
     /**
-     * public static field
+     * static field
      */
     XNodeCache getSpotAnimationDefinitionCache();
 
     /**
-     * public static field
+     * static field
      */
     void setSpotAnimationDefinitionCache(XNodeCache value);
 

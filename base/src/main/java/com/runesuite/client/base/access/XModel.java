@@ -7,32 +7,32 @@ import com.runesuite.client.base.Accessor;
  */
 public interface XModel extends Accessor, XEntity {
     /**
-     * public field
+     *  field
      */
     int[] getIndicesX();
 
     /**
-     * public field
+     *  field
      */
     void setIndicesX(int[] value);
 
     /**
-     * public field
+     *  field
      */
     int[] getIndicesY();
 
     /**
-     * public field
+     *  field
      */
     void setIndicesY(int[] value);
 
     /**
-     * public field
+     *  field
      */
     int[] getIndicesZ();
 
     /**
-     * public field
+     *  field
      */
     void setIndicesZ(int[] value);
 

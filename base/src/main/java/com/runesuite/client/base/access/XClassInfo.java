@@ -9,32 +9,32 @@ import java.lang.reflect.Method;
  */
 public interface XClassInfo extends Accessor, XNode {
     /**
-     * public field
+     *  field
      */
     byte[][][] getBytes();
 
     /**
-     * public field
+     *  field
      */
     void setBytes(byte[][][] value);
 
     /**
-     * public field
+     *  field
      */
     Field[] getFields();
 
     /**
-     * public field
+     *  field
      */
     void setFields(Field[] value);
 
     /**
-     * public field
+     *  field
      */
     Method[] getMethods();
 
     /**
-     * public field
+     *  field
      */
     void setMethods(Method[] value);
 }
