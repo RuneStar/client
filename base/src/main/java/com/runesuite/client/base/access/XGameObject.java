@@ -59,6 +59,16 @@ public interface XGameObject extends Accessor {
     /**
      *  field
      */
+    int getFlags();
+
+    /**
+     *  field
+     */
+    void setFlags(int value);
+
+    /**
+     *  field
+     */
     int getHeight();
 
     /**
@@ -85,16 +95,6 @@ public interface XGameObject extends Accessor {
      *  field
      */
     void setInt6(int value);
-
-    /**
-     *  field
-     */
-    int getOrientation();
-
-    /**
-     *  field
-     */
-    void setOrientation(int value);
 
     /**
      *  field

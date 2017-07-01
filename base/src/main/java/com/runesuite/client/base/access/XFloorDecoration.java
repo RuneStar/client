@@ -19,32 +19,32 @@ public interface XFloorDecoration extends Accessor {
     /**
      *  field
      */
-    int getInt1();
+    int getFlags();
 
     /**
      *  field
      */
-    void setInt1(int value);
+    void setFlags(int value);
+
+    /**
+     *  field
+     */
+    int getHeight();
+
+    /**
+     *  field
+     */
+    void setHeight(int value);
 
     /**
      * public field
      */
-    int getInt2();
+    int getId();
 
     /**
      * public field
      */
-    void setInt2(int value);
-
-    /**
-     *  field
-     */
-    int getInt3();
-
-    /**
-     *  field
-     */
-    void setInt3(int value);
+    void setId(int value);
 
     /**
      *  field

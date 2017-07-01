@@ -27,34 +27,34 @@ public interface XWallDecoration extends Accessor {
     void setEntity2(XEntity value);
 
     /**
+     *  field
+     */
+    int getFlags();
+
+    /**
+     *  field
+     */
+    void setFlags(int value);
+
+    /**
+     *  field
+     */
+    int getHeight();
+
+    /**
+     *  field
+     */
+    void setHeight(int value);
+
+    /**
      * public field
      */
-    int getInt1();
+    int getId();
 
     /**
      * public field
      */
-    void setInt1(int value);
-
-    /**
-     *  field
-     */
-    int getInt2();
-
-    /**
-     *  field
-     */
-    void setInt2(int value);
-
-    /**
-     *  field
-     */
-    int getInt5();
-
-    /**
-     *  field
-     */
-    void setInt5(int value);
+    void setId(int value);
 
     /**
      *  field

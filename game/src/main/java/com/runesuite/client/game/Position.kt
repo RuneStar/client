@@ -14,7 +14,7 @@ data class Position(
         val height: Int,
         val plane: Int
 ) {
-    internal constructor(localX: Int, localY: Int, height: Int = 0, plane: Int = 0) :
+    internal constructor(localX: Int, localY: Int, height: Int, plane: Int) :
             this(localX shr 7, localX and MAX_SUB, localY shr 7, localY and MAX_SUB, height, plane)
 
     internal val localX get() = (x shl 7) or subX

@@ -59,22 +59,22 @@ public interface XBoundaryObject extends Accessor {
     /**
      *  field
      */
-    int getOrientation();
+    int getInt1();
 
     /**
      *  field
      */
-    void setOrientation(int value);
+    void setInt1(int value);
 
     /**
      *  field
      */
-    int getPlane();
+    int getInt2();
 
     /**
      *  field
      */
-    void setPlane(int value);
+    void setInt2(int value);
 
     /**
      *  field
