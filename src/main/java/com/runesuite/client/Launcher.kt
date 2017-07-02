@@ -70,7 +70,7 @@ fun main(args: Array<String>) {
         g.color = Color.WHITE
         SceneObjects.Boundary.getOnPlaneFlat(Game.plane).forEach { obj ->
             obj.location.outline().takeIf { it.bounds in Canvas.Live.shape }?.let { p ->
-                g.drawString("${obj.uid}", p.xpoints[0], p.ypoints[0])
+                g.drawString("${obj.tag}", p.xpoints[0], p.ypoints[0])
             }
         }
     }

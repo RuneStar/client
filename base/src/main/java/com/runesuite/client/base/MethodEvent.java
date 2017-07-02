@@ -1,14 +1,17 @@
 package com.runesuite.client.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 
 public abstract class MethodEvent {
 
     private final Object instance;
 
+    @NotNull
     private final Object[] arguments;
 
-    private MethodEvent(final Object instance, final Object[] arguments) {
+    private MethodEvent(final Object instance, @NotNull final Object[] arguments) {
         this.instance = instance;
         this.arguments = arguments;
     }
@@ -20,13 +23,14 @@ public abstract class MethodEvent {
         return instance;
     }
 
+    @NotNull
     public final Object[] getArguments() {
         return arguments;
     }
 
     public final static class Enter extends MethodEvent {
 
-        public Enter(final Object instance, final Object[] arguments) {
+        public Enter(final Object instance, @NotNull final Object[] arguments) {
             super(instance, arguments);
         }
 
@@ -43,7 +47,7 @@ public abstract class MethodEvent {
 
         private final Object returned;
 
-        public Exit(final Object instance, final Object[] arguments, final Object returned) {
+        public Exit(final Object instance, @NotNull final Object[] arguments, final Object returned) {
             super(instance, arguments);
             this.returned = returned;
         }

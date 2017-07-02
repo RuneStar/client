@@ -1,6 +1,6 @@
 package com.runesuite.client.game
 
-enum class InteractableKind(val id: Int) {
+enum class EntityKind(val id: Int) {
 
     PLAYER(0),
     NPC(1),

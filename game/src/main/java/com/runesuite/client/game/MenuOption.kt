@@ -136,7 +136,7 @@ interface MenuOption {
     }
 
     interface OnObject: MenuOption {
-        val uid: InteractableUid get() = InteractableUid(argument0)
+        val tag: EntityTag get() = EntityTag(argument0)
     }
 
     interface OnGroundItem: MenuOption {
@@ -279,7 +279,7 @@ interface MenuOption {
                     Operator.OBJECT_ACTION_3, Operator.OBJECT_ACTION_4)
         }
         override fun toString(): String {
-            return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, uid=$uid, targetName=$targetName, action=$action)"
+            return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, tag=$tag, targetName=$targetName, action=$action)"
         }
     }
 
@@ -359,7 +359,7 @@ interface MenuOption {
             val OPERATORS = setOf(Operator.SPELL_ON_OBJECT, Operator.OBJECT_EXAMINE, Operator.ITEM_ON_OBJECT)
         }
         override fun toString(): String {
-            return "OnObjectSimple(opcode=$opcode, operator=$operator, uid=$uid, location=$location, targetName=$targetName, action=$action)"
+            return "OnObjectSimple(opcode=$opcode, operator=$operator, tag=$tag, location=$location, targetName=$targetName, action=$action)"
         }
     }
 }
