@@ -4,13 +4,10 @@ import com.runesuite.client.base.Client
 import com.runesuite.client.base.access.XClient
 import com.runesuite.client.dev.plugins.PluginLoader
 import com.runesuite.client.dev.plugins.newJarClassLoader
-import com.runesuite.client.game.live.Canvas
 import com.runesuite.client.game.live.Game
-import com.runesuite.client.game.live.SceneObjects
 import com.runesuite.general.JavConfig
 import com.runesuite.general.RuneScape
 import java.applet.Applet
-import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -65,16 +62,6 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
     })
-
-    Canvas.Live.repaints.subscribe { g ->
-        g.color = Color.WHITE
-        SceneObjects.Boundary.getOnPlaneFlat(Game.plane).forEach { obj ->
-            obj.location.outline().takeIf { it.bounds in Canvas.Live.shape }?.let { p ->
-                g.drawString("${obj.tag}", p.xpoints[0], p.ypoints[0])
-            }
-        }
-    }
-
 }
 
 private fun Applet.preInit(javConfig: JavConfig) {
