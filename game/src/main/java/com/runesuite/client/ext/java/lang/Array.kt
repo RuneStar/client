@@ -1,15 +1,21 @@
 package com.runesuite.client.ext.java.lang
 
+/**
+ * Deep copies component arrays, shallow copies everything else.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T> Array<T>.deepCopyOf(): Array<T> {
+    if (size == 0) return this
     val componentType: Class<*> = this::class.java.componentType
     return if (componentType.isArray) {
         val newArray = java.lang.reflect.Array.newInstance(componentType, size) as Array<T>
         val componentComponentType = componentType.componentType
         if (componentComponentType.isPrimitive) {
             for (i in indices) {
-                newArray[i] = java.lang.reflect.Array.newInstance(componentComponentType, size) as T
-                System.arraycopy(get(i), 0, newArray[i], 0, java.lang.reflect.Array.getLength(newArray[i]))
+                val elem = get(i)
+                val length = java.lang.reflect.Array.getLength(elem)
+                newArray[i] = java.lang.reflect.Array.newInstance(componentComponentType, length) as T
+                System.arraycopy(elem, 0, newArray[i], 0, length)
             }
         } else {
             for (i in indices) {
