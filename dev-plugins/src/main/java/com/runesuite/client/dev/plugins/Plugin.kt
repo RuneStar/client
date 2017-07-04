@@ -8,7 +8,9 @@ import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
-abstract class Plugin<T : Plugin.Settings> : FileReadWriter<T> {
+abstract class Plugin<T : Plugin.Settings> {
+
+    open val settingsWriter: FileReadWriter<T> = FileReadWriter.Yaml()
 
     protected val logger = KotlinLogging.logger(javaClass.name)
 
@@ -25,7 +27,7 @@ abstract class Plugin<T : Plugin.Settings> : FileReadWriter<T> {
     private fun tryWrite(file: Path, type: Class<T>, value: T) {
         try {
             ignoreNextEvent = true
-            write(file, type, value)
+            settingsWriter.write(file, type, value)
         } catch (e: IOException) {
             logger.error(e) { "Write failed. Destroying." }
             destroy()
@@ -37,7 +39,7 @@ abstract class Plugin<T : Plugin.Settings> : FileReadWriter<T> {
         logger.debug { "Creating" }
         if (Files.exists(settingsFile)) {
             try {
-                settings = read(settingsFile, defaultSettings.javaClass)
+                settings = settingsWriter.read(settingsFile, defaultSettings.javaClass)
             } catch (e: IOException) {
                 logger.warn(e) { "Read failed. Reverting to default settings." }
                 settings = defaultSettings
@@ -91,7 +93,7 @@ abstract class Plugin<T : Plugin.Settings> : FileReadWriter<T> {
                     stop()
                 }
                 try {
-                    settings = read(settingsFile, defaultSettings.javaClass)
+                    settings = settingsWriter.read(settingsFile, defaultSettings.javaClass)
                 } catch (e: IOException) {
                     logger.warn(e) { "Read failed. Writing current settings." }
                     tryWrite(settingsFile, defaultSettings.javaClass, settings)

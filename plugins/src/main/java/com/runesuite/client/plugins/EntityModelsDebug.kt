@@ -1,12 +1,11 @@
 package com.runesuite.client.plugins
 
 import com.runesuite.client.dev.plugins.DisposablePlugin
-import com.runesuite.client.dev.plugins.FileReadWriter
 import com.runesuite.client.dev.plugins.Plugin
 import com.runesuite.client.game.live.*
 import java.awt.Color
 
-class EntityModelsDebug : DisposablePlugin<EntityModelsDebug.Settings>(), FileReadWriter.Yaml<EntityModelsDebug.Settings> {
+class EntityModelsDebug : DisposablePlugin<EntityModelsDebug.Settings>() {
 
     override val defaultSettings = Settings()
 

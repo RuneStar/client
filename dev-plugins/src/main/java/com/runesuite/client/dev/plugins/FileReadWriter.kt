@@ -13,11 +13,9 @@ interface FileReadWriter<T> {
     @Throws(IOException::class)
     fun write(file: Path, type: Class<T>, value: T)
 
-    interface Yaml<T> : FileReadWriter<T> {
+    class Yaml<T> : FileReadWriter<T> {
 
-        private companion object {
-            val mapper = ObjectMapper(YAMLFactory()).findAndRegisterModules()
-        }
+        private val mapper = ObjectMapper(YAMLFactory()).findAndRegisterModules()
 
         override fun read(file: Path, type: Class<T>): T {
             return mapper.readValue(file.toFile(), type)

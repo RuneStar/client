@@ -1,7 +1,6 @@
 package com.runesuite.client.plugins
 
 import com.runesuite.client.dev.plugins.DisposablePlugin
-import com.runesuite.client.dev.plugins.FileReadWriter
 import com.runesuite.client.dev.plugins.Plugin
 import com.runesuite.client.game.live.Canvas
 import com.runesuite.client.game.live.Game
@@ -10,7 +9,7 @@ import com.runesuite.client.game.live.Mouse
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 
-class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>(), FileReadWriter.Yaml<SwingEventsLogger.Settings> {
+class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
 
     override val defaultSettings = Settings()
 

@@ -1,14 +1,13 @@
 package com.runesuite.client.plugins
 
 import com.runesuite.client.dev.plugins.DisposablePlugin
-import com.runesuite.client.dev.plugins.FileReadWriter
 import com.runesuite.client.dev.plugins.Plugin
 import com.runesuite.client.game.live.Canvas
 import com.runesuite.client.game.live.Menu
 import java.awt.BasicStroke
 import java.awt.Color
 
-class MenuDebug : DisposablePlugin<MenuDebug.Settings>(), FileReadWriter.Yaml<MenuDebug.Settings> {
+class MenuDebug : DisposablePlugin<MenuDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
