@@ -1,6 +1,8 @@
 package com.runesuite.client.game.live
 
 import com.runesuite.client.base.Client.accessor
+import com.runesuite.client.ext.java.lang.arrayMap
+import com.runesuite.client.ext.java.lang.deepCopyOf
 import com.runesuite.client.game.GlobalTile
 import com.runesuite.client.game.Position
 import com.runesuite.client.game.SceneTile
@@ -24,7 +26,12 @@ interface Scene {
 
     val base: GlobalTile
 
-    fun getHeight(sceneTile: SceneTile): Int
+    fun getHeight(sceneTile: SceneTile): Int {
+        require(sceneTile.isLoaded) { sceneTile }
+        return heights[sceneTile.plane][sceneTile.x][sceneTile.y]
+    }
+
+    val heights: Array<Array<IntArray>>
 
     fun getTileHeight(position: Position): Int {
         require(position.isLoaded) { position }
@@ -40,9 +47,19 @@ interface Scene {
                 (128 - position.subY) * (position.subX * e + o * (128 - position.subX) shr 7) shr 7
     }
 
-    fun getRenderFlags(sceneTile: SceneTile): Byte
+    fun getRenderFlags(sceneTile: SceneTile): Byte {
+        require(sceneTile.isLoaded) { sceneTile }
+        return renderFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
+    }
 
-    fun getCollisionFlags(sceneTile: SceneTile): Int
+    val renderFlags: Array<Array<ByteArray>>
+
+    fun getCollisionFlags(sceneTile: SceneTile): Int {
+        require(sceneTile.isLoaded) { sceneTile }
+        return collisionFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
+    }
+
+    val collisionFlags: Array<Array<IntArray>>
 
     object Live : Scene {
 
@@ -51,49 +68,29 @@ interface Scene {
             return accessor.collisionMaps[sceneTile.plane].flags[sceneTile.x][sceneTile.y]
         }
 
-        override fun getRenderFlags(sceneTile: SceneTile): Byte {
-            require(sceneTile.isLoaded) { sceneTile }
-            return accessor.tileRenderFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
-        }
+        override val collisionFlags get() = accessor.collisionMaps.arrayMap { it.flags }
 
-        override fun getHeight(sceneTile: SceneTile): Int {
-            require(sceneTile.isLoaded) { sceneTile }
-            return accessor.tileHeights[sceneTile.plane][sceneTile.x][sceneTile.y]
-        }
+        override val renderFlags get() = accessor.tileRenderFlags
+
+        override val heights get() = accessor.tileHeights
 
         override val base get() = GlobalTile(accessor.baseX, accessor.baseY, 0)
 
         override fun toString(): String {
             return "Scene.Live(base=$base)"
         }
-
-        fun copyOf(): Copy = Copy(base,
-                accessor.tileRenderFlags.map { it.map { it.toList() } },
-                accessor.tileHeights.map { it.map { it.toList() } },
-                accessor.collisionMaps.map { it.flags.map { it.toList() } })
     }
 
-    data class Copy(
+    fun copyOf(): Copy {
+        return Copy(base, renderFlags.deepCopyOf(), heights.deepCopyOf(), collisionFlags.deepCopyOf())
+    }
+
+    class Copy(
             override val base: GlobalTile,
-            val renderFlags: List<List<List<Byte>>>,
-            val heights: List<List<List<Int>>>,
-            val collisionFlags: List<List<List<Int>>>
+            override val renderFlags: Array<Array<ByteArray>>,
+            override val heights: Array<Array<IntArray>>,
+            override val collisionFlags: Array<Array<IntArray>>
     ) : Scene {
-
-        override fun getCollisionFlags(sceneTile: SceneTile): Int {
-            require(sceneTile.isLoaded) { sceneTile }
-            return collisionFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
-        }
-
-        override fun getHeight(sceneTile: SceneTile): Int {
-            require(sceneTile.isLoaded) { sceneTile }
-            return heights[sceneTile.plane][sceneTile.x][sceneTile.y]
-        }
-
-        override fun getRenderFlags(sceneTile: SceneTile): Byte {
-            require(sceneTile.isLoaded) { sceneTile }
-            return renderFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
-        }
 
         override fun toString(): String {
             return "Scene.Copy(base=$base)"

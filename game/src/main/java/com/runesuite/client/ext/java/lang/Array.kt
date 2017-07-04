@@ -22,3 +22,9 @@ fun <T> Array<T>.deepCopyOf(): Array<T> {
         clone()
     }
 }
+
+inline fun <T, reified R> Array<T>.arrayMap(transform: (T) -> R): Array<R> {
+    return Array(size) {
+        transform(get(it))
+    }
+}
