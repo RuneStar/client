@@ -103,6 +103,7 @@ interface MenuOption {
             val base = Base(opcode, operator, argument0, argument1, argument2, targetName, action)
             return when(operator) {
                 // todo: subclasses
+                // todo: Object Examine is wrong
                 in OnObjectIndexed.OPERATORS -> OnObjectIndexed(base)
                 in Cancel.OPERATORS -> Cancel(base)
                 in WalkHere.OPERATORS -> WalkHere(base)

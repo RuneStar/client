@@ -5,7 +5,7 @@ import com.runesuite.client.base.access.XTile
 import com.runesuite.client.game.GroundItem
 import com.runesuite.client.game.SceneTile
 
-object GroundItems : SceneObjects.Base.Many<GroundItem>() {
+object GroundItems : TileEntities.Many<GroundItem>() {
 
     override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<GroundItem> {
         val pile = xTile?.groundItemPile ?: return emptyList()
