@@ -1,6 +1,6 @@
 package com.runesuite.client.game
 
-import com.runesuite.client.ext.swing.toPolygon
+import com.runesuite.client.ext.java.swing.toPolygon
 import com.runesuite.client.game.live.Projection
 import com.runesuite.client.game.live.Scene
 import java.awt.Polygon

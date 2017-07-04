@@ -3,7 +3,7 @@ package com.runesuite.client.game.live
 import com.runesuite.client.base.Client
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XClient
-import com.runesuite.client.ext.swing.getWindowAncestor
+import com.runesuite.client.ext.java.swing.getWindowAncestor
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.applet.Applet

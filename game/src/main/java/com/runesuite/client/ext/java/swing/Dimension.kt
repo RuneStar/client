@@ -1,4 +1,4 @@
-package com.runesuite.client.ext.swing
+package com.runesuite.client.ext.java.swing
 
 import java.awt.Dimension
 
