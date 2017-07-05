@@ -16,6 +16,9 @@ public interface XScene extends Accessor {
     @NotNull
     MethodExecution getWallDecoration = new MethodExecution();
 
+    @NotNull
+    MethodExecution newGroundItemPile = new MethodExecution();
+
     /**
      *  field
      */
@@ -50,4 +53,10 @@ public interface XScene extends Accessor {
      * public method
      */
     XWallDecoration getWallDecoration(int plane, int x, int y);
+
+    /**
+     * public method
+     */
+    void newGroundItemPile(int plane, int x, int y, int int0, XEntity bottom, int int1,
+                           XEntity middle, XEntity top);
 }

@@ -1,16 +1,23 @@
 package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
-import java.lang.String;
-import java.lang.management.GarbageCollectorMXBean;
 import org.jetbrains.annotations.NotNull;
+
+import java.lang.management.GarbageCollectorMXBean;
 
 /**
  * public final class
  */
 public interface XClient extends Accessor, XGameShell {
+
+    @NotNull
+    MethodExecution getItemDefinition = new MethodExecution();
+
     @NotNull
     MethodExecution getNpcDefinition = new MethodExecution();
+
+    @NotNull
+    MethodExecution getObjectDefinition = new MethodExecution();
 
     @NotNull
     MethodExecution init = new MethodExecution();
@@ -1007,7 +1014,17 @@ public interface XClient extends Accessor, XGameShell {
     /**
      * public static method
      */
+    XItemDefinition getItemDefinition(int id);
+
+    /**
+     * public static method
+     */
     XNpcDefinition getNpcDefinition(int id);
+
+    /**
+     * public static method
+     */
+    XObjectDefinition getObjectDefinition(int id);
 
     /**
      * public final method
