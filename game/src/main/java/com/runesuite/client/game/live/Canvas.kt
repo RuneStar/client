@@ -7,6 +7,7 @@ import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.awt.Graphics2D
 import java.awt.Rectangle
+import java.awt.Toolkit
 import java.awt.event.ComponentEvent
 import java.awt.event.FocusEvent
 
@@ -20,12 +21,17 @@ interface Canvas {
             accessor.gameDrawingMode = 2
         }
 
+        private val renderingHints = Toolkit.getDefaultToolkit()
+                        .getDesktopProperty("awt.font.desktophints") as Map<*, *>?
+
         override val shape get() = Rectangle(accessor.canvas.size)
 
-        val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.enter.map {
-            val gp = it.instance as XGraphicsProvider
-            gp.image.graphics as Graphics2D
-        }
+        val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.enter.map { me ->
+            val gp = me.instance as XGraphicsProvider
+            val g2d = gp.image.graphics as Graphics2D
+            renderingHints?.let { g2d.addRenderingHints(it) }
+            g2d
+        }.publish().refCount().map { it.create() as Graphics2D }
 
         /**
          * @see[java.awt.event.FocusListener]
