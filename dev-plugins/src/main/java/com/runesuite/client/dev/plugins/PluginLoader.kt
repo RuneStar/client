@@ -56,7 +56,7 @@ class PluginLoader(val pluginsDirectory: Path, val settingsDirectory: Path) : Cl
 
     private fun loadJar(jar: Path) {
         logger.debug { "Loading plugin jar: $jar" }
-        val jarClassLoader = newJarClassLoader(jar)
+        val jarClassLoader = URLClassLoader(jar)
         @Suppress("UNCHECKED_CAST")
         val jarPlugins = jarClassLoader.urlClasses
                 .filter { Plugin::class.java.isAssignableFrom(it) }

@@ -34,8 +34,7 @@ abstract class Plugin<T : Plugin.Settings> {
         }
     }
 
-    @OverridingMethodsMustInvokeSuper
-    open fun create() {
+    fun create() {
         logger.debug { "Creating" }
         if (Files.exists(settingsFile)) {
             try {
@@ -64,8 +63,7 @@ abstract class Plugin<T : Plugin.Settings> {
         logger.debug { "Stopping" }
     }
 
-    @OverridingMethodsMustInvokeSuper
-    open fun destroy() {
+    fun destroy() {
         logger.debug { "Destroying" }
         if (settings.active) {
             stop()

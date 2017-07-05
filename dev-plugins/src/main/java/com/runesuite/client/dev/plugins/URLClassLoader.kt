@@ -30,6 +30,6 @@ val URLClassLoader.urlClasses: Collection<Class<*>> get() {
     return classes
 }
 
-fun newJarClassLoader(jar: Path): URLClassLoader {
-    return URLClassLoader(arrayOf(jar.toUri().toURL()))
+fun URLClassLoader(vararg paths: Path): URLClassLoader {
+    return URLClassLoader(paths.map { it.toUri().toURL() }.toTypedArray())
 }

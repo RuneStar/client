@@ -3,18 +3,15 @@ package com.runesuite.client
 import com.runesuite.client.base.Client
 import com.runesuite.client.base.access.XClient
 import com.runesuite.client.dev.plugins.PluginLoader
-import com.runesuite.client.dev.plugins.newJarClassLoader
-import com.runesuite.client.game.live.ClanChat
+import com.runesuite.client.dev.plugins.URLClassLoader
 import com.runesuite.client.game.live.Game
 import com.runesuite.general.JavConfig
 import com.runesuite.general.RuneScape
-import io.reactivex.Observable
 import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
 import javax.swing.JFrame
 import javax.swing.WindowConstants
 
@@ -34,7 +31,7 @@ fun main(args: Array<String>) {
 
     val javConfig = JavConfig()
 
-    val classLoader = newJarClassLoader(gamepack)
+    val classLoader = URLClassLoader(gamepack)
     Client.accessor = classLoader.loadClass(javConfig.initialClass).newInstance() as XClient
     val applet = Client.accessor as Applet
 
