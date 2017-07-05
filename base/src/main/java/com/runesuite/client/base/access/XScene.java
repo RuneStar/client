@@ -17,7 +17,10 @@ public interface XScene extends Accessor {
     MethodExecution getWallDecoration = new MethodExecution();
 
     @NotNull
-    MethodExecution newGroundItemPile = new MethodExecution();
+    MethodExecution removeGroundItemPile = new MethodExecution();
+
+    @NotNull
+    MethodExecution setGroundItemPile = new MethodExecution();
 
     /**
      *  field
@@ -57,6 +60,11 @@ public interface XScene extends Accessor {
     /**
      * public method
      */
-    void newGroundItemPile(int plane, int x, int y, int int0, XEntity bottom, int int1,
+    void removeGroundItemPile(int plane, int x, int y);
+
+    /**
+     * public method
+     */
+    void setGroundItemPile(int plane, int x, int y, int int0, XEntity bottom, int int1,
                            XEntity middle, XEntity top);
 }

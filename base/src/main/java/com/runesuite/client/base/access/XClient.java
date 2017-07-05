@@ -1,15 +1,14 @@
 package com.runesuite.client.base.access;
 
 import com.runesuite.client.base.Accessor;
-import org.jetbrains.annotations.NotNull;
-
+import java.lang.String;
 import java.lang.management.GarbageCollectorMXBean;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * public final class
  */
 public interface XClient extends Accessor, XGameShell {
-
     @NotNull
     MethodExecution getItemDefinition = new MethodExecution();
 

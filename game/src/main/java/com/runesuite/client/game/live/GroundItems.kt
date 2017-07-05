@@ -20,7 +20,17 @@ object GroundItems : TileEntities.Many<GroundItem>() {
         return list
     }
 
-    val spawns: Observable<SceneTile> = XScene.newGroundItemPile.exit.map {
+    /**
+     * Item added or removed from tile, tile now has item(s)
+     */
+    val pileChanges: Observable<SceneTile> = XScene.setGroundItemPile.exit.map {
+        SceneTile(it.arguments[1] as Int, it.arguments[2] as Int, it.arguments[0] as Int)
+    }
+
+    /**
+     * Item removed from tile, tile now has no items
+     */
+    val pileRemovals: Observable<SceneTile> = XScene.removeGroundItemPile.exit.map {
         SceneTile(it.arguments[1] as Int, it.arguments[2] as Int, it.arguments[0] as Int)
     }
 }
