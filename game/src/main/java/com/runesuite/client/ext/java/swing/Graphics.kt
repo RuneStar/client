@@ -25,3 +25,7 @@ fun Graphics.drawImage(img: Image, point: Point) {
 fun Graphics.drawPoint(point: Point) {
     point.run { drawLine(x, y, x, y) }
 }
+
+fun Graphics.drawString(string: String, point: Point) {
+    drawString(string, point.x, point.y)
+}

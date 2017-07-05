@@ -14,3 +14,7 @@ fun List<Point>.toPolygon(): Polygon {
         ypoints = IntArray(size) { get(it).y }
     }
 }
+
+fun Point.copyOf(): Point {
+    return location
+}
