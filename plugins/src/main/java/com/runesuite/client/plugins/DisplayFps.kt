@@ -3,11 +3,12 @@ package com.runesuite.client.plugins
 import com.runesuite.client.base.Client
 import com.runesuite.client.dev.plugins.DisposablePlugin
 import com.runesuite.client.dev.plugins.Plugin
+import com.runesuite.client.ext.java.swing.TextLayout
+import com.runesuite.client.ext.java.swing.drawTextLayout
 import com.runesuite.client.game.live.Canvas
 import java.awt.Color
 import java.awt.Font
-import java.awt.Point
-import java.awt.font.TextLayout
+import java.awt.geom.Point2D
 
 class DisplayFps : DisposablePlugin<DisplayFps.Settings>() {
 
@@ -27,14 +28,13 @@ class DisplayFps : DisposablePlugin<DisplayFps.Settings>() {
                 g.font = font
 
                 val canvas = Canvas.Live.shape
-
                 val string = Client.accessor.fps.toString()
-
-                val stringBounds = TextLayout(string, font, g.fontRenderContext).bounds.bounds
-
-                g.drawString(string,
-                        canvas.width - stringBounds.width - settings.offset.x,
+                val textLayout = TextLayout(string, g)
+                val stringBounds = textLayout.bounds
+                val drawPt = Point2D.Double(
+                        canvas.getWidth() - stringBounds.width - settings.offset.x,
                         stringBounds.height + settings.offset.y)
+                g.drawTextLayout(textLayout, drawPt)
             })
         }
     }
@@ -45,12 +45,12 @@ class DisplayFps : DisposablePlugin<DisplayFps.Settings>() {
         val colorRgb = Color.YELLOW.rgb
         val clientDisplayFps = false
         val customDisplayFps = true
-        val offset = Point(1, 1)
+        val offset = Point2D.Double(2.0, 2.0)
 
         class FontDecode {
             val name = Font.DIALOG
             val style = "plain"
-            val size = 12
+            val size = 14
         }
     }
 }
