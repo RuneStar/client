@@ -1,4 +1,4 @@
-package com.runesuite.client.plugins
+package com.runesuite.client.plugins.debug
 
 import com.google.common.cache.CacheBuilder
 import com.runesuite.client.dev.plugins.DisposablePlugin

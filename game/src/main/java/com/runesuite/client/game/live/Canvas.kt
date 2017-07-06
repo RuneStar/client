@@ -3,6 +3,7 @@ package com.runesuite.client.game.live
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XGameShell
 import com.runesuite.client.base.access.XGraphicsProvider
+import com.runesuite.client.ext.java.swing.create2D
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.awt.Graphics2D
@@ -21,7 +22,7 @@ interface Canvas {
             accessor.gameDrawingMode = 2
         }
 
-        private val renderingHints = Toolkit.getDefaultToolkit()
+        private val desktopHints = Toolkit.getDefaultToolkit()
                         .getDesktopProperty("awt.font.desktophints") as Map<*, *>?
 
         override val shape get() = Rectangle(accessor.canvas.size)
@@ -29,9 +30,9 @@ interface Canvas {
         val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.enter.map { me ->
             val gp = me.instance as XGraphicsProvider
             val g2d = gp.image.graphics as Graphics2D
-            renderingHints?.let { g2d.addRenderingHints(it) }
+            desktopHints?.let { g2d.addRenderingHints(it) }
             g2d
-        }.publish().refCount().map { it.create() as Graphics2D }
+        }.publish().refCount().map { it.create2D() }
 
         /**
          * @see[java.awt.event.FocusListener]

@@ -1,4 +1,4 @@
-package com.runesuite.client.plugins
+package com.runesuite.client.plugins.debug
 
 import com.runesuite.client.dev.plugins.DisposablePlugin
 import com.runesuite.client.dev.plugins.Plugin
