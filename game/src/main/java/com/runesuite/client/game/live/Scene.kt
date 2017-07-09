@@ -1,8 +1,7 @@
 package com.runesuite.client.game.live
 
+import com.hunterwb.kxtra.arrays.deepCopyOf
 import com.runesuite.client.base.Client.accessor
-import com.runesuite.client.ext.java.lang.arrayMap
-import com.runesuite.client.ext.java.lang.deepCopyOf
 import com.runesuite.client.game.GlobalTile
 import com.runesuite.client.game.Position
 import com.runesuite.client.game.SceneTile
@@ -68,7 +67,7 @@ interface Scene {
             return accessor.collisionMaps[sceneTile.plane].flags[sceneTile.x][sceneTile.y]
         }
 
-        override val collisionFlags get() = accessor.collisionMaps.arrayMap { it.flags }
+        override val collisionFlags get() = accessor.collisionMaps.map { it.flags }.toTypedArray()
 
         override val renderFlags get() = accessor.tileRenderFlags
 

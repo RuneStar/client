@@ -1,9 +1,9 @@
 package com.runesuite.client.game.live
 
+import com.hunterwb.kxtra.swing.windowAncestor
 import com.runesuite.client.base.Client
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XClient
-import com.runesuite.client.ext.java.swing.getWindowAncestor
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.applet.Applet
@@ -30,7 +30,7 @@ object Game {
      * @see[java.awt.event.WindowListener][java.awt.event.WindowStateListener][java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
-            checkNotNull((accessor as Applet).getWindowAncestor()) { "Client has no window" }
+            checkNotNull((accessor as Applet).windowAncestor()) { "Client has no window" }
     )
 
     /**

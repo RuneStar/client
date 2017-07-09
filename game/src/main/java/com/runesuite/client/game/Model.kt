@@ -1,8 +1,8 @@
 package com.runesuite.client.game
 
 
+import com.hunterwb.kxtra.swing.Polygon
 import com.runesuite.client.base.access.XModel
-import com.runesuite.client.ext.java.swing.toPolygon
 import com.runesuite.client.game.live.Projection
 import java.awt.Polygon
 import java.util.*
@@ -42,6 +42,6 @@ class Model(
 
     fun trianglesToScreen(projection: Projection = Projection.Viewport.Live): List<Polygon> {
         return getTriangles().map { it.map { projection.toScreen(it, base) } }
-                .map { it.toPolygon() }
+                .map { Polygon(it) }
     }
 }

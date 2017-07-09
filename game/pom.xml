@@ -43,6 +43,16 @@
             <artifactId>rxjava2-swing</artifactId>
             <version>LATEST</version>
         </dependency>
+        <dependency>
+            <groupId>com.hunterwb.kxtra</groupId>
+            <artifactId>kxtra-swing</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hunterwb.kxtra</groupId>
+            <artifactId>kxtra-arrays</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <build>

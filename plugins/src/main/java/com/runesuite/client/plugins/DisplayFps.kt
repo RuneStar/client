@@ -1,10 +1,10 @@
 package com.runesuite.client.plugins
 
+import com.hunterwb.kxtra.swing.TextLayout
+import com.hunterwb.kxtra.swing.drawTextLayout
 import com.runesuite.client.base.Client
 import com.runesuite.client.dev.plugins.DisposablePlugin
 import com.runesuite.client.dev.plugins.Plugin
-import com.runesuite.client.ext.java.swing.TextLayout
-import com.runesuite.client.ext.java.swing.drawTextLayout
 import com.runesuite.client.game.live.Canvas
 import java.awt.Color
 import java.awt.Font

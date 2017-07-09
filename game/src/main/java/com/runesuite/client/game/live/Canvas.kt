@@ -1,9 +1,9 @@
 package com.runesuite.client.game.live
 
+import com.hunterwb.kxtra.swing.create2D
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XGameShell
 import com.runesuite.client.base.access.XGraphicsProvider
-import com.runesuite.client.ext.java.swing.create2D
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.awt.Graphics2D

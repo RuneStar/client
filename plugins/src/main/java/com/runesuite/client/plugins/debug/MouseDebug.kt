@@ -1,9 +1,9 @@
 package com.runesuite.client.plugins.debug
 
 import com.google.common.cache.CacheBuilder
+import com.hunterwb.kxtra.swing.drawPoint
 import com.runesuite.client.dev.plugins.DisposablePlugin
 import com.runesuite.client.dev.plugins.Plugin
-import com.runesuite.client.ext.java.swing.drawPoint
 import com.runesuite.client.game.live.Canvas
 import com.runesuite.client.game.live.Mouse
 import java.awt.BasicStroke
