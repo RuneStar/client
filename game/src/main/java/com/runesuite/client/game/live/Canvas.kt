@@ -1,6 +1,7 @@
 package com.runesuite.client.game.live
 
 import com.hunterwb.kxtra.swing.create2D
+import com.hunterwb.kxtra.swing.getFontDesktopHints
 import com.runesuite.client.base.Client.accessor
 import com.runesuite.client.base.access.XGameShell
 import com.runesuite.client.base.access.XGraphicsProvider
@@ -22,8 +23,7 @@ interface Canvas {
             accessor.gameDrawingMode = 2
         }
 
-        private val desktopHints = Toolkit.getDefaultToolkit()
-                        .getDesktopProperty("awt.font.desktophints") as Map<*, *>?
+        private val desktopHints = Toolkit.getDefaultToolkit().getFontDesktopHints()
 
         override val shape get() = Rectangle(accessor.canvas.size)
 

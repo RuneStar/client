@@ -1,16 +1,20 @@
 package com.runesuite.client.dev.plugins
 
+import com.hunterwb.kxtra.swing.Font
 import mu.KotlinLogging
+import java.awt.Color
+import java.awt.Font
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
+import java.util.function.Supplier
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class Plugin<T : Plugin.Settings> {
 
-    open val settingsWriter: FileReadWriter<T> = FileReadWriter.Yaml()
+    open val settingsWriter: ObjectReadWriter<T> = ObjectReadWriter.Yaml()
 
     protected val logger = KotlinLogging.logger(javaClass.name)
 
@@ -106,5 +110,22 @@ abstract class Plugin<T : Plugin.Settings> {
 
     open class Settings {
         val active = false
+
+        data class AwtFont(
+                val name: String = Font.DIALOG,
+                val style: String = "plain",
+                val size: Float = 12f
+        ) : Supplier<Font> {
+            override fun get() = Font(name, style, size)
+        }
+
+        data class AwtColor(
+                val r: Int = 0,
+                val g: Int = 0,
+                val b: Int = 0,
+                val a: Int = 255
+        ) : Supplier<Color> {
+            override fun get() = Color(r, g, b, a)
+        }
     }
 }

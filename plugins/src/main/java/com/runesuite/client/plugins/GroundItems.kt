@@ -1,8 +1,9 @@
 package com.runesuite.client.plugins
 
-import com.google.common.base.Suppliers
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
+import com.hunterwb.kxtra.swing.TextLayout
+import com.hunterwb.kxtra.swing.drawTextLayout
 import com.runesuite.client.base.Client
 import com.runesuite.client.base.access.XItemDefinition
 import com.runesuite.client.dev.plugins.DisposablePlugin
@@ -11,13 +12,9 @@ import com.runesuite.client.game.GlobalTile
 import com.runesuite.client.game.live.Canvas
 import com.runesuite.client.game.live.Game
 import com.runesuite.client.game.live.Viewport
-import com.runesuite.general.rsbuddy.Summary
-import java.awt.Color
-import java.awt.Font
-import java.awt.Point
+import java.awt.geom.Point2D
+import java.awt.geom.Rectangle2D
 import java.util.AbstractMap
-import java.util.concurrent.TimeUnit
-import java.util.function.Supplier
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashMap
 import kotlin.collections.component1
@@ -30,8 +27,6 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     private val tiles = HashSet<GlobalTile>()
 
-    private lateinit var osbuddySummary: Supplier<Summary>
-
     private val definitions = CacheBuilder.newBuilder()
             .build(object : CacheLoader<Int, XItemDefinition>() {
                 override fun load(key: Int): XItemDefinition {
@@ -42,8 +37,6 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun start() {
         super.start()
         tiles.clear()
-        osbuddySummary = Suppliers.memoizeWithExpiration({ Summary() },
-                settings.osbuddyExchange.refreshTimeMinutes.toLong(), TimeUnit.MINUTES)
 
         add(LiveGroundItems.pileRemovals.subscribe {
             tiles.remove(it.toGlobalTile())
@@ -52,13 +45,13 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             tiles.add(it.toGlobalTile())
         })
 
-        val font = Font.decode("${settings.font.name}-${settings.font.style}-${settings.font.size}")
-        val shadowColor = Color(settings.shadow.colorRgb)
+        val shadowColor = settings.shadow.color.get()
+        val font = settings.font.get()
+        val color = settings.color.get()
 
         add(Canvas.Live.repaints.subscribe { g ->
-            g.color = Color.WHITE
+            g.color = color
             g.font = font
-            val frc = g.fontRenderContext
 
             val itr = tiles.iterator()
             var gTile: GlobalTile
@@ -94,44 +87,35 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     items.asReversed().asSequence().map { AbstractMap.SimpleEntry(it.id, it.quantity)  }
                 }
 
-                var currY = tilePt.y - settings.initialOffsetY
-                val centerX = tilePt.x
+                var currY = tilePt.getY() - settings.initialOffsetY
+                val centerX = tilePt.getX()
 
                 for ((id, quantity) in itemEntries) {
-                    val itemSb = StringBuilder()
-                    if (settings.names) {
-                        val def = definitions[id]
-                        itemSb.append(def.name)
-                    }
-                    if (settings.ids) {
-                        itemSb.append(" <").append(id).append('>')
-                    }
-                    if (settings.quantities) {
-                        itemSb.append(" (").append(quantity).append(')')
-                    }
-                    if (settings.osbuddyExchange.active) {
-                        val summaryItem = osbuddySummary.get()[id]
-                        if (summaryItem != null) {
-                            itemSb.append(" ex: ").append(summaryItem.price)
-                        }
-                    }
-
-                    val itemString = itemSb.toString()
-                    val stringRect = font.getStringBounds(itemString, frc).bounds
-                    currY -= stringRect.height + settings.spacingY
-                    stringRect.y = currY
-                    stringRect.x = centerX - stringRect.width / 2
+                    val def = definitions[id]
+                    val itemText = TextLayout("${def.name} x $quantity", g)
+                    val stringDim = itemText.bounds
+                    currY -= stringDim.height + settings.spacingY
+                    val stringRect = Rectangle2D.Double(
+                            centerX - stringDim.width / 2,
+                            currY,
+                            stringDim.width,
+                            stringDim.height
+                    )
                     if (stringRect !in viewportShape) {
                         break
                     }
                     if (settings.shadow.active) {
                         val col = g.color
                         g.color = shadowColor
-                        g.drawString(itemString, stringRect.x + settings.shadow.offset.x,
-                                stringRect.y + stringRect.height + settings.shadow.offset.y)
+                        val drawShadowPt = Point2D.Double(
+                                stringRect.x - 1,
+                                stringRect.y + stringRect.height + 1
+                        )
+                        g.drawTextLayout(itemText, drawShadowPt)
                         g.color = col
                     }
-                    g.drawString(itemString, stringRect.x, stringRect.y + stringRect.height)
+                    val drawPt = Point2D.Double(stringRect.x, stringRect.y + stringRect.height)
+                    g.drawTextLayout(itemText, drawPt)
                 }
             }
         })
@@ -139,32 +123,17 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     class Settings: Plugin.Settings() {
 
-        val font = FontDecode()
+        val font = AwtFont()
+        val color = AwtColor(255, 255, 255)
         val shadow = Shadow()
-        val initialOffsetY = 15
-        val spacingY = 0
+        val initialOffsetY = 13.0
+        val spacingY = 4.0
 
-        val names = true
-        val ids = false
-        val quantities = true
         val collapseIdDuplicates = true
-        val osbuddyExchange = OSBuddyExchange()
-
-        class FontDecode {
-            val name = Font.DIALOG
-            val style = "plain"
-            val size = 12
-        }
 
         class Shadow {
             val active = true
-            val colorRgb = Color.BLACK.rgb
-            val offset = Point(-1, 1)
-        }
-
-        class OSBuddyExchange {
-            val active = true
-            val refreshTimeMinutes = 30
+            val color = AwtColor()
         }
     }
 }

@@ -48,6 +48,16 @@
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.hunterwb.kxtra</groupId>
+            <artifactId>kxtra-swing</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hunterwb.kxtra</groupId>
+            <artifactId>kxtra-arrays</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <build>
