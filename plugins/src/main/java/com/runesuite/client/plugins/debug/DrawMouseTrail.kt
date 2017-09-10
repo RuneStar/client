@@ -12,18 +12,18 @@ import java.awt.Point
 import java.awt.event.MouseEvent
 import java.util.concurrent.TimeUnit
 
-class MouseDebug : DisposablePlugin<MouseDebug.Settings>() {
+class DrawMouseTrail : DisposablePlugin<DrawMouseTrail.Settings>() {
 
     override val defaultSettings = Settings()
 
     override fun start() {
         super.start()
         val pathCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(settings.path.expireMs.toLong(), TimeUnit.MILLISECONDS)
+                .expireAfterWrite(settings.trail.expireMs.toLong(), TimeUnit.MILLISECONDS)
                 .build<Point, Unit>()
 
-        val pathColor = settings.path.color.color()
-        val pathStroke = BasicStroke(settings.path.width.toFloat())
+        val pathColor = settings.trail.color.color()
+        val pathStroke = BasicStroke(settings.trail.width.toFloat())
 
         add(Mouse.events.subscribe {
             when (it.id) {
@@ -44,9 +44,9 @@ class MouseDebug : DisposablePlugin<MouseDebug.Settings>() {
 
     class Settings : Plugin.Settings() {
 
-        val path = Path()
+        val trail = Trail()
 
-        class Path {
+        class Trail {
             val color = Color()
             val width = 2
             val expireMs = 2000
