@@ -21,4 +21,29 @@
             <artifactId>rxrelay</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>client-core-raw-accessors-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>accessors</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>accessors</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputPackage>com.runesuite.client.core.raw.access</outputPackage>
+                    <accessorClassName>com.runesuite.client.core.raw.Accessor</accessorClassName>
+                    <methodClassName>com.runesuite.client.core.raw.Accessor.MethodExecution</methodClassName>
+                    <methodInitializer>new Accessor.MethodExecution()</methodInitializer>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

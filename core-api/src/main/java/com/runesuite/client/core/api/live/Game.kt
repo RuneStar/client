@@ -1,6 +1,6 @@
 package com.runesuite.client.core.api.live
 
-import com.hunterwb.kxtra.swing.windowAncestor
+import com.hunterwb.kxtra.swing.component.windowAncestor
 import com.runesuite.client.core.raw.Client
 import com.runesuite.client.core.raw.Client.accessor
 import com.runesuite.client.core.raw.access.XClient

@@ -2,14 +2,14 @@
 
 package com.runesuite.client.core
 
+import com.runesuite.client.common.GAMEPACK
+import com.runesuite.client.common.PLUGINS_DIR
+import com.runesuite.client.common.PLUGINS_SETTINGS_DIR
 import com.runesuite.client.core.api.live.Game
 import com.runesuite.client.core.raw.Client
 import com.runesuite.client.core.raw.access.XClient
-import com.runesuite.client.plugins.framework.PluginLoader
-import com.runesuite.client.plugins.framework.URLClassLoader
-import com.runesuite.client.shared.GAMEPACK
-import com.runesuite.client.shared.PLUGINS_DIR
-import com.runesuite.client.shared.PLUGINS_SETTINGS_DIR
+import com.runesuite.client.pluginframework.PluginLoader
+import com.runesuite.client.pluginframework.URLClassLoader
 import com.runesuite.general.JavConfig
 import com.runesuite.general.updateRevision
 import java.applet.Applet
@@ -24,7 +24,6 @@ fun main(args: Array<String>) {
     updateRevision()
 
     val javConfig = JavConfig()
-
     val classLoader = URLClassLoader(GAMEPACK)
     Client.accessor = classLoader.loadClass(javConfig.initialClass).newInstance() as XClient
     val applet = Client.accessor as Applet
@@ -32,7 +31,7 @@ fun main(args: Array<String>) {
     applet.preInit(javConfig)
 
     val jframe = JFrame(javConfig[JavConfig.Key.TITLE]).apply {
-        defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
+        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         add(applet)
         pack()
         setLocationRelativeTo(null)
@@ -56,6 +55,7 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
     })
+    jframe.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
 }
 
 private fun Applet.preInit(javConfig: JavConfig) {

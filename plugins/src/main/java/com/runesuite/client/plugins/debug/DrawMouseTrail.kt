@@ -1,11 +1,11 @@
 package com.runesuite.client.plugins.debug
 
 import com.google.common.cache.CacheBuilder
-import com.hunterwb.kxtra.swing.drawPoint
+import com.hunterwb.kxtra.swing.graphics.drawPoint
 import com.runesuite.client.core.api.live.Canvas
 import com.runesuite.client.core.api.live.Mouse
-import com.runesuite.client.plugins.framework.DisposablePlugin
-import com.runesuite.client.plugins.framework.Plugin
+import com.runesuite.client.pluginframework.DisposablePlugin
+import com.runesuite.client.pluginframework.Plugin
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Point

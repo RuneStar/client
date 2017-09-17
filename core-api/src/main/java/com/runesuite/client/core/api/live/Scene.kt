@@ -1,6 +1,6 @@
 package com.runesuite.client.core.api.live
 
-import com.hunterwb.kxtra.arrays.deepCopyOf
+import com.hunterwb.kxtra.collections.array.deepCopyOf
 import com.runesuite.client.core.raw.Client.accessor
 
 /**

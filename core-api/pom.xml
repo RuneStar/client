@@ -19,6 +19,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>client-core-raw</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
@@ -34,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>com.hunterwb.kxtra</groupId>
-            <artifactId>kxtra-arrays</artifactId>
+            <artifactId>kxtra-collections</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.akarnokd</groupId>

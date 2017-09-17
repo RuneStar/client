@@ -1,8 +1,8 @@
 package com.runesuite.client.plugins.debug
 
 import com.runesuite.client.core.api.live.Game
-import com.runesuite.client.plugins.framework.DisposablePlugin
-import com.runesuite.client.plugins.framework.Plugin
+import com.runesuite.client.pluginframework.DisposablePlugin
+import com.runesuite.client.pluginframework.Plugin
 
 class GameStateLogger : DisposablePlugin<Plugin.Settings>() {
 

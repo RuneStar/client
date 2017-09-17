@@ -13,13 +13,20 @@
     <name>client</name>
 
     <modules>
-        <module>shared</module>
-        <module>plugins-framework</module>
-        <module>launcher</module>
+        <module>common</module>
         <module>core</module>
         <module>core-raw</module>
+        <module>core-raw-accessors-maven-plugin</module>
         <module>core-api</module>
         <module>plugins</module>
+        <module>plugin-framework</module>
+        <module>updater-common</module>
+        <module>updater-deob</module>
+        <module>updater-map</module>
+        <module>updater</module>
+        <module>updater-create-maven-plugin</module>
+        <module>gamepack</module>
+        <module>gamepack-inject-maven-plugin</module>
     </modules>
 
     <repositories>
@@ -87,12 +94,12 @@
             <dependency>
                 <groupId>com.hunterwb.kxtra</groupId>
                 <artifactId>kxtra-swing</artifactId>
-                <version>0.1.1</version>
+                <version>0.1.2</version>
             </dependency>
             <dependency>
                 <groupId>com.hunterwb.kxtra</groupId>
-                <artifactId>kxtra-arrays</artifactId>
-                <version>0.1.1</version>
+                <artifactId>kxtra-collections</artifactId>
+                <version>0.1.2</version>
             </dependency>
             <dependency>
                 <groupId>com.github.akarnokd</groupId>
@@ -140,31 +147,6 @@
                 <version>23.0</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>client-core-raw</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>client-core-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>client-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>client-shared</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>client-plugins-framework</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>de.sciss</groupId>
                 <artifactId>weblaf</artifactId>
                 <version>1.28</version>
@@ -180,7 +162,29 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.25</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>3.5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>3.5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <scope>provided</scope>
+                <version>3.5</version>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>
@@ -223,6 +227,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
                     <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.5</version>
                 </plugin>
             </plugins>
         </pluginManagement>
