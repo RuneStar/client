@@ -1,20 +1,21 @@
 package com.runesuite.client.core.api.live
 
+import com.runesuite.client.core.api.Position
 import java.awt.Point
 
 interface Projection {
 
-    fun toGame(point: Point): com.runesuite.client.core.api.Position
+    fun toGame(point: Point): Position
 
-    fun toScreen(position: com.runesuite.client.core.api.Position): Point {
+    fun toScreen(position: Position): Point {
         return toScreen(position, position)
     }
 
-    fun toScreen(position: com.runesuite.client.core.api.Position, tileHeight: com.runesuite.client.core.api.Position): Point
+    fun toScreen(position: Position, tileHeight: Position): Point
 
     open class Minimap(val minimap: com.runesuite.client.core.api.live.Minimap) : Projection {
 
-        override fun toScreen(position: com.runesuite.client.core.api.Position, tileHeight: com.runesuite.client.core.api.Position): Point {
+        override fun toScreen(position: Position, tileHeight: Position): Point {
             val dx = (position.localX - minimap.reference.localX) shr 5
             val dy = (position.localY - minimap.reference.localY) shr 5
             val sin = minimap.orientation.sinInternal * 256 / (minimap.scale + 256)
@@ -24,7 +25,7 @@ interface Projection {
             return Point(minimap.center.x + x2, minimap.center.y - y2)
         }
 
-        override fun toGame(point: Point): com.runesuite.client.core.api.Position {
+        override fun toGame(point: Point): Position {
             val x2 = minimap.center.x - point.x
             val y2 = minimap.center.y + point.y * -1
             val sin = minimap.orientation.sinInternal * (minimap.scale + 256) shr 8
@@ -39,7 +40,7 @@ interface Projection {
 
     open class Viewport(val camera: Camera, val viewport: com.runesuite.client.core.api.live.Viewport, val scene: Scene) : Projection {
 
-        override fun toScreen(position: com.runesuite.client.core.api.Position, tileHeight: com.runesuite.client.core.api.Position): Point {
+        override fun toScreen(position: Position, tileHeight: Position): Point {
             require(tileHeight.isLoaded) { tileHeight }
             var x1 = position.localX
             var y1 = position.localY
@@ -64,7 +65,7 @@ interface Projection {
                     viewport.height / 2 + z1 * viewport.scale / y1 + viewport.y)
         }
 
-        override fun toGame(point: Point): com.runesuite.client.core.api.Position {
+        override fun toGame(point: Point): Position {
             TODO("not implemented")
         }
 
