@@ -25,13 +25,11 @@ class DrawMouseTrail : DisposablePlugin<DrawMouseTrail.Settings>() {
         val pathColor = settings.trail.color.color()
         val pathStroke = BasicStroke(settings.trail.width.toFloat())
 
-        add(Mouse.events.subscribe {
-            when (it.id) {
-                MouseEvent.MOUSE_MOVED -> {
+        add(Mouse.events.filter { it.id == MouseEvent.MOUSE_MOVED }
+                .subscribe {
                     pathCache.put(it.point, Unit)
                 }
-            }
-        })
+        )
 
         add(Canvas.Live.repaints.subscribe { g ->
             g.color = pathColor
