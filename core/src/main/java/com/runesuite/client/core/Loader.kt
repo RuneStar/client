@@ -2,14 +2,12 @@
 
 package com.runesuite.client.core
 
-import com.runesuite.client.common.GAMEPACK
 import com.runesuite.client.common.PLUGINS_DIR
 import com.runesuite.client.common.PLUGINS_SETTINGS_DIR
 import com.runesuite.client.core.api.live.Game
 import com.runesuite.client.core.raw.Client
 import com.runesuite.client.core.raw.access.XClient
 import com.runesuite.client.pluginframework.PluginLoader
-import com.runesuite.client.pluginframework.URLClassLoader
 import com.runesuite.general.JavConfig
 import com.runesuite.general.updateRevision
 import java.applet.Applet
@@ -24,8 +22,7 @@ fun main(args: Array<String>) {
     updateRevision()
 
     val javConfig = JavConfig()
-    val classLoader = URLClassLoader(GAMEPACK)
-    Client.accessor = classLoader.loadClass(javConfig.initialClass).newInstance() as XClient
+    Client.accessor = Class.forName(javConfig.initialClass).newInstance() as XClient
     val applet = Client.accessor as Applet
 
     applet.preInit(javConfig)

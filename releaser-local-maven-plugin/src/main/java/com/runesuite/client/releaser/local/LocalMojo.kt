@@ -1,7 +1,6 @@
 package com.runesuite.client.releaser.local
 
 import com.runesuite.client.common.CORE
-import com.runesuite.client.common.GAMEPACK
 import com.runesuite.client.common.PLUGINS
 import com.runesuite.client.common.PLUGINS_SETTINGS_DIR
 import org.apache.maven.plugin.AbstractMojo
@@ -37,9 +36,9 @@ class LocalMojo : AbstractMojo() {
         Files.createDirectories(CORE.parent)
         Files.copy(core.file.toPath(), CORE, StandardCopyOption.REPLACE_EXISTING)
 
-        val gamepack = resolveArtifact("client-gamepack")
-        Files.createDirectories(GAMEPACK.parent)
-        Files.copy(gamepack.file.toPath(), GAMEPACK, StandardCopyOption.REPLACE_EXISTING)
+//        val gamepack = resolveArtifact("client-gamepack")
+//        Files.createDirectories(GAMEPACK.parent)
+//        Files.copy(gamepack.file.toPath(), GAMEPACK, StandardCopyOption.REPLACE_EXISTING)
 
         val plugins = resolveArtifact("client-plugins")
         Files.createDirectories(PLUGINS.parent)
