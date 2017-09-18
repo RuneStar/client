@@ -1,9 +1,9 @@
 package com.runesuite.client.plugins.debug
 
-import com.runesuite.client.game.api.live.Canvas
-import com.runesuite.client.game.api.live.Game
-import com.runesuite.client.game.api.live.Keyboard
-import com.runesuite.client.game.api.live.Mouse
+import com.runesuite.client.api.live.Canvas
+import com.runesuite.client.api.live.Game
+import com.runesuite.client.api.live.Keyboard
+import com.runesuite.client.api.live.Mouse
 import com.runesuite.client.pluginframework.DisposablePlugin
 import com.runesuite.client.pluginframework.Plugin
 import java.awt.event.KeyEvent

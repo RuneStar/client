@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins.debug
 
-import com.runesuite.client.game.api.live.Game
+import com.runesuite.client.api.live.Game
 import com.runesuite.client.pluginframework.DisposablePlugin
 import com.runesuite.client.pluginframework.Plugin
 
