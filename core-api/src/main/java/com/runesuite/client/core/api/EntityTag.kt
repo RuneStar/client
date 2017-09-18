@@ -5,13 +5,13 @@ import com.runesuite.client.core.raw.Client
 data class EntityTag(
         val kind: com.runesuite.client.core.api.EntityKind,
         val id: Int,
-        val location: com.runesuite.client.core.api.SceneTile,
+        val location: SceneTile,
         val interactable: Boolean
 ) {
     internal constructor(packed: Int) : this(
             com.runesuite.client.core.api.EntityKind.Companion.LOOKUP[packed shr 29 and 0x3]!!,
             packed shr 14 and 0x7FFF,
-            com.runesuite.client.core.api.SceneTile(packed and 0x7F, packed shr 7 and 0x7F, Client.accessor.plane),
+            SceneTile(packed and 0x7F, packed shr 7 and 0x7F, Client.accessor.plane),
             packed > 0
     )
 

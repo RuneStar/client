@@ -1,5 +1,7 @@
 package com.runesuite.client.core.api.live
 
+import com.runesuite.client.core.api.Angle
+import com.runesuite.client.core.api.Position
 import com.runesuite.client.core.raw.Client.accessor
 import java.awt.Point
 import java.awt.geom.Ellipse2D
@@ -8,9 +10,9 @@ interface Minimap {
 
     val scale: Int
 
-    val orientation: com.runesuite.client.core.api.Angle
+    val orientation: Angle
 
-    val reference: com.runesuite.client.core.api.Position
+    val reference: Position
 
     val center: Point
 
@@ -31,7 +33,7 @@ interface Minimap {
 
         override val scale get() = 256 // todo
 
-        override val orientation get() = com.runesuite.client.core.api.Angle(accessor.minimapOrientation)
+        override val orientation get() = Angle(accessor.minimapOrientation)
 
         /**
          * Due to overlapping orbs, this is not the clickable area
@@ -47,8 +49,8 @@ interface Minimap {
 
     data class Copy(
             override val scale: Int,
-            override val orientation: com.runesuite.client.core.api.Angle,
-            override val reference: com.runesuite.client.core.api.Position,
+            override val orientation: Angle,
+            override val reference: Position,
             override val center: Point
     ) : Minimap
 }

@@ -4,9 +4,9 @@ import com.runesuite.client.core.raw.Wrapper
 import com.runesuite.client.core.raw.access.XNpc
 import com.runesuite.client.core.raw.access.XNpcDefinition
 
-class Npc(override val accessor: XNpc) : com.runesuite.client.core.api.Actor(accessor) {
+class Npc(override val accessor: XNpc) : Actor(accessor) {
 
-    val definition: com.runesuite.client.core.api.Npc.Definition get() = com.runesuite.client.core.api.Npc.Definition(accessor.definition)
+    val definition: Npc.Definition get() = Npc.Definition(accessor.definition)
 
     class Definition(override val accessor: XNpcDefinition) : Wrapper() {
 
