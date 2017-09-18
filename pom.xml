@@ -15,9 +15,9 @@
     <modules>
         <module>common</module>
         <module>core</module>
-        <module>core-raw</module>
-        <module>core-raw-accessors-maven-plugin</module>
-        <module>core-api</module>
+        <module>raw</module>
+        <module>raw-accessors-maven-plugin</module>
+        <module>api</module>
         <module>plugins</module>
         <module>plugin-framework</module>
         <module>updater-common</module>
@@ -25,8 +25,8 @@
         <module>updater-map</module>
         <module>updater</module>
         <module>updater-create-maven-plugin</module>
+        <module>inject-maven-plugin</module>
         <module>gamepack</module>
-        <module>gamepack-inject-maven-plugin</module>
     </modules>
 
     <!--<repositories>-->

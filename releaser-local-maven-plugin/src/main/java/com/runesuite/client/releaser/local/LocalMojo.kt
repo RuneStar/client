@@ -36,10 +36,6 @@ class LocalMojo : AbstractMojo() {
         Files.createDirectories(CORE.parent)
         Files.copy(core.file.toPath(), CORE, StandardCopyOption.REPLACE_EXISTING)
 
-//        val gamepack = resolveArtifact("client-gamepack")
-//        Files.createDirectories(GAMEPACK.parent)
-//        Files.copy(gamepack.file.toPath(), GAMEPACK, StandardCopyOption.REPLACE_EXISTING)
-
         val plugins = resolveArtifact("client-plugins")
         Files.createDirectories(PLUGINS.parent)
         Files.copy(plugins.file.toPath(), PLUGINS, StandardCopyOption.REPLACE_EXISTING)

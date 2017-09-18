@@ -1,7 +1,7 @@
 package com.runesuite.client.plugins.debug
 
-import com.runesuite.client.core.api.live.Canvas
-import com.runesuite.client.core.api.live.GrandExchangeOffers
+import com.runesuite.client.game.api.live.Canvas
+import com.runesuite.client.game.api.live.GrandExchangeOffers
 import com.runesuite.client.pluginframework.DisposablePlugin
 import com.runesuite.client.pluginframework.Plugin
 import java.awt.Color

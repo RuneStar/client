@@ -10,16 +10,15 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>client-gamepack</artifactId>
+    <artifactId>client-raw</artifactId>
     <packaging>jar</packaging>
 
-    <name>client/gamepack</name>
+    <name>client/raw</name>
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-raw</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.jakewharton.rxrelay2</groupId>
+            <artifactId>rxrelay</artifactId>
         </dependency>
     </dependencies>
 
@@ -27,19 +26,24 @@
         <plugins>
             <plugin>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>client-inject-maven-plugin</artifactId>
+                <artifactId>client-game-raw-accessors-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>inject</id>
-                        <phase>generate-resources</phase>
+                        <id>accessors</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>inject</goal>
+                            <goal>accessors</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputPackage>com.runesuite.client.raw.access</outputPackage>
+                    <accessorClassName>com.runesuite.client.raw.Accessor</accessorClassName>
+                    <methodClassName>com.runesuite.client.raw.Accessor.MethodExecution</methodClassName>
+                    <methodInitializer>new Accessor.MethodExecution()</methodInitializer>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-    
 </project>
