@@ -23,13 +23,13 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
 
     val isFilled get() = totalQuantity == currentQuantity
 
-    val type get() = checkNotNull(com.runesuite.client.core.api.GrandExchangeOffer.Type.Companion.LOOKUP[accessor.type()]) { accessor.type() }
+    val type get() = checkNotNull(Type.LOOKUP[accessor.type()]) { accessor.type() }
 
-    val status get() = checkNotNull(com.runesuite.client.core.api.GrandExchangeOffer.Status.Companion.LOOKUP[accessor.status()]) { accessor.status() }
+    val status get() = checkNotNull(Status.LOOKUP[accessor.status()]) { accessor.status() }
 
     val isAborted get() = when(status) {
-        com.runesuite.client.core.api.GrandExchangeOffer.Status.ABORTING -> true
-        com.runesuite.client.core.api.GrandExchangeOffer.Status.DONE -> totalQuantity != currentQuantity
+        Status.ABORTING -> true
+        Status.DONE -> totalQuantity != currentQuantity
         else -> false
     }
 
