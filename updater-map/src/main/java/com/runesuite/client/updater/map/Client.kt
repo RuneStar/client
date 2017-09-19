@@ -737,4 +737,10 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == LDC && it.ldcCst == "" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
+
+    @MethodParameters("values", "ordinal")
+    @DependsOn(Enumerated::class)
+    class findEnumerated : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Enumerated>() }
+    }
 }

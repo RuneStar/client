@@ -27,7 +27,7 @@ class JagexGame : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }
     }
 
-    class name : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+    class name : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 }
