@@ -23,28 +23,28 @@ class FloorDecoration : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Entity>() }
     }
 
-    @DependsOn(Scene.newFloorDecoration::class)
-    class x : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 0) {
+    @DependsOn(Scene.setFloorDecoration::class)
+    class x : OrderMapper.InMethod.Field(Scene.setFloorDecoration::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newFloorDecoration::class)
-    class y : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 1) {
+    @DependsOn(Scene.setFloorDecoration::class)
+    class y : OrderMapper.InMethod.Field(Scene.setFloorDecoration::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newFloorDecoration::class)
-    class height : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 2) {
+    @DependsOn(Scene.setFloorDecoration::class)
+    class height : OrderMapper.InMethod.Field(Scene.setFloorDecoration::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newFloorDecoration::class)
-    class id : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 3) {
+    @DependsOn(Scene.setFloorDecoration::class)
+    class id : OrderMapper.InMethod.Field(Scene.setFloorDecoration::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newFloorDecoration::class)
-    class flags : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 4) {
+    @DependsOn(Scene.setFloorDecoration::class)
+    class flags : OrderMapper.InMethod.Field(Scene.setFloorDecoration::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

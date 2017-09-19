@@ -17,58 +17,58 @@ class WallDecoration : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == type<Entity>() } == 2 }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 9 }
 
-    @DependsOn(Scene.newWallDecoration::class, Entity::class)
-    class entity : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
+    @DependsOn(Scene.setWallDecoration::class, Entity::class)
+    class entity : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 
-    @DependsOn(Scene.newWallDecoration::class, Entity::class)
-    class entity2 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 1) {
+    @DependsOn(Scene.setWallDecoration::class, Entity::class)
+    class entity2 : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class id : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class id : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class flags : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 1) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class flags : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class x : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 2) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class x : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class y : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 3) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class y : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class height : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 4) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class height : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class int6 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 5) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class int6 : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class int7 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 6) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class int7 : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class int8 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 7) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class int8 : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Scene.newWallDecoration::class)
-    class int9 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 8) {
+    @DependsOn(Scene.setWallDecoration::class)
+    class int9 : OrderMapper.InMethod.Field(Scene.setWallDecoration::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

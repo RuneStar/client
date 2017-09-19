@@ -34,7 +34,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class newGameObject : IdentityMapper.InstanceMethod() {
+    class setGameObject : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         INT_TYPE, INT_TYPE, INT_TYPE, type<Entity>(), INT_TYPE, BOOLEAN_TYPE, INT_TYPE, INT_TYPE) }
@@ -42,7 +42,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class newFloorDecoration : IdentityMapper.InstanceMethod() {
+    class setFloorDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), INT_TYPE, INT_TYPE) }
@@ -50,7 +50,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class newWallDecoration : IdentityMapper.InstanceMethod() {
+    class setWallDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), type<Entity>(), INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
