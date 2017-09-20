@@ -850,4 +850,24 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments == listOf(INT_TYPE.withDimensions(1)) }
                 .and { it.instructions.any { it.opcode == PUTSTATIC } }
     }
+
+    @DependsOn(ActionPriority::class)
+    class ActionPriority_0 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 0, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    }
+
+    @DependsOn(ActionPriority::class)
+    class ActionPriority_1 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 1, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    }
+
+    @DependsOn(ActionPriority::class)
+    class ActionPriority_2 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 2, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    }
+
+    @DependsOn(ActionPriority::class)
+    class ActionPriority_3 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 3, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    }
 }
