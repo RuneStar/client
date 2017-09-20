@@ -19,17 +19,17 @@ class EnumDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == Array<String>::class.type } == 1 }
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 2 }
 
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
-                .and { it.arguments.startsWith(type<ByteBuffer>()) }
+                .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 6 } }
     }
 
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class readNext : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
-                .and { it.arguments.startsWith(type<ByteBuffer>()) }
+                .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 6 } }
     }
 }

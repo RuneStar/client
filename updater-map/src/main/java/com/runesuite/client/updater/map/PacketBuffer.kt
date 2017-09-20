@@ -7,9 +7,9 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import org.objectweb.asm.Type
 
-@DependsOn(ByteBuffer::class)
-class BitBuffer : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<ByteBuffer>() }
+@DependsOn(Buffer::class)
+class PacketBuffer : IdentityMapper.Class() {
+    override val predicate = predicateOf<Class2> { it.superType == type<Buffer>() }
 
     class bitIndex : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }

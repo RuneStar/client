@@ -27,7 +27,7 @@ import org.objectweb.asm.Type.LONG_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 
 @DependsOn(Node::class)
-class ByteBuffer : IdentityMapper.Class() {
+class Buffer : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.instanceFields.size == 2 }
             .and { it.superType == type<Node>() }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 1 }

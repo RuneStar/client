@@ -30,17 +30,17 @@ class ObjectDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type.withDimensions(1) }
     }
 
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
-                .and { it.arguments.startsWith(type<ByteBuffer>()) }
+                .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 23 } }
     }
 
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class readNext : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
-                .and { it.arguments.startsWith(type<ByteBuffer>()) }
+                .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 23 } }
     }
 }

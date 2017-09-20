@@ -4,6 +4,7 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -28,9 +29,9 @@ class ClientPreferences : IdentityMapper.Class() {
     }
 
     @MethodParameters
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class toBuffer : InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<ByteBuffer>() }
+        override val predicate = predicateOf<Method2> { it.returnType == type<Buffer>() }
     }
 
     class roofsHidden : OrderMapper.InConstructor.Field(ClientPreferences::class, -2) {
@@ -39,6 +40,12 @@ class ClientPreferences : IdentityMapper.Class() {
     }
 
     class titleMusicDisabled : OrderMapper.InConstructor.Field(ClientPreferences::class, -1) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @SinceVersion(154)
+    class rememberUsername : OrderMapper.InConstructor.Field(ClientPreferences::class, 0) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }

@@ -26,8 +26,10 @@ import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Opcodes.CHECKCAST
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.GETSTATIC
+import org.objectweb.asm.Opcodes.GOTO
 import org.objectweb.asm.Opcodes.ICONST_2
 import org.objectweb.asm.Opcodes.ILOAD
+import org.objectweb.asm.Opcodes.IMUL
 import org.objectweb.asm.Opcodes.INVOKESTATIC
 import org.objectweb.asm.Opcodes.ISHR
 import org.objectweb.asm.Opcodes.LDC
@@ -244,10 +246,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE.withDimensions(2) }
     }
 
-    @DependsOn(BitBuffer::class)
+    @DependsOn(PacketBuffer::class)
     class updateExternalPlayer : StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-                .and { it.arguments.startsWith(type<BitBuffer>(), INT_TYPE) }
+                .and { it.arguments.startsWith(type<PacketBuffer>(), INT_TYPE) }
                 .and { it.arguments.size in 2..3 }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == 0xF_FF_FF_FF } }
     }
@@ -742,5 +744,110 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Enumerated::class)
     class findEnumerated : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Enumerated>() }
+    }
+
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_pixels : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == INT_TYPE.withDimensions(1) }
+                .and { it.klass == klass<Rasterizer2D>() }
+    }
+
+    @SinceVersion(141)
+    @MethodParameters("x", "y", "value")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_setPixel : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_drawLine : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.instructions.any { it.opcode == INVOKESTATIC && it.methodId == Math::floor.id } }
+    }
+
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_clear : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == GOTO } }
+    }
+
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_resetClip : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.none { it.opcode == GOTO } }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_xClipStart : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 0, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_yClipStart : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 1, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_xClipEnd : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 2, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_yClipEnd : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 3, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_width : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
+
+    @DependsOn(Rasterizer2D_resetClip::class)
+    class Rasterizer2D_height : OrderMapper.InMethod.Field(Rasterizer2D_resetClip::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
+
+    @MethodParameters("x", "y", "length", "value")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_drawHorizontalLine : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == IMUL } == 1 }
+    }
+
+    @MethodParameters("x", "y", "length", "value")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_drawVerticalLine : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == IMUL } == 2 }
+    }
+
+    @MethodParameters("x", "y", "width", "height", "value")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_drawRectangle : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == INVOKESTATIC } == 4 }
+    }
+
+    @MethodParameters("array")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_getClip : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE.withDimensions(1)) }
+                .and { it.instructions.any { it.opcode == GETSTATIC } }
+    }
+
+    @MethodParameters("array")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_setClip : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE.withDimensions(1)) }
+                .and { it.instructions.any { it.opcode == PUTSTATIC } }
     }
 }

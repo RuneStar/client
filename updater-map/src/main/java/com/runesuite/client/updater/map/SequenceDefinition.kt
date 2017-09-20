@@ -16,12 +16,12 @@ class SequenceDefinition : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 5 }
 
-    @DependsOn(ByteBuffer::class)
+    @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == Opcodes.GOTO } }
                 .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 13 } }
-                .and { it.arguments.startsWith(type<ByteBuffer>()) }
+                .and { it.arguments.startsWith(type<Buffer>()) }
     }
 
     class readNext : IdentityMapper.InstanceMethod() {
