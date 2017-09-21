@@ -5,7 +5,15 @@ import com.runesuite.client.updater.deob.common.FrameRemover
 import com.runesuite.client.updater.deob.common.SortMethodsByLineNumber
 import com.runesuite.client.updater.deob.common.UnnecessaryGotoRemover
 import com.runesuite.client.updater.deob.common.controlflow.ControlFlowFixer
-import com.runesuite.client.updater.deob.jagex.*
+import com.runesuite.client.updater.deob.jagex.JarInfo
+import com.runesuite.client.updater.deob.jagex.MethodOrigClassFinder
+import com.runesuite.client.updater.deob.jagex.MultiplierFinder
+import com.runesuite.client.updater.deob.jagex.OpaquePredicateFixer
+import com.runesuite.client.updater.deob.jagex.RemoveEnclosingMethodAttributes
+import com.runesuite.client.updater.deob.jagex.StaticDuplicateMethodFinder
+import com.runesuite.client.updater.deob.jagex.UnusedFieldRemover
+import com.runesuite.client.updater.deob.jagex.UnusedMethodRemover
+import com.runesuite.client.updater.deob.jagex.UnusedTryCatchRemover
 import java.nio.file.Path
 
 interface Deobfuscator {
@@ -23,7 +31,8 @@ interface Deobfuscator {
             UnnecessaryGotoRemover,
             SortMethodsByLineNumber,
             MethodOrigClassFinder,
-            DebugRemover
+            DebugRemover,
+            RemoveEnclosingMethodAttributes
     )
 
     object Faster : Deobfuscator.Composite(
@@ -39,7 +48,8 @@ interface Deobfuscator {
             UnnecessaryGotoRemover,
 //            SortMethodsByLineNumber,
 //            MethodOrigClassFinder,
-            DebugRemover
+            DebugRemover,
+            RemoveEnclosingMethodAttributes
     )
 
     fun deob(source: Path, destination: Path)

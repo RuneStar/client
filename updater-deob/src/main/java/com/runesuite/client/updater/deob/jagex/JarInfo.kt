@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.AnnotationNode
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.util.*
+import java.util.TreeSet
 
 object JarInfo : Deobfuscator {
 
