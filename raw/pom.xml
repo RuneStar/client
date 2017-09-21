@@ -26,7 +26,7 @@
         <plugins>
             <plugin>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>client-game-raw-accessors-maven-plugin</artifactId>
+                <artifactId>client-raw-accessors-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>

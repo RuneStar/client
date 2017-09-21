@@ -870,4 +870,50 @@ class Client : IdentityMapper.Class() {
     class ActionPriority_3 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 3, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
     }
+
+    @SinceVersion(141)
+    @DependsOn(BoundingBox2D::class)
+    class addBoundingBox2D : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodOwner == type<BoundingBox2D>() && it.methodName == Method2.CONSTRUCTOR_NAME } }
+    }
+
+//    @SinceVersion(145)
+//    @DependsOn(AxisAlignedBoundingBox::class)
+//    class addAxisAlignedBoundingBox : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.instructions.any { it.isMethod && it.methodOwner == type<AxisAlignedBoundingBox>() && it.methodName == "<init>" } }
+//    }
+
+    @SinceVersion(141)
+    @DependsOn(addBoundingBox2D::class, NodeDeque2::class)
+    class boundingBoxes : UniqueMapper.InMethod.Field(addBoundingBox2D::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeDeque2>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(BoundingBoxDrawMode::class)
+    class BoundingBoxDrawMode_MOUSE_OVER : OrderMapper.InClassInitializer.Field(BoundingBoxDrawMode::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BoundingBoxDrawMode>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(BoundingBoxDrawMode::class)
+    class BoundingBoxDrawMode_ALL : OrderMapper.InClassInitializer.Field(BoundingBoxDrawMode::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BoundingBoxDrawMode>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(BoundingBoxDrawMode::class, BoundingBoxDrawMode_MOUSE_OVER::class, BoundingBoxDrawMode_ALL::class)
+    class boundingBoxDrawMode : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<BoundingBoxDrawMode>() }
+                .and { it != field<BoundingBoxDrawMode_MOUSE_OVER>() }
+                .and { it != field<BoundingBoxDrawMode_ALL>() }
+    }
+
+    @SinceVersion(141)
+    class drawAabb : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "aabb" }
+                .nextWithin(6) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }
