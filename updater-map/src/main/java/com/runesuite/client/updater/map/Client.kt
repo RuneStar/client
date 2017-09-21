@@ -912,7 +912,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    class drawAabb : StaticUniqueMapper.Field() {
+    class drawAxisAlignedBoundingBoxes : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "aabb" }
                 .nextWithin(6) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
