@@ -11,7 +11,7 @@ import org.objectweb.asm.Opcodes.LDC
 import org.objectweb.asm.Type
 
 @SinceVersion(141)
-class BoundingBoxDrawMode : StaticUniqueMapper.Class() {
+class AxisAlignedBoundingBoxDrawMode : StaticUniqueMapper.Class() {
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "aabb" }
             .nextWithin(10) { it.opcode == GETSTATIC && it.fieldType.sort == Type.OBJECT }
 
