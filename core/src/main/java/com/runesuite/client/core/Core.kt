@@ -10,7 +10,6 @@ import com.runesuite.client.raw.Client
 import com.runesuite.client.raw.access.XClient
 import com.runesuite.general.JavConfig
 import com.runesuite.general.updateRevision
-import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -22,8 +21,9 @@ fun main(args: Array<String>) {
     updateRevision()
 
     val javConfig = JavConfig()
-    Client.accessor = Class.forName(javConfig.initialClass).newInstance() as XClient
-    val applet = Client.accessor as Applet
+    Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
+    @Suppress("DEPRECATION")
+    val applet = Client.accessor as java.applet.Applet
 
     applet.preInit(javConfig)
 
@@ -55,7 +55,8 @@ fun main(args: Array<String>) {
     jframe.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
 }
 
-private fun Applet.preInit(javConfig: JavConfig) {
+@Suppress("DEPRECATION")
+private fun java.applet.Applet.preInit(javConfig: JavConfig) {
     layout = null
     setStub(JavConfig.AppletStub(javConfig))
     minimumSize = Dimension(200, 350)
