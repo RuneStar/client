@@ -12,6 +12,7 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
@@ -34,19 +35,21 @@ class ClientPreferences : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Buffer>() }
     }
 
-    class roofsHidden : OrderMapper.InConstructor.Field(ClientPreferences::class, -2) {
-        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    @SinceVersion(154)
+    @DependsOn(toBuffer::class)
+    class roofsHidden : OrderMapper.InMethod.Field(toBuffer::class, 0, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
     }
 
-    class titleMusicDisabled : OrderMapper.InConstructor.Field(ClientPreferences::class, -1) {
-        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    @SinceVersion(154)
+    @DependsOn(toBuffer::class)
+    class titleMusicDisabled : OrderMapper.InMethod.Field(toBuffer::class, 1, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
     }
-//
-//    @SinceVersion(154)
-//    class rememberUsername : OrderMapper.InConstructor.Field(ClientPreferences::class, 0) {
-//        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
-//    }
+
+    @SinceVersion(154)
+    @DependsOn(toBuffer::class)
+    class hideUsername : OrderMapper.InMethod.Field(toBuffer::class, 2, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
+    }
 }

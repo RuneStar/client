@@ -5,6 +5,7 @@ package com.runesuite.client
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.common.PLUGINS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_SETTINGS_DIR_PATH
+import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.pluginframework.PluginLoader
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
