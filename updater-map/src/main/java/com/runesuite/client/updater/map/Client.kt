@@ -489,11 +489,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<KeyHandler>() }
     }
 
-    @DependsOn(WidgetNode::class, NodeHashTable::class)
-    class widgetNodes : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<WidgetNode>() }
-                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
-    }
+//    @DependsOn(WidgetNode::class, NodeHashTable::class)
+//    class widgetNodes : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<WidgetNode>() }
+//                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
+//    }
 
     @DependsOn(ItemContainer::class, NodeHashTable::class)
     class itemContainers : StaticUniqueMapper.Field() {

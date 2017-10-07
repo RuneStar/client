@@ -43,10 +43,10 @@ class ClientPreferences : IdentityMapper.Class() {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
-
-    @SinceVersion(154)
-    class rememberUsername : OrderMapper.InConstructor.Field(ClientPreferences::class, 0) {
-        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
-    }
+//
+//    @SinceVersion(154)
+//    class rememberUsername : OrderMapper.InConstructor.Field(ClientPreferences::class, 0) {
+//        override val constructorPredicate = predicateOf<Method2> { it.arguments.isNotEmpty() }
+//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+//    }
 }

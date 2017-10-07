@@ -17,9 +17,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-debug-all</artifactId>
-            <version>5.2</version>
+            <groupId>${asm.groupId}</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${asm.groupId}</groupId>
+            <artifactId>asm-tree</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${asm.groupId}</groupId>
+            <artifactId>asm-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${asm.groupId}</groupId>
+            <artifactId>asm-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${asm.groupId}</groupId>
+            <artifactId>asm-analysis</artifactId>
+            <version>${asm.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>
