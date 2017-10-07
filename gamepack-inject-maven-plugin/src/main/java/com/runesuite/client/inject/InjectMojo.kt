@@ -1,10 +1,10 @@
 package com.runesuite.client.inject
 
 import com.runesuite.client.game.raw.access.XClient
+import com.runesuite.client.updater.GAMEPACK
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.decoderNarrowed
 import com.runesuite.client.updater.common.finalArgumentNarrowed
-import com.runesuite.client.updater.getGamepack
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.ClassFileLocator
@@ -56,7 +56,7 @@ class InjectMojo : AbstractMojo() {
             Files.createDirectories(deobJar.parent)
             Files.createFile(deobJar)
         }
-        getGamepack().use { input ->
+        GAMEPACK.openStream().use { input ->
             deobJar.toFile().outputStream().use { output ->
                 input.copyTo(output)
             }
