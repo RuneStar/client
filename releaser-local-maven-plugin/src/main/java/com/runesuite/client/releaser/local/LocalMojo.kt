@@ -1,8 +1,8 @@
 package com.runesuite.client.releaser.local
 
-import com.runesuite.client.common.CORE
-import com.runesuite.client.common.PLUGINS
-import com.runesuite.client.common.PLUGINS_SETTINGS_DIR
+import com.runesuite.client.common.CLIENT_PATH
+import com.runesuite.client.common.PLUGINS_PATH
+import com.runesuite.client.common.PLUGINS_SETTINGS_DIR_PATH
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
@@ -32,15 +32,15 @@ class LocalMojo : AbstractMojo() {
 
     override fun execute() {
 
-        val core = resolveArtifact("client-core")
-        Files.createDirectories(CORE.parent)
-        Files.copy(core.file.toPath(), CORE, StandardCopyOption.REPLACE_EXISTING)
+        val core = resolveArtifact("client")
+        Files.createDirectories(CLIENT_PATH.parent)
+        Files.copy(core.file.toPath(), CLIENT_PATH, StandardCopyOption.REPLACE_EXISTING)
 
         val plugins = resolveArtifact("client-plugins")
-        Files.createDirectories(PLUGINS.parent)
-        Files.copy(plugins.file.toPath(), PLUGINS, StandardCopyOption.REPLACE_EXISTING)
+        Files.createDirectories(PLUGINS_PATH.parent)
+        Files.copy(plugins.file.toPath(), PLUGINS_PATH, StandardCopyOption.REPLACE_EXISTING)
 
-        Files.createDirectories(PLUGINS_SETTINGS_DIR)
+        Files.createDirectories(PLUGINS_SETTINGS_DIR_PATH)
     }
 
     private fun resolveArtifact(artifactId: String): Artifact {
