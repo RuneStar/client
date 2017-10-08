@@ -10,7 +10,7 @@ import org.objectweb.asm.Opcodes
 
 @SinceVersion(141)
 @DependsOn(Enumerated::class, Type0::class)
-class KeyChar : IdentityMapper.Class() {
+class KeyChar1 : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.contains(type<Enumerated>()) }
             .and { it.classInitializer != null }
             .and { it.classInitializer!!.instructions.any { it.opcode == Opcodes.GETSTATIC && it.fieldType == type<Type0>() } }

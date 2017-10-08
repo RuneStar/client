@@ -8,12 +8,7 @@ import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.id
-import com.runesuite.mapper.extensions.mark
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.next
 import com.runesuite.mapper.nextWithin
 import com.runesuite.mapper.prev
@@ -893,22 +888,22 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class BoundingBoxDrawMode_MOUSE_OVER : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 0, 2) {
+    class AxisAlignedBoundingBoxDrawMode_MOUSE_OVER : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
     }
 
     @SinceVersion(141)
     @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class BoundingBoxDrawMode_ALL : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 1, 2) {
+    class AxisAlignedBoundingBoxDrawMode_ALL : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(AxisAlignedBoundingBoxDrawMode::class, BoundingBoxDrawMode_MOUSE_OVER::class, BoundingBoxDrawMode_ALL::class)
+    @DependsOn(AxisAlignedBoundingBoxDrawMode::class, AxisAlignedBoundingBoxDrawMode_MOUSE_OVER::class, AxisAlignedBoundingBoxDrawMode_ALL::class)
     class axisAlignedBoundingBoxDrawMode : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<AxisAlignedBoundingBoxDrawMode>() }
-                .and { it != field<BoundingBoxDrawMode_MOUSE_OVER>() }
-                .and { it != field<BoundingBoxDrawMode_ALL>() }
+                .and { it != field<AxisAlignedBoundingBoxDrawMode_MOUSE_OVER>() }
+                .and { it != field<AxisAlignedBoundingBoxDrawMode_ALL>() }
     }
 
     @SinceVersion(141)
@@ -929,5 +924,15 @@ class Client : IdentityMapper.Class() {
     class axisAlignedBoundingBoxContainsMouse : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(type<Model>(), INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    class localPlayerName : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "&u=" }
+                .nextWithin(2) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Timer::class)
+    class timer : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Timer>() }
     }
 }
