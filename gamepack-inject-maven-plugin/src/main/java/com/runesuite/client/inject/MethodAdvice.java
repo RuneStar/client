@@ -18,7 +18,7 @@ public interface MethodAdvice {
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
-        exec.getEnter().accept(new MethodEvent.Enter(instance, arguments));
+        exec.enter.accept(new MethodEvent.Enter(instance, arguments));
     }
 
     @Advice.OnMethodExit
@@ -28,6 +28,6 @@ public interface MethodAdvice {
             @Advice.AllArguments Object[] arguments,
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned
     ) throws Throwable {
-        exec.getExit().accept(new MethodEvent.Exit(instance, arguments, returned));
+        exec.exit.accept(new MethodEvent.Exit(instance, arguments, returned));
     }
 }

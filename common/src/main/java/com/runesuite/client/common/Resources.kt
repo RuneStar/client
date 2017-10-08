@@ -2,14 +2,20 @@
 
 package com.runesuite.client.common
 
+import java.nio.file.Path
 import java.nio.file.Paths
 
-val ROOT_DIR_PATH = Paths.get(System.getProperty("user.home"), "RuneSuite")
+@JvmField
+val ROOT_DIR_PATH: Path = Paths.get(System.getProperty("user.home"), "RuneSuite")
 
-val CLIENT_PATH = ROOT_DIR_PATH.resolve("client.jar")
+@JvmField
+val CLIENT_PATH: Path = ROOT_DIR_PATH.resolve("client.jar")
 
-val PLUGINS_DIR_PATH = ROOT_DIR_PATH.resolve("plugins")
+@JvmField
+val PLUGINS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins")
 
-val PLUGINS_PATH = PLUGINS_DIR_PATH.resolve("runesuite-plugins.jar")
+@JvmField
+val PLUGINS_PATH: Path = PLUGINS_DIR_PATH.resolve("runesuite-plugins.jar")
 
-val PLUGINS_SETTINGS_DIR_PATH = ROOT_DIR_PATH.resolve("plugins-settings")
+@JvmField
+val PLUGINS_SETTINGS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins-settings")
