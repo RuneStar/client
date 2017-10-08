@@ -12,6 +12,7 @@ import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.INT_TYPE
+import java.awt.image.TileObserver
 
 @DependsOn(Node::class, Scene.tiles::class)
 class Tile : IdentityMapper.Class() {
@@ -53,5 +54,15 @@ class Tile : IdentityMapper.Class() {
     @DependsOn(GroundItemPile::class)
     class groundItemPile : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<GroundItemPile>() }
+    }
+
+    @DependsOn(TilePaint::class)
+    class paint : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TilePaint>() }
+    }
+
+    @DependsOn(TileModel::class)
+    class model : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TileModel>() }
     }
 }
