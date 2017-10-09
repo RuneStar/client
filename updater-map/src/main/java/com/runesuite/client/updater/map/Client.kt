@@ -945,4 +945,22 @@ class Client : IdentityMapper.Class() {
                 .next { it.isMethod && it.methodName == "toLowerCase" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
+
+    @DependsOn(Strings::class)
+    class Strings_SPACE : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " " }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Widget::class, Widget.children::class)
+    class getWidgetChild : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Widget>() }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.children>().id } }
+    }
+
+    @DependsOn(MenuAction::class)
+    class tempMenuAction : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<MenuAction>() }
+    }
 }
