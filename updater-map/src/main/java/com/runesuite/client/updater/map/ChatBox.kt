@@ -4,10 +4,7 @@ import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2
@@ -28,5 +25,9 @@ class ChatBox : IdentityMapper.Class() {
     @DependsOn(Message::class)
     class messages : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Message>().withDimensions(1) }
+    }
+
+    class int1 : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 }

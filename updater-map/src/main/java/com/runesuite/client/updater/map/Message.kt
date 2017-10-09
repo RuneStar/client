@@ -3,6 +3,7 @@ package com.runesuite.client.updater.map
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -32,10 +33,19 @@ class Message : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class type : OrderMapper.InConstructor.Field(Message::class, -1) {
+    class type : OrderMapper.InConstructor.Field(Message::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class cycle : OrderMapper.InConstructor.Field(Message::class, 1, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class count : OrderMapper.InConstructor.Field(Message::class, 0, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters("type", "sender", "prefix", "text")
     class set : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
     }

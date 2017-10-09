@@ -3,13 +3,13 @@ package com.runesuite.client.updater.map
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
+import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
@@ -113,5 +113,21 @@ class Widget : IdentityMapper.Class() {
 
     class spell : OrderMapper.InConstructor.Field(Widget::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    @MethodParameters()
+    @DependsOn(Font::class)
+    class getFont : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Font>() }
+    }
+
+    @DependsOn(getFont::class)
+    class fontId : OrderMapper.InMethod.Field(getFont::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Model::class)
+    class getModel : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
     }
 }

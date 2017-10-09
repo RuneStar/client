@@ -62,6 +62,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<NpcDefinition>() }
     }
 
+//    @MethodParameters("id")
+//    @DependsOn(HealthBarDefinition::class)
+//    class getHealthBarDefinition : StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<HealthBarDefinition>() }
+//    }
+
     @DependsOn(KitDefinition::class)
     class getKitDefinition : StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<KitDefinition>() }
@@ -962,5 +968,45 @@ class Client : IdentityMapper.Class() {
     @DependsOn(MenuAction::class)
     class tempMenuAction : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<MenuAction>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(NodeHashTable2::class)
+    class messages : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<NodeHashTable2>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Client::class)
+    class client : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Client>() }
+    }
+
+    @DependsOn(Widget.getFont::class, NodeCache::class)
+    class widgetFontCache : UniqueMapper.InMethod.Field(Widget.getFont::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeCache>() }
+    }
+
+    @DependsOn(Widget.getModel::class, NodeCache::class)
+    class widgetModelCache : UniqueMapper.InMethod.Field(Widget.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeCache>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Type0::class)
+    class Type0_INTEGER : OrderMapper.InClassInitializer.Field(Type0::class, 0, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Type0::class)
+    class Type0_LONG : OrderMapper.InClassInitializer.Field(Type0::class, 1, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Type0::class)
+    class Type0_STRING : OrderMapper.InClassInitializer.Field(Type0::class, 2, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
     }
 }

@@ -31,7 +31,7 @@ class WidgetNode : IdentityMapper.Class() {
 
     @SinceVersion(155)
     @DependsOn(id::class)
-    class int1 : IdentityMapper.InstanceField() {
+    class type : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE && it != field<id>() }
     }
 
