@@ -1,18 +1,11 @@
 package com.runesuite.client.updater.map
 
 import com.hunterwb.kxtra.collections.list.startsWith
-import com.runesuite.mapper.IdentityMapper
-import com.runesuite.mapper.OrderMapper
-import com.runesuite.mapper.StaticUniqueMapper
-import com.runesuite.mapper.UniqueMapper
+import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.*
-import com.runesuite.mapper.next
-import com.runesuite.mapper.nextWithin
-import com.runesuite.mapper.prev
-import com.runesuite.mapper.prevWithin
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
@@ -934,5 +927,22 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Timer::class)
     class timer : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<Timer>() }
+    }
+
+    class userHomeDirectory : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "user.home" }
+                .nextWithin(3) { it.isField && it.fieldType == String::class.type }
+    }
+
+    class osName : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "os.name" }
+                .nextWithin(3) { it.isField && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(osName::class)
+    class osNameLowerCase : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<osName>().id }
+                .next { it.isMethod && it.methodName == "toLowerCase" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 }
