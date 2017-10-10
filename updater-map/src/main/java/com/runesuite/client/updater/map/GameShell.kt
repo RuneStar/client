@@ -73,4 +73,11 @@ class GameShell : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(String::class.type) }
                 .and { it.instructions.any { it.isMethod && it.methodName == "setContents" } }
     }
+
+    @SinceVersion(141)
+    @MethodParameters()
+    @DependsOn(MouseWheel::class)
+    class mouseWheel : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<MouseWheel>() }
+    }
 }

@@ -9,12 +9,12 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 
 @DependsOn(AccessFile::class)
-class File1 : IdentityMapper.Class() {
+class BufferedFile : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.instanceFields.count { it.type == type<AccessFile>() } == 1 }
 
     @DependsOn(AccessFile::class)
-    class file : IdentityMapper.InstanceField() {
+    class accessFile : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<AccessFile>() }
     }
 }

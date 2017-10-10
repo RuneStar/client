@@ -3,6 +3,7 @@ package com.runesuite.client.updater.map
 import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.id
@@ -34,9 +35,17 @@ class AccessFile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
     }
 
-    class close : IdentityMapper.InstanceMethod() {
+    @MethodParameters("sync")
+    class closeSync : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == RandomAccessFile::close.id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(closeSync::class)
+    class close : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<closeSync>().id } }
     }
 
     @MethodParameters("index")
