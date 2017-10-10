@@ -1,6 +1,7 @@
 package com.runesuite.client.updater.map
 
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.id
 import com.runesuite.mapper.extensions.predicateOf
@@ -52,6 +53,16 @@ class NetSocket : IdentityMapper.Class() {
     class write : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == NEWARRAY } }
+    }
+
+    @DependsOn(Task::class)
+    class task : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Task>() }
+    }
+
+    @DependsOn(TaskHandler::class)
+    class taskHandler : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TaskHandler>() }
     }
 
     // isClosed

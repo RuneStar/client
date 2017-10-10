@@ -1104,4 +1104,19 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst is String && (it.ldcCst as String).contains("jagex_cl_") }
                 .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == File::class.type }
     }
+
+    @DependsOn(Track::class)
+    class tracks : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Track>().withDimensions(1) }
+    }
+
+    @DependsOn(TaskHandler::class)
+    class javaVendor : OrderMapper.InConstructor.Field(TaskHandler::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(TaskHandler::class)
+    class javaVersion : OrderMapper.InConstructor.Field(TaskHandler::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
 }
