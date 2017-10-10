@@ -958,6 +958,30 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
+    @DependsOn(Strings::class)
+    class Strings_ALREADY_A_FRIEND : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " is already on your friend list" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_REMOVE_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_FROM_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " from your ignore list first" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_REMOVE_FRIEND : OrderMapper.InClassInitializer.Field(Strings::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
     @DependsOn(Widget::class, Widget.children::class)
     class getWidgetChild : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Widget>() }
@@ -1008,5 +1032,44 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Type0::class)
     class Type0_STRING : OrderMapper.InClassInitializer.Field(Type0::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    }
+
+    @DependsOn(JagexGame::class)
+    class jagexGame : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<JagexGame>() && it.klass != klass<JagexGame>() }
+    }
+
+    @DependsOn(JagexGame0::class)
+    class jagexGame0 : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<JagexGame0>() && it.klass != klass<JagexGame0>() }
+    }
+
+    @DependsOn(File1::class)
+    class randomDat : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "random.dat" }
+                .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == type<File1>() }
+    }
+
+    @DependsOn(File1::class)
+    class cacheDat2 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.dat2" }
+                .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == type<File1>() }
+    }
+
+    @DependsOn(File1::class)
+    class cacheIdx255 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx255" }
+                .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == type<File1>() }
+    }
+
+    @DependsOn(File1::class)
+    class cacheIdxs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx" }
+                .prevWithin(25) { it.opcode == GETSTATIC && it.fieldType == type<File1>().withDimensions(1) }
+    }
+
+    class cacheIndexCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx255" }
+                .nextWithin(25) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 }

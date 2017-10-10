@@ -34,7 +34,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class setGameObject : IdentityMapper.InstanceMethod() {
+    class newGameObject : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         INT_TYPE, INT_TYPE, INT_TYPE, type<Entity>(), INT_TYPE, BOOLEAN_TYPE, INT_TYPE, INT_TYPE) }
@@ -42,7 +42,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class setFloorDecoration : IdentityMapper.InstanceMethod() {
+    class newFloorDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), INT_TYPE, INT_TYPE) }
@@ -50,7 +50,7 @@ class Scene : IdentityMapper.Class() {
     }
 
     @DependsOn(Entity::class)
-    class setWallDecoration : IdentityMapper.InstanceMethod() {
+    class newWallDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), type<Entity>(), INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
@@ -59,7 +59,7 @@ class Scene : IdentityMapper.Class() {
 
     @MethodParameters("plane", "x", "y", "int0", "bottom", "int1", "middle", "top")
     @DependsOn(Entity::class)
-    class setGroundItemPile : IdentityMapper.InstanceMethod() {
+    class newGroundItemPile : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), INT_TYPE, type<Entity>(), type<Entity>()) }
@@ -73,6 +73,33 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 3..4 }
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.groundItemPile>().id } }
+    }
+
+    @MethodParameters("plane", "x", "y")
+    @DependsOn(Tile.floorDecoration::class)
+    class removeFloorDecoration : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.arguments.size in 3..4 }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.floorDecoration>().id } }
+    }
+
+    @MethodParameters("plane", "x", "y")
+    @DependsOn(Tile.wallDecoration::class)
+    class removeWallDecoration : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.arguments.size in 3..4 }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.wallDecoration>().id } }
+    }
+
+    @MethodParameters("plane", "x", "y")
+    @DependsOn(Tile.boundaryObject::class)
+    class removeBoundaryObject : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.arguments.size in 3..4 }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.boundaryObject>().id } }
     }
 
     @DependsOn(Entity::class)
