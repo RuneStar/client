@@ -41,7 +41,7 @@ class SoundTaskData : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class  : IdentityMapper.InstanceMethod() {
+    class available : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::available.name } }
     }
