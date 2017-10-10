@@ -1119,4 +1119,35 @@ class Client : IdentityMapper.Class() {
     class javaVersion : OrderMapper.InConstructor.Field(TaskHandler::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
+
+    @SinceVersion(141)
+    @DependsOn(TaskDataProvider::class)
+    class soundTaskDataProvider : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TaskDataProvider>() }
+    }
+
+    @DependsOn(Task0::class)
+    class soundTask0 : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Task0>() }
+    }
+
+    class isLowDetail : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Mem:" }
+                .prevWithin(30) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    // else mono
+    @DependsOn(SoundTaskData.available::class)
+    class isStereo : UniqueMapper.InMethod.Field(SoundTaskData.available::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+        // sometimes accesses static field through the subclass
+        override fun resolve(instruction: Instruction2): Field2 {
+            return if (instruction.jar.contains(instruction.fieldId)) {
+                instruction.jar[instruction.fieldId]
+            } else {
+                val superType = instruction.jar[instruction.fieldOwner].superType
+                instruction.jar[superType to instruction.fieldName]
+            }
+        }
+    }
 }

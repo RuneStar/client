@@ -10,7 +10,7 @@ import org.objectweb.asm.Type.*
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.SourceDataLine
 
-class SoundSystem : IdentityMapper.Class() {
+class SoundTaskData : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
             .and { it.instanceFields.any { it.type == SourceDataLine::class.type } }
 
@@ -41,7 +41,7 @@ class SoundSystem : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class available : IdentityMapper.InstanceMethod() {
+    class  : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::available.name } }
     }
