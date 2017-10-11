@@ -19,17 +19,14 @@
         <dependency>
             <groupId>${kotlin.groupId}</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>${asm.groupId}</groupId>
             <artifactId>asm-tree</artifactId>
-            <version>${asm.version}</version>
         </dependency>
         <dependency>
             <groupId>${asm.groupId}</groupId>
             <artifactId>asm</artifactId>
-            <version>${asm.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

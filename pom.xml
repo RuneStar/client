@@ -15,19 +15,19 @@
     <modules>
         <module>client</module>
         <module>common</module>
+        <module>game-api</module>
         <module>game-raw</module>
         <module>game-raw-accessors-maven-plugin</module>
-        <module>game-api</module>
-        <module>plugins</module>
-        <module>plugin-framework</module>
-        <module>updater-common</module>
-        <module>updater-deob</module>
-        <module>updater-map</module>
-        <module>updater</module>
-        <module>updater-create-maven-plugin</module>
         <module>gamepack</module>
         <module>gamepack-inject-maven-plugin</module>
+        <module>plugins</module>
+        <module>plugins-standard</module>
+        <module>updater</module>
+        <module>updater-common</module>
+        <module>updater-deob</module>
+        <module>updater-create-maven-plugin</module>
         <module>updater-mapper</module>
+        <module>updater-mapper-standard</module>
     </modules>
 
     <!--<repositories>-->

@@ -36,7 +36,7 @@ class LocalMojo : AbstractMojo() {
         Files.createDirectories(CLIENT_PATH.parent)
         Files.copy(core.file.toPath(), CLIENT_PATH, StandardCopyOption.REPLACE_EXISTING)
 
-        val plugins = resolveArtifact("client-plugins")
+        val plugins = resolveArtifact("client-plugins-standard")
         Files.createDirectories(PLUGINS_PATH.parent)
         Files.copy(plugins.file.toPath(), PLUGINS_PATH, StandardCopyOption.REPLACE_EXISTING)
 

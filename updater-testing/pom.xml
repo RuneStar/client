@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-updater-map</artifactId>
+            <artifactId>client-updater-mapper-standard</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

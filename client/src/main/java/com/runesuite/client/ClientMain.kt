@@ -7,13 +7,12 @@ import com.runesuite.client.common.PLUGINS_SETTINGS_DIR_PATH
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
-import com.runesuite.client.pluginframework.PluginLoader
+import com.runesuite.client.plugins.PluginLoader
 import com.runesuite.general.JavConfig
 import com.runesuite.general.updateRevision
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.io.File
 import javax.swing.JFrame
 import javax.swing.WindowConstants
 

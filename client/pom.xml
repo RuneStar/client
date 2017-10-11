@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-plugin-framework</artifactId>
+            <artifactId>client-plugins</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
