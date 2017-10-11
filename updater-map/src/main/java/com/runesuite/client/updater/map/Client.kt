@@ -10,6 +10,7 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Opcodes.CHECKCAST
 import org.objectweb.asm.Opcodes.GETFIELD
@@ -967,6 +968,72 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Strings::class)
+    class Strings_TAKE : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Take" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_EXAMINE : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Examine" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_ATTACK : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Attack" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_DROP : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Drop" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_MORE_OPTIONS : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " more options" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_LEVEL : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "level-" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_SKILL : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "skill-" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_USE : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Use" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_LOADING_PLEASE_WAIT : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Loading - please wait." }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_CONNECTION_LOST : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Connection lost" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_ATTEMPTING_TO_REESTABLISH : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please wait - attempting to reestablish" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
     class Strings_ALREADY_A_FRIEND : UniqueMapper.InClassInitializer.Field(Strings::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " is already on your friend list" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
@@ -993,6 +1060,12 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Strings::class)
     class Strings_CHOOSE_OPTION : UniqueMapper.InClassInitializer.Field(Strings::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Choose Option" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings::class)
+    class Strings_PLEASE_WAIT : UniqueMapper.InClassInitializer.Field(Strings::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please wait..." }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
@@ -1149,5 +1222,75 @@ class Client : IdentityMapper.Class() {
                 instruction.jar[superType to instruction.fieldName]
             }
         }
+    }
+
+    class getColorStartTag : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments.startsWith(INT_TYPE) }
+                .and { it.arguments.size in 1..2 }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "<col=" } }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == ">" } }
+    }
+
+    class colorEndTag : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "</col>" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class lineBreakTag : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "<br>" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class rightParenthesis : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ")" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class spaceLeftParenthesis : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " (" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class rightArrow : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "->" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(CacheIndex::class)
+    class cacheIndex255 : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<CacheIndex>() }
+    }
+
+//    @DependsOn(ClientPreferences::class)
+//    class readClientPreferences : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<ClientPreferences>() }
+//    }
+
+    @SinceVersion(141)
+    @DependsOn(MouseWheel.useRotation::class)
+    class mouseWheelRotation : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<MouseWheel.useRotation>().id }
+                .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler.mouseMoved::class)
+    class mouseHandlerX : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 1, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler.mouseMoved::class)
+    class mouseHandlerY : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 2, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler.mousePressed::class)
+    class mouseHandlerPressedX : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler.mousePressed::class)
+    class mouseHandlerPressedY : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 }
