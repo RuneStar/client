@@ -2,6 +2,7 @@ package com.runesuite.client.inject
 
 import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.updater.GAMEPACK
+import com.runesuite.client.updater.GAMEPACK_DEOB
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.decoderNarrowed
 import com.runesuite.client.updater.common.finalArgumentNarrowed
@@ -56,7 +57,7 @@ class InjectMojo : AbstractMojo() {
             Files.createDirectories(deobJar.parent)
             Files.createFile(deobJar)
         }
-        GAMEPACK.openStream().use { input ->
+        GAMEPACK_DEOB.openStream().use { input ->
             deobJar.toFile().outputStream().use { output ->
                 input.copyTo(output)
             }

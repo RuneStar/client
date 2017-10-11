@@ -23,7 +23,7 @@ object GroundItems : TileEntities.Many<com.runesuite.client.game.api.GroundItem>
     /**
      * Item added or removed from tile, tile now has item(s)
      */
-    val pileChanges: Observable<com.runesuite.client.game.api.SceneTile> = XScene.setGroundItemPile.exit.map {
+    val pileChanges: Observable<com.runesuite.client.game.api.SceneTile> = XScene.newGroundItemPile.exit.map {
         com.runesuite.client.game.api.SceneTile(it.arguments[1] as Int, it.arguments[2] as Int, it.arguments[0] as Int)
     }
 

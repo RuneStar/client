@@ -11,4 +11,7 @@ import java.net.URL
 val HOOKS: List<ClassHook> = jacksonObjectMapper().readValue(::HOOKS.javaClass.classLoader.getResource("hooks.json"))
 
 @JvmField
-val GAMEPACK: URL = ::GAMEPACK.javaClass.classLoader.getResource("gamepack.deob.jar")
+val GAMEPACK: URL = ::GAMEPACK.javaClass.classLoader.getResource("gamepack.jar")
+
+@JvmField
+val GAMEPACK_DEOB: URL = ::GAMEPACK_DEOB.javaClass.classLoader.getResource("gamepack.deob.jar")
