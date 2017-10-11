@@ -1293,4 +1293,16 @@ class Client : IdentityMapper.Class() {
     class mouseHandlerPressedY : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(mouseHandlerPressedX::class)
+    class mousePressedX : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mouseHandlerPressedX>().id }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(mouseHandlerPressedY::class)
+    class mousePressedY : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mouseHandlerPressedY>().id }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }
