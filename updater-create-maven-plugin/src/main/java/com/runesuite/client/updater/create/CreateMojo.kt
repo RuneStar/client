@@ -8,7 +8,7 @@ import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
-import com.runesuite.client.updater.map.Client
+import com.runesuite.client.updater.map.classes.Client
 import com.runesuite.general.downloadGamepack
 import com.runesuite.general.updateRevision
 import com.runesuite.mapper.IdClass

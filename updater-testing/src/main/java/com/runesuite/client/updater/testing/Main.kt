@@ -9,7 +9,7 @@ import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.common.Renamer
-import com.runesuite.client.updater.map.Client
+import com.runesuite.client.updater.map.classes.Client
 import com.runesuite.mapper.IdClass
 import com.runesuite.mapper.JarMapper
 import com.runesuite.mapper.Mapper
