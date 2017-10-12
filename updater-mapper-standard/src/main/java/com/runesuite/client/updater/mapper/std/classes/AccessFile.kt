@@ -15,9 +15,7 @@ import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.LONG_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
 import java.io.RandomAccessFile
 
 class AccessFile : IdentityMapper.Class() {

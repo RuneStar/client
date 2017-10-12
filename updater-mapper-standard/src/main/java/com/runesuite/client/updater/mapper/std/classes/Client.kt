@@ -1205,9 +1205,9 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(CacheIndex::class)
-    class cacheIndex255 : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<CacheIndex>() }
+    @DependsOn(IndexStore::class)
+    class indexStore255 : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IndexStore>() }
     }
 
 //    @DependsOn(ClientPreferences::class)
@@ -1376,5 +1376,11 @@ class Client : IdentityMapper.Class() {
     class fontNameVerdana15 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA15>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
+    }
+
+    @DependsOn(IndexStore::class)
+    class IndexStore_buffer : UniqueMapper.InClassInitializer.Field(IndexStore::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 520 }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == ByteArray::class.type }
     }
 }
