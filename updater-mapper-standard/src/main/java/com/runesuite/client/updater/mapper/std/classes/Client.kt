@@ -1356,4 +1356,25 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_BOLD12>().id }
                 .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
     }
+
+    @SinceVersion(141)
+    @DependsOn(FontName_VERDANA11::class, FontName::class)
+    class fontNameVerdana11 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA11>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(FontName_VERDANA13::class, FontName::class)
+    class fontNameVerdana13 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA13>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(FontName_VERDANA15::class, FontName::class)
+    class fontNameVerdana15 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA15>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
+    }
 }
