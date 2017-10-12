@@ -1,6 +1,7 @@
 package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.collections.list.startsWith
+import com.runesuite.client.updater.mapper.std.CacheReferenceTableFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
 import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
@@ -963,56 +964,46 @@ class Client : IdentityMapper.Class() {
     }
 
     class Strings_SPACE : StringsUniqueMapper(" ")
-
     class Strings_TAKE : StringsUniqueMapper("Take")
-
     class Strings_EXAMINE : StringsUniqueMapper("Examine")
-
     class Strings_ATTACK : StringsUniqueMapper("Attack")
-
     class Strings_DROP : StringsUniqueMapper("Drop")
-
     class Strings_MORE_OPTIONS : StringsUniqueMapper(" more options")
-
     class Strings_LEVEL : StringsUniqueMapper("level-")
-
     class Strings_SKILL : StringsUniqueMapper("skill-")
-
     class Strings_USE : StringsUniqueMapper("Use")
-
+    class Strings_PREPARED_SOUND_ENGINE : StringsUniqueMapper("Prepared sound engine")
     class Strings_CONNECTING_TO_UPDATE_SERVER : StringsUniqueMapper("Connecting to update server")
-
     class Strings_STARTING_GAME_ENGINE : StringsUniqueMapper("Starting game engine...")
-
     class Strings_PREPARED_VISIBILITY_MAP : StringsUniqueMapper("Prepared visibility map")
-
     class Strings_CHECKING_FOR_UPDATES : StringsUniqueMapper("Checking for updates - ")
-
     class Strings_LOADED_UPDATE_LIST : StringsUniqueMapper("Loaded update list")
-
     class Strings_LOADING_FONTS : StringsUniqueMapper("Loading fonts - ")
-
     class Strings_LOADED_FONTS : StringsUniqueMapper("Loaded fonts")
-
     class Strings_LOADING_TITLE_SCREEN : StringsUniqueMapper("Loading title screen - ")
-
     class Strings_LOADED_TITLE_SCREEN : StringsUniqueMapper("Loaded title screen")
-
     class Strings_LOADING_PLEASE_WAIT : StringsUniqueMapper("Loading - please wait.")
-
     class Strings_CONNECTION_LOST : StringsUniqueMapper("Connection lost")
-
     class Strings_ATTEMPTING_TO_REESTABLISH : StringsUniqueMapper("Please wait - attempting to reestablish")
-
     class Strings_ALREADY_A_FRIEND : StringsUniqueMapper(" is already on your friend list")
-
-    @DependsOn(Strings::class)
-    class Strings_REMOVE_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
-
+    class Strings_CHOOSE_OPTION : StringsUniqueMapper("Choose Option")
+    class Strings_PLEASE_WAIT : StringsUniqueMapper("Please wait...")
     class Strings_FROM_IGNORE : StringsUniqueMapper(" from your ignore list first")
+    class Strings_LOADED_INPUT_HANDLER : StringsUniqueMapper("Loaded input handler")
+    class Strings_LOADED_TEXTURES : StringsUniqueMapper("Loaded textures")
+    class Strings_LOADED_CONFIG : StringsUniqueMapper("Loaded config")
+    class Strings_LOADED_SPRITES : StringsUniqueMapper("Loaded sprites")
+    class Strings_LOADED_WORDPACK : StringsUniqueMapper("Loaded wordpack")
+    class Strings_LOADED_INTERFACES : StringsUniqueMapper("Loaded interfaces")
+    class Strings_LOADING_SPRITES : StringsUniqueMapper("Loading sprites - ")
+    class Strings_LOADING_CONFIG : StringsUniqueMapper("Loading config - ")
+    class Strings_LOADING_TEXTURES : StringsUniqueMapper("Loading textures - ")
+    class Strings_LOADING_WORDPACK : StringsUniqueMapper("Loading wordpack - ")
+    class Strings_LOADING_INTERFACES : StringsUniqueMapper("Loading interfaces - ")
+    @SinceVersion(141)
+    class Strings_LOADING_WORLD_MAP : StringsUniqueMapper("Loading world map - ")
+    @SinceVersion(141)
+    class Strings_LOADED_WORLD_MAP : StringsUniqueMapper("Loaded world map")
 
     @DependsOn(Strings::class)
     class Strings_REMOVE_FRIEND : OrderMapper.InClassInitializer.Field(Strings::class, 1, 2) {
@@ -1020,9 +1011,11 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    class Strings_CHOOSE_OPTION : StringsUniqueMapper("Choose Option")
-
-    class Strings_PLEASE_WAIT : StringsUniqueMapper("Please wait...")
+    @DependsOn(Strings::class)
+    class Strings_REMOVE_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
 
     @DependsOn(Widget::class, Widget.children::class)
     class getWidgetChild : IdentityMapper.StaticMethod() {
@@ -1312,5 +1305,55 @@ class Client : IdentityMapper.Class() {
     @SinceVersion(141)
     class fontsMap : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == HashMap::class.type }
+    }
+
+    @DependsOn(CacheReferenceTable::class)
+    class getCacheReferenceTable : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<CacheReferenceTable>() }
+    }
+
+    class cacheReferenceTable0 : CacheReferenceTableFieldMapper(0)
+    class cacheReferenceTable1 : CacheReferenceTableFieldMapper(1)
+    class cacheReferenceTable2 : CacheReferenceTableFieldMapper(2)
+    class cacheReferenceTable3 : CacheReferenceTableFieldMapper(3)
+    class cacheReferenceTable4 : CacheReferenceTableFieldMapper(4)
+    class cacheReferenceTable5 : CacheReferenceTableFieldMapper(5)
+    class cacheReferenceTable6 : CacheReferenceTableFieldMapper(6)
+    class cacheReferenceTable7 : CacheReferenceTableFieldMapper(7)
+    class cacheReferenceTable8 : CacheReferenceTableFieldMapper(8)
+    class cacheReferenceTable9 : CacheReferenceTableFieldMapper(9)
+    class cacheReferenceTable10 : CacheReferenceTableFieldMapper(10)
+    class cacheReferenceTable11 : CacheReferenceTableFieldMapper(11)
+    class cacheReferenceTable12 : CacheReferenceTableFieldMapper(12)
+    class cacheReferenceTable13 : CacheReferenceTableFieldMapper(13)
+    class cacheReferenceTable14 : CacheReferenceTableFieldMapper(14)
+    class cacheReferenceTable15 : CacheReferenceTableFieldMapper(15)
+    @SinceVersion(141)
+    class cacheReferenceTable16 : CacheReferenceTableFieldMapper(16)
+
+    @DependsOn(MouseTracker::class)
+    class mouseTracker : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<MouseTracker>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Font::class, FontName_PLAIN11::class)
+    class fontPlain11 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_PLAIN11>().id }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Font::class, FontName_PLAIN12::class)
+    class fontPlain12 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_PLAIN12>().id }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Font::class, FontName_BOLD12::class)
+    class fontBold12 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_BOLD12>().id }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
     }
 }
