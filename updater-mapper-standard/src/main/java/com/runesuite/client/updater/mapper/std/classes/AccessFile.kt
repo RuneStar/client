@@ -5,6 +5,7 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.id
 import com.runesuite.mapper.extensions.predicateOf
@@ -35,12 +36,14 @@ class AccessFile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
     }
 
+    @SinceVersion(154)
     @MethodParameters("sync")
     class closeSync : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == RandomAccessFile::close.id } }
     }
 
+    @SinceVersion(154)
     @MethodParameters()
     @DependsOn(closeSync::class)
     class close : IdentityMapper.InstanceMethod() {
@@ -61,13 +64,13 @@ class AccessFile : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == RandomAccessFile::length.id } }
     }
 
-    @MethodParameters("bytes", "offset", "length")
+    @MethodParameters("dst", "dstIndex", "length")
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.startsWith(ByteArray::class.type, INT_TYPE, INT_TYPE) }
     }
 
-    @MethodParameters("bytes", "offset", "length")
+    @MethodParameters("src", "srcIndex", "length")
     class write : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(ByteArray::class.type, INT_TYPE, INT_TYPE) }
