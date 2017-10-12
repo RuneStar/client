@@ -758,7 +758,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @MethodParameters("x", "y", "value")
+    @MethodParameters("x", "y", "color")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_setPixel : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -816,7 +816,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 
-    @MethodParameters("x", "y", "length", "value")
+    @MethodParameters("x", "y", "length", "color")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_drawHorizontalLine : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -824,7 +824,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.count { it.opcode == IMUL } == 1 }
     }
 
-    @MethodParameters("x", "y", "length", "value")
+    @MethodParameters("x", "y", "length", "color")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_drawVerticalLine : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -832,7 +832,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.count { it.opcode == IMUL } == 2 }
     }
 
-    @MethodParameters("x", "y", "width", "height", "value")
+    @MethodParameters("x", "y", "width", "height", "color")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_drawRectangle : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -840,7 +840,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.count { it.opcode == INVOKESTATIC } == 4 }
     }
 
-    @MethodParameters("array")
+    @MethodParameters("dst")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_getClip : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -848,7 +848,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETSTATIC } }
     }
 
-    @MethodParameters("array")
+    @MethodParameters("src")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_setClip : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
@@ -1383,4 +1383,16 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 520 }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == ByteArray::class.type }
     }
+
+    @DependsOn(StoreRunnable::class)
+    class StoreRunnable_lock : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == Any::class.type }
+                .and { it.klass == klass<StoreRunnable>() }
+    }
+
+//    @DependsOn(StoreRunnable::class)
+//    class StoreRunnable_thread : IdentityMapper.StaticField() {
+//        override val predicate = predicateOf<Field2> { it.type == Thread::class.type }
+//                .and { it.klass == klass<StoreRunnable>() }
+//    }
 }
