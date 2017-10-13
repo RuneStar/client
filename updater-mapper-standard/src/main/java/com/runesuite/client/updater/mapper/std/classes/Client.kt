@@ -1,7 +1,7 @@
 package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.collections.list.startsWith
-import com.runesuite.client.updater.mapper.std.CacheReferenceTableFieldMapper
+import com.runesuite.client.updater.mapper.std.IndexCacheFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
 import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
@@ -13,20 +13,7 @@ import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Opcodes.BIPUSH
-import org.objectweb.asm.Opcodes.CHECKCAST
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Opcodes.GETSTATIC
-import org.objectweb.asm.Opcodes.GOTO
-import org.objectweb.asm.Opcodes.ICONST_2
-import org.objectweb.asm.Opcodes.ILOAD
-import org.objectweb.asm.Opcodes.IMUL
-import org.objectweb.asm.Opcodes.INVOKESTATIC
-import org.objectweb.asm.Opcodes.ISHR
-import org.objectweb.asm.Opcodes.LDC
-import org.objectweb.asm.Opcodes.PUTSTATIC
-import org.objectweb.asm.Opcodes.RETURN
-import org.objectweb.asm.Opcodes.SIPUSH
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.BYTE_TYPE
 import org.objectweb.asm.Type.INT_TYPE
@@ -842,7 +829,7 @@ class Client : IdentityMapper.Class() {
 
     @MethodParameters("dst")
     @DependsOn(Rasterizer2D::class)
-    class Rasterizer2D_getClip : IdentityMapper.StaticMethod() {
+    class Rasterizer2D_getClipArray : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
                 .and { it.arguments == listOf(INT_TYPE.withDimensions(1)) }
                 .and { it.instructions.any { it.opcode == GETSTATIC } }
@@ -850,10 +837,33 @@ class Client : IdentityMapper.Class() {
 
     @MethodParameters("src")
     @DependsOn(Rasterizer2D::class)
-    class Rasterizer2D_setClip : IdentityMapper.StaticMethod() {
+    class Rasterizer2D_setClipArray : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
                 .and { it.arguments == listOf(INT_TYPE.withDimensions(1)) }
                 .and { it.instructions.any { it.opcode == PUTSTATIC } }
+    }
+
+    @MethodParameters("pixels", "width", "height")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_setPixels : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("xStart", "yStart", "xEnd", "yEnd")
+    @DependsOn(Rasterizer2D_setPixels::class)
+    class Rasterizer2D_setClip : UniqueMapper.InMethod.Method(Rasterizer2D_setPixels::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    @MethodParameters("xStart", "yStart", "xEnd", "yEnd")
+    @DependsOn(Rasterizer2D::class, Rasterizer2D_setClip::class)
+    class Rasterizer2D_expandClip : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.arguments.size in 4..5 }
+                .and { it != method<Rasterizer2D_setClip>() }
+                .and { it.instructions.none { it.opcode in setOf(ICONST_0, ICONST_1, ISUB) } }
     }
 
     @DependsOn(ActionPriority::class)
@@ -1086,24 +1096,24 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(BufferedFile::class)
-    class cacheDat2 : AllUniqueMapper.Field() {
+    class dat2File : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.dat2" }
                 .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == type<BufferedFile>() }
     }
 
     @DependsOn(BufferedFile::class)
-    class cacheIdx255 : AllUniqueMapper.Field() {
+    class idx255File : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx255" }
                 .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == type<BufferedFile>() }
     }
 
     @DependsOn(BufferedFile::class)
-    class cacheIdxs : AllUniqueMapper.Field() {
+    class idxFiles : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx" }
                 .prevWithin(25) { it.opcode == GETSTATIC && it.fieldType == type<BufferedFile>().withDimensions(1) }
     }
 
-    class cacheIndexCount : AllUniqueMapper.Field() {
+    class idxCount : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "main_file_cache.idx255" }
                 .nextWithin(25) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
@@ -1307,29 +1317,29 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == HashMap::class.type }
     }
 
-    @DependsOn(CacheReferenceTable::class)
-    class getCacheReferenceTable : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<CacheReferenceTable>() }
+    @DependsOn(IndexCache::class)
+    class getIndexCache : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<IndexCache>() }
     }
 
-    class cacheReferenceTable0 : CacheReferenceTableFieldMapper(0)
-    class cacheReferenceTable1 : CacheReferenceTableFieldMapper(1)
-    class cacheReferenceTable2 : CacheReferenceTableFieldMapper(2)
-    class cacheReferenceTable3 : CacheReferenceTableFieldMapper(3)
-    class cacheReferenceTable4 : CacheReferenceTableFieldMapper(4)
-    class cacheReferenceTable5 : CacheReferenceTableFieldMapper(5)
-    class cacheReferenceTable6 : CacheReferenceTableFieldMapper(6)
-    class cacheReferenceTable7 : CacheReferenceTableFieldMapper(7)
-    class cacheReferenceTable8 : CacheReferenceTableFieldMapper(8)
-    class cacheReferenceTable9 : CacheReferenceTableFieldMapper(9)
-    class cacheReferenceTable10 : CacheReferenceTableFieldMapper(10)
-    class cacheReferenceTable11 : CacheReferenceTableFieldMapper(11)
-    class cacheReferenceTable12 : CacheReferenceTableFieldMapper(12)
-    class cacheReferenceTable13 : CacheReferenceTableFieldMapper(13)
-    class cacheReferenceTable14 : CacheReferenceTableFieldMapper(14)
-    class cacheReferenceTable15 : CacheReferenceTableFieldMapper(15)
+    class indexCache0 : IndexCacheFieldMapper(0)
+    class indexCache1 : IndexCacheFieldMapper(1)
+    class indexCache2 : IndexCacheFieldMapper(2)
+    class indexCache3 : IndexCacheFieldMapper(3)
+    class indexCache4 : IndexCacheFieldMapper(4)
+    class indexCache5 : IndexCacheFieldMapper(5)
+    class indexCache6 : IndexCacheFieldMapper(6)
+    class indexCache7 : IndexCacheFieldMapper(7)
+    class indexCache8 : IndexCacheFieldMapper(8)
+    class indexCache9 : IndexCacheFieldMapper(9)
+    class indexCache10 : IndexCacheFieldMapper(10)
+    class indexCache11 : IndexCacheFieldMapper(11)
+    class indexCache12 : IndexCacheFieldMapper(12)
+    class indexCache13 : IndexCacheFieldMapper(13)
+    class indexCache14 : IndexCacheFieldMapper(14)
+    class indexCache15 : IndexCacheFieldMapper(15)
     @SinceVersion(141)
-    class cacheReferenceTable16 : CacheReferenceTableFieldMapper(16)
+    class indexCache16 : IndexCacheFieldMapper(16)
 
     @DependsOn(MouseTracker::class)
     class mouseTracker : IdentityMapper.StaticField() {
@@ -1384,15 +1394,26 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == ByteArray::class.type }
     }
 
-    @DependsOn(StoreRunnable::class)
-    class StoreRunnable_lock : IdentityMapper.StaticField() {
+    @DependsOn(IndexStoreActionHandler::class)
+    class IndexStoreActionHandler_lock : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == Any::class.type }
-                .and { it.klass == klass<StoreRunnable>() }
+                .and { it.klass == klass<IndexStoreActionHandler>() }
     }
 
-//    @DependsOn(StoreRunnable::class)
-//    class StoreRunnable_thread : IdentityMapper.StaticField() {
-//        override val predicate = predicateOf<Field2> { it.type == Thread::class.type }
-//                .and { it.klass == klass<StoreRunnable>() }
-//    }
+    @DependsOn(IndexStoreActionHandler::class, NodeDeque::class)
+    class IndexStoreActionHandler_requestQueue : OrderMapper.InClassInitializer.Field(IndexStoreActionHandler::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<NodeDeque>() }
+    }
+
+    @DependsOn(IndexStoreActionHandler::class, NodeDeque::class)
+    class IndexStoreActionHandler_responseQueue : OrderMapper.InClassInitializer.Field(IndexStoreActionHandler::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<NodeDeque>() }
+    }
+
+    @SinceVersion(155)
+    @DependsOn(IndexStoreActionHandler::class)
+    class IndexStoreActionHandler_thread : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == Thread::class.type }
+                .and { it.klass == klass<IndexStoreActionHandler>() }
+    }
 }

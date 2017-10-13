@@ -7,7 +7,7 @@ import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 
-class StoreRunnable : IdentityMapper.Class() {
+class IndexStoreActionHandler : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.contains(Runnable::class.type) }
             .and { it.superType == Any::class.type }
             .and { it.instanceFields.isEmpty() }

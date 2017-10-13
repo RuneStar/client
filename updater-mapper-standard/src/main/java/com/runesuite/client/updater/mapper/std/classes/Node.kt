@@ -15,7 +15,7 @@ class Node : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == LONG_TYPE } == 1 }
             .and { c -> c.instanceFields.count { it.type == c.type } == 2 }
 
-    class uid : IdentityMapper.InstanceField() {
+    class key : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == LONG_TYPE }
     }
 

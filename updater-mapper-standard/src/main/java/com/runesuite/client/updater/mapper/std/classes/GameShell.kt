@@ -9,7 +9,9 @@ import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes.LDC
 import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import java.applet.Applet
 import java.awt.Canvas
@@ -79,5 +81,10 @@ class GameShell : IdentityMapper.Class() {
     @DependsOn(MouseWheel::class)
     class mouseWheel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<MouseWheel>() }
+    }
+
+    class checkHost : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "runescape.com" } }
     }
 }
