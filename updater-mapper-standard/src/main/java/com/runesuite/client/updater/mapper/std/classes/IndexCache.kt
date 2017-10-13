@@ -46,7 +46,13 @@ class IndexCache : IdentityMapper.Class() {
                 .and { it.arguments.size in 0..1 }
     }
 
-    class invalidArchives :IdentityMapper.InstanceField() {
+    class invalidArchives : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == BooleanArray::class.type }
+    }
+
+    @DependsOn(IndexStore::class)
+    class read0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<IndexStore>()) }
     }
 }

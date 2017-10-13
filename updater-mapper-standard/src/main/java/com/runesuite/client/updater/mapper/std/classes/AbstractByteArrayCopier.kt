@@ -10,7 +10,7 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Type
 import java.lang.reflect.Modifier
 
-class AbstractByteBuffer : IdentityMapper.Class() {
+class AbstractByteArrayCopier : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
             .and { Modifier.isAbstract(it.access) }
             .and { it.instanceFields.isEmpty() }
@@ -22,8 +22,8 @@ class AbstractByteBuffer : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
     }
 
-    @MethodParameters("source")
-    class put : IdentityMapper.InstanceMethod() {
+    @MethodParameters("array")
+    class set : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
     }
 }

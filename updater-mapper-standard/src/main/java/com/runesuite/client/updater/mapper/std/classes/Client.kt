@@ -22,6 +22,7 @@ import java.applet.Applet
 import java.io.File
 import java.lang.management.GarbageCollectorMXBean
 import java.net.URL
+import java.util.zip.CRC32
 
 class Client : IdentityMapper.Class() {
 
@@ -1415,5 +1416,25 @@ class Client : IdentityMapper.Class() {
     class IndexStoreActionHandler_thread : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == Thread::class.type }
                 .and { it.klass == klass<IndexStoreActionHandler>() }
+    }
+
+    @DependsOn(IndexCache.read0::class)
+    class IndexCache_crc : UniqueMapper.InMethod.Field(IndexCache.read0::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == CRC32::class.type }
+    }
+
+    class byteArrayCopyToObject : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == Any::class.type }
+                .and { it.arguments.startsWith(ByteArray::class.type) }
+    }
+
+    class byteArrayCopyFromObject : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
+                .and { it.arguments.startsWith(Any::class.type) }
+    }
+
+    @DependsOn(byteArrayCopyToObject::class)
+    class directBufferUnavailable : UniqueMapper.InMethod.Field(byteArrayCopyToObject::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 }

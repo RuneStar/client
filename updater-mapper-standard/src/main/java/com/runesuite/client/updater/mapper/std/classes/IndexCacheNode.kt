@@ -19,11 +19,11 @@ class IndexCacheNode : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IndexCache>() }
     }
 
-    class int1 : IdentityMapper.InstanceField() {
+    class crc : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }
     }
 
-    class byte1 : IdentityMapper.InstanceField() {
+    class type : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.BYTE_TYPE }
     }
 }

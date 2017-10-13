@@ -15,6 +15,7 @@ import com.runesuite.mapper.JarMapper
 import com.runesuite.mapper.Mapper
 import com.runesuite.mapper.buildIdHierarchy
 import java.awt.datatransfer.Clipboard
+import java.nio.ByteBuffer
 import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicInteger
 
