@@ -16,9 +16,9 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 
-@DependsOn(ReferenceTable::class)
+@DependsOn(AbstractIndexCache::class)
 class IndexCache : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<ReferenceTable>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<AbstractIndexCache>() }
 
     @DependsOn(IndexStore::class)
     class indexStore : OrderMapper.InConstructor.Field(IndexCache::class, 0, 2) {
@@ -41,7 +41,7 @@ class IndexCache : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class loadAll : IdentityMapper.InstanceMethod() {
+    class loadAllLocal : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }
     }

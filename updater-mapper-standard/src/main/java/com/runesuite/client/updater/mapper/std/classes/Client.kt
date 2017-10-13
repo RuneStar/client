@@ -14,13 +14,11 @@ import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.BYTE_TYPE
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
 import java.applet.Applet
 import java.io.File
 import java.lang.management.GarbageCollectorMXBean
+import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.zip.CRC32
 
@@ -1443,9 +1441,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IndexCache>().withDimensions(1) }
     }
 
-    @DependsOn(Cache::class)
+    @DependsOn(NetCache::class)
     class Cache_crc : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.klass == klass<Cache>() }
+        override val predicate = predicateOf<Field2> { it.klass == klass<NetCache>() }
                 .and { it.type == CRC32::class.type }
     }
 
@@ -1456,58 +1454,74 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netPriorityWritePending : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
+    class NetCache_priorityWritePending : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netPriorityResponsePending : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
+    class NetCache_priorityResponsePending : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netWritePending : OrderMapper.InMethod.Field(requestNetArchive::class, 2) {
+    class NetCache_writePending : OrderMapper.InMethod.Field(requestNetArchive::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netResponsePending : OrderMapper.InMethod.Field(requestNetArchive::class, 4) {
+    class NetCache_responsePending : OrderMapper.InMethod.Field(requestNetArchive::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
     @DependsOn(CacheNodeDeque::class, requestNetArchive::class)
-    class Cache_netWritePendingQueue : UniqueMapper.InMethod.Field(requestNetArchive::class) {
+    class NetCache_writePendingQueue : UniqueMapper.InMethod.Field(requestNetArchive::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<CacheNodeDeque>() }
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netWritePendingCount : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
+    class NetCache_writePendingCount : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class Cache_netPriorityWritePendingCount : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
+    class NetCache_priorityWritePendingCount : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(NetSocket::class, Cache_netPriorityWritePendingCount::class)
-    class Cache_netSocket : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Cache_netPriorityWritePendingCount>().id }
+    @DependsOn(NetSocket::class, NetCache_priorityWritePendingCount::class)
+    class NetCache_socket : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_priorityWritePendingCount>().id }
                 .prevWithin(3) { it.opcode == ISUB }
                 .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<NetSocket>() }
     }
 
-    @DependsOn(NetSocket::class, Cache_netPriorityWritePendingCount::class)
-    class Cache_netPriorityResponsePendingCount : AllUniqueMapper.Field() {
+    @DependsOn(NetSocket::class, NetCache_priorityWritePendingCount::class)
+    class NetCache_priorityResponsePendingCount : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == ISUB }
-                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<Cache_netPriorityWritePendingCount>().id }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_priorityWritePendingCount>().id }
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(NetSocket::class, Cache_netWritePendingCount::class, Cache_netPriorityWritePendingCount::class)
-    class Cache_netResponsePendingCount : AllUniqueMapper.Field() {
+    @DependsOn(NetSocket::class, NetCache_writePendingCount::class, NetCache_priorityWritePendingCount::class)
+    class NetCache_responsePendingCount : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == ISUB }
-                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<Cache_netWritePendingCount>().id }
-                .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE && it.fieldId != field<Cache_netPriorityWritePendingCount>().id }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_writePendingCount>().id }
+                .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE && it.fieldId != field<NetCache_priorityWritePendingCount>().id }
+    }
+
+    class currentTimeMillis : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == LONG_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { Modifier.isSynchronized(it.access) }
+    }
+
+    @DependsOn(currentTimeMillis::class)
+    class currentTimeMillisLast : OrderMapper.InMethod.Field(currentTimeMillis::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
+
+    @DependsOn(currentTimeMillis::class)
+    class currentTimeMillisOffset : OrderMapper.InMethod.Field(currentTimeMillis::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 }

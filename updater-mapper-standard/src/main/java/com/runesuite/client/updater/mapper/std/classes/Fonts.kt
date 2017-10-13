@@ -11,12 +11,12 @@ import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2
 
 @SinceVersion(141)
-@DependsOn(ReferenceTable::class)
+@DependsOn(AbstractIndexCache::class)
 class Fonts : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
             .and { it.instanceFields.size == 3 }
             .and { it.instanceFields.count { it.type == HashMap::class.type } == 1 }
-            .and { it.instanceFields.count { it.type == type<ReferenceTable>() } == 2 }
+            .and { it.instanceFields.count { it.type == type<AbstractIndexCache>() } == 2 }
 
     class map : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == HashMap::class.type }

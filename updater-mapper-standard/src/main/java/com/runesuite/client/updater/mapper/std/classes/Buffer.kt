@@ -37,7 +37,7 @@ class Buffer : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 
-    class buffer : InstanceField() {
+    class array : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
