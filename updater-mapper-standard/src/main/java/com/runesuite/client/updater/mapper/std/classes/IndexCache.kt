@@ -5,7 +5,7 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
-import com.runesuite.mapper.extensions.Predicate
+import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -51,8 +51,24 @@ class IndexCache : IdentityMapper.Class() {
     }
 
     @DependsOn(IndexStore::class)
-    class read0 : IdentityMapper.InstanceMethod() {
+    class load0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<IndexStore>()) }
+    }
+
+    @SinceVersion(154)
+    @DependsOn(load0::class, indexStore::class)
+    class loadArchive : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<load0>().id } }
+                .and { it.instructions.any { it.isField && it.fieldId == field<indexStore>().id } }
+    }
+
+    @SinceVersion(154)
+    @DependsOn(load0::class, indexStore::class)
+    class loadIndexReference : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<load0>().id } }
+                .and { it.instructions.none { it.isField && it.fieldId == field<indexStore>().id } }
     }
 }

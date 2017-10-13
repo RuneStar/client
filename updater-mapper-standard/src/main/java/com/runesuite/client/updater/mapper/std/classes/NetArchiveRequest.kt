@@ -10,7 +10,7 @@ import com.runesuite.mapper.tree.Field2
 import org.objectweb.asm.Type
 
 @DependsOn(CacheNode::class, IndexCache::class)
-class IndexCacheNode : IdentityMapper.Class() {
+class NetArchiveRequest : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
             .and { it.instanceFields.count { it.type == type<IndexCache>() } == 1 }
 
@@ -23,7 +23,7 @@ class IndexCacheNode : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }
     }
 
-    class type : IdentityMapper.InstanceField() {
+    class length0 : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.BYTE_TYPE }
     }
 }
