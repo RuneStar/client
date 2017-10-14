@@ -128,4 +128,9 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, IntArray::class.type) }
                 .and { it.arguments.size in 3..4 }
     }
+
+    class getModifiableRecordByNames : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
+                .and { it.arguments.startsWith(String::class.type, String::class.type) }
+    }
 }

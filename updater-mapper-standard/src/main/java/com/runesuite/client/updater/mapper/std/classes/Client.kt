@@ -1011,6 +1011,7 @@ class Client : IdentityMapper.Class() {
     class Strings_LOADING_INTERFACES : StringsUniqueMapper("Loading interfaces - ")
     @SinceVersion(141)
     class Strings_LOADING_WORLD_MAP : StringsUniqueMapper("Loading world map - ")
+
     @SinceVersion(141)
     class Strings_LOADED_WORLD_MAP : StringsUniqueMapper("Loaded world map")
 
@@ -1523,5 +1524,15 @@ class Client : IdentityMapper.Class() {
     @DependsOn(currentTimeMillis::class)
     class currentTimeMillisOffset : OrderMapper.InMethod.Field(currentTimeMillis::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
+
+    @DependsOn(AbstractIndexCache.getModifiableRecordByNames::class)
+    class hashString : UniqueMapper.InMethod.Method(AbstractIndexCache.getModifiableRecordByNames::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    @DependsOn(hashString::class)
+    class charToByteCp1252 : UniqueMapper.InMethod.Method(hashString::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 }

@@ -28,6 +28,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>client-updater-mapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>client-updater-common</artifactId>
             <version>${project.version}</version>
         </dependency>
