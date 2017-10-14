@@ -1,15 +1,15 @@
 package com.runesuite.client.updater.mapper.std.classes
 
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.id
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
+import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.NEWARRAY
+import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 import java.io.InputStream
 import java.io.OutputStream
@@ -31,6 +31,10 @@ class NetSocket : IdentityMapper.Class() {
 
     class outputStream : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == OutputStream::class.type }
+    }
+
+    class array : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
     class read : IdentityMapper.InstanceMethod() {
@@ -65,7 +69,16 @@ class NetSocket : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<TaskHandler>() }
     }
 
-    // isClosed
+    class isClosed : OrderMapper.InConstructor.Field(NetSocket::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
 
-    // buffer
+    class exceptionWriting : OrderMapper.InConstructor.Field(NetSocket::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class close : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodName == "join" } }
+    }
 }
