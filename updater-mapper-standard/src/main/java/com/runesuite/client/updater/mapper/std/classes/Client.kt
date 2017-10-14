@@ -503,49 +503,49 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(NpcDefinition::class, EvictingHashTable::class)
-    class npcDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedNpcDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<NpcDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(Sprite::class, EvictingHashTable::class)
-    class spriteCache : StaticUniqueMapper.Field() {
+    class cachedSprites : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<Sprite>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(KitDefinition::class, EvictingHashTable::class)
-    class kitDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedKitDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<KitDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(SpotAnimationDefinition::class, EvictingHashTable::class)
-    class spotAnimationDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedSpotAnimationDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SpotAnimationDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(ItemDefinition::class, EvictingHashTable::class)
-    class itemDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedItemDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ItemDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(VarbitDefinition::class, EvictingHashTable::class)
-    class varbitDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedVarbitDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<VarbitDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(SequenceDefinition::class, EvictingHashTable::class)
-    class sequenceDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedSequenceDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SequenceDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(ObjectDefinition::class, EvictingHashTable::class)
-    class objectDefinitionCache : StaticUniqueMapper.Field() {
+    class cachedObjectDefinitions : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ObjectDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
@@ -569,7 +569,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Fps:" }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
 
-        // todo : static field called through subclass, fix to be actual class
+        // static field called through subclass
         override fun resolve(instruction: Instruction2): Field2 {
             return instruction.jar[instruction.jar[instruction.fieldOwner].superType to instruction.fieldName]
         }
@@ -1051,12 +1051,12 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Widget.getFont::class, EvictingHashTable::class)
-    class widgetFontCache : UniqueMapper.InMethod.Field(Widget.getFont::class) {
+    class cachedWidgetFonts : UniqueMapper.InMethod.Field(Widget.getFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(Widget.getModel::class, EvictingHashTable::class)
-    class widgetModelCache : UniqueMapper.InMethod.Field(Widget.getModel::class) {
+    class cachedWidgetModels : UniqueMapper.InMethod.Field(Widget.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
