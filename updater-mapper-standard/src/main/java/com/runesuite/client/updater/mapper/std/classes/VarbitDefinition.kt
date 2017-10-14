@@ -13,9 +13,9 @@ import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class VarbitDefinition : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.size == 3 }
             .and { it.instanceFields.all { it.type == INT_TYPE } }

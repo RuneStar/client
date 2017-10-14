@@ -14,23 +14,23 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 
 @DependsOn(Node::class)
-class CacheNode : IdentityMapper.Class() {
+class DualNode : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
             .and { it.instanceFields.size == 2 }
             .and { c -> c.instanceFields.count { it.type == c.type } == 2 }
 
     @MethodParameters()
-    class cacheRemove : IdentityMapper.InstanceMethod() {
+    class removeDual : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
     }
 
-    @DependsOn(cacheRemove::class)
-    class cacheNext : OrderMapper.InMethod.Field(cacheRemove::class, 0) {
+    @DependsOn(removeDual::class)
+    class nextDual : OrderMapper.InMethod.Field(removeDual::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD }
     }
 
-    @DependsOn(cacheNext::class)
-    class cachePrevious : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.id != field<cacheNext>().id }
+    @DependsOn(nextDual::class)
+    class previousDual : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.id != field<nextDual>().id }
     }
 }

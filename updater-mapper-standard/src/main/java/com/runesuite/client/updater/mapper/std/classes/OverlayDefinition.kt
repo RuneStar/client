@@ -12,9 +12,9 @@ import org.objectweb.asm.Type
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class OverlayDefinition : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 9 }
             .and { it.instanceFields.count { it.type == BOOLEAN_TYPE } == 1 }

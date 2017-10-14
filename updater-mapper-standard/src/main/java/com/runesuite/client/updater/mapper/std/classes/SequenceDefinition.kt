@@ -11,9 +11,9 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type.VOID_TYPE
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class SequenceDefinition : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 5 }
 
     @DependsOn(Buffer::class)

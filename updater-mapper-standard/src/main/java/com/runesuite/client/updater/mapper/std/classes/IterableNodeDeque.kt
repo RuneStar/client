@@ -17,7 +17,7 @@ import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 
 @DependsOn(Node::class)
-class NodeDeque2 : IdentityMapper.Class() {
+class IterableNodeDeque : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.contains(Iterable::class.type) }
             .and { it.instanceFields.size == 2 }
@@ -28,7 +28,7 @@ class NodeDeque2 : IdentityMapper.Class() {
     }
 
     @DependsOn(Node::class)
-    class sentinel : OrderMapper.InConstructor.Field(NodeDeque2::class, 0) {
+    class sentinel : OrderMapper.InConstructor.Field(IterableNodeDeque::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == type<Node>() }
     }
 

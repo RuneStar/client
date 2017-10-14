@@ -18,8 +18,8 @@ abstract class StringsUniqueMapper(string: String) : UniqueMapper.InClassInitial
             .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
 }
 
-@DependsOn(Client.getIndexCache::class, IndexCache::class)
+@DependsOn(Client.newIndexCache::class, IndexCache::class)
 abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.getIndexCache>().id }
+    override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.newIndexCache>().id }
             .next { it.opcode == PUTSTATIC && it.fieldType == type<IndexCache>() }
 }

@@ -18,21 +18,21 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.LONG_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 
-@DependsOn(CacheNodeDeque::class, CacheNode::class, NodeHashTable::class)
-class NodeCache : IdentityMapper.Class() {
+@DependsOn(DualNodeDeque::class, DualNode::class, NodeHashTable::class)
+class EvictingHashTable : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
-            .and { it.instanceFields.count { it.type == type<CacheNode>() } == 1 }
+            .and { it.instanceFields.count { it.type == type<DualNode>() } == 1 }
             .and { it.instanceFields.count { it.type == type<NodeHashTable>() } == 1 }
-            .and { it.instanceFields.count { it.type == type<CacheNodeDeque>() } == 1 }
+            .and { it.instanceFields.count { it.type == type<DualNodeDeque>() } == 1 }
 
     @DependsOn(NodeHashTable::class)
     class hashTable : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<NodeHashTable>() }
     }
 
-    @DependsOn(CacheNodeDeque::class)
+    @DependsOn(DualNodeDeque::class)
     class deque : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<CacheNodeDeque>() }
+        override val predicate = predicateOf<Field2> { it. type == type<DualNodeDeque>() }
     }
 
     @MethodParameters()
@@ -43,11 +43,11 @@ class NodeCache : IdentityMapper.Class() {
     }
 
 
-    @MethodParameters("cacheNode", "key")
-    @DependsOn(CacheNode::class)
+    @MethodParameters("dualNode", "key")
+    @DependsOn(DualNode::class)
     class put : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.startsWith(type<CacheNode>(), LONG_TYPE) }
+                .and { it.arguments.startsWith(type<DualNode>(), LONG_TYPE) }
     }
 
     @MethodParameters("key")
@@ -57,9 +57,9 @@ class NodeCache : IdentityMapper.Class() {
     }
 
     @MethodParameters("key")
-    @DependsOn(CacheNode::class)
+    @DependsOn(DualNode::class)
     class get : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<CacheNode>() }
+        override val predicate = predicateOf<Method2> { it.returnType == type<DualNode>() }
                 .and { it.arguments.startsWith(LONG_TYPE) }
     }
 

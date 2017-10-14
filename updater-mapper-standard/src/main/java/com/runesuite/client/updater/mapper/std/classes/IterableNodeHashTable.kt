@@ -18,7 +18,7 @@ import org.objectweb.asm.Type
 
 @SinceVersion(141)
 @DependsOn(Node::class)
-class NodeHashTable2 : IdentityMapper.Class() {
+class IterableNodeHashTable : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.instanceFields.count { it.type == type<Node>().withDimensions(1) } == 1 }
@@ -30,11 +30,11 @@ class NodeHashTable2 : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Node>().withDimensions(1) }
     }
 
-    class index : OrderMapper.InConstructor.Field(NodeHashTable2::class, 0) {
+    class index : OrderMapper.InConstructor.Field(IterableNodeHashTable::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
     }
 
-    class size : OrderMapper.InConstructor.Field(NodeHashTable2::class, 1) {
+    class size : OrderMapper.InConstructor.Field(IterableNodeHashTable::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
     }
 

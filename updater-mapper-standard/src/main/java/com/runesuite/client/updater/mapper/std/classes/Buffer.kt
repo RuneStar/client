@@ -3,7 +3,10 @@ package com.runesuite.client.updater.mapper.std.classes
 import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -12,19 +15,8 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.BALOAD
-import org.objectweb.asm.Opcodes.BASTORE
-import org.objectweb.asm.Opcodes.BIPUSH
-import org.objectweb.asm.Opcodes.ICONST_0
-import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
-import org.objectweb.asm.Opcodes.LDC
-import org.objectweb.asm.Opcodes.NEW
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Opcodes.SIPUSH
-import org.objectweb.asm.Type.BYTE_TYPE
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.LONG_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
 class Buffer : IdentityMapper.Class() {
@@ -153,7 +145,33 @@ class Buffer : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == ICONST_0 } }
     }
 
-    // read bytes
+    @MethodParameters("xteaKey", "start", "end")
+    class xteaDecrypt : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == ISUB } > 2 }
+    }
 
-    // write bytes
+    @MethodParameters("xteaKey", "start", "end")
+    class xteaEncrypt : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == ISUB } == 2 }
+    }
+
+    @MethodParameters("xteaKey")
+    class xteaEncryptAll : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(IntArray::class.type) }
+                .and { it.arguments.size in 1..2 }
+                .and { it.instructions.count { it.opcode == ISUB } == 1 }
+    }
+
+    @MethodParameters("xteaKey")
+    class xteaDecryptAll : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(IntArray::class.type) }
+                .and { it.arguments.size in 1..2 }
+                .and { it.instructions.count { it.opcode == ISUB } > 1 }
+    }
 }

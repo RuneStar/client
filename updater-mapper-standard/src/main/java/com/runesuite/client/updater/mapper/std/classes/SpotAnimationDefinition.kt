@@ -11,9 +11,9 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.INT_TYPE
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class SpotAnimationDefinition : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.count { it.type == ShortArray::class.type } == 4 }
             .and { it.instanceFields.count { it.type == INT_TYPE } >= 8 }

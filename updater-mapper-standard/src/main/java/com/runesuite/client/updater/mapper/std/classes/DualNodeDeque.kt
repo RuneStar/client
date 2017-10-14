@@ -11,12 +11,12 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.GOTO
 import org.objectweb.asm.Type.VOID_TYPE
 
-@DependsOn(CacheNode::class)
-class CacheNodeDeque : IdentityMapper.Class() {
+@DependsOn(DualNode::class)
+class DualNodeDeque : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.size == 1 }
-            .and { it.instanceFields.all { it.type == type<CacheNode>() } }
+            .and { it.instanceFields.all { it.type == type<DualNode>() } }
 
     class sentinel : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { true }
@@ -27,29 +27,29 @@ class CacheNodeDeque : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GOTO } }
     }
 
-    @DependsOn(CacheNode::class, CacheNode.cachePrevious::class)
+    @DependsOn(DualNode::class, DualNode.previousDual::class)
     class last : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<CacheNode>() }
-                .and { it.instructions.filter { it.isField && it.fieldId == field<CacheNode.cachePrevious>().id }.count() == 1 }
+        override val predicate = predicateOf<Method2> { it.returnType == type<DualNode>() }
+                .and { it.instructions.filter { it.isField && it.fieldId == field<DualNode.previousDual>().id }.count() == 1 }
                 .and { it.instructions.none { it.isMethod } }
     }
 
-    @DependsOn(CacheNode::class, CacheNode.cachePrevious::class)
+    @DependsOn(DualNode::class, DualNode.previousDual::class)
     class removeLast : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<CacheNode>() }
-                .and { it.instructions.filter { it.isField && it.fieldId == field<CacheNode.cachePrevious>().id }.count() == 1 }
+        override val predicate = predicateOf<Method2> { it.returnType == type<DualNode>() }
+                .and { it.instructions.filter { it.isField && it.fieldId == field<DualNode.previousDual>().id }.count() == 1 }
                 .and { it.instructions.any { it.isMethod } }
     }
 
-    @DependsOn(CacheNode.cachePrevious::class)
+    @DependsOn(DualNode.previousDual::class)
     class addFirst : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.instructions.filter { it.isField && it.fieldId == field<CacheNode.cachePrevious>().id }.count() == 3 }
+                .and { it.instructions.filter { it.isField && it.fieldId == field<DualNode.previousDual>().id }.count() == 3 }
     }
 
-    @DependsOn(CacheNode.cachePrevious::class)
+    @DependsOn(DualNode.previousDual::class)
     class addLast : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.instructions.filter { it.isField && it.fieldId == field<CacheNode.cachePrevious>().id }.count() == 4 }
+                .and { it.instructions.filter { it.isField && it.fieldId == field<DualNode.previousDual>().id }.count() == 4 }
     }
 }

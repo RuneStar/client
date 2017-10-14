@@ -13,9 +13,9 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 
-@DependsOn(CacheNode::class, NpcDefinition::class)
+@DependsOn(DualNode::class, NpcDefinition::class)
 class ObjectDefinition : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.count { it.type == String::class.type } == 1 }
             .and { it.instanceFields.count { it.type == String::class.type.withDimensions(1) } == 1 }

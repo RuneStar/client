@@ -12,9 +12,9 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import java.lang.reflect.Modifier
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class Entity : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.instanceFields.size == 1 }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 1 }
             .and { Modifier.isAbstract(it.access) }

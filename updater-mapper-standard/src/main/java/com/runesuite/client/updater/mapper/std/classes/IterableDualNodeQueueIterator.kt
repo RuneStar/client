@@ -8,20 +8,14 @@ import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 
-@DependsOn(Node::class, NodeDeque2::class)
-class NodeDeque2DescendingIterator : IdentityMapper.Class() {
+@DependsOn(IterableDualNodeQueue::class)
+class IterableDualNodeQueueIterator : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.contains(Iterator::class.type) }
-            .and { it.instanceFields.count { it.type == type<Node>() } == 2 }
-            .and { it.instanceFields.count { it.type == type<NodeDeque2>() } == 1 }
-            .and { it.instanceFields.size == 3 }
+            .and { it.instanceFields.count { it.type == type<IterableDualNodeQueue>() } == 1 }
 
-    @DependsOn(NodeDeque2::class)
-    class deque : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<NodeDeque2>() }
+    @DependsOn(IterableDualNodeQueue::class)
+    class queue : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IterableDualNodeQueue>() }
     }
-
-    // current
-
-    // last
 }

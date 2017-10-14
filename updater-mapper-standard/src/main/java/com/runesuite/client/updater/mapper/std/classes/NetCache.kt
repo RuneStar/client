@@ -6,7 +6,7 @@ import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 
-@DependsOn(Client.Cache_indexCaches::class)
+@DependsOn(Client.NetCache_indexCaches::class)
 class NetCache : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { field<Client.Cache_indexCaches>().klass == it }
+    override val predicate = predicateOf<Class2> { field<Client.NetCache_indexCaches>().klass == it }
 }

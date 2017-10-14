@@ -27,9 +27,9 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
 
-    @DependsOn(NodeDeque2::class)
+    @DependsOn(IterableNodeDeque::class)
     class healthBars : InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<NodeDeque2>() }
+        override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
     }
 
     class overheadMessage : InstanceField() {

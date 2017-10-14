@@ -14,9 +14,9 @@ import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.INT_TYPE
 
-@DependsOn(CacheNode::class)
+@DependsOn(DualNode::class)
 class Message : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<CacheNode>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.instanceFields.size == 6 }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 3 }
             .and { it.instanceFields.count { it.type == String::class.type } == 3 }
