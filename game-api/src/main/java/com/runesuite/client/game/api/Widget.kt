@@ -35,7 +35,7 @@ class Widget(override val accessor: XWidget) : Wrapper() {
                 node = table.next() as XWidgetNode?
             }
             node ?: return null
-            pId = node.uid.toInt()
+            pId = node.key.toInt()
         }
         return Widget(Client.accessor.widgets[pId shr 16]!![pId and 0xFFFF])
     }
