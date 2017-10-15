@@ -20,7 +20,7 @@ class IndexStoreAction : IdentityMapper.Class() {
     }
 
     @DependsOn(IndexCache::class)
-    class cacheReferenceTable : IdentityMapper.InstanceField() {
+    class indexCache : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<IndexCache>() }
     }
 

@@ -6,6 +6,7 @@ import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -70,5 +71,19 @@ class IndexCache : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<load0>().id } }
                 .and { it.instructions.none { it.isField && it.fieldId == field<indexStore>().id } }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(AbstractIndexCache.archiveLoadPercent::class)
+    class archiveLoadPercent : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<AbstractIndexCache.archiveLoadPercent>().mark }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(archiveLoadPercent::class)
+    class loadPercent : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<archiveLoadPercent>().id } }
     }
 }
