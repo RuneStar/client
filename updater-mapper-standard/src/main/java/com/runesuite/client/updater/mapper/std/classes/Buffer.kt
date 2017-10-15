@@ -6,6 +6,7 @@ import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
@@ -173,5 +174,27 @@ class Buffer : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(IntArray::class.type) }
                 .and { it.arguments.size in 1..2 }
                 .and { it.instructions.count { it.opcode == ISUB } > 1 }
+    }
+
+    @MethodParameters("string")
+    class writeStringCp1252NullTerminated : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 1 }
+    }
+
+    @MethodParameters("string")
+    class writeStringCp1252NullSurrounded : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.count { it.opcode == ICONST_1 } > 1 }
+    }
+
+    @SinceVersion(154)
+    @MethodParameters("boolean")
+    class writeBooleanAsByte : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(BOOLEAN_TYPE) }
     }
 }

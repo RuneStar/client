@@ -1558,4 +1558,15 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(3) { it.isMethod && it.methodId == CRC32::reset.id }
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == type<Buffer>() }
     }
+
+    @DependsOn(Bzip2Decompressor::class)
+    class bzip2Decompressor : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Bzip2Decompressor>() }
+    }
+
+    @MethodParameters("src", "srcStart", "srcEnd", "dst", "dstStart")
+    class encodeStringCp1252 : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.startsWith(CharSequence::class.type, INT_TYPE, INT_TYPE, ByteArray::class.type, INT_TYPE) }
+    }
 }
