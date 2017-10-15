@@ -1535,4 +1535,9 @@ class Client : IdentityMapper.Class() {
     class charToByteCp1252 : UniqueMapper.InMethod.Method(hashString::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
+
+    @DependsOn(Huffman::class)
+    class huffman : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Huffman>() }
+    }
 }

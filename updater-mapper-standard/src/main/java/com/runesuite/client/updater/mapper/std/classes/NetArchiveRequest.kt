@@ -22,7 +22,7 @@ class NetArchiveRequest : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }
     }
 
-    class length0 : IdentityMapper.InstanceField() {
+    class padding : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.BYTE_TYPE }
     }
 }
