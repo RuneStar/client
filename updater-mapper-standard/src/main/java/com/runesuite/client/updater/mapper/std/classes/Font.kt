@@ -5,7 +5,7 @@ import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 
-@DependsOn(TypeFace::class)
+@DependsOn(AbstractFont::class)
 class Font : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<TypeFace>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<AbstractFont>() }
 }

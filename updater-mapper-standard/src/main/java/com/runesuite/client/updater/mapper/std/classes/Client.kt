@@ -1422,18 +1422,18 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == CRC32::class.type }
     }
 
-    class byteArrayCopyToObject : IdentityMapper.StaticMethod() {
+    class byteArrayToObject : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Any::class.type }
                 .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 
-    class byteArrayCopyFromObject : IdentityMapper.StaticMethod() {
+    class byteArrayFromObject : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(Any::class.type) }
     }
 
-    @DependsOn(byteArrayCopyToObject::class)
-    class directBufferUnavailable : UniqueMapper.InMethod.Field(byteArrayCopyToObject::class) {
+    @DependsOn(byteArrayToObject::class)
+    class directBufferUnavailable : UniqueMapper.InMethod.Field(byteArrayToObject::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 

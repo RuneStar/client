@@ -8,7 +8,7 @@ import com.runesuite.mapper.tree.Class2
 import java.lang.reflect.Modifier
 
 @DependsOn(Rasterizer2D::class)
-class TypeFace : IdentityMapper.Class() {
+class AbstractFont : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { Modifier.isAbstract(it.access) }
             .and { it.superType == type<Rasterizer2D>() }
 }

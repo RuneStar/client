@@ -4,6 +4,7 @@ import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -20,6 +21,7 @@ class ItemDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == ShortArray::class.type } == 4 }
             .and { it.instanceFields.count { it.type == Array<String>::class.type } == 2 }
 
+    @MethodParameters("quantity")
     @DependsOn(Model::class)
     class getModel : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
