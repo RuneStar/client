@@ -1062,21 +1062,21 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(Type0::class)
-    class Type0_INTEGER : OrderMapper.InClassInitializer.Field(Type0::class, 0, 3) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    @DependsOn(BaseVarType::class)
+    class BaseVarType_INTEGER : OrderMapper.InClassInitializer.Field(BaseVarType::class, 0, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(Type0::class)
-    class Type0_LONG : OrderMapper.InClassInitializer.Field(Type0::class, 1, 3) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    @DependsOn(BaseVarType::class)
+    class BaseVarType_LONG : OrderMapper.InClassInitializer.Field(BaseVarType::class, 1, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(Type0::class)
-    class Type0_STRING : OrderMapper.InClassInitializer.Field(Type0::class, 2, 3) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Type0>() }
+    @DependsOn(BaseVarType::class)
+    class BaseVarType_STRING : OrderMapper.InClassInitializer.Field(BaseVarType::class, 2, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
     @DependsOn(JagexGame::class)

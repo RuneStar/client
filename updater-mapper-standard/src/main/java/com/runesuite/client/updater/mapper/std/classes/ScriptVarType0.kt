@@ -8,8 +8,8 @@ import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 
 @SinceVersion(141)
-@DependsOn(KeyChar1::class, Enumerated::class)
-class KeyChar0 : IdentityMapper.Class() {
+@DependsOn(ScriptVarType::class, Enumerated::class)
+class ScriptVarType0 : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { klass<Enumerated>() != it }
-            .and { klass<KeyChar1>().interfaces.contains(it.type) }
+            .and { klass<ScriptVarType>().interfaces.contains(it.type) }
 }
