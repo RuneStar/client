@@ -1559,9 +1559,9 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == type<Buffer>() }
     }
 
-    @DependsOn(Bzip2Decompressor::class)
-    class bzip2Decompressor : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Bzip2Decompressor>() }
+    @DependsOn(Bzip2State::class)
+    class Bzip2Decompressor_state : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Bzip2State>() }
     }
 
     @MethodParameters("src", "srcStart", "srcEnd", "dst", "dstStart")
