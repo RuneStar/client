@@ -19,7 +19,7 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import java.lang.reflect.Modifier
 
-class AbstractGraphicsProvider : IdentityMapper.Class() {
+class AbstractRasterProvider : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { Modifier.isAbstract(it.access) }
             .and { it.interfaces.isEmpty() }

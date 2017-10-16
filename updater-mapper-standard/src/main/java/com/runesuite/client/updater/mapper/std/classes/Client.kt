@@ -248,9 +248,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Scene>() }
     }
 
-    @DependsOn(AbstractGraphicsProvider::class)
-    class graphicsProvider : StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AbstractGraphicsProvider>() }
+    @DependsOn(AbstractRasterProvider::class)
+    class rasterProvider : StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AbstractRasterProvider>() }
     }
 
     @DependsOn(GrandExchangeOffer::class)
@@ -704,9 +704,9 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(AbstractGraphicsProvider.draw::class)
+    @DependsOn(AbstractRasterProvider.draw::class)
     class methodDraw : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractGraphicsProvider.draw>().id } }
+        override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractRasterProvider.draw>().id } }
     }
 
     @SinceVersion(141)
@@ -844,14 +844,14 @@ class Client : IdentityMapper.Class() {
 
     @MethodParameters("pixels", "width", "height")
     @DependsOn(Rasterizer2D::class)
-    class Rasterizer2D_setPixels : IdentityMapper.StaticMethod() {
+    class Rasterizer2D_replace : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
                 .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE) }
     }
 
     @MethodParameters("xStart", "yStart", "xEnd", "yEnd")
-    @DependsOn(Rasterizer2D_setPixels::class)
-    class Rasterizer2D_setClip : UniqueMapper.InMethod.Method(Rasterizer2D_setPixels::class) {
+    @DependsOn(Rasterizer2D_replace::class)
+    class Rasterizer2D_setClip : UniqueMapper.InMethod.Method(Rasterizer2D_replace::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 

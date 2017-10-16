@@ -4,7 +4,7 @@ import com.hunterwb.kxtra.swing.graphics2d.create2D
 import com.hunterwb.kxtra.swing.toolkit.fontDesktopHints
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell
-import com.runesuite.client.game.raw.access.XGraphicsProvider
+import com.runesuite.client.game.raw.access.XRasterProvider
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.awt.Graphics2D
@@ -27,8 +27,8 @@ interface Canvas {
 
         override val shape get() = Rectangle(accessor.canvas.size)
 
-        val repaints: Observable<Graphics2D> = XGraphicsProvider.drawFull0.enter.map { me ->
-            val gp = me.instance as XGraphicsProvider
+        val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map { me ->
+            val gp = me.instance as XRasterProvider
             val g2d = gp.image.graphics as Graphics2D
             desktopHints?.let { g2d.addRenderingHints(it) }
             g2d

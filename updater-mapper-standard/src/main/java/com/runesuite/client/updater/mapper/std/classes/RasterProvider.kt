@@ -6,7 +6,6 @@ import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
-import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -18,9 +17,9 @@ import org.objectweb.asm.Type
 import java.awt.Component
 import java.awt.Image
 
-@DependsOn(AbstractGraphicsProvider::class)
-class GraphicsProvider : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.superType == type<AbstractGraphicsProvider>() }
+@DependsOn(AbstractRasterProvider::class)
+class RasterProvider : IdentityMapper.Class() {
+    override val predicate = predicateOf<Class2> { it.superType == type<AbstractRasterProvider>() }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.any { it.type == Component::class.type } }
 
@@ -35,30 +34,30 @@ class GraphicsProvider : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @MethodParameters("x", "y", "width", "height")
-    @DependsOn(AbstractGraphicsProvider.draw::class)
+    @DependsOn(AbstractRasterProvider.draw::class)
     class draw : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<AbstractGraphicsProvider.draw>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<AbstractRasterProvider.draw>().mark }
     }
 
     @SinceVersion(141)
     @MethodParameters("x", "y")
-    @DependsOn(AbstractGraphicsProvider.drawFull::class)
+    @DependsOn(AbstractRasterProvider.drawFull::class)
     class drawFull : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<AbstractGraphicsProvider.drawFull>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<AbstractRasterProvider.drawFull>().mark }
     }
 
     @SinceVersion(141)
     @MethodParameters("graphics", "x", "y", "width", "height")
     @DependsOn(draw::class)
     class draw0 : OrderMapper.InMethod.Method(draw::class, 0, 1) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<GraphicsProvider>() }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<RasterProvider>() }
     }
 
     @SinceVersion(141)
     @MethodParameters("graphics", "x", "y")
     @DependsOn(drawFull::class)
     class drawFull0 : OrderMapper.InMethod.Method(drawFull::class, 0, 1) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<GraphicsProvider>() }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<RasterProvider>() }
     }
 
     @SinceVersion(141)
