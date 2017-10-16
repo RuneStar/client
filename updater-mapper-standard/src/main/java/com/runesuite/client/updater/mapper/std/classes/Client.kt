@@ -1526,8 +1526,8 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 
-    @DependsOn(AbstractIndexCache.getModifiableRecordByNames::class)
-    class hashString : UniqueMapper.InMethod.Method(AbstractIndexCache.getModifiableRecordByNames::class) {
+    @DependsOn(AbstractIndexCache.takeRecordByNames::class)
+    class hashString : UniqueMapper.InMethod.Method(AbstractIndexCache.takeRecordByNames::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 
@@ -1579,5 +1579,18 @@ class Client : IdentityMapper.Class() {
     @DependsOn(decodeStringCp1252::class)
     class cp1252AsciiExtension : UniqueMapper.InMethod.Field(decodeStringCp1252::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
+
+    @DependsOn(gzipDecompressor::class)
+    class decompressBytes : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(ByteArray::class.type) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<gzipDecompressor>().id } }
+    }
+
+    @DependsOn(decompressBytes::class)
+    class Bzip2Decompressor_decompress : UniqueMapper.InMethod.Method(decompressBytes::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 }

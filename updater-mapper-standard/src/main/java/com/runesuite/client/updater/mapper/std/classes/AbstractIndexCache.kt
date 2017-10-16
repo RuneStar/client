@@ -26,12 +26,12 @@ class AbstractIndexCache : IdentityMapper.Class() {
     }
 
     @DependsOn(AbstractIndexCache::class)
-    class noCopyArchives : OrderMapper.InConstructor.Field(AbstractIndexCache::class, 0, 2) {
+    class releaseArchives : OrderMapper.InConstructor.Field(AbstractIndexCache::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
     @DependsOn(AbstractIndexCache::class)
-    class noCopyRecords : OrderMapper.InConstructor.Field(AbstractIndexCache::class, 1, 2) {
+    class shallowRecords : OrderMapper.InConstructor.Field(AbstractIndexCache::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -79,38 +79,38 @@ class AbstractIndexCache : IdentityMapper.Class() {
     }
 
     @MethodParameters("archive", "xteaKey")
-    class loadRecords : IdentityMapper.InstanceMethod() {
+    class buildRecords : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, IntArray::class.type) }
     }
 
     @MethodParameters("archive", "record")
-    @DependsOn(getModifiableRecordEncrypted::class)
-    class getModifiableRecord : IdentityMapper.InstanceMethod() {
+    @DependsOn(takeRecordEncrypted::class)
+    class takeRecord : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 2..3 }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<getModifiableRecordEncrypted>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<takeRecordEncrypted>().id } }
     }
 
     @MethodParameters("archive", "record")
-    @DependsOn(getModifiableRecordEncrypted::class)
+    @DependsOn(takeRecordEncrypted::class)
     class getRecord : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 2..3 }
-                .and { it.instructions.none { it.isMethod && it.methodId == method<getModifiableRecordEncrypted>().id } }
+                .and { it.instructions.none { it.isMethod && it.methodId == method<takeRecordEncrypted>().id } }
                 .and { it.instructions.none { it.opcode == NEW && it.typeType == RuntimeException::class.type } }
     }
 
     @MethodParameters("archiveOrRecord")
-    @DependsOn(getModifiableRecord::class)
-    class getModifiableRecordFlat : IdentityMapper.InstanceMethod() {
+    @DependsOn(takeRecord::class)
+    class takeRecordFlat : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(INT_TYPE) }
                 .and { it.arguments.size in 1..2 }
                 .and { it.instructions.any { it.opcode == NEW && it.typeType == RuntimeException::class.type } }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<getModifiableRecord>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<takeRecord>().id } }
     }
 
     @MethodParameters("archiveOrRecord")
@@ -124,25 +124,25 @@ class AbstractIndexCache : IdentityMapper.Class() {
     }
 
     @MethodParameters("archive", "record", "xteaKey")
-    class getModifiableRecordEncrypted : IdentityMapper.InstanceMethod() {
+    class takeRecordEncrypted : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, IntArray::class.type) }
                 .and { it.arguments.size in 3..4 }
     }
 
-    class getModifiableRecordByNames : IdentityMapper.InstanceMethod() {
+    class takeRecordByNames : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(String::class.type, String::class.type) }
     }
 
-    class isRecordValid : IdentityMapper.InstanceMethod() {
+    class isRecordLoaded : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == ARRAYLENGTH } }
     }
 
-    class isArchiveValid : IdentityMapper.InstanceMethod() {
+    class isArchiveLoaded : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(INT_TYPE) }
@@ -155,5 +155,47 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(INT_TYPE) }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 100 } }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(isArchiveLoaded::class)
+    class isArchiveLoadedByName : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<isArchiveLoaded>().id } }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(isRecordLoaded::class)
+    class isRecordLoadedByNames : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(String::class.type, String::class.type) }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<isRecordLoaded>().id } }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(archiveLoadPercent::class)
+    class archiveLoadPercentByName : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<archiveLoadPercent>().id } }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(archiveLoadPercent::class)
+    class getArchiveId : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.none { it.isMethod && it.methodId == method<archiveLoadPercent>().id } }
+    }
+
+    class getRecordId : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
     }
 }
