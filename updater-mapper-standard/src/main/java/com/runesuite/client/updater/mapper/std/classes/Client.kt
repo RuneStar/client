@@ -1569,4 +1569,15 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.startsWith(CharSequence::class.type, INT_TYPE, INT_TYPE, ByteArray::class.type, INT_TYPE) }
     }
+
+    @MethodParameters("src", "srcStart", "length")
+    @DependsOn(Buffer.readStringCp1252NullTerminated::class)
+    class decodeStringCp1252 : UniqueMapper.InMethod.Method(Buffer.readStringCp1252NullTerminated::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    @DependsOn(decodeStringCp1252::class)
+    class cp1252AsciiExtension : UniqueMapper.InMethod.Field(decodeStringCp1252::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
+    }
 }

@@ -197,4 +197,25 @@ class Buffer : IdentityMapper.Class() {
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(BOOLEAN_TYPE) }
     }
+
+    @MethodParameters()
+    class readStringCp1252NullTerminated : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 2 }
+    }
+
+    @MethodParameters()
+    class readStringCp1252NullTerminatedOrNull : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 0 }
+    }
+
+    @MethodParameters()
+    class readStringCp1252NullSurrounded : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 3 }
+    }
 }
