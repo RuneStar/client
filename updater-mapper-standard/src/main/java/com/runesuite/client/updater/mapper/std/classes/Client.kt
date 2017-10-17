@@ -1417,8 +1417,8 @@ class Client : IdentityMapper.Class() {
                 .and { it.klass == klass<IndexStoreActionHandler>() }
     }
 
-    @DependsOn(IndexCache.load0::class)
-    class IndexCache_crc : UniqueMapper.InMethod.Field(IndexCache.load0::class) {
+    @DependsOn(IndexCache.load::class)
+    class IndexCache_crc : UniqueMapper.InMethod.Field(IndexCache.load::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == CRC32::class.type }
     }
 
@@ -1449,43 +1449,43 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(IndexCache::class)
-    class requestNetArchive : IdentityMapper.StaticMethod() {
+    class requestNetFile : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<IndexCache>(), INT_TYPE, INT_TYPE, INT_TYPE, BYTE_TYPE, BOOLEAN_TYPE) }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingPriorityWrites : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingPriorityWrites : OrderMapper.InMethod.Field(requestNetFile::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingPriorityResponses : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingPriorityResponses : OrderMapper.InMethod.Field(requestNetFile::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingWrites : OrderMapper.InMethod.Field(requestNetArchive::class, 2) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingWrites : OrderMapper.InMethod.Field(requestNetFile::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingResponses : OrderMapper.InMethod.Field(requestNetArchive::class, 4) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingResponses : OrderMapper.InMethod.Field(requestNetFile::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
-    @DependsOn(DualNodeDeque::class, requestNetArchive::class)
-    class NetCache_pendingWritesQueue : UniqueMapper.InMethod.Field(requestNetArchive::class) {
+    @DependsOn(DualNodeDeque::class, requestNetFile::class)
+    class NetCache_pendingWritesQueue : UniqueMapper.InMethod.Field(requestNetFile::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<DualNodeDeque>() }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingWritesCount : OrderMapper.InMethod.Field(requestNetArchive::class, 0) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingWritesCount : OrderMapper.InMethod.Field(requestNetFile::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(NodeHashTable::class, requestNetArchive::class)
-    class NetCache_pendingPriorityWritesCount : OrderMapper.InMethod.Field(requestNetArchive::class, 1) {
+    @DependsOn(NodeHashTable::class, requestNetFile::class)
+    class NetCache_pendingPriorityWritesCount : OrderMapper.InMethod.Field(requestNetFile::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -1541,9 +1541,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Huffman>() }
     }
 
-    @DependsOn(NetArchiveRequest::class)
+    @DependsOn(NetFileRequest::class)
     class NetCache_currentResponse : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<NetArchiveRequest>() }
+        override val predicate = predicateOf<Field2> { it.type == type<NetFileRequest>() }
     }
 
     @DependsOn(Buffer::class, NetCache::class)
@@ -1592,5 +1592,12 @@ class Client : IdentityMapper.Class() {
     @DependsOn(decompressBytes::class)
     class Bzip2Decompressor_decompress : UniqueMapper.InMethod.Method(decompressBytes::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    @SinceVersion(154)
+    @DependsOn(IndexCache.loadIndexReference::class, Buffer::class)
+    class NetCache_reference : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<IndexCache.loadIndexReference>().id }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == type<Buffer>() }
     }
 }

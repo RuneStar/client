@@ -24,7 +24,7 @@ class IndexStoreAction : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IndexCache>() }
     }
 
-    class array : IdentityMapper.InstanceField() {
+    class data : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 

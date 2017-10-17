@@ -3,6 +3,7 @@ package com.runesuite.client.updater.mapper.std.classes
 import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
@@ -197,5 +198,10 @@ class AbstractIndexCache : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
+    }
+
+    @DependsOn(isArchiveLoaded::class)
+    class loadArchive : UniqueMapper.InMethod.Method(isArchiveLoaded::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 }
