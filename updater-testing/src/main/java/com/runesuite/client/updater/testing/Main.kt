@@ -15,6 +15,7 @@ import com.runesuite.mapper.JarMapper
 import com.runesuite.mapper.Mapper
 import com.runesuite.mapper.buildIdHierarchy
 import java.awt.datatransfer.Clipboard
+import java.awt.event.KeyEvent
 import java.nio.ByteBuffer
 import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicInteger
@@ -25,7 +26,6 @@ val jsonMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
 fun main(args: Array<String>) {
-
     for (revision in 127..155) {
         if (revision in setOf(146, 147)) continue
         println(revision)

@@ -87,7 +87,7 @@ class IndexCache : IdentityMapper.Class() {
     class indexReferenceCrc : OrderMapper.InMethod.Field(loadIndexReference::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
-    
+
     @DependsOn(loadIndexReference::class)
     class indexReferenceVersion : OrderMapper.InMethod.Field(loadIndexReference::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }

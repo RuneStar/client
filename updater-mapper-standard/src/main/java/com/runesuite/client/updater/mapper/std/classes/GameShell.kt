@@ -2,21 +2,21 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
+import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.LDC
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import java.applet.Applet
+import java.awt.*
 import java.awt.Canvas
-import java.awt.EventQueue
-import java.awt.Frame
 import java.awt.datatransfer.Clipboard
 
 @DependsOn(Client::class)
@@ -86,5 +86,57 @@ class GameShell : IdentityMapper.Class() {
     class checkHost : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "runescape.com" } }
+    }
+
+    class getContainer : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == Container::class.type }
+    }
+
+    class error : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "error_game_" } }
+    }
+
+    @DependsOn(error::class)
+    class hasErrored : UniqueMapper.InMethod.Field(error::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+//    class setUpKeyboard : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments.size in 0..1 }
+//                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "microsoft" } }
+//    }
+
+    @SinceVersion(141)
+    class setUpClipboard : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.isMethod && it.methodId == Toolkit::getSystemClipboard.id } }
+    }
+
+    @DependsOn(Client.setUp::class)
+    class setUp : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<Client.setUp>().mark }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Client.setUp::class)
+    class setUpKeyboard : OrderMapper.InMethod.Method(Client.setUp::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL }
+        override fun resolve(instruction: Instruction2): Method2 {
+            return instruction.jar[Triple(instruction.jar[instruction.methodOwner].superType, instruction.methodName, instruction.methodType)]
+        }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Client.setUp::class)
+    class setUpMouse : OrderMapper.InMethod.Method(Client.setUp::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL }
+        override fun resolve(instruction: Instruction2): Method2 {
+            return instruction.jar[Triple(instruction.jar[instruction.methodOwner].superType, instruction.methodName, instruction.methodType)]
+        }
     }
 }

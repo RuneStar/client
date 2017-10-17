@@ -136,14 +136,14 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(String::class.type, String::class.type) }
     }
 
-    class isRecordLoaded : IdentityMapper.InstanceMethod() {
+    class tryLoadRecord : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == ARRAYLENGTH } }
     }
 
-    class isArchiveLoaded : IdentityMapper.InstanceMethod() {
+    class tryLoadArchive : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(INT_TYPE) }
@@ -159,21 +159,21 @@ class AbstractIndexCache : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(isArchiveLoaded::class)
-    class isArchiveLoadedByName : IdentityMapper.InstanceMethod() {
+    @DependsOn(tryLoadArchive::class)
+    class tryLoadArchiveByName : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(String::class.type) }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<isArchiveLoaded>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<tryLoadArchive>().id } }
     }
 
     @SinceVersion(141)
-    @DependsOn(isRecordLoaded::class)
-    class isRecordLoadedByNames : IdentityMapper.InstanceMethod() {
+    @DependsOn(tryLoadRecord::class)
+    class tryLoadRecordByNames : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(String::class.type, String::class.type) }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<isRecordLoaded>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<tryLoadRecord>().id } }
     }
 
     @SinceVersion(141)
@@ -200,8 +200,8 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
     }
 
-    @DependsOn(isArchiveLoaded::class)
-    class loadArchive : UniqueMapper.InMethod.Method(isArchiveLoaded::class) {
+    @DependsOn(tryLoadArchive::class)
+    class loadArchive : UniqueMapper.InMethod.Method(tryLoadArchive::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 }
