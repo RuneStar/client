@@ -40,8 +40,8 @@
                 <configuration>
                     <outputPackage>com.runesuite.client.game.raw.access</outputPackage>
                     <accessorClassName>com.runesuite.client.game.raw.Accessor</accessorClassName>
-                    <methodClassName>com.runesuite.client.game.raw.Accessor.MethodExecution</methodClassName>
-                    <methodInitializer>new Accessor.MethodExecution()</methodInitializer>
+                    <methodClassName>com.runesuite.client.game.raw.MethodExecution</methodClassName>
+                    <methodInitializer>new MethodExecution()</methodInitializer>
                 </configuration>
             </plugin>
         </plugins>
