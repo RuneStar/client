@@ -973,6 +973,7 @@ class Client : IdentityMapper.Class() {
     }
 
     class Strings_SPACE : StringsUniqueMapper(" ")
+    class Strings_CANCEL : StringsUniqueMapper("Cancel")
     class Strings_TAKE : StringsUniqueMapper("Take")
     class Strings_EXAMINE : StringsUniqueMapper("Examine")
     class Strings_ATTACK : StringsUniqueMapper("Attack")

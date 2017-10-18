@@ -191,7 +191,7 @@ class Buffer : IdentityMapper.Class() {
     }
 
     @SinceVersion(154)
-    @MethodParameters("boolean")
+    @MethodParameters("bool")
     class writeBooleanAsByte : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
