@@ -14,20 +14,22 @@ public interface MethodAdvice {
 
     @Advice.OnMethodEnter
     static void onMethodEnter(
-            @Execution Accessor.MethodExecution exec,
+            @Execution MethodExecution exec,
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
+        //noinspection unchecked
         exec.enter.accept(new MethodEvent.Enter(instance, arguments));
     }
 
     @Advice.OnMethodExit
     static void onMethodExit(
-            @Execution Accessor.MethodExecution exec,
+            @Execution MethodExecution exec,
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments Object[] arguments,
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned
     ) throws Throwable {
+        //noinspection unchecked
         exec.exit.accept(new MethodEvent.Exit(instance, arguments, returned));
     }
 }

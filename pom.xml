@@ -28,6 +28,9 @@
         <module>updater-create-maven-plugin</module>
         <module>updater-mapper</module>
         <module>updater-mapper-standard</module>
+
+        <module>updater-testing</module>
+        <module>releaser-local-maven-plugin</module>
     </modules>
 
     <!--<repositories>-->
