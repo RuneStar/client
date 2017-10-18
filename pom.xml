@@ -123,6 +123,11 @@
                 <version>${kxtra.version}</version>
             </dependency>
             <dependency>
+                <groupId>${kxtra.groupId}</groupId>
+                <artifactId>kxtra-classload</artifactId>
+                <version>${kxtra.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.akarnokd</groupId>
                 <artifactId>rxjava2-swing</artifactId>
                 <version>0.2.5</version>

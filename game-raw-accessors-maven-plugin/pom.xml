@@ -47,6 +47,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${kxtra.groupId}</groupId>
+            <artifactId>kxtra-classload</artifactId>
+            <version>${kxtra.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

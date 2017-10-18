@@ -4,14 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public abstract class MethodEvent {
+public abstract class MethodEvent<I> {
 
-    private final Object instance;
+    private final I instance;
 
     @NotNull
     private final Object[] arguments;
 
-    private MethodEvent(final Object instance, @NotNull final Object[] arguments) {
+    private MethodEvent(final I instance, @NotNull final Object[] arguments) {
         this.instance = instance;
         this.arguments = arguments;
     }
@@ -19,7 +19,7 @@ public abstract class MethodEvent {
     /**
      * @return null for static methods
      */
-    public final Object getInstance() {
+    public final I getInstance() {
         return instance;
     }
 
@@ -28,9 +28,9 @@ public abstract class MethodEvent {
         return arguments;
     }
 
-    public final static class Enter extends MethodEvent {
+    public final static class Enter<I> extends MethodEvent<I> {
 
-        public Enter(final Object instance, @NotNull final Object[] arguments) {
+        public Enter(final I instance, @NotNull final Object[] arguments) {
             super(instance, arguments);
         }
 
@@ -43,11 +43,11 @@ public abstract class MethodEvent {
         }
     }
 
-    public final static class Exit extends MethodEvent {
+    public final static class Exit<I, R> extends MethodEvent<I> {
 
-        private final Object returned;
+        private final R returned;
 
-        public Exit(final Object instance, @NotNull final Object[] arguments, final Object returned) {
+        public Exit(final I instance, @NotNull final Object[] arguments, final R returned) {
             super(instance, arguments);
             this.returned = returned;
         }
@@ -55,7 +55,7 @@ public abstract class MethodEvent {
         /**
          * @return null for void methods
          */
-        public Object getReturned() {
+        public R getReturned() {
             return returned;
         }
 

@@ -1,13 +1,10 @@
 package com.runesuite.client.game.raw.accessors
 
+import com.hunterwb.kxtra.classload.classloader.loadClassFromDescriptor
 import com.runesuite.client.updater.HOOKS
-import com.squareup.javapoet.ArrayTypeName
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
+import com.runesuite.client.updater.common.ClassHook
+import com.runesuite.client.updater.common.MethodHook
+import com.squareup.javapoet.*
 import org.apache.commons.lang3.ClassUtils
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
@@ -54,7 +51,7 @@ class AccessorsMojo : AbstractMojo() {
             val typeBuilder = TypeSpec.interfaceBuilder("X" + c.`class`)
                     .addSuperinterface(ACCESSOR_NAME)
                     .addModifiers(Modifier.PUBLIC)
-                    .addJavadoc("\$L", classModifiersToString(c.access) + "\n")
+                    .addJavadoc("\$L", classModifiersToString(c.access))
             if (c.`super` in TYPE_TRANSFORMS) {
                 typeBuilder.addSuperinterface(ClassName.get(outputPackage, TYPE_TRANSFORMS.getValue(c.`super`!!)))
             }
@@ -65,13 +62,13 @@ class AccessorsMojo : AbstractMojo() {
                 val fName = poetType(f.descriptor)
                 typeBuilder.addMethod(MethodSpec.methodBuilder("get${f.field.capitalize()}")
                         .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                        .addJavadoc("\$L", fieldModifiersToString(f.access) + "\n")
+                        .addJavadoc("\$L", fieldModifiersToString(f.access))
                         .returns(fName).build())
                 if (!RModifier.isFinal(f.access)) {
                     typeBuilder.addMethod(MethodSpec.methodBuilder("set${f.field.capitalize()}")
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                             .addParameter(fName, SETTER_PARAM_NAME)
-                            .addJavadoc("\$L", fieldModifiersToString(f.access) + "\n").build())
+                            .addJavadoc("\$L", fieldModifiersToString(f.access)).build())
                 }
             }
             c.methods?.forEach { m ->
@@ -79,7 +76,7 @@ class AccessorsMojo : AbstractMojo() {
                     val mType = Type.getMethodType(m.descriptor)
                     val method = MethodSpec.methodBuilder(m.method)
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                            .addJavadoc("\$L", methodModifiersToString(m.access) + "\n")
+                            .addJavadoc("\$L", methodModifiersToString(m.access))
                             .returns(poetType(mType.returnType.descriptor))
                     mType.argumentTypes.take(m.parameters!!.size).forEachIndexed { i, arg ->
                         method.addParameter(poetType(arg.descriptor), m.parameters!![i])
@@ -87,36 +84,65 @@ class AccessorsMojo : AbstractMojo() {
                     typeBuilder.addMethod(method.build())
                 }
                 if (m.parameters != null && !RModifier.isInterface(c.access) && !RModifier.isAbstract(m.access)) {
+                    val instanceType = if (RModifier.isStatic(m.access)) {
+                        TypeName.get(Void::class.java)
+                    } else {
+                        poetType(Type.getObjectType(c.name).descriptor)
+                    }
+                    val returnType = poetType(Type.getMethodType(m.descriptor).returnType.descriptor, true)
+                    val callbackType = ParameterizedTypeName.get(METHOD_NAME, instanceType, returnType)
                     typeBuilder.addField(
-                            FieldSpec.builder(METHOD_NAME, m.method, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            FieldSpec.builder(callbackType, m.method, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                     .initializer(methodInitializer)
                                     .addAnnotation(NotNull::class.java)
+                                    .addJavadoc(seeTag(c, m))
                                     .build()
                     )
                 }
             }
+            METHOD_NAME
             JavaFile.builder(outputPackage, typeBuilder.build()).indent(INDENT)
                     .build().writeTo(OUTPUT_DIR)
         }
         project.addCompileSourceRoot(OUTPUT_DIR.toString())
     }
 
-    private fun poetType(desc: String): TypeName {
+    private fun poetType(desc: String, wrapPrimitives: Boolean = false): TypeName {
         val type = Type.getType(desc)
         val baseType = if (type.sort == Type.ARRAY) type.elementType else type
-        var baseName: TypeName
-        try {
-            baseName = TypeName.get(ClassUtils.getClass(baseType.className))
-        } catch (e: ClassNotFoundException) {
-            baseName = ClassName.bestGuess(TYPE_TRANSFORMS[baseType.className]) ?: ClassName.OBJECT
+        val baseName2: TypeName = if (TYPE_TRANSFORMS.containsKey(baseType.className)) {
+            ClassName.bestGuess(TYPE_TRANSFORMS[baseType.className])
+        } else {
+            var klass = ClassLoader.getSystemClassLoader().loadClassFromDescriptor(baseType.descriptor)
+            if (wrapPrimitives && klass.isPrimitive) {
+                klass = if (klass == Void.TYPE) {
+                    Void::class.java
+                } else {
+                    ClassUtils.primitiveToWrapper(klass)
+                }
+            }
+            TypeName.get(klass)
         }
-        var name = baseName
+        var name = baseName2
         if (type.sort == Type.ARRAY) {
             repeat(type.dimensions) {
                 name = ArrayTypeName.of(name)
             }
         }
         return name
+    }
+
+    private fun seeTag(classHook: ClassHook, methodHook: MethodHook): String {
+        val argList = Type.getArgumentTypes(methodHook.descriptor).toList().take(methodHook.parameters!!.size).map {
+            val baseType = if (it.sort == Type.ARRAY) it.elementType else it
+            val dim = if (it.sort == Type.ARRAY) it.dimensions else 0
+            if (baseType.className in TYPE_TRANSFORMS) {
+                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(dim))
+            } else {
+                ClassLoader.getSystemClassLoader().loadClassFromDescriptor(it.descriptor).simpleName
+            }
+        }
+        return "@see X${classHook.`class`}#${methodHook.method}(${argList.joinToString()})"
     }
 
     private fun classModifiersToString(modifiers: Int): String {
