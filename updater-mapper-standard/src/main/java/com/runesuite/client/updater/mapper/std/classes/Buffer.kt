@@ -206,10 +206,11 @@ class Buffer : IdentityMapper.Class() {
     }
 
     @MethodParameters()
+    @DependsOn(readStringCp1252NullTerminated::class)
     class readStringCp1252NullTerminatedOrNull : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
                 .and { it.arguments.size in 0..1 }
-                .and { it.instructions.count { it.opcode == ICONST_1 } == 0 }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<readStringCp1252NullTerminated>().id } }
     }
 
     @MethodParameters()

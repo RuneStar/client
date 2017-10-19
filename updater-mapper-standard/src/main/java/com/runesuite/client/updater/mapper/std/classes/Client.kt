@@ -1451,11 +1451,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<NodeDeque>() }
     }
 
-    @SinceVersion(155)
+    @SinceVersion(141)
     @DependsOn(IndexStoreActionHandler::class)
-    class IndexStoreActionHandler_thread : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == Thread::class.type }
-                .and { it.klass == klass<IndexStoreActionHandler>() }
+    class IndexStoreActionHandler_thread : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<IndexStoreActionHandler>() }
+                .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == Thread::class.type }
     }
 
     @DependsOn(IndexCache.load::class)
