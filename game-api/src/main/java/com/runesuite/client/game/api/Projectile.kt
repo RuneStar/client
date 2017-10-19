@@ -3,25 +3,25 @@ package com.runesuite.client.game.api
 import com.runesuite.client.game.api.live.Scene
 import com.runesuite.client.game.raw.access.XProjectile
 
-class Projectile(override val accessor: XProjectile) : com.runesuite.client.game.api.Entity(accessor), com.runesuite.client.game.api.ActorTargeting {
+class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTargeting {
 
     val id get() = accessor.id
 
-    val sourcePosition: com.runesuite.client.game.api.Position
-        get() = com.runesuite.client.game.api.Position(accessor.sourceX, accessor.sourceY, 0, accessor.plane)
+    val sourcePosition: Position
+        get() = Position(accessor.sourceX, accessor.sourceY, 0, accessor.plane)
                 .let { it.copy(height = Scene.Live.getTileHeight(it) - accessor.sourceZ) }
 
     val pitch get() = accessor.pitch
 
-    override val orientation get() = com.runesuite.client.game.api.Angle(accessor.yaw)
+    override val orientation get() = Angle(accessor.yaw)
 
-    override val position: com.runesuite.client.game.api.Position
-        get() = com.runesuite.client.game.api.Position(accessor.x.toInt(), accessor.y.toInt(), 0, accessor.plane)
+    override val position: Position
+        get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, accessor.plane)
                 .let { it.copy(height = Scene.Live.getTileHeight(it) - accessor.z.toInt()) }
 
-    override val model: com.runesuite.client.game.api.Model? get() {
+    override val model: Model? get() {
         if (!accessor.isMoving) return null
-        return accessor.model?.let { com.runesuite.client.game.api.Model(position, orientation, it) }
+        return accessor.model?.let { Model(position, orientation, it) }
     }
 
     override val npcTargetIndex: Int?

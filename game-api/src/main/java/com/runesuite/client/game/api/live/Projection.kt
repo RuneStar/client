@@ -13,7 +13,7 @@ interface Projection {
 
     fun toScreen(position: Position, tileHeight: Position): Point
 
-    open class Minimap(val minimap: com.runesuite.client.game.api.live.Minimap) : Projection {
+    class Minimap(val minimap: com.runesuite.client.game.api.live.Minimap) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             val dx = (position.localX - minimap.reference.localX) shr 5
@@ -35,10 +35,13 @@ interface Projection {
             return minimap.reference.plusLocal(dx * -1, dy)
         }
 
-        object Live : Minimap(com.runesuite.client.game.api.live.Minimap.Live)
+        companion object {
+            @JvmField
+            val LIVE = Minimap(com.runesuite.client.game.api.live.Minimap.Live)
+        }
     }
 
-    open class Viewport(val camera: Camera, val viewport: com.runesuite.client.game.api.live.Viewport, val scene: Scene) : Projection {
+    class Viewport(val camera: Camera, val viewport: com.runesuite.client.game.api.live.Viewport, val scene: Scene) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             require(tileHeight.isLoaded) { tileHeight }
@@ -69,6 +72,9 @@ interface Projection {
             TODO("not implemented")
         }
 
-        object Live : Viewport(Camera.Live, com.runesuite.client.game.api.live.Viewport.Live, Scene.Live)
+        companion object {
+            @JvmField
+            val LIVE = Viewport(Camera.Live, com.runesuite.client.game.api.live.Viewport.Live, Scene.Live)
+        }
     }
 }

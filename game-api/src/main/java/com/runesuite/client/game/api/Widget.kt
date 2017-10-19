@@ -10,17 +10,17 @@ import java.awt.Rectangle
 
 class Widget(override val accessor: XWidget) : Wrapper() {
 
-    val children: List<com.runesuite.client.game.api.Widget> get() = accessor.children?.map { com.runesuite.client.game.api.Widget(it) } ?: emptyList()
+    val children: List<Widget> get() = accessor.children?.map { Widget(it) } ?: emptyList()
 
     val childrenSize get() = accessor.children?.size ?: 0
 
-    val flat: List<com.runesuite.client.game.api.Widget> get() {
+    val flat: List<Widget> get() {
         return listOf(this) + children
     }
 
-    operator fun get(childId: Int) : com.runesuite.client.game.api.Widget? = accessor.children?.get(childId)?.let { com.runesuite.client.game.api.Widget(it) }
+    operator fun get(childId: Int) : Widget? = accessor.children?.get(childId)?.let { Widget(it) }
 
-    val group get() = com.runesuite.client.game.api.WidgetGroup(accessor.id shr 16)
+    val group get() = WidgetGroup(accessor.id shr 16)
 
     val id get() = accessor.id and 0xFFFF
 

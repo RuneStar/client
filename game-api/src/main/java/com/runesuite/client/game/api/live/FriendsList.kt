@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object FriendsList {
 
-    val SIZE = accessor.friendsList.size
+    val CAPACITY = accessor.friendsList.size
 
     fun get(): List<Friend?> = accessor.friendsList.map { it?.let { Friend(it) } }
 

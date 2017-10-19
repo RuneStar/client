@@ -3,7 +3,7 @@
 //import com.runesuite.client.dev.plugins.DisposablePlugin
 //import com.runesuite.client.dev.plugins.Plugin
 //import com.runesuite.client.game.live.*
-//import com.runesuite.client.game.live.GroundItems
+//import com.runesuite.client.game.com.runesuite.client.game.api.live.GroundItems
 //import java.awt.Color
 //
 //class EntityModelsDebug : DisposablePlugin<EntityModelsDebug.Settings>() {

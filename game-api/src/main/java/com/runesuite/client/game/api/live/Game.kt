@@ -50,6 +50,7 @@ object Game {
         CHANGING_WORLD(45);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }
@@ -60,6 +61,7 @@ object Game {
         RESIZABLE(2);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }

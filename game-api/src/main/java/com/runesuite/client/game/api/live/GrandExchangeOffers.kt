@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object GrandExchangeOffers {
 
-    val SIZE = accessor.grandExchangeOffers.size
+    val CAPACITY = accessor.grandExchangeOffers.size
 
     val all: List<GrandExchangeOffer> get() {
         return accessor.grandExchangeOffers.mapNotNull { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }

@@ -11,7 +11,7 @@ import com.runesuite.client.game.raw.Client.accessor
  */
 interface Scene {
 
-    companion object k {
+    companion object {
         const val SIZE = 104
         const val PLANE_SIZE = 4
         val CENTER = SceneTile(SIZE / 2, SIZE / 2, 0)

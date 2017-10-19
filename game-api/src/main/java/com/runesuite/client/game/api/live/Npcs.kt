@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object Npcs {
 
-    val SIZE = accessor.npcs.size
+    val CAPACITY = accessor.npcs.size
 
     val all: List<Npc> get() = accessor.npcs.mapNotNull { it?.let { Npc(it) } }
 

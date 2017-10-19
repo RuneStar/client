@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object ClanChat {
 
-    val SIZE = 100
+    val CAPACITY = 100
 
     val owner: String? get() = accessor.clanChatOwner
 

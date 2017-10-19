@@ -32,7 +32,7 @@ data class Position(
     operator fun plus(position: Position) =
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
-    fun toScreen(projection: Projection = Projection.Viewport.Live): Point {
+    fun toScreen(projection: Projection = Projection.Viewport.LIVE): Point {
         check(isLoaded) { this }
         return projection.toScreen(this)
     }

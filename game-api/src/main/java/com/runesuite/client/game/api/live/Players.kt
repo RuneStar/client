@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object Players {
 
-    val SIZE = accessor.players.size
+    val CAPACITY = accessor.players.size
 
     val local: Player? get() = accessor.localPlayer?.let { Player(it) }
 

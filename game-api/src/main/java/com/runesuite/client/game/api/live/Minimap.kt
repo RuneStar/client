@@ -31,7 +31,7 @@ interface Minimap {
             Game.WindowMode.FIXED -> FIXED_CENTER
         }
 
-        override val scale get() = 256 // todo
+        override val scale get() = 0 // todo
 
         override val orientation get() = Angle(accessor.minimapOrientation)
 

@@ -38,7 +38,7 @@ class Model(
         return list
     }
 
-    fun trianglesToScreen(projection: Projection = Projection.Viewport.Live): List<Polygon> {
+    fun trianglesToScreen(projection: Projection = Projection.Viewport.LIVE): List<Polygon> {
         return getTriangles().map { it.map { projection.toScreen(it, base) } }
                 .map { Polygon(it) }
     }

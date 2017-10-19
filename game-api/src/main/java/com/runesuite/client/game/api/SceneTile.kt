@@ -37,7 +37,7 @@ data class SceneTile(val x: Int, val y: Int, val plane: Int) {
                 copy(subX = Position.MAX_SUB, subY = Position.MAX_SUB),
                 copy(subY = Position.MAX_SUB)) }
 
-    fun outline(projection: Projection = Projection.Viewport.Live): Polygon {
+    fun outline(projection: Projection = Projection.Viewport.LIVE): Polygon {
         check(isLoaded) { this }
         return Polygon(corners.map { it.toScreen(projection) })
     }

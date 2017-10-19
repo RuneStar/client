@@ -23,10 +23,6 @@ class Message(override val accessor: XMessage) : Wrapper() {
         return "Message(type=$type, prefix='$prefix', sender='$sender', text='$text')"
     }
 
-    private fun String.unescape() = replace("<lt>", "<").replace("<gt>", ">")
-
-    private fun String.escape() = replace("<", "<lt>").replace(">", "<gt>")
-
     enum class Type(val id: Int) {
 
         SYSTEM(0),
@@ -43,6 +39,7 @@ class Message(override val accessor: XMessage) : Wrapper() {
         SYSTEM_FILTERED(105);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }
