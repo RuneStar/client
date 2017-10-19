@@ -35,7 +35,7 @@ class Angle(value: Int) {
     }
 
     override fun toString(): String {
-        return "Angle($value)"
+        return "Angle($value/$MAX_VALUE)"
     }
 
     override fun equals(other: Any?): Boolean {

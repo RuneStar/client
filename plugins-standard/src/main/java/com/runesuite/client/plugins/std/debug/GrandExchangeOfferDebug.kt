@@ -12,7 +12,7 @@ class GrandExchangeOfferDebug : DisposablePlugin<Plugin.Settings>() {
 
     override fun start() {
         super.start()
-        Canvas.Live.repaints.subscribe { g ->
+        add(Canvas.Live.repaints.subscribe { g ->
             val x = 5
             var y = 40
             g.color = Color.WHITE
@@ -20,6 +20,6 @@ class GrandExchangeOfferDebug : DisposablePlugin<Plugin.Settings>() {
                 g.drawString(o.toString(), x, y)
                 y += 13
             }
-        }
+        })
     }
 }
