@@ -1,7 +1,5 @@
 package com.runesuite.client.game.api.live
 
-import com.runesuite.client.game.api.GroundItem
-import com.runesuite.client.game.api.SceneTile
 import com.runesuite.client.game.raw.access.XGroundItem
 import com.runesuite.client.game.raw.access.XScene
 import com.runesuite.client.game.raw.access.XTile

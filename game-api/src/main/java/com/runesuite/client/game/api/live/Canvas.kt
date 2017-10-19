@@ -28,7 +28,7 @@ interface Canvas {
         override val shape get() = Rectangle(accessor.canvas.size)
 
         val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map { me ->
-            val gp = me.instance as XRasterProvider
+            val gp = me.instance
             val g2d = gp.image.graphics as Graphics2D
             desktopHints?.let { g2d.addRenderingHints(it) }
             g2d

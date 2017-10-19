@@ -42,5 +42,4 @@
             <artifactId>rxjava2-swing</artifactId>
         </dependency>
     </dependencies>
-
 </project>

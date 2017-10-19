@@ -1,6 +1,5 @@
 package com.runesuite.client.game.api.live
 
-import com.runesuite.client.game.api.MenuOption
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XClient
 import io.reactivex.Observable
