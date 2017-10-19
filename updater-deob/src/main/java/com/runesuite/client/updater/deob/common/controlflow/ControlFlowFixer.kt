@@ -4,8 +4,10 @@ import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
 import mu.KotlinLogging
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
+import org.objectweb.asm.util.Printer
 import java.nio.file.Path
 import java.util.*
 import kotlin.collections.HashSet

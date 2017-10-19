@@ -24,8 +24,8 @@ object UnnecessaryGotoRemover : Deobfuscator {
                 val insn0 = instructions.next()
                 if (insn0.opcode != Opcodes.GOTO) continue
                 insn0 as JumpInsnNode
-                if (insn0.next == null) continue
-                val insn1 = insn0.next as LabelNode
+                val insn1 = insn0.next
+                if (insn1 == null || insn1 !is LabelNode) continue
                 if (insn0.label == insn1) {
                     instructions.remove()
                     gotosRemoved++

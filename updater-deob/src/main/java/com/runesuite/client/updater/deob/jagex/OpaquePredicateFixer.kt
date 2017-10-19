@@ -3,8 +3,6 @@ package com.runesuite.client.updater.deob.jagex
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runesuite.client.updater.deob.Deobfuscator
-import com.runesuite.client.updater.deob.extensions.isIf
-import com.runesuite.client.updater.deob.extensions.isReturn
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
 import mu.KotlinLogging
@@ -136,5 +134,13 @@ object OpaquePredicateFixer : Deobfuscator {
                 }
             }
         }
+    }
+
+    val AbstractInsnNode.isIf: Boolean get() {
+        return this is JumpInsnNode && opcode != Opcodes.GOTO
+    }
+
+    val AbstractInsnNode.isReturn: Boolean get() {
+        return opcode >= 0 && Printer.OPCODES[opcode].endsWith("RETURN")
     }
 }

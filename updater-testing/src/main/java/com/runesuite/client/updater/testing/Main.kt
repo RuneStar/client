@@ -8,7 +8,9 @@ import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
-import com.runesuite.client.updater.deob.common.Renamer
+import com.runesuite.client.updater.deob.common.*
+import com.runesuite.client.updater.deob.common.controlflow.ControlFlowFixer
+import com.runesuite.client.updater.deob.jagex.*
 import com.runesuite.client.updater.mapper.std.classes.Client
 import com.runesuite.mapper.IdClass
 import com.runesuite.mapper.JarMapper

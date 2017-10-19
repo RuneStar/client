@@ -15,7 +15,7 @@ fun readJar(source: Path, classReaderFlags: Int = 0) : Collection<ClassNode> {
         jf.stream().iterator().asSequence()
                 .filter { it.name.endsWith(".class") }
                 .map {
-                    ClassNode(Opcodes.ASM5).apply {
+                    ClassNode().apply {
                         ClassReader(jf.getInputStream(it)).accept(this, classReaderFlags)
                     }
                 }.toList()

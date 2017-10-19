@@ -1,9 +1,6 @@
 package com.runesuite.client.updater.deob.common.controlflow
 
-import com.runesuite.client.updater.deob.extensions.isBranch
-import org.objectweb.asm.tree.AbstractInsnNode
-import org.objectweb.asm.tree.LabelNode
-import org.objectweb.asm.tree.MethodNode
+import org.objectweb.asm.tree.*
 import org.objectweb.asm.tree.analysis.Analyzer
 import org.objectweb.asm.tree.analysis.BasicInterpreter
 import org.objectweb.asm.tree.analysis.BasicValue
@@ -15,7 +12,7 @@ class BlockAnalyzer : Analyzer<BasicValue>(BasicInterpreter()) {
     var blocks: MutableList<Block> = ArrayList()
 
     override fun init(owner: String, m: MethodNode) {
-        instructions = m.instructions.toArray().toList()
+        instructions = m.instructions.toArray().asList()
         var b = Block()
         blocks.add(b)
         var ain = instructions.first()
@@ -23,7 +20,8 @@ class BlockAnalyzer : Analyzer<BasicValue>(BasicInterpreter()) {
         while (ain.next != null) {
             ain = ain.next
             b.instructions.add(ain)
-            if (ain.next != null && (ain.next is LabelNode || ain.isBranch)) {
+            if (ain.next == null) break
+            if (ain.next is LabelNode || ain is JumpInsnNode || ain is LookupSwitchInsnNode || ain is TableSwitchInsnNode) {
                 b = Block()
                 blocks.add(b)
             }
@@ -34,8 +32,12 @@ class BlockAnalyzer : Analyzer<BasicValue>(BasicInterpreter()) {
         val b1 = findBlock(instructions[insn])
         val b2 = findBlock(instructions[successor])
         if (b1 != b2) {
-            b1.successors.add(b2)
-            b2.predecessors.add(b1)
+            if (insn + 1 == successor) {
+                b1.immediateSuccessor = b2
+                b2.immediatePredecessor = b1
+            } else {
+                b1.branchSuccessors.add(b2)
+            }
         }
     }
 
