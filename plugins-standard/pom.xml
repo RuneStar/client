@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.runesuite.client</groupId>
         <artifactId>client-parent</artifactId>
-        <version>0.155.0-SNAPSHOT</version>
+        <version>0.156.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>client-plugins-standard</artifactId>
@@ -22,8 +22,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client</artifactId>
+            <groupId>com.runesuite.client</groupId>
+            <artifactId>client-plugins</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.runesuite.client</groupId>
+            <artifactId>client-game-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
