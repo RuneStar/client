@@ -4,47 +4,47 @@ import com.runesuite.client.game.api.SceneObject
 import com.runesuite.client.game.api.SceneTile
 import com.runesuite.client.game.raw.access.XTile
 
-object SceneObjects : TileEntities.Many<com.runesuite.client.game.api.SceneObject>() {
+object SceneObjects : TileEntities.Many<SceneObject>() {
 
-    override fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): List<com.runesuite.client.game.api.SceneObject> {
+    override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<SceneObject> {
         xTile ?: return emptyList()
-        val list = ArrayList<com.runesuite.client.game.api.SceneObject>()
-        xTile.floorDecoration?.let { list.add(com.runesuite.client.game.api.SceneObject.Floor(it, sceneTile)) }
-        xTile.wallDecoration?.let { list.add(com.runesuite.client.game.api.SceneObject.Wall(it, sceneTile)) }
-        xTile.boundaryObject?.let { list.add(com.runesuite.client.game.api.SceneObject.Boundary(it, sceneTile)) }
-        xTile.gameObjects?.mapNotNullTo(list) { it?.let { com.runesuite.client.game.api.SceneObject.Interactable(it, sceneTile) } }
+        val list = ArrayList<SceneObject>()
+        xTile.floorDecoration?.let { list.add(SceneObject.Floor(it, sceneTile)) }
+        xTile.wallDecoration?.let { list.add(SceneObject.Wall(it, sceneTile)) }
+        xTile.boundaryObject?.let { list.add(SceneObject.Boundary(it, sceneTile)) }
+        xTile.gameObjects?.mapNotNullTo(list) { it?.let { SceneObject.Interactable(it, sceneTile) } }
         return list
     }
 
-    object Wall : TileEntities.Single<com.runesuite.client.game.api.SceneObject.Wall>() {
+    object Wall : TileEntities.Single<SceneObject.Wall>() {
 
-        override fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): com.runesuite.client.game.api.SceneObject.Wall? {
+        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Wall? {
             val obj = xTile?.wallDecoration ?: return null
-            return com.runesuite.client.game.api.SceneObject.Wall(obj, sceneTile)
+            return SceneObject.Wall(obj, sceneTile)
         }
     }
 
-    object Floor : TileEntities.Single<com.runesuite.client.game.api.SceneObject.Floor>() {
+    object Floor : TileEntities.Single<SceneObject.Floor>() {
 
-        override fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): com.runesuite.client.game.api.SceneObject.Floor? {
+        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Floor? {
             val obj = xTile?.floorDecoration ?: return null
-            return com.runesuite.client.game.api.SceneObject.Floor(obj, sceneTile)
+            return SceneObject.Floor(obj, sceneTile)
         }
     }
 
-    object Boundary : TileEntities.Single<com.runesuite.client.game.api.SceneObject.Boundary>() {
+    object Boundary : TileEntities.Single<SceneObject.Boundary>() {
 
-        override fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): com.runesuite.client.game.api.SceneObject.Boundary? {
+        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Boundary? {
             val obj = xTile?.boundaryObject ?: return null
-            return com.runesuite.client.game.api.SceneObject.Boundary(obj, sceneTile)
+            return SceneObject.Boundary(obj, sceneTile)
         }
     }
 
-    object Interactable : TileEntities.Many<com.runesuite.client.game.api.SceneObject.Interactable>() {
+    object Interactable : TileEntities.Many<SceneObject.Interactable>() {
 
-        override fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): List<com.runesuite.client.game.api.SceneObject.Interactable> {
+        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<SceneObject.Interactable> {
             val obj = xTile?.gameObjects ?: return emptyList()
-            return obj.mapNotNull { it?.let { com.runesuite.client.game.api.SceneObject.Interactable(it, sceneTile) } }
+            return obj.mapNotNull { it?.let { SceneObject.Interactable(it, sceneTile) } }
         }
     }
 }

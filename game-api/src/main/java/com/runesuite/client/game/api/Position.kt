@@ -15,22 +15,22 @@ data class Position(
         val plane: Int
 ) {
     internal constructor(localX: Int, localY: Int, height: Int, plane: Int) :
-            this(localX shr 7, localX and com.runesuite.client.game.api.Position.Companion.MAX_SUB, localY shr 7, localY and com.runesuite.client.game.api.Position.Companion.MAX_SUB, height, plane)
+            this(localX shr 7, localX and MAX_SUB, localY shr 7, localY and MAX_SUB, height, plane)
 
     internal val localX get() = (x shl 7) or subX
 
     internal val localY get() = (y shl 7) or subY
 
-    val sceneTile get() = com.runesuite.client.game.api.SceneTile(x, y, plane)
+    val sceneTile get() = SceneTile(x, y, plane)
 
     val isLoaded get() = sceneTile.isLoaded
 
-    internal fun plusLocal(localX: Int = 0, localY: Int = 0, height: Int = 0): com.runesuite.client.game.api.Position {
-        return com.runesuite.client.game.api.Position(localX + this.localX, localY + this.localY, height + this.height, plane)
+    internal fun plusLocal(localX: Int = 0, localY: Int = 0, height: Int = 0): Position {
+        return Position(localX + this.localX, localY + this.localY, height + this.height, plane)
     }
 
-    operator fun plus(position: com.runesuite.client.game.api.Position) =
-            com.runesuite.client.game.api.Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
+    operator fun plus(position: Position) =
+            Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
     fun toScreen(projection: Projection = Projection.Viewport.Live): Point {
         check(isLoaded) { this }

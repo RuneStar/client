@@ -7,11 +7,11 @@ object Players {
 
     val SIZE = accessor.players.size
 
-    val local: com.runesuite.client.game.api.Player? get() = accessor.localPlayer?.let { com.runesuite.client.game.api.Player(it) }
+    val local: Player? get() = accessor.localPlayer?.let { Player(it) }
 
-    val all: List<com.runesuite.client.game.api.Player> get() = accessor.players.mapNotNull { it?.let { com.runesuite.client.game.api.Player(it) } }
+    val all: List<Player> get() = accessor.players.mapNotNull { it?.let { Player(it) } }
 
-    fun get(): List<com.runesuite.client.game.api.Player?> =  accessor.players.map { it?.let { com.runesuite.client.game.api.Player(it) } }
+    fun get(): List<Player?> =  accessor.players.map { it?.let { Player(it) } }
 
-    operator fun get(index: Int): com.runesuite.client.game.api.Player? = accessor.players[index]?.let { com.runesuite.client.game.api.Player(it) }
+    operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
 }

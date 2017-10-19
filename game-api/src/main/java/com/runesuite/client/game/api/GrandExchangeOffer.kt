@@ -42,6 +42,7 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
         SELL(1);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }
@@ -54,6 +55,7 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
         DONE(5);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }

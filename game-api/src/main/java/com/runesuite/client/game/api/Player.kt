@@ -46,6 +46,7 @@ class Player(override val accessor: XPlayer) : com.runesuite.client.game.api.Act
             SKIN(4);
 
             companion object {
+                @JvmField
                 val LOOKUP = values().associateBy { it.id }
             }
         }
@@ -71,6 +72,7 @@ class Player(override val accessor: XPlayer) : com.runesuite.client.game.api.Act
             // 11
 
             companion object {
+                @JvmField
                 val LOOKUP = values().associateBy { it.id }
             }
         }

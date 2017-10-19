@@ -42,10 +42,11 @@ interface Viewport {
         override val height = 334
 
         companion object {
-            val SCALE_DEFAULT = 512
-            val SCALE_MIN = 390
-            val SCALE_MAX = 1400
+            const val SCALE_DEFAULT = 512
+            const val SCALE_MIN = 390
+            const val SCALE_MAX = 1400
 
+            @JvmField
             val DEFAULT = Fixed(SCALE_DEFAULT)
         }
     }

@@ -7,7 +7,7 @@ object FriendsList {
 
     val SIZE = accessor.friendsList.size
 
-    fun get(): List<com.runesuite.client.game.api.Friend?> = accessor.friendsList.map { it?.let { com.runesuite.client.game.api.Friend(it) } }
+    fun get(): List<Friend?> = accessor.friendsList.map { it?.let { Friend(it) } }
 
-    val all: List<com.runesuite.client.game.api.Friend> get() = accessor.friendsList.mapNotNull { it?.let { com.runesuite.client.game.api.Friend(it) } }
+    val all: List<Friend> get() = accessor.friendsList.mapNotNull { it?.let { Friend(it) } }
 }

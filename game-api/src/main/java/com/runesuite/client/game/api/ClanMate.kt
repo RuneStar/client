@@ -31,6 +31,7 @@ class ClanMate(override val accessor: XClanMate) : Wrapper() {
         OWNER(7);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }

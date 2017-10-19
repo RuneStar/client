@@ -7,9 +7,9 @@ object Npcs {
 
     val SIZE = accessor.npcs.size
 
-    val all: List<com.runesuite.client.game.api.Npc> get() = accessor.npcs.mapNotNull { it?.let { com.runesuite.client.game.api.Npc(it) } }
+    val all: List<Npc> get() = accessor.npcs.mapNotNull { it?.let { Npc(it) } }
 
-    fun get(): List<com.runesuite.client.game.api.Npc?> =  accessor.npcs.map { it?.let { com.runesuite.client.game.api.Npc(it) } }
+    fun get(): List<Npc?> =  accessor.npcs.map { it?.let { Npc(it) } }
 
-    operator fun get(index: Int): com.runesuite.client.game.api.Npc? = accessor.npcs[index]?.let { com.runesuite.client.game.api.Npc(it) }
+    operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it) }
 }

@@ -1,6 +1,5 @@
 package com.runesuite.client.game.api.live
 
-import com.runesuite.client.game.api.WidgetGroup
 import com.runesuite.client.game.raw.Client
 
 object WidgetGroups {

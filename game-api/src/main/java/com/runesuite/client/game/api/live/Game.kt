@@ -1,12 +1,10 @@
 package com.runesuite.client.game.api.live
 
 import com.hunterwb.kxtra.swing.component.windowAncestor
-import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XClient
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
-import java.applet.Applet
 import java.awt.Component
 import java.awt.Container
 

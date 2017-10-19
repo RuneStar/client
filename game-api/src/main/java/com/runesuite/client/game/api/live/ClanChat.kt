@@ -9,7 +9,7 @@ object ClanChat {
 
     val owner: String? get() = accessor.clanChatOwner
 
-    fun get(): List<com.runesuite.client.game.api.ClanMate?> = accessor.clanChat?.map { it?.let { com.runesuite.client.game.api.ClanMate(it) } } ?: emptyList()
+    fun get(): List<ClanMate?> = accessor.clanChat?.map { it?.let { ClanMate(it) } } ?: emptyList()
 
-    val all: List<com.runesuite.client.game.api.ClanMate> get() = accessor.clanChat?.mapNotNull { it?.let { com.runesuite.client.game.api.ClanMate(it) } } ?: emptyList()
+    val all: List<ClanMate> get() = accessor.clanChat?.mapNotNull { it?.let { ClanMate(it) } } ?: emptyList()
 }

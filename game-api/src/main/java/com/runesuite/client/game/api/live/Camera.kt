@@ -11,9 +11,9 @@ interface Camera {
 
     val z: Int
 
-    val pitch: com.runesuite.client.game.api.Angle
+    val pitch: Angle
 
-    val yaw: com.runesuite.client.game.api.Angle
+    val yaw: Angle
 
     object Live : Camera {
 
@@ -23,9 +23,9 @@ interface Camera {
 
         override val z get() = accessor.cameraZ
 
-        override val pitch get() = com.runesuite.client.game.api.Angle(accessor.cameraPitch)
+        override val pitch get() = Angle(accessor.cameraPitch)
 
-        override val yaw get() = com.runesuite.client.game.api.Angle(accessor.cameraYaw)
+        override val yaw get() = Angle(accessor.cameraYaw)
 
         override fun toString(): String {
             return "Camera.Live(x=$x, y=$y, z=$z, pitch=$pitch, yaw=$yaw)"
@@ -38,7 +38,7 @@ interface Camera {
             override val x: Int,
             override val y: Int,
             override val z: Int,
-            override val pitch: com.runesuite.client.game.api.Angle,
-            override val yaw: com.runesuite.client.game.api.Angle
+            override val pitch: Angle,
+            override val yaw: Angle
     ) : Camera
 }

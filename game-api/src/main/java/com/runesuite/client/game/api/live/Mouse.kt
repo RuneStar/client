@@ -34,6 +34,7 @@ object Mouse {
         RED(2);
 
         companion object {
+            @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
     }

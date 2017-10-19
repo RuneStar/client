@@ -27,11 +27,10 @@ interface Canvas {
 
         override val shape get() = Rectangle(accessor.canvas.size)
 
-        val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map { me ->
-            val gp = me.instance
-            val g2d = gp.image.graphics as Graphics2D
-            desktopHints?.let { g2d.addRenderingHints(it) }
-            g2d
+        val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map {
+            (it.instance.image.graphics as Graphics2D).apply {
+                desktopHints?.let { this.addRenderingHints(it) }
+            }
         }.publish().refCount().map { it.create2D() }
 
         /**
@@ -51,8 +50,8 @@ interface Canvas {
         }
     }
 
-    companion object {
-        val FIXED = Copy(Rectangle(0, 0, 765, 503))
+    object Fixed : Canvas {
+        override val shape = Rectangle(0, 0, 765, 503)
     }
 
     fun copyOf(): Copy = Copy(shape)
