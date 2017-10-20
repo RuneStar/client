@@ -12,7 +12,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     companion object {
         const val SETTINGS_FILE_EXTENSION = ".txt"
-        private val field = Plugin::class.java.getDeclaredField(Plugin<*>::settings.name).apply {
+        private val settingsField = Plugin::class.java.getDeclaredField(Plugin<*>::settings.name).apply {
             isAccessible = true
         }
     }
@@ -24,14 +24,14 @@ internal class PluginHolder<T : PluginSettings>(
     @Volatile
     private var ignoreNextEvent = false
 
-    private fun tryWrite(file: Path, type: Class<T>, value: T) {
+    private fun tryWrite(file: Path, value: T) {
         try {
             ignoreNextEvent = true
             logger.debug("Writing settings...")
-            plugin.settingsWriter.write(file, type, value)
-            logger.debug("Write successful")
+            plugin.settingsWriter.write(file, value)
+            logger.debug("Write successful.")
         } catch (e: IOException) {
-            logger.error(e) { "Write failed" }
+            logger.error(e) { "Write failed." }
             plugin.stop()
         }
     }
@@ -42,17 +42,17 @@ internal class PluginHolder<T : PluginSettings>(
             logger.debug("Settings file exists. Reading...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                field.set(plugin, readSettings)
-                logger.debug("Read successful")
+                settingsField.set(plugin, readSettings)
+                logger.debug("Read successful.")
             } catch (e: IOException) {
                 logger.warn(e) { "Read failed. Reverting to default settings." }
-                field.set(plugin, plugin.defaultSettings)
-                tryWrite(settingsFile, plugin.defaultSettings.javaClass, plugin.settings)
+                settingsField.set(plugin, plugin.defaultSettings)
+                tryWrite(settingsFile, plugin.settings)
             }
         } else {
             logger.debug("Settings file does not exist. Using default settings.")
-            field.set(plugin, plugin.defaultSettings)
-            tryWrite(settingsFile, plugin.defaultSettings.javaClass, plugin.settings)
+            settingsField.set(plugin, plugin.defaultSettings)
+            tryWrite(settingsFile, plugin.settings)
         }
         if (plugin.settings.active) {
             plugin.start()
@@ -71,8 +71,8 @@ internal class PluginHolder<T : PluginSettings>(
                 plugin.stop()
             }
             logger.debug("Switching to default settings.")
-            field.set(plugin, plugin.defaultSettings)
-            tryWrite(settingsFile, plugin.defaultSettings.javaClass, plugin.defaultSettings)
+            settingsField.set(plugin, plugin.defaultSettings)
+            tryWrite(settingsFile, plugin.defaultSettings)
             if (plugin.settings.active) {
                 plugin.start()
             }
@@ -85,10 +85,10 @@ internal class PluginHolder<T : PluginSettings>(
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 logger.debug("Read successful.")
-                field.set(plugin, readSettings)
+                settingsField.set(plugin, readSettings)
             } catch (e: IOException) {
                 logger.warn(e) { "Read failed." }
-                tryWrite(settingsFile, plugin.defaultSettings.javaClass, plugin.settings)
+                tryWrite(settingsFile, plugin.settings)
             }
             if (plugin.settings.active) {
                 plugin.start()

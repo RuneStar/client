@@ -1,7 +1,8 @@
 package com.runesuite.client.plugins
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.IOException
 import java.nio.file.Path
 
@@ -11,17 +12,22 @@ interface ObjectReadWriter<T> {
     fun read(file: Path, type: Class<T>): T
 
     @Throws(IOException::class)
-    fun write(file: Path, type: Class<T>, value: T)
+    fun write(file: Path, value: T)
 
     class Yaml<T> : ObjectReadWriter<T> {
 
-        private val mapper = ObjectMapper(YAMLFactory()).findAndRegisterModules()
+        private companion object {
+            val YAML = YAMLFactory()
+        }
+
+        private val mapper = YAMLMapper(YAML).findAndRegisterModules()
 
         override fun read(file: Path, type: Class<T>): T {
             return mapper.readValue(file.toFile(), type)
         }
 
-        override fun write(file: Path, type: Class<T>, value: T) {
+        override fun write(file: Path, value: T) {
+            jacksonObjectMapper()
             mapper.writeValue(file.toFile(), value)
         }
     }

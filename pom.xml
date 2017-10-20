@@ -43,16 +43,20 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.1.51</kotlin.version>
-        <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
-        <jackson.version>2.9.1</jackson.version>
+
+        <kotlin.version>1.1.51</kotlin.version>
+        <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
+        <jackson.version>2.9.2</jackson.version>
         <kxtra.groupId>com.hunterwb.kxtra</kxtra.groupId>
         <kxtra.version>0.1.4</kxtra.version>
+        <logback.groupId>ch.qos.logback</logback.groupId>
         <logback.version>1.2.3</logback.version>
         <asm.groupId>org.ow2.asm</asm.groupId>
         <asm.version>6.0</asm.version>
+        <slf4j.groupId>org.slf4j</slf4j.groupId>
+        <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
     <dependencies>
@@ -151,12 +155,12 @@
                 <version>1.4.6</version>
             </dependency>
             <dependency>
-                <groupId>ch.qos.logback</groupId>
+                <groupId>${logback.groupId}</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
             </dependency>
             <dependency>
-                <groupId>ch.qos.logback</groupId>
+                <groupId>${logback.groupId}</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
             </dependency>
@@ -176,14 +180,14 @@
                 <version>23.1-jre</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
+                <groupId>${slf4j.groupId}</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.25</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
+                <groupId>${slf4j.groupId}</groupId>
                 <artifactId>slf4j-simple</artifactId>
-                <version>1.7.25</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

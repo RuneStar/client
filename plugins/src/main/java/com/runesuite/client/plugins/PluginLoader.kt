@@ -1,13 +1,14 @@
 package com.runesuite.client.plugins
 
-import io.reactivex.Scheduler
+import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.reactivex.schedulers.Schedulers
 import mu.KotlinLogging
 import java.io.Closeable
 import java.lang.reflect.Modifier
 import java.net.URLClassLoader
-import java.nio.file.*
-import java.util.concurrent.ConcurrentHashMap
+import java.nio.file.FileSystems
+import java.nio.file.Path
+import java.nio.file.StandardWatchEventKinds
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -24,9 +25,9 @@ class PluginLoader(
 
     private val jars = HashMap<Path, Collection<PluginHolder<*>>>()
 
-    private val plugins = ConcurrentHashMap<String, PluginHolder<*>>()
+    private val plugins = HashMap<String, PluginHolder<*>>()
 
-    val executor = Executors.newSingleThreadExecutor()
+    val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
     private val scheduler = Schedulers.from(executor)
 
