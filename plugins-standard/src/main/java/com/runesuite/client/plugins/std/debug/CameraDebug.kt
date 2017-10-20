@@ -4,11 +4,12 @@ import com.runesuite.client.game.api.live.Camera
 import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 import java.awt.Color
 
-class CameraDebug: DisposablePlugin<Plugin.Settings>() {
+class CameraDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Plugin.Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()

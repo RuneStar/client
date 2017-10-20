@@ -3,12 +3,12 @@ package com.runesuite.client.plugins.std.debug
 import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.game.api.live.GrandExchangeOffers
 import com.runesuite.client.plugins.DisposablePlugin
-import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 import java.awt.Color
 
-class GrandExchangeOfferDebug : DisposablePlugin<Plugin.Settings>() {
+class GrandExchangeOfferDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Plugin.Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()

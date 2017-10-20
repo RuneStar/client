@@ -5,7 +5,7 @@ import com.hunterwb.kxtra.swing.graphics.drawPoint
 import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.game.api.live.Mouse
 import com.runesuite.client.plugins.DisposablePlugin
-import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Point
@@ -40,7 +40,7 @@ class DrawMouseTrail : DisposablePlugin<DrawMouseTrail.Settings>() {
         })
     }
 
-    class Settings : Plugin.Settings() {
+    class Settings : PluginSettings() {
 
         val trail = Trail()
 

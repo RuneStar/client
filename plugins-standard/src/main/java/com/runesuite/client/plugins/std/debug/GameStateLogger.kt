@@ -2,11 +2,11 @@ package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.plugins.DisposablePlugin
-import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 
-class GameStateLogger : DisposablePlugin<Plugin.Settings>() {
+class GameStateLogger : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Plugin.Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()

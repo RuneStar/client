@@ -5,7 +5,7 @@ import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.api.live.Keyboard
 import com.runesuite.client.game.api.live.Mouse
 import com.runesuite.client.plugins.DisposablePlugin
-import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 
@@ -53,7 +53,7 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
         }
     }
 
-    class Settings : Plugin.Settings() {
+    class Settings : PluginSettings() {
         val focus = false
         val component = false
         val window = false
