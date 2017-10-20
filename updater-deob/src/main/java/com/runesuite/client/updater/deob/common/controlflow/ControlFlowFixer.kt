@@ -4,12 +4,13 @@ import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
 import mu.KotlinLogging
-import org.objectweb.asm.Opcodes
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.FrameNode
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
-import org.objectweb.asm.util.Printer
 import java.nio.file.Path
 import java.util.*
+import kotlin.collections.AbstractMap
 import kotlin.collections.HashSet
 
 object ControlFlowFixer : Deobfuscator {
@@ -25,8 +26,7 @@ object ControlFlowFixer : Deobfuscator {
                     val analyzer = BlockAnalyzer()
                     analyzer.analyze(c.name, m)
                     blockCount += analyzer.blocks.size
-                    m.instructions.resetLabels()
-                    m.instructions = buildInsnList(analyzer.blocks)
+                    m.instructions = buildInsnList(m.instructions, analyzer.blocks)
                 }
             }
         }
@@ -34,10 +34,7 @@ object ControlFlowFixer : Deobfuscator {
         writeJar(classNodes, destination)
     }
 
-    private fun buildInsnList(blocks: List<Block>): InsnList {
-        val labels = blocks.flatMap { it.instructions }
-                .mapNotNull { it as? LabelNode }
-                .associate { it to it }
+    private fun buildInsnList(originalInstructions: InsnList, blocks: List<Block>): InsnList {
         val instructions = InsnList()
         if (blocks.isEmpty()) {
             return instructions
@@ -51,8 +48,16 @@ object ControlFlowFixer : Deobfuscator {
             placed.add(b)
             b.branchSuccessors.forEach { stack.add(it.immediateOrigin) }
             b.immediateSuccessor?.let { stack.add(it) }
-            b.instructions.forEach { instructions.add(it.clone(labels)) }
+            for (i in b.instructionsStart until b.instructionsEnd) {
+                instructions.add(originalInstructions[i].clone(FAKE_LABEL_MAP))
+            }
         }
         return instructions
+    }
+
+    // todo
+    val FAKE_LABEL_MAP = object : AbstractMap<LabelNode, LabelNode>() {
+        override val entries get() = throw IllegalStateException()
+        override fun get(key: LabelNode) = key
     }
 }

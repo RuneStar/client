@@ -1,10 +1,12 @@
 package com.runesuite.client.updater.deob.common.controlflow
 
-import org.objectweb.asm.tree.AbstractInsnNode
-
 class Block {
 
-    val instructions = LinkedHashSet<AbstractInsnNode>()
+    // inclusive
+    var instructionsStart = 0
+
+    // exclusive
+    var instructionsEnd = 0
 
     var immediateSuccessor: Block? = null
 
@@ -20,5 +22,5 @@ class Block {
         return b
     }
 
-    val branchSuccessors = HashSet<Block>()
+    val branchSuccessors = ArrayList<Block>()
 }
