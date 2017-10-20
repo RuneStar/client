@@ -57,12 +57,15 @@ class PluginLoader(
     }
 
     private fun loadJar(jar: Path) {
-        val holders = URLClassLoader(jar).plugins().map { PluginHolder(this, it) }
-        holders.forEach {
-            it.begin()
-            plugins[it.plugin.javaClass.name] = it
+        // https://stackoverflow.com/q/7071761
+        URLClassLoader(jar).use {
+            val holders = it.plugins().map { PluginHolder(this, it) }
+            holders.forEach {
+                it.begin()
+                plugins[it.plugin.javaClass.name] = it
+            }
+            jars[jar] = holders
         }
-        jars[jar] = holders
     }
 
     private fun URLClassLoader.plugins(): List<Plugin<*>> {

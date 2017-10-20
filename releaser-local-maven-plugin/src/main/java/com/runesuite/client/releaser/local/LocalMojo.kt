@@ -15,7 +15,7 @@ import org.eclipse.aether.resolution.ArtifactRequest
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
-@Mojo(name = "local", aggregator = true)
+@Mojo(name = "local")
 class LocalMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project.version}")
@@ -32,13 +32,21 @@ class LocalMojo : AbstractMojo() {
 
     override fun execute() {
 
-        val core = resolveArtifact("client")
-        Files.createDirectories(CLIENT_PATH.parent)
-        Files.copy(core.file.toPath(), CLIENT_PATH, StandardCopyOption.REPLACE_EXISTING)
-
         val plugins = resolveArtifact("client-plugins-standard")
         Files.createDirectories(PLUGINS_PATH.parent)
-        Files.copy(plugins.file.toPath(), PLUGINS_PATH, StandardCopyOption.REPLACE_EXISTING)
+        try {
+            Files.copy(plugins.file.toPath(), PLUGINS_PATH, StandardCopyOption.REPLACE_EXISTING)
+        } catch (e: Exception) {
+            log.warn("Cannot write to $PLUGINS_PATH")
+        }
+
+        val client = resolveArtifact("client")
+        Files.createDirectories(CLIENT_PATH.parent)
+        try {
+            Files.copy(client.file.toPath(), CLIENT_PATH, StandardCopyOption.REPLACE_EXISTING)
+        } catch (e: Exception) {
+            log.warn("Cannot write to $CLIENT_PATH")
+        }
 
         Files.createDirectories(PLUGINS_SETTINGS_DIR_PATH)
     }
