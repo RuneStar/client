@@ -12,7 +12,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     companion object {
         const val SETTINGS_FILE_EXTENSION = ".txt"
-        private val settingsField = Plugin::class.java.getDeclaredField(Plugin<*>::settings.name).apply {
+        private val settingsField = Plugin::class.java.getDeclaredField("_settings").apply {
             isAccessible = true
         }
     }
@@ -25,6 +25,10 @@ internal class PluginHolder<T : PluginSettings>(
 
     private var active = false
 
+    private var created = false
+
+    private var destroyed = false
+
     private fun tryWrite(file: Path, value: T) {
         try {
             ignoreNextEvent = true
@@ -33,12 +37,11 @@ internal class PluginHolder<T : PluginSettings>(
             logger.debug("Write successful.")
         } catch (e: IOException) {
             logger.error(e) { "Write failed." }
-            safeStopPlugin()
+            safeDestroyPlugin()
         }
     }
 
-    fun begin() {
-        logger.debug { "Begin." }
+    fun create() {
         if (Files.exists(settingsFile)) {
             logger.debug("Settings file exists. Reading...")
             try {
@@ -55,7 +58,7 @@ internal class PluginHolder<T : PluginSettings>(
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.settings)
         }
-        safeStartPlugin()
+        safeTryStartPlugin()
     }
 
     fun settingsFileChanged() {
@@ -64,7 +67,7 @@ internal class PluginHolder<T : PluginSettings>(
             ignoreNextEvent = false
             return
         }
-        safeStopPlugin()
+        safeTryStopPlugin()
         if (Files.notExists(settingsFile)) {
             logger.debug("Settings file missing. Switching to default settings.")
             settingsField.set(plugin, plugin.defaultSettings)
@@ -80,16 +83,26 @@ internal class PluginHolder<T : PluginSettings>(
                 tryWrite(settingsFile, plugin.settings)
             }
         }
-        safeStartPlugin()
+        safeTryStartPlugin()
     }
 
-    fun end() {
-        logger.debug("End.")
-        safeStopPlugin()
+    fun destroy() {
+        safeDestroyPlugin()
     }
 
-    private fun safeStartPlugin() {
-        if (active || !plugin.settings.active) return
+    private fun safeCreatePlugin() {
+        if (created || destroyed) return
+        try {
+            plugin.create()
+            created = true
+        } catch (e: Exception) {
+            logger.error(e) { "Exception creating plugin." }
+        }
+    }
+
+    private fun safeTryStartPlugin() {
+        safeCreatePlugin()
+        if (destroyed || !created || active || !plugin.settings.active) return
         try {
             plugin.start()
             active = true
@@ -98,13 +111,24 @@ internal class PluginHolder<T : PluginSettings>(
         }
     }
 
-    private fun safeStopPlugin() {
-        if (!active || !plugin.settings.active) return
+    private fun safeTryStopPlugin() {
+        if (destroyed || !created || !active || !plugin.settings.active) return
         try {
             active = false
             plugin.stop()
         } catch (e: Throwable) {
             logger.error(e) { "Exception stopping plugin." }
+        }
+    }
+
+    private fun safeDestroyPlugin() {
+        safeTryStopPlugin()
+        if (destroyed || !created) return
+        try {
+            plugin.destroy()
+            destroyed = true
+        } catch (e: Exception) {
+            logger.error(e) { "Exception destroying plugin." }
         }
     }
 }

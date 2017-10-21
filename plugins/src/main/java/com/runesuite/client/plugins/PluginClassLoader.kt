@@ -26,9 +26,9 @@ private constructor(jar: Path) : ClassLoader() {
             val c: Class<*>
             try {
                 c = defineClass(name, bytes, 0, bytes.size)
-                logger.debug { "Loaded class $name" }
+                logger.debug { "Defined class $name" }
             } catch (e: Exception) {
-                logger.debug { "Cannot load class $name" }
+                logger.debug { "Failed to define class $name" }
                 return@forEach
             }
             resolveClass(c)
@@ -40,14 +40,14 @@ private constructor(jar: Path) : ClassLoader() {
                 try {
                     constructor = c.getDeclaredConstructor()
                 } catch (e: Exception) {
-                    logger.warn(e) { "Cannot get no-arg constructor for $c" }
+                    logger.warn(e) { "Failed to get no-argument constructor for $c" }
                     return@forEach
                 }
                 val plugin: Plugin<*>
                 try {
                     plugin = constructor.newInstance() as Plugin<*>
                 } catch (e: Exception) {
-                    logger.warn(e) { "Cannot create new instance of $c" }
+                    logger.warn(e) { "Failed to create instance of $c" }
                     return@forEach
                 }
                 plugins.add(plugin)

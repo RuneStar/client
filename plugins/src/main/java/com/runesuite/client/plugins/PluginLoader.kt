@@ -40,7 +40,7 @@ class PluginLoader(
                     val pluginNames = currentJarPluginNames.remove(jarPath)
                     if (pluginNames != null) {
                         pluginNames.forEach { className ->
-                            checkNotNull(currentPlugins.remove(className)).end()
+                            checkNotNull(currentPlugins.remove(className)).destroy()
                         }
                     }
                     if (Files.exists(jarPath) && verifyJar(jarPath)) {
@@ -50,7 +50,7 @@ class PluginLoader(
 
         newDirectoryWatchObservable(settingsDirectory, settingsWatchService)
                 .observeOn(scheduler)
-                .filter { it.context() != null && it.kind() != StandardWatchEventKinds.ENTRY_CREATE }
+                .filter { it.kind() != StandardWatchEventKinds.ENTRY_CREATE }
                 .subscribe { we ->
                     logger.debug { "${we.kind()} > ${we.context()}" }
                     val path = pluginsDirectory.resolve(we.context())
@@ -63,7 +63,7 @@ class PluginLoader(
         val plugins = PluginClassLoader.load(jar)
         plugins.forEach { plugin ->
             val pluginHolder = PluginHolder(this, plugin)
-            pluginHolder.begin()
+            pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder
         }
         currentJarPluginNames[jar] = plugins.map { it.javaClass.name }
@@ -74,7 +74,7 @@ class PluginLoader(
         settingsWatchService.close()
         executor.submit {
             logger.debug("close")
-            currentPlugins.values.forEach { it.end() }
+            currentPlugins.values.forEach { it.destroy() }
         }
         executor.shutdown()
         executor.awaitTermination(10L, TimeUnit.SECONDS)

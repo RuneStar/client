@@ -11,11 +11,18 @@ abstract class Plugin<T : PluginSettings> {
 
     abstract val defaultSettings: T
 
-    lateinit var settings: T
-        private set
+    private var _settings: T? = null
+
+    val settings: T get() = _settings ?:
+            throw IllegalStateException("settings is not initialized until after object construction")
 
     init {
         logger.debug("init")
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    open fun create() {
+        logger.debug("create")
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -26,5 +33,10 @@ abstract class Plugin<T : PluginSettings> {
     @OverridingMethodsMustInvokeSuper
     open fun stop() {
         logger.debug("stop")
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    open fun destroy() {
+        logger.debug("destroy")
     }
 }
