@@ -1,6 +1,5 @@
 package com.runesuite.client.plugins
 
-import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.internal.disposables.ListCompositeDisposable
 import javax.annotation.OverridingMethodsMustInvokeSuper

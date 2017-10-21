@@ -4,9 +4,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.reactivex.schedulers.Schedulers
 import mu.KotlinLogging
 import java.io.Closeable
-import java.lang.reflect.Modifier
-import java.net.URLClassLoader
 import java.nio.file.FileSystems
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
 import java.util.concurrent.Executors
@@ -23,11 +22,11 @@ class PluginLoader(
 
     private val settingsWatchService = FileSystems.getDefault().newWatchService()
 
-    private val jars = HashMap<Path, Collection<PluginHolder<*>>>()
+    private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
-    private val plugins = HashMap<String, PluginHolder<*>>()
+    private val currentPlugins = HashMap<String, PluginHolder<*>>()
 
-    val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
+    private val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
     private val scheduler = Schedulers.from(executor)
 
@@ -36,13 +35,16 @@ class PluginLoader(
                 .observeOn(scheduler)
                 .filter { it.context().toFile().extension == "jar" }
                 .subscribe { we ->
-                    val path = pluginsDirectory.resolve(we.context())
-                    jars.remove(path)?.forEach { p ->
-                        plugins.remove(p.javaClass.name)
-                        p.end()
+                    logger.debug { "${we.kind()} > ${we.context()}" }
+                    val jarPath = pluginsDirectory.resolve(we.context())
+                    val pluginNames = currentJarPluginNames.remove(jarPath)
+                    if (pluginNames != null) {
+                        pluginNames.forEach { className ->
+                            checkNotNull(currentPlugins.remove(className)).end()
+                        }
                     }
-                    if (verifyJar(path)) {
-                        loadJar(path)
+                    if (Files.exists(jarPath) && verifyJar(jarPath)) {
+                        loadJar(jarPath)
                     }
                 }
 
@@ -50,35 +52,21 @@ class PluginLoader(
                 .observeOn(scheduler)
                 .filter { it.context() != null && it.kind() != StandardWatchEventKinds.ENTRY_CREATE }
                 .subscribe { we ->
+                    logger.debug { "${we.kind()} > ${we.context()}" }
                     val path = pluginsDirectory.resolve(we.context())
-                    val plugin = plugins[path.toFile().nameWithoutExtension] ?: return@subscribe
+                    val plugin = currentPlugins[path.toFile().nameWithoutExtension] ?: return@subscribe
                     plugin.settingsFileChanged()
                 }
     }
 
     private fun loadJar(jar: Path) {
-        // https://stackoverflow.com/q/7071761
-        URLClassLoader(jar).use {
-            val holders = it.plugins().map { PluginHolder(this, it) }
-            holders.forEach {
-                it.begin()
-                plugins[it.plugin.javaClass.name] = it
-            }
-            jars[jar] = holders
+        val plugins = PluginClassLoader.load(jar)
+        plugins.forEach { plugin ->
+            val pluginHolder = PluginHolder(this, plugin)
+            pluginHolder.begin()
+            currentPlugins[plugin.javaClass.name] = pluginHolder
         }
-    }
-
-    private fun URLClassLoader.plugins(): List<Plugin<*>> {
-        return urlClasses
-                .filter { !Modifier.isAbstract(it.modifiers) }
-                .filter { Plugin::class.java.isAssignableFrom(it) }
-                .mapNotNull {
-                    try {
-                        it.getDeclaredConstructor().newInstance() as Plugin<*>
-                    } catch (e: Throwable) {
-                        null
-                    }
-                }
+        currentJarPluginNames[jar] = plugins.map { it.javaClass.name }
     }
 
     override fun close() {
@@ -86,7 +74,7 @@ class PluginLoader(
         settingsWatchService.close()
         executor.submit {
             logger.debug("close")
-            plugins.values.forEach { it.end() }
+            currentPlugins.values.forEach { it.end() }
         }
         executor.shutdown()
         executor.awaitTermination(10L, TimeUnit.SECONDS)

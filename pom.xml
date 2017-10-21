@@ -210,6 +210,11 @@
                 <scope>provided</scope>
                 <version>3.5</version>
             </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>1.7.6</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

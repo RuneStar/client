@@ -16,7 +16,7 @@ class CameraDebug : DisposablePlugin<PluginSettings>() {
         add(Canvas.Live.repaints.subscribe { g ->
             val x = 5
             val y = 40
-            g.color = Color.WHITE
+            g.color = Color.GREEN
             g.drawString(Camera.Live.toString(), x, y)
         })
     }

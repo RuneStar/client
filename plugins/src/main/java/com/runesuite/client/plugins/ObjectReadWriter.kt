@@ -2,7 +2,6 @@ package com.runesuite.client.plugins
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.IOException
 import java.nio.file.Path
 
@@ -27,7 +26,6 @@ interface ObjectReadWriter<T> {
         }
 
         override fun write(file: Path, value: T) {
-            jacksonObjectMapper()
             mapper.writeValue(file.toFile(), value)
         }
     }

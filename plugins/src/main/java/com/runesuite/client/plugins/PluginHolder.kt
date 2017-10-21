@@ -21,8 +21,9 @@ internal class PluginHolder<T : PluginSettings>(
 
     val settingsFile = loader.settingsDirectory.resolve(plugin.javaClass.name + SETTINGS_FILE_EXTENSION)
 
-    @Volatile
     private var ignoreNextEvent = false
+
+    private var active = false
 
     private fun tryWrite(file: Path, value: T) {
         try {
@@ -32,7 +33,7 @@ internal class PluginHolder<T : PluginSettings>(
             logger.debug("Write successful.")
         } catch (e: IOException) {
             logger.error(e) { "Write failed." }
-            plugin.stop()
+            safeStopPlugin()
         }
     }
 
@@ -54,9 +55,7 @@ internal class PluginHolder<T : PluginSettings>(
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.settings)
         }
-        if (plugin.settings.active) {
-            plugin.start()
-        }
+        safeStartPlugin()
     }
 
     fun settingsFileChanged() {
@@ -65,23 +64,13 @@ internal class PluginHolder<T : PluginSettings>(
             ignoreNextEvent = false
             return
         }
+        safeStopPlugin()
         if (Files.notExists(settingsFile)) {
-            logger.debug("Settings file missing.")
-            if (plugin.settings.active) {
-                plugin.stop()
-            }
-            logger.debug("Switching to default settings.")
+            logger.debug("Settings file missing. Switching to default settings.")
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.defaultSettings)
-            if (plugin.settings.active) {
-                plugin.start()
-            }
         } else {
-            logger.debug("Settings file modified.")
-            if (plugin.settings.active) {
-                plugin.stop()
-            }
-            logger.debug("Reading new settings...")
+            logger.debug("Settings file modified. Reading new settings...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 logger.debug("Read successful.")
@@ -90,16 +79,32 @@ internal class PluginHolder<T : PluginSettings>(
                 logger.warn(e) { "Read failed." }
                 tryWrite(settingsFile, plugin.settings)
             }
-            if (plugin.settings.active) {
-                plugin.start()
-            }
         }
+        safeStartPlugin()
     }
 
     fun end() {
         logger.debug("End.")
-        if (plugin.settings.active) {
+        safeStopPlugin()
+    }
+
+    private fun safeStartPlugin() {
+        if (active || !plugin.settings.active) return
+        try {
+            plugin.start()
+            active = true
+        } catch (e: Throwable) {
+            logger.error(e) { "Exception starting plugin." }
+        }
+    }
+
+    private fun safeStopPlugin() {
+        if (!active || !plugin.settings.active) return
+        try {
+            active = false
             plugin.stop()
+        } catch (e: Throwable) {
+            logger.error(e) { "Exception stopping plugin." }
         }
     }
 }
