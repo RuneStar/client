@@ -973,6 +973,7 @@ class Client : IdentityMapper.Class() {
     }
 
     class Strings_SPACE : StringsUniqueMapper(" ")
+    class Strings_WALK_HERE : StringsUniqueMapper("Walk here")
     class Strings_CANCEL : StringsUniqueMapper("Cancel")
     class Strings_TAKE : StringsUniqueMapper("Take")
     class Strings_EXAMINE : StringsUniqueMapper("Examine")
@@ -1680,21 +1681,36 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    class viewportLastPressedX : AllUniqueMapper.Field() {
+    class mouseViewportX : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
                 .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
-                .skip(1)
-                .nextWithin(25) { it.opcode == ISTORE }
+                .nextWithin(5) { it.opcode == ISTORE }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @SinceVersion(141)
-    @DependsOn(viewportLastPressedX::class)
-    class viewportLastPressedY : AllUniqueMapper.Field() {
+    @DependsOn(mouseViewportX::class)
+    class mouseViewportY : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
                 .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
-                .nextWithin(20) { it.opcode == GETSTATIC && it.fieldId == field<viewportLastPressedX>().id }
-                .nextWithin(25) { it.opcode == ISTORE }
+                .nextWithin(20) { it.opcode == GETSTATIC && it.fieldId == field<mouseViewportX>().id }
+                .nextWithin(10) { it.opcode == ISTORE }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(mouseViewportY::class)
+    class isMouseInViewport : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<mouseViewportY>().id }
+                .next { it.opcode == ICONST_1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(mouseViewportY::class)
+    class viewportFalse : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<mouseViewportY>().id }
+                .nextWithin(5) { it.opcode == ICONST_0 }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 }
