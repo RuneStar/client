@@ -84,7 +84,7 @@ class InjectMojo : AbstractMojo() {
                 if (cn == ch.name) {
                     val itfClass = Class.forName("$accessPkg.X${ch.`class`}")
                     typeBuilder = typeBuilder.implement(itfClass)
-                    log.info("Injected interface: ${itfClass.simpleName} -> ${ch.name}")
+                    log.debug("Injected interface: ${itfClass.simpleName} -> ${ch.name}")
                     ch.fields?.forEach { f ->
                         val fieldOwner = f.owner ?: ch.name
                         val getterName = "get${f.field.capitalize()}"
@@ -92,11 +92,11 @@ class InjectMojo : AbstractMojo() {
                         val decoder = f.decoderNarrowed
                         typeBuilder = typeBuilder.method { it.name == getterName }
                                 .intercept(createFieldAccessor(typePool, f.name, fieldOwner, getterName, decoder))
-                        log.info("Injected getter: $getterName -> ${ch.name} (${itfClass.simpleName})")
+                        log.debug("Injected getter: $getterName -> ${ch.name} (${itfClass.simpleName})")
                         if (!Modifier.isFinal(f.access)) {
                             typeBuilder = typeBuilder.method { it.name == setterName }
                                     .intercept(createFieldAccessor(typePool, f.name, fieldOwner, setterName, decoder))
-                            log.info("Injected setter: $setterName -> ${ch.name} (${itfClass.simpleName})" )
+                            log.debug("Injected setter: $setterName -> ${ch.name} (${itfClass.simpleName})" )
                         }
                     }
                     ch.methods?.forEach { m ->
@@ -111,7 +111,7 @@ class InjectMojo : AbstractMojo() {
                                 check(sourceArgumentsSize == m.parameters!!.size)
                             }
                             typeBuilder = typeBuilder.method { it.name == m.method }.intercept(methodCall.withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC))
-                            log.info("Injected method: ${m.method} -> ${ch.name} (${itfClass.simpleName})")
+                            log.debug("Injected method: ${m.method} -> ${ch.name} (${itfClass.simpleName})")
                         }
                     }
                 }
@@ -127,7 +127,7 @@ class InjectMojo : AbstractMojo() {
                                             Advice.withCustomMapping()
                                                     .bind(MethodAdvice.Execution::class.java, executionField)
                                                     .to(MethodAdvice::class.java))
-                            log.info("Injected callbacks -> $methodOwner.${mh.name} (X${ch.`class`}.${mh.method})")
+                            log.debug("Injected callbacks -> $methodOwner.${mh.name} (X${ch.`class`}.${mh.method})")
                         }
                     }
                 }
