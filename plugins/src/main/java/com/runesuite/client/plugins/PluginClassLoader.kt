@@ -15,7 +15,7 @@ private constructor(jar: Path) : ClassLoader() {
         }
     }
 
-    val plugins: Collection<Plugin<*>>
+    private val plugins: Collection<Plugin<*>>
 
     private val logger = KotlinLogging.logger { }
 

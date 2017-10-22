@@ -19,7 +19,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     private val logger = KotlinLogging.logger("${javaClass.simpleName}(${plugin.javaClass.simpleName})")
 
-    val settingsFile = loader.settingsDirectory.resolve(plugin.javaClass.name + SETTINGS_FILE_EXTENSION)
+    private val settingsFile = loader.settingsDirectory.resolve(plugin.javaClass.name + SETTINGS_FILE_EXTENSION)
 
     private var ignoreNextEvent = false
 
@@ -108,25 +108,27 @@ internal class PluginHolder<T : PluginSettings>(
             active = true
         } catch (e: Throwable) {
             logger.error(e) { "Exception starting plugin." }
+            safeDestroyPlugin()
         }
     }
 
     private fun safeTryStopPlugin() {
         if (destroyed || !created || !active || !plugin.settings.active) return
+        active = false
         try {
-            active = false
             plugin.stop()
         } catch (e: Throwable) {
             logger.error(e) { "Exception stopping plugin." }
+            safeDestroyPlugin()
         }
     }
 
     private fun safeDestroyPlugin() {
         safeTryStopPlugin()
         if (destroyed || !created) return
+        destroyed = true
         try {
             plugin.destroy()
-            destroyed = true
         } catch (e: Exception) {
             logger.error(e) { "Exception destroying plugin." }
         }
