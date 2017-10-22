@@ -1713,4 +1713,10 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(5) { it.opcode == ICONST_0 }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_zoom : UniqueMapper.InClassInitializer.Field(Rasterizer3D::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 512 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }
