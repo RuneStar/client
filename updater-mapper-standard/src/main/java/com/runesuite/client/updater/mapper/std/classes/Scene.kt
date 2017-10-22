@@ -2,16 +2,13 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.collections.list.startsWith
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.arrayDimensions
-import com.runesuite.mapper.extensions.baseType
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
+import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
@@ -126,5 +123,21 @@ class Scene : IdentityMapper.Class() {
     @DependsOn(FloorDecoration::class)
     class getFloorDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<FloorDecoration>() }
+    }
+
+    class planes : OrderMapper.InConstructor.Field(Scene::class, -3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class xSize : OrderMapper.InConstructor.Field(Scene::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class ySize : OrderMapper.InConstructor.Field(Scene::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class tileHeights : OrderMapper.InConstructor.Field(Scene::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE.withDimensions(3) }
     }
 }

@@ -60,11 +60,9 @@ class CreateMojo : AbstractMojo() {
 
     private fun verifyJar(jar: Path): Boolean {
         return try {
-            JarFile(jar.toFile(), true)
+            JarFile(jar.toFile(), true).close()
             true
-        } catch (e: IOException) {
-            false
-        } catch (e: SecurityException) {
+        } catch (e: Exception) {
             false
         }
     }
