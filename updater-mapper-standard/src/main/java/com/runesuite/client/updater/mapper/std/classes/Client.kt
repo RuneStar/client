@@ -1678,4 +1678,23 @@ class Client : IdentityMapper.Class() {
     class serverBuild : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<ServerBuild>() && it.klass != klass<ServerBuild>() }
     }
+
+    @SinceVersion(141)
+    class viewportLastPressedX : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
+                .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
+                .skip(1)
+                .nextWithin(25) { it.opcode == ISTORE }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(viewportLastPressedX::class)
+    class viewportLastPressedY : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
+                .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
+                .nextWithin(20) { it.opcode == GETSTATIC && it.fieldId == field<viewportLastPressedX>().id }
+                .nextWithin(25) { it.opcode == ISTORE }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }
