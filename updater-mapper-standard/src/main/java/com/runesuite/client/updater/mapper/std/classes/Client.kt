@@ -222,7 +222,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(menuAction::class)
-    class cursorColor : OrderMapper.InMethod.Field(menuAction::class, 2) {
+    class crosshairColor : OrderMapper.InMethod.Field(menuAction::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -421,19 +421,19 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(viewportHeight::class, viewportWidth::class)
-    class viewportY : StaticUniqueMapper.Field() {
+    class viewportOffsetY : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == RETURN }
                 .prev { it.opcode == PUTSTATIC && it.fieldId == field<viewportHeight>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportWidth>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(viewportHeight::class, viewportWidth::class, viewportY::class)
-    class viewportX : StaticUniqueMapper.Field() {
+    @DependsOn(viewportHeight::class, viewportWidth::class, viewportOffsetY::class)
+    class viewportOffsetX : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == RETURN }
                 .prev { it.opcode == PUTSTATIC && it.fieldId == field<viewportHeight>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportWidth>().id }
-                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportY>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportOffsetY>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 

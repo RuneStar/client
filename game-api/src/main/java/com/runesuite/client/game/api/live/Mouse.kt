@@ -15,7 +15,7 @@ object Mouse {
 
     val location get() = Point(x, y)
 
-    val crosshair get() = checkNotNull(Crosshair.LOOKUP[accessor.cursorColor]) { accessor.cursorColor }
+    val crosshair get() = checkNotNull(Crosshair.LOOKUP[accessor.crosshairColor]) { accessor.crosshairColor }
 
     /**
      * @see[java.awt.event.MouseListener][java.awt.event.MouseMotionListener][java.awt.event.MouseWheelListener]

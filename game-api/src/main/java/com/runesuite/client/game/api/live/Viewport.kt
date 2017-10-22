@@ -19,9 +19,9 @@ interface Viewport {
 
     object Live : Viewport {
 
-        override val x: Int get() = accessor.viewportX
+        override val x: Int get() = accessor.viewportOffsetX
 
-        override val y: Int get() = accessor.viewportY
+        override val y: Int get() = accessor.viewportOffsetY
 
         override val width: Int get() = accessor.viewportWidth
 
