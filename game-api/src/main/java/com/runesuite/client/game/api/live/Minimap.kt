@@ -41,7 +41,7 @@ interface Minimap {
         val circle get() = Ellipse2D.Float().apply { setFrameFromCenter(center, Point(center.x + RADIUS, center.y + RADIUS)) }
 
         override fun toString(): String {
-            return "Minimap.Live(scale=$scale, orientation=$orientation, reference=$reference, center=$center)"
+            return "Minimap.Live(zoom=$scale, orientation=$orientation, reference=$reference, center=$center)"
         }
     }
 

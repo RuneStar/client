@@ -36,7 +36,7 @@
     <repositories>
         <repository>
             <id>central</id>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>http://repo.maven.apache.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -49,6 +49,20 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>http://repo.maven.apache.org/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <!--<pluginRepository>-->
+            <!--<id>jcenter</id>-->
+            <!--<url>https://jcenter.bintray.com/</url>-->
+        <!--</pluginRepository>-->
+    </pluginRepositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -277,12 +291,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <!--<pluginRepositories>-->
-        <!--<pluginRepository>-->
-            <!--<id>jcenter</id>-->
-            <!--<name>JCenter</name>-->
-            <!--<url>https://jcenter.bintray.com/</url>-->
-        <!--</pluginRepository>-->
-    <!--</pluginRepositories>-->
 </project>

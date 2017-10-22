@@ -5,7 +5,7 @@ import java.awt.Rectangle
 
 interface Viewport {
 
-    val scale: Int
+    val zoom: Int
 
     val x: Int
 
@@ -27,14 +27,14 @@ interface Viewport {
 
         override val height: Int get() = accessor.viewportHeight
 
-        override val scale: Int get() = accessor.viewportScale
+        override val zoom: Int get() = accessor.viewportZoom
 
         override fun toString(): String {
-            return "Viewport.Live(scale=$scale, shape=$shape)"
+            return "Viewport.Live(zoom=$zoom, shape=$shape)"
         }
     }
 
-    data class Fixed(override val scale: Int) : Viewport {
+    data class Fixed(override val zoom: Int) : Viewport {
 
         override val x = 4
         override val y = 4
@@ -42,19 +42,19 @@ interface Viewport {
         override val height = 334
 
         companion object {
-            const val SCALE_DEFAULT = 512
-            const val SCALE_MIN = 390
-            const val SCALE_MAX = 1400
+            const val ZOOM_DEFAULT = 512
+            const val ZOOM_MIN = 390
+            const val ZOOM_MAX = 1400
 
             @JvmField
-            val DEFAULT = Fixed(SCALE_DEFAULT)
+            val DEFAULT = Fixed(ZOOM_DEFAULT)
         }
     }
 
-    fun copyOf(): Copy = Copy(scale, x, y, width, height)
+    fun copyOf(): Copy = Copy(zoom, x, y, width, height)
 
     data class Copy(
-            override val scale: Int,
+            override val zoom: Int,
             override val x: Int,
             override val y: Int,
             override val width: Int,

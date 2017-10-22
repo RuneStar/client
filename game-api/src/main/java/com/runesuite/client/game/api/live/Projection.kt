@@ -64,8 +64,8 @@ interface Projection {
             if (y1 == 0) {
                 y1 = 1
             }
-            return Point(viewport.width / 2 + x1 * viewport.scale / y1 + viewport.x,
-                    viewport.height / 2 + z1 * viewport.scale / y1 + viewport.y)
+            return Point(viewport.width / 2 + x1 * viewport.zoom / y1 + viewport.x,
+                    viewport.height / 2 + z1 * viewport.zoom / y1 + viewport.y)
         }
 
         override fun toGame(point: Point): Position {
