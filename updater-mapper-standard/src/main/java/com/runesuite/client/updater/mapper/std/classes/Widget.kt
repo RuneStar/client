@@ -111,7 +111,11 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class spell : OrderMapper.InConstructor.Field(Widget::class, -2) {
+    class spellName : OrderMapper.InConstructor.Field(Widget::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    class spellActionName : OrderMapper.InConstructor.Field(Widget::class, -3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 

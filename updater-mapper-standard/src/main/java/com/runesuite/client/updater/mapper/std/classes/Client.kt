@@ -1719,4 +1719,24 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 512 }
                 .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    // nullable, includes color tags
+    @DependsOn(Strings_USE::class)
+    class lastSelectedItemName : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_USE>().id }
+                .nextIn(4) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Widget.spellName::class)
+    class lastSelectedSpellName : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.spellName>().id }
+                .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    // "Cast"
+    @DependsOn(menuAction::class)
+    class lastSelectedSpellActionName : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Null" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
 }

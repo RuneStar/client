@@ -24,6 +24,9 @@ class MethodExecution<I, R> internal constructor() {
     @JvmField
     val _exit: PublishRelay<MethodEvent.Exit<I, R>> = PublishRelay.create()
 
+    /**
+     * Number of times this method has been called.
+     */
     val count get() = _count.get()
 
     val enter get(): Observable<MethodEvent.Enter<I>> = _enter
