@@ -5,6 +5,7 @@ import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -51,5 +52,10 @@ class ClientPreferences : IdentityMapper.Class() {
     @DependsOn(toBuffer::class)
     class hideUsername : OrderMapper.InMethod.Field(toBuffer::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
+    }
+
+    @SinceVersion(154)
+    class rememberedUsername : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 }

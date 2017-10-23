@@ -986,6 +986,15 @@ class Client : IdentityMapper.Class() {
     class Strings_LEVEL : StringsUniqueMapper("level-")
     class Strings_SKILL : StringsUniqueMapper("skill-")
     class Strings_USE : StringsUniqueMapper("Use")
+    class Strings_CONNECTING_TO_SERVER : StringsUniqueMapper("Connecting to server...")
+    class Strings_LOGIN : StringsUniqueMapper("Login: ")
+    class Strings_PASSWORD : StringsUniqueMapper("Password: ")
+    class Strings_PIN : StringsUniqueMapper("PIN: ")
+    class Strings_PLEASE_ENTER_YOUR_USERNAME : StringsUniqueMapper("Please enter your username/email address.")
+    class Strings_PLEASE_ENTER_YOUR_PASSWORD : StringsUniqueMapper("Please enter your password.")
+    class Strings_WELCOME_TO_RUNESCAPE : StringsUniqueMapper("Welcome to RuneScape")
+    class Strings_NEW_USER : StringsUniqueMapper("New User")
+    class Strings_EXISTING_USER : StringsUniqueMapper("Existing User")
     class Strings_ALMOST_EVERYWHERE : StringsUniqueMapper("almost everywhere.")
     class Strings_WARNING : StringsUniqueMapper("Warning!")
     class Strings_THIS_IS_A_HIGH_RISK_WORLD : StringsUniqueMapper("This is a <col=ffff00>High Risk<col=ffffff> world.")
@@ -1776,6 +1785,12 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Strings_ALMOST_EVERYWHERE::class)
     class loginResponse3 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_ALMOST_EVERYWHERE>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings_WARNING::class)
+    class loginResponse0 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_WARNING>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 }
