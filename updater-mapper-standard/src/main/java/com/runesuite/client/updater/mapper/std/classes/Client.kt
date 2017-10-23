@@ -979,6 +979,9 @@ class Client : IdentityMapper.Class() {
     class Strings_EXAMINE : StringsUniqueMapper("Examine")
     class Strings_ATTACK : StringsUniqueMapper("Attack")
     class Strings_DROP : StringsUniqueMapper("Drop")
+    class Strings_OK : StringsUniqueMapper("Ok")
+    class Strings_SELECT : StringsUniqueMapper("Select")
+    class Strings_CONTINUE : StringsUniqueMapper("Continue")
     class Strings_MORE_OPTIONS : StringsUniqueMapper(" more options")
     class Strings_LEVEL : StringsUniqueMapper("level-")
     class Strings_SKILL : StringsUniqueMapper("skill-")
@@ -1170,8 +1173,8 @@ class Client : IdentityMapper.Class() {
     }
 
     // else mono
-    @DependsOn(SoundTaskData.available::class)
-    class isStereo : UniqueMapper.InMethod.Field(SoundTaskData.available::class) {
+    @DependsOn(SoundTaskData.remaining::class)
+    class isStereo : UniqueMapper.InMethod.Field(SoundTaskData.remaining::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
         // sometimes accesses static field through the subclass
         override fun resolve(instruction: Instruction2): Field2 {
@@ -1738,5 +1741,14 @@ class Client : IdentityMapper.Class() {
     class lastSelectedSpellActionName : UniqueMapper.InMethod.Field(menuAction::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Null" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class loadClassFromDescriptor : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == java.lang.Class::class.type }
+    }
+
+    @DependsOn(Track::class)
+    class newTrack : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Track>() }
     }
 }

@@ -103,7 +103,8 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class tooltip : OrderMapper.InConstructor.Field(Widget::class, -1) {
+    // ok, select, continue
+    class okText : OrderMapper.InConstructor.Field(Widget::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
@@ -115,7 +116,17 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
+    // "Cast"
     class spellActionName : OrderMapper.InConstructor.Field(Widget::class, -3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    // not always displayed, includes color tags, bank item names, spell names, quest list names
+    class dataText : OrderMapper.InConstructor.Field(Widget::class, -4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    class string1 : OrderMapper.InConstructor.Field(Widget::class, -5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 

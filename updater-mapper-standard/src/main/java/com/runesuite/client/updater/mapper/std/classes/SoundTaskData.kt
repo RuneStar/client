@@ -40,9 +40,8 @@ class SoundTaskData : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::write.name } }
     }
 
-    // remaining ?
     @MethodParameters()
-    class available : IdentityMapper.InstanceMethod() {
+    class remaining : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::available.name } }
     }
@@ -51,5 +50,13 @@ class SoundTaskData : IdentityMapper.Class() {
     class open : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::start.name } }
+    }
+
+    class bytes : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
+    }
+
+    class bufferSize : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 }

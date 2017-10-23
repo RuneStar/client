@@ -24,7 +24,7 @@ class ClassInfo : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Array<java.lang.reflect.Method>::class.type  }
     }
 
-    class bytes : InstanceField() {
+    class arguments : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Type.BYTE_TYPE.withDimensions(3)  }
     }
 }
