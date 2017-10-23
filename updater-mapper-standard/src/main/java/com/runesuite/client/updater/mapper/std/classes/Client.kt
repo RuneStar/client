@@ -1760,4 +1760,22 @@ class Client : IdentityMapper.Class() {
     class newTrack : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Track>() }
     }
+
+    @DependsOn(Strings_THIS_IS_A_PVP_WORLD::class)
+    class loginResponse1 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_THIS_IS_A_PVP_WORLD>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings_PLAYERS_CAN_ATTACK_EACH_OTHER::class)
+    class loginResponse2 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_PLAYERS_CAN_ATTACK_EACH_OTHER>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings_ALMOST_EVERYWHERE::class)
+    class loginResponse3 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_ALMOST_EVERYWHERE>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
 }
