@@ -1386,9 +1386,9 @@ class Client : IdentityMapper.Class() {
     @SinceVersion(141)
     class indexCache16 : IndexCacheFieldMapper(16)
 
-    @DependsOn(MouseTracker::class)
-    class mouseTracker : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<MouseTracker>() }
+    @DependsOn(MouseRecorder::class)
+    class mouseRecorder : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<MouseRecorder>() }
     }
 
     @SinceVersion(141)
