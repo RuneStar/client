@@ -986,6 +986,18 @@ class Client : IdentityMapper.Class() {
     class Strings_LEVEL : StringsUniqueMapper("level-")
     class Strings_SKILL : StringsUniqueMapper("skill-")
     class Strings_USE : StringsUniqueMapper("Use")
+    class Strings_ALMOST_EVERYWHERE : StringsUniqueMapper("almost everywhere.")
+    class Strings_WARNING : StringsUniqueMapper("Warning!")
+    class Strings_THIS_IS_A_HIGH_RISK_WORLD : StringsUniqueMapper("This is a <col=ffff00>High Risk<col=ffffff> world.")
+    class Strings_THE_PROTECT_ITEM_PRAYER_WILL : StringsUniqueMapper("The Protect Item prayer will")
+    class Strings_NOT_WORK_ON_THIS_WORLD : StringsUniqueMapper("not work on this world.")
+    class Strings_THIS_IS_A_HIGH_RISK_PVP_WORLD : StringsUniqueMapper("This is a <col=ffff00>High Risk <col=ff0000>PvP<col=ffffff> world.")
+    class Strings_PLAYERS_CAN_ATTACK_EACH_OTHER_ALMOST_ANYWHERE : StringsUniqueMapper("Players can attack each other almost everywhere")
+    class Strings_AND_THE_PROTECT_ITEM_PRAYER_WONT_WORK : StringsUniqueMapper("and the Protect Item prayer won't work.")
+    class Strings_THIS_IS_A_BETA_WORLD : StringsUniqueMapper("This is a <col=00ffff>Beta<col=ffffff> world.")
+    class Strings_YOUR_NORMAL_ACCOUNT_WILL_NOT_BE_AFFECTED : StringsUniqueMapper("Your normal account will not be affected.")
+    class Strings_THIS_IS_A_PVP_WORLD : StringsUniqueMapper("This is a <col=ff0000>PvP<col=ffffff> world.")
+    class Strings_PLAYERS_CAN_ATTACK_EACH_OTHER : StringsUniqueMapper("Players can attack each other")
     class Strings_PREPARED_SOUND_ENGINE : StringsUniqueMapper("Prepared sound engine")
     class Strings_CONNECTING_TO_UPDATE_SERVER : StringsUniqueMapper("Connecting to update server")
     class Strings_STARTING_GAME_ENGINE : StringsUniqueMapper("Starting game engine...")
@@ -1016,16 +1028,13 @@ class Client : IdentityMapper.Class() {
     class Strings_LOADING_INTERFACES : StringsUniqueMapper("Loading interfaces - ")
     @SinceVersion(141)
     class Strings_LOADING_WORLD_MAP : StringsUniqueMapper("Loading world map - ")
-
     @SinceVersion(141)
     class Strings_LOADED_WORLD_MAP : StringsUniqueMapper("Loaded world map")
-
     @DependsOn(Strings::class)
     class Strings_REMOVE_FRIEND : OrderMapper.InClassInitializer.Field(Strings::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
-
     @DependsOn(Strings::class)
     class Strings_REMOVE_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
