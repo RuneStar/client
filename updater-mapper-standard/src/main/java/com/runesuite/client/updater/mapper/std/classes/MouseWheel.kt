@@ -14,7 +14,7 @@ import org.objectweb.asm.Type
 class MouseWheel : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.type in klass<MouseWheelHandler>().interfaces }
 
-    @MethodParameters
+    @MethodParameters()
     class useRotation : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.INT_TYPE }
     }

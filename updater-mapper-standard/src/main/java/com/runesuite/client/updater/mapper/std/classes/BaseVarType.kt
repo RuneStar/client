@@ -3,6 +3,7 @@ package com.runesuite.client.updater.mapper.std.classes
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
@@ -21,6 +22,7 @@ class BaseVarType : IdentityMapper.Class() {
             .and { it.classInitializer != null }
             .and { it.classInitializer!!.instructions.any { it.opcode == Opcodes.LDC && it.ldcCst == String::class.type } }
 
+    @MethodParameters()
     @DependsOn(Enumerated.ordinal::class)
     class ordinal : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Enumerated.ordinal>().mark }

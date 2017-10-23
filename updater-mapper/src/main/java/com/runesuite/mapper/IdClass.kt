@@ -10,16 +10,16 @@ import kotlin.reflect.full.findAnnotation
 data class IdClass(
         val `class`: String,
         val name: String,
-        val `super`: String?,
+        val `super`: String,
         val access: Int,
-        val interfaces: List<String>?,
-        val fields: List<IdField>?,
-        val methods: List<IdMethod>?
+        val interfaces: List<String>,
+        val fields: List<IdField>,
+        val methods: List<IdMethod>
 )
 
 data class IdField(
         val field: String,
-        val owner: String?,
+        val owner: String,
         val name: String,
         val access: Int,
         val descriptor: String
@@ -27,7 +27,7 @@ data class IdField(
 
 data class IdMethod(
         val method: String,
-        val owner: String?,
+        val owner: String,
         val name: String,
         val access: Int,
         val parameters: List<String>?,
@@ -42,17 +42,14 @@ fun Mapper.Context.buildIdHierarchy(): List<IdClass> {
         @Suppress("UNCHECKED_CAST")
         k.nestedClasses.forEach { n ->
             fields[n as KClass<out Mapper<Field2>>]?.let { f ->
-                val owner = f.klass.name.takeUnless { it == v.name }
-                tfields.add(IdField(n.simpleName!!, owner, f.name, f.access, f.desc))
+                tfields.add(IdField(n.simpleName!!, f.klass.name, f.name, f.access, f.desc))
             }
             methods[n as KClass<out Mapper<Method2>>]?.let { m ->
                 val ps = n.findAnnotation<MethodParameters>()?.names?.asList()
-                val owner = m.klass.name.takeUnless { it == v.name }
-                tmethods.add(IdMethod(n.simpleName!!, owner, m.name, m.access, ps, m.desc))
+                tmethods.add(IdMethod(n.simpleName!!, m.klass.name, m.name, m.access, ps, m.desc))
             }
         }
-        val superName = if (v.superType == Any::class.type) null else v.superType.className
-        tclasses.add(IdClass(k.simpleName!!, v.name, superName, v.access, v.interfaces.map { it.className }, tfields, tmethods))
+        tclasses.add(IdClass(k.simpleName!!, v.name, v.superType.className, v.access, v.interfaces.map { it.className }, tfields, tmethods))
     }
     return tclasses
 }

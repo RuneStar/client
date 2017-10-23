@@ -50,12 +50,14 @@ class TaskData : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE.withDimensions(1) }
     }
 
+    @MethodParameters()
     @DependsOn(flush::class)
     class tryFlush : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<flush>().id } }
     }
 
+    @MethodParameters()
     @DependsOn(close::class)
     class shutdown : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

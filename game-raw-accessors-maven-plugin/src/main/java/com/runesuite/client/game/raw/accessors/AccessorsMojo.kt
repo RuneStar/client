@@ -51,32 +51,34 @@ class AccessorsMojo : AbstractMojo() {
             val typeBuilder = TypeSpec.interfaceBuilder("X" + c.`class`)
                     .addSuperinterface(ACCESSOR_NAME)
                     .addModifiers(Modifier.PUBLIC)
-                    .addJavadoc("\$L", classModifiersToString(c.access))
+                    .addJavadoc(classModifiersToString(c.access))
             if (c.`super` in TYPE_TRANSFORMS) {
-                typeBuilder.addSuperinterface(ClassName.get(outputPackage, TYPE_TRANSFORMS.getValue(c.`super`!!)))
+                typeBuilder.addSuperinterface(ClassName.get(outputPackage, TYPE_TRANSFORMS.getValue(c.`super`)))
+            } else {
+                typeBuilder.addJavadoc(" extends ${c.`super`}")
             }
-            c.interfaces?.forEach { i ->
+            c.interfaces.forEach { i ->
                 typeBuilder.addSuperinterface(poetType(Type.getObjectType(i).descriptor))
             }
-            c.fields?.forEach { f ->
+            c.fields.forEach { f ->
                 val fName = poetType(f.descriptor)
                 typeBuilder.addMethod(MethodSpec.methodBuilder("get${f.field.capitalize()}")
                         .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                        .addJavadoc("\$L", fieldModifiersToString(f.access))
+                        .addJavadoc(fieldModifiersToString(f.access))
                         .returns(fName).build())
                 if (!RModifier.isFinal(f.access)) {
                     typeBuilder.addMethod(MethodSpec.methodBuilder("set${f.field.capitalize()}")
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                             .addParameter(fName, SETTER_PARAM_NAME)
-                            .addJavadoc("\$L", fieldModifiersToString(f.access)).build())
+                            .addJavadoc(fieldModifiersToString(f.access)).build())
                 }
             }
-            c.methods?.forEach { m ->
+            c.methods.forEach { m ->
                 if (m.parameters != null) {
                     val mType = Type.getMethodType(m.descriptor)
                     val method = MethodSpec.methodBuilder(m.method)
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                            .addJavadoc("\$L", methodModifiersToString(m.access))
+                            .addJavadoc(methodModifiersToString(m.access))
                             .returns(poetType(mType.returnType.descriptor))
                     mType.argumentTypes.take(m.parameters!!.size).forEachIndexed { i, arg ->
                         method.addParameter(poetType(arg.descriptor), m.parameters!![i])
@@ -100,7 +102,6 @@ class AccessorsMojo : AbstractMojo() {
                     )
                 }
             }
-            METHOD_NAME
             JavaFile.builder(outputPackage, typeBuilder.build()).indent(INDENT)
                     .build().writeTo(OUTPUT_DIR)
         }

@@ -61,7 +61,7 @@ class GameShell : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.mark == Applet::update.mark }
     }
 
-    @MethodParameters
+    @MethodParameters()
     @SinceVersion(141)
     @DependsOn(canvas::class)
     class replaceCanvas : InstanceMethod() {
@@ -69,6 +69,7 @@ class GameShell : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<canvas>().id } }
     }
 
+    @MethodParameters("s")
     @SinceVersion(141)
     class clipboardSetString : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -83,15 +84,18 @@ class GameShell : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<MouseWheel>() }
     }
 
+    @MethodParameters()
     class checkHost : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "runescape.com" } }
     }
 
-    class getContainer : IdentityMapper.InstanceMethod() {
+    @MethodParameters()
+    class container : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Container::class.type }
     }
 
+    @MethodParameters("type")
     class error : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
@@ -110,6 +114,7 @@ class GameShell : IdentityMapper.Class() {
 //                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "microsoft" } }
 //    }
 
+    @MethodParameters()
     @SinceVersion(141)
     class setUpClipboard : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -117,11 +122,13 @@ class GameShell : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == Toolkit::getSystemClipboard.id } }
     }
 
+    @MethodParameters()
     @DependsOn(Client.setUp::class)
     class setUp : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Client.setUp>().mark }
     }
 
+    @MethodParameters()
     @SinceVersion(141)
     @DependsOn(Client.setUp::class)
     class setUpKeyboard : OrderMapper.InMethod.Method(Client.setUp::class, 0) {
@@ -131,6 +138,7 @@ class GameShell : IdentityMapper.Class() {
         }
     }
 
+    @MethodParameters()
     @SinceVersion(141)
     @DependsOn(Client.setUp::class)
     class setUpMouse : OrderMapper.InMethod.Method(Client.setUp::class, 1) {

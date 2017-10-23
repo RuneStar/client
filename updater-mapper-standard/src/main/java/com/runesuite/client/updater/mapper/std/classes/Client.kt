@@ -1205,7 +1205,8 @@ class Client : IdentityMapper.Class() {
         }
     }
 
-    class getColorStartTag : IdentityMapper.StaticMethod() {
+    @MethodParameters("color")
+    class colorStartTag : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
                 .and { it.arguments.startsWith(INT_TYPE) }
                 .and { it.arguments.size in 1..2 }
@@ -1485,11 +1486,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == CRC32::class.type }
     }
 
+    @MethodParameters("bytes", "copyArray")
     class byteArrayToObject : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Any::class.type }
                 .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 
+    @MethodParameters("o", "copyArray")
     class byteArrayFromObject : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(Any::class.type) }
@@ -1573,6 +1576,7 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE && it.fieldId != field<NetCache_pendingPriorityWritesCount>().id }
     }
 
+    @MethodParameters()
     class currentTimeMillis : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == LONG_TYPE }
                 .and { it.arguments.size in 0..1 }
@@ -1589,11 +1593,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 
+    @MethodParameters("chars")
     @DependsOn(AbstractIndexCache.takeRecordByNames::class)
     class hashString : UniqueMapper.InMethod.Method(AbstractIndexCache.takeRecordByNames::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 
+    @MethodParameters("c")
     @DependsOn(hashString::class)
     class charToByteCp1252 : UniqueMapper.InMethod.Method(hashString::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
@@ -1669,6 +1675,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
+    @MethodParameters()
     @DependsOn(ClientPreferences.windowMode::class)
     class setUp : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -1761,6 +1768,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
+    @MethodParameters("descriptor")
     class loadClassFromDescriptor : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == java.lang.Class::class.type }
     }
