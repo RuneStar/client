@@ -12,7 +12,7 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    val font = Font(Font.MONOSPACED, Font.BOLD, 15)
+    val font = Font(Font.SANS_SERIF, Font.BOLD, 15)
 
     override fun start() {
         super.start()

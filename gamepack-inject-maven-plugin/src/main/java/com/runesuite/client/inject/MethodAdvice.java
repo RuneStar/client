@@ -23,8 +23,9 @@ public interface MethodAdvice {
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
-        MethodEvent.Enter enterEvent = new MethodEvent.Enter(exec._count.getAndIncrement(), instance, arguments);
-        exec._enter.accept(enterEvent);
+        MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
+        MethodEvent.Enter enterEvent = new MethodEvent.Enter(execImpl.counter.getAndIncrement(), instance, arguments);
+        execImpl.getEnter().accept(enterEvent);
         return enterEvent;
     }
 
@@ -36,6 +37,6 @@ public interface MethodAdvice {
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned,
             @Advice.Enter MethodEvent.Enter enterEvent
     ) throws Throwable {
-        exec._exit.accept(new MethodEvent.Exit(enterEvent.getId(), instance, enterEvent.getArguments(), returned));
+        ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getId(), instance, enterEvent.getArguments(), returned));
     }
 }

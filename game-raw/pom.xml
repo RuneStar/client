@@ -41,8 +41,20 @@
                     <outputPackage>com.runesuite.client.game.raw.access</outputPackage>
                     <accessorClassName>com.runesuite.client.game.raw.Accessor</accessorClassName>
                     <methodClassName>com.runesuite.client.game.raw.MethodExecution</methodClassName>
-                    <methodInitializer>new MethodExecution()</methodInitializer>
+                    <methodInitializer>new MethodExecution.Implementation()</methodInitializer>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

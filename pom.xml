@@ -58,10 +58,13 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
-        <!--<pluginRepository>-->
-            <!--<id>jcenter</id>-->
-            <!--<url>https://jcenter.bintray.com/</url>-->
-        <!--</pluginRepository>-->
+        <pluginRepository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
     </pluginRepositories>
 
     <properties>
@@ -283,11 +286,11 @@
                     <artifactId>maven-plugin-plugin</artifactId>
                     <version>3.5</version>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<groupId>org.jetbrains.dokka</groupId>-->
-                    <!--<artifactId>dokka-maven-plugin</artifactId>-->
-                    <!--<version>0.9.15</version>-->
-                <!--</plugin>-->
+                <plugin>
+                    <groupId>org.jetbrains.dokka</groupId>
+                    <artifactId>dokka-maven-plugin</artifactId>
+                    <version>0.9.15</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>

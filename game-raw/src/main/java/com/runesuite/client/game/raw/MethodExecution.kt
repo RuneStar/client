@@ -4,32 +4,26 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import java.util.concurrent.atomic.AtomicLong
 
-class MethodExecution<I, R> internal constructor() {
-
-    /**
-     * For internal use only
-     */
-    @JvmField
-    val _count = AtomicLong(0)
-
-    /**
-     * For internal use only
-     */
-    @JvmField
-    val _enter: PublishRelay<MethodEvent.Enter<I>> = PublishRelay.create()
-
-    /**
-     * For internal use only
-     */
-    @JvmField
-    val _exit: PublishRelay<MethodEvent.Exit<I, R>> = PublishRelay.create()
+interface MethodExecution<I, R> {
 
     /**
      * Number of times this method has been called.
      */
-    val count get() = _count.get()
+    val count: Long
 
-    val enter get(): Observable<MethodEvent.Enter<I>> = _enter
+    val enter: Observable<MethodEvent.Enter<I>>
 
-    val exit get(): Observable<MethodEvent.Exit<I, R>> = _exit
+    val exit: Observable<MethodEvent.Exit<I, R>>
+
+    class Implementation<I, R> constructor() : MethodExecution<I, R> {
+
+        @JvmField
+        val counter = AtomicLong(0)
+
+        override val count get() = counter.get()
+
+        override val enter = PublishRelay.create<MethodEvent.Enter<I>>()
+
+        override val exit = PublishRelay.create<MethodEvent.Exit<I, R>>()
+    }
 }
