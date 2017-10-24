@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>com.hunterwb.kxtra</groupId>
-            <artifactId>kxtra-collections</artifactId>
+            <artifactId>kxtra-lang</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,6 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.hunterwb.kxtra.collections.list.startsWith
+import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.client.updater.mapper.std.IndexCacheFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
 import com.runesuite.mapper.*

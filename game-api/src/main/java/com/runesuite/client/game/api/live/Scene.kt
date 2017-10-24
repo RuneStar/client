@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api.live
 
-import com.hunterwb.kxtra.collections.array.deepCopyOf
+import com.hunterwb.kxtra.lang.array.deepCopyOf
 import com.runesuite.client.game.api.GlobalTile
 import com.runesuite.client.game.api.Position
 import com.runesuite.client.game.api.SceneTile

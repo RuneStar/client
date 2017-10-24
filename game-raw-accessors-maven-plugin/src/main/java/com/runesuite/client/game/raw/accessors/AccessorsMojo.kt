@@ -1,6 +1,6 @@
 package com.runesuite.client.game.raw.accessors
 
-import com.hunterwb.kxtra.classload.classloader.loadClassFromDescriptor
+import com.hunterwb.kxtra.lang.classloader.loadClassFromDescriptor
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.MethodHook

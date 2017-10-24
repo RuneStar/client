@@ -1,10 +1,13 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.hunterwb.kxtra.collections.list.startsWith
+import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
-import com.runesuite.mapper.extensions.*
+import com.runesuite.mapper.extensions.and
+import com.runesuite.mapper.extensions.predicateOf
+import com.runesuite.mapper.extensions.type
+import com.runesuite.mapper.extensions.withDimensions
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2

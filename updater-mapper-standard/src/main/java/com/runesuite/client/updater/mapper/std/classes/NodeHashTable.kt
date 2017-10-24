@@ -1,6 +1,6 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.hunterwb.kxtra.collections.list.startsWith
+import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
@@ -15,9 +15,7 @@ import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.GOTO
 import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.LONG_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
 class NodeHashTable : IdentityMapper.Class() {

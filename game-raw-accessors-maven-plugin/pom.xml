@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>${kxtra.groupId}</groupId>
-            <artifactId>kxtra-classload</artifactId>
+            <artifactId>kxtra-lang</artifactId>
             <version>${kxtra.version}</version>
         </dependency>
     </dependencies>
