@@ -7,6 +7,8 @@ import com.runesuite.client.game.raw.access.XClient
  */
 object Client : Wrapper() {
 
+    // The XClient class is generated during the build process
+
     override lateinit var accessor: XClient
 
     override fun toString(): String {

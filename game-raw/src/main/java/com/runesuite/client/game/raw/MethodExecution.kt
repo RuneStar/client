@@ -15,7 +15,10 @@ interface MethodExecution<I, R> {
 
     val exit: Observable<MethodEvent.Exit<I, R>>
 
-    class Implementation<I, R> constructor() : MethodExecution<I, R> {
+    /**
+     * For internal use only.
+     */
+    class Implementation<I, R> : MethodExecution<I, R> {
 
         @JvmField
         val counter = AtomicLong(0)

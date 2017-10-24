@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull
 import org.objectweb.asm.Type
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
+import kotlin.reflect.jvm.jvmName
 import java.lang.reflect.Modifier as RModifier
 
 @Mojo(name = "accessors")
@@ -54,8 +55,8 @@ class AccessorsMojo : AbstractMojo() {
                     .addJavadoc(classModifiersToString(c.access))
             if (c.`super` in TYPE_TRANSFORMS) {
                 typeBuilder.addSuperinterface(ClassName.get(outputPackage, TYPE_TRANSFORMS.getValue(c.`super`)))
-            } else {
-                typeBuilder.addJavadoc(" extends ${c.`super`}")
+            } else if (c.`super` != Any::class.jvmName) {
+                typeBuilder.addJavadoc(" extends {@link ${c.`super`}}")
             }
             c.interfaces.forEach { i ->
                 typeBuilder.addSuperinterface(poetType(Type.getObjectType(i).descriptor))
@@ -102,7 +103,8 @@ class AccessorsMojo : AbstractMojo() {
                     )
                 }
             }
-            JavaFile.builder(outputPackage, typeBuilder.build()).indent(INDENT)
+            JavaFile.builder(outputPackage, typeBuilder.build())
+                    .indent(INDENT)
                     .build().writeTo(OUTPUT_DIR)
         }
         project.addCompileSourceRoot(OUTPUT_DIR.toString())

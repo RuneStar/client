@@ -1,7 +1,6 @@
 package com.runesuite.client.inject
 
 import com.runesuite.client.game.raw.access.XClient
-import com.runesuite.client.updater.GAMEPACK
 import com.runesuite.client.updater.GAMEPACK_DEOB
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.decoderNarrowed
@@ -75,8 +74,8 @@ class InjectMojo : AbstractMojo() {
         val typePool = TypePool.Default.of(classFileLocator)
         copyJarClearManifest(sourceJar, destinationJar)
         val classNames = HOOKS.flatMap {
-            (it.methods?.filter { it.parameters != null && it.owner != null }?.map { it.owner!! }?.asIterable() ?: emptyList()) + it.name
-        }
+            (it.methods.map { it.owner }.asIterable()) + it.name
+        }.distinct()
         classNames.forEach { cn ->
             val typeDescription = typePool.describe(cn).resolve()
             var typeBuilder = ByteBuddy().with(TypeValidation.DISABLED).rebase<Any>(typeDescription, classFileLocator)
@@ -85,8 +84,8 @@ class InjectMojo : AbstractMojo() {
                     val itfClass = Class.forName("$accessPkg.X${ch.`class`}")
                     typeBuilder = typeBuilder.implement(itfClass)
                     log.debug("Injected interface: ${itfClass.simpleName} -> ${ch.name}")
-                    ch.fields?.forEach { f ->
-                        val fieldOwner = f.owner ?: ch.name
+                    ch.fields.forEach { f ->
+                        val fieldOwner = f.owner
                         val getterName = "get${f.field.capitalize()}"
                         val setterName = "set${f.field.capitalize()}"
                         val decoder = f.decoderNarrowed
@@ -99,10 +98,10 @@ class InjectMojo : AbstractMojo() {
                             log.debug("Injected setter: $setterName -> ${ch.name} (${itfClass.simpleName})" )
                         }
                     }
-                    ch.methods?.forEach { m ->
+                    ch.methods.forEach { m ->
                         if (m.parameters != null && !typeDescription.isInterface) {
                             val sourceArgumentsSize = Type.getMethodType(m.descriptor).argumentTypes.size
-                            val sourceMethodOwner = m.owner ?: ch.name
+                            val sourceMethodOwner = m.owner
                             val sourceMethodDescription = typePool.describe(sourceMethodOwner).resolve().declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
                             var methodCall = MethodCall.invoke(sourceMethodDescription).withAllArguments()
                             if (sourceArgumentsSize == m.parameters!!.size + 1) {
@@ -116,8 +115,8 @@ class InjectMojo : AbstractMojo() {
                     }
                 }
                 val xClass = Class.forName("$accessPkg.X${ch.`class`}")
-                ch.methods?.forEach { mh ->
-                    val methodOwner = mh.owner ?: ch.name
+                ch.methods.forEach { mh ->
+                    val methodOwner = mh.owner
                     if (mh.parameters != null && methodOwner == cn && !typeDescription.isInterface) {
                         val methodDescription = typeDescription.declaredMethods.first { it.name == mh.name && it.descriptor == mh.descriptor }
                         if (!methodDescription.isAbstract) {
