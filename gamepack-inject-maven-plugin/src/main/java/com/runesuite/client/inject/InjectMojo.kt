@@ -1,7 +1,6 @@
 package com.runesuite.client.inject
 
 import com.runesuite.client.game.raw.access.XClient
-import com.runesuite.client.updater.GAMEPACK
 import com.runesuite.client.updater.GAMEPACK_CLEAN
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.decoderNarrowed
@@ -9,6 +8,7 @@ import com.runesuite.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.ClassFileLocator
+import net.bytebuddy.dynamic.DynamicType
 import net.bytebuddy.dynamic.scaffold.TypeValidation
 import net.bytebuddy.implementation.FieldAccessor
 import net.bytebuddy.implementation.Implementation
@@ -43,25 +43,22 @@ class InjectMojo : AbstractMojo() {
 
     val classesDir by lazy { Paths.get(project.build.directory, "classes") }
 
-    val injectJar by lazy { Paths.get(project.build.directory, "gamepack.inject.jar") }
-
     val accessPkg = XClient::class.java.`package`.name
 
     override fun execute() {
         Files.createDirectories(cleanJar.parent)
-        val inStream = GAMEPACK_CLEAN.openStream()
-        Files.copy(inStream, cleanJar, StandardCopyOption.REPLACE_EXISTING)
-        inStream.close()
-        jarInject(cleanJar, injectJar)
-        ZipUtil.unpack(injectJar.toFile(), classesDir.toFile())
+        GAMEPACK_CLEAN.openStream().use { input ->
+            Files.copy(input, cleanJar, StandardCopyOption.REPLACE_EXISTING)
+        }
+        jarInject(cleanJar, classesDir)
     }
 
-    private fun jarInject(sourceJar: Path, destinationJar: Path) {
+    private fun jarInject(sourceJar: Path, destinationFolder: Path) {
         val classFileLocator = ClassFileLocator.Compound(
                 ClassFileLocator.ForClassLoader.ofClassPath(),
                 ClassFileLocator.ForJarFile.of(sourceJar.toFile()))
         val typePool = TypePool.Default.of(classFileLocator)
-        Files.copy(sourceJar, destinationJar, StandardCopyOption.REPLACE_EXISTING)
+        ZipUtil.unpack(sourceJar.toFile(), destinationFolder.toFile())
         val classNames = HOOKS.flatMap { (it.methods.map { it.owner }) + it.name }.distinct()
         classNames.forEach { cn ->
             val typeDescription = typePool.describe(cn).resolve()
@@ -109,16 +106,15 @@ class InjectMojo : AbstractMojo() {
                         if (!methodDescription.isAbstract) {
                             val executionField = xClass.getDeclaredField(mh.method)
                             typeBuilder = typeBuilder.method { it == methodDescription }
-                                    .intercept(
-                                            Advice.withCustomMapping()
-                                                    .bind(MethodAdvice.Execution::class.java, executionField)
-                                                    .to(MethodAdvice::class.java))
+                                    .intercept(Advice.withCustomMapping()
+                                            .bind(MethodAdvice.Execution::class.java, executionField)
+                                            .to(MethodAdvice::class.java))
                             log.debug("Injected callbacks -> $methodOwner.${mh.name} (X${ch.`class`}.${mh.method})")
                         }
                     }
                 }
             }
-            typeBuilder.make().inject(destinationJar.toFile())
+            typeBuilder.make().saveIn(destinationFolder.toFile())
         }
     }
 
