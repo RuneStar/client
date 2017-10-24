@@ -3,6 +3,8 @@ package com.runesuite.client.inject
 import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.updater.GAMEPACK_CLEAN
 import com.runesuite.client.updater.HOOKS
+import com.runesuite.client.updater.common.FieldHook
+import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.common.decoderNarrowed
 import com.runesuite.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
@@ -19,7 +21,6 @@ import net.bytebuddy.implementation.bytecode.constant.LongConstant
 import net.bytebuddy.implementation.bytecode.member.FieldAccess
 import net.bytebuddy.implementation.bytecode.member.MethodReturn
 import net.bytebuddy.implementation.bytecode.member.MethodVariableAccess
-import net.bytebuddy.jar.asm.Type
 import net.bytebuddy.pool.TypePool
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
@@ -66,42 +67,31 @@ class InjectMojo : AbstractMojo() {
                 val xClass = Class.forName("$accessPkg.X${ch.`class`}")
                 if (cn == ch.name) {
                     typeBuilder = typeBuilder.implement(xClass)
-                    log.debug("Injected interface: ${xClass.simpleName} -> ${ch.name}")
+                    log.info("Injected interface: ${xClass.simpleName} -> ${ch.name}")
                     ch.fields.forEach { f ->
                         typeBuilder = typeBuilder.method { it.name == f.getterName }
-                                .intercept(createFieldAccessor(typePool, f.name, f.owner, f.getterName, f.decoderNarrowed))
-                        log.debug("Injected getter: ${f.getterName} -> ${ch.name} (${xClass.simpleName})")
+                                .intercept(createFieldGetter(typePool, f))
+                        log.info("Injected getter: ${f.getterName} -> ${ch.name} (${xClass.simpleName})")
                         if (!Modifier.isFinal(f.access)) {
                             typeBuilder = typeBuilder.method { it.name == f.setterName }
-                                    .intercept(createFieldAccessor(typePool, f.name, f.owner, f.setterName, f.decoderNarrowed))
-                            log.debug("Injected setter: ${f.setterName} -> ${ch.name} (${xClass.simpleName})" )
+                                    .intercept(createFieldSetter(typePool, f))
+                            log.info("Injected setter: ${f.setterName} -> ${ch.name} (${xClass.simpleName})" )
                         }
                     }
                     ch.methods.forEach { m ->
-                        if (m.parameters != null && !typeDescription.isInterface) {
-                            val sourceArgumentsSize = Type.getMethodType(m.descriptor).argumentTypes.size
-                            val sourceMethodDescription = typePool.describe(m.owner).resolve().declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
-                            var methodCall = MethodCall.invoke(sourceMethodDescription).withAllArguments()
-                            if (sourceArgumentsSize == m.parameters!!.size + 1) {
-                                methodCall = methodCall.with(m.finalArgumentNarrowed ?: 0.toByte())
-                            } else {
-                                check(sourceArgumentsSize == m.parameters!!.size)
-                            }
-                            typeBuilder = typeBuilder.method { it.name == m.method }.intercept(methodCall.withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC))
-                            log.debug("Injected method: ${m.method} -> ${ch.name} (${xClass.simpleName})")
+                        if (m.parameters != null && !Modifier.isAbstract(m.access)) {
+                            typeBuilder = typeBuilder.method { it.name == m.method }.intercept(createMethodProxy(typePool, m))
+                            log.info("Injected method: ${m.method} -> ${ch.name} (${xClass.simpleName})")
                         }
                     }
                 }
                 ch.methods.forEach { m ->
-                    if (m.parameters != null && m.owner == cn && !typeDescription.isInterface) {
-                        val methodDescription = typeDescription.declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
-                        if (!methodDescription.isAbstract) {
-                            typeBuilder = typeBuilder.method { it == methodDescription }
-                                    .intercept(Advice.withCustomMapping()
-                                            .bind(MethodAdvice.Execution::class.java, xClass.getDeclaredField(m.method))
-                                            .to(MethodAdvice::class.java))
-                            log.debug("Injected callbacks -> ${m.owner}.${m.name} (X${ch.`class`}.${m.method})")
-                        }
+                    if (m.parameters != null && m.owner == cn && !Modifier.isAbstract(m.access)) {
+                        typeBuilder = typeBuilder.method { it.name == m.name && it.descriptor == m.descriptor }
+                                .intercept(Advice.withCustomMapping()
+                                        .bind(MethodAdvice.Execution::class.java, xClass.getDeclaredField(m.method))
+                                        .to(MethodAdvice::class.java))
+                        log.info("Injected callbacks -> ${m.owner}.${m.name} (X${ch.`class`}.${m.method})")
                     }
                 }
             }
@@ -109,50 +99,66 @@ class InjectMojo : AbstractMojo() {
         }
     }
 
-    private fun createFieldAccessor(typePool: TypePool, fieldName: String, fieldOwner: String, methodName: String, decoder: Number? = null): Implementation {
-        val fieldDescription = typePool.describe(fieldOwner).resolve().declaredFields.first { it.name == fieldName }
+    private fun createFieldGetter(typePool: TypePool, fieldHook: FieldHook): Implementation {
+        val fieldOwnerDescription = typePool.describe(fieldHook.owner).resolve()
+        val fieldDescription = fieldOwnerDescription.declaredFields.first { it.name == fieldHook.name }
         val fieldAccess = FieldAccess.forField(fieldDescription)
-        val encoder = invert(decoder)
-        return if (methodName.startsWith("get")) {
-            when(decoder) {
-                is Int -> Implementation.Simple(
-                        if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
-                        fieldAccess.read(),
-                        IntegerConstant.forValue(decoder),
-                        Multiplication.INTEGER,
-                        MethodReturn.INTEGER)
-                is Long -> Implementation.Simple(
-                        if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
-                        fieldAccess.read(),
-                        LongConstant.forValue(decoder),
-                        Multiplication.LONG,
-                        MethodReturn.LONG)
-                null -> FieldAccessor.ofField(fieldName).`in`(typePool.describe(fieldOwner).resolve())
-                        .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC)
-                else -> error(decoder)
-            }
-        } else if (methodName.startsWith("set")) {
-            when(encoder) {
-                is Int -> Implementation.Simple(
-                        if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
-                        IntegerConstant.forValue(encoder),
-                        MethodVariableAccess.INTEGER.loadFrom(1),
-                        Multiplication.INTEGER,
-                        fieldAccess.write(),
-                        MethodReturn.VOID)
-                is Long -> Implementation.Simple(
-                        if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
-                        LongConstant.forValue(encoder),
-                        MethodVariableAccess.LONG.loadFrom(1),
-                        Multiplication.LONG,
-                        fieldAccess.write(),
-                        MethodReturn.VOID)
-                null -> FieldAccessor.ofField(fieldName).`in`(typePool.describe(fieldOwner).resolve())
-                        .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC)
-                else -> error(encoder)
-            }
-        } else {
-            error(methodName)
+        val decoder = fieldHook.decoderNarrowed
+        return when(decoder) {
+            is Int -> Implementation.Simple(
+                    if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
+                    fieldAccess.read(),
+                    IntegerConstant.forValue(decoder),
+                    Multiplication.INTEGER,
+                    MethodReturn.INTEGER)
+            is Long -> Implementation.Simple(
+                    if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
+                    fieldAccess.read(),
+                    LongConstant.forValue(decoder),
+                    Multiplication.LONG,
+                    MethodReturn.LONG)
+            null -> FieldAccessor.ofField(fieldHook.name).`in`(fieldOwnerDescription)
+                    .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC)
+            else -> error(decoder)
         }
+    }
+
+    private fun createFieldSetter(typePool: TypePool, fieldHook: FieldHook): Implementation {
+        val fieldOwnerDescription = typePool.describe(fieldHook.owner).resolve()
+        val fieldDescription = fieldOwnerDescription.declaredFields.first { it.name == fieldHook.name }
+        val fieldAccess = FieldAccess.forField(fieldDescription)
+        val encoder = invert(fieldHook.decoderNarrowed)
+        return when(encoder) {
+            is Int -> Implementation.Simple(
+                    if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
+                    IntegerConstant.forValue(encoder),
+                    MethodVariableAccess.INTEGER.loadFrom(1),
+                    Multiplication.INTEGER,
+                    fieldAccess.write(),
+                    MethodReturn.VOID)
+            is Long -> Implementation.Simple(
+                    if (fieldDescription.isStatic) StackManipulation.Trivial.INSTANCE else MethodVariableAccess.loadThis(),
+                    LongConstant.forValue(encoder),
+                    MethodVariableAccess.LONG.loadFrom(1),
+                    Multiplication.LONG,
+                    fieldAccess.write(),
+                    MethodReturn.VOID)
+            null -> FieldAccessor.ofField(fieldHook.name).`in`(fieldOwnerDescription)
+                    .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC)
+            else -> error(encoder)
+        }
+    }
+
+    private fun createMethodProxy(typePool: TypePool, methodHook: MethodHook): Implementation {
+        val sourceMethodDescription = typePool.describe(methodHook.owner).resolve().declaredMethods.first {
+            it.name == methodHook.name && it.descriptor == methodHook.descriptor
+        }
+        var methodCall = MethodCall.invoke(sourceMethodDescription).withAllArguments()
+        if (methodHook.argumentsCount == methodHook.actualArgumentsCount + 1) {
+            methodCall = methodCall.with(methodHook.finalArgumentNarrowed ?: 0.toByte())
+        } else {
+            check(methodHook.argumentsCount == methodHook.actualArgumentsCount)
+        }
+        return methodCall.withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC)
     }
 }

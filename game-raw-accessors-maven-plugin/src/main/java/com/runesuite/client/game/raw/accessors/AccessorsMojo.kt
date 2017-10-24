@@ -78,7 +78,7 @@ class AccessorsMojo : AbstractMojo() {
                             .build())
                 }
             }
-            c.methods.filter { it.hasKnownParameterNames() }.forEach { m ->
+            c.methods.filter { it.parameters != null }.forEach { m ->
                 typeBuilder.addMethod(MethodSpec.methodBuilder(m.method)
                         .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                         .addJavadoc(methodModifiersToString(m.access))

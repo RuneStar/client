@@ -9,8 +9,6 @@ internal val FieldHook.getterName get() = "get${field.capitalize()}"
 
 internal val FieldHook.setterName get() = "set${field.capitalize()}"
 
-internal fun MethodHook.hasKnownParameterNames() = parameters != null
-
 internal val MethodHook.type get() = Type.getMethodType(descriptor)
 
 internal val MethodHook.actualParameters: List<ParameterHook>
