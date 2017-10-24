@@ -73,9 +73,7 @@ class InjectMojo : AbstractMojo() {
                 ClassFileLocator.ForJarFile.of(sourceJar.toFile()))
         val typePool = TypePool.Default.of(classFileLocator)
         copyJarClearManifest(sourceJar, destinationJar)
-        val classNames = HOOKS.flatMap {
-            (it.methods.map { it.owner }.asIterable()) + it.name
-        }.distinct()
+        val classNames = HOOKS.flatMap { (it.methods.map { it.owner }) + it.name }.distinct()
         classNames.forEach { cn ->
             val typeDescription = typePool.describe(cn).resolve()
             var typeBuilder = ByteBuddy().with(TypeValidation.DISABLED).rebase<Any>(typeDescription, classFileLocator)
@@ -132,24 +130,6 @@ class InjectMojo : AbstractMojo() {
                 }
             }
             typeBuilder.make().inject(destinationJar.toFile())
-        }
-    }
-
-    private fun copyJarClearManifest(source: Path, destination: Path) {
-        Files.deleteIfExists(destination)
-        val sjf = JarFile(source.toFile())
-        JarInputStream(FileInputStream(source.toFile())).use { input ->
-            JarOutputStream(FileOutputStream(destination.toFile()), Manifest()).use { output ->
-                var e = input.nextJarEntry
-                while (e != null) {
-                    if (e.name.endsWith(".class")) {
-                        output.putNextEntry(e)
-                        sjf.getInputStream(e).copyTo(output)
-                        output.closeEntry()
-                    }
-                    e = input.nextJarEntry
-                }
-            }
         }
     }
 

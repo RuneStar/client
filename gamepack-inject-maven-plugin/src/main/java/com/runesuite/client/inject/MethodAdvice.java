@@ -4,7 +4,6 @@ import com.runesuite.client.game.raw.MethodEvent;
 import com.runesuite.client.game.raw.MethodExecution;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
