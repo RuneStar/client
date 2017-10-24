@@ -8,7 +8,6 @@ import com.runesuite.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.ClassFileLocator
-import net.bytebuddy.dynamic.DynamicType
 import net.bytebuddy.dynamic.scaffold.TypeValidation
 import net.bytebuddy.implementation.FieldAccessor
 import net.bytebuddy.implementation.Implementation
@@ -37,56 +36,51 @@ import java.nio.file.StandardCopyOption
 class InjectMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}")
-    lateinit var project: MavenProject
+    private lateinit var project: MavenProject
 
-    val cleanJar by lazy { Paths.get(project.build.directory, "gamepack.clean.jar") }
+    private val cleanJar by lazy { Paths.get(project.build.directory, "gamepack.clean.jar") }
 
-    val classesDir by lazy { Paths.get(project.build.directory, "classes") }
+    private val classesDir by lazy { Paths.get(project.build.directory, "classes") }
 
-    val accessPkg = XClient::class.java.`package`.name
+    private val accessPkg = XClient::class.java.`package`.name
 
     override fun execute() {
         Files.createDirectories(cleanJar.parent)
         GAMEPACK_CLEAN.openStream().use { input ->
             Files.copy(input, cleanJar, StandardCopyOption.REPLACE_EXISTING)
         }
-        jarInject(cleanJar, classesDir)
+        inject(cleanJar, classesDir)
     }
 
-    private fun jarInject(sourceJar: Path, destinationFolder: Path) {
+    private fun inject(sourceJar: Path, destinationFolder: Path) {
         val classFileLocator = ClassFileLocator.Compound(
                 ClassFileLocator.ForClassLoader.ofClassPath(),
                 ClassFileLocator.ForJarFile.of(sourceJar.toFile()))
         val typePool = TypePool.Default.of(classFileLocator)
         ZipUtil.unpack(sourceJar.toFile(), destinationFolder.toFile())
-        val classNames = HOOKS.flatMap { (it.methods.map { it.owner }) + it.name }.distinct()
+        val classNames = HOOKS.flatMap { (it.methods.map { it.owner }).plus(it.name) }.distinct()
         classNames.forEach { cn ->
             val typeDescription = typePool.describe(cn).resolve()
             var typeBuilder = ByteBuddy().with(TypeValidation.DISABLED).rebase<Any>(typeDescription, classFileLocator)
             HOOKS.forEach { ch ->
+                val xClass = Class.forName("$accessPkg.X${ch.`class`}")
                 if (cn == ch.name) {
-                    val itfClass = Class.forName("$accessPkg.X${ch.`class`}")
-                    typeBuilder = typeBuilder.implement(itfClass)
-                    log.debug("Injected interface: ${itfClass.simpleName} -> ${ch.name}")
+                    typeBuilder = typeBuilder.implement(xClass)
+                    log.debug("Injected interface: ${xClass.simpleName} -> ${ch.name}")
                     ch.fields.forEach { f ->
-                        val fieldOwner = f.owner
-                        val getterName = "get${f.field.capitalize()}"
-                        val setterName = "set${f.field.capitalize()}"
-                        val decoder = f.decoderNarrowed
-                        typeBuilder = typeBuilder.method { it.name == getterName }
-                                .intercept(createFieldAccessor(typePool, f.name, fieldOwner, getterName, decoder))
-                        log.debug("Injected getter: $getterName -> ${ch.name} (${itfClass.simpleName})")
+                        typeBuilder = typeBuilder.method { it.name == f.getterName }
+                                .intercept(createFieldAccessor(typePool, f.name, f.owner, f.getterName, f.decoderNarrowed))
+                        log.debug("Injected getter: ${f.getterName} -> ${ch.name} (${xClass.simpleName})")
                         if (!Modifier.isFinal(f.access)) {
-                            typeBuilder = typeBuilder.method { it.name == setterName }
-                                    .intercept(createFieldAccessor(typePool, f.name, fieldOwner, setterName, decoder))
-                            log.debug("Injected setter: $setterName -> ${ch.name} (${itfClass.simpleName})" )
+                            typeBuilder = typeBuilder.method { it.name == f.setterName }
+                                    .intercept(createFieldAccessor(typePool, f.name, f.owner, f.setterName, f.decoderNarrowed))
+                            log.debug("Injected setter: ${f.setterName} -> ${ch.name} (${xClass.simpleName})" )
                         }
                     }
                     ch.methods.forEach { m ->
                         if (m.parameters != null && !typeDescription.isInterface) {
                             val sourceArgumentsSize = Type.getMethodType(m.descriptor).argumentTypes.size
-                            val sourceMethodOwner = m.owner
-                            val sourceMethodDescription = typePool.describe(sourceMethodOwner).resolve().declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
+                            val sourceMethodDescription = typePool.describe(m.owner).resolve().declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
                             var methodCall = MethodCall.invoke(sourceMethodDescription).withAllArguments()
                             if (sourceArgumentsSize == m.parameters!!.size + 1) {
                                 methodCall = methodCall.with(m.finalArgumentNarrowed ?: 0.toByte())
@@ -94,22 +88,19 @@ class InjectMojo : AbstractMojo() {
                                 check(sourceArgumentsSize == m.parameters!!.size)
                             }
                             typeBuilder = typeBuilder.method { it.name == m.method }.intercept(methodCall.withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC))
-                            log.debug("Injected method: ${m.method} -> ${ch.name} (${itfClass.simpleName})")
+                            log.debug("Injected method: ${m.method} -> ${ch.name} (${xClass.simpleName})")
                         }
                     }
                 }
-                val xClass = Class.forName("$accessPkg.X${ch.`class`}")
-                ch.methods.forEach { mh ->
-                    val methodOwner = mh.owner
-                    if (mh.parameters != null && methodOwner == cn && !typeDescription.isInterface) {
-                        val methodDescription = typeDescription.declaredMethods.first { it.name == mh.name && it.descriptor == mh.descriptor }
+                ch.methods.forEach { m ->
+                    if (m.parameters != null && m.owner == cn && !typeDescription.isInterface) {
+                        val methodDescription = typeDescription.declaredMethods.first { it.name == m.name && it.descriptor == m.descriptor }
                         if (!methodDescription.isAbstract) {
-                            val executionField = xClass.getDeclaredField(mh.method)
                             typeBuilder = typeBuilder.method { it == methodDescription }
                                     .intercept(Advice.withCustomMapping()
-                                            .bind(MethodAdvice.Execution::class.java, executionField)
+                                            .bind(MethodAdvice.Execution::class.java, xClass.getDeclaredField(m.method))
                                             .to(MethodAdvice::class.java))
-                            log.debug("Injected callbacks -> $methodOwner.${mh.name} (X${ch.`class`}.${mh.method})")
+                            log.debug("Injected callbacks -> ${m.owner}.${m.name} (X${ch.`class`}.${m.method})")
                         }
                     }
                 }
