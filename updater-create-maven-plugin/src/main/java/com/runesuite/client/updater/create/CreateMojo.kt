@@ -8,6 +8,7 @@ import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
+import com.runesuite.client.updater.deob.jagex.RemoveEnclosingMethodAttributes
 import com.runesuite.client.updater.mapper.std.classes.Client
 import com.runesuite.general.downloadGamepack
 import com.runesuite.general.updateRevision
@@ -36,6 +37,7 @@ class CreateMojo : AbstractMojo() {
 
     private val targetDir by lazy { Paths.get(project.build.directory) }
     private val gamepackJar by lazy { targetDir.resolve("gamepack.jar") }
+    private val cleanJar by lazy { targetDir.resolve("gamepack.clean.jar") }
     private val deobJar by lazy { targetDir.resolve("gamepack.deob.jar") }
     private val namesJson by lazy { deobJar.appendFileName(".names.json") }
     private val opJson by lazy { deobJar.appendFileName(".op.json") }
@@ -45,10 +47,12 @@ class CreateMojo : AbstractMojo() {
     override fun execute() {
         if (Files.notExists(gamepackJar) || !verifyJar(gamepackJar)) {
             dl()
+            clean()
             deob()
             map()
             mergeHooks()
-        } else if (Files.notExists(deobJar) || !verifyJar(deobJar) || Files.notExists(opJson) || Files.notExists(multJson)) {
+        } else if (Files.notExists(deobJar) || !verifyJar(deobJar) || Files.notExists(opJson) || Files.notExists(multJson) || Files.notExists(cleanJar)) {
+            clean()
             deob()
             map()
             mergeHooks()
@@ -77,6 +81,10 @@ class CreateMojo : AbstractMojo() {
 
     private fun deob() {
         Deobfuscator.Faster.deob(gamepackJar, deobJar)
+    }
+
+    private fun clean() {
+        RemoveEnclosingMethodAttributes.deob(gamepackJar, cleanJar)
     }
 
     private fun map() {

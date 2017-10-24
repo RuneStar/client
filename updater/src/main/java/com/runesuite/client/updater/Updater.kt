@@ -15,3 +15,6 @@ val GAMEPACK: URL = ::GAMEPACK.javaClass.classLoader.getResource("gamepack.jar")
 
 @JvmField
 val GAMEPACK_DEOB: URL = ::GAMEPACK_DEOB.javaClass.classLoader.getResource("gamepack.deob.jar")
+
+@JvmField
+val GAMEPACK_CLEAN: URL = ::GAMEPACK_CLEAN.javaClass.classLoader.getResource("gamepack.clean.jar")

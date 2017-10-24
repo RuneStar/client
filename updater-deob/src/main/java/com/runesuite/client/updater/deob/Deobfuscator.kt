@@ -46,7 +46,7 @@ interface Deobfuscator {
             UnusedMethodRemover,
             FrameRemover,
             UnnecessaryGotoRemover,
-//            SortMethodsByLineNumber,
+            SortMethodsByLineNumber,
 //            MethodOrigClassFinder,
             DebugRemover,
             RemoveEnclosingMethodAttributes

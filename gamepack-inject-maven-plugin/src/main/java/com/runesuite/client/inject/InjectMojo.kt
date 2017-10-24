@@ -1,7 +1,8 @@
 package com.runesuite.client.inject
 
 import com.runesuite.client.game.raw.access.XClient
-import com.runesuite.client.updater.GAMEPACK_DEOB
+import com.runesuite.client.updater.GAMEPACK
+import com.runesuite.client.updater.GAMEPACK_CLEAN
 import com.runesuite.client.updater.HOOKS
 import com.runesuite.client.updater.common.decoderNarrowed
 import com.runesuite.client.updater.common.finalArgumentNarrowed
@@ -26,16 +27,11 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.zeroturnaround.zip.ZipUtil
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.lang.reflect.Modifier
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.jar.JarFile
-import java.util.jar.JarInputStream
-import java.util.jar.JarOutputStream
-import java.util.jar.Manifest
+import java.nio.file.StandardCopyOption
 
 @Mojo(name = "inject")
 class InjectMojo : AbstractMojo() {
@@ -43,7 +39,7 @@ class InjectMojo : AbstractMojo() {
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject
 
-    val deobJar by lazy { Paths.get(project.build.directory, "gamepack.deob.jar") }
+    val cleanJar by lazy { Paths.get(project.build.directory, "gamepack.clean.jar") }
 
     val classesDir by lazy { Paths.get(project.build.directory, "classes") }
 
@@ -52,27 +48,20 @@ class InjectMojo : AbstractMojo() {
     val accessPkg = XClient::class.java.`package`.name
 
     override fun execute() {
-        if (Files.notExists(deobJar)) {
-            Files.createDirectories(deobJar.parent)
-            Files.createFile(deobJar)
-        }
-        GAMEPACK_DEOB.openStream().use { input ->
-            deobJar.toFile().outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
-        if (Files.notExists(injectJar)) {
-            jarInject(deobJar, injectJar)
-        }
+        Files.createDirectories(cleanJar.parent)
+        val inStream = GAMEPACK_CLEAN.openStream()
+        Files.copy(inStream, cleanJar, StandardCopyOption.REPLACE_EXISTING)
+        inStream.close()
+        jarInject(cleanJar, injectJar)
         ZipUtil.unpack(injectJar.toFile(), classesDir.toFile())
     }
 
-    fun jarInject(sourceJar: Path, destinationJar: Path) {
+    private fun jarInject(sourceJar: Path, destinationJar: Path) {
         val classFileLocator = ClassFileLocator.Compound(
                 ClassFileLocator.ForClassLoader.ofClassPath(),
                 ClassFileLocator.ForJarFile.of(sourceJar.toFile()))
         val typePool = TypePool.Default.of(classFileLocator)
-        copyJarClearManifest(sourceJar, destinationJar)
+        Files.copy(sourceJar, destinationJar, StandardCopyOption.REPLACE_EXISTING)
         val classNames = HOOKS.flatMap { (it.methods.map { it.owner }) + it.name }.distinct()
         classNames.forEach { cn ->
             val typeDescription = typePool.describe(cn).resolve()
