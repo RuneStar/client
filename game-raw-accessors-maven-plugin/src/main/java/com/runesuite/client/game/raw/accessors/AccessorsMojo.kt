@@ -23,14 +23,14 @@ class AccessorsMojo : AbstractMojo() {
     @Parameter(property = "outputPackage", required = true)
     lateinit var outputPackage: String
 
-    @Parameter(property = "accessorClassName", required = true)
-    lateinit var accessorClassName: String
+    @Parameter(property = "accessorClass", required = true)
+    lateinit var accessorClass: String
 
-    @Parameter(property = "methodClassName", required = true)
-    lateinit var methodClassName: String
+    @Parameter(property = "callbackFieldClass", required = true)
+    lateinit var callbackFieldClass: String
 
-    @Parameter(property = "methodInitializer", required = true)
-    lateinit var methodInitializer: String
+    @Parameter(property = "callbackFieldInitializer", required = true)
+    lateinit var callbackFieldInitializer: String
 
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject
@@ -39,9 +39,11 @@ class AccessorsMojo : AbstractMojo() {
 
     private val SETTER_PARAM_NAME = "value"
 
-    private val ACCESSOR_NAME: ClassName by lazy { ClassName.bestGuess(accessorClassName) }
+    private val VOID_OBJECT_TYPENAME = TypeName.get(Void::class.java)
 
-    private val METHOD_NAME: ClassName by lazy { ClassName.bestGuess(methodClassName) }
+    private val ACCESSOR_TYPENAME: ClassName by lazy { ClassName.bestGuess(accessorClass) }
+
+    private val CALLBACK_FIELD_TYPENAME: ClassName by lazy { ClassName.bestGuess(callbackFieldClass) }
 
     private val OUTPUT_DIR by lazy { Paths.get(project.build.directory, "generated-sources") }
 
@@ -50,7 +52,7 @@ class AccessorsMojo : AbstractMojo() {
     override fun execute() {
         HOOKS.forEach { c ->
             val typeBuilder = TypeSpec.interfaceBuilder("X" + c.`class`)
-                    .addSuperinterface(ACCESSOR_NAME)
+                    .addSuperinterface(ACCESSOR_TYPENAME)
                     .addModifiers(Modifier.PUBLIC)
                     .addJavadoc(classModifiersToString(c.access))
             if (c.`super` in TYPE_TRANSFORMS) {
@@ -62,105 +64,79 @@ class AccessorsMojo : AbstractMojo() {
                 typeBuilder.addSuperinterface(poetType(Type.getObjectType(i).descriptor))
             }
             c.fields.forEach { f ->
-                val fName = poetType(f.descriptor)
-                typeBuilder.addMethod(MethodSpec.methodBuilder("get${f.field.capitalize()}")
+                val fieldTypeName = poetType(f.descriptor)
+                typeBuilder.addMethod(MethodSpec.methodBuilder(f.getterName)
                         .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                         .addJavadoc(fieldModifiersToString(f.access))
-                        .returns(fName).build())
+                        .returns(fieldTypeName)
+                        .build())
                 if (!RModifier.isFinal(f.access)) {
-                    typeBuilder.addMethod(MethodSpec.methodBuilder("set${f.field.capitalize()}")
+                    typeBuilder.addMethod(MethodSpec.methodBuilder(f.setterName)
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                            .addParameter(fName, SETTER_PARAM_NAME)
-                            .addJavadoc(fieldModifiersToString(f.access)).build())
+                            .addParameter(fieldTypeName, SETTER_PARAM_NAME)
+                            .addJavadoc(fieldModifiersToString(f.access))
+                            .build())
                 }
             }
-            c.methods.forEach { m ->
-                if (m.parameters != null) {
-                    val mType = Type.getMethodType(m.descriptor)
-                    val method = MethodSpec.methodBuilder(m.method)
-                            .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                            .addJavadoc(methodModifiersToString(m.access))
-                            .returns(poetType(mType.returnType.descriptor))
-                    mType.argumentTypes.take(m.parameters!!.size).forEachIndexed { i, arg ->
-                        method.addParameter(poetType(arg.descriptor), m.parameters!![i])
-                    }
-                    typeBuilder.addMethod(method.build())
-                }
-                if (m.parameters != null && !RModifier.isInterface(c.access) && !RModifier.isAbstract(m.access)) {
-                    val instanceType = if (RModifier.isStatic(m.access)) {
-                        TypeName.get(Void::class.java)
-                    } else {
-                        poetType(Type.getObjectType(c.name).descriptor)
-                    }
-                    val returnType = poetType(Type.getMethodType(m.descriptor).returnType.descriptor, true)
-                    val callbackType = ParameterizedTypeName.get(METHOD_NAME, instanceType, returnType)
-                    typeBuilder.addField(
-                            FieldSpec.builder(callbackType, m.method, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                    .initializer(methodInitializer)
-                                    .addAnnotation(NotNull::class.java)
-                                    .addJavadoc(seeTag(c, m))
-                                    .build()
+            c.methods.filter { it.hasKnownParameterNames() }.forEach { m ->
+                typeBuilder.addMethod(MethodSpec.methodBuilder(m.method)
+                        .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
+                        .addJavadoc(methodModifiersToString(m.access))
+                        .returns(poetType(m.type.returnType.descriptor))
+                        .addParameters(m.actualParameters.map {
+                            ParameterSpec.builder(poetType(it.descriptor), it.name).build() })
+                        .build()
+                )
+                if (!RModifier.isInterface(c.access) && !RModifier.isAbstract(m.access)) {
+                    val instanceType = if (RModifier.isStatic(m.access)) VOID_OBJECT_TYPENAME else poetType(c.descriptor)
+                    val returnType = poetType(m.type.returnType.descriptor, true)
+                    val callbackType = ParameterizedTypeName.get(CALLBACK_FIELD_TYPENAME, instanceType, returnType)
+                    typeBuilder.addField(FieldSpec.builder(callbackType, m.method)
+                            .initializer(callbackFieldInitializer)
+                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .addAnnotation(NotNull::class.java)
+                            .addJavadoc(seeMethodTag(c, m))
+                            .build()
                     )
                 }
             }
             JavaFile.builder(outputPackage, typeBuilder.build())
                     .indent(INDENT)
-                    .build().writeTo(OUTPUT_DIR)
+                    .build()
+                    .writeTo(OUTPUT_DIR)
         }
         project.addCompileSourceRoot(OUTPUT_DIR.toString())
     }
 
-    private fun poetType(desc: String, wrapPrimitives: Boolean = false): TypeName {
-        val type = Type.getType(desc)
-        val baseType = if (type.sort == Type.ARRAY) type.elementType else type
-        val baseName2: TypeName = if (TYPE_TRANSFORMS.containsKey(baseType.className)) {
+    private fun poetType(descriptor: String, wrapPrimitives: Boolean = false): TypeName {
+        val type = Type.getType(descriptor)
+        val baseType = type.baseType
+        val baseName: TypeName = if (TYPE_TRANSFORMS.containsKey(baseType.className)) {
             ClassName.bestGuess(TYPE_TRANSFORMS[baseType.className])
         } else {
             var klass = ClassLoader.getSystemClassLoader().loadClassFromDescriptor(baseType.descriptor)
             if (wrapPrimitives && klass.isPrimitive) {
-                klass = if (klass == Void.TYPE) {
-                    Void::class.java
-                } else {
-                    ClassUtils.primitiveToWrapper(klass)
-                }
+                klass = if (klass == Void.TYPE) Void::class.java else ClassUtils.primitiveToWrapper(klass)
             }
             TypeName.get(klass)
         }
-        var name = baseName2
-        if (type.sort == Type.ARRAY) {
-            repeat(type.dimensions) {
-                name = ArrayTypeName.of(name)
-            }
+        var name = baseName
+        repeat(type.arrayDimensions) {
+            name = ArrayTypeName.of(name)
         }
         return name
     }
 
-    private fun seeTag(classHook: ClassHook, methodHook: MethodHook): String {
-        val argList = Type.getArgumentTypes(methodHook.descriptor).toList().take(methodHook.parameters!!.size).map {
-            val baseType = if (it.sort == Type.ARRAY) it.elementType else it
-            val dim = if (it.sort == Type.ARRAY) it.dimensions else 0
+    private fun seeMethodTag(classHook: ClassHook, methodHook: MethodHook): String {
+        val argList = methodHook.actualParameters.map {
+            val type = Type.getType(it.descriptor)
+            val baseType = type.baseType
             if (baseType.className in TYPE_TRANSFORMS) {
-                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(dim))
+                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(type.dimensions))
             } else {
-                ClassLoader.getSystemClassLoader().loadClassFromDescriptor(it.descriptor).simpleName
+                ClassLoader.getSystemClassLoader().loadClassFromDescriptor(type.descriptor).simpleName
             }
         }
         return "@see X${classHook.`class`}#${methodHook.method}(${argList.joinToString()})"
-    }
-
-    private fun classModifiersToString(modifiers: Int): String {
-        return if (RModifier.isInterface(modifiers)) {
-            RModifier.toString(RModifier.interfaceModifiers() and modifiers) + " interface"
-        } else {
-            RModifier.toString(RModifier.classModifiers() and modifiers) + " class"
-        }
-    }
-
-    private fun fieldModifiersToString(modifiers: Int): String {
-        return RModifier.toString(RModifier.fieldModifiers() and modifiers) + " field"
-    }
-
-    private fun methodModifiersToString(modifiers: Int): String {
-        return RModifier.toString(RModifier.methodModifiers() and modifiers) + " method"
     }
 }

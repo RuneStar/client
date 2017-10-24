@@ -39,9 +39,9 @@
                 </executions>
                 <configuration>
                     <outputPackage>com.runesuite.client.game.raw.access</outputPackage>
-                    <accessorClassName>com.runesuite.client.game.raw.Accessor</accessorClassName>
-                    <methodClassName>com.runesuite.client.game.raw.MethodExecution</methodClassName>
-                    <methodInitializer>new MethodExecution.Implementation()</methodInitializer>
+                    <accessorClass>com.runesuite.client.game.raw.Accessor</accessorClass>
+                    <callbackFieldClass>com.runesuite.client.game.raw.MethodExecution</callbackFieldClass>
+                    <callbackFieldInitializer>new MethodExecution.Implementation()</callbackFieldInitializer>
                 </configuration>
             </plugin>
         </plugins>
