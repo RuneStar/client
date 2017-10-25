@@ -54,11 +54,11 @@ fun mergeHooks(revision: Int) {
     val mults = jsonMapper.readValue<Map<String, Long>>(multJson(revision).toFile())
     val names = jsonMapper.readValue<List<IdClass>>(namesJson(revision).toFile())
     val hooks = names.map { c ->
-        val fields = c.fields?.map { f ->
-            FieldHook(f.field, f.owner, f.name, f.access, f.descriptor, mults["${f.owner ?: c.name}.${f.name}"])
+        val fields = c.fields.map { f ->
+            FieldHook(f.field, f.owner, f.name, f.access, f.descriptor, mults["${f.owner}.${f.name}"])
         }
-        val methods = c.methods?.map { m ->
-            MethodHook(m.method, m.owner, m.name, m.access, m.parameters, m.descriptor, ops["${m.owner ?: c.name}.${m.name}${m.descriptor}"])
+        val methods = c.methods.map { m ->
+            MethodHook(m.method, m.owner, m.name, m.access, m.parameters, m.descriptor, ops["${m.owner}.${m.name}${m.descriptor}"])
         }
         ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
     }

@@ -7,14 +7,27 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.runesuite.client.updater.common.ClassHook
 import java.net.URL
 
-@JvmField
-val HOOKS: List<ClassHook> = jacksonObjectMapper().readValue(::HOOKS.javaClass.classLoader.getResource("hooks.json"))
+// ClassLoader that loaded this class
+private val classLoader = object {}.javaClass.classLoader
 
 @JvmField
-val GAMEPACK: URL = ::GAMEPACK.javaClass.classLoader.getResource("gamepack.jar")
+val HOOKS: List<ClassHook> = jacksonObjectMapper().readValue(classLoader.getResource("hooks.json"))
 
+/**
+ * Original untouched gamepack.
+ */
 @JvmField
-val GAMEPACK_DEOB: URL = ::GAMEPACK_DEOB.javaClass.classLoader.getResource("gamepack.deob.jar")
+val GAMEPACK: URL = classLoader.getResource("gamepack.jar")
 
+/**
+ * Deobfuscated gamepack.
+ */
 @JvmField
-val GAMEPACK_CLEAN: URL = ::GAMEPACK_CLEAN.javaClass.classLoader.getResource("gamepack.clean.jar")
+val GAMEPACK_DEOB: URL = classLoader.getResource("gamepack.deob.jar")
+
+/**
+ * Gamepack with the META-INF directory along with all of its contents removed and all enclosing method
+ * attributes removed.
+ */
+@JvmField
+val GAMEPACK_CLEAN: URL = classLoader.getResource("gamepack.clean.jar")
