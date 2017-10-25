@@ -1,5 +1,8 @@
 package com.runesuite.client.game.raw
 
+/**
+ * A class that wraps an [Accessor] value.
+ */
 abstract class Wrapper {
 
     abstract val accessor: Accessor

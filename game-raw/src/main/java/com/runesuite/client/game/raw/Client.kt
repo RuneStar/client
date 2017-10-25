@@ -3,7 +3,7 @@ package com.runesuite.client.game.raw
 import com.runesuite.client.game.raw.access.XClient
 
 /**
- * Singleton for the "client" class
+ * Singleton for the "client" [java.applet.Applet] class
  */
 object Client : Wrapper() {
 
@@ -11,6 +11,9 @@ object Client : Wrapper() {
 
     override lateinit var accessor: XClient
 
+    /**
+     * @return "Client"
+     */
     override fun toString(): String {
         return "Client"
     }

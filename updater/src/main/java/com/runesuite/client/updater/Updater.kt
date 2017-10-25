@@ -26,8 +26,11 @@ val GAMEPACK: URL = classLoader.getResource("gamepack.jar")
 val GAMEPACK_DEOB: URL = classLoader.getResource("gamepack.deob.jar")
 
 /**
- * Gamepack with the META-INF directory along with all of its contents removed and all enclosing method
- * attributes removed.
+ * Gamepack with the META-INF directory removed and all enclosing method attributes removed.
  */
 @JvmField
 val GAMEPACK_CLEAN: URL = classLoader.getResource("gamepack.clean.jar")
+
+fun main(args: Array<String>) {
+    ClassLoader.getPlatformClassLoader()
+}

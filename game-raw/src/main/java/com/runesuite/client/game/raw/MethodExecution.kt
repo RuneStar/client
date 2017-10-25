@@ -4,6 +4,10 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import java.util.concurrent.atomic.AtomicLong
 
+/**
+ * @param[I] the instance type this method is declared on, [Void] for static methods
+ * @param[R] the return type of this method, [Void] for void methods
+ */
 interface MethodExecution<I, R> {
 
     /**
