@@ -15,14 +15,14 @@ public abstract class MethodEvent<I> {
     @NotNull
     private final Object[] arguments;
 
-    private MethodEvent(final long id, final I instance, @NotNull final Object[] arguments) {
+    private MethodEvent(long id, I instance, @NotNull Object[] arguments) {
         this.id = id;
         this.instance = instance;
         this.arguments = arguments;
     }
 
     /**
-     * @return {@code null} for {@code static} methods
+     * @return the instance the method was called on, {@code null} for {@code static} methods
      */
     public final I getInstance() {
         return instance;
@@ -32,6 +32,11 @@ public abstract class MethodEvent<I> {
         return id;
     }
 
+    /**
+     * The returned array should not be modified.
+     *
+     * @return the arguments used to call the method, boxing primitive values
+     */
     @NotNull
     public final Object[] getArguments() {
         return arguments;
@@ -42,7 +47,7 @@ public abstract class MethodEvent<I> {
      */
     public final static class Enter<I> extends MethodEvent<I> {
 
-        public Enter(final long id, final I instance, @NotNull final Object[] arguments) {
+        public Enter(long id, I instance, @NotNull Object[] arguments) {
             super(id, instance, arguments);
         }
 
@@ -64,13 +69,13 @@ public abstract class MethodEvent<I> {
 
         private final R returned;
 
-        public Exit(final long id, final I instance, @NotNull final Object[] arguments, final R returned) {
+        public Exit(long id, I instance, @NotNull Object[] arguments, R returned) {
             super(id, instance, arguments);
             this.returned = returned;
         }
 
         /**
-         * @return {@code null} for {@code void} methods
+         * @return the value returned from the method, {@code null} for {@code void} methods
          */
         public R getReturned() {
             return returned;

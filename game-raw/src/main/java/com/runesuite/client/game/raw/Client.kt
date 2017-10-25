@@ -3,7 +3,7 @@ package com.runesuite.client.game.raw
 import com.runesuite.client.game.raw.access.XClient
 
 /**
- * Singleton for the "client" [java.applet.Applet] class
+ * Singleton for the "client" [java.applet.Applet] class.
  */
 object Client : Wrapper() {
 
