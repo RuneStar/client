@@ -2,12 +2,14 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
+import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
@@ -36,5 +38,10 @@ class NpcDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 17 } }
+    }
+
+    @DependsOn(Client.getNpcDefinition::class)
+    class id : OrderMapper.InMethod.Field(Client.getNpcDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE && it.fieldOwner == type<NpcDefinition>() }
     }
 }

@@ -503,49 +503,49 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(NpcDefinition::class, EvictingHashTable::class)
-    class cachedNpcDefinitions : StaticUniqueMapper.Field() {
+    class NpcDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<NpcDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(Sprite::class, EvictingHashTable::class)
-    class cachedSprites : StaticUniqueMapper.Field() {
+    class Sprite_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<Sprite>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(KitDefinition::class, EvictingHashTable::class)
-    class cachedKitDefinitions : StaticUniqueMapper.Field() {
+    class KitDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<KitDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(SpotAnimationDefinition::class, EvictingHashTable::class)
-    class cachedSpotAnimationDefinitions : StaticUniqueMapper.Field() {
+    class SpotAnimationDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SpotAnimationDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(ItemDefinition::class, EvictingHashTable::class)
-    class cachedItemDefinitions : StaticUniqueMapper.Field() {
+    class ItemDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ItemDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(VarbitDefinition::class, EvictingHashTable::class)
-    class cachedVarbitDefinitions : StaticUniqueMapper.Field() {
+    class VarbitDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<VarbitDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(SequenceDefinition::class, EvictingHashTable::class)
-    class cachedSequenceDefinitions : StaticUniqueMapper.Field() {
+    class SequenceDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SequenceDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(ObjectDefinition::class, EvictingHashTable::class)
-    class cachedObjectDefinitions : StaticUniqueMapper.Field() {
+    class ObjectDefinition_cached : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ObjectDefinition>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
@@ -907,22 +907,22 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class AxisAlignedBoundingBoxDrawMode_MOUSE_OVER : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 0, 2) {
+    class AxisAlignedBoundingBoxDrawMode_mouseOver : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
     }
 
     @SinceVersion(141)
     @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class AxisAlignedBoundingBoxDrawMode_ALL : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 1, 2) {
+    class AxisAlignedBoundingBoxDrawMode_all : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(AxisAlignedBoundingBoxDrawMode::class, AxisAlignedBoundingBoxDrawMode_MOUSE_OVER::class, AxisAlignedBoundingBoxDrawMode_ALL::class)
+    @DependsOn(AxisAlignedBoundingBoxDrawMode::class, AxisAlignedBoundingBoxDrawMode_mouseOver::class, AxisAlignedBoundingBoxDrawMode_all::class)
     class axisAlignedBoundingBoxDrawMode : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<AxisAlignedBoundingBoxDrawMode>() }
-                .and { it != field<AxisAlignedBoundingBoxDrawMode_MOUSE_OVER>() }
-                .and { it != field<AxisAlignedBoundingBoxDrawMode_ALL>() }
+                .and { it != field<AxisAlignedBoundingBoxDrawMode_mouseOver>() }
+                .and { it != field<AxisAlignedBoundingBoxDrawMode_all>() }
     }
 
     @SinceVersion(141)
@@ -972,80 +972,80 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    class Strings_SPACE : StringsUniqueMapper(" ")
-    class Strings_WALK_HERE : StringsUniqueMapper("Walk here")
-    class Strings_CANCEL : StringsUniqueMapper("Cancel")
-    class Strings_TAKE : StringsUniqueMapper("Take")
-    class Strings_EXAMINE : StringsUniqueMapper("Examine")
-    class Strings_ATTACK : StringsUniqueMapper("Attack")
-    class Strings_DROP : StringsUniqueMapper("Drop")
-    class Strings_OK : StringsUniqueMapper("Ok")
-    class Strings_SELECT : StringsUniqueMapper("Select")
-    class Strings_CONTINUE : StringsUniqueMapper("Continue")
-    class Strings_MORE_OPTIONS : StringsUniqueMapper(" more options")
-    class Strings_LEVEL : StringsUniqueMapper("level-")
-    class Strings_SKILL : StringsUniqueMapper("skill-")
-    class Strings_USE : StringsUniqueMapper("Use")
-    class Strings_CONNECTING_TO_SERVER : StringsUniqueMapper("Connecting to server...")
-    class Strings_LOGIN : StringsUniqueMapper("Login: ")
-    class Strings_PASSWORD : StringsUniqueMapper("Password: ")
-    class Strings_PIN : StringsUniqueMapper("PIN: ")
-    class Strings_PLEASE_ENTER_YOUR_USERNAME : StringsUniqueMapper("Please enter your username/email address.")
-    class Strings_PLEASE_ENTER_YOUR_PASSWORD : StringsUniqueMapper("Please enter your password.")
-    class Strings_WELCOME_TO_RUNESCAPE : StringsUniqueMapper("Welcome to RuneScape")
-    class Strings_NEW_USER : StringsUniqueMapper("New User")
-    class Strings_EXISTING_USER : StringsUniqueMapper("Existing User")
-    class Strings_ALMOST_EVERYWHERE : StringsUniqueMapper("almost everywhere.")
-    class Strings_WARNING : StringsUniqueMapper("Warning!")
-    class Strings_THIS_IS_A_HIGH_RISK_WORLD : StringsUniqueMapper("This is a <col=ffff00>High Risk<col=ffffff> world.")
-    class Strings_THE_PROTECT_ITEM_PRAYER_WILL : StringsUniqueMapper("The Protect Item prayer will")
-    class Strings_NOT_WORK_ON_THIS_WORLD : StringsUniqueMapper("not work on this world.")
-    class Strings_THIS_IS_A_HIGH_RISK_PVP_WORLD : StringsUniqueMapper("This is a <col=ffff00>High Risk <col=ff0000>PvP<col=ffffff> world.")
-    class Strings_PLAYERS_CAN_ATTACK_EACH_OTHER_ALMOST_ANYWHERE : StringsUniqueMapper("Players can attack each other almost everywhere")
-    class Strings_AND_THE_PROTECT_ITEM_PRAYER_WONT_WORK : StringsUniqueMapper("and the Protect Item prayer won't work.")
-    class Strings_THIS_IS_A_BETA_WORLD : StringsUniqueMapper("This is a <col=00ffff>Beta<col=ffffff> world.")
-    class Strings_YOUR_NORMAL_ACCOUNT_WILL_NOT_BE_AFFECTED : StringsUniqueMapper("Your normal account will not be affected.")
-    class Strings_THIS_IS_A_PVP_WORLD : StringsUniqueMapper("This is a <col=ff0000>PvP<col=ffffff> world.")
-    class Strings_PLAYERS_CAN_ATTACK_EACH_OTHER : StringsUniqueMapper("Players can attack each other")
-    class Strings_PREPARED_SOUND_ENGINE : StringsUniqueMapper("Prepared sound engine")
-    class Strings_CONNECTING_TO_UPDATE_SERVER : StringsUniqueMapper("Connecting to update server")
-    class Strings_STARTING_GAME_ENGINE : StringsUniqueMapper("Starting game engine...")
-    class Strings_PREPARED_VISIBILITY_MAP : StringsUniqueMapper("Prepared visibility map")
-    class Strings_CHECKING_FOR_UPDATES : StringsUniqueMapper("Checking for updates - ")
-    class Strings_LOADED_UPDATE_LIST : StringsUniqueMapper("Loaded update list")
-    class Strings_LOADING_FONTS : StringsUniqueMapper("Loading fonts - ")
-    class Strings_LOADED_FONTS : StringsUniqueMapper("Loaded fonts")
-    class Strings_LOADING_TITLE_SCREEN : StringsUniqueMapper("Loading title screen - ")
-    class Strings_LOADED_TITLE_SCREEN : StringsUniqueMapper("Loaded title screen")
-    class Strings_LOADING_PLEASE_WAIT : StringsUniqueMapper("Loading - please wait.")
-    class Strings_CONNECTION_LOST : StringsUniqueMapper("Connection lost")
-    class Strings_ATTEMPTING_TO_REESTABLISH : StringsUniqueMapper("Please wait - attempting to reestablish")
-    class Strings_ALREADY_A_FRIEND : StringsUniqueMapper(" is already on your friend list")
-    class Strings_CHOOSE_OPTION : StringsUniqueMapper("Choose Option")
-    class Strings_PLEASE_WAIT : StringsUniqueMapper("Please wait...")
-    class Strings_FROM_IGNORE : StringsUniqueMapper(" from your ignore list first")
-    class Strings_LOADED_INPUT_HANDLER : StringsUniqueMapper("Loaded input handler")
-    class Strings_LOADED_TEXTURES : StringsUniqueMapper("Loaded textures")
-    class Strings_LOADED_CONFIG : StringsUniqueMapper("Loaded config")
-    class Strings_LOADED_SPRITES : StringsUniqueMapper("Loaded sprites")
-    class Strings_LOADED_WORDPACK : StringsUniqueMapper("Loaded wordpack")
-    class Strings_LOADED_INTERFACES : StringsUniqueMapper("Loaded interfaces")
-    class Strings_LOADING_SPRITES : StringsUniqueMapper("Loading sprites - ")
-    class Strings_LOADING_CONFIG : StringsUniqueMapper("Loading config - ")
-    class Strings_LOADING_TEXTURES : StringsUniqueMapper("Loading textures - ")
-    class Strings_LOADING_WORDPACK : StringsUniqueMapper("Loading wordpack - ")
-    class Strings_LOADING_INTERFACES : StringsUniqueMapper("Loading interfaces - ")
+    class Strings_space : StringsUniqueMapper(" ")
+    class Strings_walkHere : StringsUniqueMapper("Walk here")
+    class Strings_cancel : StringsUniqueMapper("Cancel")
+    class Strings_take : StringsUniqueMapper("Take")
+    class Strings_examine : StringsUniqueMapper("Examine")
+    class Strings_attack : StringsUniqueMapper("Attack")
+    class Strings_drop : StringsUniqueMapper("Drop")
+    class Strings_ok : StringsUniqueMapper("Ok")
+    class Strings_select : StringsUniqueMapper("Select")
+    class Strings_continue : StringsUniqueMapper("Continue")
+    class Strings_moreOptions : StringsUniqueMapper(" more options")
+    class Strings_level : StringsUniqueMapper("level-")
+    class Strings_skill : StringsUniqueMapper("skill-")
+    class Strings_use : StringsUniqueMapper("Use")
+    class Strings_connectingToServer : StringsUniqueMapper("Connecting to server...")
+    class Strings_login : StringsUniqueMapper("Login: ")
+    class Strings_password : StringsUniqueMapper("Password: ")
+    class Strings_pin : StringsUniqueMapper("PIN: ")
+    class Strings_pleaseEnterYourUsername : StringsUniqueMapper("Please enter your username/email address.")
+    class Strings_pleaseEnterYourPassword : StringsUniqueMapper("Please enter your password.")
+    class Strings_welcomeToRuneScape : StringsUniqueMapper("Welcome to RuneScape")
+    class Strings_newUser : StringsUniqueMapper("New User")
+    class Strings_existingUser : StringsUniqueMapper("Existing User")
+    class Strings_almostEverywhere : StringsUniqueMapper("almost everywhere.")
+    class Strings_warning : StringsUniqueMapper("Warning!")
+    class Strings_thisIsAHighRiskWorld : StringsUniqueMapper("This is a <col=ffff00>High Risk<col=ffffff> world.")
+    class Strings_theProtectItemPrayerWill : StringsUniqueMapper("The Protect Item prayer will")
+    class Strings_notWorkOnThisWorld : StringsUniqueMapper("not work on this world.")
+    class Strings_thisIsAHighRiskPvpWorld : StringsUniqueMapper("This is a <col=ffff00>High Risk <col=ff0000>PvP<col=ffffff> world.")
+    class Strings_playersCanAttackEachOtherAlmostEverywhere : StringsUniqueMapper("Players can attack each other almost everywhere")
+    class Strings_andTheProtectItemPrayerWontWork : StringsUniqueMapper("and the Protect Item prayer won't work.")
+    class Strings_thisIsABetaWorld : StringsUniqueMapper("This is a <col=00ffff>Beta<col=ffffff> world.")
+    class Strings_yourNormalAccountWillNotBeAffected : StringsUniqueMapper("Your normal account will not be affected.")
+    class Strings_thisIsAPvpWorld : StringsUniqueMapper("This is a <col=ff0000>PvP<col=ffffff> world.")
+    class Strings_playersCanAttackEachOther : StringsUniqueMapper("Players can attack each other")
+    class Strings_preparedSoundEngine : StringsUniqueMapper("Prepared sound engine")
+    class Strings_connectingToUpdateServer : StringsUniqueMapper("Connecting to update server")
+    class Strings_startingGameEngine : StringsUniqueMapper("Starting game engine...")
+    class Strings_preparedVisibilityMap : StringsUniqueMapper("Prepared visibility map")
+    class Strings_checkingForUpdates : StringsUniqueMapper("Checking for updates - ")
+    class Strings_loadedUpdateList : StringsUniqueMapper("Loaded update list")
+    class Strings_loadingFonts : StringsUniqueMapper("Loading fonts - ")
+    class Strings_loadedFonts : StringsUniqueMapper("Loaded fonts")
+    class Strings_loadingTitleScreen : StringsUniqueMapper("Loading title screen - ")
+    class Strings_loadedTitleScreen : StringsUniqueMapper("Loaded title screen")
+    class Strings_loadingPleaseWait : StringsUniqueMapper("Loading - please wait.")
+    class Strings_connectionLost : StringsUniqueMapper("Connection lost")
+    class Strings_pleaseWaitAttemptingToReestablish : StringsUniqueMapper("Please wait - attempting to reestablish")
+    class Strings_isAlreadyOnYourFriendList : StringsUniqueMapper(" is already on your friend list")
+    class Strings_chooseOption : StringsUniqueMapper("Choose Option")
+    class Strings_pleaseWait : StringsUniqueMapper("Please wait...")
+    class Strings_fromYourIgnoreListFirst : StringsUniqueMapper(" from your ignore list first")
+    class Strings_loadedInputHandler : StringsUniqueMapper("Loaded input handler")
+    class Strings_loadedTextures : StringsUniqueMapper("Loaded textures")
+    class Strings_loadedConfig : StringsUniqueMapper("Loaded config")
+    class Strings_loadedSprites : StringsUniqueMapper("Loaded sprites")
+    class Strings_loadedWordpack : StringsUniqueMapper("Loaded wordpack")
+    class Strings_loadedInterfaces : StringsUniqueMapper("Loaded interfaces")
+    class Strings_loadingSprites : StringsUniqueMapper("Loading sprites - ")
+    class Strings_loadingConfig : StringsUniqueMapper("Loading config - ")
+    class Strings_loadingTextures : StringsUniqueMapper("Loading textures - ")
+    class Strings_loadingWordpack : StringsUniqueMapper("Loading wordpack - ")
+    class Strings_loadingInterfaces : StringsUniqueMapper("Loading interfaces - ")
     @SinceVersion(141)
-    class Strings_LOADING_WORLD_MAP : StringsUniqueMapper("Loading world map - ")
+    class Strings_loadingWorldMap : StringsUniqueMapper("Loading world map - ")
     @SinceVersion(141)
-    class Strings_LOADED_WORLD_MAP : StringsUniqueMapper("Loaded world map")
+    class Strings_loadedWorldMap : StringsUniqueMapper("Loaded world map")
     @DependsOn(Strings::class)
-    class Strings_REMOVE_FRIEND : OrderMapper.InClassInitializer.Field(Strings::class, 1, 2) {
+    class Strings_pleaseRemoveFriend : OrderMapper.InClassInitializer.Field(Strings::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
     @DependsOn(Strings::class)
-    class Strings_REMOVE_IGNORE : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
+    class Strings_pleaseRemoveIgnore : OrderMapper.InClassInitializer.Field(Strings::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
@@ -1075,30 +1075,30 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Widget.getFont::class, EvictingHashTable::class)
-    class cachedWidgetFonts : UniqueMapper.InMethod.Field(Widget.getFont::class) {
+    class Widget_cachedFonts : UniqueMapper.InMethod.Field(Widget.getFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @DependsOn(Widget.getModel::class, EvictingHashTable::class)
-    class cachedWidgetModels : UniqueMapper.InMethod.Field(Widget.getModel::class) {
+    class Widget_cachedModels : UniqueMapper.InMethod.Field(Widget.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
     }
 
     @SinceVersion(141)
     @DependsOn(BaseVarType::class)
-    class BaseVarType_INTEGER : OrderMapper.InClassInitializer.Field(BaseVarType::class, 0, 3) {
+    class BaseVarType_integer : OrderMapper.InClassInitializer.Field(BaseVarType::class, 0, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
     @SinceVersion(141)
     @DependsOn(BaseVarType::class)
-    class BaseVarType_LONG : OrderMapper.InClassInitializer.Field(BaseVarType::class, 1, 3) {
+    class BaseVarType_long : OrderMapper.InClassInitializer.Field(BaseVarType::class, 1, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
     @SinceVersion(141)
     @DependsOn(BaseVarType::class)
-    class BaseVarType_STRING : OrderMapper.InClassInitializer.Field(BaseVarType::class, 2, 3) {
+    class BaseVarType_string : OrderMapper.InClassInitializer.Field(BaseVarType::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BaseVarType>() }
     }
 
@@ -1330,37 +1330,37 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_PLAIN11 : OrderMapper.InClassInitializer.Field(FontName::class, 0, 6) {
+    class FontName_plain11 : OrderMapper.InClassInitializer.Field(FontName::class, 0, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_PLAIN12 : OrderMapper.InClassInitializer.Field(FontName::class, 1, 6) {
+    class FontName_plain12 : OrderMapper.InClassInitializer.Field(FontName::class, 1, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_BOLD12 : OrderMapper.InClassInitializer.Field(FontName::class, 2, 6) {
+    class FontName_bold12 : OrderMapper.InClassInitializer.Field(FontName::class, 2, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_VERDANA11 : OrderMapper.InClassInitializer.Field(FontName::class, 3, 6) {
+    class FontName_verdana11 : OrderMapper.InClassInitializer.Field(FontName::class, 3, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_VERDANA13 : OrderMapper.InClassInitializer.Field(FontName::class, 4, 6) {
+    class FontName_verdana13 : OrderMapper.InClassInitializer.Field(FontName::class, 4, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
     @DependsOn(FontName::class)
-    class FontName_VERDANA15 : OrderMapper.InClassInitializer.Field(FontName::class, 5, 6) {
+    class FontName_verdana15 : OrderMapper.InClassInitializer.Field(FontName::class, 5, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
@@ -1411,44 +1411,44 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(Font::class, FontName_PLAIN11::class)
+    @DependsOn(Font::class, FontName_plain11::class)
     class fontPlain11 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_PLAIN11>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_plain11>().id }
                 .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(Font::class, FontName_PLAIN12::class)
+    @DependsOn(Font::class, FontName_plain12::class)
     class fontPlain12 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_PLAIN12>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_plain12>().id }
                 .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(Font::class, FontName_BOLD12::class)
+    @DependsOn(Font::class, FontName_bold12::class)
     class fontBold12 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_BOLD12>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_bold12>().id }
                 .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == type<Font>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(FontName_VERDANA11::class, FontName::class)
+    @DependsOn(FontName_verdana11::class, FontName::class)
     class fontNameVerdana11 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA11>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_verdana11>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(FontName_VERDANA13::class, FontName::class)
+    @DependsOn(FontName_verdana13::class, FontName::class)
     class fontNameVerdana13 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA13>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_verdana13>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(FontName_VERDANA15::class, FontName::class)
+    @DependsOn(FontName_verdana15::class, FontName::class)
     class fontNameVerdana15 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_VERDANA15>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<FontName_verdana15>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == type<FontName>() }
     }
 
@@ -1749,9 +1749,9 @@ class Client : IdentityMapper.Class() {
     }
 
     // nullable, includes color tags
-    @DependsOn(Strings_USE::class)
+    @DependsOn(Strings_use::class)
     class lastSelectedItemName : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_USE>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_use>().id }
                 .nextIn(4) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
     }
 
@@ -1778,27 +1778,57 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Track>() }
     }
 
-    @DependsOn(Strings_THIS_IS_A_PVP_WORLD::class)
+    @DependsOn(Strings_thisIsAPvpWorld::class)
     class loginResponse1 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_THIS_IS_A_PVP_WORLD>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_thisIsAPvpWorld>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(Strings_PLAYERS_CAN_ATTACK_EACH_OTHER::class)
+    @DependsOn(Strings_playersCanAttackEachOther::class)
     class loginResponse2 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_PLAYERS_CAN_ATTACK_EACH_OTHER>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_playersCanAttackEachOther>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(Strings_ALMOST_EVERYWHERE::class)
+    @DependsOn(Strings_almostEverywhere::class)
     class loginResponse3 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_ALMOST_EVERYWHERE>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_almostEverywhere>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(Strings_WARNING::class)
+    @DependsOn(Strings_warning::class)
     class loginResponse0 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_WARNING>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_warning>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(getObjectDefinition::class, AbstractIndexCache::class)
+    class ObjectDefinition_indexCache : UniqueMapper.InMethod.Field(getObjectDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(getItemDefinition::class, AbstractIndexCache::class)
+    class ItemDefinition_indexCache : UniqueMapper.InMethod.Field(getItemDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(getNpcDefinition::class, AbstractIndexCache::class)
+    class NpcDefinition_indexCache : UniqueMapper.InMethod.Field(getNpcDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(getKitDefinition::class, AbstractIndexCache::class)
+    class KitDefinition_indexCache : UniqueMapper.InMethod.Field(getKitDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(getSpotAnimationDefinition::class, AbstractIndexCache::class)
+    class SpotAnimationDefinition_indexCache : UniqueMapper.InMethod.Field(getSpotAnimationDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(getSequenceDefinition::class, AbstractIndexCache::class)
+    class SequenceDefinition_indexCache : UniqueMapper.InMethod.Field(getSequenceDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
 }

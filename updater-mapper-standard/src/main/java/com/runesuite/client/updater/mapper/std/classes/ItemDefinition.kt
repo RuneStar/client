@@ -12,8 +12,8 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Type
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 
 @DependsOn(DualNode::class)
 class ItemDefinition : IdentityMapper.Class() {
@@ -41,15 +41,20 @@ class ItemDefinition : IdentityMapper.Class() {
 
     @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
-                .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 16 } }
+                .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 16 } }
     }
 
     @DependsOn(Buffer::class)
     class readNext : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
-                .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 16 } }
+                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 16 } }
+    }
+
+    @DependsOn(Client.getItemDefinition::class)
+    class id : OrderMapper.InMethod.Field(Client.getItemDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<ItemDefinition>() }
     }
 }

@@ -2,6 +2,7 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
+import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
@@ -9,9 +10,10 @@ import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.extensions.withDimensions
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
+import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Type
+import org.objectweb.asm.Type.*
+import org.objectweb.asm.Opcodes.*
 
 @DependsOn(DualNode::class, NpcDefinition::class)
 class ObjectDefinition : IdentityMapper.Class() {
@@ -32,15 +34,20 @@ class ObjectDefinition : IdentityMapper.Class() {
 
     @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
-                .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 23 } }
+                .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 23 } }
     }
 
     @DependsOn(Buffer::class)
     class readNext : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
-                .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 23 } }
+                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 23 } }
+    }
+
+    @DependsOn(Client.getObjectDefinition::class)
+    class id : OrderMapper.InMethod.Field(Client.getObjectDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<ObjectDefinition>() }
     }
 }
