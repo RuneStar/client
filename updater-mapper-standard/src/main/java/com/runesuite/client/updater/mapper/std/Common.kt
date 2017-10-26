@@ -1,16 +1,14 @@
 package com.runesuite.client.updater.mapper.std
 
-import com.runesuite.client.updater.mapper.std.classes.IndexCache
-import com.runesuite.client.updater.mapper.std.classes.Client
-import com.runesuite.client.updater.mapper.std.classes.Strings
-import com.runesuite.mapper.StaticOrderMapper
-import com.runesuite.mapper.UniqueMapper
+import com.runesuite.client.updater.mapper.std.classes.*
+import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.next
+import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
+import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
 abstract class StringsUniqueMapper(string: String) : UniqueMapper.InClassInitializer.Field(Strings::class) {
@@ -22,4 +20,10 @@ abstract class StringsUniqueMapper(string: String) : UniqueMapper.InClassInitial
 abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order) {
     override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.newIndexCache>().id }
             .next { it.opcode == PUTSTATIC && it.fieldType == type<IndexCache>() }
+}
+
+//@DependsOn(EvictingHashTable::class)
+abstract class CachedDefinitionMapper(classMapper: KClass<out Mapper<Class2>>) : StaticUniqueMapper.Field() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == context.classes.getValue(classMapper).type }
+            .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
 }

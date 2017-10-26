@@ -1,6 +1,7 @@
 package com.runesuite.client.updater.mapper.std.classes
 
 import com.hunterwb.kxtra.lang.list.startsWith
+import com.runesuite.client.updater.mapper.std.CachedDefinitionMapper
 import com.runesuite.client.updater.mapper.std.IndexCacheFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
 import com.runesuite.mapper.*
@@ -52,6 +53,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<NpcDefinition>() }
     }
 
+    @SinceVersion(141)
+    @DependsOn(OverlayDefinition::class)
+    class getOverlayDefinition : StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<OverlayDefinition>() }
+    }
+
 //    @MethodParameters("id")
 //    @DependsOn(HealthBarDefinition::class)
 //    class getHealthBarDefinition : StaticMethod() {
@@ -62,6 +69,12 @@ class Client : IdentityMapper.Class() {
     class getKitDefinition : StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<KitDefinition>() }
     }
+
+//    @SinceVersion(148)
+//    @DependsOn(EnumDefinition::class)
+//    class getEnumDefinition : StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<EnumDefinition>() }
+//    }
 
     @DependsOn(SpotAnimationDefinition::class)
     class getSpotAnimationDefinition : StaticMethod() {
@@ -503,54 +516,37 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(NpcDefinition::class, EvictingHashTable::class)
-    class NpcDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<NpcDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class NpcDefinition_cached : CachedDefinitionMapper(NpcDefinition::class)
+
+    @DependsOn(EnumDefinition::class, EvictingHashTable::class)
+    class EnumDefinition_cached : CachedDefinitionMapper(EnumDefinition::class)
 
     @DependsOn(Sprite::class, EvictingHashTable::class)
-    class Sprite_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<Sprite>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class Sprite_cached : CachedDefinitionMapper(Sprite::class)
 
     @DependsOn(KitDefinition::class, EvictingHashTable::class)
-    class KitDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<KitDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class KitDefinition_cached : CachedDefinitionMapper(KitDefinition::class)
+
+    @SinceVersion(141)
+    @DependsOn(OverlayDefinition::class, EvictingHashTable::class)
+    class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
 
     @DependsOn(SpotAnimationDefinition::class, EvictingHashTable::class)
-    class SpotAnimationDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SpotAnimationDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class SpotAnimationDefinition_cached : CachedDefinitionMapper(SpotAnimationDefinition::class)
 
     @DependsOn(ItemDefinition::class, EvictingHashTable::class)
-    class ItemDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ItemDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class ItemDefinition_cached : CachedDefinitionMapper(ItemDefinition::class)
 
     @DependsOn(VarbitDefinition::class, EvictingHashTable::class)
-    class VarbitDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<VarbitDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class VarbitDefinition_cached : CachedDefinitionMapper(VarbitDefinition::class)
 
     @DependsOn(SequenceDefinition::class, EvictingHashTable::class)
-    class SequenceDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<SequenceDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class SequenceDefinition_cached : CachedDefinitionMapper(SequenceDefinition::class)
 
     @DependsOn(ObjectDefinition::class, EvictingHashTable::class)
-    class ObjectDefinition_cached : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ObjectDefinition>() }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
-    }
+    class ObjectDefinition_cached : CachedDefinitionMapper(ObjectDefinition::class)
 
-    @DependsOn(GzipDecompressor::class)
+    @DependsOn(GzipDecompressor::class, EvictingHashTable::class)
     class gzipDecompressor : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<GzipDecompressor>() }
     }
@@ -893,10 +889,10 @@ class Client : IdentityMapper.Class() {
     }
 
 //    @SinceVersion(145)
-//    @DependsOn(AxisAlignedBoundingBox::class)
+//    @DependsOn(BoundingBox3D::class)
 //    class addAxisAlignedBoundingBox : IdentityMapper.StaticMethod() {
 //        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-//                .and { it.instructions.any { it.isMethod && it.methodOwner == type<AxisAlignedBoundingBox>() && it.methodName == "<init>" } }
+//                .and { it.instructions.any { it.isMethod && it.methodOwner == type<BoundingBox3D>() && it.methodName == "<init>" } }
 //    }
 
     @SinceVersion(141)
@@ -906,41 +902,41 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class AxisAlignedBoundingBoxDrawMode_mouseOver : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 0, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
+    @DependsOn(BoundingBox3DDrawMode::class)
+    class BoundingBox3DDrawMode_mouseOver : OrderMapper.InClassInitializer.Field(BoundingBox3DDrawMode::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BoundingBox3DDrawMode>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(AxisAlignedBoundingBoxDrawMode::class)
-    class AxisAlignedBoundingBoxDrawMode_all : OrderMapper.InClassInitializer.Field(AxisAlignedBoundingBoxDrawMode::class, 1, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AxisAlignedBoundingBoxDrawMode>() }
+    @DependsOn(BoundingBox3DDrawMode::class)
+    class BoundingBox3DDrawMode_all : OrderMapper.InClassInitializer.Field(BoundingBox3DDrawMode::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<BoundingBox3DDrawMode>() }
     }
 
     @SinceVersion(141)
-    @DependsOn(AxisAlignedBoundingBoxDrawMode::class, AxisAlignedBoundingBoxDrawMode_mouseOver::class, AxisAlignedBoundingBoxDrawMode_all::class)
-    class axisAlignedBoundingBoxDrawMode : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AxisAlignedBoundingBoxDrawMode>() }
-                .and { it != field<AxisAlignedBoundingBoxDrawMode_mouseOver>() }
-                .and { it != field<AxisAlignedBoundingBoxDrawMode_all>() }
+    @DependsOn(BoundingBox3DDrawMode::class, BoundingBox3DDrawMode_mouseOver::class, BoundingBox3DDrawMode_all::class)
+    class boundingBox3DDrawMode : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<BoundingBox3DDrawMode>() }
+                .and { it != field<BoundingBox3DDrawMode_mouseOver>() }
+                .and { it != field<BoundingBox3DDrawMode_all>() }
     }
 
     @SinceVersion(141)
-    class drawAxisAlignedBoundingBoxes : StaticUniqueMapper.Field() {
+    class drawBoundingBoxes3D : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "aabb" }
                 .nextWithin(6) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
     @SinceVersion(141)
-    @DependsOn(drawAxisAlignedBoundingBoxes::class, Model.renderAtPoint::class)
+    @DependsOn(drawBoundingBoxes3D::class, Model.renderAtPoint::class)
     class drawBoundingBoxes2D : UniqueMapper.InMethod.Field(Model.renderAtPoint::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<drawAxisAlignedBoundingBoxes>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<drawBoundingBoxes3D>().id }
                 .nextWithin(40) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
     @SinceVersion(141)
     @DependsOn(Model::class)
-    class axisAlignedBoundingBoxContainsMouse : IdentityMapper.StaticMethod() {
+    class boundingBox3DContainsMouse : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(type<Model>(), INT_TYPE, INT_TYPE, INT_TYPE) }
     }
@@ -1231,6 +1227,11 @@ class Client : IdentityMapper.Class() {
 
     class spaceLeftParenthesis : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " (" }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    class trueString : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "true" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
@@ -1822,6 +1823,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
 
+    @SinceVersion(141)
+    @DependsOn(getOverlayDefinition::class, AbstractIndexCache::class)
+    class OverlayDefinition_indexCache : UniqueMapper.InMethod.Field(getOverlayDefinition::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
     @DependsOn(getSpotAnimationDefinition::class, AbstractIndexCache::class)
     class SpotAnimationDefinition_indexCache : UniqueMapper.InMethod.Field(getSpotAnimationDefinition::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
@@ -1831,4 +1838,32 @@ class Client : IdentityMapper.Class() {
     class SequenceDefinition_indexCache : UniqueMapper.InMethod.Field(getSequenceDefinition::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
+
+    @DependsOn(VarbitDefinition::class, AbstractIndexCache::class)
+    class VarbitDefinition_indexCache : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<VarbitDefinition>() }
+                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(EnumDefinition::class, AbstractIndexCache::class)
+    class EnumDefinition_indexCache : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<EnumDefinition>() }
+                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(ObjectDefinition.readNext::class)
+    class ObjectDefinition_isLowDetail : UniqueMapper.InMethod.Field(ObjectDefinition.readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class cacheDirectoryLocations : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "/tmp/" }
+                .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == Array<String>::class.type }
+    }
+
+//    @DependsOn(ClientPreferences.windowMode::class)
+//    class isResizable : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<ClientPreferences.windowMode>().id }
+//                .nextWithin(15) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+//    }
 }
