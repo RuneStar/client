@@ -13,28 +13,28 @@ class BoundingBoxesDebug : Plugin<BoundingBoxesDebug.Settings>() {
         if (settings.twoD.on) {
             accessor.drawBoundingBoxes2D = true
         }
-        if (settings.aabb.on) {
-            accessor.drawAxisAlignedBoundingBoxes = true
+        if (settings.threeD.on) {
+            accessor.drawBoundingBoxes3D = true
         }
-        if (settings.aabb.all) {
-            accessor.axisAlignedBoundingBoxDrawMode = accessor.axisAlignedBoundingBoxDrawMode_ALL
+        if (settings.threeD.all) {
+            accessor.boundingBox3DDrawMode = accessor.boundingBox3DDrawMode_all
         } else {
-            accessor.axisAlignedBoundingBoxDrawMode = accessor.axisAlignedBoundingBoxDrawMode_MOUSE_OVER
+            accessor.boundingBox3DDrawMode = accessor.boundingBox3DDrawMode_mouseOver
         }
     }
 
     override fun stop() {
         super.stop()
         accessor.drawBoundingBoxes2D = false
-        accessor.drawAxisAlignedBoundingBoxes = false
+        accessor.drawBoundingBoxes3D = false
     }
 
     class Settings : PluginSettings() {
 
-        val aabb = Aabb()
+        val threeD = ThreeD()
         val twoD = TwoD()
 
-        class Aabb {
+        class ThreeD {
             val on = true
             val all = true
         }
