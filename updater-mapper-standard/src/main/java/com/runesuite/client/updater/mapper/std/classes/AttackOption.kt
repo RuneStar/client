@@ -11,7 +11,7 @@ import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Type.INT_TYPE
 
 @DependsOn(Enumerated::class)
-class ActionPriority : IdentityMapper.Class() {
+class AttackOption : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.instanceFields.size == 1 }
             .and { it.interfaces.contains(type<Enumerated>()) }

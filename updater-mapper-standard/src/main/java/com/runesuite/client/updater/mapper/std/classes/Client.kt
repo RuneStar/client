@@ -861,24 +861,24 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.none { it.opcode in setOf(ICONST_0, ICONST_1, ISUB) } }
     }
 
-    @DependsOn(ActionPriority::class)
-    class ActionPriority_0 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 0, 4) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    @DependsOn(AttackOption::class)
+    class AttackOption_dependsOnCombatLevels : OrderMapper.InClassInitializer.Field(AttackOption::class, 0, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
     }
 
-    @DependsOn(ActionPriority::class)
-    class ActionPriority_1 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 1, 4) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    @DependsOn(AttackOption::class)
+    class AttackOption_alwaysRightClick : OrderMapper.InClassInitializer.Field(AttackOption::class, 1, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
     }
 
-    @DependsOn(ActionPriority::class)
-    class ActionPriority_2 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 2, 4) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    @DependsOn(AttackOption::class)
+    class AttackOption_leftClickWhereAvailable : OrderMapper.InClassInitializer.Field(AttackOption::class, 2, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
     }
 
-    @DependsOn(ActionPriority::class)
-    class ActionPriority_3 : OrderMapper.InClassInitializer.Field(ActionPriority::class, 3, 4) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<ActionPriority>() }
+    @DependsOn(AttackOption::class)
+    class AttackOption_hidden : OrderMapper.InClassInitializer.Field(AttackOption::class, 3, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
     }
 
     @SinceVersion(141)
@@ -1866,4 +1866,16 @@ class Client : IdentityMapper.Class() {
 //        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<ClientPreferences.windowMode>().id }
 //                .nextWithin(15) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
 //    }
+
+    @DependsOn(AttackOption::class, AttackOption_dependsOnCombatLevels::class)
+    class playerAttackOption : StaticOrderMapper.Field(0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<AttackOption_dependsOnCombatLevels>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
+    }
+
+    @DependsOn(AttackOption::class, AttackOption_dependsOnCombatLevels::class)
+    class npcAttackOption : StaticOrderMapper.Field(1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<AttackOption_dependsOnCombatLevels>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
+    }
 }
