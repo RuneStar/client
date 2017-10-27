@@ -59,6 +59,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<OverlayDefinition>() }
     }
 
+    @DependsOn(UnderlayDefinition::class)
+    class getUnderlayDefinition : StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<UnderlayDefinition>() }
+    }
+
 //    @MethodParameters("id")
 //    @DependsOn(HealthBarDefinition::class)
 //    class getHealthBarDefinition : StaticMethod() {
@@ -530,6 +535,9 @@ class Client : IdentityMapper.Class() {
     @SinceVersion(141)
     @DependsOn(OverlayDefinition::class, EvictingHashTable::class)
     class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
+
+    @DependsOn(UnderlayDefinition::class, EvictingHashTable::class)
+    class UnderlayDefinition_cached : CachedDefinitionMapper(UnderlayDefinition::class)
 
     @DependsOn(SpotAnimationDefinition::class, EvictingHashTable::class)
     class SpotAnimationDefinition_cached : CachedDefinitionMapper(SpotAnimationDefinition::class)
@@ -1848,6 +1856,12 @@ class Client : IdentityMapper.Class() {
     @DependsOn(EnumDefinition::class, AbstractIndexCache::class)
     class EnumDefinition_indexCache : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<EnumDefinition>() }
+                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(UnderlayDefinition::class, AbstractIndexCache::class)
+    class UnderlayDefinition_indexCache : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<UnderlayDefinition>() }
                 .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
 
