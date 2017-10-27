@@ -1892,4 +1892,14 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<AttackOption_dependsOnCombatLevels>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == type<AttackOption>() }
     }
+
+    @DependsOn(Model.method0::class)
+    class drawObjectGeometry2D : OrderMapper.InMethod.Field(Model.method0::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Model.renderAtPoint::class)
+    class useBoundingBoxes3D : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }
