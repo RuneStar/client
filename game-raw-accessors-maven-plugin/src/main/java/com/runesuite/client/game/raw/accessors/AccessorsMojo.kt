@@ -132,7 +132,7 @@ class AccessorsMojo : AbstractMojo() {
             val type = Type.getType(it.descriptor)
             val baseType = type.baseType
             if (baseType.className in TYPE_TRANSFORMS) {
-                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(type.dimensions))
+                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(type.arrayDimensions))
             } else {
                 ClassLoader.getSystemClassLoader().loadClassFromDescriptor(type.descriptor).simpleName
             }
