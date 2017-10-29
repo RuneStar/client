@@ -8,8 +8,6 @@ class GroundItem(override val accessor: XGroundItem, val location: com.runesuite
 
     override val position get() = location.center
 
-    override val model: com.runesuite.client.game.api.Model? get() = accessor.model?.let { com.runesuite.client.game.api.Model(position, orientation, it) }
-
     val id get() = accessor.id
 
     val quantity get() = accessor.quantity

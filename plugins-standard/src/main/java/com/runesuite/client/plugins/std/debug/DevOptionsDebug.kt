@@ -4,7 +4,7 @@ import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.plugins.Plugin
 import com.runesuite.client.plugins.PluginSettings
 
-class DevOptionDebug : Plugin<DevOptionDebug.Settings>() {
+class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
@@ -21,7 +21,7 @@ class DevOptionDebug : Plugin<DevOptionDebug.Settings>() {
         } else {
             accessor.boundingBox3DDrawMode = accessor.boundingBox3DDrawMode_mouseOver
         }
-        if (settings.displyFps) {
+        if (settings.displayFps) {
             accessor.displayFps = true
         }
         if (!settings.useBoundingBoxes3D) {
@@ -29,6 +29,9 @@ class DevOptionDebug : Plugin<DevOptionDebug.Settings>() {
         }
         if (settings.boundingBoxes2D.drawObjectGeometry) {
             accessor.drawObjectGeometry2D = true
+        }
+        if (settings.numberMenuOptions) {
+            accessor.numberMenuOptions = true
         }
     }
 
@@ -39,14 +42,16 @@ class DevOptionDebug : Plugin<DevOptionDebug.Settings>() {
         accessor.displayFps = false
         accessor.useBoundingBoxes3D = true
         accessor.drawObjectGeometry2D = false
+        accessor.numberMenuOptions = false
     }
 
     class Settings : PluginSettings() {
 
         val boundingBoxes3D = ThreeD()
         val boundingBoxes2D = TwoD()
-        val displyFps = false
+        val displayFps = false
         val useBoundingBoxes3D = true
+        val numberMenuOptions = false
 
         class ThreeD {
             val draw = false

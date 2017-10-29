@@ -396,14 +396,14 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    class sineTable : StaticUniqueMapper.Field() {
+    class Rasterizer3D_sine : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.method.isClassInitializer }
                 .and { it.opcode == INVOKESTATIC && it.methodId == Math::sin.id }
                 .prevWithin(7) { it.opcode == LDC && it.ldcCst == 65536.0 }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    class cosineTable : StaticUniqueMapper.Field() {
+    class Rasterizer3D_cosine : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.method.isClassInitializer }
                 .and { it.opcode == INVOKESTATIC && it.methodId == Math::cos.id }
                 .prevWithin(7) { it.opcode == LDC && it.ldcCst == 65536.0 }
@@ -980,9 +980,12 @@ class Client : IdentityMapper.Class() {
     class Strings_walkHere : StringsUniqueMapper("Walk here")
     class Strings_cancel : StringsUniqueMapper("Cancel")
     class Strings_take : StringsUniqueMapper("Take")
+    class Strings_close : StringsUniqueMapper("Close")
     class Strings_examine : StringsUniqueMapper("Examine")
     class Strings_attack : StringsUniqueMapper("Attack")
     class Strings_drop : StringsUniqueMapper("Drop")
+    class Strings_unableToFind : StringsUniqueMapper("Unable to find ")
+    class Strings_fromYourFriendListFirst : StringsUniqueMapper(" from your friend list first")
     class Strings_ok : StringsUniqueMapper("Ok")
     class Strings_select : StringsUniqueMapper("Select")
     class Strings_continue : StringsUniqueMapper("Continue")
@@ -990,6 +993,8 @@ class Client : IdentityMapper.Class() {
     class Strings_level : StringsUniqueMapper("level-")
     class Strings_skill : StringsUniqueMapper("skill-")
     class Strings_use : StringsUniqueMapper("Use")
+    class Strings_yourIgnoreListIsFull : StringsUniqueMapper("Your ignore list is full. Max of 100 for free users, and 400 for members")
+    class Strings_yourFriendListIsFull : StringsUniqueMapper("Your friend list is full. Max of 200 for free users, and 400 for members")
     class Strings_connectingToServer : StringsUniqueMapper("Connecting to server...")
     class Strings_login : StringsUniqueMapper("Login: ")
     class Strings_password : StringsUniqueMapper("Password: ")
@@ -1586,19 +1591,19 @@ class Client : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class currentTimeMillis : IdentityMapper.StaticMethod() {
+    class currentTimeMs : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == LONG_TYPE }
                 .and { it.arguments.size in 0..1 }
                 .and { Modifier.isSynchronized(it.access) }
     }
 
-    @DependsOn(currentTimeMillis::class)
-    class currentTimeMillisLast : OrderMapper.InMethod.Field(currentTimeMillis::class, 0) {
+    @DependsOn(currentTimeMs::class)
+    class currentTimeMsLast : OrderMapper.InMethod.Field(currentTimeMs::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 
-    @DependsOn(currentTimeMillis::class)
-    class currentTimeMillisOffset : OrderMapper.InMethod.Field(currentTimeMillis::class, 1) {
+    @DependsOn(currentTimeMs::class)
+    class currentTimeMsOffset : OrderMapper.InMethod.Field(currentTimeMs::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC }
     }
 
@@ -1901,5 +1906,178 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Model.renderAtPoint::class)
     class useBoundingBoxes3D : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Strings_yourIgnoreListIsFull::class)
+    class ignoreListCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourIgnoreListIsFull>().id }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Strings_yourFriendListIsFull::class)
+    class friendsListCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourFriendListIsFull>().id }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @SinceVersion(154)
+    @DependsOn(username::class)
+    class isUsernameRemembered : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<username>().id }
+                .next { it.opcode == ICONST_1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(garbageCollector::class)
+    class garbageCollectorLastCheckTimeMs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<garbageCollector>().id }
+                .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return if (instruction.jar.contains(instruction.fieldId)) {
+                instruction.jar[instruction.fieldId]
+            } else {
+                val superType = instruction.jar[instruction.fieldOwner].superType
+                instruction.jar[superType to instruction.fieldName]
+            }
+        }
+    }
+
+    @DependsOn(garbageCollector::class)
+    class garbageCollectorLastCollectionTime : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<garbageCollector>().id }
+                .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
+                .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return if (instruction.jar.contains(instruction.fieldId)) {
+                instruction.jar[instruction.fieldId]
+            } else {
+                val superType = instruction.jar[instruction.fieldOwner].superType
+                instruction.jar[superType to instruction.fieldName]
+            }
+        }
+    }
+
+    @DependsOn(Model.renderAtPoint::class)
+    class modelViewportXs : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Model.renderAtPoint::class)
+    class modelViewportYs : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_method1 : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.arguments.isEmpty() }
+                .and { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod } }
+    }
+
+    @MethodParameters("xStart", "yStart", "xEnd", "yEnd")
+    @DependsOn(Rasterizer3D_method1::class)
+    class Rasterizer3D_setClip : UniqueMapper.InMethod.Method(Rasterizer3D_method1::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @DependsOn(Rasterizer3D_setClip::class)
+    class Rasterizer3D_clipWidth : OrderMapper.InMethod.Field(Rasterizer3D_setClip::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_setClip::class)
+    class Rasterizer3D_clipHeight : OrderMapper.InMethod.Field(Rasterizer3D_setClip::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    // offsets into R2D.pixels for clip
+    @DependsOn(Rasterizer3D_setClip::class)
+    class Rasterizer3D_rowOffsets : UniqueMapper.InMethod.Field(Rasterizer3D_setClip::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Rasterizer3D_setClip::class)
+    class Rasterizer3D_method3 : OrderMapper.InMethod.Method(Rasterizer3D_setClip::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters("n")
+    @DependsOn(Rasterizer3D_setClip::class)
+    class nextPowerOfTwo : OrderMapper.InMethod.Method(Rasterizer3D_setClip::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipMidX : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipMidY : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipNegativeMidX : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipMidX2 : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipNegativeMidY : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(Rasterizer3D_method3::class)
+    class Rasterizer3D_clipMidY2 : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    }
+
+    @MethodParameters("x", "y", "width", "height", "color")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_fillRectangle : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.returnType == VOID_TYPE }
+                .and { it.arguments.size == 5 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.none { it.opcode == BIPUSH || it.isMethod } }
+    }
+
+    @DependsOn(Model.rotateZ::class)
+    class Model_sine : OrderMapper.InMethod.Field(Model.rotateZ::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Model.rotateZ::class)
+    class Model_cosine : OrderMapper.InMethod.Field(Model.rotateZ::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(EvictingHashTable::class, NpcDefinition.getModel::class)
+    class NpcDefinition_cachedModels : UniqueMapper.InMethod.Field(NpcDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+    }
+
+    @DependsOn(AbstractIndexCache::class, NpcDefinition.getModel::class)
+    class NpcDefinition_modelIndexCache : UniqueMapper.InMethod.Field(NpcDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @MethodParameters("strings")
+    class prependIndices : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == Array<String>::class.type }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(Array<String>::class.type) }
+    }
+
+    @DependsOn(prependIndices::class)
+    class numberMenuOptions : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<prependIndices>().id }
+                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 }

@@ -20,7 +20,4 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
     override val orientation get() = Angle(accessor.orientation)
 
     val overheadText: String? get() = accessor.overheadMessage
-
-    override val model: Model?
-        get() = accessor.model?.let { Model(position.copy(height = 0), orientation, it) }
 }
