@@ -6,7 +6,6 @@ import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
-import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -79,7 +78,7 @@ class Model : IdentityMapper.Class() {
 
     // either xz or xyz
     @DependsOn(Model.renderAtPoint::class)
-    class diagonal : OrderMapper.InMethod.Field(Model.renderAtPoint::class, 1) {
+    class xzRadius : OrderMapper.InMethod.Field(Model.renderAtPoint::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -96,8 +95,9 @@ class Model : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<Model>() && it.methodType.argumentTypes.size in 0..1 }
     }
 
+    @MethodParameters()
     @DependsOn(rotateZ::class)
-    class resetCalcs : UniqueMapper.InMethod.Method(rotateZ::class) {
+    class resetBounds : UniqueMapper.InMethod.Method(rotateZ::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
@@ -108,5 +108,31 @@ class Model : IdentityMapper.Class() {
                 .and { it.arguments.size in 3..4 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.count { it.opcode == SIPUSH && it.intOperand == 128 } == 3 }
+    }
+
+    @MethodParameters()
+    @DependsOn(renderAtPoint::class)
+    class calculateBoundsCylinder : OrderMapper.InMethod.Method(renderAtPoint::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @DependsOn(renderAtPoint::class)
+    class boundsType : OrderMapper.InMethod.Field(renderAtPoint::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundsCylinder::class)
+    class bottomY : OrderMapper.InMethod.Field(calculateBoundsCylinder::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundsCylinder::class)
+    class radius : OrderMapper.InMethod.Field(calculateBoundsCylinder::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundsCylinder::class)
+    class diameter : OrderMapper.InMethod.Field(calculateBoundsCylinder::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

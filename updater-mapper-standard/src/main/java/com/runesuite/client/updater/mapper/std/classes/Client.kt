@@ -2080,4 +2080,44 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<prependIndices>().id }
                 .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @DependsOn(ItemDefinition.getModel::class, EvictingHashTable::class)
+    class ItemDefinition_cachedModels : OrderMapper.InMethod.Field(ItemDefinition.getModel::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+    }
+
+    @DependsOn(AbstractIndexCache::class, ItemDefinition.getModel::class)
+    class ItemDefinition_modelIndexCache : UniqueMapper.InMethod.Field(ItemDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @MethodParameters("x", "y", "width", "height", "rgb", "alpha")
+    @DependsOn(Rasterizer2D::class)
+    class Rasterizer2D_drawRectangleAlpha : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == INVOKESTATIC } == 4 }
+    }
+
+    @MethodParameters("x", "y", "length", "rgb", "alpha")
+    @DependsOn(Rasterizer2D_drawRectangleAlpha::class)
+    class Rasterizer2D_drawHorizontalLineAlpha : OrderMapper.InMethod.Method(Rasterizer2D_drawRectangleAlpha::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters("x", "y", "length", "rgb", "alpha")
+    @DependsOn(Rasterizer2D_drawRectangleAlpha::class)
+    class Rasterizer2D_drawVerticalLineAlpha : OrderMapper.InMethod.Method(Rasterizer2D_drawRectangleAlpha::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @DependsOn(EvictingHashTable::class, SpotAnimationDefinition.getModel::class)
+    class SpotAnimationDefinition_cachedModels : UniqueMapper.InMethod.Field(SpotAnimationDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+    }
+
+    @DependsOn(AbstractIndexCache::class, SpotAnimationDefinition.getModel::class)
+    class SpotAnimationDefinition_modelIndexCache : UniqueMapper.InMethod.Field(SpotAnimationDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
 }
