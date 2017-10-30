@@ -45,11 +45,10 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
     }
 
-    // yaw, in degrees, 0, 180, 270
-    @DependsOn(readNext::class)
-    class orientation : UniqueMapper.InMethod.Field(readNext::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 6 }
-                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    // in degrees, 0, 180, 270
+    @DependsOn(SpotAnimationDefinition.getModel::class)
+    class orientation : OrderMapper.InMethod.Field(SpotAnimationDefinition.getModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(readNext::class)

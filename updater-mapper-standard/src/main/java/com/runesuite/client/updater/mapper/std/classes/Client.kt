@@ -2120,4 +2120,10 @@ class Client : IdentityMapper.Class() {
     class SpotAnimationDefinition_modelIndexCache : UniqueMapper.InMethod.Field(SpotAnimationDefinition.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
+
+    @MethodParameters("id")
+    @DependsOn(ObjectDefinition.transform::class)
+    class getVarbit : OrderMapper.InMethod.Method(ObjectDefinition.transform::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
 }

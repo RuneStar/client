@@ -3,11 +3,10 @@ package com.runesuite.client.updater.mapper.std.classes
 import com.hunterwb.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
@@ -49,5 +48,25 @@ class ObjectDefinition : IdentityMapper.Class() {
     @DependsOn(Client.getObjectDefinition::class)
     class id : OrderMapper.InMethod.Field(Client.getObjectDefinition::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<ObjectDefinition>() }
+    }
+
+    @MethodParameters()
+    class transform : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<ObjectDefinition>() }
+    }
+
+    @DependsOn(transform::class)
+    class transforms : UniqueMapper.InMethod.Field(transform::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(transform::class)
+    class transformVarbit : OrderMapper.InMethod.Field(transform::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(transform::class)
+    class transformConfigId : OrderMapper.InMethod.Field(transform::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 }

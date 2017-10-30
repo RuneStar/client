@@ -5,10 +5,12 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
+import com.runesuite.mapper.nextWithin
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
@@ -60,5 +62,31 @@ class NpcDefinition : IdentityMapper.Class() {
     @DependsOn(NpcDefinition.getModel::class)
     class yScale : OrderMapper.InMethod.Field(NpcDefinition.getModel::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters()
+    class transform : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<NpcDefinition>() }
+    }
+
+    @DependsOn(transform::class)
+    class transforms : UniqueMapper.InMethod.Field(transform::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(transform::class)
+    class transformVarbit : OrderMapper.InMethod.Field(transform::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(transform::class)
+    class transformConfigId : OrderMapper.InMethod.Field(transform::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(readNext::class)
+    class combatLevel : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 95 }
+                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
