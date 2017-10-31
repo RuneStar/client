@@ -2,14 +2,13 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
-import com.runesuite.mapper.extensions.and
-import com.runesuite.mapper.extensions.baseType
-import com.runesuite.mapper.extensions.predicateOf
-import com.runesuite.mapper.extensions.withDimensions
+import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
+import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.INT_TYPE
 import java.awt.image.TileObserver
@@ -64,5 +63,10 @@ class Tile : IdentityMapper.Class() {
     @DependsOn(TileModel::class)
     class model : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<TileModel>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class gameObjectsCount : UniqueMapper.InMethod.Field(Scene.newGroundItemPile::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 }

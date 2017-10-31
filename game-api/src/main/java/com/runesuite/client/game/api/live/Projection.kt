@@ -49,8 +49,8 @@ interface Projection {
             var y1 = position.localY
             var z1 = scene.getTileHeight(tileHeight) - position.height
             x1 -= camera.x
-            y1 -= camera.y
-            z1 -= camera.z
+            y1 -= camera.z
+            z1 -= camera.y
             val sinY = camera.pitch.sinInternal
             val cosY = camera.pitch.cosInternal
             val sinX = camera.yaw.sinInternal

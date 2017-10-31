@@ -28,7 +28,7 @@ class TestPlugin : DisposablePlugin<PluginSettings>() {
             Npcs.all.forEach { n ->
                 n.definition.let { def ->
                     val pt = n.position.toScreen()
-                    
+
                 }
             }
         })

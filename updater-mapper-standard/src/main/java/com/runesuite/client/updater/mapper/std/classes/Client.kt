@@ -193,12 +193,12 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(worldToScreen::class)
-    class cameraZ : OrderMapper.InMethod.Field(worldToScreen::class, 2) {
+    class cameraY : OrderMapper.InMethod.Field(worldToScreen::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class cameraY : OrderMapper.InMethod.Field(worldToScreen::class, 3) {
+    class cameraZ : OrderMapper.InMethod.Field(worldToScreen::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -936,8 +936,8 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(drawBoundingBoxes3D::class, Model.renderAtPoint::class)
-    class drawBoundingBoxes2D : UniqueMapper.InMethod.Field(Model.renderAtPoint::class) {
+    @DependsOn(drawBoundingBoxes3D::class, Model.draw::class)
+    class drawBoundingBoxes2D : UniqueMapper.InMethod.Field(Model.draw::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<drawBoundingBoxes3D>().id }
                 .nextWithin(40) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
@@ -1903,8 +1903,8 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
-    @DependsOn(Model.renderAtPoint::class)
-    class useBoundingBoxes3D : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -1) {
+    @DependsOn(Model.draw::class)
+    class useBoundingBoxes3D : OrderMapper.InMethod.Field(Model.draw::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -1957,13 +1957,13 @@ class Client : IdentityMapper.Class() {
         }
     }
 
-    @DependsOn(Model.renderAtPoint::class)
-    class modelViewportXs : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -5) {
+    @DependsOn(Model.draw::class)
+    class modelViewportXs : OrderMapper.InMethod.Field(Model.draw::class, -5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(Model.renderAtPoint::class)
-    class modelViewportYs : OrderMapper.InMethod.Field(Model.renderAtPoint::class, -6) {
+    @DependsOn(Model.draw::class)
+    class modelViewportYs : OrderMapper.InMethod.Field(Model.draw::class, -6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
@@ -2125,5 +2125,82 @@ class Client : IdentityMapper.Class() {
     @DependsOn(ObjectDefinition.transform::class)
     class getVarbit : OrderMapper.InMethod.Method(ObjectDefinition.transform::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    // no 0, yes 1
+    @DependsOn(Client.menuAction::class)
+    class isItemSelected : UniqueMapper.InMethod.Field(Client.menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 38 }
+                .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraPitchSine : OrderMapper.InMethod.Field(Scene.method1::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraPitchCosine : OrderMapper.InMethod.Field(Scene.method1::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraYawSine : OrderMapper.InMethod.Field(Scene.method1::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraYawCosine : OrderMapper.InMethod.Field(Scene.method1::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraX : OrderMapper.InMethod.Field(Scene.method1::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraY : OrderMapper.InMethod.Field(Scene.method1::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraZ : OrderMapper.InMethod.Field(Scene.method1::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraXTile : OrderMapper.InMethod.Field(Scene.method1::class, 8) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraYTile : OrderMapper.InMethod.Field(Scene.method1::class, 9) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_plane : OrderMapper.InMethod.Field(Scene.method1::class, 10) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraXTileMin : OrderMapper.InMethod.Field(Scene.method1::class, 11) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraYTileMin : OrderMapper.InMethod.Field(Scene.method1::class, 13) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraXTileMax : OrderMapper.InMethod.Field(Scene.method1::class, 15) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.method1::class)
+    class Scene_cameraYTileMax : OrderMapper.InMethod.Field(Scene.method1::class, 17) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 }

@@ -50,9 +50,9 @@ class Model : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(Entity.renderAtPoint::class)
-    class renderAtPoint : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<Entity.renderAtPoint>().mark }
+    @DependsOn(Entity.draw::class)
+    class draw : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<Entity.draw>().mark }
     }
 
     @MethodParameters("pitch")
@@ -77,8 +77,8 @@ class Model : IdentityMapper.Class() {
     }
 
     // either xz or xyz
-    @DependsOn(Model.renderAtPoint::class)
-    class xzRadius : OrderMapper.InMethod.Field(Model.renderAtPoint::class, 1) {
+    @DependsOn(Model.draw::class)
+    class xzRadius : OrderMapper.InMethod.Field(Model.draw::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -111,13 +111,13 @@ class Model : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(renderAtPoint::class)
-    class calculateBoundsCylinder : OrderMapper.InMethod.Method(renderAtPoint::class, 0) {
+    @DependsOn(draw::class)
+    class calculateBoundsCylinder : OrderMapper.InMethod.Method(draw::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
-    @DependsOn(renderAtPoint::class)
-    class boundsType : OrderMapper.InMethod.Field(renderAtPoint::class, 0) {
+    @DependsOn(draw::class)
+    class boundsType : OrderMapper.InMethod.Field(draw::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 

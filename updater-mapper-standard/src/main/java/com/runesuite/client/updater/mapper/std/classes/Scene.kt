@@ -138,4 +138,17 @@ class Scene : IdentityMapper.Class() {
     class tileHeights : OrderMapper.InConstructor.Field(Scene::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE.withDimensions(3) }
     }
+
+    class method1 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 6..7 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("plane", "x", "y", "id")
+    class getObjectFlags : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size == 4 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
 }

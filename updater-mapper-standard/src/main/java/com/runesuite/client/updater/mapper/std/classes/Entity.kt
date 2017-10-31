@@ -28,7 +28,7 @@ class Entity : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType in it.jar }
     }
 
-    class renderAtPoint : InstanceMethod() {
+    class draw : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
     }
 }

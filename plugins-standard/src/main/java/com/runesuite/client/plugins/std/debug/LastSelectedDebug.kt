@@ -24,7 +24,8 @@ class LastSelectedDebug : DisposablePlugin<PluginSettings>() {
             val strings = listOf(
                     "item: ${accessor.lastSelectedItemName}",
                     "spellAction: ${accessor.lastSelectedSpellActionName}",
-                    "spellName: ${accessor.lastSelectedSpellName}"
+                    "spellName: ${accessor.lastSelectedSpellName}",
+                    "isItemSelected: ${accessor.isItemSelected}"
             )
             strings.forEach { s ->
                 g.drawString(s, x, y)
