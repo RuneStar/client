@@ -1,6 +1,4 @@
 # updater
-
-#### Artifact contains:
  
 * hooks: the mapping between the obfuscated bytecode element names and
  their actual names. Includes other data such as field decoder multipliers and 
