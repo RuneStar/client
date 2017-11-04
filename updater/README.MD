@@ -10,13 +10,16 @@
 
 * a deobfuscated gamepack jar (~500 KB)
 
-#### Depends on:
+#### Dependencies:
 
 * [updater-common](https://github.com/RuneSuite/client/tree/master/updater-common)
 
+
+#### Build dependencies:
+
 * [general](https://github.com/RuneSuite/general)
 
-Utilites for getting the current game revision and downloading the current gamepack jar
+Utilities for getting the current game revision and downloading the current gamepack jar
 
 * [updater-deob](https://github.com/RuneSuite/client/tree/master/updater-deob)
 
