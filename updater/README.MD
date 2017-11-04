@@ -15,24 +15,14 @@
 
 #### Build dependencies:
 
-* [general](https://github.com/RuneSuite/general)
+* [general](https://github.com/RuneSuite/general) - Utilities for getting the current game revision and downloading the current gamepack jar
 
-Utilities for getting the current game revision and downloading the current gamepack jar
+* [updater-deob](https://github.com/RuneSuite/client/tree/master/updater-deob) - Does various bytecode deobfuscation, transformation, and analysis
 
-* [updater-deob](https://github.com/RuneSuite/client/tree/master/updater-deob)
+* [updater-mapper](https://github.com/RuneSuite/client/tree/master/updater-mapper) - Framework for mapping obfuscated names to their actual names 
 
-Does various bytecode deobfuscation, transformation, and analysis
+* [updater-mapper-standard](https://github.com/RuneSuite/client/tree/master/updater-mapper-standard) - Implementation of updater-mapper for Old School RuneScape
 
-* [updater-mapper](https://github.com/RuneSuite/client/tree/master/updater-mapper)
-
-Framework for mapping obfuscated names to their actual names 
-
-* [updater-mapper-standard](https://github.com/RuneSuite/client/tree/master/updater-mapper-standard)
-
-Implementation of updater-mapper for Old School RuneScape
-
-* [updater-create-maven-plugin](https://github.com/RuneSuite/client/tree/master/updater-create-maven-plugin)
-
-Downloads the current gamepack jar and generates the needed resources
+* [updater-create-maven-plugin](https://github.com/RuneSuite/client/tree/master/updater-create-maven-plugin) - Downloads the current gamepack jar and generates the needed resources
 
 #### Testing done in [updater-testing](https://github.com/RuneSuite/client/tree/master/updater-testing)

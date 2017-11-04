@@ -8,10 +8,10 @@ The executable.
 
 * [general](https://github.com/RuneSuite/general)
 
-* [gamepack](https://github.com/RuneSuite/client/tree/master/gamepack)
+* [gamepack](https://github.com/RuneSuite/client/tree/master/gamepack) - The modified gamepack
 
-* [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw)
+* [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw) - Direct access to game values
 
-* [game-api](https://github.com/RuneSuite/client/tree/master/game-api)
+* [game-api](https://github.com/RuneSuite/client/tree/master/game-api) - User friendly access to game values
 
-* [plugins](https://github.com/RuneSuite/client/tree/master/plugins)
+* [plugins](https://github.com/RuneSuite/client/tree/master/plugins) - Plugins framework

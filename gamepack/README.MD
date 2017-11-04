@@ -8,6 +8,4 @@ The gamepack jar modified to conform to [game-raw](https://github.com/RuneSuite/
 
 ## Build dependencies:
 
-* [gamepack-inject-maven-plugin](https://github.com/RuneSuite/client/tree/master/gamepack-inject-maven-plugin)
-
-Injects the [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw) interfaces into the original gamepack
+* [gamepack-inject-maven-plugin](https://github.com/RuneSuite/client/tree/master/gamepack-inject-maven-plugin) - Injects the [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw) interfaces into the original gamepack

@@ -4,10 +4,6 @@ Injects the [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw)
 
 ## Dependencies:
 
-* [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw)
+* [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw) - Provides the interfaces
 
-Provides the interfaces
-
-* [updater](https://github.com/RuneSuite/client/tree/master/updater)
-
-Provides the gamepack
+* [updater](https://github.com/RuneSuite/client/tree/master/updater) - Provides the gamepack
