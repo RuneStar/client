@@ -14,6 +14,10 @@
 
 * [updater-common](https://github.com/RuneSuite/client/tree/master/updater-common)
 
+* [general](https://github.com/RuneSuite/general)
+
+Utilites for getting the current game revision and downloading the current gamepack jar
+
 * [updater-deob](https://github.com/RuneSuite/client/tree/master/updater-deob)
 
 Does various bytecode deobfuscation, transformation, and analysis
