@@ -12,7 +12,7 @@ object Client : Wrapper() {
     override lateinit var accessor: XClient
 
     /**
-     * @return "Client"
+     * @return `"Client"`
      */
     override fun toString(): String {
         return "Client"
