@@ -12,4 +12,4 @@
 
 * [game-raw-accessors-maven-plugin](https://github.com/RuneSuite/client/tree/master/game-raw-accessors-maven-plugin)
 
-Generates all of the accessor interfaces
+Generates all of the accessor interfaces.
