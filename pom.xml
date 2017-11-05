@@ -13,6 +13,7 @@
     <name>client parent</name>
 
     <modules>
+        <module>launcher</module>
         <module>client</module>
         <module>common</module>
         <module>game-api</module>
@@ -30,7 +31,6 @@
         <module>updater-mapper-standard</module>
 
         <module>updater-testing</module>
-        <module>releaser-local-maven-plugin</module>
     </modules>
 
     <repositories>
@@ -49,6 +49,13 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>repo.runesuite.com</id>
+            <url>http://repo.runesuite.com/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <pluginRepositories>
         <pluginRepository>
@@ -261,7 +268,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -273,6 +279,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
                     <version>3.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
                 </plugin>
             </plugins>
         </pluginManagement>

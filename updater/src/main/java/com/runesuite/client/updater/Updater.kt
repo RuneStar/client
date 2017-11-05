@@ -30,7 +30,3 @@ val GAMEPACK_DEOB: URL = classLoader.getResource("gamepack.deob.jar")
  */
 @JvmField
 val GAMEPACK_CLEAN: URL = classLoader.getResource("gamepack.clean.jar")
-
-fun main(args: Array<String>) {
-    ClassLoader.getPlatformClassLoader()
-}
