@@ -6,27 +6,16 @@ import com.runesuite.client.common.*
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory
 import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.VersionRangeRequest
-import org.eclipse.aether.spi.connector.RepositoryConnectorFactory
-import org.eclipse.aether.spi.connector.transport.TransporterFactory
-import org.eclipse.aether.transport.file.FileTransporterFactory
-import org.eclipse.aether.transport.http.HttpTransporterFactory
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
-private val locator =  MavenRepositorySystemUtils.newServiceLocator().apply {
-    addService(TransporterFactory::class.java, FileTransporterFactory::class.java)
-    addService(TransporterFactory::class.java, HttpTransporterFactory::class.java)
-    addService(RepositoryConnectorFactory::class.java, BasicRepositoryConnectorFactory::class.java)
-}
-
-private val repoSystem = locator.getService(RepositorySystem::class.java)
+private val repoSystem = MavenRepositorySystemUtils.newServiceLocator().getService(RepositorySystem::class.java)
 
 private val localRepo = LocalRepository(Paths.get(System.getProperty("user.home"), ".m2", "repository").toFile())
 
@@ -60,5 +49,7 @@ private fun updateArtifactLocalRepo(artifactId: String): Path {
     val version = repoSystem.resolveVersionRange(session, versionRangeRequest).highestVersion.toString()
     val artifact2 = DefaultArtifact(GROUP_ID, artifactId, "", "jar", version)
     val artifactRequest = ArtifactRequest(artifact2, listOf(remoteRepo), null)
-    return repoSystem.resolveArtifact(session, artifactRequest).artifact.file.toPath()
+    val artifactResponse = repoSystem.resolveArtifact(session, artifactRequest)
+    println(artifactResponse)
+    return artifactResponse.artifact.file.toPath()
 }

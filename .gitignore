@@ -3,3 +3,4 @@ target
 *.iml
 updater-testing/reference
 updater-testing/workspace
+*/dependency-reduced-pom.xml

@@ -134,7 +134,7 @@
             <dependency>
                 <groupId>com.runesuite</groupId>
                 <artifactId>general</artifactId>
-                <version>0.155.0</version>
+                <version>0.156.0</version>
             </dependency>
             <dependency>
                 <groupId>com.jakewharton.rxrelay2</groupId>
