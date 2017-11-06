@@ -2,11 +2,11 @@
 
 The executable.
 
-## Dependencies:
+#### Included Dependencies:
 
 * [common](https://github.com/RuneSuite/client/tree/master/common)
 
-* [general](https://github.com/RuneSuite/general)
+* [general](https://github.com/RuneSuite/general) - Utitlities
 
 * [gamepack](https://github.com/RuneSuite/client/tree/master/gamepack) - The modified gamepack
 

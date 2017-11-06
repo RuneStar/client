@@ -58,7 +58,7 @@ private fun updateArtifactLocalRepo(artifactId: String): Path {
     val artifact = DefaultArtifact(GROUP_ID, artifactId, null, "jar", "(,]")
     val versionRangeRequest = VersionRangeRequest(artifact, listOf(remoteRepo), null)
     val versionRangeResponse = repoSystem.resolveVersionRange(session, versionRangeRequest)
-    println(versionRangeResponse)
+    println("$artifactId $versionRangeResponse")
     val version = versionRangeResponse.highestVersion
     val artifact2 = DefaultArtifact(GROUP_ID, artifactId, null, "jar", version.toString())
     val artifactRequestRemoteRepos = if (versionRangeResponse.getRepository(version).id == localRepo.id) {
