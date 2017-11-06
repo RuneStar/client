@@ -6,8 +6,6 @@ import com.runesuite.client.common.*
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.transport.file.FileTransporterFactory
-import org.eclipse.aether.transport.http.HttpTransporterFactory
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory
 import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.RemoteRepository
@@ -16,10 +14,16 @@ import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.VersionRangeRequest
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory
 import org.eclipse.aether.spi.connector.transport.TransporterFactory
+import org.eclipse.aether.transport.file.FileTransporterFactory
+import org.eclipse.aether.transport.http.HttpTransporterFactory
+import java.awt.Dimension
+import java.awt.Window
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import javax.swing.JDialog
+import javax.swing.JLabel
 
 private val locator =  MavenRepositorySystemUtils.newServiceLocator().apply {
     addService(TransporterFactory::class.java, FileTransporterFactory::class.java)
@@ -41,10 +45,25 @@ private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default
         .build()
 
 fun main(args: Array<String>) {
+    val window = startLoadingWindow()
     Files.createDirectories(PLUGINS_SETTINGS_DIR_PATH)
     updateArtifact(PLUGINS_ARTIFACT_ID, PLUGINS_PATH)
     updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
+    window.dispose()
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString()).inheritIO().start().waitFor()
+}
+
+private fun startLoadingWindow(): Window {
+    return JDialog().apply {
+        isUndecorated = true
+        setLocationRelativeTo(null)
+        add(JLabel("Loading RuneSuite...", JLabel.CENTER).apply {
+            font = font.deriveFont(20f)
+        })
+        size = Dimension(250, 80)
+        isModal = false
+        isVisible = true
+    }
 }
 
 private fun updateArtifact(artifactId: String, path: Path) {
