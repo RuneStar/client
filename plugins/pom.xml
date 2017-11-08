@@ -44,5 +44,9 @@
             <groupId>${logback.groupId}</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.hunterwb.kxtra</groupId>
+            <artifactId>kxtra-swing</artifactId>
+        </dependency>
     </dependencies>
 </project>
