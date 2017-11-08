@@ -96,7 +96,6 @@ class PluginLoader(
     override fun close() {
         watchService.close()
         executor.submit {
-            logger.debug("close")
             currentPlugins.values.forEach { it.destroy() }
         }
         executor.shutdown()

@@ -50,7 +50,8 @@ fun main(args: Array<String>) {
     updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
     updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
     window.dispose()
-    ProcessBuilder("java", "-jar", CLIENT_PATH.toString()).inheritIO().start().waitFor()
+    ProcessBuilder("java", "-jar", CLIENT_PATH.toString(), *args)
+            .inheritIO().start().waitFor()
 }
 
 private fun startLoadingWindow(): Window {
@@ -77,7 +78,6 @@ private fun updateArtifactLocalRepo(artifactId: String): Path {
     val artifact = DefaultArtifact(GROUP_ID, artifactId, null, "jar", "(,]")
     val versionRangeRequest = VersionRangeRequest(artifact, listOf(remoteRepo), null)
     val versionRangeResponse = repoSystem.resolveVersionRange(session, versionRangeRequest)
-    println("$artifactId $versionRangeResponse")
     val version = versionRangeResponse.highestVersion
     val artifact2 = DefaultArtifact(GROUP_ID, artifactId, null, "jar", version.toString())
     val artifactRequestRemoteRepos = if (versionRangeResponse.getRepository(version).id == localRepo.id) {
