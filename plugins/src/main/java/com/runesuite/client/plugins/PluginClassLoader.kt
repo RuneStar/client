@@ -3,6 +3,7 @@ package com.runesuite.client.plugins
 import mu.KotlinLogging
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
+import java.net.URL
 import java.nio.file.Path
 import java.util.jar.JarFile
 
@@ -54,6 +55,10 @@ private constructor(jar: Path) : ClassLoader() {
             }
         }
         this.plugins = plugins
+    }
+
+    override fun findResource(name: String): URL? {
+        return null // todo
     }
 
     private fun jarClassBytes(jar: Path): List<Pair<String, ByteArray>> {

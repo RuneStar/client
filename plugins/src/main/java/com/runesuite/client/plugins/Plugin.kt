@@ -1,24 +1,24 @@
 package com.runesuite.client.plugins
 
 import mu.KotlinLogging
+import java.nio.file.Path
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class Plugin<T : PluginSettings> {
 
-    protected val logger = KotlinLogging.logger(javaClass.name)
+    val logger = KotlinLogging.logger(javaClass.name)
 
     open val settingsWriter: ObjectReadWriter<T> = ObjectReadWriter.Yaml()
 
     abstract val defaultSettings: T
 
-    private var _settings: T? = null
+    private lateinit var _settings: T
 
-    val settings: T get() = _settings ?:
-            throw IllegalStateException("settings is not initialized until after object construction")
+    val settings get() = _settings
 
-    init {
-        logger.debug("init")
-    }
+    private lateinit var _directory: Path
+
+    val directory get() = _directory
 
     @OverridingMethodsMustInvokeSuper
     open fun create() {

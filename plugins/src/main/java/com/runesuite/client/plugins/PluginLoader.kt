@@ -1,26 +1,19 @@
 package com.runesuite.client.plugins
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import io.reactivex.schedulers.Schedulers
 import mu.KotlinLogging
 import java.io.Closeable
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardWatchEventKinds
+import java.nio.file.*
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class PluginLoader(
-        val pluginsDirectory: Path,
-        val settingsDirectory: Path
+        private val pluginsJarsDir: Path,
+        private val pluginsDir: Path
 ) : Closeable {
 
     private val logger = KotlinLogging.logger {  }
-
-    private val pluginsWatchService = FileSystems.getDefault().newWatchService()
-
-    private val settingsWatchService = FileSystems.getDefault().newWatchService()
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
@@ -28,41 +21,72 @@ class PluginLoader(
 
     private val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
-    private val scheduler = Schedulers.from(executor)
+    private val watchService = FileSystems.getDefault().newWatchService()
 
     init {
-        newDirectoryWatchObservable(pluginsDirectory, pluginsWatchService)
-                .observeOn(scheduler)
-                .filter { it.context().toFile().extension == "jar" }
-                .subscribe { we ->
-                    logger.debug { "${we.kind()} > ${we.context()}" }
-                    val jarPath = pluginsDirectory.resolve(we.context())
-                    val pluginNames = currentJarPluginNames.remove(jarPath)
-                    if (pluginNames != null) {
-                        pluginNames.forEach { className ->
-                            checkNotNull(currentPlugins.remove(className)).destroy()
+        Files.walkFileTree(pluginsJarsDir, object : SimpleFileVisitor<Path>() {
+            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                if (attrs.isRegularFile && file.toFile().extension == "jar" && verifyJar(file)) {
+                    executor.submit { loadJar(file) }
+                }
+                return super.visitFile(file, attrs)
+            }
+        })
+
+        pluginsJarsDir.register(watchService,
+                StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE)
+
+        Thread({
+            while (true) {
+                val key: WatchKey
+                try {
+                    key = watchService.take() // blocks
+                    Thread.sleep(100L) // accumulates duplicate events
+                } catch (e: InterruptedException) {
+                    logger.error(e) { "WatchService interrupted early." }
+                    return@Thread
+                } catch (e: ClosedWatchServiceException) {
+                    return@Thread
+                }
+                val dir = key.watchable() as Path
+                key.pollEvents().forEach { weRaw ->
+                    @Suppress("UNCHECKED_CAST")
+                    val we = weRaw as WatchEvent<Path>
+                    val ctx = we.context() ?: return@forEach
+                    executor.submit {
+                        logger.debug { "$dir.$ctx:${we.kind()}" }
+                    }
+                    if (dir == pluginsJarsDir && ctx.toFile().extension == "jar") {
+                        executor.submit {
+                            val jarPath = pluginsJarsDir.resolve(we.context())
+                            val pluginNames = currentJarPluginNames.remove(jarPath)
+                            if (pluginNames != null) {
+                                pluginNames.forEach { className ->
+                                    checkNotNull(currentPlugins.remove(className)).destroy()
+                                }
+                            }
+                            if (Files.exists(jarPath) && verifyJar(jarPath)) {
+                                loadJar(jarPath)
+                            }
+                        }
+                    } else if (dir != pluginsDir && ctx.fileName.toString() == PluginHolder.SETTINGS_FILE_NAME) {
+                        executor.submit {
+                            currentPlugins[dir.fileName.toString()]?.settingsFileChanged()
                         }
                     }
-                    if (Files.exists(jarPath) && verifyJar(jarPath)) {
-                        loadJar(jarPath)
-                    }
                 }
-
-        newDirectoryWatchObservable(settingsDirectory, settingsWatchService)
-                .observeOn(scheduler)
-                .filter { it.kind() != StandardWatchEventKinds.ENTRY_CREATE }
-                .subscribe { we ->
-                    logger.debug { "${we.kind()} > ${we.context()}" }
-                    val path = pluginsDirectory.resolve(we.context())
-                    val plugin = currentPlugins[path.toFile().nameWithoutExtension] ?: return@subscribe
-                    plugin.settingsFileChanged()
-                }
+                key.reset()
+            }
+        }).start()
     }
 
     private fun loadJar(jar: Path) {
         val plugins = PluginClassLoader.load(jar)
         plugins.forEach { plugin ->
-            val pluginHolder = PluginHolder(this, plugin)
+            val pluginDir = pluginsDir.resolve(plugin.javaClass.name)
+            Files.createDirectories(pluginDir)
+            val watchKey = pluginDir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE)
+            val pluginHolder = PluginHolder(plugin, watchKey)
             pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder
         }
@@ -70,8 +94,7 @@ class PluginLoader(
     }
 
     override fun close() {
-        pluginsWatchService.close()
-        settingsWatchService.close()
+        watchService.close()
         executor.submit {
             logger.debug("close")
             currentPlugins.values.forEach { it.destroy() }

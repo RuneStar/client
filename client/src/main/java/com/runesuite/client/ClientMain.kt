@@ -2,8 +2,8 @@
 
 package com.runesuite.client
 
+import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_DIR_PATH
-import com.runesuite.client.common.PLUGINS_SETTINGS_DIR_PATH
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
 
     waitForTitle()
 
-    val pluginLoader = PluginLoader(PLUGINS_DIR_PATH, PLUGINS_SETTINGS_DIR_PATH)
+    val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH)
 
     jframe.addWindowListener(object : WindowAdapter() {
         override fun windowClosed(e: WindowEvent) {

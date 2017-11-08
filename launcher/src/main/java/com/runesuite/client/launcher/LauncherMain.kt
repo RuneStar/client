@@ -46,8 +46,8 @@ private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default
 
 fun main(args: Array<String>) {
     val window = startLoadingWindow()
-    Files.createDirectories(PLUGINS_SETTINGS_DIR_PATH)
-    updateArtifact(PLUGINS_ARTIFACT_ID, PLUGINS_PATH)
+    Files.createDirectories(PLUGINS_DIR_PATH)
+    updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
     updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
     window.dispose()
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString()).inheritIO().start().waitFor()

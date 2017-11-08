@@ -117,7 +117,7 @@
                 <version>${asm.version}</version>
             </dependency>
             <dependency>
-                <groupId>o${asm.groupId}</groupId>
+                <groupId>${asm.groupId}</groupId>
                 <artifactId>asm-analysis</artifactId>
                 <version>${asm.version}</version>
             </dependency>

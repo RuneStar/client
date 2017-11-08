@@ -18,13 +18,13 @@ val CLIENT_ARTIFACT_ID = "client"
 val CLIENT_PATH: Path = ROOT_DIR_PATH.resolve("$CLIENT_ARTIFACT_ID.jar")
 
 @JvmField
+val PLUGINS_JARS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins-jars")
+
+@JvmField
+val PLUGINS_STANDARD_ARTIFACT_ID = "client-plugins-standard"
+
+@JvmField
+val PLUGINS_STANDARD_PATH: Path = PLUGINS_JARS_DIR_PATH.resolve("$PLUGINS_STANDARD_ARTIFACT_ID.jar")
+
+@JvmField
 val PLUGINS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins")
-
-@JvmField
-val PLUGINS_ARTIFACT_ID = "client-plugins-standard"
-
-@JvmField
-val PLUGINS_PATH: Path = PLUGINS_DIR_PATH.resolve("$PLUGINS_ARTIFACT_ID.jar")
-
-@JvmField
-val PLUGINS_SETTINGS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins-settings")

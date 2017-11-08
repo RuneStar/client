@@ -6,7 +6,7 @@ The executable.
 
 * [common](https://github.com/RuneSuite/client/tree/master/common)
 
-* [general](https://github.com/RuneSuite/general) - Utitlities
+* [general](https://github.com/RuneSuite/general) - Utilities
 
 * [gamepack](https://github.com/RuneSuite/client/tree/master/gamepack) - The modified gamepack
 
