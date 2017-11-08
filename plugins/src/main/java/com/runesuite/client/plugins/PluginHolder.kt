@@ -61,6 +61,11 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     fun create() {
+        createSettings()
+        safeTryStartPlugin()
+    }
+
+    private fun createSettings() {
         if (Files.exists(settingsFile)) {
             logger.debug("Settings file exists. Reading...")
             try {
@@ -77,7 +82,6 @@ internal class PluginHolder<T : PluginSettings>(
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.settings)
         }
-        safeTryStartPlugin()
     }
 
     fun settingsFileChanged() {
@@ -121,9 +125,9 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     private fun safeTryStartPlugin() {
-        safeCreatePlugin()
-        if (destroyed || !created || active || !plugin.settings.active) return
+        if (destroyed || active || !plugin.settings.active) return
         try {
+            if (!created) safeCreatePlugin()
             plugin.start()
             active = true
         } catch (e: Throwable) {
