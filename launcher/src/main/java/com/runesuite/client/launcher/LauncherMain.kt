@@ -39,10 +39,11 @@ private val session = MavenRepositorySystemUtils.newSession().apply {
     localRepositoryManager = repoSystem.newLocalRepositoryManager(this, localRepo)
 }
 
-private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default", "http://repo.runesuite.com/libs-snapshot-local")
-        .setReleasePolicy(RepositoryPolicy(false, RepositoryPolicy.UPDATE_POLICY_NEVER, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
+private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default", "http://repo.runesuite.com")
+        .setReleasePolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_NEVER, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
         .setSnapshotPolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_NEVER, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
         .build()
+
 
 fun main(args: Array<String>) {
     val window = startLoadingWindow()
@@ -78,14 +79,9 @@ private fun updateArtifactLocalRepo(artifactId: String): Path {
     val artifact = DefaultArtifact(GROUP_ID, artifactId, null, "jar", "(,]")
     val versionRangeRequest = VersionRangeRequest(artifact, listOf(remoteRepo), null)
     val versionRangeResponse = repoSystem.resolveVersionRange(session, versionRangeRequest)
-    val version = versionRangeResponse.highestVersion
-    val artifact2 = DefaultArtifact(GROUP_ID, artifactId, null, "jar", version.toString())
-    val artifactRequestRemoteRepos = if (versionRangeResponse.getRepository(version).id == localRepo.id) {
-        emptyList<RemoteRepository>()
-    } else {
-        listOf(remoteRepo)
-    }
-    val artifactRequest = ArtifactRequest(artifact2, artifactRequestRemoteRepos, null)
+    val artifactVersion = versionRangeResponse.highestVersion.toString()
+    val artifact2 = DefaultArtifact(GROUP_ID, artifactId, null, "jar", artifactVersion)
+    val artifactRequest = ArtifactRequest(artifact2, listOf(remoteRepo), null)
     val artifactResponse = repoSystem.resolveArtifact(session, artifactRequest)
     println(artifactResponse)
     return artifactResponse.artifact.file.toPath()

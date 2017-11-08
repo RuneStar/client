@@ -20,7 +20,7 @@ internal class PluginHolder<T : PluginSettings>(
 ) {
 
     companion object {
-        const val SETTINGS_FILE_NAME = "settings.txt"
+        const val SETTINGS_FILE_NAME = "plugin.settings"
         private val settingsField = Plugin::class.java.getDeclaredField("_settings").apply {
             isAccessible = true
         }
@@ -174,14 +174,14 @@ internal class PluginHolder<T : PluginSettings>(
         logFileAppender.name = "plugin-individual"
         logFileAppender.encoder = logEncoder
         logFileAppender.isAppend = true
-        logFileAppender.file = directory.resolve("log.txt").toString()
+        logFileAppender.file = directory.resolve("plugin.log").toString()
 
         val rollingPolicy = FixedWindowRollingPolicy()
         rollingPolicy.minIndex = 0
         rollingPolicy.maxIndex = 0
         rollingPolicy.context = logCtx
         rollingPolicy.setParent(logFileAppender)
-        rollingPolicy.fileNamePattern = directory.resolve("log%i.txt").toString()
+        rollingPolicy.fileNamePattern = directory.resolve("plugin%i.log").toString()
         rollingPolicy.start()
 
         val triggeringPolicy = SizeBasedTriggeringPolicy<ILoggingEvent>()

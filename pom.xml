@@ -53,7 +53,7 @@
     <distributionManagement>
         <snapshotRepository>
             <id>repo.runesuite.com</id>
-            <url>http://repo.runesuite.com/libs-snapshot-local</url>
+            <url>http://repo.runesuite.com</url>
         </snapshotRepository>
     </distributionManagement>
 

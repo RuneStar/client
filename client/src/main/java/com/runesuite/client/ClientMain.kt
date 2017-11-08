@@ -2,14 +2,13 @@
 
 package com.runesuite.client
 
-import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_DIR_PATH
+import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.plugins.PluginLoader
 import com.runesuite.general.JavConfig
-import com.runesuite.general.updateRevision
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -18,7 +17,6 @@ import javax.swing.WindowConstants
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
-    updateRevision()
 
     val javConfig = JavConfig()
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
