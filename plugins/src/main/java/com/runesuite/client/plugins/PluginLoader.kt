@@ -53,9 +53,9 @@ class PluginLoader(
                     @Suppress("UNCHECKED_CAST")
                     val we = weRaw as WatchEvent<Path>
                     val ctx = we.context() ?: return@forEach
-                    executor.submit {
-                        logger.debug { "$dir.$ctx:${we.kind()}" }
-                    }
+//                    executor.submit {
+//                        logger.debug { "$dir.$ctx:${we.kind()}" }
+//                    }
                     if (dir == pluginsJarsDir && ctx.toFile().extension == "jar") {
                         executor.submit {
                             val jarPath = pluginsJarsDir.resolve(we.context())
