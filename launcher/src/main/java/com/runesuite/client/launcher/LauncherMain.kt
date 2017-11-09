@@ -44,7 +44,6 @@ private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default
         .setSnapshotPolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_NEVER, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
         .build()
 
-
 fun main(args: Array<String>) {
     val window = startLoadingWindow()
     Files.createDirectories(PLUGINS_DIR_PATH)

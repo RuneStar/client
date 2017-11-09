@@ -1,4 +1,4 @@
-# RuneSuite Client
+# RuneSuite Client for Old School RuneScape
 
 [Download](http://repo.runesuite.com/com/runesuite/client/client-launcher/) (Work in Progress) - Requires Java 8+
 
