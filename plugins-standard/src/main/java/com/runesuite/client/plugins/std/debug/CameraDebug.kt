@@ -1,7 +1,10 @@
 package com.runesuite.client.plugins.std.debug
 
+import com.runesuite.client.game.api.Scene
 import com.runesuite.client.game.api.live.LiveCamera
 import com.runesuite.client.game.api.live.LiveCanvas
+import com.runesuite.client.game.api.live.LiveScene
+import com.runesuite.client.game.api.live.Players
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.util.ColorForm
@@ -15,11 +18,12 @@ class CameraDebug : DisposablePlugin<CameraDebug.Settings>() {
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
-            val x = 5
-            val y = 40
             g.font = settings.font.get()
             g.color = settings.color.get()
-            g.drawString(LiveCamera.toString(), x, y)
+            g.drawString(LiveCamera.toString(), 5, 40)
+            val player = Players.local ?: return@subscribe
+            val tile = player.location.takeIf { it.isLoaded } ?: return@subscribe
+            g.drawString(LiveScene.getHeight(tile).toString(), 5, 60)
         })
     }
 

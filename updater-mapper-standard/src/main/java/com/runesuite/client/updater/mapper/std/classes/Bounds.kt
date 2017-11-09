@@ -14,4 +14,5 @@ class Bounds : IdentityMapper.Class() {
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.size == 2 }
             .and { it.instanceFields.all { it.type == Type.INT_TYPE } }
+            .and { it.instanceMethods.isNotEmpty() }
 }

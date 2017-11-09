@@ -3,9 +3,6 @@ package com.runesuite.client.game.api
 import com.runesuite.client.game.api.live.Projections
 import java.awt.Point
 
-/**
- * Exact point in the loaded 3D game space
- */
 data class Position(
         val x: Int,
         val subX: Int,

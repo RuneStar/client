@@ -13,8 +13,7 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GOTO
-import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
@@ -59,7 +58,7 @@ class NodeHashTable : IdentityMapper.Class() {
     class first : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Node>() }
                 .and { it.arguments.size in 0..1 }
-                .and { it.instructions.none { it.opcode == GOTO } }
+                .and { it.instructions.none { it.opcode == ICONST_1 } }
     }
 
     @MethodParameters()
@@ -67,7 +66,7 @@ class NodeHashTable : IdentityMapper.Class() {
     class next : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Node>() }
                 .and { it.arguments.size in 0..1 }
-                .and { it.instructions.any { it.opcode == GOTO } }
+                .and { it.instructions.any { it.opcode == ICONST_1 } }
                 .and { it != method<get>() }
     }
 
