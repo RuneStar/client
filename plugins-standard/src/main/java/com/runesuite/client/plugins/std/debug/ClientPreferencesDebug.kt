@@ -1,13 +1,11 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
-import com.runesuite.client.game.api.live.Viewport
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.util.ColorForm
 import com.runesuite.client.plugins.util.FontForm
-import java.awt.Color
 import java.awt.Font
 
 class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>() {
@@ -16,7 +14,7 @@ class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>
 
     override fun start() {
         super.start()
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             val p = Client.accessor.clientPreferences ?: return@subscribe
             val strings = listOf(
                     "titleMusicDisabled: ${p.titleMusicDisabled}",

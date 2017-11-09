@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Mouse
 import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.plugins.DisposablePlugin
@@ -18,7 +18,7 @@ class WidgetDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             g.font = font
             val mousePt = Mouse.location
 

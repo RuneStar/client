@@ -1,8 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
-import com.runesuite.client.game.api.live.Mouse
-import com.runesuite.client.game.api.live.Projection
+import com.runesuite.client.game.api.live.*
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
 import java.awt.Color
@@ -17,7 +15,7 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
     override fun start() {
         super.start()
 
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             val mousePt = Mouse.location
 //            val viewportPos = Projection.Viewport.LIVE.toGame(mousePt)
 //            if (viewportPos.isLoaded) {
@@ -25,7 +23,7 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
 //                g.draw(viewportPos.sceneTile.outline())
 //                g.drawPoint(viewportPos.toScreen())
 //            }
-            val minimapPos = Projection.Minimap.LIVE.toGame(mousePt)
+            val minimapPos = Projections.minimap.toGame(mousePt)
             if (minimapPos.isLoaded) {
                 g.color = Color.BLUE
                 g.draw(minimapPos.sceneTile.outline())

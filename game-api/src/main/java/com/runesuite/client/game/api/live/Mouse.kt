@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api.live
 
+import com.runesuite.client.game.api.MouseCrosshair
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell
 import hu.akarnokd.rxjava2.swing.SwingObservable
@@ -15,7 +16,7 @@ object Mouse {
 
     val location get() = Point(x, y)
 
-    val crosshair get() = checkNotNull(Crosshair.LOOKUP[accessor.crosshairColor]) { accessor.crosshairColor }
+    val crosshair get() = checkNotNull(MouseCrosshair.LOOKUP[accessor.crosshairColor]) { accessor.crosshairColor }
 
     /**
      * @see[java.awt.event.MouseListener][java.awt.event.MouseMotionListener][java.awt.event.MouseWheelListener]
@@ -25,17 +26,5 @@ object Mouse {
 
     override fun toString(): String {
         return "Mouse(location=$location, crosshair=$crosshair)"
-    }
-
-    enum class Crosshair(val id: Int) {
-
-        NONE(0),
-        YELLOW(1),
-        RED(2);
-
-        companion object {
-            @JvmField
-            val LOOKUP = values().associateBy { it.id }
-        }
     }
 }

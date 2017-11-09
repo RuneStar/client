@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.localLevel
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
@@ -15,7 +15,7 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
 
     override fun start() {
         super.start()
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             g.font = settings.font.get()
             g.color = settings.color.get()
 

@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api.live
 
+import com.runesuite.client.game.api.Scene
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XTile
 

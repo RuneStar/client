@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api.live
 
+import com.runesuite.client.game.api.MenuOption
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XClient
 import io.reactivex.Observable
@@ -24,8 +25,8 @@ object Menu {
 
     val optionsCount get() = accessor.menuOptionsCount
 
-    val actions: Observable<com.runesuite.client.game.api.MenuOption> = XClient.menuAction.exit.map {
-        com.runesuite.client.game.api.MenuOption.of(it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
+    val actions: Observable<MenuOption> = XClient.menuAction.exit.map {
+        MenuOption.of(it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
                 it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String)
     }
 
@@ -37,9 +38,9 @@ object Menu {
             false -> emptyList()
         }
 
-    val options: List<com.runesuite.client.game.api.MenuOption>
+    val options: List<MenuOption>
         get() = (optionsCount - 1).downTo(0).map {
-                com.runesuite.client.game.api.MenuOption.of(
+                MenuOption.of(
                         accessor.menuOpcodes[it],
                         accessor.menuArguments0[it],
                         accessor.menuArguments1[it],

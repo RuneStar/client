@@ -1,8 +1,8 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.api.live.Keyboard
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Mouse
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
@@ -17,7 +17,7 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
         super.start()
         val s = settings
         if (s.focus) {
-            add(Canvas.Live.focusEvents.subscribe {
+            add(LiveCanvas.focusEvents.subscribe {
                 logger.debug { it }
             })
         }
@@ -27,7 +27,7 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
             })
         }
         if (s.component) {
-            add(Canvas.Live.componentEvents.subscribe {
+            add(LiveCanvas.componentEvents.subscribe {
                 logger.debug { it }
             })
         }

@@ -7,7 +7,7 @@ object IgnoreList {
 
     val CAPACITY = accessor.ignoreList.size
 
-    fun get(): List<com.runesuite.client.game.api.Ignored?> = accessor.ignoreList.map { it?.let { com.runesuite.client.game.api.Ignored(it) } }
+    fun get(): List<Ignored?> = accessor.ignoreList.map { it?.let { Ignored(it) } }
 
-    val all: List<com.runesuite.client.game.api.Ignored> get() = accessor.ignoreList.mapNotNull { it?.let { com.runesuite.client.game.api.Ignored(it) } }
+    val all: List<Ignored> get() = accessor.ignoreList.mapNotNull { it?.let { Ignored(it) } }
 }

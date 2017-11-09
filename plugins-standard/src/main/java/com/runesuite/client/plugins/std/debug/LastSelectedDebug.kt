@@ -1,7 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Camera
-import com.runesuite.client.game.api.live.Canvas
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
@@ -16,7 +15,7 @@ class LastSelectedDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40
             g.font = font

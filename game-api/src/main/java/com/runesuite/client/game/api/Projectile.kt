@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-import com.runesuite.client.game.api.live.Scene
+import com.runesuite.client.game.api.live.LiveScene
 import com.runesuite.client.game.raw.access.XProjectile
 
 class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTargeting {
@@ -9,7 +9,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
 
     val sourcePosition: Position
         get() = Position(accessor.sourceX, accessor.sourceY, 0, accessor.plane)
-                .let { it.copy(height = Scene.Live.getTileHeight(it) - accessor.sourceZ) }
+                .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.sourceZ) }
 
     val pitch get() = accessor.pitch
 
@@ -17,7 +17,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
 
     override val position: Position
         get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, accessor.plane)
-                .let { it.copy(height = Scene.Live.getTileHeight(it) - accessor.z.toInt()) }
+                .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.z.toInt()) }
 
     override val npcTargetIndex: Int?
         get() = accessor.targetIndex.let { if (it > 0) it - 1 else null }

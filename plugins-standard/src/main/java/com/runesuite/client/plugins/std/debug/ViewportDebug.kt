@@ -1,7 +1,8 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.runesuite.client.game.api.live.Canvas
-import com.runesuite.client.game.api.live.Viewport
+import com.runesuite.client.game.api.Viewport
+import com.runesuite.client.game.api.live.LiveCanvas
+import com.runesuite.client.game.api.live.LiveViewport
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
@@ -16,9 +17,9 @@ class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
 
     override fun start() {
         super.start()
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.CYAN
-            g.draw(Viewport.Live.shape)
+            g.draw(LiveViewport.shape)
             g.color = Color.BLUE
             g.draw(Viewport.Fixed.DEFAULT.shape)
             val strings = listOf(

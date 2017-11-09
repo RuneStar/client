@@ -13,7 +13,7 @@ enum class AttackOption {
     companion object {
 
         @JvmStatic
-        fun get(accessor: XAttackOption): AttackOption {
+        operator fun get(accessor: XAttackOption): AttackOption {
             return when (accessor) {
                 Client.accessor.attackOption_alwaysRightClick -> ALWAYS_RIGHT_CLICK
                 Client.accessor.attackOption_dependsOnCombatLevels -> DEPENDS_ON_COMBAT_LEVELS

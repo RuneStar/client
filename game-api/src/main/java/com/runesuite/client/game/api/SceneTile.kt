@@ -1,8 +1,8 @@
 package com.runesuite.client.game.api
 
 import com.hunterwb.kxtra.swing.polygon.Polygon
-import com.runesuite.client.game.api.live.Projection
-import com.runesuite.client.game.api.live.Scene
+import com.runesuite.client.game.api.live.Projections
+import com.runesuite.client.game.api.live.LiveScene
 import java.awt.Polygon
 
 /**
@@ -18,11 +18,11 @@ data class SceneTile(val x: Int, val y: Int, val plane: Int) {
 
     val isLoaded get() = x in 0 until Scene.SIZE && y in 0 until Scene.SIZE && plane in 0 until Scene.PLANE_SIZE
 
-    fun toGlobalTile(scene: Scene = Scene.Live): GlobalTile {
+    fun toGlobalTile(scene: Scene = LiveScene): GlobalTile {
         return GlobalTile(x + scene.base.x, y + scene.base.y, plane)
     }
 
-    fun height(scene: Scene = Scene.Live): Int? {
+    fun height(scene: Scene = LiveScene): Int? {
         return scene.getHeight(this)
     }
 
@@ -37,7 +37,7 @@ data class SceneTile(val x: Int, val y: Int, val plane: Int) {
                 copy(subX = Position.MAX_SUB, subY = Position.MAX_SUB),
                 copy(subY = Position.MAX_SUB)) }
 
-    fun outline(projection: Projection = Projection.Viewport.LIVE): Polygon {
+    fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }
         return Polygon(corners.map { it.toScreen(projection) })
     }

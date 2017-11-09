@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-import com.runesuite.client.game.api.live.Projection
+import com.runesuite.client.game.api.live.Projections
 import java.awt.Point
 
 /**
@@ -32,7 +32,7 @@ data class Position(
     operator fun plus(position: Position) =
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
-    fun toScreen(projection: Projection = Projection.Viewport.LIVE): Point {
+    fun toScreen(projection: Projection = Projections.viewport): Point {
         check(isLoaded) { this }
         return projection.toScreen(this)
     }

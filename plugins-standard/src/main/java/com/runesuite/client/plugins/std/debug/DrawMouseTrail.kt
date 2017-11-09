@@ -2,7 +2,7 @@ package com.runesuite.client.plugins.std.debug
 
 import com.google.common.cache.CacheBuilder
 import com.hunterwb.kxtra.swing.graphics.drawPoint
-import com.runesuite.client.game.api.live.Canvas
+import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Mouse
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
@@ -31,7 +31,7 @@ class DrawMouseTrail : DisposablePlugin<DrawMouseTrail.Settings>() {
                 }
         )
 
-        add(Canvas.Live.repaints.subscribe { g ->
+        add(LiveCanvas.repaints.subscribe { g ->
             g.color = pathColor
             g.stroke = pathStroke
             pathCache.asMap().keys.forEach { pt ->
