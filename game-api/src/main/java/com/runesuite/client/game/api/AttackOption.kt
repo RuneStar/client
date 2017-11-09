@@ -11,6 +11,7 @@ enum class AttackOption {
     LEFT_CLICK_WHERE_AVAILABLE;
 
     companion object {
+
         @JvmStatic
         fun get(accessor: XAttackOption): AttackOption {
             return when (accessor) {

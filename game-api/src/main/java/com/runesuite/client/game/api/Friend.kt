@@ -14,7 +14,7 @@ class Friend(override val accessor: XFriend) : Wrapper() {
 
     val world get() = Worlds[accessor.world]
 
-    val rank get() = checkNotNull(ClanMate.Rank.LOOKUP[accessor.rank.toByte()]) { accessor.rank }
+    val rank get() = checkNotNull(ClanRank.LOOKUP[accessor.rank.toByte()]) { accessor.rank }
 
     override fun toString(): String {
         return "Friend(name=$name, previousName=$previousName, worldId=$worldId, rank=$rank)"

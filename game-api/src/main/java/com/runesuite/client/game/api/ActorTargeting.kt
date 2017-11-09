@@ -5,7 +5,7 @@ import com.runesuite.client.game.api.live.Players
 
 interface ActorTargeting {
 
-    val target: com.runesuite.client.game.api.Actor? get() = npcTargetIndex?.let { Npcs[it] } ?: playerTargetIndex?.let { Players[it] }
+    val target: Actor? get() = npcTargetIndex?.let { Npcs[it] } ?: playerTargetIndex?.let { Players[it] }
 
     val hasTarget get() = npcTargetIndex != null || playerTargetIndex != null
 
