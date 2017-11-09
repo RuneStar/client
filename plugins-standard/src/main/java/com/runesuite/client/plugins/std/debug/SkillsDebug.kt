@@ -1,11 +1,12 @@
 package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.Canvas
-import com.runesuite.client.game.api.live.Skills
+import com.runesuite.client.game.api.live.localLevel
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.util.ColorForm
 import com.runesuite.client.plugins.util.FontForm
+import com.runesuite.general.Skill
 import java.awt.Font
 
 class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
@@ -19,23 +20,9 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
             g.color = settings.color.get()
 
             var y = 35
-            var x = 5
-            Skills.levels.entries.forEach { e ->
-                g.drawString(e.toString(), x, y)
-                y += g.font.size + 5
-            }
-
-            y = 35
-            x = Canvas.Live.shape.width / 4
-            Skills.currentLevels.entries.forEach { e ->
-                g.drawString(e.toString(), x, y)
-                y += g.font.size + 5
-            }
-
-            y = 35
-            x = Canvas.Live.shape.width / 2
-            Skills.experience.entries.forEach { e ->
-                g.drawString(e.toString(), x, y)
+            val x = 5
+            Skill.values().map { "$it ${it.localLevel}" }.forEach { s ->
+                g.drawString(s, x, y)
                 y += g.font.size + 5
             }
         })
