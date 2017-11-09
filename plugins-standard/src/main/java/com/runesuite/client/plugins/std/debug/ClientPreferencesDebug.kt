@@ -5,14 +5,14 @@ import com.runesuite.client.game.api.live.Viewport
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
+import com.runesuite.client.plugins.util.ColorForm
+import com.runesuite.client.plugins.util.FontForm
 import java.awt.Color
 import java.awt.Font
 
-class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
+class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>() {
 
-    override val defaultSettings = PluginSettings()
-
-    val font = Font(Font.SANS_SERIF, Font.BOLD, 15)
+    override val defaultSettings = Settings()
 
     override fun start() {
         super.start()
@@ -26,14 +26,19 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
                     "rememberedUsername: ${p.rememberedUsername}",
                     "parameters: ${p.parameters}"
             )
-            g.font = font
-            g.color = Color.WHITE
+            g.font = settings.font.get()
+            g.color = settings.color.get()
             val x = 20
             var y = 40
             strings.forEach { s ->
                 g.drawString(s, x, y)
-                y += 20
+                y += g.font.size + 5
             }
         })
+    }
+
+    class Settings : PluginSettings() {
+        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
+        val color = ColorForm()
     }
 }

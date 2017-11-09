@@ -4,6 +4,7 @@ package com.runesuite.client
 
 import com.runesuite.client.common.PLUGINS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
+import com.runesuite.client.game.api.GameState
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
@@ -65,7 +66,7 @@ private fun java.applet.Applet.preInit(javConfig: JavConfig) {
 
 private fun waitForTitle() {
     // wait for most fields to be initialized
-    Game.stateChanges.takeUntil { it == Game.State.TITLE }
+    Game.stateChanges.takeUntil { it == GameState.TITLE }
             .ignoreElements()
             .blockingAwait()
 }

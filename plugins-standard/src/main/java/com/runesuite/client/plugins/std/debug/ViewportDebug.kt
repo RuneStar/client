@@ -5,14 +5,14 @@ import com.runesuite.client.game.api.live.Viewport
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
+import com.runesuite.client.plugins.util.ColorForm
+import com.runesuite.client.plugins.util.FontForm
 import java.awt.Color
 import java.awt.Font
 
-class ViewportDebug : DisposablePlugin<PluginSettings>() {
+class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
 
-    override val defaultSettings = PluginSettings()
-
-    val font = Font(Font.MONOSPACED, Font.BOLD, 13)
+    override val defaultSettings = Settings()
 
     override fun start() {
         super.start()
@@ -22,20 +22,25 @@ class ViewportDebug : DisposablePlugin<PluginSettings>() {
             g.color = Color.BLUE
             g.draw(Viewport.Fixed.DEFAULT.shape)
             val strings = listOf(
-                    "    viewportOffsetX/Y: ${accessor.viewportOffsetX}, ${accessor.viewportOffsetY}",
-                    " viewportWidth/Height: ${accessor.viewportWidth}, ${accessor.viewportHeight}",
-                    "         viewportZoom: ${accessor.viewportZoom}",
-                    "     viewportMouseX/Y: ${accessor.viewportMouseX}, ${accessor.viewportMouseY}",
+                    "viewportOffsetX/Y: ${accessor.viewportOffsetX}, ${accessor.viewportOffsetY}",
+                    "viewportWidth/Height: ${accessor.viewportWidth}, ${accessor.viewportHeight}",
+                    "viewportZoom: ${accessor.viewportZoom}",
+                    "viewportMouseX/Y: ${accessor.viewportMouseX}, ${accessor.viewportMouseY}",
                     "viewportContainsMouse: ${accessor.viewportContainsMouse}"
             )
-            g.font = font
-            g.color = Color.WHITE
+            g.font = settings.font.get()
+            g.color = settings.color.get()
             val x = 20
             var y = 40
             strings.forEach { s ->
                 g.drawString(s, x, y)
-                y += 20
+                y += g.font.size + 5
             }
         })
+    }
+
+    class Settings : PluginSettings() {
+        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
+        val color = ColorForm()
     }
 }
