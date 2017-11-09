@@ -4,19 +4,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 /**
- * @param <I> the instance type the method is declared on, {@link Void} for static methods
+ * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
  */
 public abstract class MethodEvent<I> {
 
-    private final long id;
+    private final long index;
 
     private final I instance;
 
     @NotNull
     private final Object[] arguments;
 
-    private MethodEvent(long id, I instance, @NotNull Object[] arguments) {
-        this.id = id;
+    private MethodEvent(long index, I instance, @NotNull Object[] arguments) {
+        this.index = index;
         this.instance = instance;
         this.arguments = arguments;
     }
@@ -28,12 +28,16 @@ public abstract class MethodEvent<I> {
         return instance;
     }
 
-    public final long getId() {
-        return id;
+    /**
+     * @return the number of times the method was called before the call this event is a part of
+     */
+    public final long getIndex() {
+        return index;
     }
 
     /**
-     * The returned array should not be modified.
+     * The arguments used to call the method, boxing primitive values. The returned array should not be
+     * modified.
      *
      * @return the arguments used to call the method, boxing primitive values
      */
@@ -43,18 +47,18 @@ public abstract class MethodEvent<I> {
     }
 
     /**
-     * @param <I> the instance type the method is declared on, {@link Void} for static methods
+     * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
      */
     public final static class Enter<I> extends MethodEvent<I> {
 
-        public Enter(long id, I instance, @NotNull Object[] arguments) {
-            super(id, instance, arguments);
+        public Enter(long index, I instance, @NotNull Object[] arguments) {
+            super(index, instance, arguments);
         }
 
         @Override
         public String toString() {
             return "MethodEvent.Enter(" +
-                    getId() + ", " +
+                    getIndex() + ", " +
                     getInstance() + ", " +
                     Arrays.toString(getArguments()) +
                     ")";
@@ -69,8 +73,8 @@ public abstract class MethodEvent<I> {
 
         private final R returned;
 
-        public Exit(long id, I instance, @NotNull Object[] arguments, R returned) {
-            super(id, instance, arguments);
+        public Exit(long index, I instance, @NotNull Object[] arguments, R returned) {
+            super(index, instance, arguments);
             this.returned = returned;
         }
 
@@ -84,7 +88,7 @@ public abstract class MethodEvent<I> {
         @Override
         public String toString() {
             return "MethodEvent.Exit(" +
-                    getId() + ", " +
+                    getIndex() + ", " +
                     getInstance() + ", " +
                     Arrays.toString(getArguments()) + ", " +
                     getReturned() +

@@ -36,6 +36,6 @@ public interface MethodAdvice {
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned,
             @Advice.Enter MethodEvent.Enter enterEvent
     ) throws Throwable {
-        ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getId(), instance, enterEvent.getArguments(), returned));
+        ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getIndex(), instance, enterEvent.getArguments(), returned));
     }
 }
