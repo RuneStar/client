@@ -43,6 +43,6 @@ object LiveCanvas : Canvas {
             .flatMap { SwingObservable.component(it) }
 
     override fun toString(): String {
-        return "Canvas.Live(shape=$shape)"
+        return "LiveCanvas(shape=$shape)"
     }
 }

@@ -17,6 +17,6 @@ object LiveViewport : Viewport {
     override val zoom: Int get() = accessor.viewportZoom
 
     override fun toString(): String {
-        return "Viewport.Live(zoom=$zoom, shape=$shape)"
+        return "LiveViewport(zoom=$zoom, shape=$shape)"
     }
 }

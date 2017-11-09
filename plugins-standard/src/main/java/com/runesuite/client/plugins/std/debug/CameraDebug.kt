@@ -21,9 +21,6 @@ class CameraDebug : DisposablePlugin<CameraDebug.Settings>() {
             g.font = settings.font.get()
             g.color = settings.color.get()
             g.drawString(LiveCamera.toString(), 5, 40)
-            val player = Players.local ?: return@subscribe
-            val tile = player.location.takeIf { it.isLoaded } ?: return@subscribe
-            g.drawString(LiveScene.getHeight(tile).toString(), 5, 60)
         })
     }
 

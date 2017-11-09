@@ -17,6 +17,6 @@ object LiveCamera : Camera {
     override val yaw get() = Angle(accessor.cameraYaw)
 
     override fun toString(): String {
-        return "Camera.Live(x=$x, y=$y, z=$z, pitch=$pitch, yaw=$yaw)"
+        return "LiveCamera(x=$x, y=$y, z=$z, pitch=$pitch, yaw=$yaw)"
     }
 }
