@@ -16,8 +16,8 @@
     <name>client/launcher</name>
 
     <properties>
-        <aether.groupId>org.eclipse.aether</aether.groupId>
-        <aether.version>1.1.0</aether.version>
+        <maven-resolver.groupId>org.apache.maven.resolver</maven-resolver.groupId>
+        <maven-resolver.version>1.1.0</maven-resolver.version>
     </properties>
 
     <dependencies>
@@ -27,41 +27,24 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
+            <groupId>${maven.groupId}</groupId>
+            <artifactId>maven-resolver-provider</artifactId>
+            <version>3.5.2</version>
         </dependency>
         <dependency>
-            <groupId>${aether.groupId}</groupId>
-            <artifactId>aether-connector-basic</artifactId>
-            <version>${aether.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>${aether.groupId}</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>${maven-resolver.groupId}</groupId>
+            <artifactId>maven-resolver-connector-basic</artifactId>
+            <version>${maven-resolver.version}</version>
         </dependency>
         <dependency>
-            <groupId>${aether.groupId}</groupId>
-            <artifactId>aether-transport-file</artifactId>
-            <version>${aether.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>${aether.groupId}</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>${maven-resolver.groupId}</groupId>
+            <artifactId>maven-resolver-transport-file</artifactId>
+            <version>${maven-resolver.version}</version>
         </dependency>
         <dependency>
-            <groupId>${aether.groupId}</groupId>
-            <artifactId>aether-transport-http</artifactId>
-            <version>${aether.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>${aether.groupId}</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>${maven-resolver.groupId}</groupId>
+            <artifactId>maven-resolver-transport-http</artifactId>
+            <version>${maven-resolver.version}</version>
         </dependency>
     </dependencies>
 
