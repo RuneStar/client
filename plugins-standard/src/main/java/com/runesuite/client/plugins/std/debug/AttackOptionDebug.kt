@@ -1,5 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
+import com.runesuite.client.game.api.live.AttackOptions
 import com.runesuite.client.game.api.live.Canvas
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XAttackOption
@@ -22,25 +23,14 @@ class AttackOptionDebug : DisposablePlugin<AttackOptionDebug.Settings>() {
             g.font = settings.font.get()
             g.color = settings.color.get()
             val strings = listOf(
-                    "player: ${attackOptionToString(accessor.playerAttackOption)}",
-                    "npc: ${attackOptionToString(accessor.npcAttackOption)}"
+                    "player: ${AttackOptions.player}",
+                    "npc: ${AttackOptions.npc}"
             )
             strings.forEach { s ->
                 g.drawString(s, x, y)
                 y += g.font.size + 5
             }
         })
-    }
-
-    private fun attackOptionToString(attackOption: XAttackOption?): String {
-        return when (attackOption) {
-            accessor.attackOption_alwaysRightClick -> "alwaysRightClick"
-            accessor.attackOption_dependsOnCombatLevels -> "dependsOnCombatLevels"
-            accessor.attackOption_hidden -> "hidden"
-            accessor.attackOption_leftClickWhereAvailable -> "leftClickWhereAvailable"
-            null -> "null"
-            else -> error(attackOption)
-        }
     }
 
     class Settings : PluginSettings() {
