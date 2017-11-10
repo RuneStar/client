@@ -5,7 +5,7 @@ import java.awt.Point
 
 interface MenuOption {
     val opcode: Int
-    val operator: com.runesuite.client.game.api.MenuOption.Operator
+    val operator: MenuOption.Operator
     val argument0: Int
     val argument1: Int
     val argument2: Int
@@ -80,284 +80,284 @@ interface MenuOption {
 
         companion object {
             val LOOKUP = values().associateBy { it.opcode }
-            fun fromOpcode(opcode: Int): com.runesuite.client.game.api.MenuOption.Operator {
+            fun fromOpcode(opcode: Int): MenuOption.Operator {
                 val fixed = if (opcode >= 2000) opcode - 2000 else opcode
-                return com.runesuite.client.game.api.MenuOption.Operator.Companion.LOOKUP[fixed] ?: com.runesuite.client.game.api.MenuOption.Operator.OTHER_UNKNOWN
+                return MenuOption.Operator.Companion.LOOKUP[fixed] ?: MenuOption.Operator.OTHER_UNKNOWN
             }
         }
     }
 
     private data class Base(
             override val opcode: Int,
-            override val operator: com.runesuite.client.game.api.MenuOption.Operator,
+            override val operator: MenuOption.Operator,
             override val argument0: Int,
             override val argument1: Int,
             override val argument2: Int,
             override val targetName: String,
             override val action: String
-    ) : com.runesuite.client.game.api.MenuOption
+    ) : MenuOption
 
     companion object {
-        fun of(opcode: Int, argument0: Int, argument1: Int, argument2: Int, targetName: String, action: String): com.runesuite.client.game.api.MenuOption {
-            val operator = com.runesuite.client.game.api.MenuOption.Operator.Companion.fromOpcode(opcode)
-            val base = com.runesuite.client.game.api.MenuOption.Base(opcode, operator, argument0, argument1, argument2, targetName, action)
+        fun of(opcode: Int, argument0: Int, argument1: Int, argument2: Int, targetName: String, action: String): MenuOption {
+            val operator = MenuOption.Operator.Companion.fromOpcode(opcode)
+            val base = MenuOption.Base(opcode, operator, argument0, argument1, argument2, targetName, action)
             return when(operator) {
                 // todo: subclasses
                 // todo: Object Examine is wrong
-                in com.runesuite.client.game.api.MenuOption.OnObjectIndexed.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnObjectIndexed(base)
-                in com.runesuite.client.game.api.MenuOption.Cancel.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.Cancel(base)
-                in com.runesuite.client.game.api.MenuOption.WalkHere.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.WalkHere(base)
-                in com.runesuite.client.game.api.MenuOption.OnNpcIndexed.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnNpcIndexed(base)
-                in com.runesuite.client.game.api.MenuOption.OnPlayerIndexed.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnPlayerIndexed(base)
-                in com.runesuite.client.game.api.MenuOption.OnNpcSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnNpcSimple(base)
-                in com.runesuite.client.game.api.MenuOption.OnPlayerSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnPlayerSimple(base)
-                in com.runesuite.client.game.api.MenuOption.OnObjectSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnObjectSimple(base)
-                in com.runesuite.client.game.api.MenuOption.OnGroundItemIndexed.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnGroundItemIndexed(base)
-                in com.runesuite.client.game.api.MenuOption.OnGroundItemSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnGroundItemSimple(base)
-                in com.runesuite.client.game.api.MenuOption.OnItemIndexed.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnItemIndexed(base)
-                in com.runesuite.client.game.api.MenuOption.OnItemSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnItemSimple(base)
-                in com.runesuite.client.game.api.MenuOption.OnWidgetSimple.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.OnWidgetSimple(base)
-                in com.runesuite.client.game.api.MenuOption.ButtonDialog.Companion.OPERATORS -> com.runesuite.client.game.api.MenuOption.ButtonDialog(base)
+                in MenuOption.OnObjectIndexed.Companion.OPERATORS -> MenuOption.OnObjectIndexed(base)
+                in MenuOption.Cancel.Companion.OPERATORS -> MenuOption.Cancel(base)
+                in MenuOption.WalkHere.Companion.OPERATORS -> MenuOption.WalkHere(base)
+                in MenuOption.OnNpcIndexed.Companion.OPERATORS -> MenuOption.OnNpcIndexed(base)
+                in MenuOption.OnPlayerIndexed.Companion.OPERATORS -> MenuOption.OnPlayerIndexed(base)
+                in MenuOption.OnNpcSimple.Companion.OPERATORS -> MenuOption.OnNpcSimple(base)
+                in MenuOption.OnPlayerSimple.Companion.OPERATORS -> MenuOption.OnPlayerSimple(base)
+                in MenuOption.OnObjectSimple.Companion.OPERATORS -> MenuOption.OnObjectSimple(base)
+                in MenuOption.OnGroundItemIndexed.Companion.OPERATORS -> MenuOption.OnGroundItemIndexed(base)
+                in MenuOption.OnGroundItemSimple.Companion.OPERATORS -> MenuOption.OnGroundItemSimple(base)
+                in MenuOption.OnItemIndexed.Companion.OPERATORS -> MenuOption.OnItemIndexed(base)
+                in MenuOption.OnItemSimple.Companion.OPERATORS -> MenuOption.OnItemSimple(base)
+                in MenuOption.OnWidgetSimple.Companion.OPERATORS -> MenuOption.OnWidgetSimple(base)
+                in MenuOption.ButtonDialog.Companion.OPERATORS -> MenuOption.ButtonDialog(base)
                 else -> base
             }
         }
     }
 
-    interface AtLocation : com.runesuite.client.game.api.MenuOption {
+    interface AtLocation : MenuOption {
         val plane: Int
-        val location: com.runesuite.client.game.api.SceneTile get() = com.runesuite.client.game.api.SceneTile(argument1, argument2, plane)
+        val location: SceneTile get() = SceneTile(argument1, argument2, plane)
     }
 
-    interface Indexed : com.runesuite.client.game.api.MenuOption {
+    interface Indexed : MenuOption {
         val index: Int
     }
 
-    interface OnScreen : com.runesuite.client.game.api.MenuOption {
+    interface OnScreen : MenuOption {
         val screenLocation get() = Point(argument1, argument2)
     }
 
-    interface OnObject: com.runesuite.client.game.api.MenuOption {
-        val tag: com.runesuite.client.game.api.EntityTag get() = com.runesuite.client.game.api.EntityTag(argument0)
+    interface OnObject: MenuOption {
+        val tag: EntityTag get() = EntityTag(argument0)
     }
 
-    interface OnGroundItem: com.runesuite.client.game.api.MenuOption {
+    interface OnGroundItem: MenuOption {
         val id get() = argument0
     }
 
-    interface OnItem: com.runesuite.client.game.api.MenuOption, com.runesuite.client.game.api.MenuOption.InWidget {
+    interface OnItem: MenuOption, MenuOption.InWidget {
         val id get() = argument0
         val slot get() = argument1
     }
 
-    interface InWidget: com.runesuite.client.game.api.MenuOption {
-        val group get() = com.runesuite.client.game.api.WidgetGroup(argument2 shr 16)
+    interface InWidget: MenuOption {
+        val group get() = WidgetGroup(argument2 shr 16)
         val widgetId get() = argument2 and 0xFFFF
-        val widget: com.runesuite.client.game.api.Widget? get() = group[widgetId]
+        val widget: Widget? get() = group[widgetId]
     }
 
-    interface OnWidget: com.runesuite.client.game.api.MenuOption, com.runesuite.client.game.api.MenuOption.InWidget {
+    interface OnWidget: MenuOption, MenuOption.InWidget {
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
-        val widgetParent: com.runesuite.client.game.api.Widget? get() = super.widget
-        override val widget: com.runesuite.client.game.api.Widget? get() = widgetParent?.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
+        val widgetParent: Widget? get() = super.widget
+        override val widget: Widget? get() = widgetParent?.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
     }
 
-    data class OnWidgetSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnWidget {
+    data class OnWidgetSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnWidget {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnWidgetSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnWidgetSimple.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.WIDGET_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.WIDGET_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.BUTTON_SPELL)
+            val OPERATORS = setOf(MenuOption.Operator.WIDGET_ACTION_0, MenuOption.Operator.WIDGET_ACTION_1, MenuOption.Operator.BUTTON_SPELL)
         }
         override fun toString(): String {
             return "OnWidgetSimple(opcode=$opcode, operator=$operator, widgetId=$widgetId, widgetChildId=$widgetChildId, targetName=$targetName, action=$action)"
         }
     }
 
-    data class ButtonDialog(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.InWidget, com.runesuite.client.game.api.MenuOption.Indexed {
+    data class ButtonDialog(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.InWidget, MenuOption.Indexed {
         override val index get() = argument1
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.ButtonDialog.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.ButtonDialog.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.BUTTON_DIALOG)
+            val OPERATORS = setOf(MenuOption.Operator.BUTTON_DIALOG)
         }
         override fun toString(): String {
             return "ButtonDialog(opcode=$opcode, operator=$operator, index=$index, widgetId=$widgetId, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnItemIndexed(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.Indexed, com.runesuite.client.game.api.MenuOption.OnItem {
+    data class OnItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnItem {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnItemIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnItemIndexed.Companion.OPERATORS) { operator }
         }
-        override val index get() = opcode - com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_0.opcode
+        override val index get() = opcode - MenuOption.Operator.ITEM_ACTION_0.opcode
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_2,
-                    com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_3, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ACTION_4)
+                    MenuOption.Operator.ITEM_ACTION_0, MenuOption.Operator.ITEM_ACTION_1, MenuOption.Operator.ITEM_ACTION_2,
+                    MenuOption.Operator.ITEM_ACTION_3, MenuOption.Operator.ITEM_ACTION_4)
         }
         override fun toString(): String {
             return "OnItemIndexed(opcode=$opcode, operator=$operator, index=$index, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnItemSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnItem {
+    data class OnItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnItem {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnItemSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnItemSimple.Companion.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.ITEM_EXAMINE, com.runesuite.client.game.api.MenuOption.Operator.SPELL_ON_ITEM, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ON_ITEM,
-                    com.runesuite.client.game.api.MenuOption.Operator.USE_ITEM)
+                    MenuOption.Operator.ITEM_EXAMINE, MenuOption.Operator.SPELL_ON_ITEM, MenuOption.Operator.ITEM_ON_ITEM,
+                    MenuOption.Operator.USE_ITEM)
         }
         override fun toString(): String {
             return "OnItemSimple(opcode=$opcode, operator=$operator, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnGroundItemIndexed(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.Indexed, com.runesuite.client.game.api.MenuOption.OnGroundItem, com.runesuite.client.game.api.MenuOption.AtLocation {
+    data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnGroundItemIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnGroundItemIndexed.Companion.OPERATORS) { operator }
         }
-        override val index: Int get() = opcode - com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_0.opcode
+        override val index: Int get() = opcode - MenuOption.Operator.GROUND_ITEM_ACTION_0.opcode
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_2,
-                    com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_3, com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_ACTION_4)
+                    MenuOption.Operator.GROUND_ITEM_ACTION_0, MenuOption.Operator.GROUND_ITEM_ACTION_1, MenuOption.Operator.GROUND_ITEM_ACTION_2,
+                    MenuOption.Operator.GROUND_ITEM_ACTION_3, MenuOption.Operator.GROUND_ITEM_ACTION_4)
         }
         override fun toString(): String {
             return "OnGroundItemIndexed(opcode=$opcode, operator=$operator, index=$index, id=$id, location=$location, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnGroundItemSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnGroundItem, com.runesuite.client.game.api.MenuOption.AtLocation {
+    data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnGroundItemSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnGroundItemSimple.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.ITEM_ON_GROUND_ITEM, com.runesuite.client.game.api.MenuOption.Operator.GROUND_ITEM_EXAMINE, com.runesuite.client.game.api.MenuOption.Operator.SPELL_ON_GROUND_ITEM)
+            val OPERATORS = setOf(MenuOption.Operator.ITEM_ON_GROUND_ITEM, MenuOption.Operator.GROUND_ITEM_EXAMINE, MenuOption.Operator.SPELL_ON_GROUND_ITEM)
         }
         override fun toString(): String {
             return "OnGroundItemSimple(opcode=$opcode, operator=$operator, id=$id, location=$location, targetName=$targetName, action=$action)"
         }
     }
 
-    data class Cancel(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption {
+    data class Cancel(private val menuOption: MenuOption) : MenuOption by menuOption {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.Cancel.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.Cancel.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.CANCEL)
+            val OPERATORS = setOf(MenuOption.Operator.CANCEL)
         }
         override fun toString(): String {
             return "Cancel(opcode=$opcode, operator=$operator, action=$action)"
         }
     }
 
-    data class WalkHere(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnScreen {
+    data class WalkHere(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnScreen {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.WalkHere.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.WalkHere.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.WALK_HERE)
+            val OPERATORS = setOf(MenuOption.Operator.WALK_HERE)
         }
         override fun toString(): String {
             return "WalkHere(opcode=$opcode, operator=$operator, screenLocation=$screenLocation, action=$action)"
         }
     }
 
-    data class OnObjectIndexed(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.AtLocation, com.runesuite.client.game.api.MenuOption.Indexed, com.runesuite.client.game.api.MenuOption.OnObject {
+    data class OnObjectIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.AtLocation, MenuOption.Indexed, MenuOption.OnObject {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnObjectIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnObjectIndexed.Companion.OPERATORS) { operator }
         }
         override val plane: Int = accessor.plane
-        override val index: Int get() = opcode - com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_0.opcode
+        override val index: Int get() = opcode - MenuOption.Operator.OBJECT_ACTION_0.opcode
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_2,
-                    com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_3, com.runesuite.client.game.api.MenuOption.Operator.OBJECT_ACTION_4)
+                    MenuOption.Operator.OBJECT_ACTION_0, MenuOption.Operator.OBJECT_ACTION_1, MenuOption.Operator.OBJECT_ACTION_2,
+                    MenuOption.Operator.OBJECT_ACTION_3, MenuOption.Operator.OBJECT_ACTION_4)
         }
         override fun toString(): String {
             return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, tag=$tag, targetName=$targetName, action=$action)"
         }
     }
 
-    interface OnNpc : com.runesuite.client.game.api.MenuOption, com.runesuite.client.game.api.ActorTargeting {
+    interface OnNpc : MenuOption, ActorTargeting {
         override val playerTargetIndex: Int? get() = null
         override val npcTargetIndex: Int get() = argument0
-        override val target: com.runesuite.client.game.api.Npc? get() = super.target as com.runesuite.client.game.api.Npc?
+        override val target: Npc? get() = super.target as Npc?
     }
 
-    interface OnPlayer : com.runesuite.client.game.api.MenuOption, com.runesuite.client.game.api.ActorTargeting {
+    interface OnPlayer : MenuOption, ActorTargeting {
         override val playerTargetIndex: Int get() = argument0
         override val npcTargetIndex: Int? get() = null
-        override val target: com.runesuite.client.game.api.Player? get() = super.target as com.runesuite.client.game.api.Player?
+        override val target: Player? get() = super.target as Player?
     }
 
-    data class OnNpcIndexed(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.Indexed, com.runesuite.client.game.api.MenuOption.OnNpc {
+    data class OnNpcIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnNpc {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnNpcIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnNpcIndexed.Companion.OPERATORS) { operator }
         }
-        override val index: Int get() = opcode - com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_0.opcode
+        override val index: Int get() = opcode - MenuOption.Operator.NPC_ACTION_0.opcode
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_2,
-                    com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_3, com.runesuite.client.game.api.MenuOption.Operator.NPC_ACTION_4)
+                    MenuOption.Operator.NPC_ACTION_0, MenuOption.Operator.NPC_ACTION_1, MenuOption.Operator.NPC_ACTION_2,
+                    MenuOption.Operator.NPC_ACTION_3, MenuOption.Operator.NPC_ACTION_4)
         }
         override fun toString(): String {
             return "OnNpcIndexed(opcode=$opcode, operator=$operator, index=$index, npcTargetIndex=$npcTargetIndex, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnPlayerIndexed(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.Indexed, com.runesuite.client.game.api.MenuOption.OnPlayer {
+    data class OnPlayerIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnPlayer {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnPlayerIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnPlayerIndexed.Companion.OPERATORS) { operator }
         }
-        override val index: Int get() = opcode - com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_0.opcode
+        override val index: Int get() = opcode - MenuOption.Operator.PLAYER_ACTION_0.opcode
         companion object {
             val OPERATORS = setOf(
-                    com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_0, com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_1, com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_2,
-                    com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_3, com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_4, com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_5,
-                    com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_6, com.runesuite.client.game.api.MenuOption.Operator.PLAYER_ACTION_7)
+                    MenuOption.Operator.PLAYER_ACTION_0, MenuOption.Operator.PLAYER_ACTION_1, MenuOption.Operator.PLAYER_ACTION_2,
+                    MenuOption.Operator.PLAYER_ACTION_3, MenuOption.Operator.PLAYER_ACTION_4, MenuOption.Operator.PLAYER_ACTION_5,
+                    MenuOption.Operator.PLAYER_ACTION_6, MenuOption.Operator.PLAYER_ACTION_7)
         }
         override fun toString(): String {
             return "onPlayerIndexed(opcode=$opcode, operator=$operator, index=$index, playerTargetIndex=$playerTargetIndex, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnNpcSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnNpc {
+    data class OnNpcSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnNpc {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnNpcSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnNpcSimple.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.SPELL_ON_NPC, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ON_NPC, com.runesuite.client.game.api.MenuOption.Operator.NPC_EXAMINE)
+            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_NPC, MenuOption.Operator.ITEM_ON_NPC, MenuOption.Operator.NPC_EXAMINE)
         }
         override fun toString(): String {
             return "OnNpcSimple(opcode=$opcode, operator=$operator, npcTargetIndex=$npcTargetIndex, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnPlayerSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnPlayer {
+    data class OnPlayerSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnPlayer {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnPlayerSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnPlayerSimple.Companion.OPERATORS) { operator }
         }
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.SPELL_ON_PLAYER, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ON_PLAYER)
+            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_PLAYER, MenuOption.Operator.ITEM_ON_PLAYER)
         }
         override fun toString(): String {
             return "OnPlayerSimple(opcode=$opcode, operator=$operator, playerTargetIndex=$playerTargetIndex, targetName=$targetName, action=$action)"
         }
     }
 
-    data class OnObjectSimple(private val menuOption: com.runesuite.client.game.api.MenuOption) : com.runesuite.client.game.api.MenuOption by menuOption, com.runesuite.client.game.api.MenuOption.OnObject, com.runesuite.client.game.api.MenuOption.AtLocation {
+    data class OnObjectSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnObject, MenuOption.AtLocation {
         init {
-            require(operator in com.runesuite.client.game.api.MenuOption.OnObjectSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnObjectSimple.Companion.OPERATORS) { operator }
         }
         override val plane: Int = accessor.plane
         companion object {
-            val OPERATORS = setOf(com.runesuite.client.game.api.MenuOption.Operator.SPELL_ON_OBJECT, com.runesuite.client.game.api.MenuOption.Operator.OBJECT_EXAMINE, com.runesuite.client.game.api.MenuOption.Operator.ITEM_ON_OBJECT)
+            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_OBJECT, MenuOption.Operator.OBJECT_EXAMINE, MenuOption.Operator.ITEM_ON_OBJECT)
         }
         override fun toString(): String {
             return "OnObjectSimple(opcode=$opcode, operator=$operator, tag=$tag, location=$location, targetName=$targetName, action=$action)"

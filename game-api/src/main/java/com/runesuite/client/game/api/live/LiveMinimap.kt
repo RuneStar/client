@@ -22,7 +22,7 @@ object LiveMinimap : Minimap {
         Game.WindowMode.FIXED -> FIXED_CENTER
     }
 
-    override val zoom get() = 0 // todo
+    override val zoom get() = 0
 
     override val orientation get() = Angle(accessor.minimapOrientation)
 

@@ -12,7 +12,7 @@ interface Projection {
 
     fun toScreen(position: Position, tileHeight: Position): Point
 
-    class Minimap(val minimap: com.runesuite.client.game.api.Minimap) : Projection {
+    data class Minimap(val minimap: com.runesuite.client.game.api.Minimap) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             val dx = (position.localX - minimap.reference.localX) shr 5
@@ -35,7 +35,7 @@ interface Projection {
         }
     }
 
-    class Viewport(
+    data class Viewport(
             val camera: Camera,
             val viewport: com.runesuite.client.game.api.Viewport,
             val scene: Scene
