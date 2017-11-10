@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 /**
+ * An event representing a point in the execution of a method.
+ *
  * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
  */
 public abstract class MethodEvent<I> {
@@ -22,14 +24,14 @@ public abstract class MethodEvent<I> {
     }
 
     /**
-     * @return the instance the method was called on, {@code null} for {@code static} methods
+     * The instance the method was called on, {@code null} for {@code static} methods.
      */
     public final I getInstance() {
         return instance;
     }
 
     /**
-     * @return the number of times the method was called before the call this event is a part of
+     * The number of times the method was called before the call this event is a part of.
      */
     public final long getIndex() {
         return index;
@@ -38,8 +40,6 @@ public abstract class MethodEvent<I> {
     /**
      * The arguments used to call the method, boxing primitive values. The returned array should not be
      * modified.
-     *
-     * @return the arguments used to call the method, boxing primitive values
      */
     @NotNull
     public final Object[] getArguments() {
@@ -47,6 +47,8 @@ public abstract class MethodEvent<I> {
     }
 
     /**
+     * An event representing the entrance to a method.
+     *
      * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
      */
     public final static class Enter<I> extends MethodEvent<I> {
@@ -66,8 +68,10 @@ public abstract class MethodEvent<I> {
     }
 
     /**
+     * An event representing the exit from a method.
+     *
      * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
-     * @param <R> the return type of the method, {@link Void} for {@code void} methods
+     * @param <R> the return type of the method, wrappers for primitives, {@link Void} for {@code void} methods
      */
     public final static class Exit<I, R> extends MethodEvent<I> {
 
@@ -79,7 +83,7 @@ public abstract class MethodEvent<I> {
         }
 
         /**
-         * @return the value returned from the method, {@code null} for {@code void} methods
+         * The value returned from the method, boxing primitives, {@code null} for {@code void} methods.
          */
         public R getReturned() {
             return returned;

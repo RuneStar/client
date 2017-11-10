@@ -240,7 +240,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(menuAction::class)
-    class crosshairColor : OrderMapper.InMethod.Field(menuAction::class, 2) {
+    class mouseCrosshair : OrderMapper.InMethod.Field(menuAction::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -2211,5 +2211,11 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 4..5 }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<itemContainers>().id } }
+    }
+
+    @SinceVersion(152)
+    @DependsOn(UrlRequester::class)
+    class urlRequester : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<UrlRequester>() }
     }
 }

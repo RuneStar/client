@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong
  * Wraps a method and provides access to the state of the method calls both before execution starts and after it ends.
  *
  * @param[I] the instance type this method is declared on, [Void] for `static` methods
- * @param[R] the return type of this method, [Void] for `void` methods
+ * @param[R] the return type of this method, wrappers for primitives, [Void] for `void` methods
  */
 interface MethodExecution<I, R> {
 
