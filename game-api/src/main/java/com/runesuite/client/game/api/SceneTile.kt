@@ -5,12 +5,11 @@ import com.runesuite.client.game.api.live.Projections
 import com.runesuite.client.game.api.live.LiveScene
 import java.awt.Polygon
 
-/**
- * Tile relative to a Scene
- *
- * @see[Scene]
- */
-data class SceneTile(val x: Int, val y: Int, val plane: Int) {
+data class SceneTile(
+        val x: Int,
+        val y: Int,
+        val plane: Int
+) {
 
     val center get() = Position(x, Position.MID_SUB, y, Position.MID_SUB, 0, plane)
 

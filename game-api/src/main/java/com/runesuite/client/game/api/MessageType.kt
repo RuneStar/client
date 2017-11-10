@@ -16,6 +16,7 @@ enum class MessageType(val id: Int) {
     SYSTEM_FILTERED(105);
 
     companion object {
+
         @JvmField
         val LOOKUP = values().associateBy { it.id }
     }

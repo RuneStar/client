@@ -34,7 +34,7 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
 
     private fun shapeAt(point: Point): Shape {
         val circle = Ellipse2D.Double()
-        circle.setFrameFromCenter(point, Point(point.x + 3, point.y + 3))
+        circle.setFrameFromCenter(point, Point(point.x + 5, point.y + 5))
         return circle
     }
 }

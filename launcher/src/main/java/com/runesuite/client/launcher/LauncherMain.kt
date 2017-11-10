@@ -46,8 +46,13 @@ private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default
 fun main(args: Array<String>) {
     val window = startLoadingWindow()
     Files.createDirectories(PLUGINS_DIR_PATH)
-    updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
-    updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
+    try {
+        updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
+        updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        System.exit(1)
+    }
     window.dispose()
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString(), *args)
             .inheritIO().start().waitFor()
@@ -69,7 +74,6 @@ private fun startLoadingWindow(): Window {
 private fun updateArtifact(artifactId: String, path: Path) {
     val mvnPath = updateArtifactLocalRepo(artifactId)
     Files.createDirectories(path.parent)
-    // throws exception if in use
     Files.copy(mvnPath, path, StandardCopyOption.REPLACE_EXISTING)
 }
 

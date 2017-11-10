@@ -35,20 +35,25 @@ interface Projection {
         }
     }
 
-    class Viewport(val camera: Camera, val viewport: com.runesuite.client.game.api.Viewport, val scene: Scene) : Projection {
+    class Viewport(
+            val camera: Camera,
+            val viewport: com.runesuite.client.game.api.Viewport,
+            val scene: Scene
+    ) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             require(tileHeight.isLoaded) { tileHeight }
+            val cameraCopy = camera.copyOf()
             var x1 = position.localX
             var y1 = position.localY
             var z1 = scene.getTileHeight(tileHeight) - position.height
-            x1 -= camera.x
-            y1 -= camera.z
-            z1 -= camera.y
-            val sinY = camera.pitch.sinInternal
-            val cosY = camera.pitch.cosInternal
-            val sinX = camera.yaw.sinInternal
-            val cosX = camera.yaw.cosInternal
+            x1 -= cameraCopy.position.localX
+            y1 -= cameraCopy.position.localY
+            z1 -= scene.getTileHeight(cameraCopy.position) - cameraCopy.position.height
+            val sinY = cameraCopy.pitch.sinInternal
+            val cosY = cameraCopy.pitch.cosInternal
+            val sinX = cameraCopy.yaw.sinInternal
+            val cosX = cameraCopy.yaw.cosInternal
             val x2 = (y1 * sinX + x1 * cosX) shr 16
             y1 = (y1 * cosX - sinX * x1) shr 16
             x1 = x2
