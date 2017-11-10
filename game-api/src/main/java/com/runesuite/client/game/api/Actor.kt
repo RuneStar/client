@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.access.XActor
 
 abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTargeting {
 
-    private val plane = Client.accessor.plane
+    private val plane = Client.accessor.plane // todo
 
     override val npcTargetIndex: Int?
         get() = accessor.targetIndex.let { if (it in 0..32767) it else null }

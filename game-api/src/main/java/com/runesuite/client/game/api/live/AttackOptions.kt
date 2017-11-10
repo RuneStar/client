@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client
 
 object AttackOptions {
 
-    val npc get() = AttackOption.get(Client.accessor.npcAttackOption)
+    val npc get() = AttackOption[Client.accessor.npcAttackOption]
 
-    val player get() = AttackOption.get(Client.accessor.playerAttackOption)
+    val player get() = AttackOption[Client.accessor.playerAttackOption]
 }

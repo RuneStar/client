@@ -9,5 +9,5 @@ abstract class Entity(override val accessor: XEntity) : Wrapper() {
 
     abstract val position: Position
 
-    abstract val orientation: com.runesuite.client.game.api.Angle
+    abstract val orientation: Angle
 }

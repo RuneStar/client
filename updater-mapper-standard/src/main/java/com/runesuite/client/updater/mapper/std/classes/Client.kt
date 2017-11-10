@@ -2203,4 +2203,13 @@ class Client : IdentityMapper.Class() {
     class Scene_cameraYTileMax : OrderMapper.InMethod.Field(Scene.method1::class, 17) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("itemContainerId", "index", "itemId", "itemQuantity")
+    @DependsOn(itemContainers::class)
+    class itemContainerSetItem : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.arguments.size in 4..5 }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<itemContainers>().id } }
+    }
 }
