@@ -15,23 +15,25 @@ interface Projection {
     data class Minimap(val minimap: com.runesuite.client.game.api.Minimap) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
-            val dx = (position.localX - minimap.reference.localX) shr 5
-            val dy = (position.localY - minimap.reference.localY) shr 5
-            val sin = minimap.orientation.sinInternal * 256 / (minimap.zoom + 256)
-            val cos = minimap.orientation.cosInternal * 256 / (minimap.zoom + 256)
+            val minimapCopy = minimap.copyOf()
+            val dx = (position.localX - minimapCopy.reference.localX) shr 5
+            val dy = (position.localY - minimapCopy.reference.localY) shr 5
+            val sin = minimapCopy.orientation.sinInternal * 256 / (minimapCopy.zoom + 256)
+            val cos = minimapCopy.orientation.cosInternal * 256 / (minimapCopy.zoom + 256)
             val x2 = (dy * sin + dx * cos) shr 16
             val y2 = (dy * cos - dx * sin) shr 16
-            return Point(minimap.center.x + x2, minimap.center.y - y2)
+            return Point(minimapCopy.center.x + x2, minimapCopy.center.y - y2)
         }
 
         override fun toGame(point: Point): Position {
-            val x2 = minimap.center.x - point.x
-            val y2 = minimap.center.y + point.y * -1
-            val sin = minimap.orientation.sinInternal * (minimap.zoom + 256) shr 8
-            val cos = minimap.orientation.cosInternal * (minimap.zoom + 256) shr 8
+            val minimapCopy = minimap.copyOf()
+            val x2 = minimapCopy.center.x - point.x
+            val y2 = minimapCopy.center.y - point.y
+            val sin = minimapCopy.orientation.sinInternal * (minimapCopy.zoom + 256) shr 8
+            val cos = minimapCopy.orientation.cosInternal * (minimapCopy.zoom + 256) shr 8
             val dx = (y2 * sin + x2 * cos) shr 11
             val dy = (y2 * cos - x2 * sin) shr 11
-            return minimap.reference.plusLocal(dx * -1, dy)
+            return minimapCopy.reference.plusLocal(dx * -1, dy).copy(height = 0)
         }
     }
 
@@ -43,10 +45,10 @@ interface Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             require(tileHeight.isLoaded) { tileHeight }
-            val cameraCopy = camera.copyOf()
             var x1 = position.localX
             var y1 = position.localY
             var z1 = scene.getTileHeight(tileHeight) - position.height
+            val cameraCopy = camera.copyOf()
             x1 -= cameraCopy.position.localX
             y1 -= cameraCopy.position.localY
             z1 -= scene.getTileHeight(cameraCopy.position) - cameraCopy.position.height
@@ -63,8 +65,11 @@ interface Projection {
             if (y1 == 0) {
                 y1 = 1
             }
-            return Point(viewport.width / 2 + x1 * viewport.zoom / y1 + viewport.x,
-                    viewport.height / 2 + z1 * viewport.zoom / y1 + viewport.y)
+            val viewportCopy = viewport.copyOf()
+            return Point(
+                    viewportCopy.width / 2 + x1 * viewportCopy.zoom / y1 + viewportCopy.x,
+                    viewportCopy.height / 2 + z1 * viewportCopy.zoom / y1 + viewportCopy.y
+            )
         }
 
         override fun toGame(point: Point): Position {
