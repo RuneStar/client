@@ -51,11 +51,11 @@ internal class PluginHolder<T : PluginSettings>(
     private fun tryWrite(file: Path, value: T) {
         try {
             ignoreNextEvent = true
-            logger.debug("Writing settings...")
+            logger.info("Writing settings...")
             plugin.settingsWriter.write(file, value)
-            logger.debug("Write successful.")
+            logger.info("Write successful.")
         } catch (e: IOException) {
-            logger.error(e) { "Write failed." }
+            logger.warn("Write failed.", e)
             safeDestroyPlugin()
         }
     }
@@ -67,18 +67,18 @@ internal class PluginHolder<T : PluginSettings>(
 
     private fun createSettings() {
         if (Files.exists(settingsFile)) {
-            logger.debug("Settings file exists. Reading...")
+            logger.info("Settings file exists. Reading...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 settingsField.set(plugin, readSettings)
-                logger.debug("Read successful.")
+                logger.info("Read successful.")
             } catch (e: IOException) {
-                logger.warn(e) { "Read failed. Reverting to default settings." }
+                logger.warn("Read failed. Reverting to default settings.", e)
                 settingsField.set(plugin, plugin.defaultSettings)
                 tryWrite(settingsFile, plugin.settings)
             }
         } else {
-            logger.debug("Settings file does not exist. Using default settings.")
+            logger.info("Settings file does not exist. Using default settings.")
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.settings)
         }
@@ -92,17 +92,17 @@ internal class PluginHolder<T : PluginSettings>(
         }
         safeTryStopPlugin()
         if (Files.notExists(settingsFile)) {
-            logger.debug("Settings file missing. Switching to default settings.")
+            logger.info("Settings file missing. Switching to default settings.")
             settingsField.set(plugin, plugin.defaultSettings)
             tryWrite(settingsFile, plugin.defaultSettings)
         } else {
-            logger.debug("Settings file modified. Reading new settings...")
+            logger.info("Settings file modified. Reading new settings...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                logger.debug("Read successful.")
+                logger.info("Read successful.")
                 settingsField.set(plugin, readSettings)
             } catch (e: IOException) {
-                logger.warn(e) { "Read failed." }
+                logger.warn("Read failed.", e)
                 tryWrite(settingsFile, plugin.settings)
             }
         }
@@ -120,7 +120,7 @@ internal class PluginHolder<T : PluginSettings>(
             plugin.create()
             created = true
         } catch (e: Exception) {
-            logger.error(e) { "Exception creating plugin." }
+            logger.warn("Exception creating plugin.", e)
         }
     }
 
@@ -131,7 +131,7 @@ internal class PluginHolder<T : PluginSettings>(
             plugin.start()
             active = true
         } catch (e: Throwable) {
-            logger.error(e) { "Exception starting plugin." }
+            logger.warn("Exception starting plugin.", e)
             safeDestroyPlugin()
         }
     }
@@ -142,7 +142,7 @@ internal class PluginHolder<T : PluginSettings>(
         try {
             plugin.stop()
         } catch (e: Throwable) {
-            logger.error(e) { "Exception stopping plugin." }
+            logger.warn("Exception stopping plugin.", e)
             safeDestroyPlugin()
         }
     }
@@ -154,7 +154,7 @@ internal class PluginHolder<T : PluginSettings>(
         try {
             plugin.destroy()
         } catch (e: Exception) {
-            logger.error(e) { "Exception destroying plugin." }
+            logger.warn("Exception destroying plugin.", e)
         }
     }
 

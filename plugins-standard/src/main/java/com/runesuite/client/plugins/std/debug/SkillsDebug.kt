@@ -1,7 +1,7 @@
 package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.LiveCanvas
-import com.runesuite.client.game.api.live.localLevel
+import com.runesuite.client.game.api.live.LocalSkillLevels
 import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.util.ColorForm
@@ -21,7 +21,7 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
 
             var y = 35
             val x = 5
-            Skill.values().map { "$it ${it.localLevel}" }.forEach { s ->
+            Skill.values().map { "$it ${LocalSkillLevels[it]}" }.forEach { s ->
                 g.drawString(s, x, y)
                 y += g.font.size + 5
             }

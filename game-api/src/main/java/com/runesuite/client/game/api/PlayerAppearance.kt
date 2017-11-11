@@ -25,6 +25,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         SKIN(4);
 
         companion object {
+
             @JvmField
             val LOOKUP = values().associateBy { it.id }
         }
@@ -46,6 +47,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         // 11
 
         companion object {
+            
             @JvmField
             val LOOKUP = values().associateBy { it.id }
         }

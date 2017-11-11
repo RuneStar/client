@@ -19,7 +19,9 @@ object Mouse {
     val crosshair get() = checkNotNull(MouseCrosshair.LOOKUP[accessor.mouseCrosshair]) { accessor.mouseCrosshair }
 
     /**
-     * @see[java.awt.event.MouseListener][java.awt.event.MouseMotionListener][java.awt.event.MouseWheelListener]
+     * @see[java.awt.event.MouseListener]
+     * @see[java.awt.event.MouseMotionListener]
+     * @see[java.awt.event.MouseWheelListener]
      */
     val events: Observable<MouseEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
             .flatMap { SwingObservable.mouse(it) }

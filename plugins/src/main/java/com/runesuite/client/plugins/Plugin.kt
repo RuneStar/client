@@ -22,21 +22,21 @@ abstract class Plugin<T : PluginSettings> {
 
     @OverridingMethodsMustInvokeSuper
     open fun create() {
-        logger.debug("create")
+        logger.info("create")
     }
 
     @OverridingMethodsMustInvokeSuper
     open fun start() {
-        logger.debug("start")
+        logger.info("start")
     }
 
     @OverridingMethodsMustInvokeSuper
     open fun stop() {
-        logger.debug("stop")
+        logger.info("stop")
     }
 
     @OverridingMethodsMustInvokeSuper
     open fun destroy() {
-        logger.debug("destroy")
+        logger.info("destroy")
     }
 }

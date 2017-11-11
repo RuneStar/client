@@ -2,6 +2,7 @@ package com.runesuite.client.game.api.live
 
 import com.hunterwb.kxtra.swing.component.windowAncestor
 import com.runesuite.client.game.api.GameState
+import com.runesuite.client.game.api.WindowMode
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XClient
 import hu.akarnokd.rxjava2.swing.SwingObservable
@@ -28,7 +29,9 @@ object Game {
     val windowMode get() = checkNotNull(WindowMode.LOOKUP[accessor.clientPreferences.windowMode]) { accessor.clientPreferences.windowMode }
 
     /**
-     * @see[java.awt.event.WindowListener][java.awt.event.WindowStateListener][java.awt.event.WindowFocusListener]
+     * @see[java.awt.event.WindowListener]
+     * @see[java.awt.event.WindowStateListener]
+     * @see[java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
             checkNotNull((accessor as Component).windowAncestor()) { "Client has no window" }
@@ -38,15 +41,4 @@ object Game {
      * @see[java.awt.event.ContainerListener]
      */
     val containerEvents = SwingObservable.container(accessor as Container)
-
-    enum class WindowMode(val id: Int) {
-
-        FIXED(1),
-        RESIZABLE(2);
-
-        companion object {
-            @JvmField
-            val LOOKUP = values().associateBy { it.id }
-        }
-    }
 }

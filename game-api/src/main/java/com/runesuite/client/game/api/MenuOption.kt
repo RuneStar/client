@@ -4,6 +4,7 @@ import com.runesuite.client.game.raw.Client.accessor
 import java.awt.Point
 
 interface MenuOption {
+
     val opcode: Int
     val operator: MenuOption.Operator
     val argument0: Int
@@ -79,10 +80,14 @@ interface MenuOption {
         WIDGET_ACTION_1(1007); //
 
         companion object {
+
+            @JvmField
             val LOOKUP = values().associateBy { it.opcode }
+
+            @JvmStatic
             fun fromOpcode(opcode: Int): MenuOption.Operator {
                 val fixed = if (opcode >= 2000) opcode - 2000 else opcode
-                return MenuOption.Operator.Companion.LOOKUP[fixed] ?: MenuOption.Operator.OTHER_UNKNOWN
+                return MenuOption.Operator.LOOKUP[fixed] ?: MenuOption.Operator.OTHER_UNKNOWN
             }
         }
     }
@@ -98,26 +103,27 @@ interface MenuOption {
     ) : MenuOption
 
     companion object {
+
         fun of(opcode: Int, argument0: Int, argument1: Int, argument2: Int, targetName: String, action: String): MenuOption {
-            val operator = MenuOption.Operator.Companion.fromOpcode(opcode)
+            val operator = MenuOption.Operator.fromOpcode(opcode)
             val base = MenuOption.Base(opcode, operator, argument0, argument1, argument2, targetName, action)
             return when(operator) {
                 // todo: subclasses
                 // todo: Object Examine is wrong
-                in MenuOption.OnObjectIndexed.Companion.OPERATORS -> MenuOption.OnObjectIndexed(base)
-                in MenuOption.Cancel.Companion.OPERATORS -> MenuOption.Cancel(base)
-                in MenuOption.WalkHere.Companion.OPERATORS -> MenuOption.WalkHere(base)
-                in MenuOption.OnNpcIndexed.Companion.OPERATORS -> MenuOption.OnNpcIndexed(base)
-                in MenuOption.OnPlayerIndexed.Companion.OPERATORS -> MenuOption.OnPlayerIndexed(base)
-                in MenuOption.OnNpcSimple.Companion.OPERATORS -> MenuOption.OnNpcSimple(base)
-                in MenuOption.OnPlayerSimple.Companion.OPERATORS -> MenuOption.OnPlayerSimple(base)
-                in MenuOption.OnObjectSimple.Companion.OPERATORS -> MenuOption.OnObjectSimple(base)
-                in MenuOption.OnGroundItemIndexed.Companion.OPERATORS -> MenuOption.OnGroundItemIndexed(base)
-                in MenuOption.OnGroundItemSimple.Companion.OPERATORS -> MenuOption.OnGroundItemSimple(base)
-                in MenuOption.OnItemIndexed.Companion.OPERATORS -> MenuOption.OnItemIndexed(base)
-                in MenuOption.OnItemSimple.Companion.OPERATORS -> MenuOption.OnItemSimple(base)
-                in MenuOption.OnWidgetSimple.Companion.OPERATORS -> MenuOption.OnWidgetSimple(base)
-                in MenuOption.ButtonDialog.Companion.OPERATORS -> MenuOption.ButtonDialog(base)
+                in MenuOption.OnObjectIndexed.OPERATORS -> MenuOption.OnObjectIndexed(base)
+                in MenuOption.Cancel.OPERATORS -> MenuOption.Cancel(base)
+                in MenuOption.WalkHere.OPERATORS -> MenuOption.WalkHere(base)
+                in MenuOption.OnNpcIndexed.OPERATORS -> MenuOption.OnNpcIndexed(base)
+                in MenuOption.OnPlayerIndexed.OPERATORS -> MenuOption.OnPlayerIndexed(base)
+                in MenuOption.OnNpcSimple.OPERATORS -> MenuOption.OnNpcSimple(base)
+                in MenuOption.OnPlayerSimple.OPERATORS -> MenuOption.OnPlayerSimple(base)
+                in MenuOption.OnObjectSimple.OPERATORS -> MenuOption.OnObjectSimple(base)
+                in MenuOption.OnGroundItemIndexed.OPERATORS -> MenuOption.OnGroundItemIndexed(base)
+                in MenuOption.OnGroundItemSimple.OPERATORS -> MenuOption.OnGroundItemSimple(base)
+                in MenuOption.OnItemIndexed.OPERATORS -> MenuOption.OnItemIndexed(base)
+                in MenuOption.OnItemSimple.OPERATORS -> MenuOption.OnItemSimple(base)
+                in MenuOption.OnWidgetSimple.OPERATORS -> MenuOption.OnWidgetSimple(base)
+                in MenuOption.ButtonDialog.OPERATORS -> MenuOption.ButtonDialog(base)
                 else -> base
             }
         }
@@ -163,7 +169,7 @@ interface MenuOption {
 
     data class OnWidgetSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnWidget {
         init {
-            require(operator in MenuOption.OnWidgetSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnWidgetSimple.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.WIDGET_ACTION_0, MenuOption.Operator.WIDGET_ACTION_1, MenuOption.Operator.BUTTON_SPELL)
@@ -188,7 +194,7 @@ interface MenuOption {
 
     data class OnItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnItem {
         init {
-            require(operator in MenuOption.OnItemIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnItemIndexed.OPERATORS) { operator }
         }
         override val index get() = opcode - MenuOption.Operator.ITEM_ACTION_0.opcode
         companion object {
@@ -203,7 +209,7 @@ interface MenuOption {
 
     data class OnItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnItem {
         init {
-            require(operator in MenuOption.OnItemSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnItemSimple.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(
@@ -218,7 +224,7 @@ interface MenuOption {
     data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in MenuOption.OnGroundItemIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnGroundItemIndexed.OPERATORS) { operator }
         }
         override val index: Int get() = opcode - MenuOption.Operator.GROUND_ITEM_ACTION_0.opcode
         companion object {
@@ -234,7 +240,7 @@ interface MenuOption {
     data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in MenuOption.OnGroundItemSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnGroundItemSimple.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.ITEM_ON_GROUND_ITEM, MenuOption.Operator.GROUND_ITEM_EXAMINE, MenuOption.Operator.SPELL_ON_GROUND_ITEM)
@@ -246,7 +252,7 @@ interface MenuOption {
 
     data class Cancel(private val menuOption: MenuOption) : MenuOption by menuOption {
         init {
-            require(operator in MenuOption.Cancel.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.Cancel.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.CANCEL)
@@ -258,7 +264,7 @@ interface MenuOption {
 
     data class WalkHere(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnScreen {
         init {
-            require(operator in MenuOption.WalkHere.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.WalkHere.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.WALK_HERE)
@@ -270,7 +276,7 @@ interface MenuOption {
 
     data class OnObjectIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.AtLocation, MenuOption.Indexed, MenuOption.OnObject {
         init {
-            require(operator in MenuOption.OnObjectIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnObjectIndexed.OPERATORS) { operator }
         }
         override val plane: Int = accessor.plane
         override val index: Int get() = opcode - MenuOption.Operator.OBJECT_ACTION_0.opcode
@@ -298,7 +304,7 @@ interface MenuOption {
 
     data class OnNpcIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnNpc {
         init {
-            require(operator in MenuOption.OnNpcIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnNpcIndexed.OPERATORS) { operator }
         }
         override val index: Int get() = opcode - MenuOption.Operator.NPC_ACTION_0.opcode
         companion object {
@@ -313,7 +319,7 @@ interface MenuOption {
 
     data class OnPlayerIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnPlayer {
         init {
-            require(operator in MenuOption.OnPlayerIndexed.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnPlayerIndexed.OPERATORS) { operator }
         }
         override val index: Int get() = opcode - MenuOption.Operator.PLAYER_ACTION_0.opcode
         companion object {
@@ -329,7 +335,7 @@ interface MenuOption {
 
     data class OnNpcSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnNpc {
         init {
-            require(operator in MenuOption.OnNpcSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnNpcSimple.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_NPC, MenuOption.Operator.ITEM_ON_NPC, MenuOption.Operator.NPC_EXAMINE)
@@ -341,7 +347,7 @@ interface MenuOption {
 
     data class OnPlayerSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnPlayer {
         init {
-            require(operator in MenuOption.OnPlayerSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnPlayerSimple.OPERATORS) { operator }
         }
         companion object {
             val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_PLAYER, MenuOption.Operator.ITEM_ON_PLAYER)
@@ -353,7 +359,7 @@ interface MenuOption {
 
     data class OnObjectSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnObject, MenuOption.AtLocation {
         init {
-            require(operator in MenuOption.OnObjectSimple.Companion.OPERATORS) { operator }
+            require(operator in MenuOption.OnObjectSimple.OPERATORS) { operator }
         }
         override val plane: Int = accessor.plane
         companion object {

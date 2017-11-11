@@ -1,14 +1,15 @@
 package com.runesuite.client.game.api.live
 
 import com.runesuite.client.game.api.Scene
+import com.runesuite.client.game.api.SceneTile
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XTile
 
 abstract class TileEntities<T> {
 
-    abstract protected fun fromTile(sceneTile: com.runesuite.client.game.api.SceneTile, xTile: XTile?): T
+    abstract protected fun fromTile(sceneTile: SceneTile, xTile: XTile?): T
 
-    open fun getAt(sceneTile: com.runesuite.client.game.api.SceneTile): T {
+    open fun getAt(sceneTile: SceneTile): T {
         require(sceneTile.isLoaded) { sceneTile }
         val tile = Client.accessor.scene.tiles[sceneTile.plane][sceneTile.x][sceneTile.y]
         return fromTile(sceneTile, tile)
@@ -20,7 +21,7 @@ abstract class TileEntities<T> {
         for (x in 0 until Scene.SIZE) {
             objs.add(ArrayList(Scene.SIZE))
             for (y in 0 until Scene.SIZE) {
-                val tile = com.runesuite.client.game.api.SceneTile(x, y, plane)
+                val tile = SceneTile(x, y, plane)
                 objs[x].add(getAt(tile))
             }
         }
@@ -34,7 +35,7 @@ abstract class TileEntities<T> {
             for (x in 0 until Scene.SIZE) {
                 objs[plane].add(ArrayList(Scene.SIZE))
                 for (y in 0 until Scene.SIZE) {
-                    val tile = com.runesuite.client.game.api.SceneTile(x, y, plane)
+                    val tile = SceneTile(x, y, plane)
                     objs[plane][x].add(getAt(tile))
                 }
             }

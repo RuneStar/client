@@ -2,9 +2,9 @@ package com.runesuite.client.game.api
 
 import com.runesuite.client.game.raw.access.XGroundItem
 
-class GroundItem(override val accessor: XGroundItem, val location: com.runesuite.client.game.api.SceneTile) : com.runesuite.client.game.api.Entity(accessor) {
+class GroundItem(override val accessor: XGroundItem, val location: SceneTile) : Entity(accessor) {
 
-    override val orientation get() = com.runesuite.client.game.api.Angle(0)
+    override val orientation get() = Angle(0)
 
     override val position get() = location.center
 

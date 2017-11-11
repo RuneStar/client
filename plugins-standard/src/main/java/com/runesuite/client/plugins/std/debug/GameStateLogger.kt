@@ -11,7 +11,7 @@ class GameStateLogger : DisposablePlugin<PluginSettings>() {
     override fun start() {
         super.start()
         add(Game.stateChanges.subscribe {
-            logger.debug { it }
+            logger.info(it.toString())
         })
     }
 }

@@ -18,37 +18,37 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
         val s = settings
         if (s.focus) {
             add(LiveCanvas.focusEvents.subscribe {
-                logger.debug { it }
+                logger.info(it.toString())
             })
         }
         if (s.window) {
             add(Game.windowEvents.subscribe {
-                logger.debug { it }
+                logger.info(it.toString())
             })
         }
         if (s.component) {
             add(LiveCanvas.componentEvents.subscribe {
-                logger.debug { it }
+                logger.info(it.toString())
             })
         }
         if (s.container) {
             add(Game.containerEvents.subscribe {
-                logger.debug { it }
+                logger.info(it.toString())
             })
         }
         if (s.mouse.others || s.mouse.motion || s.mouse.wheel) {
             add(Mouse.events.subscribe {
                 when (it.id) {
-                    MouseEvent.MOUSE_WHEEL -> if (s.mouse.wheel) logger.debug { it }
-                    MouseEvent.MOUSE_MOVED -> if (s.mouse.motion) logger.debug { it }
-                    else -> if (s.mouse.others) logger.debug { it }
+                    MouseEvent.MOUSE_WHEEL -> if (s.mouse.wheel) logger.info(it.toString())
+                    MouseEvent.MOUSE_MOVED -> if (s.mouse.motion) logger.info(it.toString())
+                    else -> if (s.mouse.others) logger.info(it.toString())
                 }
             })
         }
         if (s.keyboard.all || s.keyboard.typed) {
             add(Keyboard.events.subscribe {
-                if (s.keyboard.typed && it.id == KeyEvent.KEY_TYPED) logger.debug { it }
-                else if (s.keyboard.all) logger.debug { it }
+                if (s.keyboard.typed && it.id == KeyEvent.KEY_TYPED) logger.info(it.toString())
+                else if (s.keyboard.all) logger.info(it.toString())
             })
         }
     }

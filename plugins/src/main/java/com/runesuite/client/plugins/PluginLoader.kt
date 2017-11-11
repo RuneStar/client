@@ -43,7 +43,7 @@ class PluginLoader(
                     key = watchService.take() // blocks
                     Thread.sleep(100L) // accumulates duplicate events
                 } catch (e: InterruptedException) {
-                    logger.error(e) { "WatchService interrupted early." }
+                    logger.error("WatchService interrupted early.", e)
                     return@Thread
                 } catch (e: ClosedWatchServiceException) {
                     return@Thread

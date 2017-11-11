@@ -17,7 +17,8 @@ interface Scene {
                     this,
                     copy(x = SIZE - 1),
                     copy(x = SIZE - 1, y = SIZE - 1),
-                    copy(y = SIZE - 1))
+                    copy(y = SIZE - 1)
+            )
         }
     }
 

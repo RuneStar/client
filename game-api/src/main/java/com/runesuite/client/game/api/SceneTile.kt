@@ -30,11 +30,14 @@ data class SceneTile(
     }
 
     val corners: List<Position>
-        get() = base.run { listOf(
-                this,
-                copy(subX = Position.MAX_SUB),
-                copy(subX = Position.MAX_SUB, subY = Position.MAX_SUB),
-                copy(subY = Position.MAX_SUB)) }
+        get() = base.run {
+            listOf(
+                    this,
+                    copy(subX = Position.MAX_SUB),
+                    copy(subX = Position.MAX_SUB, subY = Position.MAX_SUB),
+                    copy(subY = Position.MAX_SUB)
+            )
+        }
 
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }

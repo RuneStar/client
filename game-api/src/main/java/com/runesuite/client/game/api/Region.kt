@@ -6,11 +6,14 @@ data class Region(val x: Int, val y: Int, val plane: Int) {
 
     val base get() = GlobalTile(x * SIZE, y * SIZE, plane)
 
-    val corners get() = base.run { listOf(
-            this,
-            copy(x = x + SIZE - 1),
-            copy(x = x + SIZE - 1, y = y + SIZE - 1),
-            copy(y = y + SIZE - 1)) }
+    val corners get() = base.run {
+        listOf(
+                this,
+                copy(x = x + SIZE - 1),
+                copy(x = x + SIZE - 1, y = y + SIZE - 1),
+                copy(y = y + SIZE - 1)
+        )
+    }
 
     internal val packed get() = x shl 14 or y or plane shl 28
 

@@ -11,7 +11,7 @@ class MenuActionLogger : DisposablePlugin<PluginSettings>() {
     override fun start() {
         super.start()
         add(Menu.actions.subscribe { a ->
-            logger.debug(a.toString())
+            logger.info(a.toString())
         })
     }
 }

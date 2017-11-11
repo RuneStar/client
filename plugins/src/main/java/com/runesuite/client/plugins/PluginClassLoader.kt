@@ -27,9 +27,9 @@ private constructor(jar: Path) : ClassLoader() {
             val c: Class<*>
             try {
                 c = defineClass(name, bytes, 0, bytes.size)
-                logger.debug { "Defined class $name" }
+                logger.info("Defined class $name")
             } catch (e: Exception) {
-                logger.debug { "Failed to define class $name" }
+                logger.warn("Failed to define class $name")
                 return@forEach
             }
             resolveClass(c)
@@ -37,20 +37,22 @@ private constructor(jar: Path) : ClassLoader() {
         }
         classes.forEach { c ->
             if (!Modifier.isAbstract(c.modifiers) && Plugin::class.java.isAssignableFrom(c)) {
+                logger.info("Found plugin ${c.name}")
                 val constructor: Constructor<*>
                 try {
                     constructor = c.getDeclaredConstructor()
                 } catch (e: Exception) {
-                    logger.warn(e) { "Failed to get no-argument constructor for $c" }
+                    logger.warn("Failed to get no-argument constructor for ${c.name}", e)
                     return@forEach
                 }
                 val plugin: Plugin<*>
                 try {
                     plugin = constructor.newInstance() as Plugin<*>
                 } catch (e: Exception) {
-                    logger.warn(e) { "Failed to create instance of $c" }
+                    logger.warn("Failed to create instance of ${c.name}", e)
                     return@forEach
                 }
+                logger.info("Initialized plugin ${c.name}")
                 plugins.add(plugin)
             }
         }

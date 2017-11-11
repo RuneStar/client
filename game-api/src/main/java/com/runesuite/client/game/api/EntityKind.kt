@@ -8,6 +8,7 @@ enum class EntityKind(val id: Int) {
     GROUND_ITEM(3);
 
     companion object {
+
         @JvmField
         val LOOKUP = values().associateBy { it.id }
     }
