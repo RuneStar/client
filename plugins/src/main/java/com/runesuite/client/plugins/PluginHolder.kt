@@ -159,7 +159,7 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     private fun addIndividualFileLogger() {
-        val lblogger = logger.underlyingLogger as Logger
+        val lblogger = logger as Logger
         if (lblogger.getAppender("plugin-individual") != null) return
 
         val logCtx = LoggerFactory.getILoggerFactory() as LoggerContext

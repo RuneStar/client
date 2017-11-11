@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins
 
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
 import java.net.URL
@@ -18,7 +18,7 @@ private constructor(jar: Path) : ClassLoader() {
 
     private val plugins: Collection<Plugin<*>>
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
         val classes = ArrayList<Class<*>>()

@@ -40,6 +40,7 @@
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging</artifactId>
+            <version>1.4.6</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
