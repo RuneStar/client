@@ -22,12 +22,12 @@ class WidgetDebug : DisposablePlugin<PluginSettings>() {
             g.font = font
             val mousePt = Mouse.location
 
-            val smallesHoveredWidget = Widgets.flat
+            val smallestHoveredWidget = Widgets.flat
                     .filter { it.isVisible }
                     .filter { it.shape?.contains(mousePt) ?: false }
                     .minBy { it.dimension.run { it.width + it.height } }
 
-            smallesHoveredWidget?.let { w ->
+            smallestHoveredWidget?.let { w ->
                 g.color = Color.WHITE
                 w.shape?.let { g.draw(it) }
                 var p = w.parent

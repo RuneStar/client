@@ -1116,9 +1116,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<JagexGame>() && it.klass != klass<JagexGame>() }
     }
 
-    @DependsOn(JagexGame0::class)
-    class jagexGame0 : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<JagexGame0>() && it.klass != klass<JagexGame0>() }
+    @DependsOn(JagexLoginType::class)
+    class jagexLoginType : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<JagexLoginType>() && it.klass != klass<JagexLoginType>() }
     }
 
     @DependsOn(BufferedFile::class)
@@ -2217,5 +2217,33 @@ class Client : IdentityMapper.Class() {
     @DependsOn(UrlRequester::class)
     class urlRequester : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<UrlRequester>() }
+    }
+
+    @MethodParameters("buffer", "hashTable")
+    @SinceVersion(141)
+    @DependsOn(IterableNodeHashTable::class)
+    class readStringIntParameters : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<IterableNodeHashTable>() }
+    }
+
+    @MethodParameters("name")
+    @DependsOn(Ignored.previousName::class)
+    class isOnIgnoreList : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Ignored.previousName>().id } }
+    }
+
+//    @MethodParameters("c")
+//    class isUsernameWhiteSpace : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+//                .and { it.arguments.startsWith(CHAR_TYPE) }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 95 } }
+//    }
+
+    @MethodParameters("name", "loginType")
+    @DependsOn(isOnIgnoreList::class)
+    class cleanUsername : OrderMapper.InMethod.Method(isOnIgnoreList::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 }

@@ -6,8 +6,8 @@ import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 
-@DependsOn(Node::class, IntegerNode::class)
+@DependsOn(Node::class, AbstractIntegerNode0::class)
 class TaskDataNode : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
-            .and { it.instanceFields.any { it.type == type<IntegerNode>() } }
+            .and { it.instanceFields.any { it.type == type<AbstractIntegerNode0>() } }
 }

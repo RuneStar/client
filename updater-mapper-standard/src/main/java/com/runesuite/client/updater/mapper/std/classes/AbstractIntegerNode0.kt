@@ -11,9 +11,9 @@ import org.objectweb.asm.Type
 import java.lang.reflect.Modifier
 
 @DependsOn(Node::class)
-class IntegerNode0 : IdentityMapper.Class() {
+class AbstractIntegerNode0 : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
-            .and { !Modifier.isAbstract(it.access) }
+            .and { Modifier.isAbstract(it.access) }
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.size == 1 }
             .and { it.instanceFields.all { it.type == Type.INT_TYPE } }
