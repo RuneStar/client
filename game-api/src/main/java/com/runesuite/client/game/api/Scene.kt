@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-import com.hunterwb.kxtra.lang.array.deepCopyOf
+import org.kxtra.lang.array.deepCopyOf
 
 /**
  * The loaded area that follows the local player.

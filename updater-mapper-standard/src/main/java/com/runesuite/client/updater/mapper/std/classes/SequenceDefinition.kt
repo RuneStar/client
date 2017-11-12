@@ -1,6 +1,6 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.hunterwb.kxtra.lang.list.startsWith
+import org.kxtra.lang.list.startsWith
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.and

@@ -2,45 +2,46 @@ package com.runesuite.client.updater.deob.jagex
 
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Attribute
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.AnnotationNode
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.util.TreeSet
+import java.util.*
 
 object JarInfo : Deobfuscator {
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
 
         val versions = classNodes.map { it.version }.toSortedSet()
-        logger.debug { "Class file version: $versions" }
+        logger.info { "Class file version: $versions" }
 
         val signatures = TreeSet<String>()
         classNodes.mapNotNull { it.signature }.toCollection(signatures)
         classNodes.flatMap { it.fields }.mapNotNull { it.signature }.toCollection(signatures)
         classNodes.flatMap { it.methods }.mapNotNull { it.signature }.toCollection(signatures)
-        logger.debug { "Signatures: $signatures" }
+        logger.info { "Signatures: $signatures" }
 
         val sourceDebug = classNodes.mapNotNull { it.sourceDebug }.toSortedSet()
-        logger.debug { "Class source debug: $sourceDebug" }
+        logger.info { "Class source debug: $sourceDebug" }
 
         val outerMethods = classNodes.filter { it.outerMethod != null }.map { it.name + ":" + it.outerClass + "." + it.outerMethod + it.outerMethodDesc }.sorted()
-        logger.debug { "Outer methods: $outerMethods" }
+        logger.info { "Outer methods: $outerMethods" }
 
         val outerClasses = classNodes.filter { it.outerClass != null && it.outerMethod == null }.map { it.name + ":" + it.outerClass }.sorted()
-        logger.debug { "Outer classes: $outerClasses" }
+        logger.info { "Outer classes: $outerClasses" }
 
         val attributes = TreeSet<Attribute>()
         classNodes.mapNotNull { it.attrs }.flatten().toCollection(attributes)
         classNodes.flatMap { it.fields }.mapNotNull { it.attrs }.flatten().toCollection(attributes)
         classNodes.flatMap { it.methods }.mapNotNull { it.attrs }.flatten().toCollection(attributes)
-        logger.debug { "Attributes: $attributes" }
+        logger.info { "Attributes: $attributes" }
 
         val annotations = TreeSet<AnnotationNode>()
         classNodes.mapNotNull { it.visibleAnnotations }.flatten().toCollection(annotations)
@@ -59,13 +60,13 @@ object JarInfo : Deobfuscator {
         classNodes.flatMap { it.methods }.mapNotNull { it.invisibleParameterAnnotations?.flatMap { it } }.flatten().toCollection(annotations)
         classNodes.flatMap { it.methods }.mapNotNull { it.visibleLocalVariableAnnotations }.flatten().toCollection(annotations)
         classNodes.flatMap { it.methods }.mapNotNull { it.invisibleLocalVariableAnnotations }.flatten().toCollection(annotations)
-        logger.debug { "Annotations: $annotations" }
+        logger.info { "Annotations: $annotations" }
 
         val localVariables = classNodes.flatMap { it.methods }.mapNotNull { it.localVariables }.flatten()
-        logger.debug { "Local variables: $localVariables" }
+        logger.info { "Local variables: $localVariables" }
 
         val params = classNodes.flatMap { it.methods }.mapNotNull { it.parameters }.flatten()
-        logger.debug { "Parameters: $params" }
+        logger.info { "Parameters: $params" }
 
         val interesting = TreeSet<String>()
         classNodes.forEach { c ->
@@ -83,7 +84,7 @@ object JarInfo : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Interesting members: $interesting" }
+        logger.info { "Interesting members: $interesting" }
 
         if (source != destination) {
             Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)

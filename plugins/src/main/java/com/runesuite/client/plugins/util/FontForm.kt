@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins.util
 
-import com.hunterwb.kxtra.swing.font.Font
+import org.kxtra.swing.font.Font
 import java.awt.Font
 import java.util.function.Supplier
 

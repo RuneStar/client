@@ -1,6 +1,7 @@
 package com.runesuite.client.plugins
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.nio.file.*
@@ -13,7 +14,7 @@ class PluginLoader(
         private val pluginsDir: Path
 ) : Closeable {
 
-    private val logger = LoggerFactory.getLogger(javaClass)
+    private val logger = getLogger()
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 

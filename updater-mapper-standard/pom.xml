@@ -22,7 +22,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hunterwb.kxtra</groupId>
+            <groupId>org.kxtra</groupId>
             <artifactId>kxtra-lang</artifactId>
         </dependency>
     </dependencies>

@@ -3,7 +3,8 @@ package com.runesuite.client.updater.deob.jagex
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.FieldInsnNode
 import java.lang.reflect.Modifier
 import java.nio.file.Path
@@ -11,7 +12,7 @@ import java.util.*
 
 object UnusedFieldRemover : Deobfuscator {
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -32,7 +33,7 @@ object UnusedFieldRemover : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Fields removed: ${removedFields.size}" }
+        logger.info { "Fields removed: ${removedFields.size}" }
         writeJar(classNodes, destination)
     }
 }

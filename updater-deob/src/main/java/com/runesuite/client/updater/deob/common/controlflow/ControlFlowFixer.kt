@@ -3,19 +3,17 @@ package com.runesuite.client.updater.deob.common.controlflow
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
-import org.objectweb.asm.tree.AbstractInsnNode
-import org.objectweb.asm.tree.FrameNode
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
 import java.nio.file.Path
 import java.util.*
-import kotlin.collections.AbstractMap
 import kotlin.collections.HashSet
 
 object ControlFlowFixer : Deobfuscator {
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -30,7 +28,7 @@ object ControlFlowFixer : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Blocks reordered: $blockCount" }
+        logger.info { "Blocks reordered: $blockCount" }
         writeJar(classNodes, destination)
     }
 

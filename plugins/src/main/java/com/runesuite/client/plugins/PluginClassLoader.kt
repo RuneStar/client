@@ -1,6 +1,6 @@
 package com.runesuite.client.plugins
 
-import org.slf4j.LoggerFactory
+import org.kxtra.slf4j.loggerfactory.getLogger
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
 import java.net.URL
@@ -18,7 +18,7 @@ private constructor(jar: Path) : ClassLoader() {
 
     private val plugins: Collection<Plugin<*>>
 
-    private val logger = LoggerFactory.getLogger(javaClass)
+    private val logger = getLogger()
 
     init {
         val classes = ArrayList<Class<*>>()

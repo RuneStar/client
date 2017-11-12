@@ -1,12 +1,13 @@
 package com.runesuite.client.plugins
 
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class Plugin<T : PluginSettings> {
 
-    val logger = LoggerFactory.getLogger(javaClass)
+    val logger = getLogger(javaClass)
 
     open val settingsWriter: ObjectReadWriter<T> = ObjectReadWriter.Yaml()
 

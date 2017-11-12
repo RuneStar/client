@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api.live
 
-import com.hunterwb.kxtra.swing.component.windowAncestor
+import org.kxtra.swing.component.windowAncestor
 import com.runesuite.client.game.api.GameState
 import com.runesuite.client.game.api.WindowMode
 import com.runesuite.client.game.raw.Client.accessor

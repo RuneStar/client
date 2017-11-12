@@ -41,8 +41,12 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.hunterwb.kxtra</groupId>
+            <groupId>org.kxtra</groupId>
             <artifactId>kxtra-swing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kxtra</groupId>
+            <artifactId>kxtra-slf4j</artifactId>
         </dependency>
     </dependencies>
 </project>

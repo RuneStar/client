@@ -6,7 +6,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -16,7 +17,7 @@ object MethodOrigClassFinder : Deobfuscator {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -42,7 +43,7 @@ object MethodOrigClassFinder : Deobfuscator {
         val classFile = source.resolveSibling(source.fileName.toString() + ".methods-orig-class.json")
         mapper.writeValue(classFile.toFile(), map)
 
-        logger.debug { "Static method original classes found: ${map.size}" }
+        logger.info { "Static method original classes found: ${map.size}" }
 
         writeJar(classNodes, destination)
     }

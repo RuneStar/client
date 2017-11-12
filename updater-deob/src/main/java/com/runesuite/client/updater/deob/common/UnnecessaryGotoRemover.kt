@@ -3,7 +3,8 @@ package com.runesuite.client.updater.deob.common
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.JumpInsnNode
 import org.objectweb.asm.tree.LabelNode
@@ -11,7 +12,7 @@ import java.nio.file.Path
 
 object UnnecessaryGotoRemover : Deobfuscator {
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     // todo : work without removing frames first
 
@@ -32,7 +33,7 @@ object UnnecessaryGotoRemover : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Gotos removed: $gotosRemoved" }
+        logger.info { "Gotos removed: $gotosRemoved" }
         writeJar(classNodes, destination)
     }
 }

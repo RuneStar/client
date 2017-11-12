@@ -1,7 +1,7 @@
 package com.runesuite.client.game.api.live
 
-import com.hunterwb.kxtra.swing.graphics2d.create2D
-import com.hunterwb.kxtra.swing.toolkit.fontDesktopHints
+import org.kxtra.swing.graphics2d.create2D
+import org.kxtra.swing.toolkit.fontDesktopHints
 import com.runesuite.client.game.api.Canvas
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell

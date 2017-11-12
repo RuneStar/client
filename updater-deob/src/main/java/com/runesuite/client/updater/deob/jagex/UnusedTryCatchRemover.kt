@@ -3,7 +3,8 @@ package com.runesuite.client.updater.deob.jagex
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.AbstractInsnNode
@@ -11,7 +12,7 @@ import java.nio.file.Path
 
 object UnusedTryCatchRemover : Deobfuscator {
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -33,7 +34,7 @@ object UnusedTryCatchRemover : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Try catches removed: $removedTryCatches" }
+        logger.info { "Try catches removed: $removedTryCatches" }
         writeJar(classNodes, destination)
     }
 }

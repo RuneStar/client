@@ -76,8 +76,6 @@
         <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
         <kotlin.version>1.1.51</kotlin.version>
         <jackson.version>2.9.2</jackson.version>
-        <kxtra.groupId>com.hunterwb.kxtra</kxtra.groupId>
-        <kxtra.version>0.1.5</kxtra.version>
         <logback.groupId>ch.qos.logback</logback.groupId>
         <logback.version>1.2.3</logback.version>
         <asm.groupId>org.ow2.asm</asm.groupId>
@@ -149,14 +147,19 @@
                 <version>2.1.6</version>
             </dependency>
             <dependency>
-                <groupId>${kxtra.groupId}</groupId>
+                <groupId>org.kxtra</groupId>
                 <artifactId>kxtra-swing</artifactId>
-                <version>${kxtra.version}</version>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
-                <groupId>${kxtra.groupId}</groupId>
+                <groupId>org.kxtra</groupId>
                 <artifactId>kxtra-lang</artifactId>
-                <version>${kxtra.version}</version>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kxtra</groupId>
+                <artifactId>kxtra-slf4j</artifactId>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.github.akarnokd</groupId>

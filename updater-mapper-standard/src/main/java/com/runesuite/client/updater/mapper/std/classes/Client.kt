@@ -1,6 +1,6 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.hunterwb.kxtra.lang.list.startsWith
+import org.kxtra.lang.list.startsWith
 import com.runesuite.client.updater.mapper.std.CachedDefinitionMapper
 import com.runesuite.client.updater.mapper.std.IndexCacheFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
@@ -2245,5 +2245,12 @@ class Client : IdentityMapper.Class() {
     @DependsOn(isOnIgnoreList::class)
     class cleanUsername : OrderMapper.InMethod.Method(isOnIgnoreList::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters("bytes")
+    @DependsOn(Script::class)
+    class newScript : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Script>() }
+                .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 }

@@ -6,7 +6,7 @@ import com.google.common.collect.Multimap
 import com.google.common.collect.TreeMultimap
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*
 import java.lang.reflect.Modifier
@@ -18,7 +18,7 @@ object StaticDuplicateMethodFinder : Deobfuscator {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)

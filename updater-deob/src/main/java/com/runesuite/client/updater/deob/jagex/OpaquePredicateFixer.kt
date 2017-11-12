@@ -5,7 +5,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*
@@ -18,7 +19,7 @@ object OpaquePredicateFixer : Deobfuscator {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -53,7 +54,7 @@ object OpaquePredicateFixer : Deobfuscator {
                 }
             }
         }
-        logger.debug { "Opaque predicates checks removed: returns: $returns, exceptions: $exceptions" }
+        logger.info { "Opaque predicates checks removed: returns: $returns, exceptions: $exceptions" }
         val opFile = destination.resolveSibling(destination.fileName.toString() + ".op.json").toFile()
         mapper.writeValue(opFile, passingArgs)
         writeJar(classNodes, destination)

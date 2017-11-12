@@ -7,7 +7,8 @@ import com.google.common.collect.Multimap
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
@@ -18,7 +19,7 @@ object UnusedMethodRemover : Deobfuscator {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -61,7 +62,7 @@ object UnusedMethodRemover : Deobfuscator {
             }
         }
 
-        logger.debug { "Methods removed: ${removedMethods.size}" }
+        logger.info { "Methods removed: ${removedMethods.size}" }
         writeJar(classNodes, destination)
     }
 

@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-import com.hunterwb.kxtra.swing.polygon.Polygon
+import org.kxtra.swing.polygon.Polygon
 import com.runesuite.client.game.api.live.Projections
 import com.runesuite.client.game.api.live.LiveScene
 import java.awt.Polygon

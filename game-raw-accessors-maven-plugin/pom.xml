@@ -48,9 +48,8 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>${kxtra.groupId}</groupId>
+            <groupId>org.kxtra</groupId>
             <artifactId>kxtra-lang</artifactId>
-            <version>${kxtra.version}</version>
         </dependency>
     </dependencies>
 

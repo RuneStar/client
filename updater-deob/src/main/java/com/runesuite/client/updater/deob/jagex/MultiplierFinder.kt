@@ -6,8 +6,9 @@ import com.google.common.collect.ArrayListMultimap
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.readJar
 import com.runesuite.client.updater.deob.writeJar
-import mu.KotlinLogging
 import org.apache.bcel.Const
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.AbstractInsnNode
@@ -24,7 +25,7 @@ object MultiplierFinder : Deobfuscator {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val logger = KotlinLogging.logger { }
+    private val logger = getLogger()
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
@@ -104,7 +105,7 @@ object MultiplierFinder : Deobfuscator {
         mapper.writeValue(multFile, decoders)
         val ints = decoders.values.count { it is Int }
         val longs = decoders.values.count { it is Long }
-        logger.debug { "Multipliers found: ints: $ints, longs: $longs" }
+        logger.info { "Multipliers found: ints: $ints, longs: $longs" }
         writeJar(classNodes, destination)
     }
 

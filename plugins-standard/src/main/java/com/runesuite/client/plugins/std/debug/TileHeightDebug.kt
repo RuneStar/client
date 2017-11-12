@@ -1,7 +1,7 @@
 package com.runesuite.client.plugins.std.debug
 
-import com.hunterwb.kxtra.swing.graphics2d.drawString
-import com.hunterwb.kxtra.swing.point.minus
+import org.kxtra.swing.graphics2d.drawString
+import org.kxtra.swing.point.minus
 import com.runesuite.client.game.api.Scene
 import com.runesuite.client.game.api.SceneTile
 import com.runesuite.client.game.api.live.Game
