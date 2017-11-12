@@ -8,6 +8,7 @@ import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
+import com.runesuite.client.updater.deob.common.Renamer
 import com.runesuite.client.updater.deob.jagex.RemoveEnclosingMethodAttributes
 import com.runesuite.client.updater.mapper.std.classes.Client
 import com.runesuite.general.downloadGamepack
@@ -39,6 +40,7 @@ class CreateMojo : AbstractMojo() {
     private val gamepackJar by lazy { targetDir.resolve("gamepack.jar") }
     private val cleanJar by lazy { targetDir.resolve("gamepack.clean.jar") }
     private val deobJar by lazy { targetDir.resolve("gamepack.deob.jar") }
+    private val renamedJar by lazy { targetDir.resolve("gamepack.renamed.jar") }
     private val namesJson by lazy { deobJar.appendFileName(".names.json") }
     private val opJson by lazy { deobJar.appendFileName(".op.json") }
     private val multJson by lazy { deobJar.appendFileName(".mult.json") }
@@ -51,14 +53,17 @@ class CreateMojo : AbstractMojo() {
             deob()
             map()
             mergeHooks()
+            rename()
         } else if (Files.notExists(deobJar) || !verifyJar(deobJar) || Files.notExists(opJson) || Files.notExists(multJson) || Files.notExists(cleanJar)) {
             clean()
             deob()
             map()
             mergeHooks()
-        } else if (Files.notExists(namesJson) || Files.notExists(hooksJson)) {
+            rename()
+        } else if (Files.notExists(namesJson) || Files.notExists(hooksJson) || Files.notExists(renamedJar)) {
             map()
             mergeHooks()
+            rename()
         }
     }
 
@@ -107,5 +112,10 @@ class CreateMojo : AbstractMojo() {
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
         }
         jsonMapper.writeValue(hooksJson.toFile(), hooks)
+    }
+
+    fun rename() {
+        val names = jsonMapper.readValue<List<IdClass>>(namesJson.toFile())
+        Renamer(IdRenaming(names, deobJar)).deob(deobJar, renamedJar)
     }
 }

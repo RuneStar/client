@@ -36,6 +36,7 @@
                     <include>gamepack.deob.jar</include>
                     <include>gamepack.clean.jar</include>
                     <include>gamepack.jar</include>
+                    <include>gamepack.renamed.jar</include>
                 </includes>
             </resource>
         </resources>

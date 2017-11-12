@@ -22,11 +22,11 @@ class IdRenaming(idClasses: Collection<IdClass>, jar: Path) : Remapper() {
         }
         idClasses.forEach { c ->
             names[c.name] = c.`class`
-            c.fields?.forEach { f ->
-                names["${f.owner ?: c.name}.${f.name}"] = f.field
+            c.fields.forEach { f ->
+                names["${f.owner}.${f.name}"] = f.field
             }
-            c.methods?.forEach { m ->
-                names["${m.owner ?: c.name}.${m.name}${m.descriptor}"] = m.method
+            c.methods.forEach { m ->
+                names["${m.owner}.${m.name}${m.descriptor}"] = m.method
             }
         }
     }
