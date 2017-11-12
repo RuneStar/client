@@ -5,9 +5,11 @@ import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
+import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
@@ -29,5 +31,10 @@ class ScriptVarType : IdentityMapper.Class() {
     @DependsOn(ordinal::class)
     class id : UniqueMapper.InMethod.Field(ordinal::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(ordinal::class)
+    class char0 : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == CHAR_TYPE }
     }
 }

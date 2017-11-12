@@ -120,11 +120,11 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    class int1 : OrderMapper.InConstructor.Field(Projectile::class, 7) {
+    class cycleStart : OrderMapper.InConstructor.Field(Projectile::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int2 : OrderMapper.InConstructor.Field(Projectile::class, 8) {
+    class cycleEnd : OrderMapper.InConstructor.Field(Projectile::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

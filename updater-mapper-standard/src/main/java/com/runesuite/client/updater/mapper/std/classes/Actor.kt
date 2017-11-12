@@ -101,7 +101,7 @@ class Actor : IdentityMapper.Class() {
                 .nextWithin(6) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
     }
 
-    class overheadTextTicksRemaining : OrderMapper.InConstructor.Field(Actor::class, 9) {
+    class overheadTextCyclesRemaining : OrderMapper.InConstructor.Field(Actor::class, 9) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
