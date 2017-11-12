@@ -22,7 +22,7 @@ class Actor : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Entity>() }
             .and { Modifier.isAbstract(it.access) }
 
-    @MethodParameters
+    @MethodParameters()
     class isVisible : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
@@ -32,7 +32,7 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
     }
 
-    class overheadMessage : InstanceField() {
+    class overheadText : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 
@@ -99,5 +99,9 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == Math::atan2.id }
                 .nextWithin(6) { it.opcode == SIPUSH && it.intOperand == 2047 }
                 .nextWithin(6) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
+    }
+
+    class overheadTextTicksRemaining : OrderMapper.InConstructor.Field(Actor::class, 9) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
