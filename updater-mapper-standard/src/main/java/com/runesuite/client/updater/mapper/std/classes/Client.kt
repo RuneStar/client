@@ -2273,4 +2273,10 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Player>() }
                 .prevWithin(7) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    @SinceVersion(157)
+    @DependsOn(PacketBufferNode::class)
+    class packetBufferNodes : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PacketBufferNode>().withDimensions(1) }
+    }
 }

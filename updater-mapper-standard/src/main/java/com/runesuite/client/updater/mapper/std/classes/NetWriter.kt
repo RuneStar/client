@@ -10,7 +10,8 @@ import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2
-import java.net.URL
+import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Type.VOID_TYPE
 
 @SinceVersion(157)
 @DependsOn(NetSocket::class)
@@ -26,12 +27,36 @@ class NetWriter : IdentityMapper.Class() {
 
     @MethodParameters()
     @DependsOn(NetSocket::class)
-    class socket : IdentityMapper.InstanceMethod() {
+    class getSocket : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<NetSocket>() }
+    }
+
+    @MethodParameters("socket")
+    @DependsOn(NetSocket::class)
+    class setSocket : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<NetSocket>()) }
     }
 
     @DependsOn(Buffer::class)
     class buffer : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Buffer>() }
+    }
+
+    @DependsOn(PacketBuffer::class)
+    class packetBuffer : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PacketBuffer>() }
+    }
+
+    @DependsOn(IterableNodeDeque::class)
+    class packetBufferNodes : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
+    }
+
+    @MethodParameters()
+    @DependsOn(NetSocket.close::class)
+    class close : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<NetSocket.close>().id } }
     }
 }

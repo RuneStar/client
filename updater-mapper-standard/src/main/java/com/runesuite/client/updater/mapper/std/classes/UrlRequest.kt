@@ -27,7 +27,7 @@ class UrlRequest : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class response : IdentityMapper.InstanceMethod() {
+    class getResponse : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
     }
 
