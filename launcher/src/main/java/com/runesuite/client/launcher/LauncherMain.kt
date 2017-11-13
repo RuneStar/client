@@ -40,7 +40,7 @@ private val session = MavenRepositorySystemUtils.newSession().apply {
 }
 
 private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default", "http://repo.runesuite.com")
-        .setPolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_NEVER, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
+        .setPolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_ALWAYS, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
         .build()
 
 fun main(args: Array<String>) {
