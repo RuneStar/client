@@ -1,9 +1,9 @@
 package com.runesuite.client.updater.mapper.std.classes
 
-import com.runesuite.mapper.IdentityMapper
-import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -11,7 +11,9 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes.GETSTATIC
 import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 
 @DependsOn(Actor::class)
@@ -64,5 +66,17 @@ class Player : IdentityMapper.Class() {
 
     class team : OrderMapper.InConstructor.Field(Player::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class animationCycleStart : OrderMapper.InConstructor.Field(Player::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class animationCycleEnd : OrderMapper.InConstructor.Field(Player::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class isLowDetail : OrderMapper.InConstructor.Field(Player::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 }

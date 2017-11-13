@@ -55,12 +55,12 @@ class NpcDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(NpcDefinition.getModel::class)
-    class xzScale : OrderMapper.InMethod.Field(NpcDefinition.getModel::class, -1) {
+    class widthScale : OrderMapper.InMethod.Field(NpcDefinition.getModel::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(NpcDefinition.getModel::class)
-    class yScale : OrderMapper.InMethod.Field(NpcDefinition.getModel::class, -2) {
+    class heightScale : OrderMapper.InMethod.Field(NpcDefinition.getModel::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 

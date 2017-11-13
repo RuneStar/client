@@ -64,14 +64,17 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == ByteArray::class.type }
     }
 
+    // ?
     class standAnimation : OrderMapper.InConstructor.Field(Actor::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // ?
     class runAnimation : OrderMapper.InConstructor.Field(Actor::class, 14) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // ?
     class animationDelay : OrderMapper.InConstructor.Field(Actor::class, 20) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }

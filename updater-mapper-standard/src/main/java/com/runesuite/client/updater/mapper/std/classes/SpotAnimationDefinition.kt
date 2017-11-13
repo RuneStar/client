@@ -52,13 +52,13 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(readNext::class)
-    class xzScale : UniqueMapper.InMethod.Field(readNext::class) {
+    class widthScale : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_4 }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(readNext::class)
-    class yScale : UniqueMapper.InMethod.Field(readNext::class) {
+    class heightScale : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_5 }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }

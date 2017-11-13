@@ -257,7 +257,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(updateExternalPlayer::class)
-    class playerRegions : OrderMapper.InMethod.Field(updateExternalPlayer::class, -1) {
+    class Players_regions : OrderMapper.InMethod.Field(updateExternalPlayer::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
@@ -720,17 +720,17 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE && it.fieldId != field<gameState>().id }
     }
 
-    class username : StaticUniqueMapper.Field() {
+    class Login_username : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == String::class.type }
                 .next { it.isMethod && it.methodName == "trim" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
                 .next { it.opcode == GETSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(username::class)
-    class password : StaticUniqueMapper.Field() {
+    @DependsOn(Login_username::class)
+    class Login_password : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "" }
-                .next { it.opcode == PUTSTATIC && it.fieldId == field<username>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldId == field<Login_username>().id }
                 .next { it.opcode == LDC && it.ldcCst == "" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
@@ -1793,25 +1793,25 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Strings_thisIsAPvpWorld::class)
-    class loginResponse1 : AllUniqueMapper.Field() {
+    class Login_response1 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_thisIsAPvpWorld>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
     @DependsOn(Strings_playersCanAttackEachOther::class)
-    class loginResponse2 : AllUniqueMapper.Field() {
+    class Login_response2 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_playersCanAttackEachOther>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
     @DependsOn(Strings_almostEverywhere::class)
-    class loginResponse3 : AllUniqueMapper.Field() {
+    class Login_response3 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_almostEverywhere>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
     @DependsOn(Strings_warning::class)
-    class loginResponse0 : AllUniqueMapper.Field() {
+    class Login_response0 : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_warning>().id }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
@@ -1921,9 +1921,9 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(154)
-    @DependsOn(username::class)
-    class isUsernameRemembered : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<username>().id }
+    @DependsOn(Login_username::class)
+    class Login_isUsernameRemembered : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Login_username>().id }
                 .next { it.opcode == ICONST_1 }
                 .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
@@ -2252,5 +2252,25 @@ class Client : IdentityMapper.Class() {
     class newScript : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Script>() }
                 .and { it.arguments.startsWith(ByteArray::class.type) }
+    }
+
+//    class playersCount : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
+//                .nextWithin(40) { it.isLabel }
+//                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
+
+    @DependsOn(Player::class, Actor.targetIndex::class, Actor.orientation::class)
+    class Players_targetIndices : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Player>() }
+                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Player>() }
+                .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Player::class, Actor.targetIndex::class, Actor.orientation::class)
+    class Players_orientations : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Player>() }
+                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Player>() }
+                .prevWithin(7) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 }
