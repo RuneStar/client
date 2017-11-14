@@ -65,4 +65,136 @@ class ItemDefinition : IdentityMapper.Class() {
     class id : OrderMapper.InMethod.Field(Client.getItemDefinition::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<ItemDefinition>() }
     }
+
+    class zoom2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class xan2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class yan2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class zan2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class offsetX2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class offsetY2d : OrderMapper.InConstructor.Field(ItemDefinition::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class isStackable : OrderMapper.InConstructor.Field(ItemDefinition::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class price : OrderMapper.InConstructor.Field(ItemDefinition::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class team : OrderMapper.InConstructor.Field(ItemDefinition::class, 8) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleModel : OrderMapper.InConstructor.Field(ItemDefinition::class, 9) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleModel1 : OrderMapper.InConstructor.Field(ItemDefinition::class, 10) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleOffset : OrderMapper.InConstructor.Field(ItemDefinition::class, 11) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleModel : OrderMapper.InConstructor.Field(ItemDefinition::class, 12) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleModel1 : OrderMapper.InConstructor.Field(ItemDefinition::class, 13) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleOffset : OrderMapper.InConstructor.Field(ItemDefinition::class, 14) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleModel2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 15) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleModel2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 16) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleHeadModel : OrderMapper.InConstructor.Field(ItemDefinition::class, 17) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class maleHeadModel2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 18) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleHeadModel : OrderMapper.InConstructor.Field(ItemDefinition::class, 19) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class femaleHeadModel2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 20) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class note : OrderMapper.InConstructor.Field(ItemDefinition::class, 21) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class notedTemplate : OrderMapper.InConstructor.Field(ItemDefinition::class, 22) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class resizeX : OrderMapper.InConstructor.Field(ItemDefinition::class, 23) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class resizeY : OrderMapper.InConstructor.Field(ItemDefinition::class, 24) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class resizeZ : OrderMapper.InConstructor.Field(ItemDefinition::class, 25) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class ambient : OrderMapper.InConstructor.Field(ItemDefinition::class, 26) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class contrast : OrderMapper.InConstructor.Field(ItemDefinition::class, 27) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class int1 : OrderMapper.InConstructor.Field(ItemDefinition::class, 28) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class unnotedId : OrderMapper.InConstructor.Field(ItemDefinition::class, 29) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class notedId : OrderMapper.InConstructor.Field(ItemDefinition::class, 30) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class int2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 31) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    class int3 : OrderMapper.InConstructor.Field(ItemDefinition::class, 32) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
 }
