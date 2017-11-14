@@ -990,6 +990,8 @@ class Client : IdentityMapper.Class() {
     class Strings_select : StringsUniqueMapper("Select")
     class Strings_continue : StringsUniqueMapper("Continue")
     class Strings_moreOptions : StringsUniqueMapper(" more options")
+    class Strings_hasLoggedIn : StringsUniqueMapper(" has logged in.")
+    class Strings_hasLoggedOut : StringsUniqueMapper(" has logged out.")
     class Strings_level : StringsUniqueMapper("level-")
     class Strings_skill : StringsUniqueMapper("skill-")
     class Strings_use : StringsUniqueMapper("Use")
@@ -2278,5 +2280,29 @@ class Client : IdentityMapper.Class() {
     @DependsOn(PacketBufferNode::class)
     class packetBufferNodes : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<PacketBufferNode>().withDimensions(1) }
+    }
+
+    @DependsOn(AbstractIndexCache.takeRecordEncrypted::class, IndexCache::class)
+    class xteaKeys : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<IndexCache>() && it.methodMark == method<AbstractIndexCache.takeRecordEncrypted>().mark }
+                .prevWithin(7) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE.withDimensions(2) }
+    }
+
+    @DependsOn(Varps::class)
+    class tempVarps : OrderMapper.InClassInitializer.Field(Varps::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
+    }
+
+    @DependsOn(Varps::class)
+    class varps : OrderMapper.InClassInitializer.Field(Varps::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
+    }
+
+    @DependsOn(Varps::class)
+    class varpsMasks : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 32 }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 }

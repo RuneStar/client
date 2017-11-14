@@ -56,6 +56,7 @@ fun main(args: Array<String>) {
     window.dispose()
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString(), *args)
             .inheritIO().start().waitFor()
+
 }
 
 private fun startLoadingWindow(): Window {
@@ -78,7 +79,7 @@ private fun updateArtifact(artifactId: String, path: Path) {
 }
 
 private fun updateArtifactLocalRepo(artifactId: String): Path {
-    val artifact = DefaultArtifact(GROUP_ID, artifactId, null, "jar", "(,]")
+    val artifact = DefaultArtifact(GROUP_ID, artifactId, null, "jar", "[,)")
     val versionRangeRequest = VersionRangeRequest(artifact, listOf(remoteRepo), null)
     val versionRangeResponse = repoSystem.resolveVersionRange(session, versionRangeRequest)
     val artifactVersion = versionRangeResponse.highestVersion.toString()
