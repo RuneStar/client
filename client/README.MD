@@ -1,6 +1,6 @@
 # client
 
-The executable.
+Starts the game, should not be executed directly but through the [launcher](https://github.com/RuneSuite/client/tree/master/launcher).
 
 #### Included Dependencies:
 

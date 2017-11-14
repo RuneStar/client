@@ -10,6 +10,8 @@ Direct access to game values through:
  be done elsewhere (This is done in the [client](https://github.com/RuneSuite/client/tree/master/client)
  module).
  
+ Generated sources available [here](http://repo.runesuite.com/com/runesuite/client/client-game-raw/).
+ 
 #### Build Dependencies:
 
 * [game-raw-accessors-maven-plugin](https://github.com/RuneSuite/client/tree/master/game-raw-accessors-maven-plugin) - Generates all of the accessor interfaces.

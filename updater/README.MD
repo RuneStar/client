@@ -8,6 +8,10 @@
 
 * a deobfuscated gamepack jar (~500 KB)
 
+* a deobfuscated and renamed jar (~500 KB)
+
+[Download](http://repo.runesuite.com/com/runesuite/client/client-updater/)
+
 #### Dependencies:
 
 * [updater-common](https://github.com/RuneSuite/client/tree/master/updater-common)
@@ -25,4 +29,4 @@
 
 * [updater-create-maven-plugin](https://github.com/RuneSuite/client/tree/master/updater-create-maven-plugin) - Downloads the current gamepack jar and generates the needed resources
 
-#### Testing done in [updater-testing](https://github.com/RuneSuite/client/tree/master/updater-testing)
+Testing done in [updater-testing](https://github.com/RuneSuite/client/tree/master/updater-testing)

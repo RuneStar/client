@@ -39,6 +39,14 @@ class ItemDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == Array<String>::class.type }
     }
 
+    class isMembersOnly : OrderMapper.InConstructor.Field(ItemDefinition::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class isTradable : OrderMapper.InConstructor.Field(ItemDefinition::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == BOOLEAN_TYPE }
+    }
+
     @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
