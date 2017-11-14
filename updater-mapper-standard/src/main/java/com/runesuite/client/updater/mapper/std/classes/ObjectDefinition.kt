@@ -69,4 +69,120 @@ class ObjectDefinition : IdentityMapper.Class() {
     class transformConfigId : OrderMapper.InMethod.Field(transform::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
+
+    class sizeX : OrderMapper.InConstructor.Field(ObjectDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sizeY : OrderMapper.InConstructor.Field(ObjectDefinition::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class interactType : OrderMapper.InConstructor.Field(ObjectDefinition::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class boolean1 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class int1 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class clipType : OrderMapper.InConstructor.Field(ObjectDefinition::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class nonFlatShading : OrderMapper.InConstructor.Field(ObjectDefinition::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class modelClipped : OrderMapper.InConstructor.Field(ObjectDefinition::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class animationId : OrderMapper.InConstructor.Field(ObjectDefinition::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class int2 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class ambient : OrderMapper.InConstructor.Field(ObjectDefinition::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class contrast : OrderMapper.InConstructor.Field(ObjectDefinition::class, 8) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class mapIconId : OrderMapper.InConstructor.Field(ObjectDefinition::class, 9) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class mapSceneId : OrderMapper.InConstructor.Field(ObjectDefinition::class, 10) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class isRotated : OrderMapper.InConstructor.Field(ObjectDefinition::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class clipped : OrderMapper.InConstructor.Field(ObjectDefinition::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class modelSizeX : OrderMapper.InConstructor.Field(ObjectDefinition::class, 11) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelHeight : OrderMapper.InConstructor.Field(ObjectDefinition::class, 12) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelSizeY : OrderMapper.InConstructor.Field(ObjectDefinition::class, 13) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class offsetX : OrderMapper.InConstructor.Field(ObjectDefinition::class, 14) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class offsetHeight : OrderMapper.InConstructor.Field(ObjectDefinition::class, 15) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class offsetY : OrderMapper.InConstructor.Field(ObjectDefinition::class, 16) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class boolean2 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class isSolid : OrderMapper.InConstructor.Field(ObjectDefinition::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class int3 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 17) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class ambientSoundId : OrderMapper.InConstructor.Field(ObjectDefinition::class, 20) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class int4 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 21) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class int5 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 22) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class int6 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 23) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

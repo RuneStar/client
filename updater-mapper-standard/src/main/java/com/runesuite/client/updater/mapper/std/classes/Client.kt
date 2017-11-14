@@ -411,47 +411,47 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportHeight : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
+    class Viewport_height : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_2 }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportWidth : OrderMapper.InMethod.Field(worldToScreen::class, -2) {
+    class Viewport_width : OrderMapper.InMethod.Field(worldToScreen::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_2 }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportZoom : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
+    class Viewport_zoom : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ILOAD && it.varVar == 1 }
                 .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportTempX : OrderMapper.InMethod.Field(worldToScreen::class, -2) {
+    class Viewport_tempX : OrderMapper.InMethod.Field(worldToScreen::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportTempY : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
+    class Viewport_tempY : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(viewportHeight::class, viewportWidth::class)
-    class viewportOffsetY : StaticUniqueMapper.Field() {
+    @DependsOn(Viewport_height::class, Viewport_width::class)
+    class Viewport_yOffset : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == RETURN }
-                .prev { it.opcode == PUTSTATIC && it.fieldId == field<viewportHeight>().id }
-                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportWidth>().id }
+                .prev { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_height>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_width>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(viewportHeight::class, viewportWidth::class, viewportOffsetY::class)
-    class viewportOffsetX : StaticUniqueMapper.Field() {
+    @DependsOn(Viewport_height::class, Viewport_width::class, Viewport_yOffset::class)
+    class Viewport_xOffset : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == RETURN }
-                .prev { it.opcode == PUTSTATIC && it.fieldId == field<viewportHeight>().id }
-                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportWidth>().id }
-                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<viewportOffsetY>().id }
+                .prev { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_height>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_width>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_yOffset>().id }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -1725,7 +1725,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    class viewportMouseX : AllUniqueMapper.Field() {
+    class Viewport_mouseX : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
                 .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
                 .nextWithin(5) { it.opcode == ISTORE }
@@ -1733,27 +1733,37 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(viewportMouseX::class)
-    class viewportMouseY : AllUniqueMapper.Field() {
+    @DependsOn(Viewport_mouseX::class)
+    class Viewport_mouseY : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
                 .nextIn(2) { it.opcode == SIPUSH && it.intOperand == 3500 }
-                .nextWithin(20) { it.opcode == GETSTATIC && it.fieldId == field<viewportMouseX>().id }
+                .nextWithin(20) { it.opcode == GETSTATIC && it.fieldId == field<Viewport_mouseX>().id }
                 .nextWithin(10) { it.opcode == ISTORE }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @SinceVersion(141)
-    @DependsOn(viewportMouseY::class)
-    class viewportContainsMouse : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<viewportMouseY>().id }
+    @DependsOn(Viewport_mouseY::class)
+    class Viewport_containsMouse : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_mouseY>().id }
                 .next { it.opcode == ICONST_1 }
                 .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
     @SinceVersion(141)
-    @DependsOn(viewportMouseY::class)
-    class viewportFalse0 : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<viewportMouseY>().id }
+    @DependsOn(Viewport_mouseY::class)
+    class Viewport_entityCountAtMouse : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_mouseY>().id }
+                .next { it.opcode == ICONST_1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+                .next { it.opcode == ICONST_0 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @SinceVersion(141)
+    @DependsOn(Viewport_mouseY::class)
+    class Viewport_false0 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Viewport_mouseY>().id }
                 .nextWithin(5) { it.opcode == ICONST_0 }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
@@ -2304,5 +2314,26 @@ class Client : IdentityMapper.Class() {
     class varpsMasks : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 32 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
+    }
+
+//    @MethodParameters("bytes")
+//    @DependsOn(Sprite::class)
+//    class imageToSprite : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+//                .and { it.instructions.any { it.isMethod && it.methodName == "grabPixels" } }
+//    }
+
+//    @DependsOn(Script::class)
+//    class getScript : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<Script>() }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(INT_TYPE) }
+//    }
+
+    @SinceVersion(141)
+    @DependsOn(Viewport::class)
+    class Viewport_entityIdsAtMouse : UniqueMapper.InClassInitializer.Field(Viewport::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1000 }
+                .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 }

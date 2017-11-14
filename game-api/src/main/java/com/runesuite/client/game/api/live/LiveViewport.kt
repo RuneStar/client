@@ -6,15 +6,15 @@ import java.awt.Rectangle
 
 object LiveViewport : Viewport {
 
-    override val x: Int get() = accessor.viewportOffsetX
+    override val x: Int get() = accessor.viewport_xOffset
 
-    override val y: Int get() = accessor.viewportOffsetY
+    override val y: Int get() = accessor.viewport_yOffset
 
-    override val width: Int get() = accessor.viewportWidth
+    override val width: Int get() = accessor.viewport_width
 
-    override val height: Int get() = accessor.viewportHeight
+    override val height: Int get() = accessor.viewport_height
 
-    override val zoom: Int get() = accessor.viewportZoom
+    override val zoom: Int get() = accessor.viewport_zoom
 
     override fun toString(): String {
         return "LiveViewport(zoom=$zoom, shape=$shape)"
