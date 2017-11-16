@@ -7,7 +7,11 @@ object Npcs {
 
     val CAPACITY = accessor.npcs.size
 
-    val all: List<Npc> get() = accessor.npcs.mapNotNull { it?.let { Npc(it) } }
+    val all: List<Npc> get() = List(count) { Npc(accessor.npcs[accessor.npcIndices[it]]) }
+
+    val count get() = accessor.npcCount
+
+    val indices: List<Int> get() = accessor.npcIndices.take(count)
 
     fun get(): List<Npc?> =  accessor.npcs.map { it?.let { Npc(it) } }
 
