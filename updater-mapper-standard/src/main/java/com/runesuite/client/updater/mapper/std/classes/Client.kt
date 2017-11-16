@@ -2266,12 +2266,6 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 
-//    class playersCount : StaticUniqueMapper.Field() {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
-//                .nextWithin(40) { it.isLabel }
-//                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-//    }
-
     @DependsOn(Player::class, Actor.targetIndex::class, Actor.orientation::class)
     class Players_targetIndices : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Player>() }
@@ -2343,10 +2337,29 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(15) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
+    @DependsOn(Npc::class)
+    class npcCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<Npc>() }
+                .nextWithin(18) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
     @SinceVersion(155)
-    class playerIndices : AllUniqueMapper.Field() {
+    class Players_indices : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
                 .nextWithin(45) { it.isLabel }
                 .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @SinceVersion(155)
+    class Players_count : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
+                .nextWithin(45) { it.isLabel }
+                .prevWithin(12) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class publicChatMode : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 5001 }
+                .skip(10)
+                .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 }
