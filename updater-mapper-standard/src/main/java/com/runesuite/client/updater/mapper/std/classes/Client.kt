@@ -2362,4 +2362,19 @@ class Client : IdentityMapper.Class() {
                 .skip(10)
                 .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(Strings_attack::class)
+    class playerMenuActions : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_attack>().id }
+                .next { it.isMethod && it.methodName == "equalsIgnoreCase" }
+                .prevWithin(8) { it.opcode == GETSTATIC && it.fieldType == String::class.type.withDimensions(1) }
+    }
+
+    @DependsOn(playerMenuActions::class)
+    class playerMenuOpcodes : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.method.isClassInitializer }
+                .and { it.opcode == BIPUSH && it.intOperand == 7 }
+                .next { it.opcode == BIPUSH && it.intOperand == 51 }
+                .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
