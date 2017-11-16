@@ -29,11 +29,11 @@ val jsonMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT
 
 fun main(args: Array<String>) {
     // 127+
-    for (revision in 141..157) {
+    for (revision in 141..158) {
         if (revision in setOf(146, 147)) continue
         println(revision)
 
-//        deob(revision)
+        deob(revision)
         map(revision)
         mergeHooks(revision)
         rename(revision)

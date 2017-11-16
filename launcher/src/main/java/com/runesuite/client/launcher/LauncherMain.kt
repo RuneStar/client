@@ -54,9 +54,8 @@ fun main(args: Array<String>) {
         System.exit(1)
     }
     window.dispose()
-    ProcessBuilder("java", "-jar", CLIENT_PATH.toString(), *args)
+    ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
             .inheritIO().start().waitFor()
-
 }
 
 private fun startLoadingWindow(): Window {

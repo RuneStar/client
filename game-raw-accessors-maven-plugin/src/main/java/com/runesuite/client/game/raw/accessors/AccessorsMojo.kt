@@ -20,6 +20,12 @@ import java.lang.reflect.Modifier as RModifier
 @Mojo(name = "accessors")
 class AccessorsMojo : AbstractMojo() {
 
+    private companion object {
+        val INDENT = "    "
+        val SETTER_PARAM_NAME = "value"
+        val VOID_OBJECT_TYPENAME = TypeName.get(Void::class.java)
+    }
+
     @Parameter(property = "outputPackage", required = true)
     lateinit var outputPackage: String
 
@@ -35,28 +41,22 @@ class AccessorsMojo : AbstractMojo() {
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject
 
-    private val INDENT = "    "
+    private val accessorTypeName: ClassName by lazy { ClassName.bestGuess(accessorClass) }
 
-    private val SETTER_PARAM_NAME = "value"
+    private val callbackFieldTypeName: ClassName by lazy { ClassName.bestGuess(callbackFieldClass) }
 
-    private val VOID_OBJECT_TYPENAME = TypeName.get(Void::class.java)
+    private val outputDir by lazy { Paths.get(project.build.directory, "generated-sources") }
 
-    private val ACCESSOR_TYPENAME: ClassName by lazy { ClassName.bestGuess(accessorClass) }
-
-    private val CALLBACK_FIELD_TYPENAME: ClassName by lazy { ClassName.bestGuess(callbackFieldClass) }
-
-    private val OUTPUT_DIR by lazy { Paths.get(project.build.directory, "generated-sources") }
-
-    private val TYPE_TRANSFORMS by lazy { HOOKS.associate { it.name to "X" + it.`class` } }
+    private val typeTransforms by lazy { HOOKS.associate { it.name to "X" + it.`class` } }
 
     override fun execute() {
         HOOKS.forEach { c ->
             val typeBuilder = TypeSpec.interfaceBuilder("X" + c.`class`)
-                    .addSuperinterface(ACCESSOR_TYPENAME)
+                    .addSuperinterface(accessorTypeName)
                     .addModifiers(Modifier.PUBLIC)
                     .addJavadoc(classModifiersToString(c.access))
-            if (c.`super` in TYPE_TRANSFORMS) {
-                typeBuilder.addSuperinterface(ClassName.get(outputPackage, TYPE_TRANSFORMS.getValue(c.`super`)))
+            if (c.`super` in typeTransforms) {
+                typeBuilder.addSuperinterface(ClassName.get(outputPackage, typeTransforms.getValue(c.`super`)))
             } else if (c.`super` != Any::class.jvmName) {
                 typeBuilder.addJavadoc(" extends {@link ${c.`super`}}")
             }
@@ -90,7 +90,7 @@ class AccessorsMojo : AbstractMojo() {
                 if (!RModifier.isInterface(c.access) && !RModifier.isAbstract(m.access)) {
                     val instanceType = if (RModifier.isStatic(m.access)) VOID_OBJECT_TYPENAME else poetType(c.descriptor)
                     val returnType = poetType(m.type.returnType.descriptor, true)
-                    val callbackType = ParameterizedTypeName.get(CALLBACK_FIELD_TYPENAME, instanceType, returnType)
+                    val callbackType = ParameterizedTypeName.get(callbackFieldTypeName, instanceType, returnType)
                     typeBuilder.addField(FieldSpec.builder(callbackType, m.method)
                             .initializer(callbackFieldInitializer)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -103,16 +103,16 @@ class AccessorsMojo : AbstractMojo() {
             JavaFile.builder(outputPackage, typeBuilder.build())
                     .indent(INDENT)
                     .build()
-                    .writeTo(OUTPUT_DIR)
+                    .writeTo(outputDir)
         }
-        project.addCompileSourceRoot(OUTPUT_DIR.toString())
+        project.addCompileSourceRoot(outputDir.toString())
     }
 
     private fun poetType(descriptor: String, wrapPrimitives: Boolean = false): TypeName {
         val type = Type.getType(descriptor)
         val baseType = type.baseType
-        val baseName: TypeName = if (TYPE_TRANSFORMS.containsKey(baseType.className)) {
-            ClassName.bestGuess(TYPE_TRANSFORMS[baseType.className])
+        val baseName: TypeName = if (typeTransforms.containsKey(baseType.className)) {
+            ClassName.bestGuess(typeTransforms[baseType.className])
         } else {
             var klass = ClassLoader.getSystemClassLoader().loadClassFromDescriptor(baseType.descriptor)
             if (wrapPrimitives && klass.isPrimitive) {
@@ -131,8 +131,8 @@ class AccessorsMojo : AbstractMojo() {
         val argList = methodHook.actualParameters.map {
             val type = Type.getType(it.descriptor)
             val baseType = type.baseType
-            if (baseType.className in TYPE_TRANSFORMS) {
-                TYPE_TRANSFORMS.getValue(baseType.className) + ("[]".repeat(type.arrayDimensions))
+            if (baseType.className in typeTransforms) {
+                typeTransforms.getValue(baseType.className) + ("[]".repeat(type.arrayDimensions))
             } else {
                 ClassLoader.getSystemClassLoader().loadClassFromDescriptor(type.descriptor).simpleName
             }

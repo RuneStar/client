@@ -1,11 +1,11 @@
 package com.runesuite.client.game.api.live
 
 import com.runesuite.client.game.api.AttackOption
-import com.runesuite.client.game.raw.Client
+import com.runesuite.client.game.raw.Client.accessor
 
 object AttackOptions {
 
-    val npc get() = AttackOption[Client.accessor.npcAttackOption]
+    val npc get() = checkNotNull(AttackOption.LOOKUP[accessor.npcAttackOption]) { accessor.npcAttackOption }
 
-    val player get() = AttackOption[Client.accessor.playerAttackOption]
+    val player get() = checkNotNull(AttackOption.LOOKUP[accessor.playerAttackOption]) { accessor.playerAttackOption }
 }

@@ -62,8 +62,8 @@ interface Projection {
             val z2 = (cosY * z1 - y1 * sinY) shr 16
             y1 = (z1 * sinY + y1 * cosY) shr 16
             z1 = z2
-            if (y1 == 0) {
-                y1 = 1
+            if (y1 < 50) {
+                return Point(-1, -1) // todo
             }
             val viewportCopy = viewport.copyOf()
             return Point(

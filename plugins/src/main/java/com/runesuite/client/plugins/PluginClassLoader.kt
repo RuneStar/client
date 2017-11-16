@@ -11,9 +11,7 @@ internal class PluginClassLoader
 private constructor(jar: Path) : ClassLoader() {
 
     companion object {
-        fun load(jar: Path): Collection<Plugin<*>> {
-            return PluginClassLoader(jar).plugins
-        }
+        fun load(jar: Path): Collection<Plugin<*>> = PluginClassLoader(jar).plugins
     }
 
     private val plugins: Collection<Plugin<*>>
@@ -29,7 +27,7 @@ private constructor(jar: Path) : ClassLoader() {
                 c = defineClass(name, bytes, 0, bytes.size)
                 logger.info("Defined class $name")
             } catch (e: Exception) {
-                logger.warn("Failed to define class $name")
+                logger.warn("Failed to define class $name", e)
                 return@forEach
             }
             resolveClass(c)
