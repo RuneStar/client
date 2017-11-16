@@ -2336,4 +2336,17 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1000 }
                 .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
+
+    @DependsOn(Npc::class)
+    class npcIndices : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<Npc>() }
+                .nextWithin(15) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @SinceVersion(155)
+    class playerIndices : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
+                .nextWithin(45) { it.isLabel }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
