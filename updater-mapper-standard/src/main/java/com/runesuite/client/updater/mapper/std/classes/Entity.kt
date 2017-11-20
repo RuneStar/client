@@ -23,7 +23,7 @@ class Entity : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 
-    @MethodParameters
+    @MethodParameters()
     class getModel : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType in it.jar }
     }
