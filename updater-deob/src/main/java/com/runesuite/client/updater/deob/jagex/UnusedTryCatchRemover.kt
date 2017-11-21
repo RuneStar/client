@@ -22,7 +22,6 @@ object UnusedTryCatchRemover : Deobfuscator {
             while (tcbs.hasNext()) {
                 val tcb = tcbs.next()
                 if (tcb.type == Type.getInternalName(RuntimeException::class.java)) {
-                    m.instructions.resetLabels()
                     val insns = m.instructions.iterator(m.instructions.indexOf(tcb.handler))
                     var insn: AbstractInsnNode
                     do {
