@@ -2377,4 +2377,58 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == BIPUSH && it.intOperand == 51 }
                 .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
+    class getSprites : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
+                .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class mapSceneSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "mapscene" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class modIconSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "mod_icons" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class scrollbarSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "scrollbar" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class runeSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "runes" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class titleMuteSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "title_mute" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class slFlagSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "sl_flags" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class slArrowSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "sl_arrows" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class slStarSprites : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "sl_stars" }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+    }
 }
