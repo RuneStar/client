@@ -33,7 +33,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Player::class)
-    class players : StaticField() {
+    class Players_players : StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<Player>().withDimensions(1) }
     }
 
@@ -903,11 +903,12 @@ class Client : IdentityMapper.Class() {
 //                .and { it.instructions.any { it.isMethod && it.methodOwner == type<BoundingBox3D>() && it.methodName == "<init>" } }
 //    }
 
-//    @SinceVersion(141)
-//    @DependsOn(addBoundingBox2D::class, IterableNodeDeque::class)
-//    class boundingBoxes : UniqueMapper.InMethod.Field(addBoundingBox2D::class) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<IterableNodeDeque>() }
-//    }
+    @SinceVersion(141)
+    @DependsOn(BoundingBoxes::class, IterableNodeDeque::class)
+    class boundingBoxes : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<BoundingBoxes>() }
+                .and { it.type == type<IterableNodeDeque>() }
+    }
 
     @SinceVersion(141)
     @DependsOn(BoundingBox3DDrawMode::class)
@@ -2343,19 +2344,17 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(18) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-//    @SinceVersion(155)
-//    class Players_indices : AllUniqueMapper.Field() {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
-//                .nextWithin(45) { it.isLabel }
-//                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
-//    }
+    @DependsOn(Players::class)
+    class Players_indices : OrderMapper.InClassInitializer.Field(Players::class, 0, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2048 }
+                .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
 
-//    @SinceVersion(155)
-//    class Players_count : AllUniqueMapper.Field() {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3107 }
-//                .nextWithin(45) { it.isLabel }
-//                .prevWithin(12) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-//    }
+    @DependsOn(Players::class)
+    class Players_count : OrderMapper.InClassInitializer.Field(Players::class, 0, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 
     class publicChatMode : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 5001 }
