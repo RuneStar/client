@@ -16,6 +16,12 @@ abstract class StringsUniqueMapper(string: String) : UniqueMapper.InClassInitial
             .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
 }
 
+@DependsOn(Formatting::class)
+abstract class FormattingUniqueMapper(string: String) : UniqueMapper.InClassInitializer.Field(Formatting::class) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == string }
+            .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+}
+
 @DependsOn(Client.newIndexCache::class, IndexCache::class)
 abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order) {
     override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.newIndexCache>().id }

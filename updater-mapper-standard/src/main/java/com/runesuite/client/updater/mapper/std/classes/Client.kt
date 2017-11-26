@@ -2,6 +2,7 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
 import com.runesuite.client.updater.mapper.std.CachedDefinitionMapper
+import com.runesuite.client.updater.mapper.std.FormattingUniqueMapper
 import com.runesuite.client.updater.mapper.std.IndexCacheFieldMapper
 import com.runesuite.client.updater.mapper.std.StringsUniqueMapper
 import com.runesuite.mapper.*
@@ -33,7 +34,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Player::class)
-    class Players_players : StaticField() {
+    class players : StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<Player>().withDimensions(1) }
     }
 
@@ -1226,35 +1227,15 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == ">" } }
     }
 
-    class colorEndTag : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "</col>" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
+    class Formatting_colorEndTag : FormattingUniqueMapper("</col>")
+    class Formatting_lineBreakTag : FormattingUniqueMapper("<br>")
+    class Formatting_rightParenthesis : FormattingUniqueMapper(")")
+    class Formatting_spaceLeftParenthesis : FormattingUniqueMapper(" (")
+    class Formatting_true : FormattingUniqueMapper("true")
+    class Formatting_rightArrow : FormattingUniqueMapper("->")
+    class Formatting_comma : FormattingUniqueMapper(",")
+    class Formatting_pipe : FormattingUniqueMapper("|")
 
-    class lineBreakTag : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "<br>" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
-
-    class rightParenthesis : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ")" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
-
-    class spaceLeftParenthesis : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == " (" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
-
-    class trueString : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "true" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
-
-    class rightArrow : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "->" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
-    }
 
     @DependsOn(IndexStore::class)
     class indexStore255 : IdentityMapper.StaticField() {
