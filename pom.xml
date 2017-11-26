@@ -74,7 +74,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
         <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
-        <kotlin.version>1.1.60</kotlin.version>
+        <kotlin.version>1.1.61</kotlin.version>
         <jackson.version>2.9.2</jackson.version>
         <logback.groupId>ch.qos.logback</logback.groupId>
         <logback.version>1.2.3</logback.version>

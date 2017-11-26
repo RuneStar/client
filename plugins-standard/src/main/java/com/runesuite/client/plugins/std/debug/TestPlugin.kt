@@ -14,7 +14,6 @@ class TestPlugin : DisposablePlugin<PluginSettings>() {
 
         add(LiveCanvas.repaints.subscribe { g ->
 
-            g.drawString(Client.accessor.publicChatMode.toString(), 20, 40)
         })
     }
 }
