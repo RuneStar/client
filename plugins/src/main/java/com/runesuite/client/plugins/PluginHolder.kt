@@ -13,6 +13,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.WatchKey
+import kotlin.reflect.jvm.javaField
 
 internal class PluginHolder<T : PluginSettings>(
         val plugin: Plugin<T>,
@@ -21,10 +22,10 @@ internal class PluginHolder<T : PluginSettings>(
 
     companion object {
         const val SETTINGS_FILE_NAME = "plugin.settings"
-        private val settingsField = Plugin::class.java.getDeclaredField("_settings").apply {
+        private val settingsField = checkNotNull(Plugin<*>::settings.javaField).apply {
             isAccessible = true
         }
-        private val directoryField = Plugin::class.java.getDeclaredField("_directory").apply {
+        private val directoryField = checkNotNull(Plugin<*>::directory.javaField).apply {
             isAccessible = true
         }
     }
