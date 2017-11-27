@@ -18,12 +18,14 @@ import org.eclipse.aether.transport.file.FileTransporterFactory
 import org.eclipse.aether.transport.http.HttpTransporterFactory
 import java.awt.Dimension
 import java.awt.Window
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import javax.swing.JDialog
 import javax.swing.JLabel
+import kotlin.system.exitProcess
 
 private val locator =  MavenRepositorySystemUtils.newServiceLocator().apply {
     addService(TransporterFactory::class.java, FileTransporterFactory::class.java)
@@ -45,15 +47,13 @@ private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default
 
 fun main(args: Array<String>) {
     val window = startLoadingWindow()
-    Files.createDirectories(PLUGINS_DIR_PATH)
     try {
+        Files.createDirectories(PLUGINS_DIR_PATH)
         updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
         updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        System.exit(1)
+    } finally {
+        window.dispose()
     }
-    window.dispose()
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
             .inheritIO().start().waitFor()
 }
@@ -71,6 +71,7 @@ private fun startLoadingWindow(): Window {
     }
 }
 
+@Throws(IOException::class)
 private fun updateArtifact(artifactId: String, path: Path) {
     val mvnPath = updateArtifactLocalRepo(artifactId)
     Files.createDirectories(path.parent)
