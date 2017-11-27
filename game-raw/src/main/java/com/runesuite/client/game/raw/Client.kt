@@ -9,6 +9,7 @@ object Client : Wrapper() {
 
     // The XClient class is generated during the build process
 
+    @field:JvmSynthetic
     override lateinit var accessor: XClient
 
     /**
