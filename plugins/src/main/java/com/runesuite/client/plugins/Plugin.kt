@@ -1,7 +1,6 @@
 package com.runesuite.client.plugins
 
 import org.kxtra.slf4j.loggerfactory.getLogger
-import org.slf4j.LoggerFactory
 import java.nio.file.Path
 import javax.annotation.OverridingMethodsMustInvokeSuper
 

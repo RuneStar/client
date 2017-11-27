@@ -11,12 +11,14 @@ internal class PluginClassLoader
 private constructor(jar: Path) : ClassLoader() {
 
     companion object {
+
         fun load(jar: Path): Collection<Plugin<*>> = PluginClassLoader(jar).plugins
+
+        private val logger = getLogger()
     }
 
     private val plugins: Collection<Plugin<*>>
 
-    private val logger = getLogger()
 
     init {
         val classes = ArrayList<Class<*>>()

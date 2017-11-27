@@ -11,7 +11,6 @@ class TestPlugin : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-
         add(LiveCanvas.repaints.subscribe { g ->
 
         })

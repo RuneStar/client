@@ -2,7 +2,6 @@ package com.runesuite.client.plugins
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import org.kxtra.slf4j.loggerfactory.getLogger
-import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
@@ -58,8 +57,8 @@ class PluginLoader(
 //                        logger.debug { "$dir.$ctx:${we.kind()}" }
 //                    }
                     if (dir == pluginsJarsDir && ctx.toFile().extension == "jar") {
+                        val jarPath = pluginsJarsDir.resolve(we.context())
                         executor.submit {
-                            val jarPath = pluginsJarsDir.resolve(we.context())
                             val pluginNames = currentJarPluginNames.remove(jarPath)
                             if (pluginNames != null) {
                                 pluginNames.forEach { className ->
