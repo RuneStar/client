@@ -86,5 +86,15 @@ public interface MethodEvent<I> {
         public R getReturned() {
             return returned;
         }
+
+        @Override
+        public String toString() {
+            return "MethodEvent(" +
+                    "id=" + id +
+                    ", instance=" + instance +
+                    ", arguments=" + Arrays.toString(arguments) +
+                    ", returned=" + returned +
+                    ')';
+        }
     }
 }
