@@ -8,8 +8,6 @@
 
 * a deobfuscated gamepack jar (~500 KB)
 
-* a deobfuscated and renamed jar (~500 KB)
-
 [Download](http://repo.runesuite.com/com/runesuite/client/client-updater/)
 
 #### Dependencies:

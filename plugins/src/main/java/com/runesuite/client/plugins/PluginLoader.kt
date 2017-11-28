@@ -13,7 +13,9 @@ class PluginLoader(
         private val pluginsDir: Path
 ) : Closeable {
 
-    private val logger = getLogger()
+    companion object {
+        private val logger = getLogger()
+    }
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 

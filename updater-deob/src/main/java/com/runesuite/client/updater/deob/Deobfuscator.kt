@@ -35,7 +35,7 @@ interface Deobfuscator {
             RemoveEnclosingMethodAttributes
     )
 
-    object Faster : Deobfuscator.Composite(
+    object Default : Deobfuscator.Composite(
 //            JarInfo,
             MultiplierFinder,
             UnusedTryCatchRemover,

@@ -8,7 +8,6 @@ import com.runesuite.client.updater.common.ClassHook
 import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
-import com.runesuite.client.updater.deob.common.Renamer
 import com.runesuite.client.updater.deob.jagex.RemoveEnclosingMethodAttributes
 import com.runesuite.client.updater.mapper.std.classes.Client
 import com.runesuite.general.downloadGamepack
@@ -21,7 +20,6 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -53,17 +51,14 @@ class CreateMojo : AbstractMojo() {
             deob()
             map()
             mergeHooks()
-            rename()
         } else if (Files.notExists(deobJar) || !verifyJar(deobJar) || Files.notExists(opJson) || Files.notExists(multJson) || Files.notExists(cleanJar)) {
             clean()
             deob()
             map()
             mergeHooks()
-            rename()
         } else if (Files.notExists(namesJson) || Files.notExists(hooksJson) || Files.notExists(renamedJar)) {
             map()
             mergeHooks()
-            rename()
         }
     }
 
@@ -85,7 +80,7 @@ class CreateMojo : AbstractMojo() {
     }
 
     private fun deob() {
-        Deobfuscator.Faster.deob(gamepackJar, deobJar)
+        Deobfuscator.Default.deob(gamepackJar, deobJar)
     }
 
     private fun clean() {
@@ -112,10 +107,5 @@ class CreateMojo : AbstractMojo() {
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
         }
         jsonMapper.writeValue(hooksJson.toFile(), hooks)
-    }
-
-    fun rename() {
-        val names = jsonMapper.readValue<List<IdClass>>(namesJson.toFile())
-        Renamer(IdRenaming(names, deobJar)).deob(deobJar, renamedJar)
     }
 }
