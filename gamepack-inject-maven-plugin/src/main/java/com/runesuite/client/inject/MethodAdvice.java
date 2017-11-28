@@ -18,16 +18,16 @@ public interface MethodAdvice {
 
     @SuppressWarnings("unchecked")
     @Advice.OnMethodEnter
-    static MethodEvent.Enter onMethodEnter(
+    static MethodEvent.Implementation onMethodEnter(
             @Execution MethodExecution exec,
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
         MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
         if (execImpl.getEnter().hasObservers() || execImpl.getExit().hasObservers()) {
-            MethodEvent.Enter enterEvent = new MethodEvent.Enter(execImpl.counter.getAndIncrement(), instance, arguments);
-            execImpl.getEnter().accept(enterEvent);
-            return enterEvent;
+            MethodEvent.Implementation event = new MethodEvent.Implementation(execImpl.counter.getAndIncrement(), instance, arguments);
+            execImpl.getEnter().accept(event);
+            return event;
         } else {
             return null;
         }
@@ -37,12 +37,12 @@ public interface MethodAdvice {
     @Advice.OnMethodExit
     static void onMethodExit(
             @Execution MethodExecution exec,
-            @Advice.This(optional = true) Object instance,
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned,
-            @Advice.Enter MethodEvent.Enter enterEvent
+            @Advice.Enter MethodEvent.Implementation event
     ) throws Throwable {
-        if (enterEvent != null) {
-            ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getIndex(), instance, enterEvent.getArguments(), returned));
+        if (event != null) {
+            event.returned = returned;
+            ((MethodExecution.Implementation) exec).getExit().accept(event);
         }
     }
 }

@@ -9,63 +9,27 @@ import java.util.Arrays;
  *
  * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
  */
-public abstract class MethodEvent<I> {
+public interface MethodEvent<I> {
 
-    private final long index;
-
-    private final I instance;
-
-    @NotNull
-    private final Object[] arguments;
-
-    private MethodEvent(long index, I instance, @NotNull Object[] arguments) {
-        this.index = index;
-        this.instance = instance;
-        this.arguments = arguments;
-    }
+    long getId();
 
     /**
      * The instance the method was called on, {@code null} for {@code static} methods.
      */
-    public final I getInstance() {
-        return instance;
-    }
+    I getInstance();
 
     /**
-     * The number of times the method was called before the call this event is a part of.
+     * The arguments used to call the method, boxing primitive values. Should not be modified.
      */
-    public final long getIndex() {
-        return index;
-    }
-
-    /**
-     * The arguments used to call the method, boxing primitive values. The returned array should not be
-     * modified.
-     */
-    @NotNull
-    public final Object[] getArguments() {
-        return arguments;
-    }
+    Object[] getArguments();
 
     /**
      * An event representing the entrance to a method.
      *
      * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
      */
-    public final static class Enter<I> extends MethodEvent<I> {
+    interface Enter<I> extends MethodEvent<I> {
 
-        public Enter(long index, I instance, @NotNull Object[] arguments) {
-            super(index, instance, arguments);
-        }
-
-        @Override
-        public String toString() {
-            return "MethodEvent.Enter(" +
-                    getIndex() + ", " +
-                    getInstance() + ", " +
-                    Arrays.toString(getArguments()) +
-                    ")";
-        }
     }
 
     /**
@@ -74,30 +38,53 @@ public abstract class MethodEvent<I> {
      * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
      * @param <R> the return type of the method, wrappers for primitives, {@link Void} for {@code void} methods
      */
-    public final static class Exit<I, R> extends MethodEvent<I> {
-
-        private final R returned;
-
-        public Exit(long index, I instance, @NotNull Object[] arguments, R returned) {
-            super(index, instance, arguments);
-            this.returned = returned;
-        }
+    interface Exit<I, R> extends MethodEvent<I> {
 
         /**
          * The value returned from the method, boxing primitives, {@code null} for {@code void} methods.
          */
-        public R getReturned() {
-            return returned;
+        R getReturned();
+    }
+
+    /**
+     * For internal use only.
+     */
+    class Implementation<I, R> implements MethodEvent.Enter<I>, MethodEvent.Exit<I, R> {
+
+        public final long id;
+
+        public final I instance;
+
+        @NotNull
+        public final Object[] arguments;
+
+        public R returned;
+
+        public Implementation(long id, I instance, @NotNull Object[] arguments) {
+            this.id = id;
+            this.instance = instance;
+            this.arguments = arguments;
         }
 
         @Override
-        public String toString() {
-            return "MethodEvent.Exit(" +
-                    getIndex() + ", " +
-                    getInstance() + ", " +
-                    Arrays.toString(getArguments()) + ", " +
-                    getReturned() +
-                    ")";
+        public long getId() {
+            return id;
+        }
+
+        @Override
+        public I getInstance() {
+            return instance;
+        }
+
+        @NotNull
+        @Override
+        public Object[] getArguments() {
+            return arguments;
+        }
+
+        @Override
+        public R getReturned() {
+            return returned;
         }
     }
 }

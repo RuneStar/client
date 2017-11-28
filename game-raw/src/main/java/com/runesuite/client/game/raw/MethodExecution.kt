@@ -14,11 +14,6 @@ import java.util.concurrent.atomic.AtomicLong
 interface MethodExecution<I, R> {
 
     /**
-     * Number of times the underlying method has been called.
-     */
-    val count: Long
-
-    /**
      * [Observable] which emits an event each time the underlying method is called. By default all subscribers
      * [Observer.onNext] is ran synchronously before the body of the method is executed. [Observer.onComplete] will
      * never be triggered.
@@ -39,8 +34,6 @@ interface MethodExecution<I, R> {
 
         @JvmField
         val counter = AtomicLong(0)
-
-        override val count get() = counter.get()
 
         override val enter = PublishRelay.create<MethodEvent.Enter<I>>()
 
