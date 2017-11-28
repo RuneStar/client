@@ -4,6 +4,7 @@ import com.runesuite.client.game.raw.MethodEvent;
 import com.runesuite.client.game.raw.MethodExecution;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,9 +24,13 @@ public interface MethodAdvice {
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
         MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
-        MethodEvent.Enter enterEvent = new MethodEvent.Enter(execImpl.counter.getAndIncrement(), instance, arguments);
-        execImpl.getEnter().accept(enterEvent);
-        return enterEvent;
+        if (execImpl.getEnter().hasObservers() || execImpl.getExit().hasObservers()) {
+            MethodEvent.Enter enterEvent = new MethodEvent.Enter(execImpl.counter.getAndIncrement(), instance, arguments);
+            execImpl.getEnter().accept(enterEvent);
+            return enterEvent;
+        } else {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -36,6 +41,8 @@ public interface MethodAdvice {
             @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned,
             @Advice.Enter MethodEvent.Enter enterEvent
     ) throws Throwable {
-        ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getIndex(), instance, enterEvent.getArguments(), returned));
+        if (enterEvent != null) {
+            ((MethodExecution.Implementation) exec).getExit().accept(new MethodEvent.Exit(enterEvent.getIndex(), instance, enterEvent.getArguments(), returned));
+        }
     }
 }
