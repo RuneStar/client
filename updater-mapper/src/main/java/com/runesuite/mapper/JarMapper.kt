@@ -9,15 +9,14 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.isSubclassOf
 
 open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
 
     @Suppress("UNCHECKED_CAST")
-    constructor(packkage: String) : this(
-            *ClassPath.from(Thread.currentThread().contextClassLoader)
-                    .getTopLevelClassesRecursive(packkage)
+    constructor(pkg: String, classLoader: ClassLoader) : this(
+            *ClassPath.from(classLoader)
+                    .getTopLevelClassesRecursive(pkg)
                     .mapNotNull { it.load().kotlin }
                     .filter { it.isSubclassOf(Mapper::class) && it.isSubclassOf(ElementMatcher.Class::class) }
                     .map { it as KClass<out Mapper<Class2>> }

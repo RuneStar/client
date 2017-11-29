@@ -89,7 +89,8 @@ class CreateMojo : AbstractMojo() {
 
     private fun map() {
         val ctx = Mapper.Context()
-        JarMapper(Client::class.java.`package`.name).map(deobJar, ctx, updateRevision())
+        val clientClass = Client::class.java
+        JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, updateRevision())
         jsonMapper.writeValue(namesJson.toFile(), ctx.buildIdHierarchy())
     }
 

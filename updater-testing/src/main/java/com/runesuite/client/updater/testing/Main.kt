@@ -46,7 +46,8 @@ fun deob(revision: Int) {
 
 fun map(revision: Int) {
     val ctx = Mapper.Context()
-    JarMapper(Client::class.java.`package`.name).map(gamepackDeob(revision), ctx, revision)
+    val clientClass = Client::class.java
+    JarMapper(clientClass.`package`.name, clientClass.classLoader).map(gamepackDeob(revision), ctx, revision)
     jsonMapper.writeValue(namesJson(revision).toFile(), ctx.buildIdHierarchy())
 }
 
