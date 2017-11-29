@@ -16,7 +16,7 @@ class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = settings.font.get()
             g.color = settings.color.get()
-            
+
             val strings = ArrayList<String>()
 
 
