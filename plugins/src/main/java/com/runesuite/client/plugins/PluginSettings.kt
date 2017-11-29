@@ -1,5 +1,7 @@
 package com.runesuite.client.plugins
 
 open class PluginSettings {
-    val active = false
+
+    var active = false
+        private set
 }

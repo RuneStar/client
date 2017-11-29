@@ -15,6 +15,7 @@ import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.JFrame
 import javax.swing.WindowConstants
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
@@ -48,7 +49,7 @@ fun main(args: Array<String>) {
     jframe.addWindowListener(object : WindowAdapter() {
         override fun windowClosed(e: WindowEvent) {
             pluginLoader.close()
-            System.exit(0)
+            exitProcess(0)
         }
     })
     jframe.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE

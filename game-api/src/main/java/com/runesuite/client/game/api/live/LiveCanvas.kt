@@ -26,7 +26,7 @@ object LiveCanvas : Canvas {
 
     val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map {
         (it.instance.image.graphics as Graphics2D).apply {
-            desktopHints?.let { this.addRenderingHints(it) }
+            desktopHints?.let { addRenderingHints(it) }
         }
     }.publish().refCount().map { it.create2D() }
 

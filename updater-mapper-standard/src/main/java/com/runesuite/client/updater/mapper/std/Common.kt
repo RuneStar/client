@@ -5,6 +5,7 @@ import com.runesuite.mapper.*
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
+import com.runesuite.mapper.extensions.withDimensions
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
@@ -32,4 +33,16 @@ abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order
 abstract class CachedDefinitionMapper(classMapper: KClass<out Mapper<Class2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == context.classes.getValue(classMapper).type }
             .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+}
+
+@DependsOn(Sprite::class)
+abstract class SpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == s }
+            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
+}
+
+@DependsOn(IndexedSprite::class)
+abstract class IndexedSpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == s }
+            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
 }

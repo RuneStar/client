@@ -18,7 +18,7 @@ class ScriptEvent : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 
-    class boolean : IdentityMapper.InstanceField() {
+    class boolean1 : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
     }
 
