@@ -46,3 +46,8 @@ abstract class IndexedSpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == s }
             .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
 }
+
+@DependsOn(Instrument::class)
+abstract class InstrumentStaticIntArrayMapper(index: Int) : OrderMapper.InClassInitializer.Field(Instrument::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+}

@@ -2387,4 +2387,13 @@ class Client : IdentityMapper.Class() {
     class grandExchangeEvents : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<GrandExchangeEvents>() }
     }
+
+    class Instrument_noise : InstrumentStaticIntArrayMapper(0)
+    class Instrument_sine : InstrumentStaticIntArrayMapper(1)
+    class Instrument_samples : InstrumentStaticIntArrayMapper(2)
+    class Instrument_phases : InstrumentStaticIntArrayMapper(3)
+    class Instrument_delays : InstrumentStaticIntArrayMapper(4)
+    class Instrument_volumeSteps : InstrumentStaticIntArrayMapper(5)
+    class Instrument_pitchSteps : InstrumentStaticIntArrayMapper(6)
+    class Instrument_pitchBaseSteps : InstrumentStaticIntArrayMapper(7)
 }
