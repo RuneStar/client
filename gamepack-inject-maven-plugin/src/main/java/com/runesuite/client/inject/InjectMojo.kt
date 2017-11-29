@@ -9,6 +9,7 @@ import com.runesuite.client.updater.common.decoderNarrowed
 import com.runesuite.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
+import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.ClassFileLocator
 import net.bytebuddy.dynamic.scaffold.TypeValidation
 import net.bytebuddy.implementation.FieldAccessor
@@ -36,14 +37,16 @@ import java.nio.file.StandardCopyOption
 @Mojo(name = "inject")
 class InjectMojo : AbstractMojo() {
 
+    private companion object {
+        val accessPkg = XClient::class.java.`package`.name
+    }
+
     @Parameter(defaultValue = "\${project}")
     private lateinit var project: MavenProject
 
     private val cleanJar by lazy { Paths.get(project.build.directory, "gamepack.clean.jar") }
 
     private val classesDir by lazy { Paths.get(project.build.directory, "classes") }
-
-    private val accessPkg = XClient::class.java.`package`.name
 
     override fun execute() {
         Files.createDirectories(cleanJar.parent)
