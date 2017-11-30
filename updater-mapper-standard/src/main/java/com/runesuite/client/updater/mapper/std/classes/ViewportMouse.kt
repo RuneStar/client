@@ -7,8 +7,8 @@ import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 
 @SinceVersion(141)
-@DependsOn(Client.Viewport_containsMouse::class)
-class Viewport : IdentityMapper.Class() {
+@DependsOn(Client.ViewportMouse_isInViewport::class)
+class ViewportMouse : IdentityMapper.Class() {
 
-    override val predicate = predicateOf<Class2> { field<Client.Viewport_containsMouse>().klass == it }
+    override val predicate = predicateOf<Class2> { field<Client.ViewportMouse_isInViewport>().klass == it }
 }
