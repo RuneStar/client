@@ -2,6 +2,7 @@ package com.runesuite.client.updater.mapper.std.classes
 
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
+import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.*
@@ -9,10 +10,10 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
 class Widget : IdentityMapper.Class() {
@@ -27,11 +28,23 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Widget>().withDimensions(1) }
     }
 
+    class hasScript : OrderMapper.InConstructor.Field(Widget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class noClickThrough : OrderMapper.InConstructor.Field(Widget::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
     class id : OrderMapper.InConstructor.Field(Widget::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     class childIndex : OrderMapper.InConstructor.Field(Widget::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class contentType : OrderMapper.InConstructor.Field(Widget::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -155,4 +168,15 @@ class Widget : IdentityMapper.Class() {
 //    class modelId : OrderMapper.InMethod.Field(getModel::class, 1) {
 //        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
 //    }
+
+    @MethodParameters("index", "s")
+    class setAction : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
+    }
+
+    @DependsOn(setAction::class)
+    class actions : UniqueMapper.InMethod.Field(setAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type.withDimensions(1) }
+    }
 }
