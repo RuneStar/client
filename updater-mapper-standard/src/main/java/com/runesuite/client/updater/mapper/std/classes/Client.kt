@@ -19,6 +19,7 @@ import java.io.File
 import java.lang.management.GarbageCollectorMXBean
 import java.lang.reflect.Modifier
 import java.net.URL
+import java.util.*
 import java.util.zip.CRC32
 
 class Client : IdentityMapper.Class() {
@@ -2396,4 +2397,9 @@ class Client : IdentityMapper.Class() {
     class Instrument_volumeSteps : InstrumentStaticIntArrayMapper(5)
     class Instrument_pitchSteps : InstrumentStaticIntArrayMapper(6)
     class Instrument_pitchBaseSteps : InstrumentStaticIntArrayMapper(7)
+
+    @DependsOn(AbstractFont::class)
+    class AbstractFont_random : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == Random::class.type }
+    }
 }
