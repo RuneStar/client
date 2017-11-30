@@ -16,6 +16,7 @@ import java.io.OutputStream
 
 class NetSocket : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.instanceFields.count { it.type == java.net.Socket::class.type } == 1 }
+            .and { it.instanceFields.count { it.type == InputStream::class.type } == 1 }
 
     class finalize : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.name == "finalize" }
@@ -37,11 +38,11 @@ class NetSocket : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
-    class read : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.instructions.any { it.isMethod && it.methodId ==
-                        Triple(InputStream::class.type, "read", getMethodType(INT_TYPE, ByteArray::class.type, INT_TYPE, INT_TYPE)) } }
-    }
+//    class read : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.instructions.any { it.isMethod && it.methodId ==
+//                        Triple(InputStream::class.type, "read", getMethodType(INT_TYPE, ByteArray::class.type, INT_TYPE, INT_TYPE)) } }
+//    }
 
     class readByte : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }

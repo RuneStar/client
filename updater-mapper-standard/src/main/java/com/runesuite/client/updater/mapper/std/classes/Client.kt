@@ -1551,21 +1551,21 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(NetSocket::class, NetCache_pendingPriorityWritesCount::class)
-    class NetCache_socket : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
-                .prevWithin(3) { it.opcode == ISUB }
-                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<NetSocket>() }
-    }
+//    @DependsOn(NetSocket::class, NetCache_pendingPriorityWritesCount::class)
+//    class NetCache_socket : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
+//                .prevWithin(3) { it.opcode == ISUB }
+//                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<NetSocket>() }
+//    }
 
-    @DependsOn(NetSocket::class, NetCache_pendingPriorityWritesCount::class)
+    @DependsOn(NetCache_pendingPriorityWritesCount::class)
     class NetCache_pendingPriorityResponsesCount : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == ISUB }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(NetSocket::class, NetCache_pendingWritesCount::class, NetCache_pendingPriorityWritesCount::class)
+    @DependsOn(NetCache_pendingWritesCount::class, NetCache_pendingPriorityWritesCount::class)
     class NetCache_pendingResponsesCount : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == ISUB }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingWritesCount>().id }
