@@ -13,18 +13,10 @@ abstract class Plugin<T : PluginSettings> {
     abstract val defaultSettings: T
 
     lateinit var settings: T
-        private set
+        internal set
 
     lateinit var directory: Path
-        private set
-
-    internal fun setSettings(settings: T) {
-        this.settings = settings
-    }
-
-    internal fun setDirectory(directory: Path) {
-        this.directory = directory
-    }
+        internal set
 
     @OverridingMethodsMustInvokeSuper
     open fun create() {

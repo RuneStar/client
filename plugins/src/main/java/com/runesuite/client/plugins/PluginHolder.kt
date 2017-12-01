@@ -24,8 +24,6 @@ class PluginHolder<T : PluginSettings>(
         const val SETTINGS_FILE_NAME = "plugin.settings"
     }
 
-    val name: String = plugin.javaClass.simpleName
-
     private val directory = watchKey.watchable() as Path
 
     private val logger = plugin.logger
@@ -42,7 +40,7 @@ class PluginHolder<T : PluginSettings>(
 
     init {
         addIndividualFileLogger()
-        plugin.setDirectory(directory)
+        plugin.directory = directory
     }
 
     private fun tryWrite(file: Path, value: T) {
@@ -62,33 +60,21 @@ class PluginHolder<T : PluginSettings>(
         safeTryStartPlugin()
     }
 
-    fun enable() {
-        plugin.settings.setEnabled(true)
-        tryWrite(settingsFile, plugin.settings)
-        safeTryStartPlugin()
-    }
-
-    fun disable() {
-        plugin.settings.setEnabled(false)
-        tryWrite(settingsFile, plugin.settings)
-        safeTryStopPlugin()
-    }
-
     private fun createSettings() {
         if (Files.exists(settingsFile)) {
             logger.info("Settings file exists. Reading...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                plugin.setSettings(readSettings)
+                plugin.settings = readSettings
                 logger.info("Read successful.")
             } catch (e: IOException) {
                 logger.warn("Read failed. Reverting to default settings.", e)
-                plugin.setSettings(plugin.defaultSettings)
+                plugin.settings = plugin.defaultSettings
                 tryWrite(settingsFile, plugin.settings)
             }
         } else {
             logger.info("Settings file does not exist. Using default settings.")
-            plugin.setSettings(plugin.defaultSettings)
+            plugin.settings = plugin.defaultSettings
             tryWrite(settingsFile, plugin.settings)
         }
     }
@@ -102,14 +88,14 @@ class PluginHolder<T : PluginSettings>(
         safeTryStopPlugin()
         if (Files.notExists(settingsFile)) {
             logger.info("Settings file missing. Switching to default settings.")
-            plugin.setSettings(plugin.defaultSettings)
+            plugin.settings = plugin.defaultSettings
             tryWrite(settingsFile, plugin.defaultSettings)
         } else {
             logger.info("Settings file modified. Reading new settings...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 logger.info("Read successful.")
-                plugin.setSettings(readSettings)
+                plugin.settings = readSettings
             } catch (e: IOException) {
                 logger.warn("Read failed.", e)
                 tryWrite(settingsFile, plugin.settings)
