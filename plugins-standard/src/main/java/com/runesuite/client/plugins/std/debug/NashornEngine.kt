@@ -2,8 +2,7 @@ package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.plugins.Plugin
 import com.runesuite.client.plugins.PluginSettings
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.IOError
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
@@ -32,17 +31,21 @@ class NashornEngine : Plugin<PluginSettings>() {
 
         Thread({
             val bindings = engine.createBindings()
-            BufferedReader(InputStreamReader(System.`in`)).use { br ->
+            val console = System.console()
+            if (console == null) {
+                logger.error("No console found")
+                return@Thread
+            }
+            while (running) {
                 print(PROMPT)
-                while (running) {
-                    try {
-                        val input = br.readLine() ?: return@Thread
-                        println(engine.eval(input, bindings))
-                    } catch (se: ScriptException) {
-                        println(se)
-                    } finally {
-                        print(PROMPT)
-                    }
+                try {
+                    val input = console.readLine() ?: return@Thread
+                    println(engine.eval(input, bindings))
+                } catch (se: ScriptException) {
+                    println(se)
+                } catch (ioe: IOError) {
+                    logger.error(ioe.toString())
+                    return@Thread
                 }
             }
         }).start()

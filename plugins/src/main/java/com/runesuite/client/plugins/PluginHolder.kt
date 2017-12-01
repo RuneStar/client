@@ -1,5 +1,6 @@
 package com.runesuite.client.plugins
 
+import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
@@ -162,6 +163,8 @@ internal class PluginHolder<T : PluginSettings>(
     private fun addIndividualFileLogger() {
         val lblogger = logger as Logger
         if (lblogger.getAppender("plugin-individual") != null) return
+
+        lblogger.level = Level.ALL
 
         val logCtx = LoggerFactory.getILoggerFactory() as LoggerContext
 
