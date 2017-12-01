@@ -18,6 +18,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class NetSocket : IdentityMapper.Class() {
+
     override val predicate = predicateOf<Class2> { it.instanceFields.count { it.type == java.net.Socket::class.type } == 1 }
             .and { it.instanceFields.count { it.type == InputStream::class.type } == 1 }
 

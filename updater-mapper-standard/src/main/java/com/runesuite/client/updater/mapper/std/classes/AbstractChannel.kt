@@ -11,7 +11,7 @@ import com.runesuite.mapper.tree.Method2
 
 @SinceVersion(160)
 @DependsOn(NetSocket::class)
-class AbstractSocket : IdentityMapper.Class() {
+class AbstractChannel : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { klass<NetSocket>().superType == it.type }
 
