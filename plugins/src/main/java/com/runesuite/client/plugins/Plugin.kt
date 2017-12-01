@@ -18,6 +18,14 @@ abstract class Plugin<T : PluginSettings> {
     lateinit var directory: Path
         private set
 
+    internal fun setSettings(settings: T) {
+        this.settings = settings
+    }
+
+    internal fun setDirectory(directory: Path) {
+        this.directory = directory
+    }
+
     @OverridingMethodsMustInvokeSuper
     open fun create() {
         logger.info("create")

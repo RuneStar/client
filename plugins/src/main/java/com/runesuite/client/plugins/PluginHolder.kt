@@ -14,22 +14,17 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.WatchKey
-import kotlin.reflect.jvm.javaField
 
-internal class PluginHolder<T : PluginSettings>(
-        val plugin: Plugin<T>,
-        val watchKey: WatchKey
+class PluginHolder<T : PluginSettings>(
+        private val plugin: Plugin<T>,
+        private val watchKey: WatchKey
 ) {
 
     companion object {
         const val SETTINGS_FILE_NAME = "plugin.settings"
-        private val settingsField = checkNotNull(Plugin<*>::settings.javaField).apply {
-            isAccessible = true
-        }
-        private val directoryField = checkNotNull(Plugin<*>::directory.javaField).apply {
-            isAccessible = true
-        }
     }
+
+    val name: String = plugin.javaClass.simpleName
 
     private val directory = watchKey.watchable() as Path
 
@@ -47,7 +42,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     init {
         addIndividualFileLogger()
-        directoryField.set(plugin, directory)
+        plugin.setDirectory(directory)
     }
 
     private fun tryWrite(file: Path, value: T) {
@@ -62,9 +57,21 @@ internal class PluginHolder<T : PluginSettings>(
         }
     }
 
-    fun create() {
+    internal fun create() {
         createSettings()
         safeTryStartPlugin()
+    }
+
+    fun enable() {
+        plugin.settings.setEnabled(true)
+        tryWrite(settingsFile, plugin.settings)
+        safeTryStartPlugin()
+    }
+
+    fun disable() {
+        plugin.settings.setEnabled(false)
+        tryWrite(settingsFile, plugin.settings)
+        safeTryStopPlugin()
     }
 
     private fun createSettings() {
@@ -72,21 +79,21 @@ internal class PluginHolder<T : PluginSettings>(
             logger.info("Settings file exists. Reading...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                settingsField.set(plugin, readSettings)
+                plugin.setSettings(readSettings)
                 logger.info("Read successful.")
             } catch (e: IOException) {
                 logger.warn("Read failed. Reverting to default settings.", e)
-                settingsField.set(plugin, plugin.defaultSettings)
+                plugin.setSettings(plugin.defaultSettings)
                 tryWrite(settingsFile, plugin.settings)
             }
         } else {
             logger.info("Settings file does not exist. Using default settings.")
-            settingsField.set(plugin, plugin.defaultSettings)
+            plugin.setSettings(plugin.defaultSettings)
             tryWrite(settingsFile, plugin.settings)
         }
     }
 
-    fun settingsFileChanged() {
+    internal fun settingsFileChanged() {
         if (ignoreNextEvent) {
             // ignore events caused by this class writing
             ignoreNextEvent = false
@@ -95,14 +102,14 @@ internal class PluginHolder<T : PluginSettings>(
         safeTryStopPlugin()
         if (Files.notExists(settingsFile)) {
             logger.info("Settings file missing. Switching to default settings.")
-            settingsField.set(plugin, plugin.defaultSettings)
+            plugin.setSettings(plugin.defaultSettings)
             tryWrite(settingsFile, plugin.defaultSettings)
         } else {
             logger.info("Settings file modified. Reading new settings...")
             try {
                 val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 logger.info("Read successful.")
-                settingsField.set(plugin, readSettings)
+                plugin.setSettings(readSettings)
             } catch (e: IOException) {
                 logger.warn("Read failed.", e)
                 tryWrite(settingsFile, plugin.settings)
@@ -111,7 +118,7 @@ internal class PluginHolder<T : PluginSettings>(
         safeTryStartPlugin()
     }
 
-    fun destroy() {
+    internal fun destroy() {
         watchKey.cancel()
         safeDestroyPlugin()
     }
@@ -127,7 +134,7 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     private fun safeTryStartPlugin() {
-        if (destroyed || active || !plugin.settings.active) return
+        if (destroyed || active || !plugin.settings.enabled) return
         try {
             if (!created) safeCreatePlugin()
             plugin.start()
@@ -139,7 +146,7 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     private fun safeTryStopPlugin() {
-        if (destroyed || !created || !active || !plugin.settings.active) return
+        if (destroyed || !created || !active || !plugin.settings.enabled) return
         active = false
         try {
             plugin.stop()

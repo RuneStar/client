@@ -13,13 +13,15 @@ class PluginLoader(
         private val pluginsDir: Path
 ) : Closeable {
 
-    companion object {
+    private companion object {
         private val logger = getLogger()
     }
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
     private val currentPlugins = HashMap<String, PluginHolder<*>>()
+
+    val plugins: Collection<PluginHolder<*>> = currentPlugins.values
 
     private val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
