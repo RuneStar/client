@@ -8,7 +8,8 @@ import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Instruction2
-import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 
 @DependsOn(Entity::class)
 class GroundItemPile : IdentityMapper.Class() {
@@ -28,5 +29,30 @@ class GroundItemPile : IdentityMapper.Class() {
     @DependsOn(Scene.newGroundItemPile::class, Entity::class)
     class top : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class x : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GroundItemPile>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class y : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GroundItemPile>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class tileHeight : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GroundItemPile>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class tag : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GroundItemPile>() }
+    }
+
+    @DependsOn(Scene.newGroundItemPile::class)
+    class height : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GroundItemPile>() }
     }
 }
