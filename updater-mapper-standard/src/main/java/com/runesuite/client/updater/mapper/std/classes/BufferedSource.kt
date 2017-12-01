@@ -60,10 +60,12 @@ class BufferedSource : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class canRead : IdentityMapper.InstanceMethod() {
+    @MethodParameters("length")
+    class isAvailable : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
 
+    @MethodParameters("dst", "dstIndex", "length")
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.startsWith(ByteArray::class.type) }

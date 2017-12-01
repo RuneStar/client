@@ -36,7 +36,8 @@ class NashornEngine : Plugin<PluginSettings>() {
                 print(PROMPT)
                 while (running) {
                     try {
-                        println(engine.eval(br.readLine(), bindings))
+                        val input = br.readLine() ?: return@Thread
+                        println(engine.eval(input, bindings))
                     } catch (se: ScriptException) {
                         println(se)
                     } finally {

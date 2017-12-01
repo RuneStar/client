@@ -42,6 +42,7 @@ class NetSocket : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
+    @MethodParameters("dst", "dstIndex", "length")
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.startsWith(ByteArray::class.type, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.isMethod && it.methodId ==
@@ -61,12 +62,14 @@ class NetSocket : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == InputStream::available.id } }
     }
 
+    @MethodParameters("src", "srcIndex", "length")
     class write0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == NEWARRAY } }
     }
 
     @SinceVersion(160)
+    @MethodParameters("src", "srcIndex", "length")
     @DependsOn(write0::class)
     class write : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<write0>().id } }
@@ -96,8 +99,9 @@ class NetSocket : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodName == "join" } }
     }
 
+    @MethodParameters("length")
     @SinceVersion(160)
-    class canRead : IdentityMapper.InstanceMethod() {
+    class isAvailable : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
 }

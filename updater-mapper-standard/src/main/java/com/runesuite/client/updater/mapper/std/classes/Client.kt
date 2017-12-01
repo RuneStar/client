@@ -1551,12 +1551,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-//    @DependsOn(NetSocket::class, NetCache_pendingPriorityWritesCount::class)
-//    class NetCache_socket : AllUniqueMapper.Field() {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
-//                .prevWithin(3) { it.opcode == ISUB }
-//                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<NetSocket>() }
-//    }
+    @SinceVersion(160)
+    @DependsOn(AbstractChannel::class, NetCache_pendingPriorityWritesCount::class)
+    class NetCache_socket : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
+                .prevWithin(3) { it.opcode == ISUB }
+                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<AbstractChannel>() }
+    }
 
     @DependsOn(NetCache_pendingPriorityWritesCount::class)
     class NetCache_pendingPriorityResponsesCount : AllUniqueMapper.Field() {

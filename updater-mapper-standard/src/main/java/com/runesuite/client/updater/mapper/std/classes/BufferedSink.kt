@@ -67,6 +67,7 @@ class BufferedSink : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
 
+    @MethodParameters("src", "srcIndex", "length")
     class write : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(ByteArray::class.type) }
