@@ -8,6 +8,7 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.NEWARRAY
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
@@ -38,11 +39,11 @@ class NetSocket : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
-//    class read : IdentityMapper.InstanceMethod() {
-//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-//                .and { it.instructions.any { it.isMethod && it.methodId ==
-//                        Triple(InputStream::class.type, "read", getMethodType(INT_TYPE, ByteArray::class.type, INT_TYPE, INT_TYPE)) } }
-//    }
+    class read : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(ByteArray::class.type, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.isMethod && it.methodId ==
+                        Triple(InputStream::class.type, "read", getMethodType(INT_TYPE, ByteArray::class.type, INT_TYPE, INT_TYPE)) } }
+    }
 
     class readByte : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }

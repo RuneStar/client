@@ -23,11 +23,11 @@ class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
             g.color = Color.BLUE
             g.draw(Viewport.Fixed.DEFAULT.shape)
             val strings = listOf(
-                    "viewportOffsetX/Y: ${accessor.viewport_xOffset}, ${accessor.viewport_yOffset}",
-                    "viewportWidth/Height: ${accessor.viewport_width}, ${accessor.viewport_height}",
-                    "viewportZoom: ${accessor.viewport_zoom}",
-                    "viewportMouseX/Y: ${accessor.viewport_mouseX}, ${accessor.viewport_mouseY}",
-                    "viewportContainsMouse: ${accessor.viewport_containsMouse}"
+                    "viewportOffsetX/Y: ${accessor.viewportOffsetX}, ${accessor.viewportOffsetY}",
+                    "viewportWidth/Height: ${accessor.viewportWidth}, ${accessor.viewportHeight}",
+                    "viewportZoom: ${accessor.viewportZoom}",
+                    "viewportMouseX/Y: ${accessor.viewportMouse_x}, ${accessor.viewportMouse_y}",
+                    "viewportContainsMouse: ${accessor.viewportMouse_isInViewport}"
             )
             g.font = settings.font.get()
             g.color = settings.color.get()
