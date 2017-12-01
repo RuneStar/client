@@ -4,6 +4,7 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
+import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
@@ -11,9 +12,10 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
 import java.io.IOException
 import java.io.InputStream
 
@@ -56,5 +58,28 @@ class BufferedSource : IdentityMapper.Class() {
 
     class capacity : OrderMapper.InConstructor.Field(BufferedSource::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class canRead : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+    }
+
+    class read : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.startsWith(ByteArray::class.type) }
+    }
+
+    @MethodParameters()
+    class available : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.none { it.opcode == IREM } }
+    }
+
+    @MethodParameters()
+    class readUnsignedByte : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.opcode == IREM } }
     }
 }

@@ -11,6 +11,7 @@ import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import java.io.IOException
@@ -64,5 +65,10 @@ class BufferedSink : IdentityMapper.Class() {
     @MethodParameters()
     class isClosed : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+    }
+
+    class write : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 }

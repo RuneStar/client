@@ -4,7 +4,6 @@ import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.annotations.SinceVersion
-import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Method2
@@ -22,9 +21,9 @@ class AbstractChannel : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(NetSocket.readByte::class)
-    class readByte : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<NetSocket.readByte>().mark }
+    @DependsOn(NetSocket.readUnsignedByte::class)
+    class readUnsignedByte : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<NetSocket.readUnsignedByte>().mark }
     }
 
     @MethodParameters()

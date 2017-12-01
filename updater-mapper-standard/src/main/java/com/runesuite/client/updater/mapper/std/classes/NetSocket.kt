@@ -49,7 +49,7 @@ class NetSocket : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class readByte : IdentityMapper.InstanceMethod() {
+    class readUnsignedByte : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId ==
                         Triple(InputStream::class.type, "read", getMethodType(INT_TYPE)) } }
