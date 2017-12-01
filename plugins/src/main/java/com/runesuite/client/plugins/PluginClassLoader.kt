@@ -1,5 +1,6 @@
 package com.runesuite.client.plugins
 
+import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
@@ -24,10 +25,10 @@ private constructor(jar: Path) : ClassLoader() {
         val classes = ArrayList<Class<*>>()
         val plugins = ArrayList<Plugin<*>>()
         jarClassBytes(jar).forEach { (name, bytes) ->
+            logger.info { "Found class $name" }
             val c: Class<*>
             try {
                 c = defineClass(name, bytes, 0, bytes.size)
-                logger.info("Defined class $name")
             } catch (e: Exception) {
                 logger.warn("Failed to define class $name", e)
                 return@forEach
@@ -52,7 +53,6 @@ private constructor(jar: Path) : ClassLoader() {
                     logger.warn("Failed to create instance of ${c.name}", e)
                     return@forEach
                 }
-                logger.info("Initialized plugin ${c.name}")
                 plugins.add(plugin)
             }
         }
