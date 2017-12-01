@@ -3,6 +3,8 @@ package com.runesuite.client.updater.mapper.std.classes
 import com.runesuite.mapper.IdentityMapper
 import com.runesuite.mapper.OrderMapper
 import com.runesuite.mapper.annotations.DependsOn
+import com.runesuite.mapper.annotations.MethodParameters
+import com.runesuite.mapper.annotations.SinceVersion
 import com.runesuite.mapper.extensions.*
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
@@ -45,20 +47,28 @@ class NetSocket : IdentityMapper.Class() {
                         Triple(InputStream::class.type, "read", getMethodType(INT_TYPE, ByteArray::class.type, INT_TYPE, INT_TYPE)) } }
     }
 
+    @MethodParameters()
     class readByte : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId ==
                         Triple(InputStream::class.type, "read", getMethodType(INT_TYPE)) } }
     }
 
+    @MethodParameters()
     class available : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == InputStream::available.id } }
     }
 
-    class write : IdentityMapper.InstanceMethod() {
+    class write0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == NEWARRAY } }
+    }
+
+    @SinceVersion(160)
+    @DependsOn(write0::class)
+    class write : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<write0>().id } }
     }
 
     @DependsOn(Task::class)
@@ -79,8 +89,14 @@ class NetSocket : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
+    @MethodParameters()
     class close : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == "join" } }
+    }
+
+    @SinceVersion(160)
+    class canRead : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }
 }
