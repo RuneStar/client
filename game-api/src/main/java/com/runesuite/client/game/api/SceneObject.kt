@@ -11,18 +11,18 @@ abstract class SceneObject(val location: SceneTile) : Wrapper() {
     abstract val tag: EntityTag
 
     class Interactable(override val accessor: XGameObject, location: SceneTile) : SceneObject(location) {
-        override val tag get() = EntityTag(accessor.id)
+        override val tag get() = EntityTag(accessor.tag)
     }
 
     class Floor(override val accessor: XFloorDecoration, location: SceneTile) : SceneObject(location) {
-        override val tag get() = EntityTag(accessor.id)
+        override val tag get() = EntityTag(accessor.tag)
     }
 
     class Wall(override val accessor: XWallDecoration, location: SceneTile) : SceneObject(location) {
-        override val tag get() = EntityTag(accessor.id)
+        override val tag get() = EntityTag(accessor.tag)
     }
 
     class Boundary(override val accessor: XBoundaryObject, location: SceneTile) : SceneObject(location) {
-        override val tag get() = EntityTag(accessor.id)
+        override val tag get() = EntityTag(accessor.tag)
     }
 }
