@@ -25,9 +25,8 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import javax.swing.JDialog
 import javax.swing.JLabel
-import kotlin.system.exitProcess
 
-private val locator =  MavenRepositorySystemUtils.newServiceLocator().apply {
+private val locator = MavenRepositorySystemUtils.newServiceLocator().apply {
     addService(TransporterFactory::class.java, FileTransporterFactory::class.java)
     addService(TransporterFactory::class.java, HttpTransporterFactory::class.java)
     addService(RepositoryConnectorFactory::class.java, BasicRepositoryConnectorFactory::class.java)
