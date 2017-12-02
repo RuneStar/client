@@ -34,12 +34,12 @@ class FloorDecoration : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newFloorDecoration::class)
-    class height : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 2) {
+    class tileHeight : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Scene.newFloorDecoration::class)
-    class id : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 3) {
+    class tag : OrderMapper.InMethod.Field(Scene.newFloorDecoration::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

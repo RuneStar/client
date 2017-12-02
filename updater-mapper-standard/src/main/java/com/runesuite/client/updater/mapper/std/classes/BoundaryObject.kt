@@ -21,7 +21,7 @@ class BoundaryObject : IdentityMapper.Class() {
             .and { it.instanceMethods.isEmpty() }
 
     @DependsOn(Scene.newBoundaryObject::class)
-    class id : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 0) {
+    class tag : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -41,7 +41,7 @@ class BoundaryObject : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newBoundaryObject::class)
-    class height : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 4) {
+    class tileHeight : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -56,12 +56,12 @@ class BoundaryObject : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newBoundaryObject::class)
-    class int2 : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 5) {
+    class orientationA : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Scene.newBoundaryObject::class)
-    class int1 : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 6) {
+    class orientationB : OrderMapper.InMethod.Field(Scene.newBoundaryObject::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

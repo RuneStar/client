@@ -22,7 +22,7 @@ class GameObject : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Entity>() }
     }
 
-    class id : OrderMapper.InConstructor.Field(GameObject::class, 0) {
+    class tag : OrderMapper.InConstructor.Field(GameObject::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

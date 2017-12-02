@@ -18,7 +18,7 @@ class WallDecoration : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == INT_TYPE } == 9 }
 
     @DependsOn(Scene.newWallDecoration::class, Entity::class)
-    class entity : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
+    class entity1 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 
@@ -28,7 +28,7 @@ class WallDecoration : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newWallDecoration::class)
-    class id : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
+    class tag : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -48,12 +48,12 @@ class WallDecoration : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newWallDecoration::class)
-    class height : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 4) {
+    class tileHeight : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Scene.newWallDecoration::class)
-    class int6 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 5) {
+    class orientation : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
