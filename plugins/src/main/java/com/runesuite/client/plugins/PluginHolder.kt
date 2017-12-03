@@ -119,12 +119,12 @@ class PluginHolder<T : PluginSettings>(
     }
 
     internal fun settingsFileChanged() {
-        if (isDestroyed) return
         if (ignoreNextEvent) {
             // ignore events caused by this class writing
             ignoreNextEvent = false
             return
         }
+        if (isDestroyed) return
         if (plugin.settings.enabled) stopPlugin()
         if (isDestroyed) return
         if (Files.notExists(settingsFile)) {
@@ -145,13 +145,16 @@ class PluginHolder<T : PluginSettings>(
 
     internal fun destroy() {
         watchKey.cancel()
+        if (isDestroyed || !isCreated) return
+        if (plugin.settings.enabled) stopPlugin()
+        if (isDestroyed) return
         destroyPlugin()
     }
 
     private fun createPlugin() {
+        isCreated = true
         try {
             plugin.create()
-            isCreated = true
         } catch (e: Exception) {
             logger.warn("Exception creating plugin.", e)
             destroy()
