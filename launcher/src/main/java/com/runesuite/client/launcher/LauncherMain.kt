@@ -18,7 +18,6 @@ import org.eclipse.aether.transport.file.FileTransporterFactory
 import org.eclipse.aether.transport.http.HttpTransporterFactory
 import java.awt.Dimension
 import java.awt.Window
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -70,7 +69,6 @@ private fun startLoadingWindow(): Window {
     }
 }
 
-@Throws(IOException::class)
 private fun updateArtifact(artifactId: String, path: Path) {
     val mvnPath = updateArtifactLocalRepo(artifactId)
     Files.createDirectories(path.parent)
@@ -85,6 +83,6 @@ private fun updateArtifactLocalRepo(artifactId: String): Path {
     val artifact2 = DefaultArtifact(GROUP_ID, artifactId, null, "jar", artifactVersion)
     val artifactRequest = ArtifactRequest(artifact2, listOf(remoteRepo), null)
     val artifactResponse = repoSystem.resolveArtifact(session, artifactRequest)
-    println(artifactResponse)
+    println("using artifact $artifactResponse")
     return artifactResponse.artifact.file.toPath()
 }

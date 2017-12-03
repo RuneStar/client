@@ -9,6 +9,7 @@ import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
 import ch.qos.logback.core.util.FileSize
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.file.Files
@@ -18,134 +19,165 @@ import java.nio.file.WatchKey
 class PluginHolder<T : PluginSettings>(
         private val plugin: Plugin<T>,
         private val watchKey: WatchKey
-) {
+) : PluginHandle {
 
     companion object {
         const val SETTINGS_FILE_NAME = "plugin.settings"
+
+        private const val LOG_FILE_NAME = "plugin.log"
+        private const val LOG_APPENDER_NAME = "plugin-individual"
+        private const val LOG_ENCODER_PATTERN = "%date{ISO8601} [%thread] %-5level - %msg%n"
+        private val mapper = YAMLMapper().findAndRegisterModules()
     }
 
-    private val directory = watchKey.watchable() as Path
+    override val directory = watchKey.watchable() as Path
 
-    private val logger = plugin.logger
+    private val logger get() = plugin.logger
 
-    private val settingsFile = directory.resolve(SETTINGS_FILE_NAME)
+    override val settingsFile: Path = directory.resolve(SETTINGS_FILE_NAME)
 
     private var ignoreNextEvent = false
 
-    private var active = false
+    override var isDestroyed = false
 
-    private var created = false
+    private var isCreated = false
 
-    private var destroyed = false
+    override val name: String get() = plugin.javaClass.name
+
+    override val simpleName: String get() = plugin.javaClass.simpleName
+
+    override val logFile: Path get() = directory.resolve(LOG_FILE_NAME)
 
     init {
         addIndividualFileLogger()
         plugin.directory = directory
     }
 
-    private fun tryWrite(file: Path, value: T) {
+    internal fun create() {
+        createSettings()
+        if (isDestroyed) return
+        if (!plugin.settings.enabled) return
+        createPlugin()
+        if (isDestroyed) return
+        startPlugin()
+    }
+
+    override fun enable() {
+        if (isDestroyed || plugin.settings.enabled) return
+        plugin.settings.enabled = true
+        writeSettings()
+        if (isDestroyed) return
+        if (!isCreated) createPlugin()
+        if (isDestroyed) return
+        startPlugin()
+    }
+
+    override fun disable() {
+        if (isDestroyed || !plugin.settings.enabled) return
+        plugin.settings.enabled = false
+        writeSettings()
+        if (isDestroyed) return
+        stopPlugin()
+    }
+
+    override val isEnabled: Boolean get() {
+        return plugin.settings.enabled
+    }
+
+    private fun writeSettings() {
         try {
             ignoreNextEvent = true
             logger.info("Writing settings...")
-            plugin.settingsWriter.write(file, value)
+            mapper.writeValue(settingsFile.toFile(), plugin.settings)
             logger.info("Write successful.")
         } catch (e: IOException) {
             logger.warn("Write failed.", e)
-            safeDestroyPlugin()
+            destroy()
         }
     }
 
-    internal fun create() {
-        createSettings()
-        safeTryStartPlugin()
+    private fun readSettings() {
+        try {
+            plugin.settings = mapper.readValue(settingsFile.toFile(), plugin.defaultSettings.javaClass)
+            logger.info("Read successful.")
+        } catch (e: IOException) {
+            logger.warn("Read failed. Reverting to default settings.", e)
+            plugin.settings = plugin.defaultSettings
+            writeSettings()
+        }
     }
 
     private fun createSettings() {
         if (Files.exists(settingsFile)) {
             logger.info("Settings file exists. Reading...")
-            try {
-                val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                plugin.settings = readSettings
-                logger.info("Read successful.")
-            } catch (e: IOException) {
-                logger.warn("Read failed. Reverting to default settings.", e)
-                plugin.settings = plugin.defaultSettings
-                tryWrite(settingsFile, plugin.settings)
-            }
+            readSettings()
         } else {
             logger.info("Settings file does not exist. Using default settings.")
             plugin.settings = plugin.defaultSettings
-            tryWrite(settingsFile, plugin.settings)
+            writeSettings()
         }
     }
 
     internal fun settingsFileChanged() {
+        if (isDestroyed) return
         if (ignoreNextEvent) {
             // ignore events caused by this class writing
             ignoreNextEvent = false
             return
         }
-        safeTryStopPlugin()
+        if (plugin.settings.enabled) stopPlugin()
+        if (isDestroyed) return
         if (Files.notExists(settingsFile)) {
             logger.info("Settings file missing. Switching to default settings.")
             plugin.settings = plugin.defaultSettings
-            tryWrite(settingsFile, plugin.defaultSettings)
+            writeSettings()
         } else {
             logger.info("Settings file modified. Reading new settings...")
-            try {
-                val readSettings = plugin.settingsWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-                logger.info("Read successful.")
-                plugin.settings = readSettings
-            } catch (e: IOException) {
-                logger.warn("Read failed.", e)
-                tryWrite(settingsFile, plugin.settings)
-            }
+            readSettings()
         }
-        safeTryStartPlugin()
+        if (isDestroyed) return
+        if (plugin.settings.enabled) {
+            if (!isCreated) createPlugin()
+            if (isDestroyed) return
+            startPlugin()
+        }
     }
 
     internal fun destroy() {
         watchKey.cancel()
-        safeDestroyPlugin()
+        destroyPlugin()
     }
 
-    private fun safeCreatePlugin() {
-        if (created || destroyed) return
+    private fun createPlugin() {
         try {
             plugin.create()
-            created = true
+            isCreated = true
         } catch (e: Exception) {
             logger.warn("Exception creating plugin.", e)
+            destroy()
         }
     }
 
-    private fun safeTryStartPlugin() {
-        if (destroyed || active || !plugin.settings.enabled) return
+    private fun startPlugin() {
         try {
-            if (!created) safeCreatePlugin()
             plugin.start()
-            active = true
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             logger.warn("Exception starting plugin.", e)
-            safeDestroyPlugin()
+            destroy()
         }
     }
 
-    private fun safeTryStopPlugin() {
-        if (destroyed || !created || !active || !plugin.settings.enabled) return
-        active = false
+    private fun stopPlugin() {
         try {
             plugin.stop()
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             logger.warn("Exception stopping plugin.", e)
-            safeDestroyPlugin()
+            destroy()
         }
     }
 
-    private fun safeDestroyPlugin() {
-        safeTryStopPlugin()
-        if (destroyed || !created) return
-        destroyed = true
+    private fun destroyPlugin() {
+        isDestroyed = true
         try {
             plugin.destroy()
         } catch (e: Exception) {
@@ -155,34 +187,32 @@ class PluginHolder<T : PluginSettings>(
 
     private fun addIndividualFileLogger() {
         val lblogger = logger as Logger
-        if (lblogger.getAppender("plugin-individual") != null) return
-
+        if (lblogger.getAppender(LOG_APPENDER_NAME) != null) return
         lblogger.level = Level.ALL
-
         val logCtx = LoggerFactory.getILoggerFactory() as LoggerContext
 
         val logEncoder = PatternLayoutEncoder()
         logEncoder.context = logCtx
-        logEncoder.pattern = "%date{ISO8601} [%thread] %-5level - %msg%n"
+        logEncoder.pattern = LOG_ENCODER_PATTERN
         logEncoder.start()
 
         val logFileAppender = RollingFileAppender<ILoggingEvent>()
         logFileAppender.context = logCtx
-        logFileAppender.name = "plugin-individual"
+        logFileAppender.name = LOG_APPENDER_NAME
         logFileAppender.encoder = logEncoder
         logFileAppender.isAppend = true
-        logFileAppender.file = directory.resolve("plugin.log").toString()
+        logFileAppender.file = directory.resolve(LOG_FILE_NAME).toString()
 
         val rollingPolicy = FixedWindowRollingPolicy()
         rollingPolicy.minIndex = 0
         rollingPolicy.maxIndex = 0
         rollingPolicy.context = logCtx
         rollingPolicy.setParent(logFileAppender)
-        rollingPolicy.fileNamePattern = directory.resolve("plugin%i.log").toString()
+        rollingPolicy.fileNamePattern = directory.resolve(LOG_FILE_NAME + "%i").toString()
         rollingPolicy.start()
 
         val triggeringPolicy = SizeBasedTriggeringPolicy<ILoggingEvent>()
-        triggeringPolicy.setMaxFileSize(FileSize.valueOf("2MB"))
+        triggeringPolicy.setMaxFileSize(FileSize.valueOf("3MB"))
         triggeringPolicy.context = logCtx
         triggeringPolicy.start()
 

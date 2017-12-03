@@ -6,9 +6,8 @@ import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class Plugin<T : PluginSettings> {
 
+    @JvmField
     val logger = getLogger(javaClass)
-
-    open val settingsWriter: ObjectReadWriter<T> = ObjectReadWriter.Yaml()
 
     abstract val defaultSettings: T
 

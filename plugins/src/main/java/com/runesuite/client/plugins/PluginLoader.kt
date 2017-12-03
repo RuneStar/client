@@ -55,21 +55,10 @@ class PluginLoader(
                     @Suppress("UNCHECKED_CAST")
                     val we = weRaw as WatchEvent<Path>
                     val ctx = we.context() ?: return@forEach
-//                    executor.submit {
-//                        logger.debug { "$dir.$ctx:${we.kind()}" }
-//                    }
                     if (dir == pluginsJarsDir && ctx.toFile().extension == "jar") {
-                        val jarPath = pluginsJarsDir.resolve(we.context())
+                        val jarPath = pluginsJarsDir.resolve(ctx)
                         executor.submit {
-                            val pluginNames = currentJarPluginNames.remove(jarPath)
-                            if (pluginNames != null) {
-                                pluginNames.forEach { className ->
-                                    checkNotNull(currentPlugins.remove(className)).destroy()
-                                }
-                            }
-                            if (Files.exists(jarPath) && verifyJar(jarPath)) {
-                                loadJar(jarPath)
-                            }
+                            jarChanged(jarPath)
                         }
                     } else if (dir != pluginsDir && ctx.fileName.toString() == PluginHolder.SETTINGS_FILE_NAME) {
                         executor.submit {
@@ -80,6 +69,18 @@ class PluginLoader(
                 key.reset()
             }
         }).start()
+    }
+
+    private fun jarChanged(jar: Path) {
+        val pluginNames = currentJarPluginNames.remove(jar)
+        if (pluginNames != null) {
+            pluginNames.forEach { className ->
+                checkNotNull(currentPlugins.remove(className)).destroy()
+            }
+        }
+        if (Files.exists(jar) && verifyJar(jar)) {
+            loadJar(jar)
+        }
     }
 
     private fun loadJar(jar: Path) {
