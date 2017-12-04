@@ -9,18 +9,12 @@ import com.runesuite.client.updater.common.FieldHook
 import com.runesuite.client.updater.common.MethodHook
 import com.runesuite.client.updater.deob.Deobfuscator
 import com.runesuite.client.updater.deob.common.*
-import com.runesuite.client.updater.deob.common.controlflow.ControlFlowFixer
-import com.runesuite.client.updater.deob.jagex.*
 import com.runesuite.client.updater.mapper.std.classes.Client
 import com.runesuite.mapper.IdClass
 import com.runesuite.mapper.JarMapper
 import com.runesuite.mapper.Mapper
 import com.runesuite.mapper.buildIdHierarchy
-import java.awt.datatransfer.Clipboard
-import java.awt.event.KeyEvent
-import java.nio.ByteBuffer
 import java.nio.file.Paths
-import java.util.concurrent.atomic.AtomicInteger
 
 val WORK_DIR = Paths.get("updater-testing", "workspace")
 
@@ -41,7 +35,7 @@ fun main(args: Array<String>) {
 }
 
 fun deob(revision: Int) {
-    Deobfuscator.All.deob(gamepack(revision), gamepackDeob(revision))
+    Deobfuscator.Testing.deob(gamepack(revision), gamepackDeob(revision))
 }
 
 fun map(revision: Int) {

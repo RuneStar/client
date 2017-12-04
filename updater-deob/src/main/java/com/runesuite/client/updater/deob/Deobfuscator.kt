@@ -18,7 +18,10 @@ import java.nio.file.Path
 
 interface Deobfuscator {
 
-    object All : Deobfuscator.Composite(
+    /**
+     * Same resulting bytecode as [Default] but does additional analysis.
+     */
+    object Testing : Deobfuscator.Composite(
             JarInfo,
             MultiplierFinder,
             UnusedTryCatchRemover,
@@ -36,18 +39,30 @@ interface Deobfuscator {
     )
 
     object Default : Deobfuscator.Composite(
-//            JarInfo,
             MultiplierFinder,
             UnusedTryCatchRemover,
             OpaquePredicateFixer,
             ControlFlowFixer,
-//            StaticDuplicateMethodFinder,
             UnusedFieldRemover,
             UnusedMethodRemover,
             FrameRemover,
             UnnecessaryGotoRemover,
             SortMethodsByLineNumber,
-//            MethodOrigClassFinder,
+            DebugRemover,
+            RemoveEnclosingMethodAttributes
+    )
+
+    /**
+     * Limits deobfuscation to just removing and reordering instructions. Keeps unused methods and fields. Removes
+     * enclosing method attributes.
+     */
+    object Clean : Deobfuscator.Composite(
+            UnusedTryCatchRemover,
+            OpaquePredicateFixer,
+            ControlFlowFixer,
+            FrameRemover,
+            UnnecessaryGotoRemover,
+            SortMethodsByLineNumber,
             DebugRemover,
             RemoveEnclosingMethodAttributes
     )

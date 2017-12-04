@@ -24,7 +24,7 @@ class PluginLoader(
 
     val plugins: Collection<PluginHandle> = currentPlugins.values
 
-    val executor: ExecutorService = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
     private val watchService = FileSystems.getDefault().newWatchService()
 

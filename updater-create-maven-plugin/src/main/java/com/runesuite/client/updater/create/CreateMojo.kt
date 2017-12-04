@@ -84,7 +84,7 @@ class CreateMojo : AbstractMojo() {
     }
 
     private fun clean() {
-        RemoveEnclosingMethodAttributes.deob(gamepackJar, cleanJar)
+        Deobfuscator.Clean.deob(gamepackJar, cleanJar)
     }
 
     private fun map() {
