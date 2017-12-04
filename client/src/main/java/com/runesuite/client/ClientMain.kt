@@ -2,6 +2,8 @@
 
 package com.runesuite.client
 
+import com.alee.laf.WebLookAndFeel
+import com.alee.laf.button.WebButton
 import com.runesuite.client.common.PLUGINS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
 import com.runesuite.client.game.api.GameState
@@ -10,26 +12,34 @@ import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.plugins.PluginLoader
 import com.runesuite.general.JavConfig
+import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import javax.swing.Box
 import javax.swing.JFrame
 import javax.swing.WindowConstants
-import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
+    WebLookAndFeel.install()
 
     val javConfig = JavConfig()
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
     @Suppress("DEPRECATION")
     val applet = Client.accessor as java.applet.Applet
-
     applet.preInit(javConfig)
+
+    val pluginsButton = WebButton("plugins")
+    var pluginsWindow: PluginsWindow? = null
 
     val jframe = JFrame(javConfig[JavConfig.Key.TITLE]).apply {
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        add(applet)
+        add(Box.createHorizontalBox().apply {
+            add(Box.createGlue())
+            add(pluginsButton)
+        }, BorderLayout.NORTH)
+        add(applet, BorderLayout.CENTER)
         pack()
         setLocationRelativeTo(null)
         isVisible = true
@@ -46,13 +56,26 @@ fun main(args: Array<String>) {
 
     val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH)
 
-    jframe.addWindowListener(object : WindowAdapter() {
-        override fun windowClosed(e: WindowEvent) {
-            pluginLoader.close()
-            exitProcess(0)
+    jframe.apply {
+        addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent?) {
+                pluginLoader.close()
+            }
+        })
+        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+    }
+
+    pluginsButton.addActionListener {
+        if (pluginsWindow == null) {
+            pluginsWindow = PluginsWindow(pluginLoader).apply {
+                addWindowListener(object : WindowAdapter() {
+                    override fun windowClosing(e: WindowEvent?) {
+                        pluginsWindow = null
+                    }
+                })
+            }
         }
-    })
-    jframe.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
+    }
 }
 
 @Suppress("DEPRECATION")

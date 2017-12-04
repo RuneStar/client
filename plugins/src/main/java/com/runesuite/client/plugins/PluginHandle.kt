@@ -6,8 +6,6 @@ interface PluginHandle {
 
     val name: String
 
-    val simpleName: String
-
     fun enable()
 
     fun disable()

@@ -15,14 +15,16 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.WatchKey
+import java.util.concurrent.ExecutorService
 
-class PluginHolder<T : PluginSettings>(
+internal class PluginHolder<T : PluginSettings>(
         private val plugin: Plugin<T>,
-        private val watchKey: WatchKey
+        private val watchKey: WatchKey,
+        private val executor: ExecutorService
 ) : PluginHandle {
 
     companion object {
-        const val SETTINGS_FILE_NAME = "plugin.settings"
+        const val SETTINGS_FILE_NAME = "settings.yml"
 
         private const val LOG_FILE_NAME = "plugin.log"
         private const val LOG_APPENDER_NAME = "plugin-individual"
@@ -44,8 +46,6 @@ class PluginHolder<T : PluginSettings>(
 
     override val name: String get() = plugin.javaClass.name
 
-    override val simpleName: String get() = plugin.javaClass.simpleName
-
     override val logFile: Path get() = directory.resolve(LOG_FILE_NAME)
 
     init {
@@ -63,21 +63,25 @@ class PluginHolder<T : PluginSettings>(
     }
 
     override fun enable() {
-        if (isDestroyed || plugin.settings.enabled) return
-        plugin.settings.enabled = true
-        writeSettings()
-        if (isDestroyed) return
-        if (!isCreated) createPlugin()
-        if (isDestroyed) return
-        startPlugin()
+        executor.submit {
+            if (isDestroyed || plugin.settings.enabled) return@submit
+            plugin.settings.enabled = true
+            writeSettings()
+            if (isDestroyed) return@submit
+            if (!isCreated) createPlugin()
+            if (isDestroyed) return@submit
+            startPlugin()
+        }
     }
 
     override fun disable() {
-        if (isDestroyed || !plugin.settings.enabled) return
-        plugin.settings.enabled = false
-        writeSettings()
-        if (isDestroyed) return
-        stopPlugin()
+        executor.submit {
+            if (isDestroyed || !plugin.settings.enabled) return@submit
+            plugin.settings.enabled = false
+            writeSettings()
+            if (isDestroyed) return@submit
+            stopPlugin()
+        }
     }
 
     override val isEnabled: Boolean get() {
@@ -186,6 +190,10 @@ class PluginHolder<T : PluginSettings>(
         } catch (e: Exception) {
             logger.warn("Exception destroying plugin.", e)
         }
+    }
+
+    override fun toString(): String {
+        return name
     }
 
     private fun addIndividualFileLogger() {

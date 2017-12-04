@@ -5,6 +5,7 @@ import org.kxtra.slf4j.loggerfactory.getLogger
 import java.io.Closeable
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +22,9 @@ class PluginLoader(
 
     private val currentPlugins = HashMap<String, PluginHolder<*>>()
 
-    private val executor = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
+    val plugins: Collection<PluginHandle> = currentPlugins.values
+
+    val executor: ExecutorService = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
 
     private val watchService = FileSystems.getDefault().newWatchService()
 
@@ -89,7 +92,7 @@ class PluginLoader(
             val pluginDir = pluginsDir.resolve(plugin.javaClass.name)
             Files.createDirectories(pluginDir)
             val watchKey = pluginDir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE)
-            val pluginHolder = PluginHolder(plugin, watchKey)
+            val pluginHolder = PluginHolder(plugin, watchKey, executor)
             pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder
         }
