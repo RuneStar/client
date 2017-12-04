@@ -10,6 +10,4 @@ Install location: `{user.home}/RuneSuite/`
 
 * [Included plugins](https://github.com/RuneSuite/client/tree/master/plugins-standard)
 
-* Modify configuration on the fly by editing `/plugins/{pluginName}/plugin.settings`. Changes take effect immediately.
-
 * Dynamically load custom plugins by placing/replacing jars in `/plugins-jars/`
