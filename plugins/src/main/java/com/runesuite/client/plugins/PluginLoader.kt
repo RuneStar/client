@@ -14,10 +14,6 @@ class PluginLoader(
         private val pluginsDir: Path
 ) : Closeable {
 
-    private companion object {
-        private val logger = getLogger()
-    }
-
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
     private val currentPlugins = HashMap<String, PluginHolder<*>>()
@@ -46,10 +42,7 @@ class PluginLoader(
                 val key: WatchKey
                 try {
                     key = watchService.take() // blocks
-                    Thread.sleep(100L) // accumulates duplicate events
-                } catch (e: InterruptedException) {
-                    logger.error("WatchService interrupted early.", e)
-                    return@Thread
+                    Thread.sleep(150L) // accumulates duplicate events
                 } catch (e: ClosedWatchServiceException) {
                     return@Thread
                 }

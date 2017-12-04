@@ -5,13 +5,12 @@ import com.alee.laf.button.WebButton
 import com.alee.laf.label.WebLabel
 import com.alee.laf.list.WebList
 import com.alee.laf.list.WebListModel
-import com.alee.laf.panel.WebPanel
 import com.alee.laf.scroll.WebScrollPane
-import com.alee.laf.splitpane.WebSplitPane
 import com.runesuite.client.plugins.PluginHandle
 import com.runesuite.client.plugins.PluginLoader
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.BorderLayout
+import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.*
@@ -26,17 +25,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
 
     private val pluginsListModel = WebListModel<PluginHandle>()
 
-    private val splitPane = WebSplitPane(WebSplitPane.HORIZONTAL_SPLIT).apply {
-        dividerSize = 2
-    }
-
-    private val rightPanel = WebPanel(BorderLayout())
-
-    private val rightTopPanel = WebPanel().apply {
-        layout = BoxLayout(this, BoxLayout.X_AXIS)
-    }
-
-    private val rightBodyPanel = WebPanel()
+    private val currentBox = Box.createHorizontalBox()
 
     private var selectedPlugin: PluginHandle? = null
     private var selectedPluginSwitch: WebSwitch? = null
@@ -45,23 +34,17 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
 
     init {
         refreshPlugins()
-        rightPanel.apply {
-            add(rightTopPanel, BorderLayout.NORTH)
-            add(WebScrollPane(rightBodyPanel), BorderLayout.CENTER)
-        }
-        splitPane.leftComponent = WebScrollPane(WebList(pluginsListModel).apply {
+        add(WebScrollPane(WebList(pluginsListModel).apply {
             selectionMode = DefaultListSelectionModel.SINGLE_SELECTION
             addListSelectionListener {
                 if (it.valueIsAdjusting) return@addListSelectionListener
                 val plugin = this.selectedValue as PluginHandle? ?: return@addListSelectionListener
+                if (selectedPlugin === plugin) return@addListSelectionListener
                 selectedPlugin = plugin
-                rightTopPanel.removeAll()
-                fillPluginTopPanel(plugin)
+                fillCurrentBox(plugin)
             }
-        })
-        splitPane.rightComponent = rightPanel
-        add(splitPane)
-        pack()
+        }), BorderLayout.CENTER)
+        add(currentBox, BorderLayout.SOUTH)
         timer.apply {
             addActionListener { refresh() }
             start()
@@ -72,11 +55,12 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             }
         })
         defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
+        size = Dimension(400, 700)
         isVisible = true
     }
 
-    private fun fillPluginTopPanel(plugin: PluginHandle) {
-        rightTopPanel.apply {
+    private fun fillCurrentBox(plugin: PluginHandle) {
+        currentBox.apply {
             removeAll()
             val switch = WebSwitch().apply {
                 if (plugin.isDestroyed) isEnabled = false else isSelected = plugin.isEnabled
@@ -100,6 +84,8 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
                 addActionListener { openFile(plugin.directory) }
             })
         }
+        revalidate()
+        repaint()
     }
 
     private fun refresh() {
@@ -128,10 +114,11 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
         val sorted = pluginLoader.plugins.sortedBy { it.name }
         pluginsListModel.addElements(sorted)
         currentPlugins.addAll(sorted)
-        if (selectedPlugin !in currentPlugins) {
+        val sp = selectedPlugin
+        if (sp != null && sp !in currentPlugins) {
             selectedPlugin = null
             selectedPluginSwitch = null
-            rightTopPanel.removeAll()
+            currentBox.removeAll()
             revalidate()
             repaint()
         }

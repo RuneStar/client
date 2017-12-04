@@ -66,7 +66,8 @@ fun main(args: Array<String>) {
     }
 
     pluginsButton.addActionListener {
-        if (pluginsWindow == null) {
+        val pw = pluginsWindow
+        if (pw == null) {
             pluginsWindow = PluginsWindow(pluginLoader).apply {
                 addWindowListener(object : WindowAdapter() {
                     override fun windowClosing(e: WindowEvent?) {
@@ -74,6 +75,8 @@ fun main(args: Array<String>) {
                     }
                 })
             }
+        } else {
+            pw.requestFocus()
         }
     }
 }
