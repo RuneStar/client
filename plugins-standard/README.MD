@@ -9,3 +9,5 @@ Included plugins.
 * [game-raw](https://github.com/RuneSuite/client/tree/master/game-raw) - Direct access to game values
 
 * [game-api](https://github.com/RuneSuite/client/tree/master/game-api) - User friendly access to game values
+
+* [plugins-utils](https://github.com/RuneSuite/client/tree/master/plugins-utils) - Plugin utilities

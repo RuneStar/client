@@ -6,7 +6,7 @@ Starts the game, should not be executed directly but through the [launcher](http
 
 * [common](https://github.com/RuneSuite/client/tree/master/common)
 
-* [general](https://github.com/RuneSuite/general) - Utilities
+* [general](https://github.com/RuneSuite/general) - RuneScape utilities
 
 * [gamepack](https://github.com/RuneSuite/client/tree/master/gamepack) - The modified gamepack
 
@@ -15,3 +15,5 @@ Starts the game, should not be executed directly but through the [launcher](http
 * [game-api](https://github.com/RuneSuite/client/tree/master/game-api) - User friendly access to game values
 
 * [plugins](https://github.com/RuneSuite/client/tree/master/plugins) - Plugins framework
+
+* [plugins-utils](https://github.com/RuneSuite/client/tree/master/plugins-utils) - Plugin utilities
