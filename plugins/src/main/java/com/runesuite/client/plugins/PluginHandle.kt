@@ -19,4 +19,9 @@ interface PluginHandle {
     val settingsFile: Path
 
     val logFile: Path
+
+    companion object {
+        const val SETTINGS_FILE_NAME_BASE = "settings"
+        const val LOG_FILE_NAME = "plugin.log"
+    }
 }

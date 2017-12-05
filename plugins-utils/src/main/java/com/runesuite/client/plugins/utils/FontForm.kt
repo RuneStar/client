@@ -1,4 +1,4 @@
-package com.runesuite.client.plugins.util
+package com.runesuite.client.plugins.utils
 
 import org.kxtra.swing.font.Font
 import java.awt.Font

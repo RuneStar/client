@@ -2,8 +2,8 @@ package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.raw.Client.accessor
-import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
+import com.runesuite.client.plugins.utils.DisposablePlugin
 import java.awt.Color
 import java.awt.Font
 

@@ -54,7 +54,7 @@ fun main(args: Array<String>) {
 
     waitForTitle()
 
-    val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH)
+    val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
 
     jframe.apply {
         addWindowListener(object : WindowAdapter() {

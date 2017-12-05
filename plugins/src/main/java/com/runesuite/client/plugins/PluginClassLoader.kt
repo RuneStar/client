@@ -7,7 +7,6 @@ import java.io.InputStream
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
 import java.nio.file.Path
-import java.util.jar.JarFile
 
 internal class PluginClassLoader
 private constructor(jar: Path) : ClassLoader() {

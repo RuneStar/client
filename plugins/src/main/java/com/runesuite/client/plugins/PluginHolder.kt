@@ -9,7 +9,6 @@ import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
 import ch.qos.logback.core.util.FileSize
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.file.Files
@@ -20,23 +19,20 @@ import java.util.concurrent.ExecutorService
 internal class PluginHolder<T : PluginSettings>(
         private val plugin: Plugin<T>,
         private val watchKey: WatchKey,
-        private val executor: ExecutorService
+        private val executor: ExecutorService,
+        private val settingsReadWriter: FileReadWriter
 ) : PluginHandle {
 
-    companion object {
-        const val SETTINGS_FILE_NAME = "settings.yml"
-
-        private const val LOG_FILE_NAME = "plugin.log"
-        private const val LOG_APPENDER_NAME = "plugin-individual"
-        private const val LOG_ENCODER_PATTERN = "%date{ISO8601} [%thread] %-5level - %msg%n"
-        private val mapper = YAMLMapper().findAndRegisterModules()
+    private companion object {
+        const val LOG_APPENDER_NAME = "plugin-individual"
+        const val LOG_ENCODER_PATTERN = "%date{ISO8601} [%thread] %-5level - %msg%n"
     }
 
     override val directory = watchKey.watchable() as Path
 
     private val logger get() = plugin.logger
 
-    override val settingsFile: Path = directory.resolve(SETTINGS_FILE_NAME)
+    override val settingsFile: Path = directory.resolve("${PluginHandle.SETTINGS_FILE_NAME_BASE}.${settingsReadWriter.fileExtension}")
 
     private var ignoreNextEvent = false
 
@@ -46,7 +42,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     override val name: String get() = plugin.javaClass.name
 
-    override val logFile: Path get() = directory.resolve(LOG_FILE_NAME)
+    override val logFile: Path get() = directory.resolve(PluginHandle.LOG_FILE_NAME)
 
     init {
         addIndividualFileLogger()
@@ -92,7 +88,7 @@ internal class PluginHolder<T : PluginSettings>(
         try {
             ignoreNextEvent = true
             logger.info("Writing settings...")
-            mapper.writeValue(settingsFile.toFile(), plugin.settings)
+            settingsReadWriter.write(settingsFile, plugin.settings)
             logger.info("Write successful.")
         } catch (e: IOException) {
             logger.warn("Write failed.", e)
@@ -102,7 +98,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     private fun readSettings() {
         try {
-            plugin.settings = mapper.readValue(settingsFile.toFile(), plugin.defaultSettings.javaClass)
+            plugin.settings = settingsReadWriter.read(settingsFile, plugin.defaultSettings.javaClass)
             logger.info("Read successful.")
         } catch (e: IOException) {
             logger.warn("Read failed. Reverting to default settings.", e)
@@ -212,14 +208,14 @@ internal class PluginHolder<T : PluginSettings>(
         logFileAppender.name = LOG_APPENDER_NAME
         logFileAppender.encoder = logEncoder
         logFileAppender.isAppend = true
-        logFileAppender.file = directory.resolve(LOG_FILE_NAME).toString()
+        logFileAppender.file = directory.resolve(PluginHandle.LOG_FILE_NAME).toString()
 
         val rollingPolicy = FixedWindowRollingPolicy()
         rollingPolicy.minIndex = 0
         rollingPolicy.maxIndex = 0
         rollingPolicy.context = logCtx
         rollingPolicy.setParent(logFileAppender)
-        rollingPolicy.fileNamePattern = directory.resolve(LOG_FILE_NAME + "%i").toString()
+        rollingPolicy.fileNamePattern = directory.resolve(PluginHandle.LOG_FILE_NAME + "%i").toString()
         rollingPolicy.start()
 
         val triggeringPolicy = SizeBasedTriggeringPolicy<ILoggingEvent>()

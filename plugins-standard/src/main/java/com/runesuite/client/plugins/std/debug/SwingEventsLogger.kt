@@ -4,8 +4,8 @@ import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.api.live.Keyboard
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Mouse
-import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
+import com.runesuite.client.plugins.utils.DisposablePlugin
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 

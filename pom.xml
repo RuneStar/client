@@ -22,6 +22,7 @@
         <module>gamepack</module>
         <module>gamepack-inject-maven-plugin</module>
         <module>plugins</module>
+        <module>plugins-utils</module>
         <module>plugins-standard</module>
         <module>updater</module>
         <module>updater-common</module>

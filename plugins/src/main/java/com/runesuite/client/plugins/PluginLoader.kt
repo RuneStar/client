@@ -1,18 +1,23 @@
 package com.runesuite.client.plugins
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import org.kxtra.slf4j.loggerfactory.getLogger
 import java.io.Closeable
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.ThreadFactory
 import java.util.concurrent.TimeUnit
 
 class PluginLoader(
         private val pluginsJarsDir: Path,
-        private val pluginsDir: Path
+        private val pluginsDir: Path,
+        private val settingsReadWriter: FileReadWriter
 ) : Closeable {
+
+    private companion object {
+        val threadFactory: ThreadFactory = ThreadFactoryBuilder().setNameFormat("plugins%d").build()
+    }
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
@@ -20,9 +25,11 @@ class PluginLoader(
 
     val plugins: Collection<PluginHandle> = currentPlugins.values
 
-    private val executor: ExecutorService = Executors.newSingleThreadExecutor(ThreadFactoryBuilder().setNameFormat("plugins%d").build())
+    private val executor: ExecutorService = Executors.newSingleThreadExecutor(threadFactory)
 
     private val watchService = FileSystems.getDefault().newWatchService()
+
+    private val settingsFileName = "${PluginHandle.SETTINGS_FILE_NAME_BASE}.${settingsReadWriter.fileExtension}"
 
     init {
         Files.walkFileTree(pluginsJarsDir, object : SimpleFileVisitor<Path>() {
@@ -56,7 +63,7 @@ class PluginLoader(
                         executor.submit {
                             jarChanged(jarPath)
                         }
-                    } else if (dir != pluginsDir && ctx.fileName.toString() == PluginHolder.SETTINGS_FILE_NAME) {
+                    } else if (dir != pluginsDir && ctx.fileName.toString() == settingsFileName) {
                         executor.submit {
                             currentPlugins[dir.fileName.toString()]?.settingsFileChanged()
                         }
@@ -85,7 +92,7 @@ class PluginLoader(
             val pluginDir = pluginsDir.resolve(plugin.javaClass.name)
             Files.createDirectories(pluginDir)
             val watchKey = pluginDir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE)
-            val pluginHolder = PluginHolder(plugin, watchKey, executor)
+            val pluginHolder = PluginHolder(plugin, watchKey, executor, settingsReadWriter)
             pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder
         }

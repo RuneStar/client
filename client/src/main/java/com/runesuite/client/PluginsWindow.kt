@@ -8,7 +8,6 @@ import com.alee.laf.list.WebListModel
 import com.alee.laf.scroll.WebScrollPane
 import com.runesuite.client.plugins.PluginHandle
 import com.runesuite.client.plugins.PluginLoader
-import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
@@ -16,10 +15,6 @@ import java.awt.event.WindowEvent
 import javax.swing.*
 
 internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("Plugins") {
-
-    private companion object {
-        val logger = getLogger()
-    }
 
     private val currentPlugins = HashSet<PluginHandle>()
 
@@ -108,7 +103,6 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     }
 
     private fun refreshPlugins() {
-        logger.info("refreshing plugins")
         pluginsListModel.clear()
         currentPlugins.clear()
         val sorted = pluginLoader.plugins.sortedBy { it.name }

@@ -29,6 +29,12 @@
         </dependency>
         <dependency>
             <groupId>com.runesuite.client</groupId>
+            <artifactId>client-plugins-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.runesuite.client</groupId>
             <artifactId>client-game-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>

@@ -1,16 +1,16 @@
 package com.runesuite.client.plugins.std.debug
 
-import org.kxtra.swing.graphics2d.drawString
-import org.kxtra.swing.point.minus
 import com.runesuite.client.game.api.Scene
 import com.runesuite.client.game.api.SceneTile
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.LiveScene
-import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
-import com.runesuite.client.plugins.util.ColorForm
-import com.runesuite.client.plugins.util.FontForm
+import com.runesuite.client.plugins.utils.ColorForm
+import com.runesuite.client.plugins.utils.DisposablePlugin
+import com.runesuite.client.plugins.utils.FontForm
+import org.kxtra.swing.graphics2d.drawString
+import org.kxtra.swing.point.minus
 import java.awt.Font
 import java.awt.Point
 

@@ -11,6 +11,9 @@ abstract class Plugin<T : PluginSettings> {
 
     abstract val defaultSettings: T
 
+    /**
+     * Should not be modified. Any modifications will not be saved.
+     */
     lateinit var settings: T
         internal set
 

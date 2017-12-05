@@ -1,5 +1,7 @@
-package com.runesuite.client.plugins
+package com.runesuite.client.plugins.utils
 
+import com.runesuite.client.plugins.Plugin
+import com.runesuite.client.plugins.PluginSettings
 import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.internal.disposables.ListCompositeDisposable
 import javax.annotation.OverridingMethodsMustInvokeSuper

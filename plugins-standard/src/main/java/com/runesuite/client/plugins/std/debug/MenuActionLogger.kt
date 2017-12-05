@@ -1,8 +1,8 @@
 package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.Menu
-import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
+import com.runesuite.client.plugins.utils.DisposablePlugin
 
 class MenuActionLogger : DisposablePlugin<PluginSettings>() {
 

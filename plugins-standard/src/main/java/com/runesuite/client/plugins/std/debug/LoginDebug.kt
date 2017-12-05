@@ -2,10 +2,10 @@ package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.raw.Client.accessor
-import com.runesuite.client.plugins.DisposablePlugin
 import com.runesuite.client.plugins.PluginSettings
-import com.runesuite.client.plugins.util.ColorForm
-import com.runesuite.client.plugins.util.FontForm
+import com.runesuite.client.plugins.utils.ColorForm
+import com.runesuite.client.plugins.utils.DisposablePlugin
+import com.runesuite.client.plugins.utils.FontForm
 import java.awt.Font
 
 class LoginDebug : DisposablePlugin<LoginDebug.Settings>() {

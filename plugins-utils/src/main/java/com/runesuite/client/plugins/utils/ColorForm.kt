@@ -1,4 +1,4 @@
-package com.runesuite.client.plugins.util
+package com.runesuite.client.plugins.utils
 
 import java.awt.Color
 import java.util.function.Supplier
