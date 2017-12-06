@@ -12,17 +12,26 @@ import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.plugins.PluginLoader
 import com.runesuite.general.JavConfig
+import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.Box
 import javax.swing.JFrame
+import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
+
+private val logger = getLogger()
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
-    WebLookAndFeel.install()
+
+    SwingUtilities.invokeLater {
+        if (!WebLookAndFeel.install()) {
+            logger.warn("Failed to install Web Look and Feel")
+        }
+    }
 
     val javConfig = JavConfig.load()
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
@@ -30,21 +39,25 @@ fun main(args: Array<String>) {
     val applet = Client.accessor as java.applet.Applet
     applet.preInit(javConfig)
 
-    val pluginsButton = WebButton("plugins")
+    lateinit var pluginsButton: WebButton
     var pluginsWindow: PluginsWindow? = null
+    lateinit var frame: JFrame
 
-    val jframe = JFrame(javConfig[JavConfig.Key.Default.TITLE]).apply {
-        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        add(Box.createHorizontalBox().apply {
-            add(Box.createGlue())
-            add(pluginsButton)
-        }, BorderLayout.NORTH)
-        add(applet, BorderLayout.CENTER)
-        pack()
-        setLocationRelativeTo(null)
-        isVisible = true
-        preferredSize = size
-        minimumSize = applet.minimumSize
+    SwingUtilities.invokeAndWait {
+        pluginsButton = WebButton("plugins")
+        frame = JFrame(javConfig[JavConfig.Key.Default.TITLE]).apply {
+            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            add(Box.createHorizontalBox().apply {
+                add(Box.createGlue())
+                add(pluginsButton)
+            }, BorderLayout.NORTH)
+            add(applet, BorderLayout.CENTER)
+            pack()
+            setLocationRelativeTo(null)
+            isVisible = true
+            preferredSize = size
+            minimumSize = applet.minimumSize
+        }
     }
 
     applet.apply {
@@ -56,27 +69,29 @@ fun main(args: Array<String>) {
 
     val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
 
-    jframe.apply {
-        addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent?) {
-                pluginLoader.close()
-            }
-        })
-        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-    }
+    SwingUtilities.invokeLater {
+        frame.apply {
+            addWindowListener(object : WindowAdapter() {
+                override fun windowClosing(e: WindowEvent?) {
+                    pluginLoader.close()
+                }
+            })
+            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+        }
 
-    pluginsButton.addActionListener {
-        val pw = pluginsWindow
-        if (pw == null) {
-            pluginsWindow = PluginsWindow(pluginLoader).apply {
-                addWindowListener(object : WindowAdapter() {
-                    override fun windowClosing(e: WindowEvent?) {
-                        pluginsWindow = null
-                    }
-                })
+        pluginsButton.addActionListener {
+            val pw = pluginsWindow
+            if (pw == null) {
+                pluginsWindow = PluginsWindow(pluginLoader).apply {
+                    addWindowListener(object : WindowAdapter() {
+                        override fun windowClosing(e: WindowEvent?) {
+                            pluginsWindow = null
+                        }
+                    })
+                }
+            } else {
+                pw.requestFocus()
             }
-        } else {
-            pw.requestFocus()
         }
     }
 }
