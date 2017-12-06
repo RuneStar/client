@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
     WebLookAndFeel.install()
 
-    val javConfig = JavConfig()
+    val javConfig = JavConfig.load()
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
     @Suppress("DEPRECATION")
     val applet = Client.accessor as java.applet.Applet
@@ -33,7 +33,7 @@ fun main(args: Array<String>) {
     val pluginsButton = WebButton("plugins")
     var pluginsWindow: PluginsWindow? = null
 
-    val jframe = JFrame(javConfig[JavConfig.Key.TITLE]).apply {
+    val jframe = JFrame(javConfig[JavConfig.Key.Default.TITLE]).apply {
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         add(Box.createHorizontalBox().apply {
             add(Box.createGlue())
