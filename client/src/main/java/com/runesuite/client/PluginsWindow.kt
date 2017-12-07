@@ -28,6 +28,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     private val timer = Timer(600, null)
 
     init {
+        iconImage = ICON
         refreshPlugins()
         add(WebScrollPane(WebList(pluginsListModel).apply {
             selectionMode = DefaultListSelectionModel.SINGLE_SELECTION

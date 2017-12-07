@@ -27,7 +27,9 @@ import javax.swing.WindowConstants
 
 private val logger = getLogger()
 
-private val icon = ImageIO.read(MethodHandles.lookup().lookupClass().classLoader.getResource("icon.png")).toCompatibleImage()
+private val classLoader = MethodHandles.lookup().lookupClass().classLoader
+
+internal val ICON = ImageIO.read(classLoader.getResource("icon.png")).toCompatibleImage()
 
 private const val TITLE = "RuneSuite"
 
@@ -53,7 +55,7 @@ fun main(args: Array<String>) {
         frame = JFrame(TITLE).apply {
             defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             add(applet)
-            iconImage = icon
+            iconImage = ICON
             pack()
             setLocationRelativeTo(null)
             isVisible = true
@@ -97,7 +99,7 @@ fun main(args: Array<String>) {
     }
 
     val trayIcon = TrayIcon(
-            icon,
+            ICON,
             TITLE,
             PopupMenu(TITLE).apply {
                 add(MenuItem("Plugins").apply {
