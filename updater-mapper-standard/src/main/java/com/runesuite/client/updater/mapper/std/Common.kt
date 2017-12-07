@@ -9,6 +9,7 @@ import com.runesuite.mapper.extensions.withDimensions
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -50,4 +51,9 @@ abstract class IndexedSpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
 @DependsOn(Instrument::class)
 abstract class InstrumentStaticIntArrayMapper(index: Int) : OrderMapper.InClassInitializer.Field(Instrument::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+}
+
+@DependsOn(AbstractFont::class)
+abstract class AbstractFontStaticIntMapper(index: Int) : OrderMapper.InClassInitializer.Field(AbstractFont::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }

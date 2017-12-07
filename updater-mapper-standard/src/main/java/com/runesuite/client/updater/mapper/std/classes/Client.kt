@@ -2403,4 +2403,21 @@ class Client : IdentityMapper.Class() {
     class AbstractFont_random : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == Random::class.type }
     }
+
+    class AbstractFont_strikeRgb : AbstractFontStaticIntMapper(0)
+    class AbstractFont_underlineRgb : AbstractFontStaticIntMapper(1)
+    class AbstractFont_prevShadeRgb : AbstractFontStaticIntMapper(2)
+    class AbstractFont_shadow : AbstractFontStaticIntMapper(3)
+    class AbstractFont_prevColorRgb : AbstractFontStaticIntMapper(4)
+    class AbstractFont_color : AbstractFontStaticIntMapper(5)
+    class AbstractFont_int1 : AbstractFontStaticIntMapper(6)
+    class AbstractFont_int2 : AbstractFontStaticIntMapper(7)
+    class AbstractFont_int3 : AbstractFontStaticIntMapper(8)
+
+    @MethodParameters("string")
+    class escapeTags : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(String::class.type) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "<lt>" } }
+    }
 }

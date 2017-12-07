@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
     @Suppress("DEPRECATION")
     val applet = Client.accessor as java.applet.Applet
-    applet.preInit(javConfig)
+    appletPreInit(applet, javConfig)
 
     lateinit var frame: JFrame
     SwingUtilities.invokeAndWait {
@@ -69,26 +69,21 @@ fun main(args: Array<String>) {
                     })
                 }
             } else {
-                state = Frame.NORMAL
+                state = JFrame.NORMAL
                 requestFocus()
             }
-        }
-    }
-
-    fun confirmClose() {
-        frame.defaultCloseOperation = if (Game.state != GameState.TITLE &&
-                JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION)) {
-            WindowConstants.DO_NOTHING_ON_CLOSE
-        } else {
-            pluginLoader.close()
-            WindowConstants.EXIT_ON_CLOSE
         }
     }
 
     SwingUtilities.invokeLater {
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
-                confirmClose()
+                frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
+                    pluginLoader.close()
+                    WindowConstants.EXIT_ON_CLOSE
+                } else {
+                    WindowConstants.DO_NOTHING_ON_CLOSE
+                }
             }
         })
     }
@@ -114,14 +109,18 @@ fun main(args: Array<String>) {
     }
 }
 
-@Suppress("DEPRECATION")
-private fun java.applet.Applet.preInit(javConfig: JavConfig) {
-    layout = null
-    setStub(JavConfig.AppletStub(javConfig))
-    minimumSize = Dimension(200, 350)
-    maximumSize = javConfig.appletMaxSize
-    preferredSize = javConfig.appletMinSize
-    size = preferredSize
+private fun appletPreInit(
+        @Suppress("DEPRECATION") applet: java.applet.Applet,
+        javConfig: JavConfig
+) {
+    applet.apply {
+        layout = null
+        setStub(JavConfig.AppletStub(javConfig))
+        minimumSize = Dimension(200, 350)
+        maximumSize = javConfig.appletMaxSize
+        preferredSize = javConfig.appletMinSize
+        size = preferredSize
+    }
 }
 
 private fun waitForTitle() {
@@ -142,6 +141,11 @@ private fun newGameWindow(applet: Component): JFrame {
         preferredSize = size
         minimumSize = applet.minimumSize
     }
+}
+
+private fun confirmExit(frame: Frame): Boolean {
+    val option = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION)
+    return option == JOptionPane.YES_OPTION
 }
 
 private fun systemStartUp() {
