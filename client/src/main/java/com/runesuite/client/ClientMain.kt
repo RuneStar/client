@@ -3,7 +3,6 @@
 package com.runesuite.client
 
 import com.alee.laf.WebLookAndFeel
-import com.alee.laf.button.WebButton
 import com.runesuite.client.common.PLUGINS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
 import com.runesuite.client.game.api.GameState
@@ -13,16 +12,24 @@ import com.runesuite.client.game.raw.access.XClient
 import com.runesuite.client.plugins.PluginLoader
 import com.runesuite.general.JavConfig
 import org.kxtra.slf4j.loggerfactory.getLogger
-import java.awt.BorderLayout
-import java.awt.Dimension
+import org.kxtra.swing.bufferedimage.toCompatibleImage
+import org.kxtra.swing.mouseevent.isLeftButton
+import java.awt.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.Box
+import java.lang.invoke.MethodHandles
+import javax.imageio.ImageIO
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
 private val logger = getLogger()
+
+private val icon = ImageIO.read(MethodHandles.lookup().lookupClass().classLoader.getResource("icon.png")).toCompatibleImage()
+
+private const val TITLE = "RuneSuite"
 
 fun main(args: Array<String>) {
     System.setProperty("sun.awt.noerasebackground", true.toString())
@@ -39,19 +46,14 @@ fun main(args: Array<String>) {
     val applet = Client.accessor as java.applet.Applet
     applet.preInit(javConfig)
 
-    lateinit var pluginsButton: WebButton
     var pluginsWindow: PluginsWindow? = null
     lateinit var frame: JFrame
 
     SwingUtilities.invokeAndWait {
-        pluginsButton = WebButton("plugins")
-        frame = JFrame(javConfig[JavConfig.Key.Default.TITLE]).apply {
+        frame = JFrame(TITLE).apply {
             defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-            add(Box.createHorizontalBox().apply {
-                add(Box.createGlue())
-                add(pluginsButton)
-            }, BorderLayout.NORTH)
-            add(applet, BorderLayout.CENTER)
+            add(applet)
+            iconImage = icon
             pack()
             setLocationRelativeTo(null)
             isVisible = true
@@ -69,30 +71,51 @@ fun main(args: Array<String>) {
 
     val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
 
-    SwingUtilities.invokeLater {
-        frame.apply {
-            addWindowListener(object : WindowAdapter() {
-                override fun windowClosing(e: WindowEvent?) {
-                    pluginLoader.close()
-                }
-            })
-            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        }
-
-        pluginsButton.addActionListener {
-            val pw = pluginsWindow
-            if (pw == null) {
+    fun openPluginsAction() {
+        pluginsWindow.apply {
+            if (this == null) {
                 pluginsWindow = PluginsWindow(pluginLoader).apply {
                     addWindowListener(object : WindowAdapter() {
-                        override fun windowClosing(e: WindowEvent?) {
+                        override fun windowClosing(e: WindowEvent) {
                             pluginsWindow = null
                         }
                     })
                 }
             } else {
-                pw.requestFocus()
+                state = Frame.NORMAL
+                requestFocus()
             }
         }
+    }
+
+    SwingUtilities.invokeLater {
+        frame.addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent) {
+                pluginLoader.close()
+            }
+        })
+    }
+
+    val trayIcon = TrayIcon(
+            icon,
+            TITLE,
+            PopupMenu(TITLE).apply {
+                add(MenuItem("Plugins").apply {
+                    addActionListener { openPluginsAction() }
+                })
+            }
+    ).apply {
+        isImageAutoSize = true
+        addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                if (e.isLeftButton) frame.state = Frame.NORMAL
+            }
+        })
+    }
+    try {
+        SystemTray.getSystemTray().add(trayIcon)
+    } catch (e: Exception) {
+        logger.warn("failed to add to system tray", e)
     }
 }
 
