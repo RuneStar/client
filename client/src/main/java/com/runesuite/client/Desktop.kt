@@ -1,7 +1,7 @@
 package com.runesuite.client
 
-import org.kxtra.slf4j.logger.error
 import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.Desktop
 import java.nio.file.Files
@@ -18,7 +18,7 @@ internal fun openFile(path: Path) {
         try {
             desktop.open(path.toFile())
         } catch (e: Exception) {
-            logger.error(e) { "failed to open $path" }
+            logger.warn(e) { "failed to open $path" }
             if (Files.isRegularFile(path)) {
                 val dir = path.parent
                 logger.info { "opening parent directory $dir" }

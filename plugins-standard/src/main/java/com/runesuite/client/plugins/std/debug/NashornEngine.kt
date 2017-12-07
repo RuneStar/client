@@ -28,14 +28,14 @@ class NashornEngine : Plugin<PluginSettings>() {
     override fun start() {
         super.start()
         running = true
+        val console = System.console()
+        if (console == null) {
+            logger.warn("No console found")
+            return
+        }
 
         Thread({
             val bindings = engine.createBindings()
-            val console = System.console()
-            if (console == null) {
-                logger.error("No console found")
-                return@Thread
-            }
             while (running) {
                 print(PROMPT)
                 try {
@@ -43,9 +43,6 @@ class NashornEngine : Plugin<PluginSettings>() {
                     println(engine.eval(input, bindings))
                 } catch (se: ScriptException) {
                     println(se)
-                } catch (ioe: IOError) {
-                    logger.error(ioe.toString())
-                    return@Thread
                 }
             }
         }).start()

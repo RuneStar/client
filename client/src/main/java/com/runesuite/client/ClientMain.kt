@@ -5,6 +5,7 @@ package com.runesuite.client
 import com.alee.laf.WebLookAndFeel
 import com.runesuite.client.common.PLUGINS_DIR_PATH
 import com.runesuite.client.common.PLUGINS_JARS_DIR_PATH
+import com.runesuite.client.common.TITLE
 import com.runesuite.client.game.api.GameState
 import com.runesuite.client.game.api.live.Game
 import com.runesuite.client.game.raw.Client
@@ -22,6 +23,7 @@ import java.awt.event.WindowEvent
 import java.lang.invoke.MethodHandles
 import javax.imageio.ImageIO
 import javax.swing.JFrame
+import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
@@ -31,16 +33,8 @@ private val classLoader = MethodHandles.lookup().lookupClass().classLoader
 
 internal val ICON = ImageIO.read(classLoader.getResource("icon.png")).toCompatibleImage()
 
-private const val TITLE = "RuneSuite"
-
 fun main(args: Array<String>) {
-    System.setProperty("sun.awt.noerasebackground", true.toString())
-
-    SwingUtilities.invokeLater {
-        if (!WebLookAndFeel.install()) {
-            logger.warn("Failed to install Web Look and Feel")
-        }
-    }
+    systemStartUp()
 
     val javConfig = JavConfig.load()
     Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
@@ -48,20 +42,9 @@ fun main(args: Array<String>) {
     val applet = Client.accessor as java.applet.Applet
     applet.preInit(javConfig)
 
-    var pluginsWindow: PluginsWindow? = null
     lateinit var frame: JFrame
-
     SwingUtilities.invokeAndWait {
-        frame = JFrame(TITLE).apply {
-            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-            add(applet)
-            iconImage = ICON
-            pack()
-            setLocationRelativeTo(null)
-            isVisible = true
-            preferredSize = size
-            minimumSize = applet.minimumSize
-        }
+        frame = newGameWindow(applet)
     }
 
     applet.apply {
@@ -72,6 +55,8 @@ fun main(args: Array<String>) {
     waitForTitle()
 
     val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
+
+    var pluginsWindow: PluginsWindow? = null
 
     fun openPluginsAction() {
         pluginsWindow.apply {
@@ -90,17 +75,25 @@ fun main(args: Array<String>) {
         }
     }
 
+    fun confirmClose() {
+        frame.defaultCloseOperation = if (Game.state != GameState.TITLE &&
+                JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION)) {
+            WindowConstants.DO_NOTHING_ON_CLOSE
+        } else {
+            pluginLoader.close()
+            WindowConstants.EXIT_ON_CLOSE
+        }
+    }
+
     SwingUtilities.invokeLater {
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
-                pluginLoader.close()
+                confirmClose()
             }
         })
     }
 
-    val trayIcon = TrayIcon(
-            ICON,
-            TITLE,
+    val trayIcon = TrayIcon(ICON, TITLE,
             PopupMenu(TITLE).apply {
                 add(MenuItem("Plugins").apply {
                     addActionListener { openPluginsAction() }
@@ -136,4 +129,26 @@ private fun waitForTitle() {
     Game.stateChanges.takeUntil { it == GameState.TITLE }
             .ignoreElements()
             .blockingAwait()
+}
+
+private fun newGameWindow(applet: Component): JFrame {
+    return JFrame(TITLE).apply {
+        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+        add(applet)
+        iconImage = ICON
+        pack()
+        setLocationRelativeTo(null)
+        isVisible = true
+        preferredSize = size
+        minimumSize = applet.minimumSize
+    }
+}
+
+private fun systemStartUp() {
+    System.setProperty("sun.awt.noerasebackground", true.toString())
+    SwingUtilities.invokeLater {
+        if (!WebLookAndFeel.install()) {
+            logger.warn("Failed to install Web Look and Feel")
+        }
+    }
 }

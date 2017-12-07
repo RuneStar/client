@@ -9,6 +9,9 @@ import java.nio.file.Paths
 val GROUP_ID = "com.runesuite.client"
 
 @JvmField
+val TITLE = "RuneSuite"
+
+@JvmField
 val ROOT_DIR_PATH: Path = Paths.get(System.getProperty("user.home"), "RuneSuite")
 
 @JvmField
