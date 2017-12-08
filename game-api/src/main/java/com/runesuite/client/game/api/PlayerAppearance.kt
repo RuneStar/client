@@ -44,7 +44,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         WEAPON(3),
         BODY(4),
         SHIELD(5),
-        SHOULDERS(6),
+        ARMS(6),
         LEGS(7),
         HAIR(8),
         HANDS(9),
