@@ -9,6 +9,7 @@ import com.runesuite.mapper.extensions.type
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Method2
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import java.lang.reflect.Modifier
 
@@ -20,5 +21,10 @@ class AbstractFont : IdentityMapper.Class() {
 
     class glyphs : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Array<ByteArray>::class.type }
+    }
+
+    class decodeColor : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.size in 1..2 }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "/shad" } }
     }
 }

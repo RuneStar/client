@@ -5,14 +5,19 @@ import com.runesuite.client.game.raw.access.XPlayerAppearance
 
 class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
 
-    val equipment: Map<PlayerAppearance.EquipmentSlot, Int>
+    val equipment: Map<KitPart, Int>
         get() = accessor.equipment.withIndex()
-                .filter { PlayerAppearance.EquipmentSlot.LOOKUP.containsKey(it.index) }
-                .associate { PlayerAppearance.EquipmentSlot.LOOKUP[it.index]!! to it.value }
+                .filter { it.value >= 512 }
+                .associate { KitPart.LOOKUP[it.index]!! to it.value - 512 }
+
+    val kit: Map<KitPart, Int>
+        get() = accessor.equipment.withIndex()
+                .filter { it.value in 256 until 512 }
+                .associate { KitPart.LOOKUP[it.index]!! to it.value - 256 }
 
     val bodyColors: Map<PlayerAppearance.BodyPart, Int>
         get() = accessor.bodyColors.withIndex()
-                .associate { PlayerAppearance.BodyPart.Companion.LOOKUP[it.index]!! to it.value }
+                .associate { BodyPart.LOOKUP[it.index]!! to it.value }
 
     val sex get() = if (accessor.isFemale) Sex.FEMALE else Sex.MALE
 
@@ -31,7 +36,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         }
     }
 
-    enum class EquipmentSlot(val id: Int) {
+    enum class KitPart(val id: Int) {
 
         HEAD(0),
         CAPE(1),
@@ -39,12 +44,12 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         WEAPON(3),
         BODY(4),
         SHIELD(5),
-        // 6
+        SHOULDERS(6),
         LEGS(7),
-        // 8
+        HAIR(8),
         HANDS(9),
-        FEET(10);
-        // 11
+        FEET(10),
+        JAW(11);
 
         companion object {
             

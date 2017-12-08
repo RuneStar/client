@@ -1,6 +1,7 @@
 package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.LiveCanvas
+import com.runesuite.client.game.api.live.Players
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.utils.ColorForm
 import com.runesuite.client.plugins.utils.DisposablePlugin
@@ -17,13 +18,19 @@ class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
             g.font = settings.font.get()
             g.color = settings.color.get()
 
-            val strings = ArrayList<String>()
+            val ap = Players.local?.appearance ?: return@subscribe
 
-
-            val x = 5
+            var x = 5
             var y = 40
-            strings.forEach { s ->
-                g.drawString(s, x, y)
+            ap.equipment.entries.forEach { e ->
+                g.drawString(e.toString(), x ,y)
+                y += g.font.size + 5
+            }
+
+            x = 150
+            y = 40
+            ap.kit.entries.forEach { e ->
+                g.drawString(e.toString(), x ,y)
                 y += g.font.size + 5
             }
         })
