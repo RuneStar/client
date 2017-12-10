@@ -2,6 +2,7 @@ package com.runesuite.client.plugins.std.debug
 
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Players
+import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.plugins.PluginSettings
 import com.runesuite.client.plugins.utils.ColorForm
 import com.runesuite.client.plugins.utils.DisposablePlugin
@@ -15,23 +16,13 @@ class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = settings.font.get()
             g.color = settings.color.get()
 
-            val ap = Players.local?.appearance ?: return@subscribe
+            Widgets.flat.forEach {
+//                if (it.isVisible) {
+                    it.shape?.let { g.draw(it) }
+//                }
 
-            var x = 5
-            var y = 40
-            ap.equipment.entries.forEach { e ->
-                g.drawString(e.toString(), x ,y)
-                y += g.font.size + 5
-            }
-
-            x = 150
-            y = 40
-            ap.kit.entries.forEach { e ->
-                g.drawString(e.toString(), x ,y)
-                y += g.font.size + 5
             }
         })
     }

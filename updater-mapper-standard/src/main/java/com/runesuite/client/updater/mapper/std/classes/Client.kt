@@ -2420,4 +2420,31 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(String::class.type) }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "<lt>" } }
     }
+
+    @DependsOn(Widget::class)
+    class loadWidgetGroup : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(INT_TYPE) }
+                .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Widget>() } }
+    }
+
+    @DependsOn(loadWidgetGroup::class)
+    class loadedWidgetGroups : OrderMapper.InMethod.Field(loadWidgetGroup::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BooleanArray::class.type }
+    }
+
+    @DependsOn(Widget::class, Widget.isHidden::class)
+    class isWidgetHidden : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.startsWith(type<Widget>()) }
+                .and { it.arguments.size in 1..2 }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.isHidden>().id } }
+    }
+
+    class rootWidgetGroup : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2706 }
+                .nextWithin(25) { it.isLabel }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }

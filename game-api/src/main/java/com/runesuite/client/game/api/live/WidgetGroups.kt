@@ -13,6 +13,9 @@ object WidgetGroups {
     fun get(): List<WidgetGroup?> = Client.accessor.widgets.withIndex().map { iv -> WidgetGroup(iv.index).takeIf { iv.value != null } }
 
     operator fun get(id: Int): WidgetGroup? {
-        return WidgetGroup(id).takeIf { Client.accessor.widgets[id] != null }
+        if (id !in Client.accessor.widgets.indices) return null
+        return Client.accessor.widgets[id]?.let { WidgetGroup(id) }
     }
+
+    val root: WidgetGroup? get() = get(Client.accessor.rootWidgetGroup)
 }

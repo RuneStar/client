@@ -11,8 +11,7 @@ import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
@@ -178,5 +177,21 @@ class Widget : IdentityMapper.Class() {
     @DependsOn(setAction::class)
     class actions : UniqueMapper.InMethod.Field(setAction::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type.withDimensions(1) }
+    }
+
+    @DependsOn(Buffer::class, Client.Strings_continue::class)
+    class decode : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
+    }
+
+    @DependsOn(Buffer::class, Client.Strings_continue::class)
+    class decodeActive : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.instructions.none { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
     }
 }

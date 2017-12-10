@@ -163,7 +163,7 @@ interface MenuOption {
 
     interface OnWidget: MenuOption, MenuOption.InWidget {
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
-        val widgetParent: Widget? get() = super.widget
+        val widgetParent: Widget.Parent? get() = group[widgetId]
         override val widget: Widget? get() = widgetParent?.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
     }
 

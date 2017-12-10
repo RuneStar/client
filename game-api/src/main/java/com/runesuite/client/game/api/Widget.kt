@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api
 
+import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.Wrapper
 import com.runesuite.client.game.raw.access.XWidget
@@ -8,37 +9,13 @@ import java.awt.Dimension
 import java.awt.Point
 import java.awt.Rectangle
 
-class Widget(override val accessor: XWidget) : Wrapper() {
+sealed class Widget(override val accessor: XWidget) : Wrapper() {
 
-    val children: List<Widget> get() = accessor.children?.map { Widget(it) } ?: emptyList()
+    val group get() = WidgetGroup(parentId.group)
 
-    val childrenSize get() = accessor.children?.size ?: 0
+    val parentId get() = WidgetId(accessor.id)
 
-    val flat: List<Widget> get() {
-        return listOf(this) + children
-    }
-
-    operator fun get(childId: Int) : Widget? = accessor.children?.get(childId)?.let { Widget(it) }
-
-    val group get() = WidgetGroup(accessor.id shr 16)
-
-    val id get() = accessor.id and 0xFFFF
-
-    val parent: Widget? get() {
-        var pId = accessor.parentId
-        if (pId == -1) {
-            // todo
-            val groupId = group.id
-            val table = Client.accessor.widgetNodes
-            var node = table.first() as XWidgetNode?
-            while (node != null && node.id != groupId) {
-                node = table.next() as XWidgetNode?
-            }
-            node ?: return null
-            pId = node.key.toInt()
-        }
-        return Widget(Client.accessor.widgets[pId shr 16]!![pId and 0xFFFF])
-    }
+    abstract val ancestor: Widget.Parent?
 
     val text: String? get() = accessor.text
 
@@ -56,16 +33,59 @@ class Widget(override val accessor: XWidget) : Wrapper() {
 
     val location: Point? get() {
         if (!isVisible) return null
-        val p = parent
-        return when (p) {
-            null -> Point(Client.accessor.widgetXs[accessor.index], Client.accessor.widgetYs[accessor.index])
-            else -> p.location!!.let { Point(it.x + accessor.x - accessor.scrollX, it.y + accessor.y - accessor.scrollY) }
+        var cur = this
+        var anc = ancestor
+        var x = 0
+        var y = 0
+        while(anc != null) {
+            x += cur.accessor.x - cur.accessor.scrollX
+            y += cur.accessor.y - cur.accessor.scrollY
+            cur = anc
+            anc = anc.ancestor
         }
+        x += Client.accessor.widgetXs[cur.accessor.index]
+        y += Client.accessor.widgetYs[cur.accessor.index]
+        return Point(x, y)
     }
 
     val dimension: Dimension get() = Dimension(width, height)
 
-    val shape: Rectangle? get() {
-       return location?.let { Rectangle(it, dimension) }
+    val shape: Rectangle? get() = location?.let { Rectangle(it, dimension) }
+
+    class Child(override val accessor: XWidget) : Widget(accessor) {
+
+        val childId get() = accessor.childIndex
+
+        val parent get() = Widgets[parentId]
+
+        override val ancestor get() = parent
+
+        override fun toString(): String {
+            return "Widget.Child(group=${group.id}, parent=${parentId.parent}, child=$childId)"
+        }
+    }
+
+    class Parent(override val accessor: XWidget) : Widget(accessor) {
+
+        val flat: List<Widget> get() = listOf(this) + children
+
+        val children: List<Widget.Child> get() = accessor.children?.map { Widget.Child(it) } ?: emptyList()
+
+        operator fun get(childId: Int) : Widget.Child? = accessor.children?.get(childId)?.let { Widget.Child(it) }
+
+        val successors: List<Widget.Parent> get() = group.all.filter { it.predecessor == this }
+
+        val descendantsGroup: WidgetGroup? get() =
+            (Client.accessor.widgetNodes.get(accessor.id.toLong()) as XWidgetNode?)?.let { WidgetGroup(it.id) }
+
+        val descendants: List<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
+
+        val predecessor get() = accessor.parentId.takeIf { it != -1 }?.let { Widgets[WidgetId(it)] }
+
+        override val ancestor get() = predecessor ?: group.parent
+
+        override fun toString(): String {
+            return "Widget.Parent(group=${group.id}, parent=${parentId.parent})"
+        }
     }
 }

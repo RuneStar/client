@@ -30,33 +30,33 @@ class WidgetDebug : DisposablePlugin<PluginSettings>() {
             smallestHoveredWidget?.let { w ->
                 g.color = Color.WHITE
                 w.shape?.let { g.draw(it) }
-                var p = w.parent
+                var p = w.ancestor
                 var pIndex = 0
-                var parentsString = "parents="
+                var parentsString = "ancestors="
                 while (p != null) {
-                    parentsString += "${p.group.id}:${p.id}:${p.accessor.childIndex} > "
+                    parentsString += "${p.group.id}:${p.parentId.parent} > "
                     if (p.isVisible) {
                         p.shape?.let {
                             g.color = parentColors[pIndex]
                             g.draw(it)
                         }
                     }
-                    p = p.parent
+                    p = p.ancestor
                     pIndex++
                 }
                 val strings = listOf(
                         parentsString,
-                        "id: ${w.group.id}:${w.id}:${w.accessor.childIndex}",
+                        "$w",
                         "text: ${w.text}",
-                        "textColor: ${w.textColor}",
-                        "spellActionName: ${w.accessor.spellActionName}",
-                        "spellName: ${w.accessor.spellName}",
-                        "pad: ${w.accessor.paddingX}, ${w.accessor.paddingY}",
-                        "okText: ${w.accessor.okText}",
-                        "item: ${w.accessor.itemId} x ${w.accessor.itemQuantity}",
-                        "scroll: ${w.accessor.scrollX}, ${w.accessor.scrollY}, ${w.accessor.scrollMax}",
-                        "dataText: ${w.accessor.dataText}",
-                        "string1: ${w.accessor.string1}"
+//                        "textColor: ${w.textColor}",
+//                        "spellActionName: ${w.accessor.spellActionName}",
+//                        "spellName: ${w.accessor.spellName}",
+//                        "pad: ${w.accessor.paddingX}, ${w.accessor.paddingY}",
+//                        "okText: ${w.accessor.okText}",
+//                        "item: ${w.accessor.itemId} x ${w.accessor.itemQuantity}",
+//                        "scroll: ${w.accessor.scrollX}, ${w.accessor.scrollY}, ${w.accessor.scrollMax}",
+                        "dataText: ${w.accessor.dataText}"
+//                        "string1: ${w.accessor.string1}"
                 )
                 val x = 20
                 var y = 47
