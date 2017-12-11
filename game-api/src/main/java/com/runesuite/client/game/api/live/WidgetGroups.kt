@@ -7,15 +7,13 @@ object WidgetGroups {
 
     val CAPACITY = Client.accessor.widgets.size
 
-    val all: List<WidgetGroup>
-        get() = Client.accessor.widgets.withIndex().filter { it.value != null }.map { WidgetGroup(it.index) }
+    val all: List<WidgetGroup> get() =
+        Client.accessor.widgets.withIndex().filter { it.value != null }.map { WidgetGroup(it.index) }
 
-    fun get(): List<WidgetGroup?> = Client.accessor.widgets.withIndex().map { iv -> WidgetGroup(iv.index).takeIf { iv.value != null } }
+    fun get(): List<WidgetGroup?> =
+            Client.accessor.widgets.withIndex().map { iv -> WidgetGroup(iv.index).takeIf { iv.value != null } }
 
-    operator fun get(id: Int): WidgetGroup? {
-        if (id !in Client.accessor.widgets.indices) return null
-        return Client.accessor.widgets[id]?.let { WidgetGroup(id) }
-    }
+    operator fun get(id: Int): WidgetGroup? = Client.accessor.widgets.getOrNull(id)?.let { WidgetGroup(id) }
 
     val root: WidgetGroup? get() = get(Client.accessor.rootWidgetGroup)
 }

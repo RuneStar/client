@@ -19,21 +19,14 @@ internal constructor(val id: Int) {
         return null
     }
 
-    val roots: List<Widget.Parent> get() {
-        return all.filter { it.predecessor == null }
-    }
+    val roots: List<Widget.Parent> get() = all.filter { it.predecessor == null }
 
     val size get() = Client.accessor.widgets[id]?.size
 
-    val flat: List<Widget> get() {
-        return all.flatMap { it.flat }
-    }
+    val flat: List<Widget> get() = all.flatMap { it.flat }
 
-    val all: List<Widget.Parent> get() {
-        return Client.accessor.widgets[id]?.map { Widget.Parent(it) } ?: emptyList()
-    }
+    val all: List<Widget.Parent> get() = Client.accessor.widgets[id]?.map { Widget.Parent(it) } ?: emptyList()
 
-    operator fun get(id: Int): Widget.Parent? {
-        return Client.accessor.widgets[this.id]?.get(id)?.let { Widget.Parent(it) }
-    }
+    operator fun get(id: Int): Widget.Parent? =
+            Client.accessor.widgets.getOrNull(this.id)?.getOrNull(id)?.let { Widget.Parent(it) }
 }

@@ -15,5 +15,5 @@ object Npcs {
 
     fun get(): List<Npc?> =  accessor.npcs.map { it?.let { Npc(it) } }
 
-    operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it) }
+    operator fun get(index: Int): Npc? = accessor.npcs.getOrNull(index)?.let { Npc(it) }
 }

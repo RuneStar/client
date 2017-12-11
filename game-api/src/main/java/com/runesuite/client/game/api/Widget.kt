@@ -54,6 +54,10 @@ sealed class Widget(override val accessor: XWidget) : Wrapper() {
 
     class Child(override val accessor: XWidget) : Widget(accessor) {
 
+        init {
+            require(accessor.childIndex != -1)
+        }
+
         val childId get() = accessor.childIndex
 
         val parent get() = Widgets[parentId]
@@ -67,11 +71,15 @@ sealed class Widget(override val accessor: XWidget) : Wrapper() {
 
     class Parent(override val accessor: XWidget) : Widget(accessor) {
 
+        init {
+            require(accessor.childIndex == -1)
+        }
+
         val flat: List<Widget> get() = listOf(this) + children
 
         val children: List<Widget.Child> get() = accessor.children?.map { Widget.Child(it) } ?: emptyList()
 
-        operator fun get(childId: Int) : Widget.Child? = accessor.children?.get(childId)?.let { Widget.Child(it) }
+        operator fun get(childId: Int) : Widget.Child? = accessor.children?.getOrNull(childId)?.let { Widget.Child(it) }
 
         val successors: List<Widget.Parent> get() = group.all.filter { it.predecessor == this }
 

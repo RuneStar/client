@@ -17,5 +17,5 @@ object Players {
 
     fun get(): List<Player?> =  accessor.players.map { it?.let { Player(it) } }
 
-    operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
+    operator fun get(index: Int): Player? = accessor.players.getOrNull(index)?.let { Player(it) }
 }
