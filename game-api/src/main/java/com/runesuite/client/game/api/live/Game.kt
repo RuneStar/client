@@ -2,7 +2,9 @@ package com.runesuite.client.game.api.live
 
 import org.kxtra.swing.component.windowAncestor
 import com.runesuite.client.game.api.GameState
+import com.runesuite.client.game.api.Varps
 import com.runesuite.client.game.api.WindowMode
+import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XClient
 import hu.akarnokd.rxjava2.swing.SwingObservable
@@ -41,4 +43,6 @@ object Game {
      * @see[java.awt.event.ContainerListener]
      */
     val containerEvents = SwingObservable.container(accessor as Container)
+
+    val varps = Varps(Client.accessor.varps)
 }
