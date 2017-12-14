@@ -7,9 +7,14 @@ import com.runesuite.client.game.api.CollisionFlag.*
 
 class WalkMovement(val scene: Scene, val plane: Int) : Movement {
 
+    init {
+        require(plane in 0 until Scene.PLANE_SIZE)
+    }
+
     override fun canMove(source: Cell, direction: OctantDirection): Boolean {
         val flags = scene.getCollisionFlags(plane)
         val dest = source + direction.asCell
+        if (!SceneTile(dest.x, dest.y, plane).isLoaded) return false
         return when (direction) {
             OctantDirection.NORTH -> {
                 flags[source.x][source.y] and WALK_NORTH.mask == 0 &&
