@@ -25,8 +25,20 @@ enum class CollisionFlag(val index: Int) {
     val mask = 1 shl (index - 1)
 }
 
-fun main(args: Array<String>) {
-    CollisionFlag.values().forEach {
-        println("${it.name} ${it.mask.toString(16)}")
-    }
-}
+//WALK_NORTHWEST 1
+//WALK_NORTH 2
+//WALK_NORTHEAST 4
+//WALK_EAST 8
+//WALK_SOUTHEAST 10
+//WALK_SOUTH 20
+//WALK_SOUTHWEST 40
+//WALK_WEST 80
+//ALL 100
+//PROJECTILE_NORTHWEST 200
+//PROJECTILE_NORTH 400
+//PROJECTILE_NORTHEAST 800
+//PROJECTILE_EAST 1000
+//PROJECTILE_SOUTHEAST 2000
+//PROJECTILE_SOUTH 4000
+//PROJECTILE_SOUTHWEST 8000
+//PROJECTILE_WEST 10000
