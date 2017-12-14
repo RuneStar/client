@@ -25,12 +25,14 @@ class CameraDebug : DisposablePlugin<CameraDebug.Settings>() {
 
             val player = Players.local ?: return@subscribe
             val playerPosition = player.position.takeIf { it.isLoaded } ?: return@subscribe
-            g.fill(shapeAt(playerPosition.toScreen()))
+            val playerPt = playerPosition.toScreen() ?: return@subscribe
+            g.fill(shapeAt(playerPt))
 
             val camAbsoluteHeight = LiveCamera.position.height - LiveScene.getTileHeight(LiveCamera.position)
             // position with x/y of player and height of camera
             val fakeCamPosition = playerPosition.copy(height = camAbsoluteHeight + LiveScene.getTileHeight(playerPosition))
-            g.fill(shapeAt(fakeCamPosition.toScreen()))
+            val pt = fakeCamPosition.toScreen() ?: return@subscribe
+            g.fill(shapeAt(pt))
 
             g.drawString(LiveCamera.toString(), 5, 40)
         })

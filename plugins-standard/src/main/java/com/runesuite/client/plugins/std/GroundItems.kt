@@ -46,7 +46,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 val tile = itr.next()
                 if (tile.plane != Game.plane) continue
                 val pt = tile.center.toScreen()
-                if (pt !in g.clip) continue
+                if (pt == null || pt !in g.clip) continue
                 val gis = LiveGroundItems.getAt(tile)
                 if (gis.isEmpty()) {
                     itr.remove()

@@ -75,7 +75,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
         <kotlin.groupId>org.jetbrains.kotlin</kotlin.groupId>
-        <kotlin.version>1.2.0</kotlin.version>
+        <kotlin.version>1.2.10</kotlin.version>
         <jackson.version>2.9.2</jackson.version>
         <logback.groupId>ch.qos.logback</logback.groupId>
         <logback.version>1.2.3</logback.version>
@@ -136,6 +136,11 @@
                 <groupId>com.runesuite</groupId>
                 <artifactId>general</artifactId>
                 <version>0.160.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hunterwb</groupId>
+                <artifactId>gridnav</artifactId>
+                <version>0.1.0</version>
             </dependency>
             <dependency>
                 <groupId>com.jakewharton.rxrelay2</groupId>

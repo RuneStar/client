@@ -1,16 +1,17 @@
 package com.runesuite.client.game.api
 
+import org.kxtra.swing.polygon.Polygon
 import java.awt.Point
 
 interface Projection {
 
-    fun toGame(point: Point): Position
+    fun toGame(point: Point): Position?
 
-    fun toScreen(position: Position): Point {
+    fun toScreen(position: Position): Point? {
         return toScreen(position, position)
     }
 
-    fun toScreen(position: Position, tileHeight: Position): Point
+    fun toScreen(position: Position, tileHeight: Position): Point?
 
     data class Minimap(val minimap: com.runesuite.client.game.api.Minimap) : Projection {
 
@@ -35,6 +36,10 @@ interface Projection {
             val dy = (y2 * cos - x2 * sin) shr 11
             return minimapCopy.reference.plusLocal(dx * -1, dy).copy(height = 0)
         }
+
+        override fun toScreen(position: Position): Point {
+            return toScreen(position, position)
+        }
     }
 
     data class Viewport(
@@ -43,7 +48,7 @@ interface Projection {
             val scene: Scene
     ) : Projection {
 
-        override fun toScreen(position: Position, tileHeight: Position): Point {
+        override fun toScreen(position: Position, tileHeight: Position): Point? {
             require(tileHeight.isLoaded) { tileHeight }
             var x1 = position.localX
             var y1 = position.localY
@@ -63,7 +68,7 @@ interface Projection {
             y1 = (z1 * sinY + y1 * cosY) shr 16
             z1 = z2
             if (y1 < 50) {
-                return Point(-1, -1) // todo
+                return null
             }
             val viewportCopy = viewport.copyOf()
             return Point(
@@ -72,8 +77,19 @@ interface Projection {
             )
         }
 
-        override fun toGame(point: Point): Position {
-            TODO("not implemented")
+        override fun toGame(point: Point): Position? {
+            // todo
+            val plane = camera.position.plane
+            for (x in 0 until Scene.SIZE) {
+                for (y in 0 until Scene.SIZE) {
+                    val tile = SceneTile(x, y, plane)
+                    val bounds = tile.outline(this)
+                    if (point in bounds) {
+                        return tile.center
+                    }
+                }
+            }
+            return null
         }
     }
 }

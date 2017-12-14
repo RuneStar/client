@@ -12,6 +12,11 @@ object LiveScene : Scene {
         return accessor.collisionMaps[sceneTile.plane].flags[sceneTile.x][sceneTile.y]
     }
 
+    override fun getCollisionFlags(plane: Int): Array<IntArray> {
+        require(plane in 0 until Scene.PLANE_SIZE) { plane }
+        return accessor.collisionMaps[plane].flags
+    }
+
     override val collisionFlags get() = accessor.collisionMaps.map { it.flags }.toTypedArray()
 
     override val renderFlags get() = accessor.tileRenderFlags

@@ -57,6 +57,11 @@ interface Scene {
         return collisionFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
     }
 
+    fun getCollisionFlags(plane: Int): Array<IntArray> {
+        require(plane in 0 until Scene.PLANE_SIZE) { plane }
+        return collisionFlags[plane]
+    }
+
     val collisionFlags: Array<Array<IntArray>>
 
     fun copyOf(): Copy {

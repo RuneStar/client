@@ -28,8 +28,11 @@ class TileHeightDebug : DisposablePlugin<TileHeightDebug.Settings>() {
                 for (y in 0 until Scene.SIZE) {
                     val tile = SceneTile(x, y, Game.plane)
                     val height = LiveScene.getHeight(tile)
-                    val pt = tile.center.toScreen() - Point(g.font.size, g.font.size)
-                    g.drawString(height.toString(), pt)
+                    val center = tile.center.toScreen()
+                    if (center != null) {
+                        val pt = center - Point(g.font.size, g.font.size)
+                        g.drawString(height.toString(), pt)
+                    }
                 }
             }
         })

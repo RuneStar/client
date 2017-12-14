@@ -41,6 +41,6 @@ data class SceneTile(
 
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }
-        return Polygon(corners.map { it.toScreen(projection) })
+        return Polygon(corners.mapNotNull { it.toScreen(projection) })
     }
 }
