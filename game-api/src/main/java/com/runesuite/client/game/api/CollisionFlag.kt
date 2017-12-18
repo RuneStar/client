@@ -11,7 +11,7 @@ enum class CollisionFlag(val index: Int) {
     WALK_SOUTHWEST(7),
     WALK_WEST(8),
 
-    ALL(9),
+    OBJECT_ALL(9),
 
     PROJECTILE_NORTHWEST(10),
     PROJECTILE_NORTH(11),
@@ -20,10 +20,18 @@ enum class CollisionFlag(val index: Int) {
     PROJECTILE_SOUTHEAST(14),
     PROJECTILE_SOUTH(15),
     PROJECTILE_SOUTHWEST(16),
-    PROJECTILE_WEST(17);
+    PROJECTILE_WEST(17),
+
+    GROUND_ALL(22);
 
     val mask = 1 shl (index - 1)
 }
+
+//fun main(args: Array<String>) {
+//    CollisionFlag.values().forEach {
+//        println("$it ${it.mask.toString(16)}")
+//    }
+//}
 
 //WALK_NORTHWEST 1
 //WALK_NORTH 2
