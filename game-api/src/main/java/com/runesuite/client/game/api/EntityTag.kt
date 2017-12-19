@@ -8,10 +8,10 @@ data class EntityTag(
         val location: SceneTile,
         val isInteractable: Boolean
 ) {
-    internal constructor(packed: Int) : this(
-            EntityKind.LOOKUP[packed shr 29 and 0x3]!!,
+    internal constructor(packed: Int, plane: Int = Client.accessor.plane) : this(
+            EntityKind.LOOKUP.getValue(packed shr 29 and 0x3),
             packed shr 14 and 0x7FFF,
-            SceneTile(packed and 0x7F, packed shr 7 and 0x7F, Client.accessor.plane),
+            SceneTile(packed and 0x7F, packed shr 7 and 0x7F, plane),
             packed > 0
     )
 
