@@ -144,7 +144,12 @@ private fun newGameWindow(applet: Component): JFrame {
 }
 
 private fun confirmExit(frame: Frame): Boolean {
-    val option = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION)
+    val option = JOptionPane.showConfirmDialog(
+            frame,
+            "Are you sure you want to exit?",
+            "Exit",
+            JOptionPane.YES_NO_OPTION
+    )
     return option == JOptionPane.YES_OPTION
 }
 

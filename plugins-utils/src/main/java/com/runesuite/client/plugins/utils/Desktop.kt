@@ -1,4 +1,4 @@
-package com.runesuite.client
+package com.runesuite.client.plugins.utils
 
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.logger.warn
@@ -13,7 +13,7 @@ private val isOpenFileSupported = desktop != null && desktop.isSupported(Desktop
 
 private val logger = getLogger()
 
-internal fun openFile(path: Path) {
+fun openFile(path: Path) {
     if (desktop != null && isOpenFileSupported) {
         try {
             desktop.open(path.toFile())

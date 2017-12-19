@@ -20,7 +20,10 @@ internal enum class Multiplication(val opcode: Int, val stackSize: StackSize) : 
         return true
     }
 
-    override fun apply(methodVisitor: MethodVisitor, implementationContext: Implementation.Context?): StackManipulation.Size {
+    override fun apply(
+            methodVisitor: MethodVisitor,
+            implementationContext: Implementation.Context
+    ): StackManipulation.Size {
         methodVisitor.visitInsn(opcode)
         return stackSize.toDecreasingSize()
     }

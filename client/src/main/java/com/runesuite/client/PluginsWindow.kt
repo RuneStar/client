@@ -8,6 +8,7 @@ import com.alee.laf.list.WebListModel
 import com.alee.laf.scroll.WebScrollPane
 import com.runesuite.client.plugins.PluginHandle
 import com.runesuite.client.plugins.PluginLoader
+import com.runesuite.client.plugins.utils.openFile
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
