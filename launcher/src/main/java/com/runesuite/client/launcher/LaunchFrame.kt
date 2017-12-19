@@ -49,7 +49,10 @@ internal class LaunchFrame : JFrame("Launching RuneSuite..."), TransferListener 
     override fun transferStarted(event: TransferEvent) {}
 
     override fun transferProgressed(event: TransferEvent) {
-        updateProgress(event.resource.resourceName, event.transferredBytes.toDouble() / event.resource.contentLength)
+        updateProgress(
+                event.resource.resourceName,
+                event.transferredBytes.toDouble() / event.resource.contentLength
+        )
     }
 
     override fun transferSucceeded(event: TransferEvent) {

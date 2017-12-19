@@ -32,7 +32,8 @@ internal class PluginHolder<T : PluginSettings>(
 
     private val logger get() = plugin.logger
 
-    override val settingsFile: Path = directory.resolve("${PluginHandle.SETTINGS_FILE_NAME_BASE}.${settingsReadWriter.fileExtension}")
+    override val settingsFile: Path =
+            directory.resolve("${PluginHandle.SETTINGS_FILE_NAME_BASE}.${settingsReadWriter.fileExtension}")
 
     private var ignoreNextEvent = false
 

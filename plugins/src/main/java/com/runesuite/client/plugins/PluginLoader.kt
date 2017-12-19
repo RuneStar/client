@@ -91,7 +91,10 @@ class PluginLoader(
         plugins.forEach { plugin ->
             val pluginDir = pluginsDir.resolve(plugin.javaClass.name)
             Files.createDirectories(pluginDir)
-            val watchKey = pluginDir.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE)
+            val watchKey = pluginDir.register(
+                    watchService,
+                    StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE
+            )
             val pluginHolder = PluginHolder(plugin, watchKey, executor, settingsReadWriter)
             pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder

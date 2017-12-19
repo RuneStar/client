@@ -31,15 +31,23 @@ private val locator = MavenRepositorySystemUtils.newServiceLocator().apply {
 
 private val repoSystem = locator.getService(RepositorySystem::class.java)
 
-private val localRepo = LocalRepository(Paths.get(System.getProperty("user.home"), ".m2", "repository").toFile())
+private val localRepo =
+        LocalRepository(Paths.get(System.getProperty("user.home"), ".m2", "repository").toFile())
 
 private val session = MavenRepositorySystemUtils.newSession().apply {
     localRepositoryManager = repoSystem.newLocalRepositoryManager(this, localRepo)
 }
 
-private val remoteRepo = RemoteRepository.Builder("repo.runesuite.com", "default", "http://repo.runesuite.com")
-        .setPolicy(RepositoryPolicy(true, RepositoryPolicy.UPDATE_POLICY_ALWAYS, RepositoryPolicy.CHECKSUM_POLICY_FAIL))
-        .build()
+private val remoteRepo =
+        RemoteRepository.Builder("repo.runesuite.com", "default", "http://repo.runesuite.com")
+                .setPolicy(
+                        RepositoryPolicy(
+                                true,
+                                RepositoryPolicy.UPDATE_POLICY_ALWAYS,
+                                RepositoryPolicy.CHECKSUM_POLICY_FAIL
+                        )
+                )
+                .build()
 
 fun main(args: Array<String>) {
     val frame = LaunchFrame()
