@@ -26,6 +26,6 @@ object LiveScene : Scene {
     override val base get() = GlobalTile(accessor.baseX, accessor.baseY, 0)
 
     override fun toString(): String {
-        return "LiveScene(raw=$base)"
+        return "LiveScene(base=$base)"
     }
 }

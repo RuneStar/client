@@ -30,7 +30,9 @@ object Menu {
                 it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String)
     }
 
-    val openings: Observable<Point> = XClient.openMenu.exit.map { Point(it.arguments[0] as Int, it.arguments[1] as Int) }
+    val openings: Observable<Point> = XClient.openMenu.exit.map {
+        Point(it.arguments[0] as Int, it.arguments[1] as Int)
+    }
 
     val optionShapes: List<Rectangle>
         get() = when (isOpen) {
