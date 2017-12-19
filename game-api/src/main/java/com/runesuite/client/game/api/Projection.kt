@@ -1,6 +1,5 @@
 package com.runesuite.client.game.api
 
-import org.kxtra.swing.polygon.Polygon
 import java.awt.Point
 
 interface Projection {
