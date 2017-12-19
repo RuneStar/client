@@ -16,7 +16,7 @@ object Mouse {
 
     val location get() = Point(x, y)
 
-    val crosshair get() = checkNotNull(MouseCrosshair.LOOKUP[accessor.mouseCrosshair]) { accessor.mouseCrosshair }
+    val crosshair get() = MouseCrosshair.LOOKUP.getValue(accessor.mouseCrosshair)
 
     /**
      * @see[java.awt.event.MouseListener]

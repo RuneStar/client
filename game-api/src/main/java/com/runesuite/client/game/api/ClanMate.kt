@@ -12,7 +12,7 @@ class ClanMate(override val accessor: XClanMate) : Wrapper() {
 
     val world get() = Worlds[accessor.world]
 
-    val rank get() = checkNotNull(ClanRank.LOOKUP[accessor.rank]) { accessor.rank }
+    val rank get() = ClanRank.LOOKUP.getValue(accessor.rank)
 
     override fun toString(): String {
         return "ClanMate(name=$name, worldId=$worldId, rank=$rank)"

@@ -23,9 +23,9 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
 
     val isFilled get() = totalQuantity == currentQuantity
 
-    val type get() = checkNotNull(GrandExchangeOfferType.LOOKUP[accessor.type()]) { accessor.type() }
+    val type get() = GrandExchangeOfferType.LOOKUP.getValue(accessor.type())
 
-    val status get() = checkNotNull(GrandExchangeOfferStatus.LOOKUP[accessor.status()]) { accessor.status() }
+    val status get() = GrandExchangeOfferStatus.LOOKUP.getValue(accessor.status())
 
     val isAborted get() = when(status) {
         GrandExchangeOfferStatus.ABORTING -> true

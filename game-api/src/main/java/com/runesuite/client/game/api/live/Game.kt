@@ -14,7 +14,7 @@ import java.awt.Container
 
 object Game {
 
-    val state get() = checkNotNull(GameState.LOOKUP[accessor.gameState]) { accessor.gameState }
+    val state get() = GameState.LOOKUP.getValue(accessor.gameState)
 
     val stateChanges: Observable<GameState> = XClient.updateGameState.exit.map {
         checkNotNull(GameState.LOOKUP[it.arguments[0]]) { it.arguments[0] }
@@ -28,7 +28,7 @@ object Game {
 
     val weight get() = accessor.weight
 
-    val windowMode get() = checkNotNull(WindowMode.LOOKUP[accessor.clientPreferences.windowMode]) { accessor.clientPreferences.windowMode }
+    val windowMode get() = WindowMode.LOOKUP.getValue(accessor.clientPreferences.windowMode)
 
     /**
      * @see[java.awt.event.WindowListener]

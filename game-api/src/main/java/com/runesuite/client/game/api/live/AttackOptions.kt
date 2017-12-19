@@ -5,7 +5,7 @@ import com.runesuite.client.game.raw.Client.accessor
 
 object AttackOptions {
 
-    val npc get() = checkNotNull(AttackOption.LOOKUP[accessor.npcAttackOption]) { accessor.npcAttackOption }
+    val npc get() = AttackOption.LOOKUP.getValue(accessor.npcAttackOption)
 
-    val player get() = checkNotNull(AttackOption.LOOKUP[accessor.playerAttackOption]) { accessor.playerAttackOption }
+    val player get() = AttackOption.LOOKUP.getValue(accessor.playerAttackOption)
 }
