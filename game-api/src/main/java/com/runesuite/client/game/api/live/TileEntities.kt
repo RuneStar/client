@@ -9,7 +9,7 @@ abstract class TileEntities<T> {
 
     abstract protected fun fromTile(sceneTile: SceneTile, xTile: XTile?): T
 
-    open fun getAt(sceneTile: SceneTile): T {
+    fun getAt(sceneTile: SceneTile): T {
         require(sceneTile.isLoaded) { sceneTile }
         val tile = Client.accessor.scene.tiles[sceneTile.plane][sceneTile.x][sceneTile.y]
         return fromTile(sceneTile, tile)

@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api.live
 
+import com.runesuite.client.game.api.EntityTag
 import com.runesuite.client.game.api.MouseCrosshair
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell
@@ -15,6 +16,18 @@ object Mouse {
     val y get() = accessor.mouseY
 
     val location get() = Point(x, y)
+
+    val viewportX get() = accessor.viewportMouse_x
+
+    val viewportY get() = accessor.viewportMouse_y
+
+    val viewportLocation get() = Point(viewportX, viewportY)
+
+    val isInViewport get() = accessor.viewportMouse_isInViewport
+
+    val entityCount get() = accessor.viewportMouse_entityCount
+
+    val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it]) }
 
     val crosshair get() = MouseCrosshair.LOOKUP.getValue(accessor.mouseCrosshair)
 
