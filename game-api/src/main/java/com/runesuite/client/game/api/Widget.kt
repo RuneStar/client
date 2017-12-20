@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api
 
+import com.runesuite.client.game.api.live.WidgetGroups
 import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.Wrapper
@@ -11,7 +12,7 @@ import java.awt.Rectangle
 
 sealed class Widget(override val accessor: XWidget) : Wrapper() {
 
-    val group get() = WidgetGroup(parentId.group)
+    val group get() = checkNotNull(WidgetGroups[parentId.group])
 
     val parentId get() = WidgetId(accessor.id)
 
@@ -84,7 +85,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper() {
         val successors: List<Widget.Parent> get() = group.all.filter { it.predecessor == this }
 
         val descendantsGroup: WidgetGroup? get() =
-            (Client.accessor.widgetNodes.get(accessor.id.toLong()) as XWidgetNode?)?.let { WidgetGroup(it.id) }
+            (Client.accessor.widgetNodes.get(accessor.id.toLong()) as XWidgetNode?)?.let { checkNotNull(WidgetGroups[it.id]) }
 
         val descendants: List<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
 

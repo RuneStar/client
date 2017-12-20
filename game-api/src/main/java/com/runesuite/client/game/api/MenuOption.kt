@@ -1,5 +1,6 @@
 package com.runesuite.client.game.api
 
+import com.runesuite.client.game.api.live.WidgetGroups
 import com.runesuite.client.game.raw.Client.accessor
 import java.awt.Point
 
@@ -156,7 +157,7 @@ interface MenuOption {
     }
 
     interface InWidget: MenuOption {
-        val group get() = WidgetGroup(argument2 shr 16)
+        val group get() = WidgetGroups[argument2 shr 16]!!
         val widgetId get() = argument2 and 0xFFFF
         val widget: Widget? get() = group[widgetId]
     }

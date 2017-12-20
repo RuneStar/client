@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-import com.runesuite.client.game.api.live.Game
+import com.runesuite.client.game.raw.Accessor
 import com.runesuite.client.game.raw.Client
 import com.runesuite.client.game.raw.Wrapper
 import com.runesuite.client.game.raw.access.XBoundaryObject
