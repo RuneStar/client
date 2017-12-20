@@ -12,6 +12,8 @@ abstract class SceneObject : Wrapper() {
 
     abstract val tag: EntityTag
 
+    override abstract val accessor: Accessor
+
     val location get() = tag.location
 
     class Interactable(
