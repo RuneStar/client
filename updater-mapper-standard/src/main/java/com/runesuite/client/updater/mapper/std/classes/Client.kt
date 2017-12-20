@@ -238,6 +238,19 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @DependsOn(menuAction::class)
+    class mouseCrossX : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1004 }
+                .nextWithin(7) {it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(menuAction::class)
+    class mouseCrossY : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1004 }
+                .nextWithin(7) {it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(7) {it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
     // 0 none, 1 yellow, 2 red
     @DependsOn(menuAction::class)
     class mouseCrossColor : UniqueMapper.InMethod.Field(menuAction::class) {

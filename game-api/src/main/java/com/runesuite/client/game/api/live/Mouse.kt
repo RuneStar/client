@@ -42,6 +42,6 @@ object Mouse {
             .flatMap { SwingObservable.mouse(it) }
 
     override fun toString(): String {
-        return "Mouse(location=$location)"
+        return "Mouse(location=$location, crossColor=$crossColor)"
     }
 }
