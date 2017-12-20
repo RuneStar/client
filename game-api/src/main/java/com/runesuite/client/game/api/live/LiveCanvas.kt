@@ -30,17 +30,18 @@ object LiveCanvas : Canvas {
         }
     }.publish().refCount().map { it.create2D() }
 
+    val canvasReplacements: Observable<java.awt.Canvas> get() = XGameShell.replaceCanvas.exit.map { accessor.canvas }
+            .startWith(accessor.canvas)
+
     /**
      * @see[java.awt.event.FocusListener]
      */
-    val focusEvents: Observable<FocusEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
-            .flatMap { SwingObservable.focus(it) }
+    val focusEvents: Observable<FocusEvent> = canvasReplacements.flatMap { SwingObservable.focus(it) }
 
     /**
      * @see[java.awt.event.ComponentListener]
      */
-    val componentEvents: Observable<ComponentEvent> = XGameShell.replaceCanvas.exit.map { accessor.canvas }.startWith(accessor.canvas)
-            .flatMap { SwingObservable.component(it) }
+    val componentEvents: Observable<ComponentEvent> = canvasReplacements.flatMap { SwingObservable.component(it) }
 
     override fun toString(): String {
         return "LiveCanvas(shape=$shape)"
