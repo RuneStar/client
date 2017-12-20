@@ -238,9 +238,20 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
+    // 0 none, 1 yellow, 2 red
     @DependsOn(menuAction::class)
-    class mouseCrosshair : OrderMapper.InMethod.Field(menuAction::class, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    class mouseCrossColor : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1004 }
+                .nextWithin(20) { it.opcode == ICONST_0 }
+                .prev {it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    // 0 - 400
+    @DependsOn(menuAction::class)
+    class mouseCrossState : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1004 }
+                .nextWithin(20) { it.opcode == ICONST_0 }
+                .next {it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     class visibleTiles : StaticField() {

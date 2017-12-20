@@ -1,6 +1,6 @@
 package com.runesuite.client.game.api
 
-enum class MouseCrosshair(val id: Int) {
+enum class MouseCrossColor(val id: Int) {
 
     NONE(0),
     YELLOW(1),

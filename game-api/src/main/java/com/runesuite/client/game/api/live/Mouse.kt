@@ -1,7 +1,7 @@
 package com.runesuite.client.game.api.live
 
 import com.runesuite.client.game.api.EntityTag
-import com.runesuite.client.game.api.MouseCrosshair
+import com.runesuite.client.game.api.MouseCrossColor
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell
 import hu.akarnokd.rxjava2.swing.SwingObservable
@@ -29,7 +29,9 @@ object Mouse {
 
     val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it]) }
 
-    val crosshair get() = MouseCrosshair.LOOKUP.getValue(accessor.mouseCrosshair)
+    val crossColor get() = MouseCrossColor.LOOKUP.getValue(accessor.mouseCrossColor)
+
+    val crossState get() = accessor.mouseCrossState
 
     /**
      * @see[java.awt.event.MouseListener]
@@ -40,6 +42,6 @@ object Mouse {
             .flatMap { SwingObservable.mouse(it) }
 
     override fun toString(): String {
-        return "Mouse(location=$location, crosshair=$crosshair)"
+        return "Mouse(location=$location)"
     }
 }
