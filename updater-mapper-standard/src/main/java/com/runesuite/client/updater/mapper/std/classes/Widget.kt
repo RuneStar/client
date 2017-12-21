@@ -194,4 +194,21 @@ class Widget : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
     }
+
+    @MethodParameters("indexA", "indexB")
+    class swapItems : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(swapItems::class)
+    class itemIds : OrderMapper.InMethod.Field(swapItems::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(swapItems::class)
+    class itemQuantities : OrderMapper.InMethod.Field(swapItems::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
 }

@@ -19,7 +19,7 @@ class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = settings.color.get()
 
-
+//            Widgets.flat.filter { it.accessor.item }
         })
     }
 

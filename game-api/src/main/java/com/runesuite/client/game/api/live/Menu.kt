@@ -26,8 +26,10 @@ object Menu {
     val optionsCount get() = accessor.menuOptionsCount
 
     val actions: Observable<MenuOption> = XClient.menuAction.exit.map {
-        MenuOption.of(it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
-                it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String)
+        MenuOption.of(
+                it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
+                it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String
+        )
     }
 
     val openings: Observable<Point> = XClient.openMenu.exit.map {
