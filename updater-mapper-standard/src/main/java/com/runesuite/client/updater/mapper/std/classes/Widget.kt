@@ -211,4 +211,9 @@ class Widget : IdentityMapper.Class() {
     class itemQuantities : OrderMapper.InMethod.Field(swapItems::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
+
+    @DependsOn(decode::class)
+    class type : OrderMapper.InMethod.Field(decode::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

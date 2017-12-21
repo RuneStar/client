@@ -2471,4 +2471,11 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(25) { it.isLabel }
                 .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
+
+//    @DependsOn(Buffer::class)
+//    class decodeStringHuffman : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+//                .and { it.arguments.size in 2..3 }
+//                .and { it.arguments.startsWith(type<Buffer>(), INT_TYPE) }
+//    }
 }

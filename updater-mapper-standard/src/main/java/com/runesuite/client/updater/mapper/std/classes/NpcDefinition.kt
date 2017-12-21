@@ -1,22 +1,20 @@
 package com.runesuite.client.updater.mapper.std.classes
 
+import com.runesuite.mapper.*
 import org.kxtra.lang.list.startsWith
-import com.runesuite.mapper.IdentityMapper
-import com.runesuite.mapper.OrderMapper
-import com.runesuite.mapper.UniqueMapper
 import com.runesuite.mapper.annotations.DependsOn
 import com.runesuite.mapper.annotations.MethodParameters
 import com.runesuite.mapper.extensions.Predicate
 import com.runesuite.mapper.extensions.and
 import com.runesuite.mapper.extensions.predicateOf
 import com.runesuite.mapper.extensions.type
-import com.runesuite.mapper.nextWithin
 import com.runesuite.mapper.tree.Class2
 import com.runesuite.mapper.tree.Field2
 import com.runesuite.mapper.tree.Instruction2
 import com.runesuite.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.objectweb.asm.tree.JumpInsnNode
 
 @DependsOn(Npc.definition::class)
 class NpcDefinition : IdentityMapper.Class() {
@@ -87,6 +85,13 @@ class NpcDefinition : IdentityMapper.Class() {
     @DependsOn(readNext::class)
     class combatLevel : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 95 }
+                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(readNext::class)
+    class prayerIcon : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 102 }
+                .nextWithin(2) { it.node is JumpInsnNode }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
