@@ -1,13 +1,13 @@
 package com.runesuite.client.game.api.live
 
-import org.kxtra.swing.graphics2d.create2D
-import org.kxtra.swing.toolkit.fontDesktopHints
 import com.runesuite.client.game.api.Canvas
 import com.runesuite.client.game.raw.Client.accessor
 import com.runesuite.client.game.raw.access.XGameShell
 import com.runesuite.client.game.raw.access.XRasterProvider
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.kxtra.swing.graphics2d.create2D
+import org.kxtra.swing.toolkit.fontDesktopHints
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.Toolkit
@@ -25,9 +25,9 @@ object LiveCanvas : Canvas {
     override val shape get() = Rectangle(accessor.canvas.size)
 
     val repaints: Observable<Graphics2D> = XRasterProvider.drawFull0.enter.map {
-        (it.instance.image.graphics as Graphics2D).apply {
-            desktopHints?.let { addRenderingHints(it) }
-        }
+        val g = it.instance.image.graphics as Graphics2D
+        desktopHints?.let { g.addRenderingHints(it) }
+        g
     }.publish().refCount().map { it.create2D() }
 
     val canvasReplacements: Observable<java.awt.Canvas> get() = XGameShell.replaceCanvas.exit.map { accessor.canvas }

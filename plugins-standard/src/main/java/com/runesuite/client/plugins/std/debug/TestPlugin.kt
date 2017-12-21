@@ -1,5 +1,6 @@
 package com.runesuite.client.plugins.std.debug
 
+import com.runesuite.client.game.api.live.Chat
 import com.runesuite.client.game.api.live.LiveCanvas
 import com.runesuite.client.game.api.live.Players
 import com.runesuite.client.game.api.live.Widgets
@@ -18,12 +19,7 @@ class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = settings.color.get()
 
-            Widgets.flat.forEach {
-//                if (it.isVisible) {
-                    it.shape?.let { g.draw(it) }
-//                }
 
-            }
         })
     }
 

@@ -1,6 +1,7 @@
 package com.runesuite.client.game.api
 
 import com.runesuite.client.game.api.live.WidgetGroups
+import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.game.raw.Client.accessor
 import java.awt.Point
 
@@ -111,20 +112,20 @@ interface MenuOption {
             return when(operator) {
                 // todo: subclasses
                 // todo: Object Examine is wrong
-                in MenuOption.OnObjectIndexed.OPERATORS -> MenuOption.OnObjectIndexed(base)
-                in MenuOption.Cancel.OPERATORS -> MenuOption.Cancel(base)
-                in MenuOption.WalkHere.OPERATORS -> MenuOption.WalkHere(base)
-                in MenuOption.OnNpcIndexed.OPERATORS -> MenuOption.OnNpcIndexed(base)
-                in MenuOption.OnPlayerIndexed.OPERATORS -> MenuOption.OnPlayerIndexed(base)
-                in MenuOption.OnNpcSimple.OPERATORS -> MenuOption.OnNpcSimple(base)
-                in MenuOption.OnPlayerSimple.OPERATORS -> MenuOption.OnPlayerSimple(base)
-                in MenuOption.OnObjectSimple.OPERATORS -> MenuOption.OnObjectSimple(base)
-                in MenuOption.OnGroundItemIndexed.OPERATORS -> MenuOption.OnGroundItemIndexed(base)
-                in MenuOption.OnGroundItemSimple.OPERATORS -> MenuOption.OnGroundItemSimple(base)
-                in MenuOption.OnItemIndexed.OPERATORS -> MenuOption.OnItemIndexed(base)
-                in MenuOption.OnItemSimple.OPERATORS -> MenuOption.OnItemSimple(base)
-                in MenuOption.OnWidgetSimple.OPERATORS -> MenuOption.OnWidgetSimple(base)
-                in MenuOption.ButtonDialog.OPERATORS -> MenuOption.ButtonDialog(base)
+                in MenuOption.OnObjectIndexed.operators -> MenuOption.OnObjectIndexed(base)
+                in MenuOption.Cancel.operators -> MenuOption.Cancel(base)
+                in MenuOption.WalkHere.operators -> MenuOption.WalkHere(base)
+                in MenuOption.OnNpcIndexed.operators -> MenuOption.OnNpcIndexed(base)
+                in MenuOption.OnPlayerIndexed.operators -> MenuOption.OnPlayerIndexed(base)
+                in MenuOption.OnNpcSimple.operators -> MenuOption.OnNpcSimple(base)
+                in MenuOption.OnPlayerSimple.operators -> MenuOption.OnPlayerSimple(base)
+                in MenuOption.OnObjectSimple.operators -> MenuOption.OnObjectSimple(base)
+                in MenuOption.OnGroundItemIndexed.operators -> MenuOption.OnGroundItemIndexed(base)
+                in MenuOption.OnGroundItemSimple.operators -> MenuOption.OnGroundItemSimple(base)
+                in MenuOption.OnItemIndexed.operators -> MenuOption.OnItemIndexed(base)
+                in MenuOption.OnItemSimple.operators -> MenuOption.OnItemSimple(base)
+                in MenuOption.OnWidgetSimple.operators -> MenuOption.OnWidgetSimple(base)
+                in MenuOption.ButtonDialog.operators -> MenuOption.ButtonDialog(base)
                 else -> base
             }
         }
@@ -157,23 +158,28 @@ interface MenuOption {
     }
 
     interface InWidget: MenuOption {
-        val group get() = WidgetGroups[argument2 shr 16]!!
-        val widgetId get() = argument2 and 0xFFFF
-        val widget: Widget? get() = group[widgetId]
+        val widgetId get() = WidgetId(argument2)
+        val widgetParent: Widget.Parent get() = checkNotNull(Widgets[widgetId])
     }
 
     interface OnWidget: MenuOption, MenuOption.InWidget {
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
-        val widgetParent: Widget.Parent? get() = group[widgetId]
-        override val widget: Widget? get() = widgetParent?.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
+        val widget: Widget? get() = widgetParent.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
+    }
+
+    interface Factory {
+        val operators: Set<Operator>
+        fun check(operator: Operator) {
+            require(operator in operators) { operator }
+        }
     }
 
     data class OnWidgetSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnWidget {
         init {
-            require(operator in MenuOption.OnWidgetSimple.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.WIDGET_ACTION_0, MenuOption.Operator.WIDGET_ACTION_1, MenuOption.Operator.BUTTON_SPELL)
+        companion object : Factory {
+            override val operators = setOf(Operator.WIDGET_ACTION_0, Operator.WIDGET_ACTION_1, Operator.BUTTON_SPELL)
         }
         override fun toString(): String {
             return "OnWidgetSimple(opcode=$opcode, operator=$operator, widgetId=$widgetId, widgetChildId=$widgetChildId, targetName=$targetName, action=$action)"
@@ -183,10 +189,10 @@ interface MenuOption {
     data class ButtonDialog(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.InWidget, MenuOption.Indexed {
         override val index get() = argument1
         init {
-            require(operator in MenuOption.ButtonDialog.Companion.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.BUTTON_DIALOG)
+        companion object : Factory {
+            override val operators = setOf(Operator.BUTTON_DIALOG)
         }
         override fun toString(): String {
             return "ButtonDialog(opcode=$opcode, operator=$operator, index=$index, widgetId=$widgetId, targetName=$targetName, action=$action)"
@@ -195,13 +201,11 @@ interface MenuOption {
 
     data class OnItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnItem {
         init {
-            require(operator in MenuOption.OnItemIndexed.OPERATORS) { operator }
+            check(operator)
         }
-        override val index get() = opcode - MenuOption.Operator.ITEM_ACTION_0.opcode
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.ITEM_ACTION_0, MenuOption.Operator.ITEM_ACTION_1, MenuOption.Operator.ITEM_ACTION_2,
-                    MenuOption.Operator.ITEM_ACTION_3, MenuOption.Operator.ITEM_ACTION_4)
+        override val index get() = opcode - Operator.ITEM_ACTION_0.opcode
+        companion object : Factory {
+            override val operators = setOf(Operator.ITEM_ACTION_0, Operator.ITEM_ACTION_1, Operator.ITEM_ACTION_2, Operator.ITEM_ACTION_3, Operator.ITEM_ACTION_4)
         }
         override fun toString(): String {
             return "OnItemIndexed(opcode=$opcode, operator=$operator, index=$index, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
@@ -210,12 +214,10 @@ interface MenuOption {
 
     data class OnItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnItem {
         init {
-            require(operator in MenuOption.OnItemSimple.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.ITEM_EXAMINE, MenuOption.Operator.SPELL_ON_ITEM, MenuOption.Operator.ITEM_ON_ITEM,
-                    MenuOption.Operator.USE_ITEM)
+        companion object : Factory {
+            override val operators = setOf(Operator.ITEM_EXAMINE, Operator.SPELL_ON_ITEM, Operator.ITEM_ON_ITEM, Operator.USE_ITEM)
         }
         override fun toString(): String {
             return "OnItemSimple(opcode=$opcode, operator=$operator, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
@@ -225,13 +227,14 @@ interface MenuOption {
     data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in MenuOption.OnGroundItemIndexed.OPERATORS) { operator }
+            check(operator)
         }
-        override val index: Int get() = opcode - MenuOption.Operator.GROUND_ITEM_ACTION_0.opcode
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.GROUND_ITEM_ACTION_0, MenuOption.Operator.GROUND_ITEM_ACTION_1, MenuOption.Operator.GROUND_ITEM_ACTION_2,
-                    MenuOption.Operator.GROUND_ITEM_ACTION_3, MenuOption.Operator.GROUND_ITEM_ACTION_4)
+        override val index: Int get() = opcode - Operator.GROUND_ITEM_ACTION_0.opcode
+        companion object : Factory {
+            override val operators = setOf(
+                    Operator.GROUND_ITEM_ACTION_0, Operator.GROUND_ITEM_ACTION_1, Operator.GROUND_ITEM_ACTION_2,
+                    Operator.GROUND_ITEM_ACTION_3, Operator.GROUND_ITEM_ACTION_4
+            )
         }
         override fun toString(): String {
             return "OnGroundItemIndexed(opcode=$opcode, operator=$operator, index=$index, id=$id, location=$location, targetName=$targetName, action=$action)"
@@ -241,10 +244,10 @@ interface MenuOption {
     data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnGroundItem, MenuOption.AtLocation {
         override val plane: Int = accessor.plane
         init {
-            require(operator in MenuOption.OnGroundItemSimple.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.ITEM_ON_GROUND_ITEM, MenuOption.Operator.GROUND_ITEM_EXAMINE, MenuOption.Operator.SPELL_ON_GROUND_ITEM)
+        companion object : Factory {
+            override val operators = setOf(Operator.ITEM_ON_GROUND_ITEM, Operator.GROUND_ITEM_EXAMINE, Operator.SPELL_ON_GROUND_ITEM)
         }
         override fun toString(): String {
             return "OnGroundItemSimple(opcode=$opcode, operator=$operator, id=$id, location=$location, targetName=$targetName, action=$action)"
@@ -253,10 +256,10 @@ interface MenuOption {
 
     data class Cancel(private val menuOption: MenuOption) : MenuOption by menuOption {
         init {
-            require(operator in MenuOption.Cancel.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.CANCEL)
+        companion object : Factory {
+            override val operators = setOf(Operator.CANCEL)
         }
         override fun toString(): String {
             return "Cancel(opcode=$opcode, operator=$operator, action=$action)"
@@ -265,10 +268,10 @@ interface MenuOption {
 
     data class WalkHere(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnScreen {
         init {
-            require(operator in MenuOption.WalkHere.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.WALK_HERE)
+        companion object : Factory {
+            override val operators = setOf(Operator.WALK_HERE)
         }
         override fun toString(): String {
             return "WalkHere(opcode=$opcode, operator=$operator, screenLocation=$screenLocation, action=$action)"
@@ -277,14 +280,15 @@ interface MenuOption {
 
     data class OnObjectIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.AtLocation, MenuOption.Indexed, MenuOption.OnObject {
         init {
-            require(operator in MenuOption.OnObjectIndexed.OPERATORS) { operator }
+            check(operator)
         }
         override val plane: Int = accessor.plane
-        override val index: Int get() = opcode - MenuOption.Operator.OBJECT_ACTION_0.opcode
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.OBJECT_ACTION_0, MenuOption.Operator.OBJECT_ACTION_1, MenuOption.Operator.OBJECT_ACTION_2,
-                    MenuOption.Operator.OBJECT_ACTION_3, MenuOption.Operator.OBJECT_ACTION_4)
+        override val index: Int get() = opcode - Operator.OBJECT_ACTION_0.opcode
+        companion object : Factory {
+            override val operators = setOf(
+                    Operator.OBJECT_ACTION_0, Operator.OBJECT_ACTION_1, Operator.OBJECT_ACTION_2,
+                    Operator.OBJECT_ACTION_3, Operator.OBJECT_ACTION_4
+            )
         }
         override fun toString(): String {
             return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, tag=$tag, targetName=$targetName, action=$action)"
@@ -305,13 +309,14 @@ interface MenuOption {
 
     data class OnNpcIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnNpc {
         init {
-            require(operator in MenuOption.OnNpcIndexed.OPERATORS) { operator }
+            check(operator)
         }
         override val index: Int get() = opcode - MenuOption.Operator.NPC_ACTION_0.opcode
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.NPC_ACTION_0, MenuOption.Operator.NPC_ACTION_1, MenuOption.Operator.NPC_ACTION_2,
-                    MenuOption.Operator.NPC_ACTION_3, MenuOption.Operator.NPC_ACTION_4)
+        companion object : Factory {
+            override val operators = setOf(
+                    Operator.NPC_ACTION_0, Operator.NPC_ACTION_1, Operator.NPC_ACTION_2,
+                    Operator.NPC_ACTION_3, Operator.NPC_ACTION_4
+            )
         }
         override fun toString(): String {
             return "OnNpcIndexed(opcode=$opcode, operator=$operator, index=$index, npcTargetIndex=$npcTargetIndex, targetName=$targetName, action=$action)"
@@ -320,26 +325,26 @@ interface MenuOption {
 
     data class OnPlayerIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnPlayer {
         init {
-            require(operator in MenuOption.OnPlayerIndexed.OPERATORS) { operator }
+            check(operator)
         }
         override val index: Int get() = opcode - MenuOption.Operator.PLAYER_ACTION_0.opcode
-        companion object {
-            val OPERATORS = setOf(
-                    MenuOption.Operator.PLAYER_ACTION_0, MenuOption.Operator.PLAYER_ACTION_1, MenuOption.Operator.PLAYER_ACTION_2,
-                    MenuOption.Operator.PLAYER_ACTION_3, MenuOption.Operator.PLAYER_ACTION_4, MenuOption.Operator.PLAYER_ACTION_5,
-                    MenuOption.Operator.PLAYER_ACTION_6, MenuOption.Operator.PLAYER_ACTION_7)
+        companion object : Factory {
+            override val operators = setOf(
+                    Operator.PLAYER_ACTION_0, Operator.PLAYER_ACTION_1, Operator.PLAYER_ACTION_2,
+                    Operator.PLAYER_ACTION_3, Operator.PLAYER_ACTION_4, Operator.PLAYER_ACTION_5,
+                    Operator.PLAYER_ACTION_6, Operator.PLAYER_ACTION_7)
         }
         override fun toString(): String {
-            return "onPlayerIndexed(opcode=$opcode, operator=$operator, index=$index, playerTargetIndex=$playerTargetIndex, targetName=$targetName, action=$action)"
+            return "OnPlayerIndexed(opcode=$opcode, operator=$operator, index=$index, playerTargetIndex=$playerTargetIndex, targetName=$targetName, action=$action)"
         }
     }
 
     data class OnNpcSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnNpc {
         init {
-            require(operator in MenuOption.OnNpcSimple.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_NPC, MenuOption.Operator.ITEM_ON_NPC, MenuOption.Operator.NPC_EXAMINE)
+        companion object : Factory {
+            override val operators = setOf(Operator.SPELL_ON_NPC, Operator.ITEM_ON_NPC, Operator.NPC_EXAMINE)
         }
         override fun toString(): String {
             return "OnNpcSimple(opcode=$opcode, operator=$operator, npcTargetIndex=$npcTargetIndex, targetName=$targetName, action=$action)"
@@ -348,10 +353,10 @@ interface MenuOption {
 
     data class OnPlayerSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnPlayer {
         init {
-            require(operator in MenuOption.OnPlayerSimple.OPERATORS) { operator }
+            check(operator)
         }
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_PLAYER, MenuOption.Operator.ITEM_ON_PLAYER)
+        companion object : Factory {
+            override val operators = setOf(Operator.SPELL_ON_PLAYER, Operator.ITEM_ON_PLAYER)
         }
         override fun toString(): String {
             return "OnPlayerSimple(opcode=$opcode, operator=$operator, playerTargetIndex=$playerTargetIndex, targetName=$targetName, action=$action)"
@@ -360,11 +365,11 @@ interface MenuOption {
 
     data class OnObjectSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnObject, MenuOption.AtLocation {
         init {
-            require(operator in MenuOption.OnObjectSimple.OPERATORS) { operator }
+            check(operator)
         }
         override val plane: Int = accessor.plane
-        companion object {
-            val OPERATORS = setOf(MenuOption.Operator.SPELL_ON_OBJECT, MenuOption.Operator.OBJECT_EXAMINE, MenuOption.Operator.ITEM_ON_OBJECT)
+        companion object : Factory {
+            override val operators = setOf(Operator.SPELL_ON_OBJECT, Operator.OBJECT_EXAMINE, Operator.ITEM_ON_OBJECT)
         }
         override fun toString(): String {
             return "OnObjectSimple(opcode=$opcode, operator=$operator, tag=$tag, location=$location, targetName=$targetName, action=$action)"

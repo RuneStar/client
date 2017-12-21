@@ -3,7 +3,6 @@ package com.runesuite.client.game.api.live
 import com.runesuite.client.game.api.EntityTag
 import com.runesuite.client.game.api.MouseCrossColor
 import com.runesuite.client.game.raw.Client.accessor
-import com.runesuite.client.game.raw.access.XGameShell
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import java.awt.Point

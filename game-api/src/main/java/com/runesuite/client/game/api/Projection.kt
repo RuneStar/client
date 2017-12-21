@@ -12,7 +12,9 @@ interface Projection {
 
     fun toScreen(position: Position, tileHeight: Position): Point?
 
-    data class Minimap(val minimap: com.runesuite.client.game.api.Minimap) : Projection {
+    data class Minimap(
+            val minimap: com.runesuite.client.game.api.Minimap
+    ) : Projection {
 
         override fun toScreen(position: Position, tileHeight: Position): Point {
             val minimapCopy = minimap.copyOf()
