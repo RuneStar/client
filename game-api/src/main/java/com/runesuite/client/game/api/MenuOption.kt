@@ -1,6 +1,5 @@
 package com.runesuite.client.game.api
 
-import com.runesuite.client.game.api.live.WidgetGroups
 import com.runesuite.client.game.api.live.Widgets
 import com.runesuite.client.game.raw.Client.accessor
 import java.awt.Point

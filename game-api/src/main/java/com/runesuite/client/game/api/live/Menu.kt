@@ -34,23 +34,21 @@ object Menu {
         Point(it.arguments[0] as Int, it.arguments[1] as Int)
     }
 
-    val optionShapes: List<Rectangle>
-        get() = when (isOpen) {
-            true -> 1.rangeTo(optionsCount).map { Rectangle(x, y + it * OPTION_HEIGHT + 3, width, OPTION_HEIGHT) }
-            false -> emptyList()
-        }
+    val optionShapes: List<Rectangle> get() = when (isOpen) {
+        true -> List(optionsCount) { Rectangle(x, y + (it + 1) * OPTION_HEIGHT + 3, width, OPTION_HEIGHT) }
+        false -> emptyList()
+    }
 
-    val options: List<MenuOption>
-        get() = (optionsCount - 1).downTo(0).map {
-                MenuOption.of(
-                        accessor.menuOpcodes[it],
-                        accessor.menuArguments0[it],
-                        accessor.menuArguments1[it],
-                        accessor.menuArguments2[it],
-                        accessor.menuTargetNames[it]!!,
-                        accessor.menuActions[it]!!
-                )
-        }
+    val options: List<MenuOption> get() = List(optionsCount) {
+        MenuOption.of(
+                accessor.menuOpcodes[it],
+                accessor.menuArguments0[it],
+                accessor.menuArguments1[it],
+                accessor.menuArguments2[it],
+                checkNotNull(accessor.menuTargetNames[it]),
+                checkNotNull(accessor.menuActions[it])
+        )
+    }.asReversed()
 
     override fun toString(): String {
         return "Menu(isOpen=$isOpen, optionsCount=$optionsCount, shape=$shape)"
