@@ -48,6 +48,7 @@ class WidgetDebug : DisposablePlugin<PluginSettings>() {
                         parentsString,
                         "$w",
                         "text: ${w.text}",
+                        "type: ${w.accessor.type}",
 //                        "textColor: ${w.textColor}",
 //                        "spellActionName: ${w.accessor.spellActionName}",
 //                        "spellName: ${w.accessor.spellName}",
