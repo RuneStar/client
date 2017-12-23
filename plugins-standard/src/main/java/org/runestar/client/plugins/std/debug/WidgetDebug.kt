@@ -49,15 +49,16 @@ class WidgetDebug : DisposablePlugin<PluginSettings>() {
                         "$w",
                         "text: ${w.text}",
                         "type: ${w.accessor.type}",
+                        "contentType: ${w.accessor.contentType}",
 //                        "textColor: ${w.textColor}",
 //                        "spellActionName: ${w.accessor.spellActionName}",
 //                        "spellName: ${w.accessor.spellName}",
 //                        "pad: ${w.accessor.paddingX}, ${w.accessor.paddingY}",
 //                        "okText: ${w.accessor.okText}",
-//                        "item: ${w.accessor.itemId} x ${w.accessor.itemQuantity}",
+                        "item: ${w.accessor.itemId} x ${w.accessor.itemQuantity}",
 //                        "scroll: ${w.accessor.scrollX}, ${w.accessor.scrollY}, ${w.accessor.scrollMax}",
-                        "dataText: ${w.accessor.dataText}"
-//                        "string1: ${w.accessor.string1}"
+                        "dataText: ${w.accessor.dataText}",
+                        "string1: ${w.accessor.string1}"
                 )
                 val x = 20
                 var y = 47

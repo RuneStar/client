@@ -19,6 +19,7 @@ interface WidgetGroupId {
 
     object Inventory : WidgetGroupId {
         override val id = 149
+        val items = WidgetParentId(id, 0)
     }
 
     object MinimapOrbs : WidgetGroupId {

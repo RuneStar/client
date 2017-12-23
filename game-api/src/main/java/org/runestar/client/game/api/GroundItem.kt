@@ -15,7 +15,9 @@ class GroundItem(
 
     val quantity get() = accessor.quantity
 
+    val item get() = Item(id, quantity)
+
     override fun toString(): String {
-        return "GroundItem(id=$id, quantity=$quantity, location=$location)"
+        return "GroundItem(item=$item, location=$location)"
     }
 }

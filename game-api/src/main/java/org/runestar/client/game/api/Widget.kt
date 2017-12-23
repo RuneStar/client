@@ -93,8 +93,36 @@ sealed class Widget(override val accessor: XWidget) : Wrapper() {
 
         override val ancestor get() = predecessor ?: group.parent
 
+        fun getItem(slot: Int): WidgetItem? {
+            return getItem(slot, location)
+        }
+
+        private fun getItem(slot: Int, location: Point?): WidgetItem? {
+            if (location == null) return null
+            if (accessor.type != 2) return null
+            val id = accessor.itemIds.getOrNull(slot) ?: return null
+            val quantity = accessor.itemQuantities.getOrNull(slot) ?: return null
+            val item = Item.of(id, quantity)
+            val row = slot / width
+            val col = slot % width
+            val x = location.x + ((ITEM_SLOT_SIZE + accessor.paddingX) * col)
+            val y = location.y + ((ITEM_SLOT_SIZE + accessor.paddingY) * row)
+            val rect = Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
+            return WidgetItem(item, rect)
+        }
+
+        val items: List<WidgetItem?>? get() {
+            if (accessor.type != 2) return null
+            val loc = location
+            return List(accessor.itemIds.size) { getItem(it, loc) }
+        }
+
         override fun toString(): String {
             return "Widget.Parent(group=${group.id}, parent=${parentId.parent})"
+        }
+
+        private companion object {
+            const val ITEM_SLOT_SIZE = 32
         }
     }
 }

@@ -1,26 +1,31 @@
 package org.runestar.client.plugins.std.debug
 
+import org.runestar.client.game.api.live.Inventory
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.plugins.utils.ColorForm
 import org.runestar.client.plugins.utils.DisposablePlugin
 import org.runestar.client.plugins.utils.FontForm
+import java.awt.Color
 import java.awt.Font
 
-class TestPlugin : DisposablePlugin<TestPlugin.Settings>() {
+class InventoryDebug : DisposablePlugin<InventoryDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
+            val x = 5
+            var y = 40
+            g.font = settings.font.get()
             g.color = settings.color.get()
-
-            Widgets.flat.forEach { w ->
-                val s = w.shape
-                if (s != null) {
-                    g.draw(s)
+            val container = Inventory.container
+            if (container != null) {
+                val items = container.get()
+                items.forEach { i ->
+                    g.drawString(i.toString(), x, y)
+                    y += g.font.size + 5
                 }
             }
         })
