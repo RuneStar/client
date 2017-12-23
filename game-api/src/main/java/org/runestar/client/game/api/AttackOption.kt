@@ -15,5 +15,12 @@ enum class AttackOption(override val accessor: XAttackOption) : Wrapped {
 
         @JvmField
         val LOOKUP = values().associateBy { it.accessor }
+
+        init {
+            val accessors = LOOKUP.values.toList()
+            check(accessors.distinct() == accessors) {
+                "Duplicate accessors: $LOOKUP"
+            }
+        }
     }
 }

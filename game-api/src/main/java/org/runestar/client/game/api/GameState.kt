@@ -5,7 +5,6 @@ enum class GameState(val id: Int) {
     NONE(0),
     STARTING(5),
     TITLE(10),
-    // 11 ?
     LOGGING_IN(20),
     LOADING(25),
     LOGGED_IN(30),

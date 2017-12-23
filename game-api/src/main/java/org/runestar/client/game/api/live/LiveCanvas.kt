@@ -30,7 +30,7 @@ object LiveCanvas : Canvas {
         g
     }.publish().refCount().map { it.create2D() }
 
-    val canvasReplacements: Observable<java.awt.Canvas> get() = XGameShell.replaceCanvas.exit.map { accessor.canvas }
+    val canvasReplacements: Observable<java.awt.Canvas> = XGameShell.replaceCanvas.exit.map { accessor.canvas }
             .startWith(accessor.canvas)
 
     /**

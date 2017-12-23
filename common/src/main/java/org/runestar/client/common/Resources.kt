@@ -2,6 +2,7 @@
 
 package org.runestar.client.common
 
+import java.awt.image.BufferedImage
 import java.lang.invoke.MethodHandles
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -10,7 +11,7 @@ import javax.imageio.ImageIO
 private val classLoader = MethodHandles.lookup().lookupClass().classLoader
 
 @JvmField
-val ICON = ImageIO.read(classLoader.getResource("icon.png"))
+val ICON: BufferedImage = ImageIO.read(classLoader.getResource("icon.png"))
 
 const val GROUP_ID = "org.runestar.client"
 

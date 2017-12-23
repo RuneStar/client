@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LocalSkillLevels
+import org.runestar.client.game.api.live.Stats
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.plugins.utils.ColorForm
 import org.runestar.client.plugins.utils.DisposablePlugin
@@ -21,7 +21,7 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
 
             var y = 35
             val x = 5
-            Skill.values().map { "$it ${LocalSkillLevels[it]}" }.forEach { s ->
+            Skill.values().map { "$it ${Stats[it]}" }.forEach { s ->
                 g.drawString(s, x, y)
                 y += g.font.size + 5
             }

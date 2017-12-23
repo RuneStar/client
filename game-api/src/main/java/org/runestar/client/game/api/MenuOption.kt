@@ -151,7 +151,7 @@ interface MenuOption {
         val id get() = argument0
     }
 
-    interface OnItem: MenuOption, MenuOption.InWidget {
+    interface OnItem: MenuOption, InWidget {
         val id get() = argument0
         val slot get() = argument1
     }
@@ -161,7 +161,7 @@ interface MenuOption {
         val widgetParent: Widget.Parent get() = checkNotNull(Widgets[widgetId])
     }
 
-    interface OnWidget: MenuOption, MenuOption.InWidget {
+    interface OnWidget: MenuOption, InWidget {
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
         val widget: Widget? get() = widgetParent.let { p -> widgetChildId?.let { c -> p[c] } ?: p }
     }
@@ -173,7 +173,7 @@ interface MenuOption {
         }
     }
 
-    data class OnWidgetSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnWidget {
+    data class OnWidgetSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnWidget {
         init {
             check(operator)
         }
@@ -185,7 +185,7 @@ interface MenuOption {
         }
     }
 
-    data class ButtonDialog(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.InWidget, MenuOption.Indexed {
+    data class ButtonDialog(private val menuOption: MenuOption) : MenuOption by menuOption, InWidget, Indexed {
         override val index get() = argument1
         init {
             check(operator)
@@ -198,7 +198,7 @@ interface MenuOption {
         }
     }
 
-    data class OnItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnItem {
+    data class OnItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, Indexed, OnItem {
         init {
             check(operator)
         }
@@ -211,7 +211,7 @@ interface MenuOption {
         }
     }
 
-    data class OnItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnItem {
+    data class OnItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnItem {
         init {
             check(operator)
         }
@@ -223,7 +223,7 @@ interface MenuOption {
         }
     }
 
-    data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnGroundItem, MenuOption.AtLocation {
+    data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, Indexed, OnGroundItem, AtLocation {
         override val plane: Int = accessor.plane
         init {
             check(operator)
@@ -240,7 +240,7 @@ interface MenuOption {
         }
     }
 
-    data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnGroundItem, MenuOption.AtLocation {
+    data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnGroundItem, AtLocation {
         override val plane: Int = accessor.plane
         init {
             check(operator)
@@ -265,7 +265,7 @@ interface MenuOption {
         }
     }
 
-    data class WalkHere(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnScreen {
+    data class WalkHere(private val menuOption: MenuOption) : MenuOption by menuOption, OnScreen {
         init {
             check(operator)
         }
@@ -277,7 +277,7 @@ interface MenuOption {
         }
     }
 
-    data class OnObjectIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.AtLocation, MenuOption.Indexed, MenuOption.OnObject {
+    data class OnObjectIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, AtLocation, Indexed, OnObject {
         init {
             check(operator)
         }
@@ -306,7 +306,7 @@ interface MenuOption {
         override val target: Player? get() = super.target as Player?
     }
 
-    data class OnNpcIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnNpc {
+    data class OnNpcIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, Indexed, OnNpc {
         init {
             check(operator)
         }
@@ -322,7 +322,7 @@ interface MenuOption {
         }
     }
 
-    data class OnPlayerIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.Indexed, MenuOption.OnPlayer {
+    data class OnPlayerIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, Indexed, OnPlayer {
         init {
             check(operator)
         }
@@ -338,7 +338,7 @@ interface MenuOption {
         }
     }
 
-    data class OnNpcSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnNpc {
+    data class OnNpcSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnNpc {
         init {
             check(operator)
         }
@@ -350,7 +350,7 @@ interface MenuOption {
         }
     }
 
-    data class OnPlayerSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnPlayer {
+    data class OnPlayerSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnPlayer {
         init {
             check(operator)
         }
@@ -362,7 +362,7 @@ interface MenuOption {
         }
     }
 
-    data class OnObjectSimple(private val menuOption: MenuOption) : MenuOption by menuOption, MenuOption.OnObject, MenuOption.AtLocation {
+    data class OnObjectSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnObject, AtLocation {
         init {
             check(operator)
         }
