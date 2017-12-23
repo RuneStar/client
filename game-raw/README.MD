@@ -7,11 +7,11 @@ Direct access to game values through:
  through getters and setters. Callbacks for methods are found as static fields.
 
 * A singleton for accessing the `client` class instance. It is not initialized here but must
- be done elsewhere (This is done in the [client](https://github.com/RuneSuite/client/tree/master/client)
+ be done elsewhere (This is done in the [client](https://github.com/RuneStar/client/tree/master/client)
  module).
  
- Generated sources available [here](http://repo.runesuite.com/com/runesuite/client/client-game-raw/).
+ Generated sources available [here](http://repo.runestar.org/com/RuneStar/client/client-game-raw/).
  
 #### Build Dependencies:
 
-* [game-raw-accessors-maven-plugin](https://github.com/RuneSuite/client/tree/master/game-raw-accessors-maven-plugin) - Generates all of the accessor interfaces.
+* [game-raw-accessors-maven-plugin](https://github.com/RuneStar/client/tree/master/game-raw-accessors-maven-plugin) - Generates all of the accessor interfaces.

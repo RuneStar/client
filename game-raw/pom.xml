@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.runesuite.client</groupId>
+        <groupId>org.runestar.client</groupId>
         <artifactId>client-parent</artifactId>
         <version>0.160.0-SNAPSHOT</version>
     </parent>
@@ -38,9 +38,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputPackage>com.runesuite.client.game.raw.access</outputPackage>
-                    <accessorClass>com.runesuite.client.game.raw.Accessor</accessorClass>
-                    <callbackFieldClass>com.runesuite.client.game.raw.MethodExecution</callbackFieldClass>
+                    <outputPackage>org.runestar.client.game.raw.access</outputPackage>
+                    <accessorClass>org.runestar.client.game.raw.Accessor</accessorClass>
+                    <callbackFieldClass>org.runestar.client.game.raw.MethodExecution</callbackFieldClass>
                     <callbackFieldInitializer>new MethodExecution.Implementation()</callbackFieldInitializer>
                 </configuration>
             </plugin>

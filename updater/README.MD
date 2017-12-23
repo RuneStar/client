@@ -8,23 +8,23 @@
 
 * a deobfuscated gamepack jar (~500 KB)
 
-[Download](http://repo.runesuite.com/com/runesuite/client/client-updater/)
+[Download](http://repo.runestar.org/com/RuneStar/client/client-updater/)
 
 #### Dependencies:
 
-* [updater-common](https://github.com/RuneSuite/client/tree/master/updater-common)
+* [updater-common](https://github.com/RuneStar/client/tree/master/updater-common)
 
 
 #### Build dependencies:
 
-* [general](https://github.com/RuneSuite/general) - Utilities for getting the current game revision and downloading the current gamepack jar
+* [general](https://github.com/RuneStar/general) - Utilities for getting the current game revision and downloading the current gamepack jar
 
-* [updater-deob](https://github.com/RuneSuite/client/tree/master/updater-deob) - Does various bytecode deobfuscation, transformation, and analysis
+* [updater-deob](https://github.com/RuneStar/client/tree/master/updater-deob) - Does various bytecode deobfuscation, transformation, and analysis
 
-* [updater-mapper](https://github.com/RuneSuite/client/tree/master/updater-mapper) - Framework for mapping obfuscated names to their actual names 
+* [updater-mapper](https://github.com/RuneStar/client/tree/master/updater-mapper) - Framework for mapping obfuscated names to their actual names
 
-* [updater-mapper-standard](https://github.com/RuneSuite/client/tree/master/updater-mapper-standard) - Implementation of updater-mapper for Old School RuneScape
+* [updater-mapper-standard](https://github.com/RuneStar/client/tree/master/updater-mapper-standard) - Implementation of updater-mapper for Old School RuneScape
 
-* [updater-create-maven-plugin](https://github.com/RuneSuite/client/tree/master/updater-create-maven-plugin) - Downloads the current gamepack jar and generates the needed resources
+* [updater-create-maven-plugin](https://github.com/RuneStar/client/tree/master/updater-create-maven-plugin) - Downloads the current gamepack jar and generates the needed resources
 
-Testing done in [updater-testing](https://github.com/RuneSuite/client/tree/master/updater-testing)
+Testing done in [updater-testing](https://github.com/RuneStar/client/tree/master/updater-testing)

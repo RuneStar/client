@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.runesuite.client</groupId>
+    <groupId>org.runestar.client</groupId>
     <artifactId>client-parent</artifactId>
     <version>0.160.0-SNAPSHOT</version>
 
@@ -53,8 +53,8 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>repo.runesuite.com</id>
-            <url>http://repo.runesuite.com</url>
+            <id>repo.runestar.org</id>
+            <url>http://repo.runestar.org</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -133,9 +133,9 @@
                 <version>${asm.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.runesuite</groupId>
+                <groupId>org.runestar</groupId>
                 <artifactId>general</artifactId>
-                <version>0.160.0</version>
+                <version>0.160.1</version>
             </dependency>
             <dependency>
                 <groupId>com.hunterwb</groupId>
