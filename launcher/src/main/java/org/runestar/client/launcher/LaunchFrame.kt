@@ -2,6 +2,7 @@ package org.runestar.client.launcher
 
 import org.eclipse.aether.transfer.TransferEvent
 import org.eclipse.aether.transfer.TransferListener
+import org.runestar.client.common.ICON
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.*
@@ -17,6 +18,7 @@ internal class LaunchFrame : JFrame("Launching RuneStar..."), TransferListener {
     }
 
     init {
+        iconImage = ICON
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         setLocationRelativeTo(null)
         contentPane = Box.createVerticalBox()

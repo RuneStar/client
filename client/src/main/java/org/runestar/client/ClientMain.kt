@@ -15,6 +15,7 @@ import org.runestar.general.JavConfig
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.bufferedimage.toCompatibleImage
 import org.kxtra.swing.mouseevent.isLeftButton
+import org.runestar.client.common.ICON
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -28,10 +29,6 @@ import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
 private val logger = getLogger()
-
-private val classLoader = MethodHandles.lookup().lookupClass().classLoader
-
-internal val ICON = ImageIO.read(classLoader.getResource("icon.png")).toCompatibleImage()
 
 fun main(args: Array<String>) {
     systemStartUp()
