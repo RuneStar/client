@@ -14,6 +14,8 @@ object UnusedTryCatchRemover : Deobfuscator {
 
     private val logger = getLogger()
 
+    private val RUNTIME_EXCEPTION_INTERNAL_NAME = Type.getInternalName(RuntimeException::class.java)
+
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
         var removedTryCatches = 0
@@ -21,7 +23,7 @@ object UnusedTryCatchRemover : Deobfuscator {
             val tcbs = m.tryCatchBlocks.iterator()
             while (tcbs.hasNext()) {
                 val tcb = tcbs.next()
-                if (tcb.type == Type.getInternalName(RuntimeException::class.java)) {
+                if (tcb.type == RUNTIME_EXCEPTION_INTERNAL_NAME) {
                     val insns = m.instructions.iterator(m.instructions.indexOf(tcb.handler))
                     var insn: AbstractInsnNode
                     do {

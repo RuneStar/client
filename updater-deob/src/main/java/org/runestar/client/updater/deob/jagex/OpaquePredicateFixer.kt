@@ -23,7 +23,7 @@ object OpaquePredicateFixer : Deobfuscator {
 
     override fun deob(source: Path, destination: Path) {
         val classNodes = readJar(source)
-        val passingArgs: MutableMap<String, Int> = TreeMap()
+        val passingArgs = TreeMap<String, Int>()
         var returns = 0
         var exceptions = 0
         classNodes.forEach { c ->

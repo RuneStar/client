@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
+import com.google.common.collect.MultimapBuilder
 import org.runestar.client.updater.deob.Deobfuscator
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
@@ -25,17 +26,17 @@ object UnusedMethodRemover : Deobfuscator {
         val classNodes = readJar(source)
         val classNodeNames = classNodes.associate { it.name to it }
 
-        val supers = ArrayListMultimap.create<ClassNode, ClassNode>()
+        val supers = MultimapBuilder.hashKeys().arrayListValues().build<ClassNode, ClassNode>()
         classNodes.forEach { c ->
             c.interfaces.filter { classNodeNames.containsKey(it) }.forEach { i ->
-                supers.put(c, classNodeNames[i])
+                supers.put(c, classNodeNames.getValue(i))
             }
             if (classNodeNames.containsKey(c.superName)) {
-                supers.put(c, classNodeNames[c.superName])
+                supers.put(c, classNodeNames.getValue(c.superName))
             }
         }
 
-        val subs = ArrayListMultimap.create<ClassNode, ClassNode>()
+        val subs = MultimapBuilder.hashKeys().arrayListValues().build<ClassNode, ClassNode>()
         supers.forEach { k, v ->
             subs.put(v, k)
         }

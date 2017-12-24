@@ -39,7 +39,7 @@ object ControlFlowFixer : Deobfuscator {
         }
         val stack: Queue<Block> = Collections.asLifoQueue(ArrayDeque())
         stack.add(blocks.first())
-        val placed: MutableSet<Block> = HashSet()
+        val placed = HashSet<Block>()
         while (stack.isNotEmpty()) {
             val b = stack.remove()
             if (b in placed) continue

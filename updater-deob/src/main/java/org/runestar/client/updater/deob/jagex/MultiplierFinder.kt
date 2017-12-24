@@ -77,7 +77,10 @@ object MultiplierFinder : Deobfuscator {
                                 val currStackSize = frames[i].stackSize
                                 if (mulStackSlots.isNotEmpty() && currStackSize - 1 == mulStackSlots.lastKey()) {
                                     val fieldName = "${insn.owner}.${insn.name}"
-                                    encodersRaw.put(fieldName, mulStackSlots.remove(mulStackSlots.lastKey()))
+                                    encodersRaw.put(
+                                            fieldName,
+                                            checkNotNull(mulStackSlots.remove(mulStackSlots.lastKey()))
+                                    )
                                 }
                             }
                         }

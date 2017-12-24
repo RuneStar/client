@@ -43,6 +43,10 @@
             </snapshots>
         </repository>
         <repository>
+            <id>repo.runestar.org</id>
+            <url>http://repo.runestar.org</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
             <snapshots>

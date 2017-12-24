@@ -2,7 +2,6 @@
 
 package org.runestar.client.launcher
 
-import org.runestar.client.common.*
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.artifact.DefaultArtifact
@@ -16,7 +15,7 @@ import org.eclipse.aether.spi.connector.RepositoryConnectorFactory
 import org.eclipse.aether.spi.connector.transport.TransporterFactory
 import org.eclipse.aether.transport.file.FileTransporterFactory
 import org.eclipse.aether.transport.http.HttpTransporterFactory
-import java.io.IOException
+import org.runestar.client.common.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
