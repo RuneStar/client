@@ -3,6 +3,9 @@
 package org.runestar.client
 
 import com.alee.laf.WebLookAndFeel
+import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.swing.mouseevent.isLeftButton
+import org.runestar.client.common.ICON
 import org.runestar.client.common.PLUGINS_DIR_PATH
 import org.runestar.client.common.PLUGINS_JARS_DIR_PATH
 import org.runestar.client.common.TITLE
@@ -12,23 +15,19 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.PluginLoader
 import org.runestar.general.JavConfig
-import org.kxtra.slf4j.loggerfactory.getLogger
-import org.kxtra.swing.bufferedimage.toCompatibleImage
-import org.kxtra.swing.mouseevent.isLeftButton
-import org.runestar.client.common.ICON
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.lang.invoke.MethodHandles
-import javax.imageio.ImageIO
 import javax.swing.JFrame
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
 private val logger = getLogger()
+
+val trayIcon = TrayIcon(ICON, TITLE)
 
 fun main(args: Array<String>) {
     systemStartUp()
@@ -85,13 +84,12 @@ fun main(args: Array<String>) {
         })
     }
 
-    val trayIcon = TrayIcon(ICON, TITLE,
-            PopupMenu(TITLE).apply {
-                add(MenuItem("Plugins").apply {
-                    addActionListener { openPluginsAction() }
-                })
-            }
-    ).apply {
+    trayIcon.apply {
+        popupMenu = PopupMenu(TITLE).apply {
+            add(MenuItem("Plugins").apply {
+                addActionListener { openPluginsAction() }
+            })
+        }
         isImageAutoSize = true
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {

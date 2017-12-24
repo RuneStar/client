@@ -42,10 +42,10 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>repo.runestar.org</id>
-            <url>http://repo.runestar.org</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>repo.runestar.org</id>-->
+            <!--<url>http://repo.runestar.org</url>-->
+        <!--</repository>-->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -236,6 +236,12 @@
                 <artifactId>maven-plugin-annotations</artifactId>
                 <scope>provided</scope>
                 <version>3.5</version>
+            </dependency>
+            <dependency>
+                <groupId>de.sciss</groupId>
+                <artifactId>weblaf</artifactId>
+                <version>1.28</version>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

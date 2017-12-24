@@ -23,25 +23,7 @@
         </dependency>
         <dependency>
             <groupId>org.runestar.client</groupId>
-            <artifactId>client-plugins</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.runestar.client</groupId>
-            <artifactId>client-plugins-utils</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.runestar.client</groupId>
-            <artifactId>client-game-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.runestar.client</groupId>
-            <artifactId>client-game-raw</artifactId>
+            <artifactId>client</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
