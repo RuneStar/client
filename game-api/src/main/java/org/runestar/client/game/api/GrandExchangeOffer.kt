@@ -5,6 +5,15 @@ import org.runestar.client.game.raw.access.XGrandExchangeOffer
 
 class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper() {
 
+    companion object {
+
+        @JvmStatic
+        fun of(accessor: XGrandExchangeOffer): GrandExchangeOffer? {
+            if (accessor.id == 0) return null
+            return GrandExchangeOffer(accessor)
+        }
+    }
+
     init {
         require(accessor.id != 0)
     }

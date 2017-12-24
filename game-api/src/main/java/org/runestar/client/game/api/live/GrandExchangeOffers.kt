@@ -8,14 +8,14 @@ object GrandExchangeOffers {
     val CAPACITY = accessor.grandExchangeOffers.size
 
     val all: List<GrandExchangeOffer> get() {
-        return accessor.grandExchangeOffers.mapNotNull { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }
+        return accessor.grandExchangeOffers.mapNotNull { it?.let { GrandExchangeOffer.of(it) } }
     }
 
     fun get(): List<GrandExchangeOffer?> {
-        return accessor.grandExchangeOffers.map { it?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) } }
+        return accessor.grandExchangeOffers.map { it?.let { GrandExchangeOffer.of(it) } }
     }
 
     operator fun get(index: Int): GrandExchangeOffer? {
-        return accessor.grandExchangeOffers[index]?.takeIf { it.id != 0 }?.let { GrandExchangeOffer(it) }
+        return accessor.grandExchangeOffers.getOrNull(index)?.let { GrandExchangeOffer.of(it) }
     }
 }
