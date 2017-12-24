@@ -13,9 +13,18 @@
     <artifactId>client-game-raw</artifactId>
     <packaging>jar</packaging>
 
-    <name>client/game-raw</name>
+    <name>client/game/raw</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.jakewharton.rxrelay2</groupId>
             <artifactId>rxrelay</artifactId>

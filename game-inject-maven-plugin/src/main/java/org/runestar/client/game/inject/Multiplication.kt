@@ -1,4 +1,4 @@
-package org.runestar.client.inject
+package org.runestar.client.game.inject
 
 import net.bytebuddy.implementation.Implementation
 import net.bytebuddy.implementation.bytecode.Addition

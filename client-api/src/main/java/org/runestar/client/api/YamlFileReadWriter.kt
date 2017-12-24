@@ -1,4 +1,4 @@
-package org.runestar.client
+package org.runestar.client.api
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import org.runestar.client.plugins.FileReadWriter

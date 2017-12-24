@@ -1,4 +1,4 @@
-package org.runestar.client.inject
+package org.runestar.client.game.inject
 
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.updater.GAMEPACK_CLEAN
@@ -9,7 +9,6 @@ import org.runestar.client.updater.common.decoderNarrowed
 import org.runestar.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
-import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.ClassFileLocator
 import net.bytebuddy.dynamic.scaffold.TypeValidation
 import net.bytebuddy.implementation.FieldAccessor
@@ -67,7 +66,7 @@ class InjectMojo : AbstractMojo() {
             val typeDescription = typePool.describe(cn).resolve()
             var typeBuilder = ByteBuddy().with(TypeValidation.DISABLED).rebase<Any>(typeDescription, classFileLocator)
             HOOKS.forEach { ch ->
-                val xClass = Class.forName("$accessPkg.X${ch.`class`}")
+                val xClass = Class.forName("${accessPkg}.X${ch.`class`}")
                 if (cn == ch.name) {
                     typeBuilder = typeBuilder.implement(xClass)
                     log.info("Injected interface: ${xClass.simpleName} -> ${ch.name}")

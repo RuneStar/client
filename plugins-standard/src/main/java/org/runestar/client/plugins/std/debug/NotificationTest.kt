@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.std.debug
 
-import org.runestar.client.trayIcon
+import org.runestar.client.api.trayIcon
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.plugins.utils.DisposablePlugin

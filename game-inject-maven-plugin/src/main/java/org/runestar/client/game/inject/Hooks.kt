@@ -1,4 +1,4 @@
-package org.runestar.client.inject
+package org.runestar.client.game.inject
 
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook

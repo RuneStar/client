@@ -13,9 +13,19 @@
     <artifactId>client-game-raw-accessors-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
-    <name>client/game-raw/accessors-maven-plugin</name>
+    <name>client/game/raw/accessors-maven-plugin</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
@@ -40,7 +50,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${asm.groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-updater-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
         </dependency>
         <dependency>

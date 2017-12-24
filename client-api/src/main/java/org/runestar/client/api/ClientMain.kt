@@ -1,6 +1,6 @@
 @file:JvmName("ClientMain")
 
-package org.runestar.client
+package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -27,7 +27,12 @@ import javax.swing.WindowConstants
 
 private val logger = getLogger()
 
-val trayIcon = TrayIcon(ICON, TITLE)
+val trayIcon = TrayIcon(ICON, TITLE).apply {
+    isImageAutoSize = true
+}
+
+lateinit var frame: JFrame
+    private set
 
 fun main(args: Array<String>) {
     systemStartUp()
@@ -38,7 +43,6 @@ fun main(args: Array<String>) {
     val applet = Client.accessor as java.applet.Applet
     appletPreInit(applet, javConfig)
 
-    lateinit var frame: JFrame
     SwingUtilities.invokeAndWait {
         frame = newGameWindow(applet)
     }
@@ -90,7 +94,6 @@ fun main(args: Array<String>) {
                 addActionListener { openPluginsAction() }
             })
         }
-        isImageAutoSize = true
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
                 if (e.isLeftButton) frame.state = Frame.NORMAL

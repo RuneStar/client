@@ -13,9 +13,14 @@
     <artifactId>client-game-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>client/game-api</name>
+    <name>client/game/api</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>client-game-raw</artifactId>

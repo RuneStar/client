@@ -1,4 +1,4 @@
-package org.runestar.client
+package org.runestar.client.api
 
 import com.alee.extended.button.WebSwitch
 import com.alee.laf.button.WebButton

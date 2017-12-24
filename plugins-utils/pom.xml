@@ -17,8 +17,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>${kotlin.groupId}</groupId>
+            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.runestar.client</groupId>
@@ -26,18 +27,20 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.runestar.client</groupId>
-            <artifactId>client-game-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.runestar.client</groupId>
-            <artifactId>client-game-raw</artifactId>
-            <version>${project.version}</version>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kxtra</groupId>
             <artifactId>kxtra-swing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kxtra</groupId>
+            <artifactId>kxtra-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
         </dependency>
     </dependencies>
 </project>
