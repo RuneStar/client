@@ -1,8 +1,8 @@
 package org.runestar.client.plugins
 
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.nio.file.Path
-import javax.annotation.OverridingMethodsMustInvokeSuper
 
 abstract class Plugin<T : PluginSettings> {
 
