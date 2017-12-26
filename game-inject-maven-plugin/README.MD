@@ -1,4 +1,4 @@
-# gamepack-inject-maven-plugin
+# game-inject-maven-plugin
 
 Injects the [game-raw](https://github.com/RuneStar/client/tree/master/game-raw) interfaces into the original gamepack.
 
