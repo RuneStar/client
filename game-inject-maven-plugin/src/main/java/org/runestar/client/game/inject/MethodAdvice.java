@@ -24,9 +24,9 @@ interface MethodAdvice {
             @Advice.AllArguments Object[] arguments
     ) throws Throwable {
         MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
-        if (execImpl.getEnter().hasObservers() || execImpl.getExit().hasObservers()) {
-            MethodEvent.Implementation event = new MethodEvent.Implementation(execImpl.counter.getAndIncrement(), instance, arguments);
-            execImpl.getEnter().accept(event);
+        if (execImpl.hasObservers()) {
+            MethodEvent.Implementation event = new MethodEvent.Implementation(instance, arguments);
+            execImpl._enter.accept(event);
             return event;
         } else {
             return null;
@@ -42,7 +42,7 @@ interface MethodAdvice {
     ) throws Throwable {
         if (event != null) {
             event.returned = returned;
-            ((MethodExecution.Implementation) exec).getExit().accept(event);
+            ((MethodExecution.Implementation) exec)._exit.accept(event);
         }
     }
 }

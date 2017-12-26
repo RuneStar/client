@@ -30,13 +30,18 @@ interface MethodExecution<I, R> {
     /**
      * For internal use only.
      */
-    class Implementation<I, R> : MethodExecution<I, R> {
+    class Implementation<I, R> internal constructor(): MethodExecution<I, R>  {
 
         @JvmField
-        val counter = AtomicLong(0)
+        val _enter: PublishRelay<MethodEvent.Enter<I>> = PublishRelay.create<MethodEvent.Enter<I>>()
 
-        override val enter = PublishRelay.create<MethodEvent.Enter<I>>()
+        override val enter: Observable<MethodEvent.Enter<I>> get() = _enter
 
-        override val exit = PublishRelay.create<MethodEvent.Exit<I, R>>()
+        @JvmField
+        val _exit: PublishRelay<MethodEvent.Exit<I, R>> = PublishRelay.create<MethodEvent.Exit<I, R>>()
+
+        override val exit: Observable<MethodEvent.Exit<I, R>> get() = _exit
+
+        fun hasObservers() = _enter.hasObservers() || _exit.hasObservers()
     }
 }

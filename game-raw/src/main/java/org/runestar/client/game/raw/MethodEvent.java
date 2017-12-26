@@ -11,8 +11,6 @@ import java.util.Arrays;
  */
 public interface MethodEvent<I> {
 
-    long getId();
-
     /**
      * The instance the method was called on, {@code null} for {@code static} methods.
      */
@@ -51,8 +49,6 @@ public interface MethodEvent<I> {
      */
     class Implementation<I, R> implements MethodEvent.Enter<I>, MethodEvent.Exit<I, R> {
 
-        public final long id;
-
         public final I instance;
 
         @NotNull
@@ -60,15 +56,9 @@ public interface MethodEvent<I> {
 
         public R returned;
 
-        public Implementation(long id, I instance, @NotNull Object[] arguments) {
-            this.id = id;
+        public Implementation(I instance, @NotNull Object[] arguments) {
             this.instance = instance;
             this.arguments = arguments;
-        }
-
-        @Override
-        public long getId() {
-            return id;
         }
 
         @Override
@@ -90,8 +80,7 @@ public interface MethodEvent<I> {
         @Override
         public String toString() {
             return "MethodEvent(" +
-                    "id=" + id +
-                    ", instance=" + instance +
+                    "instance=" + instance +
                     ", arguments=" + Arrays.toString(arguments) +
                     ", returned=" + returned +
                     ')';
