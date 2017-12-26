@@ -15,7 +15,7 @@
     <modules>
         <module>launcher</module>
         <module>client</module>
-        <module>client-api</module>
+        <module>api</module>
         <module>common</module>
         <module>game-api</module>
         <module>game-raw</module>
