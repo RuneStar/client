@@ -2,6 +2,8 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XActor
+import org.runestar.client.game.raw.access.XHealthBar
+import org.runestar.client.game.raw.access.XHitSplat
 
 abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTargeting {
 
@@ -20,4 +22,20 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
     override val orientation get() = Angle(accessor.orientation)
 
     val overheadText: String? get() = accessor.overheadText
+
+    /**
+     * Health percent between `0.0` and `1.0` of limited precision. `null` if the health-bar is not visible.
+     */
+    val health: Double? get() {
+        val healthBars = accessor.healthBars ?: return null
+        val healthBar = healthBars.sentinel.next
+        if (healthBar is XHealthBar) {
+            val hitSplat = healthBar.hitSplats.sentinel.next
+            if (hitSplat is XHitSplat) {
+                val def = healthBar.definition ?: return null
+                return hitSplat.health.toDouble() / def.width
+            }
+        }
+        return null
+    }
 }

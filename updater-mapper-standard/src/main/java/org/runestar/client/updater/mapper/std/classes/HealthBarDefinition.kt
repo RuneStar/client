@@ -10,6 +10,7 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.tree.Instruction2
 
@@ -67,12 +68,14 @@ class HealthBarDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    @MethodParameters()
     @DependsOn(Sprite::class, spriteId1::class)
     class getSprite1 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
                 .and { it.instructions.any { it.isField && it.fieldId == field<spriteId1>().id } }
     }
 
+    @MethodParameters()
     @DependsOn(Sprite::class, spriteId2::class)
     class getSprite2 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
