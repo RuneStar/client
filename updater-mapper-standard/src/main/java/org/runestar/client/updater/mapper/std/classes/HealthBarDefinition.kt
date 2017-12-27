@@ -51,19 +51,31 @@ class HealthBarDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int6 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 5) {
+    class spriteId1 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int7 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 6) {
+    class spriteId2 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int8 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 7) {
+    class width : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int9 : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 8) {
+    class widthPadding : OrderMapper.InConstructor.Field(HealthBarDefinition::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Sprite::class, spriteId1::class)
+    class getSprite1 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.instructions.any { it.isField && it.fieldId == field<spriteId1>().id } }
+    }
+
+    @DependsOn(Sprite::class, spriteId2::class)
+    class getSprite2 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.instructions.any { it.isField && it.fieldId == field<spriteId2>().id } }
     }
 }

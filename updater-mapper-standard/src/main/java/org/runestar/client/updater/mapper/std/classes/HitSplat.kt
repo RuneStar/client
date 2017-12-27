@@ -26,11 +26,11 @@ class HitSplat : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int1 : OrderMapper.InConstructor.Field(HitSplat::class, 2) {
+    class health2 : OrderMapper.InConstructor.Field(HitSplat::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int2 : OrderMapper.InConstructor.Field(HitSplat::class, 3) {
+    class cycleOffset : OrderMapper.InConstructor.Field(HitSplat::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

@@ -2478,4 +2478,13 @@ class Client : IdentityMapper.Class() {
 //                .and { it.arguments.size in 2..3 }
 //                .and { it.arguments.startsWith(type<Buffer>(), INT_TYPE) }
 //    }
+
+    @MethodParameters("node", "old")
+    @DependsOn(IterableNodeDeque::class, Node::class)
+    class IterableNodeDeque_addBefore : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<IterableNodeDeque>() }
+                .and { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(type<Node>(), type<Node>()) }
+    }
 }
