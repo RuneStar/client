@@ -9,7 +9,6 @@ import com.alee.laf.scroll.WebScrollPane
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
-import org.runestar.client.plugins.utils.openFile
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.WindowAdapter

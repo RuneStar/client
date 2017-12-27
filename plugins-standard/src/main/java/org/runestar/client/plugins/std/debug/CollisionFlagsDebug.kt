@@ -2,9 +2,9 @@ package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.plugins.utils.ColorForm
-import org.runestar.client.plugins.utils.DisposablePlugin
-import org.runestar.client.plugins.utils.FontForm
+import org.runestar.client.utils.ColorForm
+import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.utils.FontForm
 import org.kxtra.swing.graphics2d.drawString
 import java.awt.Font
 import java.awt.Point

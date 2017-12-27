@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.utils
+package org.runestar.client.api
 
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.logger.warn

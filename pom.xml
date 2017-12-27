@@ -23,7 +23,7 @@
         <module>game</module>
         <module>game-inject-maven-plugin</module>
         <module>plugins</module>
-        <module>plugins-utils</module>
+        <module>utils</module>
         <module>plugins-standard</module>
         <module>updater</module>
         <module>updater-common</module>

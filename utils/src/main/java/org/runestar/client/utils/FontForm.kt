@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.utils
+package org.runestar.client.utils
 
 import org.kxtra.swing.font.Font
 import java.awt.Font

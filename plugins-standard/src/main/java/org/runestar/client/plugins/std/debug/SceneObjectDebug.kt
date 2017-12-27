@@ -4,7 +4,7 @@ import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.SceneObjects
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.plugins.utils.DisposablePlugin
+import org.runestar.client.utils.DisposablePlugin
 import org.kxtra.swing.graphics2d.drawString
 import java.awt.Color
 

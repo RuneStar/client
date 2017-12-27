@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.utils
+package org.runestar.client.utils
 
 import java.awt.Color
 import java.util.function.Supplier

@@ -4,9 +4,9 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.plugins.utils.ColorForm
-import org.runestar.client.plugins.utils.DisposablePlugin
-import org.runestar.client.plugins.utils.FontForm
+import org.runestar.client.utils.ColorForm
+import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.utils.FontForm
 import java.awt.Font
 
 class MenuDebug : DisposablePlugin<MenuDebug.Settings>() {
