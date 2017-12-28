@@ -37,9 +37,6 @@ internal class PluginHolder<T : PluginSettings>(
 
     private var ignoreNextEvent = false
 
-    override var isDestroyed = false
-
-    private var isCreated = false
 
     override val name: String get() = plugin.javaClass.name
 
@@ -48,40 +45,31 @@ internal class PluginHolder<T : PluginSettings>(
     init {
         addIndividualFileLogger()
         plugin.directory = directory
-    }
-
-    internal fun create() {
         createSettings()
-        if (isDestroyed) return
-        if (!plugin.settings.enabled) return
-        createPlugin()
-        if (isDestroyed) return
-        startPlugin()
-    }
-
-    override fun enable() {
-        executor.submit {
-            if (isDestroyed || plugin.settings.enabled) return@submit
-            plugin.settings.enabled = true
-            writeSettings()
-            if (isDestroyed) return@submit
-            if (!isCreated) createPlugin()
-            if (isDestroyed) return@submit
+        if (isRunning) {
             startPlugin()
         }
     }
 
-    override fun disable() {
+    override fun start() {
         executor.submit {
-            if (isDestroyed || !plugin.settings.enabled) return@submit
+            if (isRunning) return@submit
+            plugin.settings.enabled = true
+            startPlugin()
+            writeSettings()
+        }
+    }
+
+    override fun stop() {
+        executor.submit {
+            if (!isRunning) return@submit
             plugin.settings.enabled = false
             writeSettings()
-            if (isDestroyed) return@submit
             stopPlugin()
         }
     }
 
-    override val isEnabled: Boolean get() {
+    override val isRunning: Boolean get() {
         return plugin.settings.enabled
     }
 
@@ -93,7 +81,10 @@ internal class PluginHolder<T : PluginSettings>(
             logger.info("Write successful.")
         } catch (e: IOException) {
             logger.warn("Write failed.", e)
-            destroy()
+            if (isRunning) {
+                stopPlugin()
+                plugin.settings.enabled = false
+            }
         }
     }
 
@@ -125,9 +116,7 @@ internal class PluginHolder<T : PluginSettings>(
             ignoreNextEvent = false
             return
         }
-        if (isDestroyed) return
-        if (plugin.settings.enabled) stopPlugin()
-        if (isDestroyed) return
+        if (isRunning) stopPlugin()
         if (Files.notExists(settingsFile)) {
             logger.info("Settings file missing. Switching to default settings.")
             plugin.settings = plugin.defaultSettings
@@ -136,29 +125,15 @@ internal class PluginHolder<T : PluginSettings>(
             logger.info("Settings file modified. Reading new settings...")
             readSettings()
         }
-        if (isDestroyed) return
-        if (plugin.settings.enabled) {
-            if (!isCreated) createPlugin()
-            if (isDestroyed) return
+        if (isRunning) {
             startPlugin()
         }
     }
 
     internal fun destroy() {
         watchKey.cancel()
-        if (isDestroyed || !isCreated) return
-        if (plugin.settings.enabled) stopPlugin()
-        if (isDestroyed) return
-        destroyPlugin()
-    }
-
-    private fun createPlugin() {
-        isCreated = true
-        try {
-            plugin.create()
-        } catch (e: Exception) {
-            logger.warn("Exception creating plugin.", e)
-            destroy()
+        if (isRunning) {
+            stopPlugin()
         }
     }
 
@@ -167,7 +142,8 @@ internal class PluginHolder<T : PluginSettings>(
             plugin.start()
         } catch (e: Exception) {
             logger.warn("Exception starting plugin.", e)
-            destroy()
+            stopPlugin()
+            plugin.settings.enabled = false
         }
     }
 
@@ -176,16 +152,7 @@ internal class PluginHolder<T : PluginSettings>(
             plugin.stop()
         } catch (e: Exception) {
             logger.warn("Exception stopping plugin.", e)
-            destroy()
-        }
-    }
-
-    private fun destroyPlugin() {
-        isDestroyed = true
-        try {
-            plugin.destroy()
-        } catch (e: Exception) {
-            logger.warn("Exception destroying plugin.", e)
+            plugin.settings.enabled = false
         }
     }
 

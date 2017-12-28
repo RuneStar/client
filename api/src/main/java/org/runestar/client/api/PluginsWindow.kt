@@ -60,10 +60,9 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
         currentBox.apply {
             removeAll()
             val switch = WebSwitch().apply {
-                if (plugin.isDestroyed) isEnabled = false else isSelected = plugin.isEnabled
                 maximumSize = preferredSize
                 addActionListener {
-                    if (this.isSelected) plugin.enable() else plugin.disable()
+                    if (this.isSelected) plugin.start() else plugin.stop()
                 }
             }
             add(switch)
@@ -92,12 +91,8 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
         val switch = selectedPluginSwitch
         val plugin = selectedPlugin
         if (switch != null && plugin != null) {
-            if (plugin.isDestroyed && switch.isEnabled) {
-                switch.isEnabled = false
-                revalidate()
-                repaint()
-            } else if (switch.isSelected != plugin.isEnabled) {
-                switch.isSelected = plugin.isEnabled
+            if (switch.isSelected != plugin.isRunning) {
+                switch.isSelected = plugin.isRunning
                 revalidate()
                 repaint()
             }

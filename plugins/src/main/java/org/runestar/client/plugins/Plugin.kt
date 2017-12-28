@@ -21,11 +21,6 @@ abstract class Plugin<T : PluginSettings> {
         internal set
 
     @OverridingMethodsMustInvokeSuper
-    open fun create() {
-        logger.info("create")
-    }
-
-    @OverridingMethodsMustInvokeSuper
     open fun start() {
         logger.info("start")
     }
@@ -33,10 +28,5 @@ abstract class Plugin<T : PluginSettings> {
     @OverridingMethodsMustInvokeSuper
     open fun stop() {
         logger.info("stop")
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    open fun destroy() {
-        logger.info("destroy")
     }
 }

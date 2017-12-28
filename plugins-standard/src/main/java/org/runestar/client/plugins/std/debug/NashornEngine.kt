@@ -15,18 +15,12 @@ class NashornEngine : Plugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    lateinit var engine: ScriptEngine
-
     @Volatile
     var running = false
 
-    override fun create() {
-        super.create()
-        engine = ScriptEngineManager().getEngineByName("nashorn")
-    }
-
     override fun start() {
         super.start()
+        val engine = ScriptEngineManager().getEngineByName("nashorn")
         running = true
         val console = System.console()
         if (console == null) {

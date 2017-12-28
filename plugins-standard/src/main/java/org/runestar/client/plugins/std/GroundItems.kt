@@ -25,13 +25,9 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     lateinit var blockRegexes: List<Regex>
 
-    override fun create() {
-        super.create()
-        blockRegexes = settings.blockedNames.map { it.toRegex() }
-    }
-
     override fun start() {
         super.start()
+        blockRegexes = settings.blockedNames.map { it.toRegex() }
         LiveGroundItems.getOnPlaneFlat(Game.plane).forEach { gi ->
             tiles.add(gi.location)
         }

@@ -96,7 +96,6 @@ class PluginLoader(
                     StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE
             )
             val pluginHolder = PluginHolder(plugin, watchKey, executor, settingsReadWriter)
-            pluginHolder.create()
             currentPlugins[plugin.javaClass.name] = pluginHolder
         }
         currentJarPluginNames[jar] = plugins.map { it.javaClass.name }

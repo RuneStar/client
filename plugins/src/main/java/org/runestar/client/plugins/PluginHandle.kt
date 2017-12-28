@@ -6,13 +6,11 @@ interface PluginHandle {
 
     val name: String
 
-    fun enable()
+    fun start()
 
-    fun disable()
+    fun stop()
 
-    val isDestroyed: Boolean
-
-    val isEnabled: Boolean
+    val isRunning: Boolean
 
     val directory: Path
 
