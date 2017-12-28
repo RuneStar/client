@@ -37,7 +37,6 @@ internal class PluginHolder<T : PluginSettings>(
 
     private var ignoreNextEvent = false
 
-
     override val name: String get() = plugin.javaClass.name
 
     override val logFile: Path get() = directory.resolve(PluginHandle.LOG_FILE_NAME)

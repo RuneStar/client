@@ -20,21 +20,20 @@ class NashornEngine : Plugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-        val engine = ScriptEngineManager().getEngineByName("nashorn")
-        running = true
         val console = System.console()
         if (console == null) {
             logger.warn("No console found")
             return
         }
+        running = true
 
         Thread({
-            val bindings = engine.createBindings()
+            val engine = ScriptEngineManager().getEngineByName("nashorn")
             while (running) {
                 print(PROMPT)
                 try {
                     val input = console.readLine() ?: return@Thread
-                    println(engine.eval(input, bindings))
+                    println(engine.eval(input))
                 } catch (se: ScriptException) {
                     println(se)
                 }

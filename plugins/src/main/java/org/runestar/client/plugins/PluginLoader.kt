@@ -107,6 +107,6 @@ class PluginLoader(
             currentPlugins.values.forEach { it.destroy() }
         }
         executor.shutdown()
-        executor.awaitTermination(10L, TimeUnit.SECONDS)
+        executor.awaitTermination(5L, TimeUnit.SECONDS)
     }
 }
