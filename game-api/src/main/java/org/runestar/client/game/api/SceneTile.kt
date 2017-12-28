@@ -17,10 +17,12 @@ data class SceneTile(
 
     val isLoaded get() = x in 0 until Scene.SIZE && y in 0 until Scene.SIZE && plane in 0 until Scene.PLANE_SIZE
 
+    @JvmOverloads
     fun toGlobalTile(scene: Scene = LiveScene): GlobalTile {
         return GlobalTile(x + scene.base.x, y + scene.base.y, plane)
     }
 
+    @JvmOverloads
     fun height(scene: Scene = LiveScene): Int? {
         return scene.getHeight(this)
     }
@@ -39,6 +41,7 @@ data class SceneTile(
             )
         }
 
+    @JvmOverloads
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }
         return Polygon(corners.mapNotNull { it.toScreen(projection) })
