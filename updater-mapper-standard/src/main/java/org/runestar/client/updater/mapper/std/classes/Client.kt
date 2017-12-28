@@ -2494,4 +2494,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<GraphicsObject>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<NodeDeque>() }
     }
+
+    @DependsOn(Scene::class)
+    class Scene_isLowDetail : OrderMapper.InClassInitializer.Field(Scene::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }
