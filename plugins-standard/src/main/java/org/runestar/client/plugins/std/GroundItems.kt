@@ -1,5 +1,6 @@
 package org.runestar.client.plugins.std
 
+import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
@@ -15,13 +16,19 @@ import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
-    companion object {
-        const val MAX_QUANTITY = 65535
-    }
-
     override val defaultSettings = Settings()
 
-    val tiles = HashSet<SceneTile>()
+    val tiles = LinkedHashSet<SceneTile>()
+
+    val blockedIds = HashSet<Int>()
+    val unblockedIds = HashSet<Int>()
+
+    lateinit var blockRegexes: List<Regex>
+
+    override fun create() {
+        super.create()
+        blockRegexes = settings.blockedNames.map { it.toRegex() }
+    }
 
     override fun start() {
         super.start()
@@ -47,14 +54,13 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 if (tile.plane != Game.plane) continue
                 val pt = tile.center.toScreen()
                 if (pt == null || pt !in g.clip) continue
-                val gis = LiveGroundItems.getAt(tile)
+                val gis = LiveGroundItems.getAt(tile).asReversed()
                 if (gis.isEmpty()) {
                     itr.remove()
                     continue
                 }
                 val items = LinkedHashMap<XItemDefinition, Int>()
-                for (i in gis.lastIndex.downTo(0)) {
-                    val gi = gis[i]
+                for (gi in gis) {
                     val def = Client.accessor.getItemDefinition(gi.id)
                     if (def != null) {
                         items.merge(def, gi.quantity) { old, new -> old + new }
@@ -63,11 +69,10 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 val x = pt.x
                 var y = pt.y - settings.initialOffset
                 for ((def, count) in items) {
-                    val string = when {
-                        count == 1 -> def.name
-                        count >= MAX_QUANTITY -> def.name + " x Lots!"
-                        else -> def.name + " x $count"
+                    if (isBlocked(def, count)) {
+                        continue
                     }
+                    val string = itemToString(def, count)
                     val width = g.fontMetrics.stringWidth(string)
                     val leftX = x - (width / 2)
                     g.drawString(string, leftX, y)
@@ -76,6 +81,34 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 }
             }
         })
+    }
+
+    fun itemToString(def: XItemDefinition, count: Int): String {
+        val name = def.name
+        return when {
+            count == 1 -> name
+            count >= GroundItem.MAX_QUANTITY -> name + " x Lots!"
+            else -> name + " x $count"
+        }
+    }
+
+    fun isBlocked(def: XItemDefinition, count: Int): Boolean {
+        val id = def.id
+        val name = def.name
+        return if (id in blockedIds) {
+            true
+        } else if (id in unblockedIds) {
+            false
+        } else {
+            val blocked = blockRegexes.any { it.matches(name) }
+            if (blocked) {
+                blockedIds.add(id)
+                true
+            } else {
+                unblockedIds.add(id)
+                false
+            }
+        }
     }
 
     override fun stop() {
@@ -88,5 +121,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         val font = FontForm(Font.SANS_SERIF, FontForm.PLAIN, 13f)
         val spacing = -4
         val initialOffset = 9
+
+        val blockedNames = emptyList<String>()
     }
 }

@@ -20,4 +20,9 @@ class GroundItem(
     override fun toString(): String {
         return "GroundItem(item=$item, location=$location)"
     }
+
+    companion object {
+
+        const val MAX_QUANTITY = 65535
+    }
 }
