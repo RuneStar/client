@@ -94,4 +94,8 @@ class NpcDefinition : IdentityMapper.Class() {
                 .nextWithin(2) { it.node is JumpInsnNode }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    class size : OrderMapper.InConstructor.Field(NpcDefinition::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

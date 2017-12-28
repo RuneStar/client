@@ -40,10 +40,15 @@ class Player : IdentityMapper.Class() {
                 .and { it != field<model0>() }
     }
 
-    @MethodParameters
+    @MethodParameters()
     @DependsOn(Actor.isVisible::class)
     class isVisible : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Actor.isVisible>().mark }
+    }
+
+    @MethodParameters()
+    class size : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
     }
 
     @MethodParameters

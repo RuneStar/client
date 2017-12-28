@@ -23,7 +23,7 @@ class PlayerAppearance : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
     }
 
-    class npcId : InstanceField() {
+    class npcTransformId : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 

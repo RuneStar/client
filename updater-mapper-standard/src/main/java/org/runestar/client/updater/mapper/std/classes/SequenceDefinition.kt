@@ -40,4 +40,10 @@ class SequenceDefinition : IdentityMapper.Class() {
     class weapon : OrderMapper.InConstructor.Field(SequenceDefinition::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    class init : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.none { it.isMethod } }
+    }
 }
