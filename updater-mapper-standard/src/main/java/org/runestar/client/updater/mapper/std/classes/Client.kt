@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.*
 import java.util.zip.CRC32
+import kotlin.reflect.KClass
 
 class Client : IdentityMapper.Class() {
 
@@ -2486,5 +2487,11 @@ class Client : IdentityMapper.Class() {
                 .and { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(type<Node>(), type<Node>()) }
+    }
+
+    @DependsOn(GraphicsObject::class, NodeDeque::class)
+    class graphicsObjects : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<GraphicsObject>() }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<NodeDeque>() }
     }
 }
