@@ -56,8 +56,7 @@ fun main(args: Array<String>) {
         updateArtifact(PLUGINS_STANDARD_ARTIFACT_ID, PLUGINS_STANDARD_PATH)
         updateArtifact(CLIENT_ARTIFACT_ID, CLIENT_PATH)
     } catch (e: Exception) {
-        JOptionPane.showMessageDialog(frame, e.toString(), "Error", JOptionPane.ERROR_MESSAGE)
-        throw e
+        e.printStackTrace()
     } finally {
         frame.dispose()
     }
