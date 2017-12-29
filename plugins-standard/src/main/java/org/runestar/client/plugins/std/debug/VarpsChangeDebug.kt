@@ -28,7 +28,7 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
                     val changedBits = Integer.toBinaryString(o xor c).padStart(Integer.SIZE, '0')
                     val lastBitChanged = Integer.SIZE - changedBits.lastIndexOf('1') - 1
                     val firstBitChanged = Integer.SIZE - changedBits.indexOf('1') - 1
-                    
+
                     logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
                             "${intToString(o)} ->\n" +
                             "${intToString(c)}" }

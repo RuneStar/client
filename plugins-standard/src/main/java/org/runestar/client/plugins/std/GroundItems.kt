@@ -20,13 +20,15 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     val tiles = LinkedHashSet<SceneTile>()
 
-    val blockedIds = HashSet<Int>()
-    val unblockedIds = HashSet<Int>()
+    lateinit var blockedIds: MutableSet<Int>
+    lateinit var unblockedIds: MutableSet<Int>
 
     lateinit var blockRegexes: List<Regex>
 
     override fun start() {
         super.start()
+        blockedIds = HashSet()
+        unblockedIds = HashSet()
         blockRegexes = settings.blockedNames.map { it.toRegex() }
         LiveGroundItems.getOnPlaneFlat(Game.plane).forEach { gi ->
             tiles.add(gi.location)
