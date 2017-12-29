@@ -50,6 +50,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         HANDS(9),
         FEET(10),
         JAW(11);
+        // ring 12
 
         companion object {
             
