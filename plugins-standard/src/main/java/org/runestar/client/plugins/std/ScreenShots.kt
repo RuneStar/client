@@ -2,7 +2,6 @@ package org.runestar.client.plugins.std
 
 import org.kxtra.swing.bufferedimage.BufferedImage
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.PluginSettings
@@ -11,35 +10,46 @@ import java.awt.event.KeyEvent
 import java.nio.file.Files
 import java.time.Instant
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
 
-class ScreenShots : DisposablePlugin<PluginSettings>() {
+class ScreenShots : DisposablePlugin<ScreenShots.Settings>() {
 
-    override val defaultSettings = PluginSettings()
+    companion object {
+        const val IMAGE_FILE_EXTENSION = "png"
+        const val SCREENSHOTS_DIRECTORY_NAME = "screenshots"
+    }
 
-    val fileExtension = "png"
-
-    val timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd.kk-mm-ss,SSS")
-            .withZone(ZoneId.systemDefault())
+    override val defaultSettings = Settings()
 
     override fun start() {
         super.start()
 
-        val screenShotDirectory = directory.resolve("screenshots")
+        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
+        val timeFormatter = DateTimeFormatter.ofPattern(settings.dateTimeFormatterPattern)
+                .withZone(zoneId)
+
+        val screenShotDirectory = directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
         add(Keyboard.events.subscribe { ke ->
-            if (ke.extendedKeyCode == KeyEvent.VK_PRINTSCREEN) {
+            if (ke.extendedKeyCode == KeyEvent.VK_PRINTSCREEN && ke.id == KeyEvent.KEY_RELEASED) {
                 XRasterProvider.drawFull0.exit.firstOrError().subscribe { e ->
                     val rsn = Client.accessor.localPlayerName
                     val timeString = timeFormatter.format(Instant.now())
-                    val fileName = "$rsn.$timeString.$fileExtension"
+                    val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
                     val image = BufferedImage(e.instance.image)
                     val path = screenShotDirectory.resolve(fileName)
                     Files.createDirectories(path)
-                    ImageIO.write(image, fileExtension, path.toFile())
+                    ImageIO.write(image, IMAGE_FILE_EXTENSION, path.toFile())
                 }
             }
         })
+    }
+
+    class Settings : PluginSettings() {
+
+        val dateTimeFormatterPattern = "yyyy-MM-dd'T'kk-mm-ss,SSS"
+        val localizeTimeZone = true
     }
 }
