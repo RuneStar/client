@@ -20,16 +20,13 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     val tiles = LinkedHashSet<SceneTile>()
 
-    lateinit var blockedIds: MutableSet<Int>
-    lateinit var unblockedIds: MutableSet<Int>
-
-    lateinit var blockRegexes: List<Regex>
+    val blockedIds = HashSet<Int>()
+    val unblockedIds = HashSet<Int>()
+    val blockRegexes = ArrayList<Regex>()
 
     override fun start() {
         super.start()
-        blockedIds = HashSet()
-        unblockedIds = HashSet()
-        blockRegexes = settings.blockedNames.map { it.toRegex() }
+        settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
         LiveGroundItems.getOnPlaneFlat(Game.plane).forEach { gi ->
             tiles.add(gi.location)
         }
@@ -85,8 +82,8 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         val name = def.name
         return when {
             count == 1 -> name
-            count >= GroundItem.MAX_QUANTITY -> name + " x Lots!"
-            else -> name + " x $count"
+            count >= GroundItem.MAX_QUANTITY -> "$name x Lots!"
+            else -> "$name x $count"
         }
     }
 
@@ -112,6 +109,9 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun stop() {
         super.stop()
         tiles.clear()
+        blockedIds.clear()
+        unblockedIds.clear()
+        blockRegexes.clear()
     }
 
     class Settings : PluginSettings() {
