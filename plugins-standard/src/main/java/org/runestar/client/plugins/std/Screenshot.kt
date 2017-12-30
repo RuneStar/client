@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.std
 
-import org.kxtra.swing.bufferedimage.BufferedImage
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import java.awt.event.KeyEvent
+import java.awt.image.RenderedImage
 import java.nio.file.Files
 import java.time.Instant
 import java.time.ZoneId
@@ -14,7 +14,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
 
-class ScreenShots : DisposablePlugin<ScreenShots.Settings>() {
+class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     companion object {
         const val IMAGE_FILE_EXTENSION = "png"
@@ -38,7 +38,7 @@ class ScreenShots : DisposablePlugin<ScreenShots.Settings>() {
                     val rsn = Client.accessor.localPlayerName
                     val timeString = timeFormatter.format(Instant.now())
                     val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
-                    val image = BufferedImage(e.instance.image)
+                    val image = e.instance.image as RenderedImage
                     val path = screenShotDirectory.resolve(fileName)
                     Files.createDirectories(path)
                     ImageIO.write(image, IMAGE_FILE_EXTENSION, path.toFile())
