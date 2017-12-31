@@ -6,7 +6,8 @@ import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import java.awt.event.KeyEvent
-import java.awt.image.RenderedImage
+import java.awt.image.BufferedImage
+import java.io.IOException
 import java.nio.file.Files
 import java.time.Instant
 import java.time.ZoneId
@@ -32,19 +33,23 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
         val screenShotDirectory = directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
-        add(Keyboard.events.subscribe { ke ->
-            if (ke.extendedKeyCode == KeyEvent.VK_PRINTSCREEN && ke.id == KeyEvent.KEY_RELEASED) {
-                XRasterProvider.drawFull0.exit.firstOrError().subscribe { e ->
+        add(Keyboard.events
+                .filter { it.extendedKeyCode == KeyEvent.VK_PRINTSCREEN && it.id == KeyEvent.KEY_RELEASED }
+                .flatMapSingle { XRasterProvider.drawFull0.exit.firstOrError() }
+                .map { it.instance.image as BufferedImage }
+                .subscribe { img ->
                     val rsn = Client.accessor.localPlayerName
                     val timeString = timeFormatter.format(Instant.now())
                     val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
-                    val image = e.instance.image as RenderedImage
                     val path = screenShotDirectory.resolve(fileName)
-                    Files.createDirectories(path)
-                    ImageIO.write(image, IMAGE_FILE_EXTENSION, path.toFile())
+                    try {
+                        Files.createDirectories(path)
+                        ImageIO.write(img, IMAGE_FILE_EXTENSION, path.toFile())
+                    } catch (e: IOException) {
+                        logger.error("Failed to write screenshot", e)
+                    }
                 }
-            }
-        })
+        )
     }
 
     class Settings : PluginSettings() {
