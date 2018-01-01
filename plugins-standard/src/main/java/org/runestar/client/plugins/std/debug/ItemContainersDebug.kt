@@ -24,7 +24,7 @@ class ItemContainersDebug : DisposablePlugin<ItemContainersDebug.Settings>() {
             val map = ItemContainers.all
             val strings = ArrayList<String>()
             map.forEach { k, v ->
-                val vs = v.all.map { "(${it.id}x${it.quantity})" }
+                val vs = v.get().map { it?.let { "(${it.id}x${it.quantity})" } }
                 strings.add("$k:$vs")
             }
 
