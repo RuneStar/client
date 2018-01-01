@@ -11,14 +11,14 @@ enum class EquipmentSlot(
     WEAPON(3, true),
     BODY(4, true),
     SHIELD(5, true),
-    ARMS(6, false),
+    ARMS(6, false), //
     LEGS(7, true),
-    HAIR(8, false),
+    HAIR(8, false), //
     HANDS(9, true),
     FEET(10, true),
-    JAW(11, false),
+    JAW(11, false), //
     RING(12, true),
-    AMMUNITION(13, false);
+    AMMUNITION(13, true);
 
     companion object {
         @JvmField val VALUES = values().asList()
