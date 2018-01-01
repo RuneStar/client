@@ -2,22 +2,42 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XPlayerAppearance
+import java.util.*
 
 class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
 
-    val items: Map<EquipmentSlot.Item, Int>
-        get() = accessor.equipment.withIndex()
-                .filter { it.value >= 512 }
-                .associate { EquipmentSlot.Item.LOOKUP.getValue(it.index) to it.value - 512 }
+    val items: Map<EquipmentSlot.Item, Int> get() {
+        return EnumMap<EquipmentSlot.Item, Int>(EquipmentSlot.Item::class.java).apply {
+            val equip = accessor.equipment
+            for (e in EquipmentSlot.Item.LOOKUP.entries) {
+                val id = equip[e.key]
+                if (id >= 512) {
+                    put(e.value, id - 512)
+                }
+            }
+        }
+    }
 
-    val kit: Map<EquipmentSlot.Kit, Int>
-        get() = accessor.equipment.withIndex()
-                .filter { it.value in 256 until 512 }
-                .associate { EquipmentSlot.Kit.LOOKUP.getValue(it.index) to it.value - 256 }
+    val kit: Map<EquipmentSlot.Kit, Int> get() {
+        return EnumMap<EquipmentSlot.Kit, Int>(EquipmentSlot.Kit::class.java).apply {
+            val equip = accessor.equipment
+            for (e in EquipmentSlot.Kit.LOOKUP.entries) {
+                val id = equip[e.key]
+                if (id in 256..511) {
+                    put(e.value, id - 256)
+                }
+            }
+        }
+    }
 
-    val bodyColors: Map<PlayerAppearance.BodyPart, Int>
-        get() = accessor.bodyColors.withIndex()
-                .associate { BodyPart.LOOKUP[it.index]!! to it.value }
+    val bodyColors: Map<BodyPart, Int> get() {
+        return EnumMap<BodyPart, Int>(BodyPart::class.java).apply {
+            val bcs = accessor.bodyColors
+            for (e in BodyPart.LOOKUP.entries) {
+                put(e.value, bcs[e.key])
+            }
+        }
+    }
 
     val sex get() = if (accessor.isFemale) Sex.FEMALE else Sex.MALE
 
