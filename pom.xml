@@ -36,13 +36,6 @@
     </modules>
 
     <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo.maven.apache.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
         <!--<repository>-->
             <!--<id>repo.runestar.org</id>-->
             <!--<url>http://repo.runestar.org</url>-->
@@ -62,16 +55,6 @@
             <url>http://repo.runestar.org</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>http://repo.maven.apache.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
