@@ -12,7 +12,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
             for (v in EquipmentSlot.VALUES) {
                 val id = equip[v.id]
                 if (id >= 512) {
-                    check(v.supportsItems)
+                    check(v.supportsItems && v.isVisible)
                     put(v, id - 512)
                 }
             }
@@ -25,6 +25,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
             for (v in EquipmentSlot.VALUES) {
                 val id = equip[v.id]
                 if (id in 256..511) {
+                    check(v.isVisible)
                     put(v, id - 256)
                 }
             }
