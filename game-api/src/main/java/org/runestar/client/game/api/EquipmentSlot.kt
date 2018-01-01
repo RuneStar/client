@@ -19,7 +19,7 @@ enum class EquipmentSlot(
     FEET(10, true, true),
     JAW(11, false, true),
     RING(12, true, false),
-    AMMUNITION(13, true, false);
+    AMMO(13, true, false);
 
     companion object {
         @JvmField val VALUES = values().asList()
