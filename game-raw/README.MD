@@ -8,7 +8,7 @@ Direct access to game values through:
 
 * A singleton for accessing the `client` class instance.
  
- Generated sources available [here](http://repo.runestar.org/com/RuneStar/client/client-game-raw/).
+ Generated sources available [here](http://repo.runestar.org/org/runestar/client/client-game-raw/).
  
 #### Build Dependencies:
 
