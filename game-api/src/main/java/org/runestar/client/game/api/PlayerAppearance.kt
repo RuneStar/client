@@ -6,25 +6,26 @@ import java.util.*
 
 class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
 
-    val items: Map<EquipmentSlot.Item, Int> get() {
-        return EnumMap<EquipmentSlot.Item, Int>(EquipmentSlot.Item::class.java).apply {
+    val items: Map<EquipmentSlot, Int> get() {
+        return EnumMap<EquipmentSlot, Int>(EquipmentSlot::class.java).apply {
             val equip = accessor.equipment
-            for (e in EquipmentSlot.Item.LOOKUP.entries) {
-                val id = equip[e.key]
+            for (v in EquipmentSlot.VALUES) {
+                val id = equip[v.id]
                 if (id >= 512) {
-                    put(e.value, id - 512)
+                    check(v.supportsItems)
+                    put(v, id - 512)
                 }
             }
         }
     }
 
-    val kit: Map<EquipmentSlot.Kit, Int> get() {
-        return EnumMap<EquipmentSlot.Kit, Int>(EquipmentSlot.Kit::class.java).apply {
+    val kit: Map<EquipmentSlot, Int> get() {
+        return EnumMap<EquipmentSlot, Int>(EquipmentSlot::class.java).apply {
             val equip = accessor.equipment
-            for (e in EquipmentSlot.Kit.LOOKUP.entries) {
-                val id = equip[e.key]
+            for (v in EquipmentSlot.VALUES) {
+                val id = equip[v.id]
                 if (id in 256..511) {
-                    put(e.value, id - 256)
+                    put(v, id - 256)
                 }
             }
         }
@@ -33,8 +34,8 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
     val bodyColors: Map<BodyPart, Int> get() {
         return EnumMap<BodyPart, Int>(BodyPart::class.java).apply {
             val bcs = accessor.bodyColors
-            for (e in BodyPart.LOOKUP.entries) {
-                put(e.value, bcs[e.key])
+            for (v in BodyPart.VALUES) {
+                put(v, bcs[v.id])
             }
         }
     }
@@ -50,7 +51,7 @@ class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
         SKIN(4);
 
         companion object {
-            @JvmField val LOOKUP = values().associateBy { it.id }
+            @JvmField val VALUES = values().asList()
         }
     }
 }
