@@ -25,27 +25,27 @@ class BoundingBox3D : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.mark == method<BoundingBox.draw>().mark }
     }
 
-    class int1 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 0, 7) {
+    class xMin : OrderMapper.InConstructor.Field(BoundingBox3D::class, 0, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int2 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 1, 7) {
+    class yMin : OrderMapper.InConstructor.Field(BoundingBox3D::class, 1, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int3 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 2, 7) {
+    class zMin : OrderMapper.InConstructor.Field(BoundingBox3D::class, 2, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int4 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 3, 7) {
+    class xMax : OrderMapper.InConstructor.Field(BoundingBox3D::class, 3, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int5 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 4, 7) {
+    class yMax : OrderMapper.InConstructor.Field(BoundingBox3D::class, 4, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int6 : OrderMapper.InConstructor.Field(BoundingBox3D::class, 5, 7) {
+    class zMax : OrderMapper.InConstructor.Field(BoundingBox3D::class, 5, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

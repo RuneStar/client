@@ -116,6 +116,12 @@ class Model : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
+    @MethodParameters("yaw")
+    @DependsOn(draw::class)
+    class calculateBoundingBox : OrderMapper.InMethod.Method(draw::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
     @DependsOn(draw::class)
     class boundsType : OrderMapper.InMethod.Field(draw::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
@@ -133,6 +139,36 @@ class Model : IdentityMapper.Class() {
 
     @DependsOn(calculateBoundsCylinder::class)
     class diameter : OrderMapper.InMethod.Field(calculateBoundsCylinder::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class xMid : OrderMapper.InMethod.Field(calculateBoundingBox::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class yMid : OrderMapper.InMethod.Field(calculateBoundingBox::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class zMid : OrderMapper.InMethod.Field(calculateBoundingBox::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class xRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class yRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(calculateBoundingBox::class)
+    class zRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
