@@ -12,8 +12,6 @@ enum class GameState(val id: Int) {
     CHANGING_WORLD(45);
 
     companion object {
-
-        @JvmField
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
     }
 }

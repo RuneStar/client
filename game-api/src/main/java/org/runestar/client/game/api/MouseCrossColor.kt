@@ -7,8 +7,6 @@ enum class MouseCrossColor(val id: Int) {
     RED(2);
 
     companion object {
-
-        @JvmField
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
     }
 }

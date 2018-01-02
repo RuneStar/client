@@ -13,8 +13,6 @@ enum class ClanRank(val id: Byte) {
     OWNER(7);
 
     companion object {
-
-        @JvmField
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
     }
 }
