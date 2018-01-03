@@ -1,6 +1,6 @@
 package org.runestar.client.updater.deob.jagex
 
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
@@ -10,13 +10,13 @@ import org.objectweb.asm.Type
 import org.objectweb.asm.tree.AbstractInsnNode
 import java.nio.file.Path
 
-object UnusedTryCatchRemover : Deobfuscator {
+object UnusedTryCatchRemover : Transformer {
 
     private val logger = getLogger()
 
     private val RUNTIME_EXCEPTION_INTERNAL_NAME = Type.getInternalName(RuntimeException::class.java)
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         var removedTryCatches = 0
         classNodes.flatMap { it.methods }.forEach { m ->

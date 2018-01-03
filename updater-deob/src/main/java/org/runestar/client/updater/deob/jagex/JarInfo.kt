@@ -1,6 +1,6 @@
 package org.runestar.client.updater.deob.jagex
 
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -12,11 +12,11 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.*
 
-object JarInfo : Deobfuscator {
+object JarInfo : Transformer {
 
     private val logger = getLogger()
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
 
         val versions = classNodes.map { it.version }.toSortedSet()

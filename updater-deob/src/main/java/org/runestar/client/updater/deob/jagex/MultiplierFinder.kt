@@ -3,7 +3,7 @@ package org.runestar.client.updater.deob.jagex
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.ArrayListMultimap
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.apache.bcel.Const
@@ -21,13 +21,13 @@ import java.math.BigInteger
 import java.nio.file.Path
 import java.util.*
 
-object MultiplierFinder : Deobfuscator {
+object MultiplierFinder : Transformer {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         val decoders = TreeMap<String, Number>()
         val decodersRaw = ArrayListMultimap.create<String, Number>()

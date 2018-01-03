@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.common.*
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.mapper.*
@@ -33,7 +33,7 @@ fun main(args: Array<String>) {
 }
 
 fun deob(revision: Int) {
-    Deobfuscator.Testing.deob(gamepack(revision), gamepackDeob(revision))
+    Transformer.TESTING.transform(gamepack(revision), gamepackDeob(revision))
 }
 
 fun map(revision: Int) {
@@ -62,7 +62,7 @@ fun mergeHooks(revision: Int) {
 fun rename(revision: Int) {
     val names = jsonMapper.readValue<List<IdClass>>(namesJson(revision).toFile())
     val remapper = IdRemapper(names, readJar(gamepackDeob(revision)))
-    Renamer(remapper).deob(gamepackDeob(revision), renamed(revision))
+    Renamer(remapper).transform(gamepackDeob(revision), renamed(revision))
 }
 
 fun gamepack(revision: Int) = Paths.get("updater-testing", "reference", "runescape-gamepack.$revision.jar")

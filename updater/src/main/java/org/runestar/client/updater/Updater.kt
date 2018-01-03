@@ -26,6 +26,9 @@ val GAMEPACK: URL = classLoader.getResource("gamepack.jar")
 @JvmField
 val GAMEPACK_DEOB: URL = classLoader.getResource("gamepack.deob.jar")
 
+@JvmField
+val GAMEPACK_DEOB_RENAMED: URL = classLoader.getResource("gamepack.deob.renamed.jar")
+
 /**
  * Gamepack with the META-INF directory removed, all enclosing method attributes removed, deobfuscated but keeps unused
  * methods and fields.

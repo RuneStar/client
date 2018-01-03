@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.TreeMultimap
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Type
@@ -14,13 +14,13 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
-object StaticDuplicateMethodFinder : Deobfuscator {
+object StaticDuplicateMethodFinder : Transformer {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
 
         val map: Multimap<String, String> = TreeMultimap.create()

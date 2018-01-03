@@ -1,6 +1,6 @@
 package org.runestar.client.updater.deob.common
 
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
@@ -10,13 +10,13 @@ import org.objectweb.asm.tree.JumpInsnNode
 import org.objectweb.asm.tree.LabelNode
 import java.nio.file.Path
 
-object UnnecessaryGotoRemover : Deobfuscator {
+object UnnecessaryGotoRemover : Transformer {
 
     private val logger = getLogger()
 
     // todo : work without removing frames first
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         var gotosRemoved = 0
         classNodes.flatMap { it.methods }.forEach { m ->

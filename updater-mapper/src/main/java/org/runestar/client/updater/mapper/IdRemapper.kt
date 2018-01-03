@@ -45,14 +45,23 @@ class IdRemapper(
     }
 
     override fun map(typeName: String): String {
-        return names[typeName] ?: (typeName + '$')
+        return names[typeName] ?: escapeName(typeName, typeName, "$")
     }
 
     override fun mapFieldName(owner: String, name: String, desc: String): String {
-        return findMember(owner, name) ?: (name + '_')
+        return findMember(owner, name) ?: escapeName("$owner.$name", name,"_")
     }
 
     override fun mapMethodName(owner: String, name: String, desc: String): String {
-        return findMember(owner, name + desc) ?: (name + '_')
+        return findMember(owner, name + desc) ?: escapeName("$owner.$name$desc", name, "_")
+    }
+
+    // todo
+    private fun escapeName(qname: String, name: String, prefix: String): String {
+        return if (name.length <= 2) {
+            prefix + name
+        } else {
+            name
+        }
     }
 }

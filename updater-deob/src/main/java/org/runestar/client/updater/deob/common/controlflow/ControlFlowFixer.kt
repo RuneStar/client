@@ -1,6 +1,6 @@
 package org.runestar.client.updater.deob.common.controlflow
 
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
@@ -11,11 +11,11 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.collections.HashSet
 
-object ControlFlowFixer : Deobfuscator {
+object ControlFlowFixer : Transformer {
 
     private val logger = getLogger()
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         var blockCount = 0
         classNodes.forEach { c ->

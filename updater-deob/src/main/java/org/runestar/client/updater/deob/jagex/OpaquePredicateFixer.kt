@@ -2,7 +2,7 @@ package org.runestar.client.updater.deob.jagex
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.runestar.client.updater.deob.Deobfuscator
+import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
@@ -15,13 +15,13 @@ import java.lang.reflect.Modifier
 import java.nio.file.Path
 import java.util.*
 
-object OpaquePredicateFixer : Deobfuscator {
+object OpaquePredicateFixer : Transformer {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun deob(source: Path, destination: Path) {
+    override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         val passingArgs = TreeMap<String, Int>()
         var returns = 0
