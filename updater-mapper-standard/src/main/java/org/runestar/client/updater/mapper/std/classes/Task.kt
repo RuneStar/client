@@ -18,7 +18,7 @@ class Task : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.instanceFields.any { Modifier.isVolatile(it.access) && it.type == Any::class.type } }
 
-    class payload : IdentityMapper.InstanceField() {
+    class result : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { Modifier.isVolatile(it.access) && it.type == Any::class.type }
     }
 
@@ -30,7 +30,7 @@ class Task : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { Modifier.isVolatile(it.access) && it.type == INT_TYPE }
     }
 
-    class task : IdentityMapper.InstanceField() {
+    class next : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Task>() }
     }
 

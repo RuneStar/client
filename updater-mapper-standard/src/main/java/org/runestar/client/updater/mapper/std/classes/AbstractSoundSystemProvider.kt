@@ -10,13 +10,13 @@ import org.runestar.client.updater.mapper.tree.Method2
 import java.lang.reflect.Modifier
 
 @SinceVersion(141)
-@DependsOn(TaskData::class)
-class TaskDataProvider : IdentityMapper.Class() {
+@DependsOn(AbstractSoundSystem::class)
+class AbstractSoundSystemProvider : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { Modifier.isInterface(it.access) }
-            .and { it.instanceMethods.any { it.returnType == type<TaskData>() } }
+            .and { it.instanceMethods.any { it.returnType == type<AbstractSoundSystem>() } }
 
-    @DependsOn(TaskData::class)
-    class taskData : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<TaskData>() }
+    @DependsOn(AbstractSoundSystem::class)
+    class soundSystem : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractSoundSystem>() }
     }
 }

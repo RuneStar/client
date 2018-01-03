@@ -6,12 +6,12 @@ import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 
-@DependsOn(TaskData::class)
+@DependsOn(AbstractSoundSystem::class)
 class Task0 : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.contains(Runnable::class.type) }
-            .and { it.instanceFields.any { it.type == type<TaskData>().withDimensions(1) } }
+            .and { it.instanceFields.any { it.type == type<AbstractSoundSystem>().withDimensions(1) } }
 
     class taskData : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<TaskData>().withDimensions(1) }
+        override val predicate = predicateOf<Field2> { it.type == type<AbstractSoundSystem>().withDimensions(1) }
     }
 }

@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.*
 import java.util.zip.CRC32
-import kotlin.reflect.KClass
 
 class Client : IdentityMapper.Class() {
 
@@ -1211,9 +1210,9 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(TaskDataProvider::class)
-    class soundTaskDataProvider : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<TaskDataProvider>() }
+    @DependsOn(AbstractSoundSystemProvider::class)
+    class soundSystemProvider : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AbstractSoundSystemProvider>() }
     }
 
     @DependsOn(Task0::class)
@@ -1227,8 +1226,8 @@ class Client : IdentityMapper.Class() {
     }
 
     // else mono
-    @DependsOn(SoundTaskData.remaining::class)
-    class isStereo : UniqueMapper.InMethod.Field(SoundTaskData.remaining::class) {
+    @DependsOn(SoundSystem.remaining::class)
+    class isStereo : UniqueMapper.InMethod.Field(SoundSystem.remaining::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
         // sometimes accesses static field through the subclass
         override fun resolve(instruction: Instruction2): Field2 {

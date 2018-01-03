@@ -8,9 +8,10 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
 import javax.sound.sampled.AudioFormat
+import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.SourceDataLine
 
-class SoundTaskData : IdentityMapper.Class() {
+class SoundSystem : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
             .and { it.instanceFields.any { it.type == SourceDataLine::class.type } }
 

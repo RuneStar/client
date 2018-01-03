@@ -9,41 +9,41 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
-import java.util.concurrent.ScheduledExecutorService
-import javax.sound.sampled.AudioSystem
+import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.tree.Instruction2
 
-@DependsOn(SoundTaskData::class)
-class TaskData : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { klass<SoundTaskData>().superType == it.type }
+@DependsOn(SoundSystem::class)
+class AbstractSoundSystem : IdentityMapper.Class() {
+    override val predicate = predicateOf<Class2> { klass<SoundSystem>().superType == it.type }
 
     @MethodParameters()
-    @DependsOn(SoundTaskData.flush::class)
+    @DependsOn(SoundSystem.flush::class)
     class flush : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<SoundTaskData.flush>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.flush>().mark }
     }
 
     @MethodParameters()
-    @DependsOn(SoundTaskData.close::class)
+    @DependsOn(SoundSystem.close::class)
     class close : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<SoundTaskData.close>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.close>().mark }
     }
 
     @MethodParameters()
-    @DependsOn(SoundTaskData.write::class)
+    @DependsOn(SoundSystem.write::class)
     class write : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<SoundTaskData.write>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.write>().mark }
     }
 
     @MethodParameters()
-    @DependsOn(SoundTaskData.remaining::class)
+    @DependsOn(SoundSystem.remaining::class)
     class remaining : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<SoundTaskData.remaining>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.remaining>().mark }
     }
 
     @MethodParameters("bufferSize")
-    @DependsOn(SoundTaskData.open::class)
+    @DependsOn(SoundSystem.open::class)
     class open : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<SoundTaskData.open>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.open>().mark }
     }
 
     class ints : IdentityMapper.InstanceField() {
@@ -64,5 +64,9 @@ class TaskData : IdentityMapper.Class() {
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<close>().id } }
                 .and { it.instructions.any { it.opcode == ICONST_2 } }
+    }
+
+    class timeMs : OrderMapper.InConstructor.Field(AbstractSoundSystem::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
     }
 }

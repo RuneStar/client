@@ -8,12 +8,12 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @SinceVersion(141)
-@DependsOn(TaskDataProvider::class)
-class SoundTaskDataProvider : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it.interfaces.contains(type<TaskDataProvider>()) }
+@DependsOn(AbstractSoundSystemProvider::class)
+class SoundSystemProvider : IdentityMapper.Class() {
+    override val predicate = predicateOf<Class2> { it.interfaces.contains(type<AbstractSoundSystemProvider>()) }
 
-    @DependsOn(TaskData::class)
-    class taskData : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<TaskData>() }
+    @DependsOn(AbstractSoundSystem::class)
+    class soundSystem : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractSoundSystem>() }
     }
 }
