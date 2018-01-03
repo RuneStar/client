@@ -45,14 +45,14 @@ class IdRenaming(idClasses: Collection<IdClass>, jar: Path) : Remapper() {
     }
 
     override fun map(typeName: String): String {
-        return names[typeName] ?: typeName
+        return names[typeName] ?: (typeName + '$')
     }
 
     override fun mapFieldName(owner: String, name: String, desc: String): String {
-        return findMember(owner, name) ?: name
+        return findMember(owner, name) ?: (name + '_')
     }
 
     override fun mapMethodName(owner: String, name: String, desc: String): String {
-        return findMember(owner, name + desc) ?: name
+        return findMember(owner, name + desc) ?: (name + '_')
     }
 }
