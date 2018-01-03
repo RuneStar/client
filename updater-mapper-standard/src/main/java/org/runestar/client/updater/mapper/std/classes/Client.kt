@@ -2519,4 +2519,14 @@ class Client : IdentityMapper.Class() {
     class PlayerType_ironman : PlayerTypeInstance(3)
     class PlayerType_ultimateIronman : PlayerTypeInstance(4)
     class PlayerType_hardcoreIronman : PlayerTypeInstance(5)
+
+    @DependsOn(ModelData::class)
+    class ModelData_sine : OrderMapper.InClassInitializer.Field(ModelData::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(ModelData::class)
+    class ModelData_cosine : OrderMapper.InClassInitializer.Field(ModelData::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
