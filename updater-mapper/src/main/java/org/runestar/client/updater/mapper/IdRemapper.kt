@@ -1,19 +1,19 @@
-package org.runestar.client.updater.testing
+package org.runestar.client.updater.mapper
 
-import com.google.common.collect.ArrayListMultimap
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.mapper.IdClass
+import com.google.common.collect.MultimapBuilder
 import org.objectweb.asm.commons.Remapper
-import java.nio.file.Path
+import org.objectweb.asm.tree.ClassNode
 
-class IdRenaming(idClasses: Collection<IdClass>, jar: Path) : Remapper() {
+class IdRemapper(
+        idClasses: Collection<IdClass>,
+        classNodes: Collection<ClassNode>
+) : Remapper() {
 
-    private val supers = ArrayListMultimap.create<String, String>()
+    private val supers = MultimapBuilder.hashKeys().arrayListValues().build<String, String>()
 
     private val names = HashMap<String, String>()
 
     init {
-        val classNodes = readJar(jar)
         classNodes.forEach { c ->
             supers.put(c.name, c.superName)
             c.interfaces.forEach { i ->

@@ -9,11 +9,9 @@ import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Deobfuscator
 import org.runestar.client.updater.deob.common.*
+import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.std.classes.Client
-import org.runestar.client.updater.mapper.IdClass
-import org.runestar.client.updater.mapper.JarMapper
-import org.runestar.client.updater.mapper.Mapper
-import org.runestar.client.updater.mapper.buildIdHierarchy
 import java.nio.file.Paths
 
 val WORK_DIR = Paths.get("updater-testing", "workspace")
@@ -63,7 +61,8 @@ fun mergeHooks(revision: Int) {
 
 fun rename(revision: Int) {
     val names = jsonMapper.readValue<List<IdClass>>(namesJson(revision).toFile())
-    Renamer(IdRenaming(names, gamepackDeob(revision))).deob(gamepackDeob(revision), renamed(revision))
+    val remapper = IdRemapper(names, readJar(gamepackDeob(revision)))
+    Renamer(remapper).deob(gamepackDeob(revision), renamed(revision))
 }
 
 fun gamepack(revision: Int) = Paths.get("updater-testing", "reference", "runescape-gamepack.$revision.jar")
