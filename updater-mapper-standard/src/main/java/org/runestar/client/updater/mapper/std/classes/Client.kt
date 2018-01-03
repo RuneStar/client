@@ -2499,4 +2499,17 @@ class Client : IdentityMapper.Class() {
     class Scene_isLowDetail : OrderMapper.InClassInitializer.Field(Scene::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    class Skills_enabled : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 24 }
+                .next { it.opcode == ICONST_0 || it.opcode == ICONST_1 }
+                .next { it.opcode == BASTORE }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BooleanArray::class.type }
+    }
+
+    @DependsOn(Skills_enabled::class)
+    class Skills_experienceTable : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Skills_enabled>().id }
+                .nextIn(3) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
