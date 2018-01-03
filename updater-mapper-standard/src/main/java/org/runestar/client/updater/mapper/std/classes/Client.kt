@@ -2512,4 +2512,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Skills_enabled>().id }
                 .nextIn(3) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    class PlayerType_normal : PlayerTypeInstance(0)
+    class PlayerType_playerModerator : PlayerTypeInstance(1)
+    class PlayerType_jagexModerator : PlayerTypeInstance(2)
+    class PlayerType_ironman : PlayerTypeInstance(3)
+    class PlayerType_ultimateIronman : PlayerTypeInstance(4)
+    class PlayerType_hardcoreIronman : PlayerTypeInstance(5)
 }
