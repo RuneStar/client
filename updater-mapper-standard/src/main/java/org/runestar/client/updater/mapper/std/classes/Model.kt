@@ -158,17 +158,17 @@ class Model : IdentityMapper.Class() {
     }
 
     @DependsOn(calculateBoundingBox::class)
-    class xRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 3) {
+    class xMidOffset : OrderMapper.InMethod.Field(calculateBoundingBox::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(calculateBoundingBox::class)
-    class yRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 4) {
+    class yMidOffset : OrderMapper.InMethod.Field(calculateBoundingBox::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(calculateBoundingBox::class)
-    class zRadius : OrderMapper.InMethod.Field(calculateBoundingBox::class, 5) {
+    class zMidOffset : OrderMapper.InMethod.Field(calculateBoundingBox::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
