@@ -6,4 +6,6 @@ import org.runestar.client.game.raw.access.XNpcDefinition
 class NpcDefinition(override val accessor: XNpcDefinition) : Wrapper() {
 
     val actions: List<String> get() = accessor.actions.map { it ?: "" }
+
+    val name get() = accessor.name ?: ""
 }

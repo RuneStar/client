@@ -9,8 +9,6 @@ enum class GrandExchangeOfferStatus(val id: Int) {
     DONE(5);
 
     companion object {
-
-        @JvmField
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
     }
 }

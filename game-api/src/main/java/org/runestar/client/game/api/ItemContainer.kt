@@ -18,6 +18,6 @@ class ItemContainer(override val accessor: XItemContainer) : Wrapper() {
     val all get() = get().filterNotNull()
 
     override fun toString(): String {
-        return "ItemContainer(size=$size, all=$all)"
+        return "ItemContainer(${get()})"
     }
 }
