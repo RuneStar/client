@@ -14,6 +14,9 @@ import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.prevIn
+import org.runestar.client.updater.mapper.prevWithin
 
 @DependsOn(DualNode::class)
 class ItemDefinition : IdentityMapper.Class() {
@@ -196,5 +199,29 @@ class ItemDefinition : IdentityMapper.Class() {
 
     class int3 : OrderMapper.InConstructor.Field(ItemDefinition::class, 32) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(getModel::class)
+    class recolorFrom : OrderMapper.InMethod.Field(getModel::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class recolorTo : OrderMapper.InMethod.Field(getModel::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class retextureFrom : OrderMapper.InMethod.Field(getModel::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class retextureTo : OrderMapper.InMethod.Field(getModel::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 }

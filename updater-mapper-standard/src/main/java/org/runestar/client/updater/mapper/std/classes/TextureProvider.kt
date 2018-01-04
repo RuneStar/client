@@ -1,5 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.extensions.Predicate
@@ -9,6 +10,9 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.tree.Instruction2
 
 @DependsOn(TextureLoader::class)
 class TextureProvider : IdentityMapper.Class() {
@@ -20,8 +24,13 @@ class TextureProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<NodeDeque>() }
     }
 
+    @DependsOn(AbstractIndexCache::class)
+    class indexCache : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AbstractIndexCache>() }
+    }
+
     @DependsOn(Texture::class)
-    class texture : IdentityMapper.InstanceField() {
+    class textures : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Texture>().withDimensions(1) }
     }
 
@@ -32,5 +41,14 @@ class TextureProvider : IdentityMapper.Class() {
     @DependsOn(TextureLoader.load::class)
     class load : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<TextureLoader.load>().mark }
+    }
+
+    class detail : OrderMapper.InConstructor.Field(TextureProvider::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class isLowDetail : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 64 } }
     }
 }

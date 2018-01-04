@@ -9,6 +9,7 @@ import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.annotations.DependsOn
 import java.lang.reflect.Modifier
 
 class TextureLoader : IdentityMapper.Class() {
@@ -20,5 +21,10 @@ class TextureLoader : IdentityMapper.Class() {
 //    @MethodParameters()
     class load : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == IntArray::class.type }
+    }
+
+    @DependsOn(TextureProvider.isLowDetail::class)
+    class isLowDetail : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<TextureProvider.isLowDetail>().mark }
     }
 }

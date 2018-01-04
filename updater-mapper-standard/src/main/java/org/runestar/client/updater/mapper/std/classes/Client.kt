@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.*
 import java.util.zip.CRC32
+import kotlin.reflect.KClass
 
 class Client : IdentityMapper.Class() {
 
@@ -2549,4 +2550,21 @@ class Client : IdentityMapper.Class() {
     class WorldMapCacheName_compositeTexture : WorldMapCacheNameInstance(2)
     class WorldMapCacheName_area : WorldMapCacheNameInstance(3)
     class WorldMapCacheName_labels : WorldMapCacheNameInstance(4)
+
+    @DependsOn(FriendLoginUpdate::class, LinkDeque::class)
+    class friendLoginUpdates : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<FriendLoginUpdate>() && it.methodName == Method2.CONSTRUCTOR_NAME }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<LinkDeque>() }
+    }
+
+    @DependsOn(Rasterizer3D::class, TextureLoader::class)
+    class Rasterizer3D_textureLoader : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.type == type<TextureLoader>() }
+    }
+
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_isLowDetailTexture : OrderMapper.InClassInitializer.Field(Rasterizer3D::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }
