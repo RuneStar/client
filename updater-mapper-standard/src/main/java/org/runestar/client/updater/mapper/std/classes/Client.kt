@@ -2543,4 +2543,10 @@ class Client : IdentityMapper.Class() {
     class soundSystem1 : StaticOrderMapper.Field(1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSoundSystem>() }
     }
+
+    class WorldMapCacheName_details : WorldMapCacheNameInstance(0)
+    class WorldMapCacheName_compositeMap : WorldMapCacheNameInstance(1)
+    class WorldMapCacheName_compositeTexture : WorldMapCacheNameInstance(2)
+    class WorldMapCacheName_area : WorldMapCacheNameInstance(3)
+    class WorldMapCacheName_labels : WorldMapCacheNameInstance(4)
 }

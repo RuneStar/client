@@ -10,6 +10,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.extensions.Predicate
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -61,4 +62,9 @@ abstract class AbstractFontStaticIntMapper(index: Int) : OrderMapper.InClassInit
 @DependsOn(PlayerType::class)
 abstract class PlayerTypeInstance(index: Int) : OrderMapper.InClassInitializer.Field(PlayerType::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<PlayerType>() }
+}
+
+@DependsOn(WorldMapCacheName::class)
+abstract class WorldMapCacheNameInstance(index: Int) : OrderMapper.InClassInitializer.Field(WorldMapCacheName::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapCacheName>() }
 }
