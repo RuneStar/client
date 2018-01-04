@@ -1215,9 +1215,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<AbstractSoundSystemProvider>() }
     }
 
-    @DependsOn(Task0::class)
-    class soundTask0 : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Task0>() }
+    @DependsOn(SoundSystems::class)
+    class soundSystems : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SoundSystems>() }
     }
 
     class isLowDetail : AllUniqueMapper.Field() {
@@ -2527,5 +2527,20 @@ class Client : IdentityMapper.Class() {
     @DependsOn(ModelData::class)
     class ModelData_cosine : OrderMapper.InClassInitializer.Field(ModelData::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(AbstractSoundSystem::class)
+    class newSoundSystem : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractSoundSystem>() }
+    }
+
+    @DependsOn(AbstractSoundSystem::class)
+    class soundSystem0 : StaticOrderMapper.Field(0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSoundSystem>() }
+    }
+
+    @DependsOn(AbstractSoundSystem::class)
+    class soundSystem1 : StaticOrderMapper.Field(1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSoundSystem>() }
     }
 }
