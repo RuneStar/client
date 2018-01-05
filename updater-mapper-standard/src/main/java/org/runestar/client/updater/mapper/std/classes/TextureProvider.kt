@@ -1,5 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -34,8 +35,14 @@ class TextureProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Texture>().withDimensions(1) }
     }
 
-    class brightness : IdentityMapper.InstanceField() {
+    class brightness0 : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == DOUBLE_TYPE }
+    }
+
+    class setBrightness : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(DOUBLE_TYPE) }
     }
 
     @DependsOn(TextureLoader.load::class)
@@ -43,7 +50,15 @@ class TextureProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.mark == method<TextureLoader.load>().mark }
     }
 
-    class detail : OrderMapper.InConstructor.Field(TextureProvider::class, -1) {
+    class textureSize : OrderMapper.InConstructor.Field(TextureProvider::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class remaining : OrderMapper.InConstructor.Field(TextureProvider::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class capacity : OrderMapper.InConstructor.Field(TextureProvider::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
