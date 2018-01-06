@@ -68,3 +68,13 @@ abstract class PlayerTypeInstance(index: Int) : OrderMapper.InClassInitializer.F
 abstract class WorldMapCacheNameInstance(index: Int) : OrderMapper.InClassInitializer.Field(WorldMapCacheName::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapCacheName>() }
 }
+
+@DependsOn(ByteArrayPool::class)
+abstract class ByteArrayPoolArray(index: Int) : OrderMapper.InClassInitializer.Field(ByteArrayPool::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BYTE_TYPE.withDimensions(2) }
+}
+
+@DependsOn(ByteArrayPool::class)
+abstract class ByteArrayPoolCount(index: Int) : OrderMapper.InClassInitializer.Field(ByteArrayPool::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+}

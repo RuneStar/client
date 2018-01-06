@@ -2567,4 +2567,23 @@ class Client : IdentityMapper.Class() {
     class Rasterizer3D_isLowDetailTexture : OrderMapper.InClassInitializer.Field(Rasterizer3D::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @DependsOn(AreaDefinition::class)
+    class AreaDefinition_areas : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AreaDefinition>().withDimensions(1) }
+    }
+
+    @DependsOn(AreaDefinition::class, EvictingHashTable::class)
+    class AreaDefinition_cachedSprites : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<AreaDefinition>() }
+                .and { it.type == type<EvictingHashTable>() }
+    }
+
+    class ByteArrayPool_small : ByteArrayPoolArray(0)
+    class ByteArrayPool_medium : ByteArrayPoolArray(1)
+    class ByteArrayPool_large : ByteArrayPoolArray(2)
+
+    class ByteArrayPool_smallCount : ByteArrayPoolCount(0)
+    class ByteArrayPool_mediumCount : ByteArrayPoolCount(1)
+    class ByteArrayPool_largeCount : ByteArrayPoolCount(2)
 }

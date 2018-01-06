@@ -1,7 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
-import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.mark
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -19,5 +21,11 @@ class MouseHandler : IdentityMapper.Class() {
 
     class mousePressed : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == MouseListener::mousePressed.mark }
+    }
+
+    @SinceVersion(150)
+    @MethodParameters("mouseEvent")
+    class getButton : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
     }
 }

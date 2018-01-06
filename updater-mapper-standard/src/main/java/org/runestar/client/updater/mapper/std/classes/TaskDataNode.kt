@@ -6,8 +6,8 @@ import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 
-@DependsOn(Node::class, AbstractIntegerNode0::class)
+@DependsOn(Node::class, AbstractIntNode::class)
 class TaskDataNode : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
-            .and { it.instanceFields.any { it.type == type<AbstractIntegerNode0>() } }
+            .and { it.instanceFields.any { it.type == type<AbstractIntNode>() } }
 }

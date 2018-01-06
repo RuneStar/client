@@ -53,6 +53,11 @@ class PacketWriter : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
     }
 
+    @DependsOn(IsaacCipher::class)
+    class isaacCipher : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IsaacCipher>() }
+    }
+
     @MethodParameters()
     @DependsOn(AbstractChannel.close::class)
     class close : IdentityMapper.InstanceMethod() {

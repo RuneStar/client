@@ -89,7 +89,7 @@ class NpcDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(readNext::class)
-    class prayerIcon : UniqueMapper.InMethod.Field(readNext::class) {
+    class headIconPrayer : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 102 }
                 .nextWithin(2) { it.node is JumpInsnNode }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
@@ -97,5 +97,29 @@ class NpcDefinition : IdentityMapper.Class() {
 
     class size : OrderMapper.InConstructor.Field(NpcDefinition::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(getModel::class)
+    class recolorFrom : OrderMapper.InMethod.Field(getModel::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class recolorTo : OrderMapper.InMethod.Field(getModel::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class retextureFrom : OrderMapper.InMethod.Field(getModel::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModel::class)
+    class retextureTo : OrderMapper.InMethod.Field(getModel::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 }

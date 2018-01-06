@@ -57,11 +57,11 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.mark == method<Entity.getModel>().mark }
     }
 
-    class skullIcon : OrderMapper.InConstructor.Field(Player::class, 0) {
+    class headIconPk : OrderMapper.InConstructor.Field(Player::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class prayerIcon : OrderMapper.InConstructor.Field(Player::class, 1) {
+    class headIconPrayer : OrderMapper.InConstructor.Field(Player::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
