@@ -5,15 +5,7 @@ import org.runestar.client.updater.deob.common.FrameRemover
 import org.runestar.client.updater.deob.common.SortMethodsByLineNumber
 import org.runestar.client.updater.deob.common.UnnecessaryGotoRemover
 import org.runestar.client.updater.deob.common.controlflow.ControlFlowFixer
-import org.runestar.client.updater.deob.jagex.JarInfo
-import org.runestar.client.updater.deob.jagex.MethodOrigClassFinder
-import org.runestar.client.updater.deob.jagex.MultiplierFinder
-import org.runestar.client.updater.deob.jagex.OpaquePredicateFixer
-import org.runestar.client.updater.deob.jagex.RemoveEnclosingMethodAttributes
-import org.runestar.client.updater.deob.jagex.StaticDuplicateMethodFinder
-import org.runestar.client.updater.deob.jagex.UnusedFieldRemover
-import org.runestar.client.updater.deob.jagex.UnusedMethodRemover
-import org.runestar.client.updater.deob.jagex.UnusedTryCatchRemover
+import org.runestar.client.updater.deob.jagex.*
 import java.nio.file.Path
 
 interface Transformer {
@@ -42,7 +34,7 @@ interface Transformer {
                 JarInfo,
                 MultiplierFinder,
                 UnusedTryCatchRemover,
-                OpaquePredicateFixer,
+                OpaquePredicateCheckRemover,
                 ControlFlowFixer,
                 StaticDuplicateMethodFinder,
                 UnusedFieldRemover,
@@ -53,12 +45,13 @@ interface Transformer {
                 MethodOrigClassFinder,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes
+//                OpaquePredicateArgumentRemover
         )
 
         val DEFAULT = Transformer.Composite(
                 MultiplierFinder,
                 UnusedTryCatchRemover,
-                OpaquePredicateFixer,
+                OpaquePredicateCheckRemover,
                 ControlFlowFixer,
                 UnusedFieldRemover,
                 UnusedMethodRemover,
@@ -67,6 +60,7 @@ interface Transformer {
                 SortMethodsByLineNumber,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes
+//                OpaquePredicateArgumentRemover
         )
 
         /**
@@ -75,7 +69,7 @@ interface Transformer {
          */
         val CLEAN = Transformer.Composite(
                 UnusedTryCatchRemover,
-                OpaquePredicateFixer,
+                OpaquePredicateCheckRemover,
                 ControlFlowFixer,
                 FrameRemover,
                 UnnecessaryGotoRemover,

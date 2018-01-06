@@ -1,8 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XPlayer
-import org.runestar.client.game.raw.access.XPlayerAppearance
 
 class Player(override val accessor: XPlayer) : Actor(accessor) {
 
@@ -12,9 +10,9 @@ class Player(override val accessor: XPlayer) : Actor(accessor) {
 
     val combatLevel get() = accessor.combatLevel
 
-    val prayerIcon get() = accessor.prayerIcon
+    val prayerIcon get() = accessor.headIconPrayer
 
-    val skullIcon get() = accessor.skullIcon
+    val skullIcon get() = accessor.headIconPk
 
     val team get() = accessor.team
 

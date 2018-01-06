@@ -180,6 +180,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 3..4 }
                 .and { it.instructions.any { it.opcode == ISHR } }
+                .and { it.instructions.any { it.opcode == SIPUSH && it.intOperand == 13056 } }
     }
 
     @DependsOn(worldToScreen::class)
@@ -2586,4 +2587,18 @@ class Client : IdentityMapper.Class() {
     class ByteArrayPool_smallCount : ByteArrayPoolCount(0)
     class ByteArrayPool_mediumCount : ByteArrayPoolCount(1)
     class ByteArrayPool_largeCount : ByteArrayPoolCount(2)
+
+    @DependsOn(ByteArrayPool_large::class)
+    class ByteArrayPool_get : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { Modifier.isSynchronized(it.access) }
+                .and { it.returnType == ByteArray::class.type }
+                .and { it.instructions.any { it.isField && it.fieldId == field<ByteArrayPool_large>().id } }
+    }
+
+//    @DependsOn(ByteArrayPool_large::class)
+//    class ByteArrayPool_release : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { Modifier.isSynchronized(it.access) }
+//                .and { it.returnType == VOID_TYPE }
+//                .and { it.instructions.any { it.isField && it.fieldId == field<ByteArrayPool_large>().id } }
+//    }
 }

@@ -19,19 +19,21 @@ object UnusedTryCatchRemover : Transformer {
     override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
         var removedTryCatches = 0
-        classNodes.flatMap { it.methods }.forEach { m ->
-            val tcbs = m.tryCatchBlocks.iterator()
-            while (tcbs.hasNext()) {
-                val tcb = tcbs.next()
-                if (tcb.type == RUNTIME_EXCEPTION_INTERNAL_NAME) {
-                    val insns = m.instructions.iterator(m.instructions.indexOf(tcb.handler))
-                    var insn: AbstractInsnNode
-                    do {
-                        insn = insns.next()
-                        insns.remove()
-                    } while (insn.opcode != Opcodes.ATHROW)
-                    tcbs.remove()
-                    removedTryCatches++
+        classNodes.forEach { c ->
+            c.methods.forEach { m ->
+                val tcbs = m.tryCatchBlocks.iterator()
+                while (tcbs.hasNext()) {
+                    val tcb = tcbs.next()
+                    if (tcb.type == RUNTIME_EXCEPTION_INTERNAL_NAME) {
+                        val insns = m.instructions.iterator(m.instructions.indexOf(tcb.handler))
+                        var insn: AbstractInsnNode
+                        do {
+                            insn = insns.next()
+                            insns.remove()
+                        } while (insn.opcode != Opcodes.ATHROW)
+                        tcbs.remove()
+                        removedTryCatches++
+                    }
                 }
             }
         }

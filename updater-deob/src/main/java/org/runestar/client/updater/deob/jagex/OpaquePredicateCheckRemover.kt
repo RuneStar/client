@@ -15,7 +15,7 @@ import java.lang.reflect.Modifier
 import java.nio.file.Path
 import java.util.*
 
-object OpaquePredicateFixer : Transformer {
+object OpaquePredicateCheckRemover : Transformer {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 

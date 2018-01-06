@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         if (revision in setOf(146, 147)) continue
         println(revision)
 
-//        deob(revision)
+        deob(revision)
         map(revision)
         mergeHooks(revision)
         rename(revision)
