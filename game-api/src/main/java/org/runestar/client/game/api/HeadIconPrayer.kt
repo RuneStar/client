@@ -1,16 +1,18 @@
 package org.runestar.client.game.api
 
-enum class HeadIconPrayer(val id: Int) {
-
-    PROTECT_FROM_MELEE(0),
-    PROTECT_FROM_MISSILES(1),
-    PROTECT_FROM_MAGIC(2),
-    RETRIBUTION(3),
-    SMITE(4),
-    REDEMPTION(5),
-    PROTECT_FROM_MAGIC_AND_MISSILES(6);
+enum class HeadIconPrayer(
+        val id: Int,
+        val prayer: Prayer?
+) {
+    PROTECT_FROM_MELEE(0, Prayer.PROTECT_FROM_MELEE),
+    PROTECT_FROM_MISSILES(1, Prayer.PROTECT_FROM_MISSILES),
+    PROTECT_FROM_MAGIC(2, Prayer.PROTECT_FROM_MAGIC),
+    RETRIBUTION(3, Prayer.RETRIBUTION),
+    SMITE(4, Prayer.SMITE),
+    REDEMPTION(5, Prayer.REDEMPTION),
+    PROTECT_FROM_MAGIC_AND_MISSILES(6, null);
 
     companion object {
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
     }
 }

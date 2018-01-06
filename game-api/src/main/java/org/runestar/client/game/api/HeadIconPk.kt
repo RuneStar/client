@@ -14,5 +14,9 @@ enum class HeadIconPk(val id: Int) {
     DMM_BLUE(9),
     DMM_GREEN(10),
     DMM_SILVER(11),
-    DMM_BRONZE(12)
+    DMM_BRONZE(12);
+
+    companion object {
+        @JvmField val LOOKUP = values().associateBy { it.id }
+    }
 }

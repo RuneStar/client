@@ -8,4 +8,11 @@ class NpcDefinition(override val accessor: XNpcDefinition) : Wrapper() {
     val actions: List<String> get() = accessor.actions.map { it ?: "" }
 
     val name get() = accessor.name ?: ""
+
+    val headIconPrayer get() = accessor.headIconPrayer.let {
+        when (it) {
+            -1 -> null
+            else -> HeadIconPrayer.LOOKUP.getValue(it)
+        }
+    }
 }

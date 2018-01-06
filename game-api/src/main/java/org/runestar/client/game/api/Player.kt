@@ -10,9 +10,19 @@ class Player(override val accessor: XPlayer) : Actor(accessor) {
 
     val combatLevel get() = accessor.combatLevel
 
-    val prayerIcon get() = accessor.headIconPrayer
+    val headIconPrayer get(): HeadIconPrayer? = accessor.headIconPrayer.let {
+        when (it) {
+            -1 -> null
+            else -> HeadIconPrayer.LOOKUP.getValue(it)
+        }
+    }
 
-    val skullIcon get() = accessor.headIconPk
+    val headIconPk get(): HeadIconPk? = accessor.headIconPk.let {
+        when (it) {
+            -1 -> null
+            else -> HeadIconPk.LOOKUP.getValue(it)
+        }
+    }
 
     val team get() = accessor.team
 
