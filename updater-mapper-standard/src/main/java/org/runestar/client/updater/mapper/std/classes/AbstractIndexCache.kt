@@ -105,7 +105,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.size in 2..3 }
                 .and { it.instructions.none { it.isMethod && it.methodId == method<takeRecordEncrypted>().id } }
                 .and { it.instructions.none { it.opcode == NEW && it.typeType == RuntimeException::class.type } }
-                .and { it.instructions.count { it.opcode == ACONST_NULL } == 5 }
+//                .and { it.instructions.count { it.opcode == ACONST_NULL } == 5 }
     }
 
     @MethodParameters("archiveOrRecord")
