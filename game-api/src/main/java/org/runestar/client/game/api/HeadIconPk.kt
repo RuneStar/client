@@ -17,6 +17,13 @@ enum class HeadIconPk(val id: Int) {
     DMM_BRONZE(12);
 
     companion object {
+
         @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmStatic
+        fun of(id: Int): HeadIconPk? {
+            if (id == -1) return null
+            return LOOKUP.getValue(id)
+        }
     }
 }

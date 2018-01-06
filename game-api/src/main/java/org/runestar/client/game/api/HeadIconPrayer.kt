@@ -13,6 +13,13 @@ enum class HeadIconPrayer(
     PROTECT_FROM_MAGIC_AND_MISSILES(6, null);
 
     companion object {
-        @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmField val VALUES = values().asList()
+
+        @JvmStatic
+        fun of(id: Int): HeadIconPrayer? {
+            if (id == -1) return null
+            return VALUES[id]
+        }
     }
 }

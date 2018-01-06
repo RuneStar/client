@@ -5,6 +5,7 @@ import org.runestar.client.game.api.MouseCrossColor
 import org.runestar.client.game.raw.Client.accessor
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.runestar.client.game.api.MouseCross
 import java.awt.Point
 import java.awt.event.MouseEvent
 
@@ -28,9 +29,7 @@ object Mouse {
 
     val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it]) }
 
-    val crossColor get() = MouseCrossColor.LOOKUP.getValue(accessor.mouseCrossColor)
-
-    val crossState get() = accessor.mouseCrossState
+    val cross get() = MouseCross.of(MouseCrossColor.of(accessor.mouseCrossColor), accessor.mouseCrossState)
 
     /**
      * @see[java.awt.event.MouseListener]
@@ -40,6 +39,6 @@ object Mouse {
     val events: Observable<MouseEvent> = LiveCanvas.canvasReplacements.flatMap { SwingObservable.mouse(it) }
 
     override fun toString(): String {
-        return "Mouse(location=$location, crossColor=$crossColor)"
+        return "Mouse(location=$location, cross=$cross)"
     }
 }
