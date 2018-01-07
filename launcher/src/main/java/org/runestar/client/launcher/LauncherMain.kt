@@ -61,7 +61,9 @@ fun main(args: Array<String>) {
         frame.dispose()
     }
     ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
-            .inheritIO().start().waitFor()
+            .redirectErrorStream(true)
+            .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+            .start()
 }
 
 private fun updateArtifact(artifactId: String, path: Path) {
