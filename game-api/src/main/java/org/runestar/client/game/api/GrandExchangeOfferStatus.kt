@@ -10,11 +10,11 @@ enum class GrandExchangeOfferStatus(val id: Int) {
 
     companion object {
 
-        @JvmField val LOOKUP = values().associateBy { it.id }
+        @JvmField val VALUES = values().asList()
 
         @JvmStatic
         fun of (id: Int): GrandExchangeOfferStatus {
-            return LOOKUP.getValue(id)
+            return VALUES[id - 1]
         }
     }
 }
