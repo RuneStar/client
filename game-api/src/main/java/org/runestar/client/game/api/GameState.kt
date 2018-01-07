@@ -12,6 +12,12 @@ enum class GameState(val id: Int) {
     CHANGING_WORLD(45);
 
     companion object {
+
         @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmStatic
+        fun of(id: Int): GameState {
+            return LOOKUP.getValue(id)
+        }
     }
 }

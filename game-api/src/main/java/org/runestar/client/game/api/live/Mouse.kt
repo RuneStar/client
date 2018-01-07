@@ -29,7 +29,7 @@ object Mouse {
 
     val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it]) }
 
-    val cross get() = MouseCross.of(MouseCrossColor.of(accessor.mouseCrossColor), accessor.mouseCrossState)
+    val cross get() = MouseCrossColor.of(accessor.mouseCrossColor)?.let { MouseCross(it, accessor.mouseCrossState) }
 
     /**
      * @see[java.awt.event.MouseListener]

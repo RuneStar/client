@@ -7,7 +7,11 @@ enum class WindowMode(val id: Int) {
 
     companion object {
 
-        @JvmField
-        val LOOKUP = values().associateBy { it.id }
+        @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmStatic
+        fun of(id: Int): WindowMode {
+            return LOOKUP.getValue(id)
+        }
     }
 }

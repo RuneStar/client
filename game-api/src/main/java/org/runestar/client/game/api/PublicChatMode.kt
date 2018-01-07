@@ -9,6 +9,12 @@ enum class PublicChatMode(val id: Int) {
     AUTOCHAT(4);
 
     companion object {
-        @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmField val VALUES = values().asList()
+
+        @JvmStatic
+        fun of(id: Int): PublicChatMode {
+            return VALUES[id]
+        }
     }
 }

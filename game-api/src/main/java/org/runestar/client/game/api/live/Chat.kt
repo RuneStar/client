@@ -10,5 +10,5 @@ object Chat {
 
     val messages: Observable<Message> = XChatBox.addMessage.exit.map { Message(it.returned) }
 
-    val publicMode get() = PublicChatMode.LOOKUP.getValue(accessor.publicChatMode)
+    val publicMode get() = PublicChatMode.of(accessor.publicChatMode)
 }

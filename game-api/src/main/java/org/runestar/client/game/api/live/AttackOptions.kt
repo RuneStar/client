@@ -5,7 +5,7 @@ import org.runestar.client.game.raw.Client.accessor
 
 object AttackOptions {
 
-    val npc get() = AttackOption.LOOKUP.getValue(accessor.npcAttackOption)
+    val npc get() = AttackOption.of(accessor.npcAttackOption)
 
-    val player get() = AttackOption.LOOKUP.getValue(accessor.playerAttackOption)
+    val player get() = AttackOption.of(accessor.playerAttackOption)
 }

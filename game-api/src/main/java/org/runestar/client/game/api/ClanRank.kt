@@ -13,6 +13,12 @@ enum class ClanRank(val id: Byte) {
     OWNER(7);
 
     companion object {
+
         @JvmField val LOOKUP = values().associateBy { it.id }
+
+        @JvmStatic
+        fun of(id: Byte): ClanRank {
+            return LOOKUP.getValue(id)
+        }
     }
 }

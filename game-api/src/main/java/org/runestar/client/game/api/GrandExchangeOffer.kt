@@ -5,15 +5,6 @@ import org.runestar.client.game.raw.access.XGrandExchangeOffer
 
 class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper() {
 
-    companion object {
-
-        @JvmStatic
-        fun of(accessor: XGrandExchangeOffer): GrandExchangeOffer? {
-            if (accessor.id == 0) return null
-            return GrandExchangeOffer(accessor)
-        }
-    }
-
     init {
         require(accessor.id != 0)
     }
@@ -32,9 +23,9 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
 
     val isFilled get() = totalQuantity == currentQuantity
 
-    val type get() = GrandExchangeOfferType.LOOKUP.getValue(accessor.type())
+    val type get() = GrandExchangeOfferType.of(accessor.type())
 
-    val status get() = GrandExchangeOfferStatus.LOOKUP.getValue(accessor.status())
+    val status get() = GrandExchangeOfferStatus.of(accessor.status())
 
     val isAborted get() = when(status) {
         GrandExchangeOfferStatus.ABORTING -> true
@@ -44,5 +35,14 @@ class GrandExchangeOffer(override val accessor: XGrandExchangeOffer) : Wrapper()
 
     override fun toString(): String {
         return "GrandExchangeOffer(type=$type, id=$id, unitPrice=$unitPrice, currentQuantity=$currentQuantity, totalQuantity=$totalQuantity, status=$status)"
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun of(accessor: XGrandExchangeOffer): GrandExchangeOffer? {
+            if (accessor.id == 0) return null
+            return GrandExchangeOffer(accessor)
+        }
     }
 }

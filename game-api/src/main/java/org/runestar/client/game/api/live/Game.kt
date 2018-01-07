@@ -14,10 +14,10 @@ import java.awt.Container
 
 object Game {
 
-    val state get() = GameState.LOOKUP.getValue(accessor.gameState)
+    val state get() = GameState.of(accessor.gameState)
 
     val stateChanges: Observable<GameState> = XClient.updateGameState.exit.map {
-        checkNotNull(GameState.LOOKUP[it.arguments[0]]) { it.arguments[0] }
+        checkNotNull(GameState.of(it.arguments[0] as Int)) { it.arguments[0] }
     }
 
     val cycle get() = accessor.cycle
@@ -28,7 +28,7 @@ object Game {
 
     val weight get() = accessor.weight
 
-    val windowMode get() = WindowMode.LOOKUP.getValue(accessor.clientPreferences.windowMode)
+    val windowMode get() = WindowMode.of(accessor.clientPreferences.windowMode)
 
     /**
      * @see[java.awt.event.WindowListener]

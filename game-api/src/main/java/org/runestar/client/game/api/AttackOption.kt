@@ -12,6 +12,12 @@ enum class AttackOption(override val accessor: XAttackOption) : Wrapped {
     LEFT_CLICK_WHERE_AVAILABLE(accessor.attackOption_leftClickWhereAvailable);
 
     companion object {
+
         @JvmField val LOOKUP = values().associateBy { it.accessor }
+
+        @JvmStatic
+        fun of(accessor: XAttackOption): AttackOption {
+            return LOOKUP.getValue(accessor)
+        }
     }
 }
