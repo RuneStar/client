@@ -1,14 +1,11 @@
-@file:JvmName("ClientMain")
+@file:JvmName("Application")
 
 package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
-import org.runestar.client.common.ICON
-import org.runestar.client.common.PLUGINS_DIR_PATH
-import org.runestar.client.common.PLUGINS_JARS_DIR_PATH
-import org.runestar.client.common.TITLE
+import org.runestar.client.common.*
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
@@ -34,7 +31,7 @@ val trayIcon = TrayIcon(ICON, TITLE).apply {
 lateinit var frame: JFrame
     private set
 
-fun main(args: Array<String>) {
+fun start() {
     systemStartUp()
 
     val javConfig = JavConfig.load()
