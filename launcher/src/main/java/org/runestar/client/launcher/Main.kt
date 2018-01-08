@@ -1,4 +1,4 @@
-@file:JvmName("LauncherMain")
+@file:JvmName("Main")
 
 package org.runestar.client.launcher
 
