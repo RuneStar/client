@@ -2,8 +2,8 @@ package org.runestar.client.launcher
 
 import org.eclipse.aether.transfer.TransferEvent
 import org.eclipse.aether.transfer.TransferListener
+import org.runestar.client.common.AwtTaskbar
 import org.runestar.client.common.ICON
-import org.runestar.client.common.setWindowProgressValue
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.*
@@ -39,12 +39,12 @@ internal class LaunchFrame : JFrame("Launching RuneStar..."), TransferListener {
      * @param[progress] value from 0.0 to 1.0
      */
     private fun updateProgress(string: String, progress: Double) {
-        val intProgress = (progress * 100).toInt()
         SwingUtilities.invokeLater {
+            val intProgress = (progress * 100).toInt()
             label.text = string
             progressBar.value = intProgress
+            AwtTaskbar.setWindowProgressValue(this, intProgress)
         }
-        setWindowProgressValue(this, intProgress)
     }
 
     override fun transferInitiated(event: TransferEvent) {
