@@ -2,7 +2,7 @@ package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.plugins.Plugin
 import org.runestar.client.plugins.PluginSettings
-import java.io.IOError
+import java.io.*
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
@@ -20,22 +20,20 @@ class NashornEngine : Plugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-        val console = System.console()
-        if (console == null) {
-            logger.warn("No console found")
-            return
-        }
         running = true
-
         Thread({
-            val engine = ScriptEngineManager().getEngineByName("nashorn")
-            while (running) {
-                print(PROMPT)
-                try {
-                    val input = console.readLine() ?: return@Thread
-                    println(engine.eval(input))
-                } catch (se: ScriptException) {
-                    println(se)
+            System.`in`.bufferedReader().use { reader ->
+                System.out.bufferedWriter().use { writer ->
+                    val engine = ScriptEngineManager().getEngineByName("nashorn")
+                    while (running) {
+                        writer.write(PROMPT)
+                        try {
+                            val input = reader.readLine() ?: return@Thread
+                            writer.write(engine.eval(input).toString())
+                        } catch (se: ScriptException) {
+                            writer.write(se.toString())
+                        }
+                    }
                 }
             }
         }).start()
