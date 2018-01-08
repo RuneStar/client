@@ -152,7 +152,6 @@ class InjectMojo : AbstractMojo() {
     }
 
     private fun createMethodProxy(typePool: TypePool, methodHook: MethodHook): Implementation {
-        println(methodHook)
         val sourceMethodDescription = typePool.describe(methodHook.owner).resolve().declaredMethods.first {
             it.name == methodHook.name && it.descriptor == methodHook.descriptor
         }
