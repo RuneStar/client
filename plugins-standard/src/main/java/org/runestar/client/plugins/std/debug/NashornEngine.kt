@@ -22,18 +22,15 @@ class NashornEngine : Plugin<PluginSettings>() {
         super.start()
         running = true
         Thread({
-            System.`in`.bufferedReader().use { reader ->
-                System.out.bufferedWriter().use { writer ->
-                    val engine = ScriptEngineManager().getEngineByName("nashorn")
-                    while (running) {
-                        writer.write(PROMPT)
-                        try {
-                            val input = reader.readLine() ?: return@Thread
-                            writer.write(engine.eval(input).toString())
-                        } catch (se: ScriptException) {
-                            writer.write(se.toString())
-                        }
-                    }
+            val reader = System.`in`.bufferedReader()
+            val engine = ScriptEngineManager().getEngineByName("nashorn")
+            while (running) {
+                println(PROMPT)
+                try {
+                    val input = reader.readLine() ?: return@Thread
+                    println(engine.eval(input))
+                } catch (se: ScriptException) {
+                    println(se)
                 }
             }
         }).start()
