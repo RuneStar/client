@@ -1,3 +1,5 @@
+@file:JvmName("Taskbar")
+
 package org.runestar.client.common
 
 import java.awt.Window
