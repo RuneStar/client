@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.std.debug
 
-import org.runestar.client.api.trayIcon
+import org.runestar.client.api.Application
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
@@ -14,7 +14,7 @@ class NotificationTest : DisposablePlugin<PluginSettings>() {
         super.start()
 
         add(Menu.actions.subscribe { a ->
-            trayIcon.displayMessage(
+            Application.trayIcon.displayMessage(
                     null,
                     a.toString(),
                     TrayIcon.MessageType.INFO
