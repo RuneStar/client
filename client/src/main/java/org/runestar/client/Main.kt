@@ -2,8 +2,8 @@
 
 package org.runestar.client
 
-import org.runestar.client.api.start
+import org.runestar.client.api.Application
 
 fun main(args: Array<String>) {
-    start()
+    Application.start()
 }

@@ -1,5 +1,3 @@
-@file:JvmName("Application")
-
 package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
@@ -25,40 +23,129 @@ import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
-private val logger = getLogger()
+object Application {
 
-val trayIcon = TrayIcon(ICON, TITLE).apply {
-    isImageAutoSize = true
-}
+    private val logger = getLogger()
 
-lateinit var frame: JFrame
-    private set
-
-fun start() {
-    systemStartUp()
-
-    val javConfig = JavConfig.load()
-    Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
-    @Suppress("DEPRECATION")
-    val applet = Client.accessor as java.applet.Applet
-    appletPreInit(applet, javConfig)
-
-    SwingUtilities.invokeAndWait {
-        frame = newGameWindow(applet)
+    val trayIcon = TrayIcon(ICON, TITLE).apply {
+        isImageAutoSize = true
     }
 
-    applet.apply {
-        init()
-        start()
+    lateinit var frame: JFrame
+        private set
+
+    private lateinit var pluginLoader: PluginLoader
+
+    private var pluginsWindow: PluginsWindow? = null
+
+    private var started = false
+
+    fun start() {
+        check(!started)
+        started = true
+
+        systemStartUp()
+
+        val javConfig = JavConfig.load()
+        Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
+        @Suppress("DEPRECATION")
+        val applet = Client.accessor as java.applet.Applet
+
+        appletPreInit(applet, javConfig)
+
+        SwingUtilities.invokeAndWait {
+            frame = newGameWindow(applet)
+        }
+
+        applet.init()
+        applet.start()
+
+        waitForTitle()
+
+        pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
+
+        frame.addWindowListener(FrameCloseConfirmListener())
+
+        trayIcon.apply {
+            popupMenu = PopupMenu(TITLE).apply {
+                add(MenuItem("Plugins").apply {
+                    addActionListener { openPluginsAction() }
+                })
+            }
+            addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent) {
+                    if (e.isLeftButton) frame.state = Frame.NORMAL
+                }
+            })
+        }
+        addToSystemTray()
     }
 
-    waitForTitle()
+    private fun systemStartUp() {
+        System.setProperty("sun.awt.noerasebackground", true.toString())
+        SwingUtilities.invokeLater {
+            if (!WebLookAndFeel.install()) {
+                logger.warn("Failed to install Web Look and Feel")
+            }
+        }
+    }
 
-    val pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
+    private fun appletPreInit(
+            @Suppress("DEPRECATION") applet: java.applet.Applet,
+            javConfig: JavConfig
+    ) {
+        applet.apply {
+            layout = null
+            setStub(JavConfig.AppletStub(javConfig))
+            minimumSize = Dimension(200, 350)
+            maximumSize = javConfig.appletMaxSize
+            preferredSize = javConfig.appletMinSize
+            size = preferredSize
+        }
+    }
 
-    var pluginsWindow: PluginsWindow? = null
+    private fun waitForTitle() {
+        // wait for most fields to be initialized
+        Game.stateChanges.takeUntil { it == GameState.TITLE }
+                .ignoreElements()
+                .blockingAwait()
+    }
 
-    fun openPluginsAction() {
+    private fun newGameWindow(applet: Component): JFrame {
+        return JFrame(TITLE).apply {
+            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            add(applet)
+            iconImage = ICON
+            pack()
+            setLocationRelativeTo(null)
+            isVisible = true
+            preferredSize = size
+            minimumSize = applet.minimumSize
+        }
+    }
+
+    private class FrameCloseConfirmListener : WindowAdapter() {
+        override fun windowClosing(e: WindowEvent) {
+            val f = e.window as JFrame
+            f.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(f)) {
+                pluginLoader.close()
+                WindowConstants.EXIT_ON_CLOSE
+            } else {
+                WindowConstants.DO_NOTHING_ON_CLOSE
+            }
+        }
+    }
+
+    private fun confirmExit(frame: Frame): Boolean {
+        return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                frame,
+                "Are you sure you want to exit?",
+                "Exit",
+                JOptionPane.YES_NO_OPTION
+        )
+    }
+
+    private fun openPluginsAction() {
         pluginsWindow.apply {
             if (this == null) {
                 pluginsWindow = PluginsWindow(pluginLoader).apply {
@@ -75,86 +162,11 @@ fun start() {
         }
     }
 
-    SwingUtilities.invokeLater {
-        frame.addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent) {
-                frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
-                    pluginLoader.close()
-                    WindowConstants.EXIT_ON_CLOSE
-                } else {
-                    WindowConstants.DO_NOTHING_ON_CLOSE
-                }
-            }
-        })
-    }
-
-    trayIcon.apply {
-        popupMenu = PopupMenu(TITLE).apply {
-            add(MenuItem("Plugins").apply {
-                addActionListener { openPluginsAction() }
-            })
-        }
-        addMouseListener(object : MouseAdapter() {
-            override fun mouseClicked(e: MouseEvent) {
-                if (e.isLeftButton) frame.state = Frame.NORMAL
-            }
-        })
-    }
-    try {
-        SystemTray.getSystemTray().add(trayIcon)
-    } catch (e: Exception) {
-        logger.warn("failed to add to system tray", e)
-    }
-}
-
-private fun appletPreInit(
-        @Suppress("DEPRECATION") applet: java.applet.Applet,
-        javConfig: JavConfig
-) {
-    applet.apply {
-        layout = null
-        setStub(JavConfig.AppletStub(javConfig))
-        minimumSize = Dimension(200, 350)
-        maximumSize = javConfig.appletMaxSize
-        preferredSize = javConfig.appletMinSize
-        size = preferredSize
-    }
-}
-
-private fun waitForTitle() {
-    // wait for most fields to be initialized
-    Game.stateChanges.takeUntil { it == GameState.TITLE }
-            .ignoreElements()
-            .blockingAwait()
-}
-
-private fun newGameWindow(applet: Component): JFrame {
-    return JFrame(TITLE).apply {
-        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-        add(applet)
-        iconImage = ICON
-        pack()
-        setLocationRelativeTo(null)
-        isVisible = true
-        preferredSize = size
-        minimumSize = applet.minimumSize
-    }
-}
-
-private fun confirmExit(frame: Frame): Boolean {
-    return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
-            frame,
-            "Are you sure you want to exit?",
-            "Exit",
-            JOptionPane.YES_NO_OPTION
-    )
-}
-
-private fun systemStartUp() {
-    System.setProperty("sun.awt.noerasebackground", true.toString())
-    SwingUtilities.invokeLater {
-        if (!WebLookAndFeel.install()) {
-            logger.warn("Failed to install Web Look and Feel")
+    private fun addToSystemTray() {
+        try {
+            SystemTray.getSystemTray().add(trayIcon)
+        } catch (e: Exception) {
+            logger.warn("Failed to add tray icon to system tray", e)
         }
     }
 }
