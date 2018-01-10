@@ -1,12 +1,10 @@
 package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
+import com.alee.laf.optionpane.WebOptionPane
 import io.reactivex.Observable
-import io.reactivex.Observer
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
 import org.runestar.client.common.*
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
@@ -19,10 +17,18 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.nio.file.Files
 import java.util.concurrent.TimeUnit
-import javax.swing.*
+import javax.swing.JFrame
+import javax.swing.JOptionPane
+import javax.swing.SwingUtilities
+import javax.swing.WindowConstants
 
 object Application {
+
+    private const val DEFAULT_PROFILE = "default"
+
+    private val VALID_PROFILE_REGEX = "[a-zA-Z0-9 _-]+".toRegex()
 
     private val logger = getLogger()
 
@@ -61,12 +67,15 @@ object Application {
 
         waitForTitle()
 
-        pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
+        setProfile()
 
         frame.addWindowListener(FrameCloseConfirmListener())
 
         trayIcon.apply {
             popupMenu = PopupMenu(TITLE).apply {
+                add(MenuItem("Change profile").apply {
+                    addActionListener { changeProfile() }
+                })
                 add(MenuItem("Plugins").apply {
                     addActionListener { openPluginsAction() }
                 })
@@ -134,8 +143,7 @@ object Application {
 
     private class FrameCloseConfirmListener : WindowAdapter() {
         override fun windowClosing(e: WindowEvent) {
-            val f = e.window as JFrame
-            f.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(f)) {
+            frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
                 pluginLoader.close()
                 WindowConstants.EXIT_ON_CLOSE
             } else {
@@ -168,5 +176,38 @@ object Application {
                 requestFocus()
             }
         }
+    }
+
+    fun changeProfile() {
+        val existingCustomProfiles = ArrayList<String>()
+        for (p in Files.newDirectoryStream(PLUGINS_DIR_PATH)) {
+            if (Files.isDirectory(p)) {
+                val name = p.fileName.toString()
+                if (name != DEFAULT_PROFILE) {
+                    existingCustomProfiles.add(name)
+                }
+            }
+        }
+        val p = showProfileDialog(existingCustomProfiles)
+        if (p != null) {
+            setProfile(p)
+        }
+    }
+
+    fun showProfileDialog(profiles: List<String>): String? {
+        // todo
+        return JOptionPane.showInputDialog("Choose profile")
+                .takeIf { !it.isNullOrBlank() && it.matches(VALID_PROFILE_REGEX) }
+    }
+
+    private fun setProfile(profile: String = DEFAULT_PROFILE) {
+        val title = if (profile == DEFAULT_PROFILE) TITLE else "$TITLE - $profile"
+        frame.title = title
+        trayIcon.toolTip = title
+        pluginsWindow?.dispose()
+        if (::pluginLoader.isInitialized) pluginLoader.close()
+        val profileDir = PLUGINS_DIR_PATH.resolve(profile)
+        Files.createDirectories(profileDir)
+        pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, profileDir, YamlFileReadWriter)
     }
 }
