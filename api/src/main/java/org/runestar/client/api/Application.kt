@@ -3,10 +3,7 @@ package org.runestar.client.api
 import com.alee.laf.WebLookAndFeel
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
-import org.runestar.client.common.ICON
-import org.runestar.client.common.PLUGINS_DIR_PATH
-import org.runestar.client.common.PLUGINS_JARS_DIR_PATH
-import org.runestar.client.common.TITLE
+import org.runestar.client.common.*
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
@@ -18,10 +15,7 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.JFrame
-import javax.swing.JOptionPane
-import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
+import javax.swing.*
 
 object Application {
 
@@ -57,10 +51,13 @@ object Application {
             frame = newGameWindow(applet)
         }
 
+        AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.INDETERMINATE)
+
         applet.init()
         applet.start()
 
         waitForTitle()
+        AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF)
 
         pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
 
@@ -78,7 +75,12 @@ object Application {
                 }
             })
         }
-        addToSystemTray()
+
+        try {
+            SystemTray.getSystemTray().add(trayIcon)
+        } catch (e: Exception) {
+            logger.warn("Unable to use system tray")
+        }
     }
 
     private fun systemStartUp() {
@@ -159,14 +161,6 @@ object Application {
                 state = JFrame.NORMAL
                 requestFocus()
             }
-        }
-    }
-
-    private fun addToSystemTray() {
-        try {
-            SystemTray.getSystemTray().add(trayIcon)
-        } catch (e: Exception) {
-            logger.warn("Failed to add tray icon to system tray", e)
         }
     }
 }
