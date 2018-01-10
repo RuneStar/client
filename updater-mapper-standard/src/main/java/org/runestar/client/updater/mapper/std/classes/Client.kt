@@ -2601,4 +2601,23 @@ class Client : IdentityMapper.Class() {
 //                .and { it.returnType == VOID_TYPE }
 //                .and { it.instructions.any { it.isField && it.fieldId == field<ByteArrayPool_large>().id } }
 //    }
+
+    @DependsOn(Strings_connectingToUpdateServer::class)
+    class Login_loadingText : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_connectingToUpdateServer>().id }
+                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(Strings_connectingToUpdateServer::class)
+    class Login_loadingPercent : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_connectingToUpdateServer>().id }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Strings_connectingToUpdateServer::class)
+    class titleLoadingStage : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_connectingToUpdateServer>().id }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }

@@ -1,8 +1,12 @@
 package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
+import io.reactivex.Observable
+import io.reactivex.Observer
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import org.runestar.client.common.*
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
@@ -15,6 +19,7 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.util.concurrent.TimeUnit
 import javax.swing.*
 
 object Application {
@@ -51,13 +56,10 @@ object Application {
             frame = newGameWindow(applet)
         }
 
-        AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.INDETERMINATE)
-
         applet.init()
         applet.start()
 
         waitForTitle()
-        AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF)
 
         pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, PLUGINS_DIR_PATH, YamlFileReadWriter)
 
@@ -107,10 +109,14 @@ object Application {
     }
 
     private fun waitForTitle() {
-        // wait for most fields to be initialized
-        Game.stateChanges.takeUntil { it == GameState.TITLE }
-                .ignoreElements()
-                .blockingAwait()
+        Observable.interval(20, TimeUnit.MILLISECONDS)
+                .map { ((Client.accessor.titleLoadingStage.toDouble() / 150) * 100).toInt() }
+                .takeUntil { it >= 100 }
+                .subscribe(
+                        { AwtTaskbar.setWindowProgressValue(frame, it) },
+                        {},
+                        { AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF) }
+                )
     }
 
     private fun newGameWindow(applet: Component): JFrame {
