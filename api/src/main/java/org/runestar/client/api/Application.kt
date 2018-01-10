@@ -1,7 +1,6 @@
 package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
-import com.alee.laf.optionpane.WebOptionPane
 import io.reactivex.Observable
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
@@ -19,10 +18,7 @@ import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
-import javax.swing.JFrame
-import javax.swing.JOptionPane
-import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
+import javax.swing.*
 
 object Application {
 
@@ -178,7 +174,7 @@ object Application {
         }
     }
 
-    fun changeProfile() {
+    private fun changeProfile() {
         val existingCustomProfiles = ArrayList<String>()
         for (p in Files.newDirectoryStream(PLUGINS_DIR_PATH)) {
             if (Files.isDirectory(p)) {
@@ -194,10 +190,20 @@ object Application {
         }
     }
 
-    fun showProfileDialog(profiles: List<String>): String? {
-        // todo
-        return JOptionPane.showInputDialog("Choose profile")
-                .takeIf { !it.isNullOrBlank() && it.matches(VALID_PROFILE_REGEX) }
+    // todo
+    private fun showProfileDialog(profiles: List<String>): String? {
+        val msg = "Existing profiles: [${profiles.joinToString()}]"
+        return JOptionPane.showInputDialog(
+                frame,
+                msg,
+                "Change profile",
+                JOptionPane.PLAIN_MESSAGE,
+                ImageIcon(ICON),
+                null,
+                DEFAULT_PROFILE
+        ).takeIf {
+            it is String && !it.isBlank() && it.matches(VALID_PROFILE_REGEX)
+        } as String?
     }
 
     private fun setProfile(profile: String = DEFAULT_PROFILE) {
