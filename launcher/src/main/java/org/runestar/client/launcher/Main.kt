@@ -60,10 +60,7 @@ fun main(args: Array<String>) {
     } finally {
         frame.dispose()
     }
-    ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
-            .redirectErrorStream(true)
-            .redirectOutput(ProcessBuilder.Redirect.INHERIT)
-            .start()
+    ProcessBuilder("java", "-jar", CLIENT_PATH.toString()).start()
 }
 
 private fun updateArtifact(artifactId: String, path: Path) {
