@@ -7,8 +7,10 @@ object AwtTaskbar {
 
     private val taskbarClass = catchToNull { Class.forName("java.awt.Taskbar") }
 
-    @Suppress("UNCHECKED_CAST")
-    private val taskBarStateClass = catchToNull { Class.forName("java.awt.Taskbar\$State") as Class<Enum<*>> }
+    private val taskBarStateClass = catchToNull {
+        @Suppress("UNCHECKED_CAST")
+        Class.forName("java.awt.Taskbar\$State") as Class<Enum<*>>
+    }
 
     private val getTaskbar = taskbarClass?.let {
         catchToNull { it.getMethod("getTaskbar") }
@@ -24,6 +26,10 @@ object AwtTaskbar {
         catchToNull { it.getMethod("setWindowIconBadge", Window::class.java, Image::class.java) }
     }
 
+    private val requestWindowUserAttention = taskbarClass?.let {
+        catchToNull { it.getMethod("requestWindowUserAttention", Window::class.java) }
+    }
+
     private val setWindowProgressState = taskbarClass?.let {
         catchToNull { it.getMethod("setWindowProgressState", Window::class.java, taskBarStateClass) }
     }
@@ -36,10 +42,12 @@ object AwtTaskbar {
         catchToNull { setWindowIconBadge?.invoke(taskbar, window, badge) }
     }
 
+    fun requestWindowUserAttention(window: Window) {
+        catchToNull { requestWindowUserAttention?.invoke(taskbar, window) }
+    }
+
     fun setWindowProgressState(window: Window, state: State) {
-        println(taskBarStateClass)
         val s = taskBarStateClass?.enumConstants?.firstOrNull { it.name == state.name }
-        println(s)
         catchToNull { setWindowProgressState?.invoke(taskbar, window, s) }
     }
 
