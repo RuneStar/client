@@ -4,7 +4,7 @@ import org.kxtra.swing.font.Font
 import java.awt.Font
 import java.util.function.Supplier
 
-class FontForm(
+data class FontForm(
         val name: String = Font.DIALOG,
         val style: String = PLAIN,
         val size: Float = 12f
