@@ -28,8 +28,7 @@ interface Viewport {
             const val ZOOM_MIN = 390
             const val ZOOM_MAX = 1400
 
-            @JvmField
-            val DEFAULT = Fixed(ZOOM_DEFAULT)
+            @JvmField val DEFAULT = Fixed(ZOOM_DEFAULT)
         }
     }
 
