@@ -120,7 +120,10 @@ object Application {
                 .blockingSubscribe(
                         { AwtTaskbar.setWindowProgressValue(frame, it) },
                         {},
-                        { AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF) }
+                        {
+                            AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF)
+                            AwtTaskbar.requestWindowUserAttention(frame)
+                        }
                 )
     }
 
