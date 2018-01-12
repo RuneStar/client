@@ -117,7 +117,7 @@ object Application {
         Observable.interval(20, TimeUnit.MILLISECONDS)
                 .map { ((Client.accessor.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
-                .subscribe(
+                .blockingSubscribe(
                         { AwtTaskbar.setWindowProgressValue(frame, it) },
                         {},
                         { AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF) }
