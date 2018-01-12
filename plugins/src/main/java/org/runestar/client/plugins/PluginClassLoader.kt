@@ -63,7 +63,7 @@ private constructor(jar: Path) : ClassLoader() {
         }
     }
 
-    override fun findClass(name: String): Class<*>? {
+    override fun findClass(name: String): Class<*> {
         val fileName = name.replace('.', '/').plus(".class")
         val bytes = files[fileName] ?: throw ClassNotFoundException(name)
         try {

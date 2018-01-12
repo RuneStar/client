@@ -2,6 +2,7 @@ package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.blockingSubscribeBy
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.common.*
@@ -117,10 +118,9 @@ object Application {
         Observable.interval(20, TimeUnit.MILLISECONDS)
                 .map { ((Client.accessor.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
-                .blockingSubscribe(
-                        { AwtTaskbar.setWindowProgressValue(frame, it) },
-                        {},
-                        {
+                .blockingSubscribeBy(
+                        onNext = { AwtTaskbar.setWindowProgressValue(frame, it) },
+                        onComplete = {
                             AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF)
                             AwtTaskbar.requestWindowUserAttention(frame)
                         }
