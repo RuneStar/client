@@ -1,10 +1,12 @@
 package org.runestar.client.plugins.std
 
+import org.runestar.client.api.Application
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
+import java.awt.TrayIcon
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.io.IOException
@@ -45,8 +47,15 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                     try {
                         Files.createDirectories(path)
                         ImageIO.write(img, IMAGE_FILE_EXTENSION, path.toFile())
+                        if (settings.trayNotify) {
+                            Application.trayIcon.displayMessage(
+                                    "Screenshot Taken",
+                                    fileName,
+                                    TrayIcon.MessageType.NONE
+                            )
+                        }
                     } catch (e: IOException) {
-                        logger.error("Failed to write screenshot", e)
+                        logger.error("Failed to take screenshot", e)
                     }
                 }
         )
@@ -56,5 +65,6 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
         val dateTimeFormatterPattern = "yyyy-MM-dd'T'kk-mm-ss,SSS"
         val localizeTimeZone = true
+        val trayNotify = true
     }
 }
