@@ -11,12 +11,10 @@ class WindowSize : Plugin<WindowSize.Settings>() {
 
     override fun start() {
         super.start()
-
         Application.frame.size = settings.size
     }
 
     class Settings : PluginSettings() {
-
-        val size: Dimension = Application.frame.preferredSize
+        val size = Application.frame.preferredSize
     }
 }

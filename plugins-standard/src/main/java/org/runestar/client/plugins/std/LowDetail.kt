@@ -10,7 +10,6 @@ class LowDetail : Plugin<PluginSettings>() {
 
     override fun start() {
         super.start()
-
         Client.accessor.isLowDetail = true
         Client.accessor.objectDefinition_isLowDetail = true
         Client.accessor.scene_isLowDetail = true
@@ -19,7 +18,6 @@ class LowDetail : Plugin<PluginSettings>() {
 
     override fun stop() {
         super.stop()
-
         Client.accessor.isLowDetail = false
         Client.accessor.objectDefinition_isLowDetail = false
         Client.accessor.scene_isLowDetail = false
