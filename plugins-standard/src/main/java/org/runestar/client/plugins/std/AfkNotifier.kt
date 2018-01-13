@@ -1,6 +1,5 @@
 package org.runestar.client.plugins.std
 
-import io.reactivex.Observable
 import org.runestar.client.api.Application
 import org.runestar.client.common.AwtTaskbar
 import org.runestar.client.game.api.GameState
@@ -22,34 +21,40 @@ class AfkNotifier : DisposablePlugin<AfkNotifier.Settings>() {
     override fun start() {
         super.start()
 
-        val inputEvents: Observable<Unit> = Mouse.events.map { Unit }
-                .mergeWith(Keyboard.events.map { Unit })
+        val timeOutMillis = settings.timeOut
+                .map { it.get() }
+                .reduce { a, b -> a.plus(b) }
+                .toMillis()
 
-        val duration = settings.timeOut.map { it.get() }.reduce { a, b -> a.plus(b) }
+        val inputEvents = Mouse.events
+                .map { Unit }
+                .mergeWith(Keyboard.events.map { Unit })
 
         add(inputEvents
                 .filter { Game.state == GameState.LOGGED_IN }
-                .debounce(duration.toMillis(), TimeUnit.MILLISECONDS)
+                .debounce(timeOutMillis, TimeUnit.MILLISECONDS)
                 .filter { Game.state != GameState.TITLE }
-                .subscribe {
-                    if (settings.beep) {
-                        Toolkit.getDefaultToolkit().beep()
-                    }
-                    if (settings.requestUserAttention) {
-                        AwtTaskbar.requestWindowUserAttention(Application.frame)
-                    }
-                    if (settings.trayNotify) {
-                        Application.trayIcon.displayMessage(
-                                javaClass.simpleName,
-                                "AFK Warning",
-                                TrayIcon.MessageType.WARNING
-                        )
-                    }
-                    if (settings.requestFocus) {
-                        Application.frame.requestFocus()
-                    }
-                }
+                .subscribe { afkNotify() }
         )
+    }
+
+    fun afkNotify() {
+        if (settings.beep) {
+            Toolkit.getDefaultToolkit().beep()
+        }
+        if (settings.requestUserAttention) {
+            AwtTaskbar.requestWindowUserAttention(Application.frame)
+        }
+        if (settings.trayNotify) {
+            Application.trayIcon.displayMessage(
+                    javaClass.simpleName,
+                    "AFK Warning",
+                    TrayIcon.MessageType.WARNING
+            )
+        }
+        if (settings.requestFocus) {
+            Application.frame.requestFocus()
+        }
     }
 
     class Settings : PluginSettings() {
