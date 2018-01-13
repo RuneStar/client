@@ -41,8 +41,12 @@ class PluginLoader(
             }
         })
 
-        pluginsJarsDir.register(watchService,
-                StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE)
+        pluginsJarsDir.register(
+                watchService,
+                StandardWatchEventKinds.ENTRY_CREATE,
+                StandardWatchEventKinds.ENTRY_DELETE,
+                StandardWatchEventKinds.ENTRY_MODIFY
+        )
 
         Thread({
             while (true) {
@@ -93,7 +97,8 @@ class PluginLoader(
             Files.createDirectories(pluginDir)
             val watchKey = pluginDir.register(
                     watchService,
-                    StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE
+                    StandardWatchEventKinds.ENTRY_MODIFY,
+                    StandardWatchEventKinds.ENTRY_DELETE
             )
             val pluginHolder = PluginHolder(plugin, watchKey, executor, settingsReadWriter)
             currentPlugins[plugin.javaClass.name] = pluginHolder
