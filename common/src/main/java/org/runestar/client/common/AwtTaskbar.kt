@@ -1,6 +1,8 @@
 package org.runestar.client.common
 
 import java.awt.Image
+import java.awt.PopupMenu
+import java.awt.SystemColor.window
 import java.awt.Window
 
 object AwtTaskbar {
@@ -34,6 +36,14 @@ object AwtTaskbar {
         catchToNull { it.getMethod("setWindowProgressState", Window::class.java, taskBarStateClass) }
     }
 
+    private val setIconImage = taskbarClass?.let {
+        catchToNull { it.getMethod("setIconImage", Image::class.java) }
+    }
+
+    private val setMenu = taskbarClass?.let {
+        catchToNull { it.getMethod("setMenu", PopupMenu::class.java) }
+    }
+
     fun setWindowProgressValue(window: Window, value: Int) {
         catchToNull { setWindowProgressValue?.invoke(taskbar, window, value) }
     }
@@ -49,6 +59,14 @@ object AwtTaskbar {
     fun setWindowProgressState(window: Window, state: State) {
         val s = taskBarStateClass?.enumConstants?.firstOrNull { it.name == state.name }
         catchToNull { setWindowProgressState?.invoke(taskbar, window, s) }
+    }
+
+    fun setIconImage(image: Image) {
+        catchToNull { setIconImage?.invoke(taskbar, image) }
+    }
+
+    fun setMenu(menu: PopupMenu) {
+        catchToNull { setMenu?.invoke(taskbar, menu) }
     }
 
     enum class State {
