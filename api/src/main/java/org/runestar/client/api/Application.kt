@@ -54,11 +54,7 @@ object Application {
         val applet = Client.accessor as java.applet.Applet
 
         appletPreInit(applet, javConfig)
-
-        SwingUtilities.invokeAndWait {
-            frame = newGameWindow(applet)
-        }
-
+        SwingUtilities.invokeAndWait { frame = newGameWindow(applet) }
         applet.init()
         applet.start()
 

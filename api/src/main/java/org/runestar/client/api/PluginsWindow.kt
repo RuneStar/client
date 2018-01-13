@@ -61,8 +61,9 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             removeAll()
             val switch = WebSwitch().apply {
                 maximumSize = preferredSize
+                isSelected = selectedPlugin?.isRunning ?: false
                 addActionListener {
-                    if (this.isSelected) plugin.start() else plugin.stop()
+                    if (isSelected) plugin.start() else plugin.stop()
                 }
             }
             add(switch)

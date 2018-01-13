@@ -2,7 +2,6 @@ package org.runestar.client.common
 
 import java.awt.Image
 import java.awt.PopupMenu
-import java.awt.SystemColor.window
 import java.awt.Window
 
 object AwtTaskbar {
