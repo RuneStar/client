@@ -17,12 +17,20 @@ private val klass = MethodHandles.lookup().lookupClass()
 private val logger = LoggerFactory.getLogger(klass)
 
 fun main(args: Array<String>) {
+    setup()
+    update()
+    launch()
+}
+
+private fun setup() {
     try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     } catch (e: Exception) {
         logger.warn("Failed to set system look and feel", e)
     }
+}
 
+private fun update() {
     val frame = LaunchFrame()
     val aether = Aether(
             Paths.get(System.getProperty("user.home"), ".m2", "repository"),
@@ -39,13 +47,6 @@ fun main(args: Array<String>) {
     } finally {
         frame.dispose()
     }
-
-    val cmd = ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
-    if (System.console() != null || isRunFromIde()) {
-        cmd.inheritIO().start().waitFor()
-    } else {
-        cmd.start()
-    }
 }
 
 private fun updateArtifact(artifactResult: ArtifactResult, file: Path) {
@@ -54,6 +55,16 @@ private fun updateArtifact(artifactResult: ArtifactResult, file: Path) {
     Files.copy(artifactResult.artifact.file.toPath(), file, StandardCopyOption.REPLACE_EXISTING)
 }
 
+private fun launch() {
+    val cmd = ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
+    if (System.console() != null || isRunFromIde()) {
+        System.gc()
+        cmd.inheritIO().start().waitFor()
+    } else {
+        cmd.start()
+    }
+}
+
 private fun isRunFromIde(): Boolean {
-     return klass.getResource(klass.simpleName + ".class").protocol == "file"
+    return klass.getResource(klass.simpleName + ".class").protocol == "file"
 }
