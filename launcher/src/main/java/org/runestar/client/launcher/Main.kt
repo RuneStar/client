@@ -4,6 +4,7 @@ package org.runestar.client.launcher
 
 import org.eclipse.aether.resolution.ArtifactResult
 import org.runestar.client.common.*
+import org.slf4j.LoggerFactory
 import java.lang.invoke.MethodHandles
 import java.nio.file.Files
 import java.nio.file.Path
@@ -11,11 +12,15 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import javax.swing.UIManager
 
+private val klass = MethodHandles.lookup().lookupClass()
+
+private val logger = LoggerFactory.getLogger(klass)
+
 fun main(args: Array<String>) {
     try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     } catch (e: Exception) {
-        e.printStackTrace()
+        logger.warn("Failed to set system look and feel", e)
     }
 
     val frame = LaunchFrame()
@@ -27,10 +32,10 @@ fun main(args: Array<String>) {
 
     try {
         Files.createDirectories(PLUGINS_DIR_PATH)
-        moveArtifact(aether.updateArtifact(GROUP_ID, PLUGINS_STANDARD_ARTIFACT_ID), PLUGINS_STANDARD_PATH)
-        moveArtifact(aether.updateArtifact(GROUP_ID, CLIENT_ARTIFACT_ID), CLIENT_PATH)
+        updateArtifact(aether.updateArtifact(GROUP_ID, PLUGINS_STANDARD_ARTIFACT_ID), PLUGINS_STANDARD_PATH)
+        updateArtifact(aether.updateArtifact(GROUP_ID, CLIENT_ARTIFACT_ID), CLIENT_PATH)
     } catch (e: Exception) {
-        e.printStackTrace()
+        logger.warn("Error while updating", e)
     } finally {
         frame.dispose()
     }
@@ -43,13 +48,12 @@ fun main(args: Array<String>) {
     }
 }
 
-private fun moveArtifact(artifactResult: ArtifactResult, file: Path) {
+private fun updateArtifact(artifactResult: ArtifactResult, file: Path) {
+    logger.info("Found artifact $artifactResult")
     Files.createDirectories(file.parent)
     Files.copy(artifactResult.artifact.file.toPath(), file, StandardCopyOption.REPLACE_EXISTING)
 }
 
 private fun isRunFromIde(): Boolean {
-     return MethodHandles.lookup().lookupClass().let { c ->
-        c.getResource(c.simpleName + ".class").protocol == "file"
-     }
+     return klass.getResource(klass.simpleName + ".class").protocol == "file"
 }
