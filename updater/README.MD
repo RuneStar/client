@@ -8,7 +8,7 @@
 
 * a deobfuscated gamepack jar (~500 KB)
 
-[Download](http://repo.runestar.org/com/RuneStar/client/client-updater/)
+[Download](http://repo.runestar.org/org/runestar/client/client-updater/)
 
 #### Dependencies:
 
