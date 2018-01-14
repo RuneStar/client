@@ -4,7 +4,12 @@ import java.awt.Image
 import java.awt.PopupMenu
 import java.awt.Window
 
+/**
+ * Proxy for `java.awt.Taskbar`. Does nothing on Java 8.
+ */
 object AwtTaskbar {
+
+    // sun.awt.windows.WTaskbarPeer - Windows
 
     private val taskbarClass = catchToNull { Class.forName("java.awt.Taskbar") }
 

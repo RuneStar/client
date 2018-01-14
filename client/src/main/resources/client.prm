@@ -1,3 +1,14 @@
-#-Dsun.java2d.uiScale=1.0
-
+# used by sun.awt.SunToolkit
+# default value: false
+# recommended value: true
 -Dsun.awt.noerasebackground=true
+
+# used by sun.java2d.SunGraphicsEnvironment
+# default value: -1
+#-Dsun.java2d.uiScale=-1
+
+# used by sun.awt.Win32GraphicsEnvironment
+# default value: -1
+# takes priority over sun.java2d.uiScale
+#-Dsun.java2d.win.uiScaleX=-1
+#-Dsun.java2d.win.uiScaleY=-1
