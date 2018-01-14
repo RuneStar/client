@@ -35,3 +35,6 @@ val PLUGINS_STANDARD_PATH: Path = PLUGINS_JARS_DIR_PATH.resolve("$PLUGINS_STANDA
 
 @JvmField
 val PLUGINS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins")
+
+@JvmField
+val CLIENT_PRM_PATH: Path = ROOT_DIR_PATH.resolve("client.prm")

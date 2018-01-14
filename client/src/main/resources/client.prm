@@ -1,0 +1,3 @@
+#-Dsun.java2d.uiScale=1.0
+
+-Dsun.awt.noerasebackground=true

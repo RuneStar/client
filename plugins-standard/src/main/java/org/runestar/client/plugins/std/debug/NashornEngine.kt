@@ -2,8 +2,6 @@ package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.plugins.Plugin
 import org.runestar.client.plugins.PluginSettings
-import java.io.*
-import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 

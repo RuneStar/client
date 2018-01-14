@@ -88,7 +88,6 @@ object Application {
     }
 
     private fun systemStartUp() {
-        System.setProperty("sun.awt.noerasebackground", true.toString())
         AwtTaskbar.setIconImage(ICON)
         SwingUtilities.invokeLater {
             if (!WebLookAndFeel.install()) {

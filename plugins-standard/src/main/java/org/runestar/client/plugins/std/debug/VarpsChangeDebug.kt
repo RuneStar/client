@@ -31,7 +31,8 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
 
                     logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
                             "${intToString(o)} ->\n" +
-                            "${intToString(c)}" }
+                            intToString(c)
+                    }
                 }
             }
 

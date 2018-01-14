@@ -5,11 +5,14 @@ package org.runestar.client.launcher
 import org.eclipse.aether.resolution.ArtifactResult
 import org.runestar.client.common.*
 import org.slf4j.LoggerFactory
+import java.io.FileOutputStream
+import java.io.FileReader
 import java.lang.invoke.MethodHandles
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.util.zip.ZipFile
 import javax.swing.UIManager
 
 private val klass = MethodHandles.lookup().lookupClass()
@@ -19,7 +22,7 @@ private val logger = LoggerFactory.getLogger(klass)
 fun main(args: Array<String>) {
     setup()
     update()
-    launch()
+    launch(getArguments())
 }
 
 private fun setup() {
@@ -40,8 +43,8 @@ private fun update() {
 
     try {
         Files.createDirectories(PLUGINS_DIR_PATH)
-        updateArtifact(aether.updateArtifact(GROUP_ID, PLUGINS_STANDARD_ARTIFACT_ID), PLUGINS_STANDARD_PATH)
-        updateArtifact(aether.updateArtifact(GROUP_ID, CLIENT_ARTIFACT_ID), CLIENT_PATH)
+        installArtifact(aether.updateArtifact(GROUP_ID, PLUGINS_STANDARD_ARTIFACT_ID), PLUGINS_STANDARD_PATH)
+        installArtifact(aether.updateArtifact(GROUP_ID, CLIENT_ARTIFACT_ID), CLIENT_PATH)
     } catch (e: Exception) {
         logger.warn("Error while updating", e)
     } finally {
@@ -49,19 +52,43 @@ private fun update() {
     }
 }
 
-private fun updateArtifact(artifactResult: ArtifactResult, file: Path) {
+private fun installArtifact(artifactResult: ArtifactResult, file: Path) {
     logger.info("Found artifact $artifactResult")
     Files.createDirectories(file.parent)
     Files.copy(artifactResult.artifact.file.toPath(), file, StandardCopyOption.REPLACE_EXISTING)
 }
 
-private fun launch() {
-    val cmd = ProcessBuilder("java", "-jar", CLIENT_PATH.toString())
+private fun getArguments(): List<String> {
+    if (Files.notExists(CLIENT_PRM_PATH)) {
+        ZipFile(CLIENT_PATH.toFile()).use { zf ->
+            zf.getInputStream(zf.getEntry(CLIENT_PRM_PATH.fileName.toString())).use { input ->
+                FileOutputStream(CLIENT_PRM_PATH.toFile()).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
+    FileReader(CLIENT_PRM_PATH.toFile()).use { fr ->
+        return fr.readLines()
+                .filter { !it.startsWith('#') && it.isNotBlank() }
+                .map { it.trim() }
+    }
+}
+
+private fun launch(conf: List<String>) {
+    val cmd = ArrayList<String>(conf.size + 3).apply {
+        add("java")
+        addAll(conf)
+        add("-jar")
+        add(CLIENT_PATH.toString())
+    }
+    logger.info("Using command \"${cmd.joinToString(" ")}\"")
+    val processBuilder = ProcessBuilder(cmd)
     if (System.console() != null || isRunFromIde()) {
         System.gc()
-        cmd.inheritIO().start().waitFor()
+        processBuilder.inheritIO().start().waitFor()
     } else {
-        cmd.start()
+        processBuilder.start()
     }
 }
 
