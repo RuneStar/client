@@ -76,22 +76,21 @@ private fun getArguments(): List<String> {
 }
 
 private fun launch(conf: List<String>) {
-    val cmd = ArrayList<String>(conf.size + 3).apply {
+    val cmd = ProcessBuilder(ArrayList<String>(conf.size + 3).apply {
         add("java")
         addAll(conf)
         add("-jar")
         add(CLIENT_PATH.toString())
-    }
-    logger.info("Using command \"${cmd.joinToString(" ")}\"")
-    val processBuilder = ProcessBuilder(cmd)
+    })
+    logger.info("Using command \"${cmd.command().joinToString(" ")}\"")
     if (System.console() != null || isRunFromIde()) {
         System.gc()
-        processBuilder.inheritIO().start().waitFor()
+        cmd.inheritIO().start().waitFor()
     } else {
-        processBuilder.start()
+        cmd.start()
     }
 }
 
 private fun isRunFromIde(): Boolean {
-    return klass.getResource(klass.simpleName + ".class").protocol == "file"
+    return klass.getResource(klass.simpleName + ".class")?.protocol == "file"
 }

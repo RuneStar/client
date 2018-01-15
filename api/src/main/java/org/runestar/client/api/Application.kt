@@ -59,6 +59,7 @@ object Application {
         applet.start()
 
         waitForTitle()
+        Client.accessor.gameDrawingMode = 2
 
         setProfile()
 

@@ -16,10 +16,6 @@ import java.awt.event.FocusEvent
 
 object LiveCanvas : Canvas {
 
-    init {
-        accessor.gameDrawingMode = 2
-    }
-
     private val desktopHints = Toolkit.getDefaultToolkit().fontDesktopHints()
 
     override val shape get() = Rectangle(accessor.canvas.size)
