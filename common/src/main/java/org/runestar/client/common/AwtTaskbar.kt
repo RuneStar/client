@@ -10,6 +10,8 @@ import java.awt.Window
 object AwtTaskbar {
 
     // sun.awt.windows.WTaskbarPeer - Windows
+    // sun.lwawt.macosx.CTaskbarPeer - Mac
+    // sun.awt.X11.XTaskbarPeer - X11
 
     private val taskbarClass = catchToNull { Class.forName("java.awt.Taskbar") }
 

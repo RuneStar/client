@@ -175,7 +175,7 @@ object Application {
 
     private fun changeProfile() {
         val existingCustomProfiles = ArrayList<String>()
-        for (p in Files.newDirectoryStream(PLUGINS_DIR_PATH)) {
+        for (p in Files.newDirectoryStream(PROFILES_DIR_PATH)) {
             if (Files.isDirectory(p)) {
                 val name = p.fileName.toString()
                 if (name != DEFAULT_PROFILE) {
@@ -211,8 +211,8 @@ object Application {
         trayIcon.toolTip = title
         pluginsWindow?.dispose()
         if (::pluginLoader.isInitialized) pluginLoader.close()
-        val profileDir = PLUGINS_DIR_PATH.resolve(profile)
+        val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
-        pluginLoader = PluginLoader(PLUGINS_JARS_DIR_PATH, profileDir, YamlFileReadWriter)
+        pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
     }
 }

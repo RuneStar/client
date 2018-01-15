@@ -4,10 +4,10 @@
 
 [Download](http://repo.runestar.org/org/runestar/client/client-launcher/) (Work in Progress) - Requires Java 8+
 
-Install location: `{user.home}/RuneStar/`
+Installs to `{user.home}/RuneStar/`
 
 ## Plugins
 
 * [Included plugins](https://github.com/RuneStar/client/tree/master/plugins-standard)
 
-* Dynamically load custom plugins by placing/replacing jars in `/plugins-jars/`
+* Dynamically load custom plugins by placing/replacing jars in `/plugins/`
