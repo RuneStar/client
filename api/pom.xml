@@ -46,17 +46,6 @@
             <artifactId>general</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.sciss</groupId>
-            <artifactId>weblaf</artifactId>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>

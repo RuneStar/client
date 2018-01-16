@@ -1,9 +1,5 @@
 package org.runestar.client.api
 
-import com.alee.extended.button.WebSwitch
-import com.alee.laf.button.WebButton
-import com.alee.laf.label.WebLabel
-import com.alee.laf.list.WebListModel
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
@@ -17,12 +13,12 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
 
     private val currentPlugins = HashSet<PluginHandle>()
 
-    private val pluginsListModel = WebListModel<PluginHandle>()
+    private val pluginsListModel = DefaultListModel<PluginHandle>()
 
     private val currentBox = Box.createHorizontalBox()
 
     private var selectedPlugin: PluginHandle? = null
-    private var selectedPluginSwitch: WebSwitch? = null
+    private var selectedPluginSwitch: JCheckBox? = null
 
     private val timer = Timer(600, null)
 
@@ -57,7 +53,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     private fun fillCurrentBox(plugin: PluginHandle) {
         currentBox.apply {
             removeAll()
-            val switch = WebSwitch().apply {
+            val switch = JCheckBox().apply {
                 maximumSize = preferredSize
                 isSelected = selectedPlugin?.isRunning ?: false
                 addActionListener {
@@ -66,16 +62,17 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             }
             add(switch)
             selectedPluginSwitch = switch
+            add(JLabel("enabled"))
             add(Box.createGlue())
-            add(WebLabel(plugin.name.substringAfterLast('.')))
+            add(JLabel(plugin.name.substringAfterLast('.')))
             add(Box.createGlue())
-            add(WebButton("settings").apply {
+            add(JButton("settings").apply {
                 addActionListener { openFile(plugin.settingsFile) }
             })
-            add(WebButton("log").apply {
+            add(JButton("log").apply {
                 addActionListener { openFile(plugin.logFile) }
             })
-            add(WebButton("directory").apply {
+            add(JButton("directory").apply {
                 addActionListener { openFile(plugin.directory) }
             })
         }
@@ -112,5 +109,9 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             revalidate()
             repaint()
         }
+    }
+
+    private fun <T> DefaultListModel<T>.addElements(elements: Collection<T>) {
+        for (e in elements) addElement(e)
     }
 }
