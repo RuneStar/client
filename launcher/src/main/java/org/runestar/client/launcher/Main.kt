@@ -31,6 +31,7 @@ private fun setup() {
     } catch (e: Exception) {
         logger.warn("Failed to set system look and feel", e)
     }
+    AwtTaskbar.setIconImage(ICON)
 }
 
 private fun update() {
