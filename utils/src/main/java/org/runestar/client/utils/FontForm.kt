@@ -5,9 +5,9 @@ import java.awt.Font
 import java.util.function.Supplier
 
 data class FontForm(
-        val name: String = Font.DIALOG,
-        val style: String = PLAIN,
-        val size: Float = 12f
+        val name: String,
+        val style: String,
+        val size: Float
 ) : Supplier<Font> {
 
     companion object {

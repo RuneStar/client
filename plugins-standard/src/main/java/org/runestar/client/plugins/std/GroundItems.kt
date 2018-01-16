@@ -115,7 +115,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     }
 
     class Settings : PluginSettings() {
-        val color = ColorForm()
+        val color = ColorForm(255, 255, 255)
         val font = FontForm(Font.SANS_SERIF, FontForm.PLAIN, 13f)
         val spacing = -4
         val initialOffset = 9

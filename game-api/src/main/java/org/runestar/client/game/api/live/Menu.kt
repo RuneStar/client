@@ -41,16 +41,20 @@ object Menu {
         false -> emptyList()
     }
 
-    val options: List<MenuOption> get() = List(optionsCount) {
-        MenuOption.of(
-                accessor.menuOpcodes[it],
-                accessor.menuArguments0[it],
-                accessor.menuArguments1[it],
-                accessor.menuArguments2[it],
-                checkNotNull(accessor.menuTargetNames[it]),
-                checkNotNull(accessor.menuActions[it])
+    val options: List<MenuOption> get() = List(optionsCount) { getOption(it) }
+
+    fun getOption(index: Int): MenuOption {
+        val i = optionsCount - index - 1
+        require(i >= 0)
+        return MenuOption.of(
+                accessor.menuOpcodes[i],
+                accessor.menuArguments0[i],
+                accessor.menuArguments1[i],
+                accessor.menuArguments2[i],
+                checkNotNull(accessor.menuTargetNames[i]),
+                checkNotNull(accessor.menuActions[i])
         )
-    }.asReversed()
+    }
 
     override fun toString(): String {
         return "Menu(isOpen=$isOpen, optionsCount=$optionsCount, shape=$shape)"

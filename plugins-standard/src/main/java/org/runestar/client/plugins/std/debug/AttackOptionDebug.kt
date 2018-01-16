@@ -32,6 +32,6 @@ class AttackOptionDebug : DisposablePlugin<AttackOptionDebug.Settings>() {
 
     class Settings : PluginSettings() {
         val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
-        val color = ColorForm()
+        val color = ColorForm(255, 255, 255)
     }
 }

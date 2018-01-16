@@ -30,6 +30,6 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
 
     class Settings : PluginSettings() {
         val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 14f)
-        val color = ColorForm()
+        val color = ColorForm(255, 255, 255)
     }
 }

@@ -4,10 +4,10 @@ import java.awt.Color
 import java.util.function.Supplier
 
 data class ColorForm(
-        val alpha: Int = 255,
-        val red: Int = 255,
-        val green: Int = 255,
-        val blue: Int = 255
+        val red: Int,
+        val green: Int,
+        val blue: Int,
+        val alpha: Int = 255
 ) : Supplier<Color> {
 
     @Transient
