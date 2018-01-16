@@ -3,9 +3,7 @@ package org.runestar.client.api
 import com.alee.extended.button.WebSwitch
 import com.alee.laf.button.WebButton
 import com.alee.laf.label.WebLabel
-import com.alee.laf.list.WebList
 import com.alee.laf.list.WebListModel
-import com.alee.laf.scroll.WebScrollPane
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
@@ -31,7 +29,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     init {
         iconImage = ICON
         refreshPlugins()
-        add(WebScrollPane(WebList(pluginsListModel).apply {
+        add(JScrollPane(JList(pluginsListModel).apply {
             selectionMode = DefaultListSelectionModel.SINGLE_SELECTION
             addListSelectionListener {
                 if (it.valueIsAdjusting) return@addListSelectionListener

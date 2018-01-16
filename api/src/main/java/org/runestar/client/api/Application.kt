@@ -1,6 +1,5 @@
 package org.runestar.client.api
 
-import com.alee.laf.WebLookAndFeel
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.blockingSubscribeBy
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -46,7 +45,7 @@ object Application {
         check(!started)
         started = true
 
-        systemStartUp()
+        AwtTaskbar.setIconImage(ICON)
 
         val javConfig = JavConfig.load()
         Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
@@ -85,15 +84,6 @@ object Application {
             SystemTray.getSystemTray().add(trayIcon)
         } catch (e: Exception) {
             logger.warn("Unable to use system tray")
-        }
-    }
-
-    private fun systemStartUp() {
-        AwtTaskbar.setIconImage(ICON)
-        SwingUtilities.invokeLater {
-            if (!WebLookAndFeel.install()) {
-                logger.warn("Failed to install Web Look and Feel")
-            }
         }
     }
 
