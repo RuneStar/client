@@ -1,5 +1,7 @@
 -Dswing.defaultlaf=com.alee.laf.WebLookAndFeel
 
+#-Dsun.java2d.trace=log,timestamp,count,out:sun.java2d.trace.log
+
 #-noverify
 
 # used by sun.awt.SunToolkit

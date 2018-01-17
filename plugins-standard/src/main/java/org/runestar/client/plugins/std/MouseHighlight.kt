@@ -28,7 +28,6 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
         val font = settings.font.get()
         val fontColor = settings.fontColor.get()
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = font
             if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
             val option = Menu.getOption(0)
             val action = option.action
@@ -38,22 +37,23 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             if (mousePt !in canvas) return@subscribe
             val rawText = "${option.action} ${option.targetName}"
             val text = rawText.replace(TAG_REGEX, "")
+            g.font = font
             val textHeight = g.fontMetrics.height
             val textWidth = g.fontMetrics.stringWidth(text)
             val boxWidth = textWidth + 2 * settings.paddingX
             val boxHeight = textHeight + 2 * settings.paddingY
 
             val boxX = min(canvas.width - 1, mousePt.x + boxWidth + settings.offsetX) - boxWidth
-            val boxY = if (mousePt.y + boxHeight + settings.offsetY <= canvas.height - 1) {
-                mousePt.y + settings.offsetY
+            val boxY = if (mousePt.y - boxHeight - settings.offsetY > 0) {
+                mousePt.y - settings.offsetY - boxHeight
             } else {
-                mousePt.y - settings.offsetYFlipped - boxHeight
+                mousePt.y + settings.offsetYFlipped
             }
             val box = Rectangle(boxX, boxY, boxWidth, boxHeight)
 
             g.color = fillColor
             g.fill(box)
-            
+
             g.color = outlineColor
             g.draw(box)
 
@@ -68,9 +68,9 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
         val ignoredActions = setOf("Cancel", "Walk here")
         val paddingX = 3
         val paddingY = 1
-        val offsetX = 10
-        val offsetY = 22
-        val offsetYFlipped = 7
+        val offsetX = 3
+        val offsetY = 3
+        val offsetYFlipped = 22
         val outlineColor = ColorForm(14, 13, 15)
         val fillColor = ColorForm(70, 61, 50, 156)
         val font = FontForm(Font.SANS_SERIF, FontForm.PLAIN, 13f)
