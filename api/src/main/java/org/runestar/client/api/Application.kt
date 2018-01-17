@@ -45,7 +45,7 @@ object Application {
         check(!started)
         started = true
 
-        AwtTaskbar.setIconImage(ICON)
+        setup()
 
         val javConfig = JavConfig.load()
         Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
@@ -85,6 +85,12 @@ object Application {
         } catch (e: Exception) {
             logger.warn("Unable to use system tray")
         }
+    }
+
+    private fun setup() {
+        AwtTaskbar.setIconImage(ICON)
+        val props = debugSystemProperties.entries.joinToString("\n") { "\t${it.key}=${it.value}" }
+        logger.info("System:\n$props")
     }
 
     private fun appletPreInit(
