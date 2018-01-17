@@ -11,8 +11,8 @@ object Stats {
         return when(skill) {
             Skill.OVERALL ->
                 SkillLevel(
-                        accessor.currentLevels.sum() - (accessor.currentLevels.size - Skill.LOOKUP.size + 1),
-                        accessor.levels.sum() - (accessor.levels.size - Skill.LOOKUP.size + 1),
+                        accessor.currentLevels.sum() - (accessor.currentLevels.size - Skill.VALUES.size + 1),
+                        accessor.levels.sum() - (accessor.levels.size - Skill.VALUES.size + 1),
                         accessor.experience.fold(0L) { acc, v -> acc + v.toLong() }
                 )
             else ->
