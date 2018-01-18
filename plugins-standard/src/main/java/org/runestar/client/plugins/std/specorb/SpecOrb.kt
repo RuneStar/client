@@ -29,14 +29,15 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
 
     override val defaultSettings = Settings()
 
-    val orbBackDisabled = ImageIO.read(javaClass.getResourceAsStream("orb-back-disabled.png"))
-    val orbBackEnabled = ImageIO.read(javaClass.getResourceAsStream("orb-back-enabled.png"))
-    val orbIcon = ImageIO.read(javaClass.getResourceAsStream("orb-icon.png"))
-    val orbOrb = ImageIO.read(javaClass.getResourceAsStream("orb-orb.png"))
+    val orbBack = ImageIO.read(javaClass.getResourceAsStream("orb-back.png"))
+    val orbIconDisabled = ImageIO.read(javaClass.getResourceAsStream("orb-icon-disabled.png"))
+    val orbIconEnabled = ImageIO.read(javaClass.getResourceAsStream("orb-icon-enabled.png"))
+    val orbOrbDisabled = ImageIO.read(javaClass.getResourceAsStream("orb-orb-disabled.png"))
+    val orbOrbEnabled = ImageIO.read(javaClass.getResourceAsStream("orb-orb-enabled.png"))
 
     val font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
 
-    // todo : actual font, font shadow, orb percent, font spacing, font color
+    // todo : actual font, font shadow, font spacing, font color
 
     override fun start() {
         super.start()
@@ -49,11 +50,6 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
                 WindowMode.FIXED -> settings.fixedOffset
                 WindowMode.RESIZABLE -> settings.resizableOffset
             }
-            val orbBack = if (Game.varps[Varbit.SPECIAL_ATTACK_ENABLED] != 0) {
-                orbBackEnabled
-            } else {
-                orbBackDisabled
-            }
             val location = Point(Client.accessor.canvas.width - offset.x, offset.y)
             g.drawImage(orbBack, location)
 
@@ -61,9 +57,12 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
             val specString = spec.toString()
             val orbHeight = (ORB_HEIGHT * (spec / 100.0)).roundToInt()
             g.clip = Rectangle(location.x, location.y + HEIGHT - ORB_OFFSET_BOTTOM - orbHeight, WIDTH, HEIGHT)
+            val isEnabled = Game.varps[Varbit.SPECIAL_ATTACK_ENABLED] != 0
+            val orbOrb = if (isEnabled) orbOrbEnabled else orbOrbDisabled
             g.drawImage(orbOrb, location)
 
             g.clip = null
+            val orbIcon = if (isEnabled) orbIconEnabled else orbIconDisabled
             g.drawImage(orbIcon, location)
 
             val textLocation = location + Point(5, 25)
