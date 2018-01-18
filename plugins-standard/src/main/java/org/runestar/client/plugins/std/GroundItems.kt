@@ -11,6 +11,7 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Font
 import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
@@ -116,8 +117,8 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     class Settings : PluginSettings() {
         val color = ColorForm(255, 255, 255)
-        val font = FontForm(Font.SANS_SERIF, FontForm.PLAIN, 13f)
-        val spacing = -4
+        val font = FontForm(RUNESCAPE_SMALL_FONT)
+        val spacing = -2
         val initialOffset = 9
 
         val blockedNames = emptyList<String>()
