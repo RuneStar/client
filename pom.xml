@@ -106,7 +106,7 @@
             <dependency>
                 <groupId>org.runestar</groupId>
                 <artifactId>general</artifactId>
-                <version>0.161.0-SNAPSHOT</version>
+                <version>0.161.0</version>
             </dependency>
             <dependency>
                 <groupId>com.hunterwb</groupId>

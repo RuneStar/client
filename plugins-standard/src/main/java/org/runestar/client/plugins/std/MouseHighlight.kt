@@ -43,7 +43,7 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             val textHeight = g.fontMetrics.height
             val textWidth = g.fontMetrics.stringWidth(text)
             val boxWidth = textWidth + 2 * settings.paddingX
-            val boxHeight = textHeight + 2 * settings.paddingY
+            val boxHeight = textHeight + settings.paddingBottom + settings.paddingTop
 
             val boxX = min(canvas.width - 1, mousePt.x + boxWidth + settings.offsetX) - boxWidth
             val boxY = if (mousePt.y - boxHeight - settings.offsetY > 0) {
@@ -60,7 +60,7 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             g.draw(box)
 
             val textX = boxX + settings.paddingX
-            val textY = boxY + settings.paddingY + g.fontMetrics.ascent
+            val textY = boxY + settings.paddingTop + g.fontMetrics.ascent
             g.color = fontColor
             g.drawString(text, textX, textY)
         })
@@ -69,7 +69,8 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
     class Settings : PluginSettings() {
         val ignoredActions = setOf("Cancel", "Walk here")
         val paddingX = 2
-        val paddingY = 2
+        val paddingTop = 4
+        val paddingBottom = 1
         val offsetX = 3
         val offsetY = 3
         val offsetYFlipped = 22
