@@ -10,11 +10,24 @@ data class FontForm(
         val size: Float
 ) : Supplier<Font> {
 
+    constructor(font: Font) : this(font.name, styleToString(font.style), font.size2D)
+
     companion object {
         const val PLAIN = "plain"
         const val BOLD = "bold"
         const val ITALIC = "italic"
         const val BOLDITALIC = "bolditalic"
+
+        @JvmStatic
+        fun styleToString(style: Int): String {
+            return when (style) {
+                Font.PLAIN -> PLAIN
+                Font.BOLD -> BOLD
+                Font.ITALIC -> ITALIC
+                Font.BOLD or Font.ITALIC -> BOLDITALIC
+                else -> throw IllegalArgumentException("Invalid font style")
+            }
+        }
     }
 
     @Transient

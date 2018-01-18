@@ -7,6 +7,8 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.general.fonts.RUNESCAPE_CHAT_BOLD_FONT
+import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Font
 import java.awt.Rectangle
 import kotlin.math.min
@@ -35,7 +37,7 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             val canvas = LiveCanvas.shape
             val mousePt = Mouse.location
             if (mousePt !in canvas) return@subscribe
-            val rawText = "${option.action} ${option.targetName}"
+            val rawText = "${option.action} ${option.targetName}".trim()
             val text = rawText.replace(TAG_REGEX, "")
             g.font = font
             val textHeight = g.fontMetrics.height
@@ -66,14 +68,14 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
 
     class Settings : PluginSettings() {
         val ignoredActions = setOf("Cancel", "Walk here")
-        val paddingX = 3
-        val paddingY = 1
+        val paddingX = 2
+        val paddingY = 2
         val offsetX = 3
         val offsetY = 3
         val offsetYFlipped = 22
         val outlineColor = ColorForm(14, 13, 15)
         val fillColor = ColorForm(70, 61, 50, 156)
-        val font = FontForm(Font.SANS_SERIF, FontForm.PLAIN, 13f)
+        val font = FontForm(RUNESCAPE_SMALL_FONT)
         val fontColor = ColorForm(255, 255, 255)
     }
 }
