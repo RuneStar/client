@@ -11,6 +11,7 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
+import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Font
 import java.awt.Point
@@ -21,10 +22,13 @@ import kotlin.math.roundToInt
 class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
 
     companion object {
-        val ORB_OFFSET_BOTTOM = 6
-        val ORB_HEIGHT = 26
-        val WIDTH = 57
-        val HEIGHT = 36
+        const val ORB_OFFSET_BOTTOM = 6
+        const val ORB_HEIGHT = 26
+        const val WIDTH = 57
+        const val HEIGHT = 36
+        const val TEXT_AREA_WIDTH = 22
+        const val TEXT_AREA_X_OFFSET = 4
+        const val TEXT_AREA_Y_OFFSET = 27
     }
 
     override val defaultSettings = Settings()
@@ -35,9 +39,9 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
     val orbOrbDisabled = ImageIO.read(javaClass.getResourceAsStream("orb-orb-disabled.png"))
     val orbOrbEnabled = ImageIO.read(javaClass.getResourceAsStream("orb-orb-enabled.png"))
 
-    val font = Font(Font.SANS_SERIF, Font.PLAIN, 11)
+    val font = RUNESCAPE_SMALL_FONT
 
-    // todo : actual font, font shadow, font spacing, font color
+    // todo : font color
 
     override fun start() {
         super.start()
@@ -45,7 +49,6 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
             if (Game.state == GameState.TITLE) return@subscribe
             if (!Client.accessor.isMembersWorld && !settings.showInF2p) return@subscribe
             g.font = font
-            g.color = Color.GREEN
             val offset = when (Game.windowMode) {
                 WindowMode.FIXED -> settings.fixedOffset
                 WindowMode.RESIZABLE -> settings.resizableOffset
@@ -65,9 +68,13 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
             val orbIcon = if (isEnabled) orbIconEnabled else orbIconDisabled
             g.drawImage(orbIcon, location)
 
-            val textLocation = location + Point(5, 25)
-//            val textY = location.y + 25
-            g.drawString(specString, textLocation)
+            val stringWidth = g.fontMetrics.stringWidth(specString)
+            val textY = location.y + TEXT_AREA_Y_OFFSET
+            val textX = location.x + TEXT_AREA_X_OFFSET + ((TEXT_AREA_WIDTH - stringWidth + 1) / 2)
+            g.color = Color.BLACK
+            g.drawString(specString, textX + 1, textY + 1)
+            g.color = Color.GREEN
+            g.drawString(specString, textX, textY)
         })
     }
 
@@ -75,6 +82,6 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
 
         val fixedOffset = Point(58, 22)
         val resizableOffset = Point(152, 152)
-        val showInF2p = true
+        val showInF2p = false
     }
 }
