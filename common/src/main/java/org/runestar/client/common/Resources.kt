@@ -8,10 +8,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 
-private val classLoader = MethodHandles.lookup().lookupClass().classLoader
+private val klass = MethodHandles.lookup().lookupClass()
 
 @JvmField
-val ICON: BufferedImage = ImageIO.read(classLoader.getResource("icon.png"))
+val ICON: BufferedImage = ImageIO.read(klass.getResource("icon.png"))
 
 const val GROUP_ID = "org.runestar.client"
 
