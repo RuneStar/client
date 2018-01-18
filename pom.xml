@@ -150,7 +150,7 @@
             <dependency>
                 <groupId>com.github.akarnokd</groupId>
                 <artifactId>rxjava2-swing</artifactId>
-                <version>0.2.7</version>
+                <version>0.2.8</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
