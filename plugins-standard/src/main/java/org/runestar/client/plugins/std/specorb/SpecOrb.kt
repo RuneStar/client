@@ -14,9 +14,18 @@ import org.runestar.client.utils.DisposablePlugin
 import java.awt.Color
 import java.awt.Font
 import java.awt.Point
+import java.awt.Rectangle
 import javax.imageio.ImageIO
+import kotlin.math.roundToInt
 
 class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
+
+    companion object {
+        val ORB_OFFSET_BOTTOM = 6
+        val ORB_HEIGHT = 26
+        val WIDTH = 57
+        val HEIGHT = 36
+    }
 
     override val defaultSettings = Settings()
 
@@ -46,13 +55,19 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
                 orbBackDisabled
             }
             val location = Point(Client.accessor.canvas.width - offset.x, offset.y)
+            g.drawImage(orbBack, location)
+
             val spec = Game.varps[Varbit.SPECIAL_ATTACK_PERCENT] / 10
             val specString = spec.toString()
-            g.drawImage(orbBack, location)
+            val orbHeight = (ORB_HEIGHT * (spec / 100.0)).roundToInt()
+            g.clip = Rectangle(location.x, location.y + HEIGHT - ORB_OFFSET_BOTTOM - orbHeight, WIDTH, HEIGHT)
             g.drawImage(orbOrb, location)
+
+            g.clip = null
             g.drawImage(orbIcon, location)
 
             val textLocation = location + Point(5, 25)
+//            val textY = location.y + 25
             g.drawString(specString, textLocation)
         })
     }
