@@ -2666,4 +2666,9 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<cycle>().id } }
     }
+
+    @DependsOn(PacketBuffer::class)
+    class PacketBuffer_masks : UniqueMapper.InClassInitializer.Field(PacketBuffer::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
