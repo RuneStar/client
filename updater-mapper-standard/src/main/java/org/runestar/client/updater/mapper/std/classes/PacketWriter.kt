@@ -14,6 +14,10 @@ import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.UniqueMapper
+import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.tree.Instruction2
 
 @SinceVersion(160)
 @DependsOn(AbstractChannel::class)
@@ -75,5 +79,14 @@ class PacketWriter : IdentityMapper.Class() {
     class close : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<AbstractChannel.close>().id } }
+    }
+
+    @DependsOn(ServerPacket::class)
+    class serverPacket0 : UniqueMapper.InConstructor.Field(PacketWriter::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<ServerPacket>() }
+    }
+
+    class serverPacket0Length : OrderMapper.InConstructor.Field(PacketWriter::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
