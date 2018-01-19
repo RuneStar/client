@@ -1,117 +1,111 @@
 package org.runestar.client.api
 
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
-import java.awt.BorderLayout
-import java.awt.Dimension
+import java.awt.Window
+import java.awt.event.ItemEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.util.*
 import javax.swing.*
+import javax.swing.Timer
+import javax.swing.event.PopupMenuEvent
+import javax.swing.event.PopupMenuListener
 
 internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("Plugins") {
 
-    private val currentPlugins = HashSet<PluginHandle>()
-
-    private val pluginsListModel = DefaultListModel<PluginHandle>()
-
-    private val currentBox = Box.createHorizontalBox()
-
-    private var selectedPlugin: PluginHandle? = null
-    private var selectedPluginSwitch: JCheckBox? = null
-
     private val timer = Timer(600, null)
+
+    private val checkBox = JCheckBox("enabled")
+
+    private var currentPlugin: PluginHandle? = null
+
+    private val openButton = JButton("open...")
+
+    private val comboModelVector = Vector<PluginHandle>()
+
+    val logger = getLogger()
 
     init {
         iconImage = ICON
-        refreshPlugins()
-        add(JScrollPane(JList(pluginsListModel).apply {
-            selectionMode = DefaultListSelectionModel.SINGLE_SELECTION
-            addListSelectionListener {
-                if (it.valueIsAdjusting) return@addListSelectionListener
-                val plugin = this.selectedValue ?: return@addListSelectionListener
-                if (selectedPlugin === plugin) return@addListSelectionListener
-                selectedPlugin = plugin
-                fillCurrentBox(plugin)
-            }
-        }), BorderLayout.CENTER)
-        add(currentBox, BorderLayout.SOUTH)
+        val popup = JPopupMenu().apply {
+            add(JMenuItem("settings").apply {
+                addActionListener { currentPlugin?.let { openFile(it.settingsFile) } }
+            })
+            add(JMenuItem("log").apply {
+                addActionListener { currentPlugin?.let { openFile(it.logFile) } }
+            })
+            add(JMenuItem("directory").apply {
+                addActionListener { currentPlugin?.let { openFile(it.directory) } }
+            })
+        }
+        add(Box.createHorizontalBox().apply {
+            add(checkBox.apply {
+                isEnabled = false
+                addActionListener {
+                    val cp = currentPlugin
+                    if (cp != null) {
+                        if (isSelected) cp.start() else cp.stop()
+                    }
+                }
+            })
+            refreshPlugins()
+            add(JComboBox<PluginHandle>(DefaultComboBoxModel(comboModelVector)).apply {
+                model.selectedItem = null
+                maximumRowCount *= 2
+                addPopupMenuListener(object : PopupMenuListener {
+                    override fun popupMenuCanceled(e: PopupMenuEvent) {}
+                    override fun popupMenuWillBecomeInvisible(e: PopupMenuEvent) {}
+                    override fun popupMenuWillBecomeVisible(e: PopupMenuEvent) {
+                        model = DefaultComboBoxModel(comboModelVector)
+                        model.selectedItem = currentPlugin
+                    }
+                })
+                addItemListener {
+                    logger.info(it.toString())
+                    if (it.stateChange != ItemEvent.SELECTED) return@addItemListener
+                    if (it.item == currentPlugin) return@addItemListener
+                    logger.info(it.item.toString())
+                    currentPlugin = it.item as PluginHandle
+                    checkBox.isEnabled = true
+                    openButton.isEnabled = true
+                }
+            })
+            add(openButton.apply {
+                isEnabled = false
+                addActionListener {
+                    popup.show(this, 0, bounds.height)
+                }
+            })
+        })
         timer.apply {
-            addActionListener { refresh() }
+            addActionListener {
+                val cp = currentPlugin
+                if (cp != null && checkBox.isSelected != cp.isRunning) {
+                    checkBox.isSelected = cp.isRunning
+                    revalidate()
+                    repaint()
+                }
+            }
             start()
         }
         addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent?) {
+            override fun windowClosing(e: WindowEvent) {
                 timer.stop()
             }
         })
+        type = Window.Type.UTILITY
+        pack()
+        isResizable = false
         defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
-        size = Dimension(370, 600)
+        setLocationRelativeTo(Application.frame)
         isVisible = true
     }
 
-    private fun fillCurrentBox(plugin: PluginHandle) {
-        currentBox.apply {
-            removeAll()
-            val switch = JCheckBox().apply {
-                maximumSize = preferredSize
-                isSelected = selectedPlugin?.isRunning ?: false
-                addActionListener {
-                    if (isSelected) plugin.start() else plugin.stop()
-                }
-            }
-            add(switch)
-            selectedPluginSwitch = switch
-            add(JLabel("enabled"))
-            add(Box.createGlue())
-            add(JLabel(plugin.name.substringAfterLast('.')))
-            add(Box.createGlue())
-            add(JButton("settings").apply {
-                addActionListener { openFile(plugin.settingsFile) }
-            })
-            add(JButton("log").apply {
-                addActionListener { openFile(plugin.logFile) }
-            })
-            add(JButton("directory").apply {
-                addActionListener { openFile(plugin.directory) }
-            })
-        }
-        revalidate()
-        repaint()
-    }
-
-    private fun refresh() {
-        if (pluginLoader.plugins.size != currentPlugins.size || !currentPlugins.containsAll(pluginLoader.plugins)) {
-            refreshPlugins()
-        }
-        val switch = selectedPluginSwitch
-        val plugin = selectedPlugin
-        if (switch != null && plugin != null) {
-            if (switch.isSelected != plugin.isRunning) {
-                switch.isSelected = plugin.isRunning
-                revalidate()
-                repaint()
-            }
-        }
-    }
-
     private fun refreshPlugins() {
-        pluginsListModel.clear()
-        currentPlugins.clear()
-        val sorted = pluginLoader.plugins.sortedBy { it.name }
-        pluginsListModel.addElements(sorted)
-        currentPlugins.addAll(sorted)
-        val sp = selectedPlugin
-        if (sp != null && sp !in currentPlugins) {
-            selectedPlugin = null
-            selectedPluginSwitch = null
-            currentBox.removeAll()
-            revalidate()
-            repaint()
-        }
-    }
-
-    private fun <T> DefaultListModel<T>.addElements(elements: Collection<T>) {
-        for (e in elements) addElement(e)
+        comboModelVector.clear()
+        comboModelVector.addAll(pluginLoader.plugins.sortedBy { it.name })
     }
 }
