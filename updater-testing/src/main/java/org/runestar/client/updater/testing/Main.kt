@@ -8,7 +8,7 @@ import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.common.*
+import org.runestar.client.updater.deob.common.Renamer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.std.classes.Client
@@ -21,7 +21,7 @@ val jsonMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT
 
 fun main(args: Array<String>) {
     // 127+
-    for (revision in 141..161) {
+    for (revision in 161.downTo(141)) {
         if (revision in setOf(146, 147)) continue
         println(revision)
 

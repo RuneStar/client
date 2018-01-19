@@ -1,6 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -13,8 +15,8 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Node::class)
 class IterableNodeDeque : IdentityMapper.Class() {
@@ -82,5 +84,13 @@ class IterableNodeDeque : IdentityMapper.Class() {
                 .and { it.instructions.none { it.isMethod && it.methodId == method<Node.remove>().id } }
                 .and { it != method<previousOrLast>() }
                 .and { it != method<last>() }
+    }
+
+    @SinceVersion(157)
+    @MethodParameters()
+    class clear : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.opcode == IF_ACMPEQ } }
     }
 }

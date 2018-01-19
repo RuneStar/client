@@ -11,7 +11,9 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 
 @SinceVersion(160)
 @DependsOn(AbstractChannel::class)
@@ -36,6 +38,16 @@ class PacketWriter : IdentityMapper.Class() {
     class setChannel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<AbstractChannel>()) }
+    }
+
+    @DependsOn(channel0::class)
+    @MethodParameters()
+    class removeChannel : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<channel0>().id } }
+                .and { it.instructions.any { it.opcode == ACONST_NULL } }
+                .and { it.instructions.none { it.isMethod } }
     }
 
     @DependsOn(Buffer::class)

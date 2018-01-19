@@ -2671,4 +2671,10 @@ class Client : IdentityMapper.Class() {
     class PacketBuffer_masks : UniqueMapper.InClassInitializer.Field(PacketBuffer::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    @SinceVersion(160)
+    @DependsOn(PacketWriter::class)
+    class packetWriter : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PacketWriter>() }
+    }
 }
