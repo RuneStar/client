@@ -2623,10 +2623,13 @@ class Client : IdentityMapper.Class() {
     }
 
     // inlined
-//    @DependsOn(Npc::class)
+//    @DependsOn(PacketBuffer::class, Npc::class, Actor.overheadTextCyclesRemaining::class)
 //    class updateNpcs : IdentityMapper.StaticMethod() {
 //        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-//                .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Npc>() } }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(type<PacketBuffer>()) }
+//                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldOwner == type<Npc>() && it.fieldType == INT_TYPE &&
+//                        it.fieldName == field<Actor.overheadTextCyclesRemaining>().name } }
 //    }
 
     @DependsOn(Player::class, PacketBuffer::class)

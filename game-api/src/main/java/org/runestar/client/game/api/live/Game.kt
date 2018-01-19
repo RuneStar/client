@@ -9,6 +9,7 @@ import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.runestar.client.game.raw.access.XPacketBuffer
 import java.awt.Component
 import java.awt.Container
 
@@ -19,6 +20,10 @@ object Game {
     val stateChanges: Observable<GameState> = XClient.updateGameState.exit.map {
         checkNotNull(GameState.of(it.arguments[0] as Int)) { it.arguments[0] }
     }
+
+    val ticks: Observable<Unit> = XPacketBuffer.readSmartByteShortIsaac.exit
+            .filter { it.returned == 38 }
+            .map { Unit }
 
     val cycle get() = accessor.cycle
 
