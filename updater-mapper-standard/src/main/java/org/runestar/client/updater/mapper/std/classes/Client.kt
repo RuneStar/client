@@ -14,6 +14,7 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.objectweb.asm.tree.JumpInsnNode
 import java.applet.Applet
 import java.io.File
 import java.lang.management.GarbageCollectorMXBean
@@ -2619,5 +2620,50 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_connectingToUpdateServer>().id }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    // inlined
+//    @DependsOn(Npc::class)
+//    class updateNpcs : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Npc>() } }
+//    }
+
+    @DependsOn(Player::class, PacketBuffer::class)
+    class updatePlayer : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(type<PacketBuffer>()) }
+                .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Player>() } }
+    }
+
+    @DependsOn(Buffer::class)
+    class loadTerrain : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 7..8 }
+                .and { it.arguments.startsWith(type<Buffer>(), INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    // inlined
+//    class chatCommand : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(String::class.type) }
+//                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "displayfps" } }
+//    }
+
+    class isResizable : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_2 }
+                .next { it.node is JumpInsnNode }
+                .next { it.opcode == ICONST_1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(cycle::class)
+    class doCycle : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<cycle>().id } }
     }
 }

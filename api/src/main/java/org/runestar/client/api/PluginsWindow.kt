@@ -29,7 +29,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             selectionMode = DefaultListSelectionModel.SINGLE_SELECTION
             addListSelectionListener {
                 if (it.valueIsAdjusting) return@addListSelectionListener
-                val plugin = this.selectedValue as PluginHandle? ?: return@addListSelectionListener
+                val plugin = this.selectedValue ?: return@addListSelectionListener
                 if (selectedPlugin === plugin) return@addListSelectionListener
                 selectedPlugin = plugin
                 fillCurrentBox(plugin)
@@ -46,7 +46,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             }
         })
         defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
-        size = Dimension(400, 700)
+        size = Dimension(370, 600)
         isVisible = true
     }
 
