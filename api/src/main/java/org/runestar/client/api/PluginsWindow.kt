@@ -1,16 +1,12 @@
 package org.runestar.client.api
 
-import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
 import java.awt.Window
-import java.awt.event.ItemEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.util.*
 import javax.swing.*
-import javax.swing.Timer
 import javax.swing.event.PopupMenuEvent
 import javax.swing.event.PopupMenuListener
 
@@ -24,9 +20,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
 
     private val openButton = JButton("open...")
 
-    private val comboModelVector = Vector<PluginHandle>()
-
-    val logger = getLogger()
+    private val comboModel = DefaultComboBoxModel<PluginHandle>()
 
     init {
         iconImage = ICON
@@ -52,26 +46,22 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
                 }
             })
             refreshPlugins()
-            add(JComboBox<PluginHandle>(DefaultComboBoxModel(comboModelVector)).apply {
+            add(JComboBox<PluginHandle>(comboModel).apply {
                 model.selectedItem = null
                 maximumRowCount *= 2
                 addPopupMenuListener(object : PopupMenuListener {
                     override fun popupMenuCanceled(e: PopupMenuEvent) {}
-                    override fun popupMenuWillBecomeInvisible(e: PopupMenuEvent) {}
+                    override fun popupMenuWillBecomeInvisible(e: PopupMenuEvent) {
+                        currentPlugin = selectedItem as PluginHandle?
+                        if (currentPlugin != null) {
+                            checkBox.isEnabled = true
+                            openButton.isEnabled = true
+                        }
+                    }
                     override fun popupMenuWillBecomeVisible(e: PopupMenuEvent) {
-                        model = DefaultComboBoxModel(comboModelVector)
-                        model.selectedItem = currentPlugin
+                        refreshPlugins()
                     }
                 })
-                addItemListener {
-                    logger.info(it.toString())
-                    if (it.stateChange != ItemEvent.SELECTED) return@addItemListener
-                    if (it.item == currentPlugin) return@addItemListener
-                    logger.info(it.item.toString())
-                    currentPlugin = it.item as PluginHandle
-                    checkBox.isEnabled = true
-                    openButton.isEnabled = true
-                }
             })
             add(openButton.apply {
                 isEnabled = false
@@ -105,7 +95,9 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     }
 
     private fun refreshPlugins() {
-        comboModelVector.clear()
-        comboModelVector.addAll(pluginLoader.plugins.sortedBy { it.name })
+        val selected = comboModel.selectedItem
+        comboModel.removeAllElements()
+        pluginLoader.plugins.sortedBy { it.name }.forEach { comboModel.addElement(it) }
+        comboModel.selectedItem = selected
     }
 }
