@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import org.runestar.client.game.raw.access.XPacketBuffer
 import java.awt.Component
 import java.awt.Container
+import java.util.concurrent.TimeUnit
 
 object Game {
 
@@ -24,6 +25,7 @@ object Game {
     val ticks: Observable<Unit> = XPacketBuffer.readSmartByteShortIsaac.exit
             .filter { it.returned == 38 }
             .map { Unit }
+            .delay { Observable.timer(1, TimeUnit.MILLISECONDS) }
 
     val cycle get() = accessor.cycle
 
