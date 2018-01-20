@@ -2680,4 +2680,14 @@ class Client : IdentityMapper.Class() {
     class packetWriter : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<PacketWriter>() }
     }
+
+    @DependsOn(KeyHandler::class)
+    class KeyHandler_idleCycles : OrderMapper.InClassInitializer.Field(KeyHandler::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler::class)
+    class MouseHandler_idleCycles : OrderMapper.InClassInitializer.Field(MouseHandler::class, 0 ) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }
