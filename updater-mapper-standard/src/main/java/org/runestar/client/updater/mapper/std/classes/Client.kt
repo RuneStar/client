@@ -2690,4 +2690,50 @@ class Client : IdentityMapper.Class() {
     class MouseHandler_idleCycles : OrderMapper.InClassInitializer.Field(MouseHandler::class, 0 ) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .prevWithin(7) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextXOffsets : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .prevWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextXs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextYs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadText : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .nextWithin(70) { it.opcode == GETSTATIC && it.fieldType == String::class.type.withDimensions(1) }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextCyclesRemaining : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .nextWithin(70) { it.opcode == GETSTATIC && it.fieldType == String::class.type.withDimensions(1) }
+                .prevWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
