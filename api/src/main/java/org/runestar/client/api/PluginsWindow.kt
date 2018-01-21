@@ -97,7 +97,7 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
     private fun refreshPlugins() {
         val selected = comboModel.selectedItem
         comboModel.removeAllElements()
-        pluginLoader.plugins.sortedBy { it.name }.forEach { comboModel.addElement(it) }
+        pluginLoader.plugins.sortedBy { it.toString() }.forEach { comboModel.addElement(it) }
         comboModel.selectedItem = selected
     }
 }

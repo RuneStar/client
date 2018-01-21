@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std
+package org.runestar.client.plugins.std.grounditems
 
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneTile
@@ -12,7 +12,6 @@ import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
-import java.awt.Font
 import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {

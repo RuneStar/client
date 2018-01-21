@@ -93,7 +93,7 @@ class PluginLoader(
     private fun loadJar(jar: Path) {
         val plugins = PluginClassLoader.load(jar)
         plugins.forEach { plugin ->
-            val pluginDir = pluginsDir.resolve(plugin.javaClass.name)
+            val pluginDir = pluginsDir.resolve(plugin.javaClass.simpleName)
             Files.createDirectories(pluginDir)
             val watchKey = pluginDir.register(
                     watchService,
@@ -101,9 +101,9 @@ class PluginLoader(
                     StandardWatchEventKinds.ENTRY_DELETE
             )
             val pluginHolder = PluginHolder(plugin, watchKey, executor, settingsReadWriter)
-            currentPlugins[plugin.javaClass.name] = pluginHolder
+            currentPlugins[plugin.javaClass.simpleName] = pluginHolder
         }
-        currentJarPluginNames[jar] = plugins.map { it.javaClass.name }
+        currentJarPluginNames[jar] = plugins.map { it.javaClass.simpleName }
     }
 
     override fun close() {

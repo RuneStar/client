@@ -4,8 +4,6 @@ import java.nio.file.Path
 
 interface PluginHandle {
 
-    val name: String
-
     fun start()
 
     fun stop()

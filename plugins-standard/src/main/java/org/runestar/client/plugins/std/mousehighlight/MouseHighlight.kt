@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std
+package org.runestar.client.plugins.std.mousehighlight
 
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
@@ -7,9 +7,7 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
-import org.runestar.general.fonts.RUNESCAPE_CHAT_BOLD_FONT
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
-import java.awt.Font
 import java.awt.Rectangle
 import kotlin.math.min
 

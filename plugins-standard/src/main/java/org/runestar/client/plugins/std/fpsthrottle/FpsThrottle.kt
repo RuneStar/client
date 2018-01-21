@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std
+package org.runestar.client.plugins.std.fpsthrottle
 
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider

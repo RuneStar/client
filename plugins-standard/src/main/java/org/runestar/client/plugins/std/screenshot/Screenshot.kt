@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std
+package org.runestar.client.plugins.std.screenshot
 
 import org.runestar.client.api.Application
 import org.runestar.client.game.api.live.Keyboard
@@ -54,7 +54,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     fun takeScreenshot(img: RenderedImage) {
         val rsn = Client.accessor.localPlayerName
         val timeString = timeFormatter.format(Instant.now())
-        val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
+        val fileName = "$rsn.$timeString.${IMAGE_FILE_EXTENSION}"
         val path = screenshotDirectory.resolve(fileName)
         try {
             Files.createDirectories(path)

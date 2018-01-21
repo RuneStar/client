@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std
+package org.runestar.client.plugins.std.afknotifier
 
 import org.runestar.client.api.Application
 import org.runestar.client.common.AwtTaskbar
