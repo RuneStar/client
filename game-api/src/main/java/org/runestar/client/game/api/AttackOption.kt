@@ -1,10 +1,9 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.Client.accessor
-import org.runestar.client.game.raw.Wrapped
 import org.runestar.client.game.raw.access.XAttackOption
 
-enum class AttackOption(override val accessor: XAttackOption) : Wrapped {
+enum class AttackOption(val accessor: XAttackOption) {
 
     ALWAYS_RIGHT_CLICK(accessor.attackOption_alwaysRightClick),
     DEPENDS_ON_COMBAT_LEVELS(accessor.attackOption_dependsOnCombatLevels),

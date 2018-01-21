@@ -1,9 +1,8 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XIgnored
 
-class Ignored(override val accessor: XIgnored) : Wrapper() {
+class Ignored(val accessor: XIgnored) {
 
     val name: String get() = accessor.name
 

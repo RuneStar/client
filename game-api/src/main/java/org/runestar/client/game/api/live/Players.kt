@@ -16,7 +16,7 @@ object Players : AbstractCollection<Player>() {
         }
     }
 
-    override val size get() =  accessor.players_count
+    override val size get() = accessor.players_count
 
     internal operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
 }

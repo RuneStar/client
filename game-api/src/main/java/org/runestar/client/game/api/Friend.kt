@@ -1,10 +1,9 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Worlds
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XFriend
 
-class Friend(override val accessor: XFriend) : Wrapper() {
+class Friend(val accessor: XFriend) {
 
     val name: String get() = accessor.name
 

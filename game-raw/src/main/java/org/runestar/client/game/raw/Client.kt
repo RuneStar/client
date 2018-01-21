@@ -5,12 +5,12 @@ import org.runestar.client.game.raw.access.XClient
 /**
  * Singleton for the `client` [java.applet.Applet] class.
  */
-object Client : Wrapper() {
+object Client {
 
     // The XClient class is generated during the build process
 
     @field:JvmSynthetic
-    override lateinit var accessor: XClient
+    lateinit var accessor: XClient
 
     /**
      * @return `"Client"`

@@ -22,8 +22,7 @@ class InventoryDebug : DisposablePlugin<InventoryDebug.Settings>() {
             g.color = settings.color.get()
             val container = Inventory.container
             if (container != null) {
-                val items = container.get()
-                items.forEach { i ->
+                container.forEach { i ->
                     g.drawString(i.toString(), x, y)
                     y += g.font.size + 5
                 }

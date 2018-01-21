@@ -1,10 +1,9 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XPlayerAppearance
 import java.util.*
 
-class PlayerAppearance(override val accessor: XPlayerAppearance) : Wrapper() {
+class PlayerAppearance(val accessor: XPlayerAppearance) {
 
     val items: Map<EquipmentSlot, Int> get() {
         return EnumMap<EquipmentSlot, Int>(EquipmentSlot::class.java).apply {

@@ -2,17 +2,16 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XWidget
 import org.runestar.client.game.raw.access.XWidgetNode
 
 class WidgetGroup(
         val id: Int,
-        override val accessor: Array<XWidget>
-) : Wrapper() {
+        val accessor: Array<XWidget>
+) {
 
     val parent: Widget.Parent? get() {
-        val table = Client.accessor.widgetNodes
+        val table = Client.accessor.widgetNodes // todo
         var node = table.first() as XWidgetNode?
         while (node != null) {
             if (node.id == id) {

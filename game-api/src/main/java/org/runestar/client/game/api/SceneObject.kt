@@ -2,17 +2,16 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.Accessor
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.Wrapper
 import org.runestar.client.game.raw.access.XBoundaryObject
 import org.runestar.client.game.raw.access.XFloorDecoration
 import org.runestar.client.game.raw.access.XGameObject
 import org.runestar.client.game.raw.access.XWallDecoration
 
-abstract class SceneObject : Wrapper() {
+abstract class SceneObject {
 
     abstract val tag: EntityTag
 
-    override abstract val accessor: Accessor
+    abstract val accessor: Accessor
 
     val location get() = tag.location
 
