@@ -13,6 +13,6 @@ class ItemContainer(val accessor: XItemContainer) : AbstractList<Item?>(), Rando
     }
 
     override fun toString(): String {
-        return "ItemContainer(size=$size)"
+        return "ItemContainer${toTypedArray().contentToString()}"
     }
 }
