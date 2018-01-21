@@ -3,19 +3,20 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.Player
 import org.runestar.client.game.raw.Client.accessor
 
-object Players {
-
-    val CAPACITY = accessor.players.size
+object Players : AbstractCollection<Player>() {
 
     val local: Player? get() = accessor.localPlayer?.let { Player(it) }
 
-    val all: List<Player> get() = List(count) { Player(accessor.players[accessor.players_indices[it]]) }
+    override fun iterator() = object : AbstractIterator<Player>() {
+        private var i = 0
+        override fun computeNext() {
+            if (i >= size) return done()
+            val x = accessor.players[accessor.players_indices[i++]] ?: return done()
+            setNext(Player(x))
+        }
+    }
 
-    val count get() = accessor.players_count
+    override val size get() =  accessor.players_count
 
-    val indices: List<Int> get() = accessor.players_indices.take(count)
-
-    fun get(): List<Player?> =  accessor.players.map { it?.let { Player(it) } }
-
-    operator fun get(index: Int): Player? = accessor.players.getOrNull(index)?.let { Player(it) }
+    internal operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
 }

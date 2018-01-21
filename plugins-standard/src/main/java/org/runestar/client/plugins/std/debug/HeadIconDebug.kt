@@ -20,7 +20,7 @@ class HeadIconDebug : DisposablePlugin<HeadIconDebug.Settings>() {
             g.font = settings.font.get()
             g.color = settings.color.get()
 
-            Players.all.forEach { p ->
+            Players.forEach { p ->
                 val pos = p.position.copy(height = 0)
                 if (!pos.isLoaded) return@forEach
                 val pt = pos.toScreen() ?: return@forEach

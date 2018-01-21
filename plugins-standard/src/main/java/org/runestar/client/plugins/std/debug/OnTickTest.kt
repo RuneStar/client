@@ -21,8 +21,8 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
 
         add(Game.ticks.subscribe {
             tiles.clear()
-            Players.all.mapTo(tiles) { it.location }
-            Npcs.all.mapTo(tiles) { it.location }
+            Players.mapTo(tiles) { it.location }
+            Npcs.mapTo(tiles) { it.location }
             tick++
         })
 

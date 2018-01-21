@@ -23,8 +23,8 @@ class ActorHealthDebug : DisposablePlugin<ActorHealthDebug.Settings>() {
             g.color = settings.color.get()
 
             val actors = ArrayList<Actor>()
-            actors.addAll(Npcs.all)
-            actors.addAll(Players.all)
+            actors.addAll(Npcs.toList())
+            actors.addAll(Players.toList())
 
             actors.forEach { actor ->
                 val loc = actor.location

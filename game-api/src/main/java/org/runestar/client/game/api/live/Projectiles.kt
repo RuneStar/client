@@ -4,16 +4,13 @@ import org.runestar.client.game.api.Projectile
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XProjectile
 
-object Projectiles {
+object Projectiles : Iterable<Projectile> {
 
-    val all: List<Projectile> get() {
-        val nodes = accessor.projectiles
-        val list = ArrayList<Projectile>()
-        var node = nodes.sentinel.previous
-        while (node != nodes.sentinel) {
-            list.add(Projectile(node as XProjectile))
-            node = node.previous
-        }
-        return list
+    override fun iterator() = object : Iterator<Projectile> {
+        private var n = accessor.projectiles.sentinel.previous
+        override fun hasNext() = n != accessor.projectiles.sentinel
+        override fun next() = Projectile(n as XProjectile).also { n = n.previous }
     }
+
+    fun isEmpty() = accessor.projectiles.sentinel.previous == accessor.projectiles.sentinel
 }
