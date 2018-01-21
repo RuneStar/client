@@ -21,9 +21,8 @@ class ItemContainersDebug : DisposablePlugin<ItemContainersDebug.Settings>() {
             g.color = settings.color.get()
 
 
-            val map = ItemContainers.all
             val strings = ArrayList<String>()
-            map.forEach { k, v ->
+            ItemContainers.forEach { k, v ->
                 val vs = v.map { it?.let { "(${it.id}x${it.quantity})" } }
                 strings.add("$k:$vs")
             }

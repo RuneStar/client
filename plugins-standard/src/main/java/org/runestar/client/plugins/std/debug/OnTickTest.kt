@@ -13,14 +13,14 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    val tiles = ArrayList<SceneTile>()
+    var tiles = ArrayList<SceneTile>()
     var tick = 0
 
     override fun start() {
         super.start()
 
         add(Game.ticks.subscribe {
-            tiles.clear()
+            tiles = ArrayList()
             Players.mapTo(tiles) { it.location }
             Npcs.mapTo(tiles) { it.location }
             tick++
