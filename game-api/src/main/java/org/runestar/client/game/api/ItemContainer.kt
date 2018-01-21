@@ -7,9 +7,8 @@ class ItemContainer(val accessor: XItemContainer) : AbstractList<Item?>(), Rando
     override val size get() = accessor.ids.size
 
     override fun get(index: Int): Item? {
-        val id = accessor.ids.getOrNull(index) ?: return null
-        val quantity = accessor.quantities.getOrNull(index) ?: return null
-        return Item.of(id, quantity)
+        if (index >= size) return null
+        return Item.of(accessor.ids[index], accessor.quantities[index])
     }
 
     override fun toString(): String {
