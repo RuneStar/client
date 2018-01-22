@@ -3,11 +3,11 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.Friend
 import org.runestar.client.game.raw.Client.accessor
 
-object FriendsList {
+object FriendsList : AbstractList<Friend>(), RandomAccess {
 
-    val CAPACITY = accessor.friendsList.size
+    override val size get() = accessor.friendsListCount
 
-    fun get(): List<Friend?> = accessor.friendsList.map { it?.let { Friend(it) } }
+    val capactiy = accessor.friendsList.size
 
-    val all: List<Friend> get() = accessor.friendsList.mapNotNull { it?.let { Friend(it) } }
+    override fun get(index: Int) = Friend(checkNotNull(accessor.friendsList[index]))
 }

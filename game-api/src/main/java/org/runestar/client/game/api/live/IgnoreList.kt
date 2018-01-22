@@ -3,11 +3,11 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.Ignored
 import org.runestar.client.game.raw.Client.accessor
 
-object IgnoreList {
+object IgnoreList : AbstractList<Ignored>(), RandomAccess {
 
-    val CAPACITY = accessor.ignoreList.size
+    override val size get() = accessor.ignoreListCount
 
-    fun get(): List<Ignored?> = accessor.ignoreList.map { it?.let { Ignored(it) } }
+    val capactiy = accessor.ignoreList.size
 
-    val all: List<Ignored> get() = accessor.ignoreList.mapNotNull { it?.let { Ignored(it) } }
+    override fun get(index: Int) = Ignored(checkNotNull(accessor.ignoreList[index]))
 }
