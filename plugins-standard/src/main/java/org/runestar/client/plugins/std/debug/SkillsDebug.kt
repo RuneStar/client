@@ -21,8 +21,8 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
 
             var y = 35
             val x = 5
-            Skill.values().map { "$it ${Stats[it]}" }.forEach { s ->
-                g.drawString(s, x, y)
+            Stats.forEach { k, v ->
+                g.drawString("$k=$v", x, y)
                 y += g.font.size + 5
             }
         })

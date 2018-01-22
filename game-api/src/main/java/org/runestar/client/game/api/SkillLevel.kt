@@ -3,7 +3,7 @@ package org.runestar.client.game.api
 data class SkillLevel(
         val currentLevel: Int,
         val level: Int,
-        val experience: Long
+        val experience: Int
 ) {
 
     override fun toString(): String {

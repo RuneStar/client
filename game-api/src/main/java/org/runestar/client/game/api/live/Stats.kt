@@ -4,23 +4,30 @@ import org.runestar.client.game.api.SkillLevel
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.general.Skill
 
-object Stats {
+object Stats : AbstractMap<Skill, SkillLevel>() {
 
-    @JvmStatic
-    operator fun get(skill: Skill) : SkillLevel {
-        return when(skill) {
-            Skill.OVERALL ->
-                SkillLevel(
-                        accessor.currentLevels.sum() - (accessor.currentLevels.size - Skill.VALUES.size + 1),
-                        accessor.levels.sum() - (accessor.levels.size - Skill.VALUES.size + 1),
-                        accessor.experience.fold(0L) { acc, v -> acc + v.toLong() }
-                )
-            else ->
-                SkillLevel(
-                        accessor.currentLevels[skill.id],
-                        accessor.levels[skill.id],
-                        accessor.experience[skill.id].toLong()
-                )
+    override val entries: Set<Map.Entry<Skill, SkillLevel>> = object : AbstractSet<Map.Entry<Skill, SkillLevel>>() {
+
+        override val size = Skill.VALUES.size - 1
+
+        override fun iterator() = object : AbstractIterator<Map.Entry<Skill, SkillLevel>>() {
+
+            private var i = 0
+
+            override fun computeNext() {
+                if (i >= size) return done()
+                val skill = Skill.of(i++)
+                setNext(java.util.AbstractMap.SimpleImmutableEntry(skill, get(skill)))
+            }
         }
+    }
+
+    override fun get(key: Skill) : SkillLevel {
+        require(key != Skill.OVERALL) { "Must be a regular skill" } // todo
+        return SkillLevel(
+                accessor.currentLevels[key.id],
+                accessor.levels[key.id],
+                accessor.experience[key.id]
+        )
     }
 }
