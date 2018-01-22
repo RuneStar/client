@@ -3,13 +3,15 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.ClanMate
 import org.runestar.client.game.raw.Client.accessor
 
-object ClanChat {
+object ClanChat : AbstractList<ClanMate>(), RandomAccess {
 
-    val CAPACITY = 100
+    val capacity = 100
 
     val owner: String? get() = accessor.clanChatOwner
 
-    fun get(): List<ClanMate?> = accessor.clanChat?.map { it?.let { ClanMate(it) } } ?: emptyList()
+    val name: String? get() = accessor.clanChatName
 
-    val all: List<ClanMate> get() = accessor.clanChat?.mapNotNull { it?.let { ClanMate(it) } } ?: emptyList()
+    override val size get() = accessor.clanChatCount
+
+    override fun get(index: Int) = ClanMate(accessor.clanChat[index])
 }
