@@ -7,7 +7,7 @@ object IgnoreList : AbstractList<Ignored>(), RandomAccess {
 
     override val size get() = accessor.ignoreListCount
 
-    val capactiy = accessor.ignoreList.size
+    val capacity = accessor.ignoreList.size
 
     override fun get(index: Int) = Ignored(checkNotNull(accessor.ignoreList[index]))
 }

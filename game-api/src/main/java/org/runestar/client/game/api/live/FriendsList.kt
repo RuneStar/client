@@ -7,7 +7,7 @@ object FriendsList : AbstractList<Friend>(), RandomAccess {
 
     override val size get() = accessor.friendsListCount
 
-    val capactiy = accessor.friendsList.size
+    val capacity = accessor.friendsList.size
 
     override fun get(index: Int) = Friend(checkNotNull(accessor.friendsList[index]))
 }
