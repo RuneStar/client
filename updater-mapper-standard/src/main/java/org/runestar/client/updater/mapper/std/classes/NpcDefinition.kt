@@ -89,6 +89,18 @@ class NpcDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(readNext::class)
+    class drawMapDot : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 93 }
+                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(readNext::class)
+    class isInteractable : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 107 }
+                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(readNext::class)
     class headIconPrayer : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 102 }
                 .nextWithin(2) { it.node is JumpInsnNode }

@@ -5,4 +5,8 @@ data class Varps(
 ) {
 
     operator fun get(varbit: Varbit): Int = accessor[varbit.index] ushr varbit.lowBit and varbit.max
+
+    override fun toString(): String {
+        return "Varps($accessor)"
+    }
 }

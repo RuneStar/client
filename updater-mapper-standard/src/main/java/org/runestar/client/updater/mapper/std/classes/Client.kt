@@ -2736,4 +2736,15 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(70) { it.opcode == GETSTATIC && it.fieldType == String::class.type.withDimensions(1) }
                 .prevWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    class clanChatCount : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
+                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+                .nextWithin(7) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class clanChatName : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
+                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+    }
 }
