@@ -4,13 +4,13 @@ import org.runestar.client.game.api.Item
 import org.runestar.client.game.api.ItemContainerId
 import org.runestar.client.game.api.WidgetGroupId
 
-object Inventory {
-
-    const val SIZE = 28
+object Inventory : AbstractList<Item?>(), RandomAccess {
 
     val widget get() = Widgets[WidgetGroupId.Inventory.items]
 
     val container get() = ItemContainers[ItemContainerId.INVENTORY]
 
-    operator fun get(slot: Int): Item? = container?.get(slot)
+    override fun get(index: Int): Item? = container?.get(index)
+
+    override val size = 28
 }

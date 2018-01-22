@@ -10,8 +10,4 @@ class ItemContainer(val accessor: XItemContainer) : AbstractList<Item?>(), Rando
         if (index >= size) return null
         return Item.of(accessor.ids[index], accessor.quantities[index])
     }
-
-    override fun toString(): String {
-        return "ItemContainer${toTypedArray().contentToString()}"
-    }
 }
