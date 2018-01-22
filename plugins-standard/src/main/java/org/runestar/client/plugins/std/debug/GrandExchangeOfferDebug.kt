@@ -16,7 +16,7 @@ class GrandExchangeOfferDebug : DisposablePlugin<PluginSettings>() {
             val x = 5
             var y = 40
             g.color = Color.WHITE
-            GrandExchangeOffers.get().forEach { o ->
+            GrandExchangeOffers.forEach { o ->
                 g.drawString(o.toString(), x, y)
                 y += 13
             }
