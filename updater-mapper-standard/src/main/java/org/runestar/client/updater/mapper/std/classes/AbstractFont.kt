@@ -37,11 +37,6 @@ class AbstractFont : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "img=" } }
     }
 
-    @DependsOn(stringWidth::class)
-    class charWidths : OrderMapper.InMethod.Field(stringWidth::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
-    }
-
     @MethodParameters("c")
     class charWidth : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
@@ -77,5 +72,30 @@ class AbstractFont : IdentityMapper.Class() {
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(String::class.type, INT_TYPE) }
                 .and { it.instructions.none { it.opcode == IINC } }
+    }
+
+    @DependsOn(stringWidth::class)
+    class glyphAdvances : OrderMapper.InMethod.Field(stringWidth::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class glyphWidths : OrderMapper.InConstructor.Field(AbstractFont::class, 2) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class glyphHeights : OrderMapper.InConstructor.Field(AbstractFont::class, 3) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class glyphLeftBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 0) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class glyphTopBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 1) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 }

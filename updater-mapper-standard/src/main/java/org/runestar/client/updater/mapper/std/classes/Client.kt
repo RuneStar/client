@@ -2778,4 +2778,10 @@ class Client : IdentityMapper.Class() {
     class AbstractFont_currentLines : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type.withDimensions(1) }
     }
+
+    @DependsOn(AbstractFont::class, IndexedSprite::class)
+    class AbstractFont_modIconSprites : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<AbstractFont>() }
+                .and { it.type == type<IndexedSprite>().withDimensions(1) }
+    }
 }
