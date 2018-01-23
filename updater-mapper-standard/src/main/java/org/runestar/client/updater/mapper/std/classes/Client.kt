@@ -2431,11 +2431,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == Random::class.type }
     }
 
-    class AbstractFont_strikeRgb : AbstractFontStaticIntMapper(0)
-    class AbstractFont_underlineRgb : AbstractFontStaticIntMapper(1)
-    class AbstractFont_prevShadeRgb : AbstractFontStaticIntMapper(2)
+    class AbstractFont_strike : AbstractFontStaticIntMapper(0)
+    class AbstractFont_underline : AbstractFontStaticIntMapper(1)
+    class AbstractFont_previousShadow : AbstractFontStaticIntMapper(2)
     class AbstractFont_shadow : AbstractFontStaticIntMapper(3)
-    class AbstractFont_prevColorRgb : AbstractFontStaticIntMapper(4)
+    class AbstractFont_previousColor : AbstractFontStaticIntMapper(4)
     class AbstractFont_color : AbstractFontStaticIntMapper(5)
     class AbstractFont_int1 : AbstractFontStaticIntMapper(6)
     class AbstractFont_int2 : AbstractFontStaticIntMapper(7)
@@ -2746,5 +2746,36 @@ class Client : IdentityMapper.Class() {
     class clanChatName : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
                 .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+    }
+
+    // inlined
+//    @MethodParameters("l")
+//    class longToString : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(LONG_TYPE) }
+//                .and { it.instructions.none { it.isMethod && it.methodName == "toUpperCase" } }
+//                .and { it.instructions.any { it.opcode == LREM } }
+//    }
+
+    // inlined
+//    @MethodParameters("l")
+//    class longToTitleString : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(LONG_TYPE) }
+//                .and { it.instructions.any { it.isMethod && it.methodName == "toUpperCase" } }
+//                .and { it.instructions.any { it.opcode == LREM } }
+//    }
+
+    class base37Table : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 37 }
+                .next { it.opcode == NEWARRAY && it.intOperand == 5 }
+                .nextWithin(200) { it.opcode == PUTSTATIC && it.fieldType == CharArray::class.type }
+    }
+
+    @DependsOn(AbstractFont::class)
+    class AbstractFont_currentLines : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type.withDimensions(1) }
     }
 }
