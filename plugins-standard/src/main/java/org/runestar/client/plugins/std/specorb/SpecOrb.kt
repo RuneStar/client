@@ -29,6 +29,8 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
         const val TEXT_AREA_Y_OFFSET = 27
     }
 
+    override val name = "Special Attack Orb"
+
     override val defaultSettings = Settings()
 
     val orbBack = ImageIO.read(javaClass.getResourceAsStream("orb-back.png"))

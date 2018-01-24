@@ -9,6 +9,8 @@ class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
 
     override val defaultSettings = Settings()
 
+    override val name = "FPS Throttle"
+
     override fun start() {
         super.start()
         if (settings.sleepTimeMs <= 0) return

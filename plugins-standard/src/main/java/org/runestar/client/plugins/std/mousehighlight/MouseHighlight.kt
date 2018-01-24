@@ -19,6 +19,8 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
         val TAG_REGEX = "<.*?>".toRegex()
     }
 
+    override val name = "Mouse Highlight"
+
     // todo : color tags
 
     override fun start() {

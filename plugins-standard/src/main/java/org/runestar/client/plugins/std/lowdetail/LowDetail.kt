@@ -8,6 +8,8 @@ class LowDetail : Plugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
+    override val name = "Low Detail"
+
     override fun start() {
         super.start()
         Client.accessor.isLowDetail = true

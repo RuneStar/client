@@ -18,6 +18,8 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override val defaultSettings = Settings()
 
+    override val name = "Ground Items"
+
     val tiles = LinkedHashSet<SceneTile>()
 
     val blockedIds = HashSet<Int>()

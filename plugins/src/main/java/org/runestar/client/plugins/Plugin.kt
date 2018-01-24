@@ -29,4 +29,6 @@ abstract class Plugin<T : PluginSettings> {
     open fun stop() {
         logger.info("stop")
     }
+
+    open val name: String = javaClass.simpleName
 }

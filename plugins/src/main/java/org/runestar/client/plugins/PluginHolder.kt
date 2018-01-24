@@ -154,7 +154,7 @@ internal class PluginHolder<T : PluginSettings>(
     }
 
     override fun toString(): String {
-        return plugin.javaClass.simpleName
+        return plugin.name
     }
 
     private fun addIndividualFileLogger() {
