@@ -2437,12 +2437,12 @@ class Client : IdentityMapper.Class() {
     class AbstractFont_shadow : AbstractFontStaticIntMapper(3)
     class AbstractFont_previousColor : AbstractFontStaticIntMapper(4)
     class AbstractFont_color : AbstractFontStaticIntMapper(5)
-    class AbstractFont_int1 : AbstractFontStaticIntMapper(6)
-    class AbstractFont_int2 : AbstractFontStaticIntMapper(7)
-    class AbstractFont_int3 : AbstractFontStaticIntMapper(8)
+    class AbstractFont_alpha : AbstractFontStaticIntMapper(6)
+    class AbstractFont_justificationTotal : AbstractFontStaticIntMapper(7)
+    class AbstractFont_justificationCurrent : AbstractFontStaticIntMapper(8)
 
-    @MethodParameters("string")
-    class escapeTags : IdentityMapper.StaticMethod() {
+    @MethodParameters("s")
+    class escapeBrackets : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(String::class.type) }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "<lt>" } }
@@ -2775,7 +2775,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(AbstractFont::class)
-    class AbstractFont_currentLines : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
+    class AbstractFont_lines : UniqueMapper.InClassInitializer.Field(AbstractFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == String::class.type.withDimensions(1) }
     }
 
@@ -2783,5 +2783,31 @@ class Client : IdentityMapper.Class() {
     class AbstractFont_modIconSprites : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.klass == klass<AbstractFont>() }
                 .and { it.type == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(Font.drawGlyph::class)
+    class AbstractFont_placeGlyph : UniqueMapper.InMethod.Method(Font.drawGlyph::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+        override fun resolve(instruction: Instruction2): Method2 {
+            return instruction.jar[Triple(instruction.jar[instruction.methodOwner].superType, instruction.methodName, instruction.methodType)]
+        }
+    }
+
+    @DependsOn(Font.drawGlyphAlpha::class)
+    class AbstractFont_placeGlyphAlpha : UniqueMapper.InMethod.Method(Font.drawGlyphAlpha::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+        override fun resolve(instruction: Instruction2): Method2 {
+            return instruction.jar[Triple(instruction.jar[instruction.methodOwner].superType, instruction.methodName, instruction.methodType)]
+        }
+    }
+
+    @DependsOn(AbstractFont_placeGlyph::class)
+    class AbstractFont_drawGlyph : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyph>().id } }
+    }
+
+    @DependsOn(AbstractFont_placeGlyphAlpha::class)
+    class AbstractFont_drawGlyphAlpha : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyphAlpha>().id } }
     }
 }

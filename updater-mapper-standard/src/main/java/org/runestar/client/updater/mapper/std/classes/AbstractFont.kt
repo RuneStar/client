@@ -24,7 +24,12 @@ class AbstractFont : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Array<ByteArray>::class.type }
     }
 
-    class decodeColor : IdentityMapper.InstanceMethod() {
+    // always null?
+    class ligatureAdvances  : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
+    }
+
+    class decodeTag : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size in 1..2 }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "/shad" } }
     }
@@ -97,5 +102,91 @@ class AbstractFont : IdentityMapper.Class() {
     class topBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 1) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    // p11: this = 10, max descent = 3, height = 12, max ascent = 9, main ascent = 8
+    // p12: this = 12, max descent = 4, height = 16, max ascent = 12, main ascent = 11
+    class ascent : OrderMapper.InConstructor.Field(AbstractFont::class, 0) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    // p11: 10
+    // p12: 12
+    class maxAscent : OrderMapper.InConstructor.Field(AbstractFont::class, -2) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    // p11: 2
+    // p12: 4
+    class maxDescent : OrderMapper.InConstructor.Field(AbstractFont::class, -1) {
+        override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class drawGlyph : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { Modifier.isAbstract(it.access) }
+                .and { it.arguments == listOf(ByteArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    class drawGlyphAlpha : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { Modifier.isAbstract(it.access) }
+                .and { it.arguments == listOf(ByteArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("s", "x", "y")
+    class drawLine0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow")
+    class drawLine : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.none { it.opcode == ISUB } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow")
+    class drawLineRightAligned : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == ISUB } }
+                .and { it.instructions.none { it.opcode == IDIV } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow")
+    class drawLineCentered : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == ISUB } }
+                .and { it.instructions.any { it.opcode == IDIV } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow", "alpha")
+    class drawLineAlpha : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.none { it.opcode == IINC } }
+    }
+
+//    @MethodParameters
+    class drawLineX0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, IntArray::class.type, IntArray::class.type) }
+    }
+
+//    @MethodParameters
+    class drawLines : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
+                        INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("s", "lineWidth")
+    class calculateLineJustification : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE) }
     }
 }
