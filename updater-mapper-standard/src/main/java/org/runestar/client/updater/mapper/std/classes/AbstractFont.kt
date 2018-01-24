@@ -25,7 +25,7 @@ class AbstractFont : IdentityMapper.Class() {
     }
 
     // always null?
-    class ligatureAdvances  : IdentityMapper.InstanceField() {
+    class kerning  : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
@@ -125,31 +125,33 @@ class AbstractFont : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    @MethodParameters("pixels", "x", "y", "width", "height", "color")
     class drawGlyph : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { Modifier.isAbstract(it.access) }
                 .and { it.arguments == listOf(ByteArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 
+    @MethodParameters("pixels", "x", "y", "width", "height", "color", "alpha")
     class drawGlyphAlpha : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { Modifier.isAbstract(it.access) }
                 .and { it.arguments == listOf(ByteArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 
     @MethodParameters("s", "x", "y")
-    class drawLine0 : IdentityMapper.InstanceMethod() {
+    class draw0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE) }
     }
 
     @MethodParameters("s", "x", "y", "color", "shadow")
-    class drawLine : IdentityMapper.InstanceMethod() {
+    class draw : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.none { it.opcode == ISUB } }
     }
 
     @MethodParameters("s", "x", "y", "color", "shadow")
-    class drawLineRightAligned : IdentityMapper.InstanceMethod() {
+    class drawRightAligned : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == ISUB } }
@@ -157,7 +159,7 @@ class AbstractFont : IdentityMapper.Class() {
     }
 
     @MethodParameters("s", "x", "y", "color", "shadow")
-    class drawLineCentered : IdentityMapper.InstanceMethod() {
+    class drawCentered : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == ISUB } }
@@ -165,14 +167,14 @@ class AbstractFont : IdentityMapper.Class() {
     }
 
     @MethodParameters("s", "x", "y", "color", "shadow", "alpha")
-    class drawLineAlpha : IdentityMapper.InstanceMethod() {
+    class drawAlpha : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.none { it.opcode == IINC } }
     }
 
-//    @MethodParameters
-    class drawLineX0 : IdentityMapper.InstanceMethod() {
+    @MethodParameters("s", "x", "y", "xs", "ys")
+    class drawWithOffsets0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, IntArray::class.type, IntArray::class.type) }
     }
@@ -188,5 +190,32 @@ class AbstractFont : IdentityMapper.Class() {
     class calculateLineJustification : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE) }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow", "seed")
+    class drawRandomAlphaAndSpacing : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.isMethod && it.methodName == "setSeed" } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow", "seed")
+    class drawCenteredSin : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == 3.0 } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow", "seed")
+    class drawCenteredSinY : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == 2.0 } }
+    }
+
+    @MethodParameters("s", "x", "y", "color", "shadow", "seed", "seed2")
+    class drawCenteredSinY2 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 }

@@ -2801,11 +2801,13 @@ class Client : IdentityMapper.Class() {
         }
     }
 
+    @MethodParameters("pixels", "x", "y", "width", "height", "color")
     @DependsOn(AbstractFont_placeGlyph::class)
     class AbstractFont_drawGlyph : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyph>().id } }
     }
 
+    @MethodParameters("pixels", "x", "y", "width", "height", "color", "alpha")
     @DependsOn(AbstractFont_placeGlyphAlpha::class)
     class AbstractFont_drawGlyphAlpha : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyphAlpha>().id } }
