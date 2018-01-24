@@ -20,7 +20,7 @@ class AbstractFont : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { Modifier.isAbstract(it.access) }
             .and { it.superType == type<Rasterizer2D>() }
 
-    class glyphs : IdentityMapper.InstanceField() {
+    class pixels  : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Array<ByteArray>::class.type }
     }
 
@@ -75,26 +75,26 @@ class AbstractFont : IdentityMapper.Class() {
     }
 
     @DependsOn(stringWidth::class)
-    class glyphAdvances : OrderMapper.InMethod.Field(stringWidth::class, 0) {
+    class advances : OrderMapper.InMethod.Field(stringWidth::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 
-    class glyphWidths : OrderMapper.InConstructor.Field(AbstractFont::class, 2) {
+    class widths : OrderMapper.InConstructor.Field(AbstractFont::class, 2) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    class glyphHeights : OrderMapper.InConstructor.Field(AbstractFont::class, 3) {
+    class heights : OrderMapper.InConstructor.Field(AbstractFont::class, 3) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    class glyphLeftBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 0) {
+    class leftBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 0) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    class glyphTopBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 1) {
+    class topBearings : OrderMapper.InConstructor.Field(AbstractFont::class, 1) {
         override val constructorPredicate = predicateOf<Method2> { it.arguments.size > 2 }
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
