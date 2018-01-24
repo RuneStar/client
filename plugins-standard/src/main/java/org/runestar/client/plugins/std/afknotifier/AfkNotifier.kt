@@ -18,6 +18,8 @@ class AfkNotifier : DisposablePlugin<AfkNotifier.Settings>() {
 
     override val defaultSettings = Settings()
 
+    override val name = "AFK Notifier"
+
     override fun start() {
         super.start()
 

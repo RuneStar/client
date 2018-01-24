@@ -8,6 +8,8 @@ class WindowSize : Plugin<WindowSize.Settings>() {
 
     override val defaultSettings = Settings()
 
+    override val name = "Window Size"
+
     override fun start() {
         super.start()
         Application.frame.size = settings.size

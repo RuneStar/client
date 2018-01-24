@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.std.specorb
+package org.runestar.client.plugins.std.specialattackorb
 
 import org.kxtra.swing.graphics.drawImage
 import org.runestar.client.game.api.GameState
@@ -17,7 +17,7 @@ import java.awt.Rectangle
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
-class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
+class SpecialAttackOrb : DisposablePlugin<SpecialAttackOrb.Settings>() {
 
     companion object {
         const val ORB_OFFSET_BOTTOM = 6
