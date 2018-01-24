@@ -1,8 +1,6 @@
 package org.runestar.client.plugins.std.specorb
 
 import org.kxtra.swing.graphics.drawImage
-import org.kxtra.swing.graphics2d.drawString
-import org.kxtra.swing.point.plus
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Varbit
 import org.runestar.client.game.api.WindowMode
@@ -11,9 +9,9 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.utils.colorForPercent
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
-import java.awt.Font
 import java.awt.Point
 import java.awt.Rectangle
 import javax.imageio.ImageIO
@@ -41,8 +39,6 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
 
     val font = RUNESCAPE_SMALL_FONT
 
-    // todo : font color
-
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
@@ -58,7 +54,8 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
 
             val spec = Game.varps[Varbit.SPECIAL_ATTACK_PERCENT] / 10
             val specString = spec.toString()
-            val orbHeight = (ORB_HEIGHT * (spec / 100.0)).roundToInt()
+            val specPercent = spec / 100.0
+            val orbHeight = (ORB_HEIGHT * specPercent).roundToInt()
             g.clip = Rectangle(location.x, location.y + HEIGHT - ORB_OFFSET_BOTTOM - orbHeight, WIDTH, HEIGHT)
             val isEnabled = Game.varps[Varbit.SPECIAL_ATTACK_ENABLED] != 0
             val orbOrb = if (isEnabled) orbOrbEnabled else orbOrbDisabled
@@ -73,7 +70,7 @@ class SpecOrb : DisposablePlugin<SpecOrb.Settings>() {
             val textX = location.x + TEXT_AREA_X_OFFSET + ((TEXT_AREA_WIDTH - stringWidth + 1) / 2)
             g.color = Color.BLACK
             g.drawString(specString, textX + 1, textY + 1)
-            g.color = Color.GREEN
+            g.color = colorForPercent(specPercent)
             g.drawString(specString, textX, textY)
         })
     }
