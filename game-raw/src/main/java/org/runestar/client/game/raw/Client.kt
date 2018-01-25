@@ -11,11 +11,4 @@ object Client {
 
     @field:JvmSynthetic
     lateinit var accessor: XClient
-
-    /**
-     * @return `"Client"`
-     */
-    override fun toString(): String {
-        return "Client"
-    }
 }

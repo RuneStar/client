@@ -3,6 +3,9 @@ package org.runestar.client.plugins
 import java.io.IOException
 import java.nio.file.Path
 
+/**
+ * Uses a consistent encoding to read and write arbitrary objects to and from files
+ */
 interface FileReadWriter {
 
     /**

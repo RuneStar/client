@@ -10,6 +10,9 @@ import javax.imageio.ImageIO
 
 private val klass = MethodHandles.lookup().lookupClass()
 
+/**
+ * 16x16 RuneStar star icon
+ */
 @JvmField
 val ICON: BufferedImage = ImageIO.read(klass.getResource("icon.png"))
 

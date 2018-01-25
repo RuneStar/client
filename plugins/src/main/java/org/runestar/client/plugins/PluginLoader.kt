@@ -23,6 +23,9 @@ class PluginLoader(
 
     private val currentPlugins = HashMap<String, PluginHolder<*>>()
 
+    /**
+     * A view of the current plugins.
+     */
     val plugins: Collection<PluginHandle> = currentPlugins.values
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(threadFactory)

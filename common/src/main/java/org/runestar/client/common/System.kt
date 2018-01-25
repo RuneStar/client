@@ -2,8 +2,6 @@
 
 package org.runestar.client.common
 
-import java.awt.SystemColor.info
-
 private val systemProperties = listOf(
         "java.version",
         "java.vm.version",
@@ -15,6 +13,4 @@ private val systemProperties = listOf(
         "java.class.path"
 )
 
-private val debugSystemProperties = systemProperties.associate { it to System.getProperty(it) }
-
-val systemDebugString = "System: properties=$debugSystemProperties"
+val systemDebugString = "System: properties=${systemProperties.associate { it to System.getProperty(it) }}"

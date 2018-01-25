@@ -5,7 +5,8 @@ import java.awt.PopupMenu
 import java.awt.Window
 
 /**
- * Proxy for `java.awt.Taskbar`. Does nothing on Java 8.
+ * Proxy for `java.awt.Taskbar` introduced in Java 9. Does nothing on Java 8. If any features are unsupported the
+ * corresponding function will do nothing instead of throwing an exception.
  */
 object AwtTaskbar {
 

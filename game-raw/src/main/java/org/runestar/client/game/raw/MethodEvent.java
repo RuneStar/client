@@ -17,7 +17,8 @@ public interface MethodEvent<I> {
     I getInstance();
 
     /**
-     * The arguments used to call the method, boxing primitive values. Should not be modified.
+     * The arguments used to call the method, boxing primitive values. Should not be modified, modifications will have
+     * no effect.
      */
     Object[] getArguments();
 
