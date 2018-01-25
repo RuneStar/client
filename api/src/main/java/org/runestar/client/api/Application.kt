@@ -47,7 +47,7 @@ object Application {
 
         setup()
 
-        val javConfig = JavConfig.load()
+        val javConfig = JavConfig.load(System.getProperty("runestar.world", ""))
         Client.accessor = Class.forName(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
         @Suppress("DEPRECATION")
         val applet = Client.accessor as java.applet.Applet
