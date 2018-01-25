@@ -32,8 +32,7 @@ private fun setup() {
         logger.warn("Failed to set system look and feel", e)
     }
     AwtTaskbar.setIconImage(ICON)
-    val props = debugSystemProperties.entries.joinToString("\n") { "\t${it.key}=${it.value}" }
-    logger.info("System:\n$props")
+    logger.info(systemDebugString)
 }
 
 private fun update() {

@@ -89,8 +89,7 @@ object Application {
 
     private fun setup() {
         AwtTaskbar.setIconImage(ICON)
-        val props = debugSystemProperties.entries.joinToString("\n") { "\t${it.key}=${it.value}" }
-        logger.info("System:\n$props")
+        logger.info(systemDebugString)
     }
 
     private fun appletPreInit(
