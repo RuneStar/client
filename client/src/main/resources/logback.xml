@@ -27,7 +27,7 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="${runestar.log.level}">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILEOUT"/>
     </root>

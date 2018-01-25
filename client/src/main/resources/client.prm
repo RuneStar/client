@@ -1,5 +1,6 @@
-# TRACE, DEBUG, INFO, WARN, ERROR
--Drunestar.log.level=DEBUG
+# ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
+# default value: DEBUG
+#-Drunestar.log.level=DEBUG
 
 #-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 
