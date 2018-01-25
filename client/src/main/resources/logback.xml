@@ -2,7 +2,7 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date{ISO8601} [%thread] %-5level - %msg%n</pattern>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -12,7 +12,7 @@
         <append>true</append>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <minIndex>1</minIndex>
+            <minIndex>2</minIndex>
             <maxIndex>9</maxIndex>
             <fileNamePattern>${user.home}/RuneStar/client%i.log</fileNamePattern>
         </rollingPolicy>
@@ -22,7 +22,7 @@
         </triggeringPolicy>
 
         <encoder>
-            <pattern>%date{ISO8601} [%thread] %-5level - %msg%n</pattern>
+            <pattern>%date [%thread] %-5level %logger{0} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
