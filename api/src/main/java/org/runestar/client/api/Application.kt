@@ -28,7 +28,7 @@ object Application {
 
     private val logger = getLogger()
 
-    val trayIcon = TrayIcon(ICON, TITLE).apply {
+    val trayIcon: TrayIcon = TrayIcon(ICON, TITLE).apply {
         isImageAutoSize = true
     }
 

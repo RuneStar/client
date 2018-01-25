@@ -6,8 +6,7 @@ import java.awt.Color
 import kotlin.math.roundToInt
 
 /**
- * Red <-> Yellow <-> Green
- * 0.0 <->  0.5   <-> 1.0
+ * Red (0.0) <-> Yellow (0.5) <-> Green (1.0)
  *
  * @param[p] value in the range (0.0 - 1.0)
  */

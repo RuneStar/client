@@ -1,3 +1,5 @@
+@file:JvmName("Desktop")
+
 package org.runestar.client.api
 
 import org.kxtra.slf4j.logger.info

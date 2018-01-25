@@ -1,3 +1,5 @@
+@file:JvmName("Jars")
+
 package org.runestar.client.plugins
 
 import java.nio.file.Path
