@@ -28,9 +28,6 @@ internal class PluginsWindow(private val pluginLoader: PluginLoader) : JFrame("P
             add(JMenuItem("settings").apply {
                 addActionListener { currentPlugin?.let { openFile(it.settingsFile) } }
             })
-            add(JMenuItem("log").apply {
-                addActionListener { currentPlugin?.let { openFile(it.logFile) } }
-            })
             add(JMenuItem("directory").apply {
                 addActionListener { currentPlugin?.let { openFile(it.directory) } }
             })

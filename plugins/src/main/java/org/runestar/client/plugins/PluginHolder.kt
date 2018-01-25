@@ -37,10 +37,7 @@ internal class PluginHolder<T : PluginSettings>(
 
     private var ignoreNextEvent = false
 
-    override val logFile: Path get() = directory.resolve(PluginHandle.LOG_FILE_NAME)
-
     init {
-        addIndividualFileLogger()
         plugin.directory = directory
         createSettings()
         if (isRunning) {
@@ -155,43 +152,5 @@ internal class PluginHolder<T : PluginSettings>(
 
     override fun toString(): String {
         return plugin.name
-    }
-
-    private fun addIndividualFileLogger() {
-        val lblogger = logger as Logger
-        if (lblogger.getAppender(LOG_APPENDER_NAME) != null) return
-        lblogger.level = Level.ALL
-        val logCtx = LoggerFactory.getILoggerFactory() as LoggerContext
-
-        val logEncoder = PatternLayoutEncoder()
-        logEncoder.context = logCtx
-        logEncoder.pattern = LOG_ENCODER_PATTERN
-        logEncoder.start()
-
-        val logFileAppender = RollingFileAppender<ILoggingEvent>()
-        logFileAppender.context = logCtx
-        logFileAppender.name = LOG_APPENDER_NAME
-        logFileAppender.encoder = logEncoder
-        logFileAppender.isAppend = true
-        logFileAppender.file = directory.resolve(PluginHandle.LOG_FILE_NAME).toString()
-
-        val rollingPolicy = FixedWindowRollingPolicy()
-        rollingPolicy.minIndex = 0
-        rollingPolicy.maxIndex = 0
-        rollingPolicy.context = logCtx
-        rollingPolicy.setParent(logFileAppender)
-        rollingPolicy.fileNamePattern = directory.resolve(PluginHandle.LOG_FILE_NAME + "%i").toString()
-        rollingPolicy.start()
-
-        val triggeringPolicy = SizeBasedTriggeringPolicy<ILoggingEvent>()
-        triggeringPolicy.setMaxFileSize(FileSize.valueOf("3MB"))
-        triggeringPolicy.context = logCtx
-        triggeringPolicy.start()
-
-        logFileAppender.rollingPolicy = rollingPolicy
-        logFileAppender.triggeringPolicy = triggeringPolicy
-        logFileAppender.start()
-
-        lblogger.addAppender(logFileAppender)
     }
 }
