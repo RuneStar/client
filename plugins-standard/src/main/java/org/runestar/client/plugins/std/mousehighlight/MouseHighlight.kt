@@ -8,6 +8,7 @@ import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
+import java.awt.Color
 import java.awt.Rectangle
 import kotlin.math.min
 
@@ -61,6 +62,10 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
 
             val textX = boxX + settings.paddingX
             val textY = boxY + settings.paddingTop + g.fontMetrics.ascent
+
+            g.color = Color.BLACK
+            g.drawString(text, textX + 1, textY + 1)
+
             g.color = fontColor
             g.drawString(text, textX, textY)
         })
