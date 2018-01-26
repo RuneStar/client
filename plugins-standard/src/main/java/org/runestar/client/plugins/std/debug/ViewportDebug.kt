@@ -8,12 +8,13 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Font
 
-class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
+class ViewportDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()
@@ -29,8 +30,8 @@ class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
                     "viewportMouseX/Y: ${accessor.viewportMouse_x}, ${accessor.viewportMouse_y}",
                     "viewportContainsMouse: ${accessor.viewportMouse_isInViewport}"
             )
-            g.font = settings.font.get()
-            g.color = settings.color.get()
+            g.font = RUNESCAPE_CHAT_FONT
+            g.color = Color.WHITE
             val x = 20
             var y = 40
             strings.forEach { s ->
@@ -38,10 +39,5 @@ class ViewportDebug : DisposablePlugin<ViewportDebug.Settings>() {
                 y += g.font.size + 5
             }
         })
-    }
-
-    class Settings : PluginSettings() {
-        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
-        val color = ColorForm(255, 255, 255)
     }
 }

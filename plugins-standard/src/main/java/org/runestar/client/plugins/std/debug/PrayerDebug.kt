@@ -8,19 +8,21 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import java.awt.Color
 import java.awt.Font
 
-class PrayerDebug : DisposablePlugin<PrayerDebug.Settings>() {
+class PrayerDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40
-            g.font = settings.font.get()
-            g.color = settings.color.get()
+            g.font = RUNESCAPE_CHAT_FONT
+            g.color = Color.WHITE
             val strings = ArrayList<String>()
             strings.add(Prayers.level.toString())
             Prayer.values().filter { Prayers.isEnabled(it) }.mapTo(strings) { it.toString() }
@@ -29,10 +31,5 @@ class PrayerDebug : DisposablePlugin<PrayerDebug.Settings>() {
                 y += g.font.size + 5
             }
         })
-    }
-
-    class Settings : PluginSettings() {
-        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
-        val color = ColorForm(255, 255, 255)
     }
 }

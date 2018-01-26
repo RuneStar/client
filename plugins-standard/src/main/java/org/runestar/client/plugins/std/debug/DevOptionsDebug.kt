@@ -45,22 +45,22 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
         accessor.numberMenuOptions = false
     }
 
-    class Settings : PluginSettings() {
+    class Settings(
+            val boundingBoxes3D: ThreeD = ThreeD(),
+            val boundingBoxes2D: TwoD = TwoD(),
+            val displayFps: Boolean = false,
+            val useBoundingBoxes3D: Boolean = true,
+            val numberMenuOptions: Boolean = false
+    ) : PluginSettings() {
 
-        val boundingBoxes3D = ThreeD()
-        val boundingBoxes2D = TwoD()
-        val displayFps = false
-        val useBoundingBoxes3D = true
-        val numberMenuOptions = false
+        data class ThreeD(
+                val draw: Boolean = false,
+                val drawAll: Boolean = true
+        )
 
-        class ThreeD {
-            val draw = false
-            val drawAll = true
-        }
-
-        class TwoD {
-            val draw = false
-            val drawObjectGeometry = false
-        }
+        data class TwoD(
+                val draw: Boolean = false,
+                val drawObjectGeometry: Boolean = false
+        )
     }
 }

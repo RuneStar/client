@@ -116,12 +116,11 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         blockRegexes.clear()
     }
 
-    class Settings : PluginSettings() {
-        val color = ColorForm(255, 255, 255)
-        val font = FontForm(RUNESCAPE_SMALL_FONT)
-        val spacing = -2
-        val initialOffset = 9
-
-        val blockedNames = emptyList<String>()
-    }
+    data class Settings(
+            val color: ColorForm = ColorForm(255, 255, 255),
+            val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
+            val spacing: Int = -2,
+            val initialOffset: Int = 9,
+            val blockedNames: List<String> = emptyList()
+    ) : PluginSettings()
 }

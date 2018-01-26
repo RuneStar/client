@@ -11,18 +11,20 @@ import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.kxtra.swing.graphics2d.drawString
 import org.kxtra.swing.point.minus
+import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import java.awt.Color
 import java.awt.Font
 import java.awt.Point
 
-class TileHeightDebug : DisposablePlugin<TileHeightDebug.Settings>() {
+class TileHeightDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = settings.font.get()
-            g.color = settings.color.get()
+            g.font = RUNESCAPE_CHAT_FONT
+            g.color = Color.WHITE
 
             for (x in 0 until Scene.SIZE) {
                 for (y in 0 until Scene.SIZE) {
@@ -36,10 +38,5 @@ class TileHeightDebug : DisposablePlugin<TileHeightDebug.Settings>() {
                 }
             }
         })
-    }
-
-    class Settings : PluginSettings() {
-        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
-        val color = ColorForm(255, 255, 255)
     }
 }

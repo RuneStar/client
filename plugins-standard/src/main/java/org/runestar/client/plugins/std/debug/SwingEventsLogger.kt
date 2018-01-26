@@ -53,23 +53,25 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
         }
     }
 
-    class Settings : PluginSettings() {
-        val focus = false
-        val component = false
-        val window = false
-        val container = false
-        val mouse = Mouse()
-        val keyboard = Keyboard()
+    data class Settings(
+            val focus: Boolean = false,
+            val component: Boolean = false,
+            val window: Boolean = false,
+            val container: Boolean = false,
+            val mouse: Mouse = Mouse(),
+            val keyboard: Keyboard = Keyboard()
+    ) : PluginSettings() {
 
-        class Mouse {
-            val motion = false
-            val wheel = false
-            val others = false
-        }
 
-        class Keyboard {
-            val all = false
-            val typed = false
-        }
+        data class Mouse(
+                val motion: Boolean = false,
+                val wheel: Boolean = false,
+                val others: Boolean = false
+        )
+
+        data class Keyboard(
+                val all: Boolean = false,
+                val typed: Boolean = false
+        )
     }
 }

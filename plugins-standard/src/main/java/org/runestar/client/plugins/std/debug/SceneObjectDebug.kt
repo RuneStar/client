@@ -57,10 +57,10 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
         })
     }
 
-    class Settings : PluginSettings() {
-        val floor = false
-        val wall = true
-        val boundary = true
-        val interactable = true
-    }
+    data class Settings(
+            val floor: Boolean = false,
+            val wall: Boolean = true,
+            val boundary: Boolean = true,
+            val interactable: Boolean = true
+    ) : PluginSettings()
 }

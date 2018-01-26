@@ -71,9 +71,9 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         }
     }
 
-    class Settings : PluginSettings() {
-        val dateTimeFormatterPattern = "yyyy-MM-dd'T'kk-mm-ss,SSS"
-        val localizeTimeZone = true
-        val trayNotify = true
-    }
+    data class Settings(
+            val dateTimeFormatterPattern: String = "yyyy-MM-dd'T'kk-mm-ss,SSS",
+            val localizeTimeZone: Boolean = true,
+            val trayNotify: Boolean = true
+    ) : PluginSettings()
 }

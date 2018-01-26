@@ -6,11 +6,13 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import java.awt.Color
 import java.awt.Font
 
-class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>() {
+class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()
@@ -24,8 +26,8 @@ class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>
                     "rememberedUsername: ${p.rememberedUsername}",
                     "parameters: ${p.parameters}"
             )
-            g.font = settings.font.get()
-            g.color = settings.color.get()
+            g.font = RUNESCAPE_CHAT_FONT
+            g.color = Color.WHITE
             val x = 20
             var y = 40
             strings.forEach { s ->
@@ -33,10 +35,5 @@ class ClientPreferencesDebug : DisposablePlugin<ClientPreferencesDebug.Settings>
                 y += g.font.size + 5
             }
         })
-    }
-
-    class Settings : PluginSettings() {
-        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 15f)
-        val color = ColorForm(255, 255, 255)
     }
 }

@@ -28,8 +28,8 @@ class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
         }
     }
 
-    class Settings : PluginSettings() {
-        val onlyWhenUnfocused = true
-        val sleepTimeMs = 50L
-    }
+    data class Settings(
+            val onlyWhenUnfocused: Boolean = true,
+            val sleepTimeMs: Long = 50L
+    ) : PluginSettings()
 }

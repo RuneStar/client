@@ -35,7 +35,7 @@ class PathFindTest : DisposablePlugin<PathFindTest.Settings>() {
         WALK, PROJECTILE
     }
 
-    class Settings : PluginSettings() {
-        val type = Type.WALK
-    }
+    data class Settings(
+            val type: Type = Type.WALK
+    ) : PluginSettings()
 }

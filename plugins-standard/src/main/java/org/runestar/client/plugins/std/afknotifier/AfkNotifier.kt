@@ -59,16 +59,14 @@ class AfkNotifier : DisposablePlugin<AfkNotifier.Settings>() {
         }
     }
 
-    class Settings : PluginSettings() {
-
-        val timeOut: List<DurationForm> = listOf(
-                DurationForm(4, ChronoUnit.MINUTES),
-                DurationForm(50, ChronoUnit.SECONDS)
-        )
-
-        val beep = true
-        val requestUserAttention = true
-        val requestFocus = false
-        val trayNotify = true
-    }
+    class Settings(
+            val timeOut: List<DurationForm> = listOf(
+                    DurationForm(4, ChronoUnit.MINUTES),
+                    DurationForm(50, ChronoUnit.SECONDS)
+            ),
+            val beep: Boolean = true,
+            val requestUserAttention: Boolean = true,
+            val requestFocus: Boolean = false,
+            val trayNotify: Boolean = true
+    ) : PluginSettings()
 }

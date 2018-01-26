@@ -7,17 +7,19 @@ import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.general.Skill
+import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import java.awt.Color
 import java.awt.Font
 
-class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
+class SkillsDebug : DisposablePlugin<PluginSettings>() {
 
-    override val defaultSettings = Settings()
+    override val defaultSettings = PluginSettings()
 
     override fun start() {
         super.start()
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = settings.font.get()
-            g.color = settings.color.get()
+            g.font = RUNESCAPE_CHAT_FONT
+            g.color = Color.WHITE
 
             var y = 35
             val x = 5
@@ -26,10 +28,5 @@ class SkillsDebug : DisposablePlugin<SkillsDebug.Settings>() {
                 y += g.font.size + 5
             }
         })
-    }
-
-    class Settings : PluginSettings() {
-        val font = FontForm(Font.SANS_SERIF, FontForm.BOLD, 14f)
-        val color = ColorForm(255, 255, 255)
     }
 }

@@ -77,10 +77,9 @@ class SpecialAttackOrb : DisposablePlugin<SpecialAttackOrb.Settings>() {
         })
     }
 
-    class Settings : PluginSettings() {
-
-        val fixedOffset = Point(58, 22)
-        val resizableOffset = Point(152, 152)
-        val showInF2p = false
-    }
+    data class Settings(
+            val fixedOffset: Point = Point(58, 22),
+            val resizableOffset: Point = Point(152, 152),
+            val showInF2p: Boolean = false
+    ) : PluginSettings()
 }

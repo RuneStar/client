@@ -3,6 +3,7 @@ package org.runestar.client.plugins.std.windowsize
 import org.runestar.client.api.Application
 import org.runestar.client.plugins.Plugin
 import org.runestar.client.plugins.PluginSettings
+import java.awt.Dimension
 
 class WindowSize : Plugin<WindowSize.Settings>() {
 
@@ -15,7 +16,7 @@ class WindowSize : Plugin<WindowSize.Settings>() {
         Application.frame.size = settings.size
     }
 
-    class Settings : PluginSettings() {
-        val size = Application.frame.size
-    }
+    data class Settings(
+            val size: Dimension = Application.frame.size
+    ) : PluginSettings()
 }

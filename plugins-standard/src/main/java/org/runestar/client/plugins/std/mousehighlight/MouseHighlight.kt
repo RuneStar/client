@@ -71,17 +71,17 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
         })
     }
 
-    class Settings : PluginSettings() {
-        val ignoredActions = setOf("Cancel", "Walk here")
-        val paddingX = 2
-        val paddingTop = 4
-        val paddingBottom = 1
-        val offsetX = 3
-        val offsetY = 3
-        val offsetYFlipped = 22
-        val outlineColor = ColorForm(14, 13, 15)
-        val fillColor = ColorForm(70, 61, 50, 156)
-        val font = FontForm(RUNESCAPE_SMALL_FONT)
-        val fontColor = ColorForm(255, 255, 255)
-    }
+    data class Settings(
+            val ignoredActions: Set<String> = setOf("Cancel", "Walk here"),
+            val paddingX: Int = 2,
+            val paddingTop: Int = 4,
+            val paddingBottom: Int = 1,
+            val offsetX: Int = 3,
+            val offsetY: Int = 3,
+            val offsetYFlipped: Int = 22,
+            val outlineColor: ColorForm = ColorForm(14, 13, 15),
+            val fillColor: ColorForm = ColorForm(70, 61, 50, 156),
+            val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
+            val fontColor: ColorForm = ColorForm(255, 255, 255)
+    ) : PluginSettings()
 }
