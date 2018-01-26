@@ -25,7 +25,7 @@ data class FontForm(
             fun of(style: Int): Style = VALUES.first { it.asInt == style }
 
             @JvmStatic
-            fun of(style: String): Style = VALUES.first { it.name == style }
+            fun of(style: String): Style = VALUES.first { it.name.equals(style, true) }
         }
     }
 
