@@ -1,5 +1,6 @@
 package org.runestar.client.plugins
 
+import org.kxtra.slf4j.logger.debug
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -27,10 +28,10 @@ private constructor(jar: Path) : ClassLoader() {
         files.keys.forEach { fileName ->
             if (fileName.endsWith(".class")) {
                 val className = fileName.removeSuffix(".class").replace('/', '.')
-                logger.info { "Found class $className" }
+                logger.debug { "Found class $className" }
                 classNames.add(className)
             } else {
-                logger.info { "Found resource $fileName" }
+                logger.debug { "Found resource $fileName" }
             }
         }
         classNames.forEach { name ->

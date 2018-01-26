@@ -1,15 +1,5 @@
 package org.runestar.client.plugins
 
-import ch.qos.logback.classic.Level
-import ch.qos.logback.classic.Logger
-import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder
-import ch.qos.logback.classic.spi.ILoggingEvent
-import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
-import ch.qos.logback.core.rolling.RollingFileAppender
-import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
-import ch.qos.logback.core.util.FileSize
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -22,11 +12,6 @@ internal class PluginHolder<T : PluginSettings>(
         private val executor: ExecutorService,
         private val settingsReadWriter: FileReadWriter
 ) : PluginHandle {
-
-    private companion object {
-        const val LOG_APPENDER_NAME = "plugin-individual"
-        const val LOG_ENCODER_PATTERN = "%date{ISO8601} [%thread] %-5level - %msg%n"
-    }
 
     override val directory = watchKey.watchable() as Path
 

@@ -1,6 +1,5 @@
 # ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
-# default value: DEBUG
-#-Drunestar.log.level=DEBUG
+-Drunestar.log.level=INFO
 
 #-Drunestar.world=30
 
