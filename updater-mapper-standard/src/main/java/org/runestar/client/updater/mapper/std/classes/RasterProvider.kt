@@ -23,7 +23,7 @@ class RasterProvider : IdentityMapper.Class() {
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.any { it.type == Component::class.type } }
 
-    class component : IdentityMapper.InstanceField() {
+    class component0 : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Component::class.type }
     }
 
@@ -61,7 +61,7 @@ class RasterProvider : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    class replaceComponent : IdentityMapper.InstanceMethod() {
+    class setComponent : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
                 .and { it.arguments.startsWith(Component::class.type) }
     }

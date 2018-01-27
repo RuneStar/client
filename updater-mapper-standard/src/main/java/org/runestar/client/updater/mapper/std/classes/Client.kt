@@ -22,7 +22,6 @@ import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.*
 import java.util.zip.CRC32
-import kotlin.reflect.KClass
 
 class Client : IdentityMapper.Class() {
 
@@ -357,12 +356,12 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(MouseHandler::class)
-    class mouseX : OrderMapper.InClassInitializer.Field(MouseHandler::class, 6) {
+    class MouseHandler_x : OrderMapper.InClassInitializer.Field(MouseHandler::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
     }
 
     @DependsOn(MouseHandler::class)
-    class mouseY : OrderMapper.InClassInitializer.Field(MouseHandler::class, 7) {
+    class MouseHandler_y : OrderMapper.InClassInitializer.Field(MouseHandler::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
     }
 
@@ -1280,74 +1279,74 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(MouseHandler.mouseMoved::class)
-    class MouseHandler_x : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 1, 3) {
+    class MouseHandler_x0 : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 1, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(MouseHandler.mouseMoved::class)
-    class MouseHandler_y : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 2, 3) {
+    class MouseHandler_y0 : OrderMapper.InMethod.Field(MouseHandler.mouseMoved::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(MouseHandler.mousePressed::class)
-    class MouseHandler_lastPressedX : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 1) {
+    class MouseHandler_lastPressedX0 : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(MouseHandler.mousePressed::class)
-    class MouseHandler_lastPressedY : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 2) {
+    class MouseHandler_lastPressedY0 : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(MouseHandler.mousePressed::class)
-    class MouseHandler_lastPressedTimeMillis : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 0) {
+    class MouseHandler_lastPressedTimeMillis0 : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == LONG_TYPE }
     }
 
     @DependsOn(MouseHandler.mousePressed::class)
-    class MouseHandler_lastButton : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 3) {
+    class MouseHandler_lastButton0 : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(MouseHandler.mousePressed::class)
-    class MouseHandler_currentButton : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 4) {
+    class MouseHandler_currentButton0 : OrderMapper.InMethod.Field(MouseHandler.mousePressed::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(MouseHandler_lastPressedX::class)
-    class mouseLastPressedX : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedX>().id }
+    @DependsOn(MouseHandler_lastPressedX0::class)
+    class MouseHandler_lastPressedX : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedX0>().id }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(MouseHandler_lastPressedY::class)
-    class mouseLastPressedY : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedY>().id }
+    @DependsOn(MouseHandler_lastPressedY0::class)
+    class MouseHandler_lastPressedY : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedY0>().id }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(MouseHandler_currentButton::class)
-    class mouseCurrentButton : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton>().id }
+    @DependsOn(MouseHandler_currentButton0::class)
+    class MouseHandler_currentButton : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton0>().id }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(MouseHandler_lastButton::class)
-    class mouseLastButton : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastButton>().id }
+    @DependsOn(MouseHandler_lastButton0::class)
+    class MouseHandler_lastButton : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastButton0>().id }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
                 .and { it.klass != klass<MouseHandler>() }
     }
 
-    @DependsOn(MouseHandler_lastPressedTimeMillis::class)
-    class mouseLastPressedTimeMillis : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedTimeMillis>().id }
+    @DependsOn(MouseHandler_lastPressedTimeMillis0::class)
+    class MouseHandler_lastPressedTimeMillis : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedTimeMillis0>().id }
                 .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
     }
 
-    @DependsOn(mouseLastPressedTimeMillis::class)
+    @DependsOn(MouseHandler_lastPressedTimeMillis::class)
     class mouseLastLastPressedTimeMillis : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mouseLastPressedTimeMillis>().id }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_lastPressedTimeMillis>().id }
                 .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
     }
 
@@ -2811,5 +2810,19 @@ class Client : IdentityMapper.Class() {
     @DependsOn(AbstractFont_placeGlyphAlpha::class)
     class AbstractFont_drawGlyphAlpha : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyphAlpha>().id } }
+    }
+
+    // 0 - 27
+    @DependsOn(Widget.swapItems::class)
+    class inventorySlotHovered : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
+                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Widget.swapItems::class)
+    class inventorySlotPressed : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
+                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 }
