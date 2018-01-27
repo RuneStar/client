@@ -10,7 +10,7 @@ data class DurationForm(
 ) : Supplier<Duration> {
 
     @Transient
-    private val value = Duration.of(amount, chronoUnit)
+    private val value: Duration = Duration.of(amount, chronoUnit)
 
     override fun get() = value
 }
