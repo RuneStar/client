@@ -30,4 +30,8 @@ object Stats : AbstractMap<Skill, SkillLevel>() {
                 accessor.experience[key.id]
         )
     }
+
+    val totalLevel: Int get() = values.sumBy { it.level }
+
+    val totalExperience: Long get() = values.fold(0L) { acc, sl -> acc + sl.experience.toLong() }
 }
