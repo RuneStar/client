@@ -1,19 +1,19 @@
 package org.runestar.client.game.api.live
 
-import org.runestar.client.game.api.EntityTag
-import org.runestar.client.game.api.MouseCrossColor
-import org.runestar.client.game.raw.Client.accessor
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.runestar.client.game.api.EntityTag
 import org.runestar.client.game.api.MouseCross
+import org.runestar.client.game.api.MouseCrossColor
+import org.runestar.client.game.raw.Client.accessor
 import java.awt.Point
 import java.awt.event.MouseEvent
 
 object Mouse {
 
-    val x get() = accessor.mouseX
+    val x get() = accessor.mouseHandler_x
 
-    val y get() = accessor.mouseY
+    val y get() = accessor.mouseHandler_y
 
     val location get() = Point(x, y)
 
