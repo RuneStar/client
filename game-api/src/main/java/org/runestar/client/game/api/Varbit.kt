@@ -46,6 +46,8 @@ data class Varbit(
         @JvmField val PRAYER_CHIVALRY = Varbit(83, 25, 25)
         @JvmField val PRAYER_PIETY = Varbit(83, 26, 26)
         @JvmField val PRAYER_PRESERVE = Varbit(83, 28, 28)
+        @JvmField val PRAYER_RIGOUR = Varbit(83, 24, 24)
+        @JvmField val PRAYER_AUGURY = Varbit(83, 27, 27)
 
         @JvmField val SPECIAL_ATTACK_PERCENT = Varbit(300, 0, 16)
         @JvmField val SPECIAL_ATTACK_ENABLED = Varbit(301, 0, 0)

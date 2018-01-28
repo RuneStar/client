@@ -32,7 +32,7 @@ enum class Prayer(
     SMITE(52, true, Varbit.PRAYER_SMITE),
     PRESERVE(55, true, Varbit.PRAYER_PRESERVE),
     CHIVALRY(60, true, Varbit.PRAYER_CHIVALRY),
-    PIETY(70, true, Varbit.PRAYER_PIETY);
-    // rigour 74
-    // augury 77
+    PIETY(70, true, Varbit.PRAYER_PIETY),
+    RIGOUR(74, true, Varbit.PRAYER_RIGOUR),
+    AUGURY(77, true, Varbit.PRAYER_AUGURY);
 }
