@@ -7,7 +7,7 @@ import org.runestar.client.utils.DisposablePlugin
 import java.awt.Color
 import java.awt.Font
 
-class LastSelectedDebug : DisposablePlugin<PluginSettings>() {
+class SelectionDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
@@ -24,7 +24,9 @@ class LastSelectedDebug : DisposablePlugin<PluginSettings>() {
                     "item: ${accessor.lastSelectedItemName}",
                     "spellAction: ${accessor.lastSelectedSpellActionName}",
                     "spellName: ${accessor.lastSelectedSpellName}",
-                    "isItemSelected: ${accessor.isItemSelected}"
+                    "isItemSelected: ${accessor.isItemSelected}",
+                    "inventorySlotHovered: ${accessor.inventorySlotHovered}",
+                    "inventorySlotPressed: ${accessor.inventorySlotPressed}"
             )
             strings.forEach { s ->
                 g.drawString(s, x, y)

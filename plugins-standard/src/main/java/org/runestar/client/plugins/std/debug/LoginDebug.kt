@@ -22,7 +22,6 @@ class LoginDebug : DisposablePlugin<PluginSettings>() {
 
             val strings = listOf(
                     "username: ${accessor.login_username}",
-                    "password: ${accessor.login_password.isNotEmpty()}",
                     "isUsernameRemembered: ${accessor.login_isUsernameRemembered}",
                     "response0: ${accessor.login_response0}",
                     "response1: ${accessor.login_response1}",
