@@ -216,4 +216,18 @@ class Widget : IdentityMapper.Class() {
     class type : OrderMapper.InMethod.Field(decode::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("buffer")
+    @DependsOn(Buffer::class)
+    class readInts : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == IntArray::class.type }
+                .and { it.arguments.startsWith(type<Buffer>()) }
+    }
+
+    @MethodParameters("buffer")
+    @DependsOn(Buffer::class)
+    class readParameters : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == Array<Any?>::class.type }
+                .and { it.arguments.startsWith(type<Buffer>()) }
+    }
 }
