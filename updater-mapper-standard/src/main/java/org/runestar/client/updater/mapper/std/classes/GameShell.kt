@@ -148,4 +148,14 @@ class GameShell : IdentityMapper.Class() {
             return instruction.jar[Triple(instruction.jar[instruction.methodOwner].superType, instruction.methodName, instruction.methodType)]
         }
     }
+
+    @MethodParameters()
+    @DependsOn(Bounds::class)
+    class getBounds : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Bounds>() }
+    }
+
+    class focusGained : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.name == "focusGained" }
+    }
 }

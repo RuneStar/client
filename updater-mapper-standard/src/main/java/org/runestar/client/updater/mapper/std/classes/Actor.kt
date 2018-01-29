@@ -121,4 +121,12 @@ class Actor : IdentityMapper.Class() {
             return instruction.jar[type<Actor>() to instruction.fieldName]
         }
     }
+
+    @DependsOn(Npc.getModel::class, Npc::class)
+    class defaultHeight : UniqueMapper.InMethod.Field(Npc.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Npc>() }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return instruction.jar[type<Actor>() to instruction.fieldName]
+        }
+    }
 }

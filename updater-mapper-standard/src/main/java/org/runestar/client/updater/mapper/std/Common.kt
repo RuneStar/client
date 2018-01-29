@@ -11,6 +11,7 @@ import org.runestar.client.updater.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.tree.Method2
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -77,4 +78,9 @@ abstract class ByteArrayPoolArray(index: Int) : OrderMapper.InClassInitializer.F
 @DependsOn(ByteArrayPool::class)
 abstract class ByteArrayPoolCount(index: Int) : OrderMapper.InClassInitializer.Field(ByteArrayPool::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+}
+
+@DependsOn(PlatformInfo.length::class)
+abstract class PlatformInfoString(index: Int) : OrderMapper.InMethod.Field(PlatformInfo.length::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type }
 }

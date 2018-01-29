@@ -13,6 +13,7 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.std.PlatformInfoString
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Node::class)
@@ -55,4 +56,17 @@ class PlatformInfo : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 40 } }
     }
+
+    @MethodParameters()
+    class length : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
+    }
+
+    class string0 : PlatformInfoString(0)
+    class string1 : PlatformInfoString(1)
+    class string2 : PlatformInfoString(2)
+    class string3 : PlatformInfoString(3)
+    class string4 : PlatformInfoString(4)
+    class string5 : PlatformInfoString(5)
 }

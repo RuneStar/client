@@ -13,6 +13,8 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
+import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Player.appearance::class)
 class PlayerAppearance : IdentityMapper.Class() {
@@ -40,5 +42,11 @@ class PlayerAppearance : IdentityMapper.Class() {
     class bodyColors : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == IntArray::class.type }
                 .and { it != field<equipment>() }
+    }
+
+    @MethodParameters()
+    class getChatHeadId : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
     }
 }

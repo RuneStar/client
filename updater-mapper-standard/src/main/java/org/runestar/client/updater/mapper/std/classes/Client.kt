@@ -2825,4 +2825,9 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(GameShell.focusGained::class)
+    class hasFocus : UniqueMapper.InMethod.Field(GameShell.focusGained::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }
