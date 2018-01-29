@@ -15,6 +15,7 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Entity.getModel::class)
 class Model : IdentityMapper.Class() {
@@ -170,5 +171,10 @@ class Model : IdentityMapper.Class() {
     @DependsOn(calculateBoundingBox::class)
     class zMidOffset : OrderMapper.InMethod.Field(calculateBoundingBox::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Model::class, Player.getModel::class)
+    class isSingleTile : UniqueMapper.InMethod.Field(Player.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.isField && it.fieldOwner == type<Model>() && it.fieldType == BOOLEAN_TYPE }
     }
 }

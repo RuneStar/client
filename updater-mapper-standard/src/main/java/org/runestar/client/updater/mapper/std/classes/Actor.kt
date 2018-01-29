@@ -3,10 +3,6 @@ package org.runestar.client.updater.mapper.std.classes
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.id
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -15,6 +11,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
+import org.runestar.client.updater.mapper.extensions.*
 import java.lang.reflect.Modifier
 
 @DependsOn(Entity::class)
@@ -52,7 +49,7 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class animation : OrderMapper.InConstructor.Field(Actor::class, 17) {
+    class sequence : OrderMapper.InConstructor.Field(Actor::class, 17) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -76,6 +73,10 @@ class Actor : IdentityMapper.Class() {
 
     // ?
     class animationDelay : OrderMapper.InConstructor.Field(Actor::class, 20) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class spotAnimation : OrderMapper.InConstructor.Field(Actor::class, 22) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -110,5 +111,14 @@ class Actor : IdentityMapper.Class() {
 
     class overheadTextCyclesRemaining : OrderMapper.InConstructor.Field(Actor::class, 9) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Npc.getModel::class, Model.offsetBy::class)
+    class heightOffset : UniqueMapper.InMethod.Field(Npc.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+                .prevWithin(8) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return instruction.jar[type<Actor>() to instruction.fieldName]
+        }
     }
 }
