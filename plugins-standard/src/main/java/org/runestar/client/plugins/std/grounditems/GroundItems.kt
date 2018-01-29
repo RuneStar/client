@@ -12,6 +12,7 @@ import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
+import java.awt.Color
 import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
@@ -39,9 +40,11 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             tiles.remove(st)
         })
 
+        val defaultColor = settings.color.get()
+        val font = settings.font.get()
+
         add(LiveCanvas.repaints.subscribe { g ->
-            g.color = settings.color.get()
-            g.font = settings.font.get()
+            g.font = font
             g.clip(LiveViewport.shape)
             val height = g.fontMetrics.height
 
@@ -72,7 +75,13 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     val string = itemToString(def, count)
                     val width = g.fontMetrics.stringWidth(string)
                     val leftX = x - (width / 2)
+
+                    g.color = Color.BLACK
+                    g.drawString(string, leftX + 1, y + 1)
+
+                    g.color = defaultColor
                     g.drawString(string, leftX, y)
+
                     y -= height + settings.spacing
 
                 }
