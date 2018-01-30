@@ -5,12 +5,14 @@ import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Entity::class, SequenceDefinition::class)
 class GraphicsObject : IdentityMapper.Class() {
@@ -28,7 +30,7 @@ class GraphicsObject : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int2 : OrderMapper.InConstructor.Field(GraphicsObject::class, 1) {
+    class frameCycle : OrderMapper.InConstructor.Field(GraphicsObject::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -58,5 +60,10 @@ class GraphicsObject : IdentityMapper.Class() {
 
     class isFinished : OrderMapper.InConstructor.Field(GraphicsObject::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters("cycles")
+    class advance : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
     }
 }

@@ -46,4 +46,13 @@ class DynamicObject : IdentityMapper.Class() {
     class y : OrderMapper.InConstructor.Field(DynamicObject::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
     }
+
+    class frame : OrderMapper.InConstructor.Field(DynamicObject::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
+    }
+
+    // todo
+    class cycleStart : OrderMapper.InConstructor.Field(DynamicObject::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
+    }
 }

@@ -46,4 +46,14 @@ class SequenceDefinition : IdentityMapper.Class() {
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.none { it.isMethod } }
     }
+
+    @DependsOn(readNext::class)
+    class frameLengths : OrderMapper.InMethod.Field(readNext::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(readNext::class)
+    class frameIds : OrderMapper.InMethod.Field(readNext::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
 }

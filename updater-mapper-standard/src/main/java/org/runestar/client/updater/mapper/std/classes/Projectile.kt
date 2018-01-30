@@ -29,13 +29,14 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<SequenceDefinition>() }
     }
 
-    @MethodParameters
+    @MethodParameters()
     @DependsOn(Entity.getModel::class)
     class getModel : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Entity.getModel>().mark }
     }
 
-    class update : InstanceMethod() {
+    @MethodParameters("cycles")
+    class advance : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE) }
                 .and { it.arguments.size in 1..2 }
@@ -75,38 +76,38 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    @DependsOn(update::class)
-    class x : OrderMapper.InMethod.Field(update::class, 0) {
+    @DependsOn(advance::class)
+    class x : OrderMapper.InMethod.Field(advance::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class y : OrderMapper.InMethod.Field(update::class, 1) {
+    @DependsOn(advance::class)
+    class y : OrderMapper.InMethod.Field(advance::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class z : OrderMapper.InMethod.Field(update::class, 2) {
+    @DependsOn(advance::class)
+    class z : OrderMapper.InMethod.Field(advance::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class speedX : OrderMapper.InMethod.Field(update::class, 1) {
+    @DependsOn(advance::class)
+    class speedX : OrderMapper.InMethod.Field(advance::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class speedY : OrderMapper.InMethod.Field(update::class, 3) {
+    @DependsOn(advance::class)
+    class speedY : OrderMapper.InMethod.Field(advance::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class speedZ : OrderMapper.InMethod.Field(update::class, 3) {
+    @DependsOn(advance::class)
+    class speedZ : OrderMapper.InMethod.Field(advance::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(update::class)
-    class yaw : OrderMapper.InMethod.Field(update::class, 0) {
+    @DependsOn(advance::class)
+    class yaw : OrderMapper.InMethod.Field(advance::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -140,7 +141,7 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int6 : OrderMapper.InConstructor.Field(Projectile::class, 1) {
+    class frameCycle : OrderMapper.InConstructor.Field(Projectile::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
