@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.std.debug
 
+import org.kxtra.swing.graphics.drawString
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.SceneObjects
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
-import org.kxtra.swing.graphics2d.drawString
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 

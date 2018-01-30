@@ -10,8 +10,8 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.colorForPercent
+import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
-import java.awt.Color
 import java.awt.Point
 import java.awt.Rectangle
 import javax.imageio.ImageIO
@@ -70,10 +70,8 @@ class SpecialAttackOrb : DisposablePlugin<SpecialAttackOrb.Settings>() {
             val stringWidth = g.fontMetrics.stringWidth(specString)
             val textY = location.y + TEXT_AREA_Y_OFFSET
             val textX = location.x + TEXT_AREA_X_OFFSET + ((TEXT_AREA_WIDTH - stringWidth + 1) / 2)
-            g.color = Color.BLACK
-            g.drawString(specString, textX + 1, textY + 1)
             g.color = colorForPercent(specPercent)
-            g.drawString(specString, textX, textY)
+            g.drawStringShadowed(specString, textX, textY)
         })
     }
 

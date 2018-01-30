@@ -11,8 +11,8 @@ import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
-import java.awt.Color
 import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
@@ -76,11 +76,8 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     val width = g.fontMetrics.stringWidth(string)
                     val leftX = x - (width / 2)
 
-                    g.color = Color.BLACK
-                    g.drawString(string, leftX + 1, y + 1)
-
                     g.color = defaultColor
-                    g.drawString(string, leftX, y)
+                    g.drawStringShadowed(string, leftX, y)
 
                     y -= height + settings.spacing
 

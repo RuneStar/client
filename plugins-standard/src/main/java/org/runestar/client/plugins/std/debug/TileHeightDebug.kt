@@ -1,19 +1,16 @@
 package org.runestar.client.plugins.std.debug
 
+import org.kxtra.swing.graphics.drawString
+import org.kxtra.swing.point2d.minus
 import org.runestar.client.game.api.Scene
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.FontForm
-import org.kxtra.swing.graphics2d.drawString
-import org.kxtra.swing.point.minus
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
-import java.awt.Font
 import java.awt.Point
 
 class TileHeightDebug : DisposablePlugin<PluginSettings>() {

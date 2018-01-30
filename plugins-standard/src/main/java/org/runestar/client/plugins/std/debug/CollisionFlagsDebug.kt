@@ -1,17 +1,14 @@
 package org.runestar.client.plugins.std.debug
 
-import org.runestar.client.game.api.live.*
+import org.kxtra.swing.graphics.drawString
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.LiveScene
+import org.runestar.client.game.api.live.Mouse
+import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.FontForm
-import org.kxtra.swing.graphics2d.drawString
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
-import java.awt.Font
-import java.awt.Point
-import java.awt.Shape
-import java.awt.geom.Ellipse2D
 
 class CollisionFlagsDebug : DisposablePlugin<PluginSettings>() {
 
