@@ -49,7 +49,23 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class movementFrame : OrderMapper.InConstructor.Field(Actor::class, 15) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class movementFrameCycle : OrderMapper.InConstructor.Field(Actor::class, 16) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class sequence : OrderMapper.InConstructor.Field(Actor::class, 17) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sequenceFrame : OrderMapper.InConstructor.Field(Actor::class, 18) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sequenceFrameCycle : OrderMapper.InConstructor.Field(Actor::class, 19) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -61,22 +77,27 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == ByteArray::class.type }
     }
 
-    // ?
-    class standAnimation : OrderMapper.InConstructor.Field(Actor::class, 1) {
+    class idleSequence : OrderMapper.InConstructor.Field(Actor::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // ?
-    class runAnimation : OrderMapper.InConstructor.Field(Actor::class, 14) {
+    class movementSequence : OrderMapper.InConstructor.Field(Actor::class, 14) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // ?
-    class animationDelay : OrderMapper.InConstructor.Field(Actor::class, 20) {
+    class sequenceDelay : OrderMapper.InConstructor.Field(Actor::class, 20) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     class spotAnimation : OrderMapper.InConstructor.Field(Actor::class, 22) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class spotAnimationFrame : OrderMapper.InConstructor.Field(Actor::class, 23) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class spotAnimationFrameCycle : OrderMapper.InConstructor.Field(Actor::class, 24) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

@@ -73,10 +73,12 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // todo
     class animationCycleStart : OrderMapper.InConstructor.Field(Player::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // todo
     class animationCycleEnd : OrderMapper.InConstructor.Field(Player::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
