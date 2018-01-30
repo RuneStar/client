@@ -144,7 +144,7 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class int7 : OrderMapper.InConstructor.Field(Projectile::class, 0) {
+    class frame : OrderMapper.InConstructor.Field(Projectile::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

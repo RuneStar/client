@@ -177,4 +177,10 @@ class Model : IdentityMapper.Class() {
     class isSingleTile : UniqueMapper.InMethod.Field(Player.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldOwner == type<Model>() && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @DependsOn(Model::class)
+    class copy0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
+                .and { it.arguments.startsWith(BOOLEAN_TYPE, type<Model>(), ByteArray::class.type) }
+    }
 }
