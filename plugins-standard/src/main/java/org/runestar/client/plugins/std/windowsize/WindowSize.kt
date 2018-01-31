@@ -1,8 +1,6 @@
 package org.runestar.client.plugins.std.windowsize
 
 import org.kxtra.slf4j.logger.info
-import org.kxtra.swing.dimension.minus
-import org.kxtra.swing.dimension.plus
 import org.runestar.client.api.Application
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.Plugin
@@ -20,10 +18,13 @@ class WindowSize : Plugin<WindowSize.Settings>() {
         if (settings.includeFrame) {
             Application.frame.size = settings.size
         } else {
-            val frameSize = Application.frame.size - Application.frame.contentPane.size
-            Application.frame.size = settings.size + frameSize
+            val insets = Application.frame.insets
+            Application.frame.size = Dimension(
+                    settings.size.width + insets.left + insets.right,
+                    settings.size.height + insets.top + insets.bottom
+            )
         }
-        logger.info { "frame size: ${Application.frame.size}, game size: ${Application.frame.contentPane.size}" }
+        logger.info { "frame size: ${Application.frame.size}" }
     }
 
     data class Settings(
