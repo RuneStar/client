@@ -34,11 +34,16 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
             val option = Menu.getOption(0)
             val action = option.action
+            val target = option.targetName
             if (action in settings.ignoredActions) return@subscribe
             val canvas = LiveCanvas.shape
             val mousePt = Mouse.location
             if (mousePt !in canvas) return@subscribe
-            val rawText = "${option.action} ${option.targetName}".trim()
+            val rawText = if (target.isEmpty()) {
+                action
+            } else {
+                "$action $target"
+            }
             val text = rawText.replace(TAG_REGEX, "")
             g.font = font
             val textHeight = g.fontMetrics.height
