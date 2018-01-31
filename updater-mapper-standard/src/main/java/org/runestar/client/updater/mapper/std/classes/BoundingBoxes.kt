@@ -5,7 +5,7 @@ import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 
-@DependsOn(Client.boundingBox3DDrawMode::class)
+@DependsOn(Client.BoundingBoxes_3DDrawMode::class)
 class BoundingBoxes : IdentityMapper.Class() {
-    override val predicate = predicateOf<Class2> { it == field<Client.boundingBox3DDrawMode>().klass }
+    override val predicate = predicateOf<Class2> { it == field<Client.BoundingBoxes_3DDrawMode>().klass }
 }

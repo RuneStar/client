@@ -11,15 +11,15 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
     override fun start() {
         super.start()
         if (settings.boundingBoxes2D.draw) {
-            accessor.drawBoundingBoxes2D = true
+            accessor.boundingBoxes_draw2D = true
         }
         if (settings.boundingBoxes3D.draw) {
-            accessor.drawBoundingBoxes3D = true
+            accessor.boundingBoxes_draw3D = true
         }
         if (settings.boundingBoxes3D.drawAll) {
-            accessor.boundingBox3DDrawMode = accessor.boundingBox3DDrawMode_all
+            accessor.boundingBoxes_3DDrawMode = accessor.boundingBox3DDrawMode_all
         } else {
-            accessor.boundingBox3DDrawMode = accessor.boundingBox3DDrawMode_mouseOver
+            accessor.boundingBoxes_3DDrawMode = accessor.boundingBox3DDrawMode_mouseOver
         }
         if (settings.displayFps) {
             accessor.displayFps = true
@@ -28,7 +28,7 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
             accessor.useBoundingBoxes3D = false
         }
         if (settings.boundingBoxes2D.drawObjectGeometry) {
-            accessor.drawObjectGeometry2D = true
+            accessor.boundingBoxes_drawObjectGeometry2D = true
         }
         if (settings.numberMenuOptions) {
             accessor.numberMenuOptions = true
@@ -37,11 +37,11 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
 
     override fun stop() {
         super.stop()
-        accessor.drawBoundingBoxes2D = false
-        accessor.drawBoundingBoxes3D = false
+        accessor.boundingBoxes_draw2D = false
+        accessor.boundingBoxes_draw3D = false
         accessor.displayFps = false
         accessor.useBoundingBoxes3D = true
-        accessor.drawObjectGeometry2D = false
+        accessor.boundingBoxes_drawObjectGeometry2D = false
         accessor.numberMenuOptions = false
     }
 

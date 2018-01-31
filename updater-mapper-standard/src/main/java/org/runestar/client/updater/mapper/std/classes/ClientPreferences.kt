@@ -30,7 +30,7 @@ class ClientPreferences : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == LinkedHashMap::class.type }
     }
 
-    @MethodParameters
+    @MethodParameters()
     @DependsOn(Buffer::class)
     class toBuffer : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Buffer>() }

@@ -930,7 +930,7 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(BoundingBoxes::class, IterableNodeDeque::class)
-    class boundingBoxes : IdentityMapper.StaticField() {
+    class BoundingBoxes_deque : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.klass == klass<BoundingBoxes>() }
                 .and { it.type == type<IterableNodeDeque>() }
     }
@@ -949,22 +949,22 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(BoundingBox3DDrawMode::class, BoundingBox3DDrawMode_mouseOver::class, BoundingBox3DDrawMode_all::class)
-    class boundingBox3DDrawMode : IdentityMapper.StaticField() {
+    class BoundingBoxes_3DDrawMode : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<BoundingBox3DDrawMode>() }
                 .and { it != field<BoundingBox3DDrawMode_mouseOver>() }
                 .and { it != field<BoundingBox3DDrawMode_all>() }
     }
 
     @SinceVersion(141)
-    class drawBoundingBoxes3D : StaticUniqueMapper.Field() {
+    class BoundingBoxes_draw3D : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "aabb" }
                 .nextWithin(6) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
     @SinceVersion(141)
-    @DependsOn(drawBoundingBoxes3D::class, Model.draw::class)
-    class drawBoundingBoxes2D : UniqueMapper.InMethod.Field(Model.draw::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<drawBoundingBoxes3D>().id }
+    @DependsOn(BoundingBoxes_draw3D::class, Model.draw::class)
+    class BoundingBoxes_draw2D : UniqueMapper.InMethod.Field(Model.draw::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<BoundingBoxes_draw3D>().id }
                 .nextWithin(40) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -1918,7 +1918,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Model.method0::class)
-    class drawObjectGeometry2D : OrderMapper.InMethod.Field(Model.method0::class, 0) {
+    class BoundingBoxes_drawObjectGeometry2D : OrderMapper.InMethod.Field(Model.method0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
