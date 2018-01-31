@@ -13,6 +13,7 @@ import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 
 @DependsOn(DualNode::class)
 class SequenceDefinition : IdentityMapper.Class() {
@@ -41,6 +42,7 @@ class SequenceDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    @MethodParameters()
     class init : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }

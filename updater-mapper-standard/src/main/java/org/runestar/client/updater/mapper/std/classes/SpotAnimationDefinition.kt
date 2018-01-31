@@ -87,4 +87,9 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
+
+    @DependsOn(readNext::class)
+    class archive : OrderMapper.InMethod.Field(readNext::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

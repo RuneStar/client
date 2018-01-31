@@ -185,4 +185,10 @@ class ObjectDefinition : IdentityMapper.Class() {
     class int6 : OrderMapper.InConstructor.Field(ObjectDefinition::class, 23) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters()
+    @DependsOn(Client.getObjectDefinition::class)
+    class init : OrderMapper.InMethod.Method(Client.getObjectDefinition::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<ObjectDefinition>() }
+    }
 }

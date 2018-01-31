@@ -78,7 +78,7 @@ class NpcDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(transform::class)
-    class transformConfigId : OrderMapper.InMethod.Field(transform::class, 2) {
+    class transformVarpsIndex : OrderMapper.InMethod.Field(transform::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -133,5 +133,10 @@ class NpcDefinition : IdentityMapper.Class() {
     class retextureTo : OrderMapper.InMethod.Field(getModel::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(readNext::class)
+    class archives : OrderMapper.InMethod.Field(readNext::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 }
