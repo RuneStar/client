@@ -340,20 +340,20 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }
     }
 
-    @DependsOn(ClanMate::class)
-    class clanChat : StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<ClanMate>().withDimensions(1) }
-    }
+//    @DependsOn(ClanMate::class)
+//    class clanChat : StaticField() {
+//        override val predicate = predicateOf<Field2> { it.type == type<ClanMate>().withDimensions(1) }
+//    }
 
-    @DependsOn(Ignored::class)
-    class ignoreList : StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Ignored>().withDimensions(1) }
-    }
+//    @DependsOn(Ignored::class)
+//    class ignoreList : StaticField() {
+//        override val predicate = predicateOf<Field2> { it.type == type<Ignored>().withDimensions(1) }
+//    }
 
-    @DependsOn(Friend::class)
-    class friendsList : StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Friend>().withDimensions(1) }
-    }
+//    @DependsOn(Friend::class)
+//    class friendsList : StaticField() {
+//        override val predicate = predicateOf<Field2> { it.type == type<Friend>().withDimensions(1) }
+//    }
 
     @DependsOn(MouseHandler::class)
     class MouseHandler_x : OrderMapper.InClassInitializer.Field(MouseHandler::class, 6) {
@@ -589,10 +589,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<PlatformInfo>() }
     }
 
-    class clanChatOwner : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3625 }
-                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
-    }
+//    class clanChatOwner : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3625 }
+//                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+//    }
 
     class fps : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Fps:" }
@@ -1927,17 +1927,17 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
-    @DependsOn(Strings_yourIgnoreListIsFull::class)
-    class ignoreListCount : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourIgnoreListIsFull>().id }
-                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
+//    @DependsOn(Strings_yourIgnoreListIsFull::class)
+//    class ignoreListCount : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourIgnoreListIsFull>().id }
+//                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
 
-    @DependsOn(Strings_yourFriendListIsFull::class)
-    class friendsListCount : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourFriendListIsFull>().id }
-                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
+//    @DependsOn(Strings_yourFriendListIsFull::class)
+//    class friendsListCount : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_yourFriendListIsFull>().id }
+//                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
 
     @SinceVersion(154)
     @DependsOn(Login_username::class)
@@ -2245,12 +2245,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<IterableNodeHashTable>() }
     }
 
-    @MethodParameters("name")
-    @DependsOn(Ignored.previousName::class)
-    class isOnIgnoreList : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Ignored.previousName>().id } }
-    }
+//    @MethodParameters("name")
+//    @DependsOn(Ignored.previousName::class)
+//    class isOnIgnoreList : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+//                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Ignored.previousName>().id } }
+//    }
 
 //    @MethodParameters("c")
 //    class isUsernameWhiteSpace : IdentityMapper.StaticMethod() {
@@ -2260,11 +2260,11 @@ class Client : IdentityMapper.Class() {
 //                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 95 } }
 //    }
 
-    @MethodParameters("name", "loginType")
-    @DependsOn(isOnIgnoreList::class)
-    class cleanUsername : OrderMapper.InMethod.Method(isOnIgnoreList::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod }
-    }
+//    @MethodParameters("name", "loginType")
+//    @DependsOn(isOnIgnoreList::class)
+//    class cleanUsername : OrderMapper.InMethod.Method(isOnIgnoreList::class, 0) {
+//        override val predicate = predicateOf<Instruction2> { it.isMethod }
+//    }
 
     @MethodParameters("bytes")
     @DependsOn(Script::class)
@@ -2552,11 +2552,11 @@ class Client : IdentityMapper.Class() {
     class WorldMapCacheName_area : WorldMapCacheNameInstance(3)
     class WorldMapCacheName_labels : WorldMapCacheNameInstance(4)
 
-    @DependsOn(FriendLoginUpdate::class, LinkDeque::class)
-    class friendLoginUpdates : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<FriendLoginUpdate>() && it.methodName == Method2.CONSTRUCTOR_NAME }
-                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<LinkDeque>() }
-    }
+//    @DependsOn(FriendLoginUpdate::class, LinkDeque::class)
+//    class friendLoginUpdates : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<FriendLoginUpdate>() && it.methodName == Method2.CONSTRUCTOR_NAME }
+//                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<LinkDeque>() }
+//    }
 
     @DependsOn(Rasterizer3D::class, TextureLoader::class)
     class Rasterizer3D_textureLoader : IdentityMapper.StaticField() {
@@ -2736,16 +2736,16 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    class clanChatCount : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
-                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
-                .nextWithin(7) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
+//    class clanChatCount : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
+//                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+//                .nextWithin(7) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
 
-    class clanChatName : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
-                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
-    }
+//    class clanChatName : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3614 }
+//                .nextWithin(17) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
+//    }
 
     // inlined
 //    @MethodParameters("l")

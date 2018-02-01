@@ -21,9 +21,9 @@ class Player : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Actor>() }
             .and { it.instanceFields.size > 1 }
 
-    class name : InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == String::class.type }
-    }
+//    class name : InstanceField() {
+//        override val predicate = predicateOf<Field2> { it.type == String::class.type }
+//    }
 
     class actions : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Array<String>::class.type }
@@ -34,11 +34,11 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Model>() }
     }
 
-    @DependsOn(model0::class)
-    class appearance : InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type in it.jar }
-                .and { it != field<model0>() }
-    }
+//    @DependsOn(model0::class)
+//    class appearance : InstanceField() {
+//        override val predicate = predicateOf<Field2> { it.type in it.jar }
+//                .and { it != field<model0>() }
+//    }
 
     @MethodParameters()
     @DependsOn(Actor.isVisible::class)
