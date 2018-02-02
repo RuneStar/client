@@ -43,7 +43,7 @@ class Username : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class hasCleanedName : IdentityMapper.InstanceMethod() {
+    class hasCleanName : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.name != "equals" }
     }

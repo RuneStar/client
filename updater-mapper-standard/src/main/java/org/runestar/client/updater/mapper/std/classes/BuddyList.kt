@@ -1,5 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
@@ -60,5 +61,29 @@ class BuddyList : IdentityMapper.Class() {
     @MethodParameters()
     class sort : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.instructions.any { it.isMethod && it.methodName == "sort" } }
+    }
+
+    class usernamesMap : OrderMapper.InConstructor.Field(BuddyList::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
+    }
+
+    class previousUsernamesMap : OrderMapper.InConstructor.Field(BuddyList::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
+    }
+
+    @MethodParameters("buddy")
+    class mapRemove : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(type<Buddy>()) }
+                .and { it.instructions.any { it.isMethod && it.methodName == "remove" } }
+    }
+
+    @MethodParameters("buddy")
+    class mapPut : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(type<Buddy>()) }
+                .and { it.instructions.any { it.isMethod && it.methodName == "put" } }
     }
 }
