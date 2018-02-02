@@ -35,7 +35,11 @@ open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
         val ordered = orderDependencies(unordered)
         ordered.map { it.createInstance() }.forEach {
             it.context = context
-            it.map(jar2)
+            try {
+                it.map(jar2)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

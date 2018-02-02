@@ -5,9 +5,11 @@ import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
+import org.objectweb.asm.Label
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.LabelNode
 import java.nio.file.Path
 
 object UnusedTryCatchRemover : Transformer {
@@ -21,20 +23,20 @@ object UnusedTryCatchRemover : Transformer {
         var removedTryCatches = 0
         classNodes.forEach { c ->
             c.methods.forEach { m ->
-                val tcbs = m.tryCatchBlocks.iterator()
-                while (tcbs.hasNext()) {
-                    val tcb = tcbs.next()
-                    if (tcb.type == RUNTIME_EXCEPTION_INTERNAL_NAME) {
-                        val insns = m.instructions.iterator(m.instructions.indexOf(tcb.handler))
-                        var insn: AbstractInsnNode
-                        do {
-                            insn = insns.next()
-                            insns.remove()
-                        } while (insn.opcode != Opcodes.ATHROW)
-                        tcbs.remove()
-                        removedTryCatches++
-                    }
+                val runtimes = m.tryCatchBlocks.filter { it.type == RUNTIME_EXCEPTION_INTERNAL_NAME }
+                val runtimeHandlers = runtimes.map { it.handler }.distinct()
+                runtimeHandlers.forEach { ln ->
+                    val insns = m.instructions.iterator(m.instructions.indexOf(ln))
+                    var insn: AbstractInsnNode
+                    do {
+                        insn = insns.next()
+                        insns.remove()
+                    } while (insn.opcode != Opcodes.ATHROW)
+                    removedTryCatches++
                 }
+                m.tryCatchBlocks.removeAll(runtimes)
+                val removedRanges = runtimes.map { it.start to it.end }
+                m.tryCatchBlocks.removeIf { it.start to it.end in removedRanges }
             }
         }
         logger.info { "Try catches removed: $removedTryCatches" }
