@@ -50,4 +50,15 @@ class BuddyList : IdentityMapper.Class() {
     class capacity : OrderMapper.InConstructor.Field(BuddyList::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("index")
+    class get : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Buddy>() }
+                .and { it.instructions.any { it.opcode == NEW && it.typeType == ArrayIndexOutOfBoundsException::class.type } }
+    }
+
+    @MethodParameters()
+    class sort : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.instructions.any { it.isMethod && it.methodName == "sort" } }
+    }
 }
