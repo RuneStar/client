@@ -4,7 +4,7 @@ import org.runestar.client.game.raw.access.XPlayer
 
 class Player(override val accessor: XPlayer) : Actor(accessor) {
 
-    val name get() = accessor.name ?: ""
+//    val name get() = accessor.name ?: ""
 
     val actions: List<String> get() = accessor.actions.toList()
 
@@ -18,7 +18,7 @@ class Player(override val accessor: XPlayer) : Actor(accessor) {
 
     val appearance: PlayerAppearance? get() = accessor.appearance?.let { PlayerAppearance(it) }
 
-    override fun toString(): String {
-        return "Player($name)"
-    }
+//    override fun toString(): String {
+//        return "Player($name)"
+//    }
 }

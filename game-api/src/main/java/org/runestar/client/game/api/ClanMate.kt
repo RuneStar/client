@@ -5,7 +5,7 @@ import org.runestar.client.game.raw.access.XClanMate
 
 class ClanMate(val accessor: XClanMate) {
 
-    val name: String get() = accessor.name
+    val name: String get() = accessor.name()
 
     val worldId get() = accessor.world
 

@@ -340,20 +340,17 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }
     }
 
-//    @DependsOn(ClanMate::class)
-//    class clanChat : StaticField() {
-//        override val predicate = predicateOf<Field2> { it.type == type<ClanMate>().withDimensions(1) }
-//    }
+    @SinceVersion(162)
+    @DependsOn(ClanChat::class)
+    class clanChat : StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<ClanChat>() }
+    }
 
-//    @DependsOn(Ignored::class)
-//    class ignoreList : StaticField() {
-//        override val predicate = predicateOf<Field2> { it.type == type<Ignored>().withDimensions(1) }
-//    }
-
-//    @DependsOn(Friend::class)
-//    class friendsList : StaticField() {
-//        override val predicate = predicateOf<Field2> { it.type == type<Friend>().withDimensions(1) }
-//    }
+    @SinceVersion(162)
+    @DependsOn(FriendSystem::class)
+    class friendSystem : StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<FriendSystem>() }
+    }
 
     @DependsOn(MouseHandler::class)
     class MouseHandler_x : OrderMapper.InClassInitializer.Field(MouseHandler::class, 6) {
@@ -2551,12 +2548,6 @@ class Client : IdentityMapper.Class() {
     class WorldMapCacheName_compositeTexture : WorldMapCacheNameInstance(2)
     class WorldMapCacheName_area : WorldMapCacheNameInstance(3)
     class WorldMapCacheName_labels : WorldMapCacheNameInstance(4)
-
-//    @DependsOn(FriendLoginUpdate::class, LinkDeque::class)
-//    class friendLoginUpdates : AllUniqueMapper.Field() {
-//        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<FriendLoginUpdate>() && it.methodName == Method2.CONSTRUCTOR_NAME }
-//                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<LinkDeque>() }
-//    }
 
     @DependsOn(Rasterizer3D::class, TextureLoader::class)
     class Rasterizer3D_textureLoader : IdentityMapper.StaticField() {
