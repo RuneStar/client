@@ -9,7 +9,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.objectweb.asm.Type
 
 // name length ??
-class JagexLoginType : IdentityMapper.Class() {
+class LoginType : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.isEmpty() }
             .and {  it.instanceFields.size == 2 }

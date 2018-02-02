@@ -11,7 +11,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 
 @SinceVersion(162)
 @DependsOn(Username::class)
-class Named : IdentityMapper.Class() {
+class Buddy : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.interfaces.contains(Comparable::class.type) }
             .and { it.instanceFields.count() == 2 }
             .and { it.instanceFields.count { it.type == type<Username>() } == 2 }

@@ -1144,9 +1144,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<JagexGame>() && it.klass != klass<JagexGame>() }
     }
 
-    @DependsOn(JagexLoginType::class)
-    class jagexLoginType : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<JagexLoginType>() && it.klass != klass<JagexLoginType>() }
+    @DependsOn(LoginType::class)
+    class loginType : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<LoginType>() && it.klass != klass<LoginType>() }
     }
 
     @DependsOn(BufferedFile::class)
