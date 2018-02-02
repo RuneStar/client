@@ -169,7 +169,7 @@ class BuddyList : IdentityMapper.Class() {
 
     @MethodParameters("username")
     @DependsOn(addLast::class)
-    class addLastCurrentUsernameOnly : IdentityMapper.InstanceMethod() {
+    class addLastNoPreviousUsername : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Buddy>() }
                 .and { it.arguments.size in 1..2 }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<addLast>().id } }

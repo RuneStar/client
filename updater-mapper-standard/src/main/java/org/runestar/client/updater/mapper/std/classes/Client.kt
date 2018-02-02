@@ -2821,4 +2821,10 @@ class Client : IdentityMapper.Class() {
     class hasFocus : UniqueMapper.InMethod.Field(GameShell.focusGained::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @SinceVersion(162)
+    @DependsOn(Usernamed.username::class)
+    class username : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<Usernamed.username>().mark }
+    }
 }
