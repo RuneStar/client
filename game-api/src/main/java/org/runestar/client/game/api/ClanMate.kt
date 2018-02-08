@@ -3,9 +3,7 @@ package org.runestar.client.game.api
 import org.runestar.client.game.api.live.Worlds
 import org.runestar.client.game.raw.access.XClanMate
 
-class ClanMate(val accessor: XClanMate) {
-
-    val name: String get() = accessor.name()
+class ClanMate(override val accessor: XClanMate) : Buddy(accessor) {
 
     val worldId get() = accessor.world
 
@@ -14,6 +12,6 @@ class ClanMate(val accessor: XClanMate) {
     val rank get() = ClanRank.of(accessor.rank)
 
     override fun toString(): String {
-        return "ClanMate(name=$name, worldId=$worldId, rank=$rank)"
+        return "ClanMate(username=$username, previousUsername=$previousUsername, worldId=$worldId, rank=$rank)"
     }
 }

@@ -1,13 +1,8 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Worlds
 import org.runestar.client.game.raw.access.XFriend
 
-class Friend(val accessor: XFriend) {
-
-    val name: String get() = accessor.name()
-
-    val previousName: String? get() = accessor.previousName().takeUnless { it.isNullOrEmpty() }
+class Friend(override val accessor: XFriend) : Buddy(accessor) {
 
 //    val worldId get() = accessor.
 
@@ -15,7 +10,7 @@ class Friend(val accessor: XFriend) {
 
 //    val rank get() = ClanRank.of(accessor.rank.toByte())
 
-//    override fun toString(): String {
-//        return "Friend(name=$name, previousName=$previousName, worldId=$worldId, rank=$rank)"
-//    }
+    override fun toString(): String {
+        return "Friend(username=$username, previousUsername=$previousUsername)"
+    }
 }
