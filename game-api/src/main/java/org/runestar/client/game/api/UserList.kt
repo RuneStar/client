@@ -1,8 +1,8 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.access.XBuddyList
+import org.runestar.client.game.raw.access.XUserList
 
-abstract class BuddyList(open val accessor: XBuddyList) {
+abstract class UserList(open val accessor: XUserList) {
 
     val size get() = accessor.size0
 

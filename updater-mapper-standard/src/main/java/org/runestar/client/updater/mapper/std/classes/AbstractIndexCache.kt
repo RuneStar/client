@@ -145,6 +145,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.size in 2..3 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == ARRAYLENGTH } }
+                .and { it.instructions.any { it.opcode == IFNULL || it.opcode == IFNONNULL || it.opcode == ACONST_NULL } }
     }
 
     class tryLoadArchive : IdentityMapper.InstanceMethod() {

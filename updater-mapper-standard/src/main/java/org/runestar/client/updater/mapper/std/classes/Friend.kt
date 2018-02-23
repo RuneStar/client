@@ -12,12 +12,11 @@ import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Method2
 
-@SinceVersion(162)
+@SinceVersion(164)
 @DependsOn(Buddy::class)
 class Friend : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == type<Buddy>() }
-            .and { it.instanceFields.count { it.type == INT_TYPE } >= 2 }
             .and { it.instanceFields.count { it.type == BOOLEAN_TYPE } == 2 }
 
     @MethodParameters("other")

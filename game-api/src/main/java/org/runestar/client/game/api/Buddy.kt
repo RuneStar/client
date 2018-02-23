@@ -1,12 +1,13 @@
 package org.runestar.client.game.api
 
+import org.runestar.client.game.api.live.Worlds
 import org.runestar.client.game.raw.access.XBuddy
 
-abstract class Buddy(open val accessor: XBuddy): Comparable<Buddy> {
+abstract class Buddy(override val accessor: XBuddy) : User(accessor) {
 
-    val username: Username? get() = accessor.username ?.let { Username(it) }
+    val worldId get() = accessor.world
 
-    val previousUsername: Username? get() = accessor.previousUsername ?.let { Username(it) }
+    val world get() = Worlds[worldId]
 
-    override fun compareTo(other: Buddy) = accessor.compareTo(other.accessor)
+    val rank get() = ClanRank.of(accessor.rank)
 }

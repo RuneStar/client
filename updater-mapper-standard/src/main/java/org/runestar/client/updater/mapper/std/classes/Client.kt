@@ -340,13 +340,13 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }
     }
 
-    @SinceVersion(162)
+    @SinceVersion(164)
     @DependsOn(ClanChat::class)
     class clanChat : StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<ClanChat>() }
     }
 
-    @SinceVersion(162)
+    @SinceVersion(164)
     @DependsOn(FriendSystem::class)
     class friendSystem : StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<FriendSystem>() }

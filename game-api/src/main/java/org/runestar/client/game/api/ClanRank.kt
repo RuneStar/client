@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-enum class ClanRank(val id: Byte) {
+enum class ClanRank(val id: Int) {
 
     NONE(-1),
     FRIEND(0),
@@ -17,7 +17,7 @@ enum class ClanRank(val id: Byte) {
         @JvmField val VALUES = values().asList()
 
         @JvmStatic
-        fun of(id: Byte): ClanRank {
+        fun of(id: Int): ClanRank {
             return VALUES[id + 1]
         }
     }

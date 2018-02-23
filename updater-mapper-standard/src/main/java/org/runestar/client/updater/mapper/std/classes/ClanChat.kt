@@ -1,13 +1,10 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -16,21 +13,21 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 
-@SinceVersion(162)
-@DependsOn(BuddyList::class, ClanMate::class)
+@SinceVersion(164)
+@DependsOn(UserList::class, ClanMate::class)
 class ClanChat : IdentityMapper.Class() {
 
-    override val predicate = predicateOf<Class2> { it.superType == type<BuddyList>() }
+    override val predicate = predicateOf<Class2> { it.superType == type<UserList>() }
             .and { it.instanceMethods.flatMap { it.instructions.toList() }.any { it.opcode == NEW && it.typeType == type<ClanMate>() } }
 
-    @DependsOn(BuddyList.newInstance::class)
+    @DependsOn(UserList.newInstance::class)
     class newInstance : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<BuddyList.newInstance>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<UserList.newInstance>().mark }
     }
 
-    @DependsOn(BuddyList.newTypedArray::class)
+    @DependsOn(UserList.newTypedArray::class)
     class newTypedArray : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.mark == method<BuddyList.newTypedArray>().mark }
+        override val predicate = predicateOf<Method2> { it.mark == method<UserList.newTypedArray>().mark }
     }
 
     @DependsOn(LoginType::class)
