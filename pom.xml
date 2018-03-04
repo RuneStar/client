@@ -68,7 +68,7 @@
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
-        <kotlin.version>1.2.21</kotlin.version>
+        <kotlin.version>1.2.30</kotlin.version>
         <jackson.version>2.9.3</jackson.version>
         <logback.version>1.2.3</logback.version>
         <asm.version>6.0</asm.version>
