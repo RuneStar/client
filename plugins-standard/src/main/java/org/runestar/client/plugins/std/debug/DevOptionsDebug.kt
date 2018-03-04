@@ -30,9 +30,9 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
         if (settings.boundingBoxes2D.drawObjectGeometry) {
             accessor.boundingBoxes_drawObjectGeometry2D = true
         }
-        if (settings.numberMenuOptions) {
-            accessor.numberMenuOptions = true
-        }
+//        if (settings.numberMenuOptions) {
+//            accessor.numberMenuOptions = true
+//        }
     }
 
     override fun stop() {
@@ -42,15 +42,15 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
         accessor.displayFps = false
         accessor.useBoundingBoxes3D = true
         accessor.boundingBoxes_drawObjectGeometry2D = false
-        accessor.numberMenuOptions = false
+//        accessor.numberMenuOptions = false
     }
 
     class Settings(
             val boundingBoxes3D: ThreeD = ThreeD(),
             val boundingBoxes2D: TwoD = TwoD(),
             val displayFps: Boolean = false,
-            val useBoundingBoxes3D: Boolean = true,
-            val numberMenuOptions: Boolean = false
+            val useBoundingBoxes3D: Boolean = true
+//            val numberMenuOptions: Boolean = false
     ) : PluginSettings() {
 
         data class ThreeD(

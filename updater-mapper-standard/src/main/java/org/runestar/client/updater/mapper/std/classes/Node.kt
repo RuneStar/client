@@ -8,11 +8,13 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.extensions.type
 import java.lang.reflect.Modifier
 
 class Node : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.instanceFields.size == 3 }
             .and { it.instanceFields.count { it.type == LONG_TYPE } == 1 }
+            .and { it.superType == Any::class.type }
             .and { c -> c.instanceFields.count { it.type == c.type } == 2 }
 
     class key : IdentityMapper.InstanceField() {

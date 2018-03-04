@@ -418,15 +418,19 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
+    @DependsOn(Rasterizer3D::class)
     class Rasterizer3D_sine : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.method.isClassInitializer }
+                .and { it.klass == klass<Rasterizer3D>() }
                 .and { it.opcode == INVOKESTATIC && it.methodId == Math::sin.id }
                 .prevWithin(7) { it.opcode == LDC && it.ldcCst == 65536.0 }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
+    @DependsOn(Rasterizer3D::class)
     class Rasterizer3D_cosine : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.method.isClassInitializer }
+                .and { it.klass == klass<Rasterizer3D>() }
                 .and { it.opcode == INVOKESTATIC && it.methodId == Math::cos.id }
                 .prevWithin(7) { it.opcode == LDC && it.ldcCst == 65536.0 }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
@@ -2084,18 +2088,18 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
 
-    @MethodParameters("strings")
-    class prependIndices : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Array<String>::class.type }
-                .and { it.arguments.size in 1..2 }
-                .and { it.arguments.startsWith(Array<String>::class.type) }
-    }
+//    @MethodParameters("strings")
+//    class prependIndices : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == Array<String>::class.type }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.arguments.startsWith(Array<String>::class.type) }
+//    }
 
-    @DependsOn(prependIndices::class)
-    class numberMenuOptions : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<prependIndices>().id }
-                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
-    }
+//    @DependsOn(prependIndices::class)
+//    class numberMenuOptions : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<prependIndices>().id }
+//                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+//    }
 
     @DependsOn(ItemDefinition.getModel::class, EvictingHashTable::class)
     class ItemDefinition_cachedModels : OrderMapper.InMethod.Field(ItemDefinition.getModel::class, 0) {

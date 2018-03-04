@@ -18,6 +18,7 @@ class Entity : IdentityMapper.Class() {
             .and { it.instanceFields.size == 1 }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 1 }
             .and { Modifier.isAbstract(it.access) }
+            .and { it.instanceMethods.none { Modifier.isAbstract(it.access) } }
 
     class height : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }

@@ -10,16 +10,17 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.GOTO
 import org.objectweb.asm.Type.VOID_TYPE
+import java.lang.reflect.Modifier
 
 @DependsOn(DualNode::class)
 class IterableDualNodeQueue : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.contains(Iterable::class.type) }
-            .and { it.instanceFields.size == 1 }
+            .and { it.instanceFields.size >= 1 }
             .and { it.instanceFields.all { it.type == type<DualNode>() } }
 
     class sentinel : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { true }
+        override val predicate = predicateOf<Field2> { Modifier.isPublic(it.access) }
     }
 
     class clear : IdentityMapper.InstanceMethod() {

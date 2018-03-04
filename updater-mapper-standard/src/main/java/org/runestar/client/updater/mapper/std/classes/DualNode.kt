@@ -16,7 +16,7 @@ import org.objectweb.asm.Type
 @DependsOn(Node::class)
 class DualNode : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
-            .and { it.instanceFields.size == 2 }
+            .and { it.instanceFields.size >= 2 }
             .and { c -> c.instanceFields.count { it.type == c.type } == 2 }
 
     @MethodParameters()
@@ -32,5 +32,6 @@ class DualNode : IdentityMapper.Class() {
     @DependsOn(nextDual::class)
     class previousDual : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.id != field<nextDual>().id }
+                .and { it.type == type<DualNode>() }
     }
 }
