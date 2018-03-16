@@ -1,12 +1,10 @@
 package org.runestar.client.plugins.std.debug
 
-import org.runestar.client.game.api.Projection
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
-import org.kxtra.swing.graphics.drawPoint
 import java.awt.Color
 import java.awt.Point
 import java.awt.Shape

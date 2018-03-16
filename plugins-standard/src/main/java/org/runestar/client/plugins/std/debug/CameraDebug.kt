@@ -30,6 +30,7 @@ class CameraDebug : DisposablePlugin<PluginSettings>() {
             val playerPt = playerPosition.toScreen() ?: return@subscribe
             g.fill(shapeAt(playerPt))
 
+            g.color = Color.YELLOW
             val camAbsoluteHeight = LiveCamera.position.height - LiveScene.getTileHeight(LiveCamera.position)
             // position with x/y of player and height of camera
             val fakeCamPosition = playerPosition.copy(height = camAbsoluteHeight + LiveScene.getTileHeight(playerPosition))

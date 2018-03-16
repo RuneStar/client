@@ -2022,11 +2022,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
-    @MethodParameters("n")
-    @DependsOn(Rasterizer3D_setClip::class)
-    class nextPowerOfTwo : OrderMapper.InMethod.Method(Rasterizer3D_setClip::class, 1) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod }
-    }
+//    @MethodParameters("n")
+//    @DependsOn(Rasterizer3D_setClip::class)
+//    class nextPowerOfTwo : OrderMapper.InMethod.Method(Rasterizer3D_setClip::class, 1) {
+//        override val predicate = predicateOf<Instruction2> { it.isMethod }
+//    }
 
     @DependsOn(Rasterizer3D_method3::class)
     class Rasterizer3D_clipMidX : OrderMapper.InMethod.Field(Rasterizer3D_method3::class, 0) {
@@ -2461,13 +2461,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BooleanArray::class.type }
     }
 
-    @DependsOn(Widget::class, Widget.isHidden::class)
-    class isWidgetHidden : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-                .and { it.arguments.startsWith(type<Widget>()) }
-                .and { it.arguments.size in 1..2 }
-                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.isHidden>().id } }
-    }
+//    @DependsOn(Widget::class, Widget.isHidden::class)
+//    class isWidgetHidden : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+//                .and { it.arguments.startsWith(type<Widget>()) }
+//                .and { it.arguments.size in 1..2 }
+//                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.isHidden>().id } }
+//    }
 
     class rootWidgetGroup : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2706 }

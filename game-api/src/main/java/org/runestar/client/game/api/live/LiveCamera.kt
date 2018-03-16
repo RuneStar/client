@@ -13,8 +13,7 @@ object LiveCamera : Camera {
         if (!l.isLoaded) {
             return Scene.CENTER.center // todo
         }
-        val th = LiveScene.getTileHeight(l)
-        return l.copy(height = LiveScene.getTileHeight(l) - th)
+        return l.copy(height = LiveScene.getTileHeight(l) - l.height)
     }
 
     override val pitch get() = Angle(accessor.cameraPitch)

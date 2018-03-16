@@ -6,7 +6,7 @@
 
     <groupId>org.runestar.client</groupId>
     <artifactId>client-parent</artifactId>
-    <version>0.165.0-SNAPSHOT</version>
+    <version>0.166.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -45,16 +45,6 @@
         </repository>
     </repositories>
 
-    <!--<pluginRepositories>-->
-        <!--<pluginRepository>-->
-            <!--<id>jcenter</id>-->
-            <!--<url>https://jcenter.bintray.com/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</pluginRepository>-->
-    <!--</pluginRepositories>-->
-
     <distributionManagement>
         <snapshotRepository>
             <id>repo.runestar.org</id>
@@ -74,7 +64,6 @@
         <asm.version>6.0</asm.version>
         <slf4j.version>1.7.25</slf4j.version>
         <maven.version>3.5.0</maven.version>
-        <!--<dokka.version>0.9.15</dokka.version>-->
     </properties>
 
     <dependencyManagement>
@@ -230,12 +219,6 @@
                 <scope>provided</scope>
                 <version>3.5</version>
             </dependency>
-            <dependency>
-                <groupId>de.sciss</groupId>
-                <artifactId>weblaf</artifactId>
-                <version>1.28</version>
-                <type>pom</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -311,43 +294,5 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.jetbrains.dokka</groupId>-->
-                <!--<artifactId>dokka-maven-plugin</artifactId>-->
-                <!--<version>${dokka.version}</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>pre-site</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>javadocJar</goal>-->
-                        <!--</goals>-->
-                        <!--<inherited>false</inherited>-->
-                        <!--<configuration>-->
-                            <!--<jdkVersion>8</jdkVersion>-->
-                            <!--<cacheRoot>default</cacheRoot>-->
-                            <!--<sourceDirectories>-->
-                                <!--<dir>common/src/main/java</dir>-->
-                                <!--<dir>game-raw/src/main/java</dir>-->
-                                <!--<dir>game-raw/target/generated-sources/</dir>-->
-                                <!--<dir>game-api/src/main/java</dir>-->
-                                <!--<dir>plugins/src/main/java</dir>-->
-                                <!--<dir>api/src/main/java</dir>-->
-                                <!--<dir>utils/src/main/java</dir>-->
-                            <!--</sourceDirectories>-->
-                            <!--<impliedPlatforms>-->
-                                <!--<platform>JVM</platform>-->
-                            <!--</impliedPlatforms>-->
-                            <!--&lt;!&ndash;<externalDocumentationLinks>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<link>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<url>http://reactivex.io/RxJava/javadoc/</url>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<url>https://www.slf4j.org/api/</url>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</link>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</externalDocumentationLinks>&ndash;&gt;-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-        </plugins>
     </build>
 </project>
