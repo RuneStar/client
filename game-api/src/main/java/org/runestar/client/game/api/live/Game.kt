@@ -1,14 +1,12 @@
 package org.runestar.client.game.api.live
 
 import org.kxtra.swing.component.windowAncestor
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.Varps
-import org.runestar.client.game.api.WindowMode
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.runestar.client.game.api.*
 import org.runestar.client.game.raw.access.XPacketBuffer
 import java.awt.Component
 import java.awt.Container
@@ -52,4 +50,8 @@ object Game {
     val containerEvents = SwingObservable.container(accessor as Container)
 
     val varps = Varps(Client.accessor.varps)
+
+    val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
+
+    val friendsSystem: FriendsSystem get() = FriendsSystem(Client.accessor.friendSystem)
 }

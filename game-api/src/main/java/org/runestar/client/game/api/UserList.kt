@@ -2,9 +2,9 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XUserList
 
-abstract class UserList(open val accessor: XUserList) {
+abstract class UserList<out T : User>(open val accessor: XUserList) : AbstractList<T>(), RandomAccess {
 
-    val size get() = accessor.size0
+    override val size get() = accessor.size0
 
     val capacity get() = accessor.capacity
 
