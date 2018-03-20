@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XEntity
 
-abstract class Entity(open val accessor: XEntity) {
+abstract class Entity(override val accessor: XEntity) : Wrapper(accessor) {
 
     open val height get() = accessor.height
 
