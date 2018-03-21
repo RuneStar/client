@@ -10,8 +10,9 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Type
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 
 @DependsOn(Node::class)
 class DualNode : IdentityMapper.Class() {
@@ -21,17 +22,22 @@ class DualNode : IdentityMapper.Class() {
 
     @MethodParameters()
     class removeDual : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
     }
 
     @DependsOn(removeDual::class)
     class nextDual : OrderMapper.InMethod.Field(removeDual::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD }
     }
 
     @DependsOn(nextDual::class)
     class previousDual : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.id != field<nextDual>().id }
                 .and { it.type == type<DualNode>() }
+    }
+
+    @SinceVersion(165)
+    class keyDual : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == LONG_TYPE }
     }
 }
