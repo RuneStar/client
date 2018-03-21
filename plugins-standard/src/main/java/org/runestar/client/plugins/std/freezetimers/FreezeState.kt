@@ -1,33 +1,31 @@
 package org.runestar.client.plugins.std.freezetimers
 
-import org.runestar.client.game.api.SceneTile
-
-sealed class FreezeState() {
+sealed class FreezeState {
 
     abstract val ticksRemaining: Int
 
-    abstract fun advance(): FreezeState?
+    abstract fun nextTick(): FreezeState?
 
-    data class Frozen(override val ticksRemaining: Int, val tile: SceneTile) : FreezeState() {
+    data class Frozen(override val ticksRemaining: Int) : FreezeState() {
 
-        override fun advance(): FreezeState {
+        override fun nextTick(): FreezeState {
             val n = ticksRemaining
             return if (n == 0) {
                 Immune()
             } else {
-                Frozen(n - 1, tile)
+                Frozen(n - 1)
             }
         }
     }
 
     data class Immune(override val ticksRemaining: Int = 6) : FreezeState() {
 
-        override fun advance(): FreezeState? {
+        override fun nextTick(): FreezeState? {
             val n = ticksRemaining
             return if (n == 0) {
                 null
             } else {
-                Immune(n -1 )
+                Immune(n - 1)
             }
         }
     }
