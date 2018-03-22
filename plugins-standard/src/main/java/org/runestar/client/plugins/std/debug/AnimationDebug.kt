@@ -4,10 +4,12 @@ import org.runestar.client.game.api.Actor
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
+import org.runestar.client.game.raw.access.XActor
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
@@ -21,18 +23,12 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
             val p = Players.local?.accessor ?: return@subscribe
 
             g.color = Color.WHITE
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = RUNESCAPE_SMALL_FONT
 
             val x = 40
             var y = 40
 
-            val strings = listOf(
-                    "movement=${p.movementSequence}, ${p.movementFrame}:${p.movementFrameCycle}",
-                    "spotAnimation=${p.spotAnimation}, ${p.spotAnimationFrame}:${p.spotAnimationFrameCycle}",
-                    "sequence=${p.sequence}, ${p.sequenceFrame}:${p.sequenceFrameCycle}",
-                    "idle=${p.idleSequence}, walk=${p.walkSequence}, run=${p.runSequence}",
-                    "turn=${p.turnSequence}, left=${p.turnLeftSequence}, right=${p.turnRightSequence}"
-            )
+            val strings = animString(p).split(',')
 
             strings.forEach { s ->
                 g.drawString(s, x, y)
@@ -53,8 +49,19 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
         if (!pos.isLoaded) return
         val height = actor.accessor.defaultHeight * 2 / 3
         val pt = pos.copy(height = height).toScreen() ?: return
-        val s = "sa=${actor.accessor.spotAnimation}," +
-                "sq=${actor.accessor.sequence}"
+        val s = animString(actor.accessor)
         g.drawStringShadowed(s, pt.x, pt.y)
+    }
+
+    private fun animString(p: XActor): String {
+        return "m=${p.movementSequence} ${p.movementFrame.pad()}:${p.movementFrameCycle.pad()}," +
+        "a=${p.spotAnimation} ${p.spotAnimationFrame.pad()}:${p.spotAnimationFrameCycle.pad()}," +
+        "q=${p.sequence} ${p.sequenceFrame.pad()}:${p.sequenceFrameCycle.pad()}," +
+        "i=${p.idleSequence} w=${p.walkSequence} r=${p.runSequence}," +
+        "t=${p.turnSequence} l=${p.turnLeftSequence} r=${p.turnRightSequence}"
+    }
+
+    private fun Int.pad(): String {
+        return this.toString().padStart(2, '0')
     }
 }
