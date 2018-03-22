@@ -89,11 +89,10 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
         }
         val existingFreeze = freezes[key]
         if (existingFreeze != null) {
-            if (existingFreeze is FreezeState.Frozen) {
-                val mvmt = actor.accessor.movementSequence
-                if (mvmt == actor.accessor.walkSequence || mvmt == actor.accessor.runSequence) {
-                    freezes.remove(key)
-                }
+            if (existingFreeze is FreezeState.Frozen && actor.accessor.movementSequence == actor.accessor.runSequence) {
+                // player is thought to be frozen, but this is proved to be wrong because he is running
+                // cannot test walking because of d spears
+                freezes.remove(key)
             }
             return
         }
