@@ -52,7 +52,7 @@ class GameObject : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newGameObject::class)
-    class int6 : OrderMapper.InMethod.Field(Scene.newGameObject::class, 6) {
+    class orientation : OrderMapper.InMethod.Field(Scene.newGameObject::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<GameObject>() }
     }
 
