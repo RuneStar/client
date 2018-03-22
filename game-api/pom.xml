@@ -35,6 +35,10 @@
             <artifactId>general</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.runestar.cache</groupId>
+            <artifactId>cache-generated</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.kxtra</groupId>
             <artifactId>kxtra-swing</artifactId>
         </dependency>

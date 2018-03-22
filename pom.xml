@@ -234,6 +234,11 @@
                 <artifactId>byte-buddy</artifactId>
                 <version>1.8.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.runestar.cache</groupId>
+                <artifactId>cache-generated</artifactId>
+                <version>0.1.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
