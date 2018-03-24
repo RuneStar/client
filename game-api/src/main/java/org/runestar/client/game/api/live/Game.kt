@@ -54,4 +54,11 @@ object Game {
     val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
 
     val friendsSystem: FriendsSystem get() = FriendsSystem(Client.accessor.friendSystem)
+
+    val specialAttackEnabled get() = varps[Varbit.SPECIAL_ATTACK_ENABLED] != 0
+
+    /**
+     * 0 - 100
+     */
+    val specialAttackPercent get() = varps[Varbit.SPECIAL_ATTACK_PERCENT] / 10
 }
