@@ -10,6 +10,8 @@ data class ColorForm(
         val alpha: Int = 255
 ) : Supplier<Color> {
 
+    constructor(color: Color) : this(color.red, color.green, color.blue, color.alpha)
+
     @Transient
     private val value = Color(red, green, blue, alpha)
 
