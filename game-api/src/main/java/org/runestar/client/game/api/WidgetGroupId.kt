@@ -23,7 +23,22 @@ interface WidgetGroupId {
     }
 
     object MinimapOrbs : WidgetGroupId {
+
         override val id = 160
+
+        val xp = WidgetParentId(id, 1)
+
+        val hp = WidgetParentId(id, 2)
+        val hp_circle = WidgetParentId(id, 6)
+
+        val pray = WidgetParentId(id, 12)
+        val pray_circle = WidgetParentId(id, 16)
+
+        val run = WidgetParentId(id, 20)
+        val run_circle = WidgetParentId(id, 24)
+
+        val spec = WidgetParentId(id, 28)
+        val spec_circle = WidgetParentId(id, 31)
     }
 
     object ViewportResizableOldSchoolBox : WidgetGroupId {
