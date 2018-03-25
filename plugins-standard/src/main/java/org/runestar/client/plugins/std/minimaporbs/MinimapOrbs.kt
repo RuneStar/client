@@ -3,13 +3,11 @@ package org.runestar.client.plugins.std.minimaporbs
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Prayers
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
+import org.runestar.general.Skill
 import java.awt.BasicStroke
 import java.awt.RenderingHints
 import java.awt.Shape
@@ -68,10 +66,14 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE)
 
-            if (settings.hpRegen.enabled) {
+            if (settings.hpRegen.enabled && hpTicks > 0) {
                 Widgets[WidgetGroupId.MinimapOrbs.hp_circle]?.shape?.let { hpRect ->
-                    if (hpTicks <= 0) return@let
-                    val hpPercent = hpTicks.toDouble() / hpTickLimit
+                    val lvl = Stats[Skill.HITPOINTS]
+                    val hpPercent = when {
+                        lvl.currentLevel < lvl.level -> hpTicks.toDouble() / hpTickLimit
+                        lvl.currentLevel > lvl.level -> 1 - (hpTicks.toDouble() / hpTickLimit)
+                        else -> return@let
+                    }
                     g.color = settings.hpRegen.color.get()
                     g.draw(orbArc(hpRect, hpPercent))
                 }
@@ -89,8 +91,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                     )
                 }
 
-                if (settings.specRegen.enabled) {
-                    if (specTicks <= 0) return@let
+                if (settings.specRegen.enabled && specTicks > 0) {
                     val specPercent = specTicks.toDouble() / SPEC_TICKS
                     g.color = settings.specRegen.color.get()
                     g.draw(orbArc(specRect, specPercent))
@@ -109,7 +110,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     }
 
     data class Settings(
-            val stroke: Float = 3f,
+            val stroke: Float = 2f,
             val hpRegen: Element = Element(ColorForm(220, 0, 0)),
             val specRegen: Element = Element(ColorForm(0, 200, 200)),
             val specFill: Element = Element(ColorForm(255, 255, 255, 120))
