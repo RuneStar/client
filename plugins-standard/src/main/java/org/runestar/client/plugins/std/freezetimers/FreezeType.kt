@@ -18,10 +18,17 @@ enum class FreezeType(
 
     companion object {
 
-        private val LOOKUP = values().associateBy { it.spotAnimation }
-
         fun fromSpotAnimation(spotAnimation: Int): FreezeType? {
-            return LOOKUP[spotAnimation]
+            return when (spotAnimation) {
+                SpotAnimationId.ICE_RUSH -> ICE_RUSH
+                SpotAnimationId.ICE_BURST -> ICE_BURST
+                SpotAnimationId.ICE_BLITZ -> ICE_BLITZ
+                SpotAnimationId.ICE_BARRAGE -> ICE_BARRAGE
+                SpotAnimationId.BIND -> BIND
+                SpotAnimationId.SNARE -> SNARE
+                SpotAnimationId.ENTANGLE -> ENTANGLE
+                else -> null
+            }
         }
     }
 }

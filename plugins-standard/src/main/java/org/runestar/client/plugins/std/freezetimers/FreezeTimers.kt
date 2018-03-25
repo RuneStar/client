@@ -11,7 +11,6 @@ import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
-import java.util.concurrent.ConcurrentHashMap
 
 class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
@@ -19,9 +18,11 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     override val name: String = "Freeze Timers"
 
-    private val playerFreezes = ConcurrentHashMap<String, FreezeState>()
+    private val playerFreezes = HashMap<String, FreezeState>()
 
-    private val npcFreezes = ConcurrentHashMap<Npc, FreezeState>()
+    private val npcFreezes = HashMap<Npc, FreezeState>()
+
+    @Volatile private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
     override fun start() {
         super.start()
@@ -31,28 +32,25 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
             tickFreezes(npcFreezes)
             tickFreezes(playerFreezes)
 
+            val loaded = ArrayList<Pair<Actor, FreezeState>>()
+
             for (npc in Npcs) {
-                processActor(npc, npc, npcFreezes)
+                processActor(npc, npc, npcFreezes, loaded)
             }
 
             for (player in Players) {
                 val name = player.name?.name ?: continue
-                processActor(player, name, playerFreezes)
+                processActor(player, name, playerFreezes, loaded)
             }
+
+            loadedFrozenActors = loaded
         })
 
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = RUNESCAPE_SMALL_FONT
 
-            for (npc in Npcs) {
-                val freezeState = npcFreezes[npc] ?: continue
-                drawActor(g, npc, freezeState)
-            }
-
-            for (player in Players) {
-                val name = player.name?.name ?: continue
-                val freezeState = playerFreezes[name] ?: continue
-                drawActor(g, player, freezeState)
+            for ((actor, freezeState) in loadedFrozenActors) {
+                drawActor(g, actor, freezeState)
             }
         })
     }
@@ -77,7 +75,8 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     private fun <T> processActor(
             actor: Actor,
             key: T,
-            freezes: MutableMap<T, FreezeState>
+            freezes: MutableMap<T, FreezeState>,
+            loaded: MutableList<Pair<Actor, FreezeState>>
     ) {
         if (actor.accessor.walkSequence == -1 && actor.accessor.runSequence == -1) {
             // npc which can't move, like a castle wars barricade
@@ -93,12 +92,16 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
                 // player is thought to be frozen, but this is proved to be wrong because he is running
                 // cannot test walking because of d spears
                 freezes.remove(key)
+            } else {
+                loaded.add(actor to existingFreeze)
             }
             return
         }
         val freezeType = FreezeType.fromSpotAnimation(actor.accessor.spotAnimation)
         if (freezeType != null) {
-            freezes[key] = freezeStateForActor(actor, freezeType)
+            val freezeState = freezeStateForActor(actor, freezeType)
+            freezes[key] = freezeState
+            loaded.add(actor to freezeState)
         }
     }
 
