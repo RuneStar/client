@@ -15,7 +15,6 @@ import java.awt.RenderingHints
 import java.awt.Shape
 import java.awt.geom.Arc2D
 import java.awt.geom.Rectangle2D
-import kotlin.math.max
 
 class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
@@ -27,8 +26,8 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     override val defaultSettings = Settings()
 
     private var rapidHeal = false
-    @Volatile private var hpTicks = 0
-    @Volatile private var specTicks = 0
+    @Volatile private var hpTicks = -1
+    @Volatile private var specTicks = -1
     @Volatile private var hpTickLimit = HP_TICKS
 
     override fun start() {
@@ -36,14 +35,14 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
         add(Game.stateChanges.subscribe { state ->
             if (state == GameState.LOGGING_IN || state == GameState.CHANGING_WORLD) {
-                specTicks = 0
-                hpTicks = -2
+                specTicks = -1
+                hpTicks = -1
             }
         })
 
         add(Game.ticks.subscribe {
             specTicks = if (Game.specialAttackPercent == 100) {
-                0
+                -1
             } else {
                 (specTicks + 1) % SPEC_TICKS
             }
@@ -56,7 +55,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
             val rh = Prayers.isEnabled(Prayer.RAPID_HEAL)
             if (rh != rapidHeal) {
-                hpTicks = 0
+                hpTicks = -1 // todo: sometimes 1 tick off
                 hpTickLimit = if (rh) {
                     HP_TICKS / 2
                 } else {
@@ -71,7 +70,8 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
             if (settings.hpRegen.enabled) {
                 Widgets[WidgetGroupId.MinimapOrbs.hp_circle]?.shape?.let { hpRect ->
-                    val hpPercent = max(hpTicks.toDouble() / hpTickLimit, 0.0)
+                    if (hpTicks <= 0) return@let
+                    val hpPercent = hpTicks.toDouble() / hpTickLimit
                     g.color = settings.hpRegen.color.get()
                     g.draw(orbArc(hpRect, hpPercent))
                 }
@@ -90,6 +90,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                 }
 
                 if (settings.specRegen.enabled) {
+                    if (specTicks <= 0) return@let
                     val specPercent = specTicks.toDouble() / SPEC_TICKS
                     g.color = settings.specRegen.color.get()
                     g.draw(orbArc(specRect, specPercent))
