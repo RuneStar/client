@@ -6,8 +6,4 @@
 
 Installs to `{user.home}/RuneStar/`
 
-## Plugins
-
-* [Included plugins](https://github.com/RuneStar/client/tree/master/plugins-standard)
-
-* Dynamically load custom plugins by placing/replacing jars in `/plugins/`
+[Included plugins](https://github.com/RuneStar/client/tree/master/plugins-standard)
