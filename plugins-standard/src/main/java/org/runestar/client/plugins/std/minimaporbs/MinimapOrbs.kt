@@ -23,6 +23,8 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
     override val defaultSettings = Settings()
 
+    override val name = "Minimap Orbs"
+
     private var rapidHeal = false
     @Volatile private var hpTicks = -1
     @Volatile private var specTicks = -1
