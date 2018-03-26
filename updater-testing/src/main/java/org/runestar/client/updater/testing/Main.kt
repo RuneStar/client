@@ -20,9 +20,8 @@ val jsonMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
 fun main(args: Array<String>) {
-    // 127+
-    for (revision in 166.downTo(141)) {
-        if (revision in setOf(146, 147)) continue
+    // 127+, -(146, 147)
+    for (revision in 166.downTo(148)) {
         println(revision)
 
 //        deob(revision)
