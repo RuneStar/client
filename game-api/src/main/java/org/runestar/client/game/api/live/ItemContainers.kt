@@ -18,6 +18,7 @@ object ItemContainers : AbstractMap<Int, ItemContainer>() {
         override fun iterator() = object : AbstractIterator<Map.Entry<Int, ItemContainer>>() {
 
             private var index = 0
+
             private lateinit var curr: XNode
 
             override fun computeNext() {

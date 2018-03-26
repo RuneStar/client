@@ -8,5 +8,5 @@ object Prayers {
 
     fun isEnabled(prayer: Prayer) = Game.varps[prayer.varbit] == 1
 
-    val level: SkillLevel = Stats[Skill.PRAYER]
+    val level: SkillLevel get() = Stats[Skill.PRAYER]
 }
