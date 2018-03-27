@@ -49,7 +49,7 @@ class Player : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class size : IdentityMapper.InstanceMethod() {
+    class transformedSize : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
     }
 

@@ -2,6 +2,8 @@ package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Players
+import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.access.XPlayer
 import org.runestar.client.plugins.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 
@@ -13,7 +15,7 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
         super.start()
 
         add(Game.ticks.subscribe {
-            Players.local?.appearance?.accessor?.npcTransformId = settings.npcId
+            Players.local?.accessor?.let { transmog(it, settings.npcId) }
         })
     }
 
@@ -21,6 +23,21 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
         super.stop()
 
         Players.local?.appearance?.accessor?.npcTransformId = -1
+    }
+
+    private fun transmog(player: XPlayer, npcId: Int) {
+        val appearance = player.appearance ?: return
+        val def = Client.accessor.getNpcDefinition(npcId) ?: return
+        appearance.npcTransformId = npcId
+        // todo: multipliers are broken for these
+//        player.walkSequence = def.walkSequence
+//        player.walkSequenceA = def.walkSequenceA
+//        player.walkSequenceB = def.walkSequenceB
+//        player.idleSequence = def.idleSequence
+//        player.turnSequence = def.turnSequence
+//        player.turnLeftSequence = def.turnLeftSequence
+//        player.turnRightSequence = def.turnRightSequence
+        // npcs can't run
     }
 
     class Settings(

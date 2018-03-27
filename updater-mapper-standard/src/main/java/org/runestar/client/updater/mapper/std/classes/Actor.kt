@@ -77,17 +77,21 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == ByteArray::class.type }
     }
 
+    class size : OrderMapper.InConstructor.Field(Actor::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class idleSequence : OrderMapper.InConstructor.Field(Actor::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     // todo
-    class int1 : OrderMapper.InConstructor.Field(Actor::class, 2) {
+    class walkSequenceA : OrderMapper.InConstructor.Field(Actor::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     // todo
-    class int2 : OrderMapper.InConstructor.Field(Actor::class, 3) {
+    class walkSequenceB : OrderMapper.InConstructor.Field(Actor::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
