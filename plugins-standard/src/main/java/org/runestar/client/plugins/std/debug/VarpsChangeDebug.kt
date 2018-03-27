@@ -11,7 +11,7 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    val varps = Client.accessor.varps
+    val varps = Client.accessor.varps_main
 
     @Volatile
     var old = varps.copyOf()

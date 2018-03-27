@@ -49,7 +49,7 @@ object Game {
      */
     val containerEvents = SwingObservable.container(accessor as Container)
 
-    val varps = Varps(Client.accessor.varps)
+    val varps = Varps(Client.accessor.varps_main)
 
     val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
 

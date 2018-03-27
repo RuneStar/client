@@ -2301,19 +2301,19 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Varps::class)
-    class tempVarps : OrderMapper.InClassInitializer.Field(Varps::class, 0, 2) {
+    class Varps_temp : OrderMapper.InClassInitializer.Field(Varps::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 
     @DependsOn(Varps::class)
-    class varps : OrderMapper.InClassInitializer.Field(Varps::class, 1, 2) {
+    class Varps_main : OrderMapper.InClassInitializer.Field(Varps::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 
     @DependsOn(Varps::class)
-    class varpsMasks : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
+    class Varps_mask : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 32 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
@@ -2830,5 +2830,10 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Usernamed.username::class)
     class username : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Usernamed.username>().mark }
+    }
+
+    @DependsOn(Varcs::class)
+    class varcs : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Varcs>() }
     }
 }
