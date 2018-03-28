@@ -29,18 +29,19 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
         val appearance = player.appearance ?: return
         val def = Client.accessor.getNpcDefinition(npcId) ?: return
         appearance.npcTransformId = npcId
-        // todo: multipliers are broken for these
-//        player.walkSequence = def.walkSequence
-//        player.walkSequenceA = def.walkSequenceA
-//        player.walkSequenceB = def.walkSequenceB
-//        player.idleSequence = def.idleSequence
-//        player.turnSequence = def.turnSequence
-//        player.turnLeftSequence = def.turnLeftSequence
-//        player.turnRightSequence = def.turnRightSequence
+        player.walkSequence = def.walkSequence
+        player.walkSequenceA = def.walkSequenceA
+        player.walkSequenceB = def.walkSequenceB
+        player.idleSequence = def.idleSequence
+        player.turnSequence = def.turnSequence
+        player.turnLeftSequence = def.turnLeftSequence
+        player.turnRightSequence = def.turnRightSequence
+
         // npcs can't run
+        player.runSequence = def.walkSequence
     }
 
     class Settings(
-            val npcId: Int = 403
+            val npcId: Int = 7530
     ) : PluginSettings()
 }
