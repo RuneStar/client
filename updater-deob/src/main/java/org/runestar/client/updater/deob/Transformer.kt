@@ -6,6 +6,7 @@ import org.runestar.client.updater.deob.common.SortMethodsByLineNumber
 import org.runestar.client.updater.deob.common.UnnecessaryGotoRemover
 import org.runestar.client.updater.deob.common.controlflow.ControlFlowFixer
 import org.runestar.client.updater.deob.jagex.*
+import org.runestar.client.updater.deob.jagex.mult.MultiplierFinder
 import java.nio.file.Path
 
 interface Transformer {

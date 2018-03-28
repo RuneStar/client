@@ -21,8 +21,13 @@ data class FieldHook(
 
 val FieldHook.decoderNarrowed: Number? get() = when(decoder) {
     null -> null
-    in Int.MIN_VALUE..Int.MAX_VALUE -> decoder.toInt()
-    else -> decoder
+    else -> {
+        when (descriptor) {
+            "I" -> decoder.toInt()
+            "J" -> decoder
+            else -> error(this)
+        }
+    }
 }
 
 data class MethodHook(

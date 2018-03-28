@@ -9,6 +9,8 @@ import org.runestar.client.updater.common.decoderNarrowed
 import org.runestar.client.updater.common.finalArgumentNarrowed
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
+import net.bytebuddy.description.field.FieldDescription
+import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.ClassFileLocator
 import net.bytebuddy.dynamic.scaffold.TypeValidation
 import net.bytebuddy.implementation.FieldAccessor
