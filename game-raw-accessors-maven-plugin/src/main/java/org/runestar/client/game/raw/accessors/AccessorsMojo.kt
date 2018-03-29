@@ -21,9 +21,9 @@ import java.lang.reflect.Modifier as RModifier
 class AccessorsMojo : AbstractMojo() {
 
     private companion object {
-        val INDENT = "\t"
-        val SETTER_PARAM_NAME = "value"
-        val VOID_OBJECT_TYPENAME = TypeName.get(Void::class.java)
+        const val INDENT = "\t"
+        const val SETTER_PARAM_NAME = "value"
+        val VOID_OBJECT_TYPENAME: TypeName = TypeName.get(Void::class.java)
     }
 
     @Parameter(property = "outputPackage", required = true)
