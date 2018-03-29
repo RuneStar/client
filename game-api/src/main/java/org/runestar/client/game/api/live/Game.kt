@@ -21,7 +21,7 @@ object Game {
     }
 
     val ticks: Observable<Unit> = XPacketBuffer.readSmartByteShortIsaac.exit
-            .filter { it.returned == 82 } // update npcs
+            .filter { it.returned == 21 } // update npcs
             .map { Unit }
             .delay { Observable.timer(1, TimeUnit.MILLISECONDS) }
 

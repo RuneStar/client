@@ -1004,7 +1004,6 @@ class Client : IdentityMapper.Class() {
     }
 
     class Strings_hidden : StringsUniqueMapper("Hidden")
-    class Strings_null : StringsUniqueMapper("null")
     class Strings_space : StringsUniqueMapper(" ")
     class Strings_walkHere : StringsUniqueMapper("Walk here")
     class Strings_cancel : StringsUniqueMapper("Cancel")
@@ -1089,6 +1088,8 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Please remove " }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
+    @SinceVersion(165)
+    class Strings_null : StringsUniqueMapper("null")
 
     @DependsOn(Widget::class, Widget.children::class)
     class getWidgetChild : IdentityMapper.StaticMethod() {
@@ -2153,6 +2154,7 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Client.menuAction::class)
     class isItemSelected : UniqueMapper.InMethod.Field(Client.menuAction::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 38 }
+                .nextWithin(2) { it.node is JumpInsnNode }
                 .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
