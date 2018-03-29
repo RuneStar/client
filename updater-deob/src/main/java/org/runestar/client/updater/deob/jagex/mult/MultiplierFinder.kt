@@ -66,6 +66,14 @@ object MultiplierFinder : Transformer {
 
         val slots = TreeMap<Int, Slot>()
 
+        fun slotsRemove(index: Int): Slot? {
+            val x = slots.remove(index)
+            if (x is Slot.Mul.Field) {
+                decoders.put(x.f, Const.Direct(x.n))
+            }
+            return x
+        }
+
         out@
         for (i in 0 until insns.size - 1) {
             val insn = insns[i]
@@ -90,8 +98,8 @@ object MultiplierFinder : Transformer {
                 }
                 IMUL, LMUL -> {
                     val stackSize = frames[i].stackSize
-                    val x = slots.remove(stackSize - 2)
-                    val y = slots.remove(stackSize - 1)
+                    val x = slotsRemove(stackSize - 2)
+                    val y = slotsRemove(stackSize - 1)
                     if (x is Slot.Operand && y is Slot.Operand && x.javaClass != y.javaClass) {
                         val opf = x as? Slot.Operand.Field ?: y as Slot.Operand.Field
                         val opl = x as? Slot.Operand.Ldc ?: y as Slot.Operand.Ldc
@@ -129,16 +137,11 @@ object MultiplierFinder : Transformer {
                     frames[i + 1].stackSize - insn.stackProduced + 1
             )
             while (slots.isNotEmpty() && slots.lastKey() > validStackSize) {
-                val x = slots.remove(slots.lastKey())
-                if (x is Slot.Mul.Field) {
-                    decoders.put(x.f, Const.Direct(x.n))
-                }
+                slotsRemove(slots.lastKey())
             }
         }
-        slots.values.forEach { x ->
-            if (x is Slot.Mul.Field) {
-                decoders.put(x.f, Const.Direct(x.n))
-            }
+        while (slots.isNotEmpty()) {
+            slotsRemove(slots.lastKey())
         }
     }
 
