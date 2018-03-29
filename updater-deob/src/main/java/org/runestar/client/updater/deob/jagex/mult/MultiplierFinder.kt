@@ -135,6 +135,11 @@ object MultiplierFinder : Transformer {
                 }
             }
         }
+        slots.values.forEach { x ->
+            if (x is Slot.Mul.Field) {
+                decoders.put(x.f, Const.Direct(x.n))
+            }
+        }
     }
 
     private fun unfoldToDecoders(
@@ -148,6 +153,7 @@ object MultiplierFinder : Transformer {
 
         val directDecoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Number>()
         val indirectDecoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Number>()
+
 
         decoders.forEach { fieldName, cst ->
             if (cst is Const.Direct) {
@@ -235,23 +241,23 @@ object MultiplierFinder : Transformer {
 
         interface Operand : Slot {
 
-            class Ldc(val n: Number) : Operand
+            data class Ldc(val n: Number) : Operand
 
-            class Field(val f: String) : Operand
+            data class Field(val f: String) : Operand
         }
 
         interface Mul : Slot {
 
-            class Field(val n: Number, val f: String) : Mul
+            data class Field(val n: Number, val f: String) : Mul
 
-            class Other(val n: Number) : Mul
+            data class Other(val n: Number) : Mul
         }
     }
 
     interface Const {
 
-        class Direct(val n: Number) : Const
+        data class Direct(val n: Number) : Const
 
-        class FieldFolded(val n: Number, val f: String) : Const
+        data class FieldFolded(val n: Number, val f: String) : Const
     }
 }
