@@ -30,10 +30,10 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
         val def = Client.accessor.getNpcDefinition(npcId) ?: return
         appearance.npcTransformId = npcId
         player.walkSequence = def.walkSequence
-        player.walkSequenceA = def.walkSequenceA
-        player.walkSequenceB = def.walkSequenceB
+        player.walkTurnSequence = def.walkTurnSequence
+        player.walkTurnLeftSequence = def.walkTurnLeftSequence
+        player.walkTurnRightSequence = def.walkTurnRightSequence
         player.idleSequence = def.idleSequence
-        player.turnSequence = def.turnSequence
         player.turnLeftSequence = def.turnLeftSequence
         player.turnRightSequence = def.turnRightSequence
 

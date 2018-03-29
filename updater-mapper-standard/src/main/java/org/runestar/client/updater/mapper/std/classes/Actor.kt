@@ -85,13 +85,11 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // todo
-    class walkSequenceA : OrderMapper.InConstructor.Field(Actor::class, 2) {
+    class turnLeftSequence : OrderMapper.InConstructor.Field(Actor::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // todo
-    class walkSequenceB : OrderMapper.InConstructor.Field(Actor::class, 3) {
+    class turnRightSequence : OrderMapper.InConstructor.Field(Actor::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -99,15 +97,15 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnSequence : OrderMapper.InConstructor.Field(Actor::class, 5) {
+    class walkTurnSequence : OrderMapper.InConstructor.Field(Actor::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnLeftSequence : OrderMapper.InConstructor.Field(Actor::class, 6) {
+    class walkTurnLeftSequence : OrderMapper.InConstructor.Field(Actor::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnRightSequence : OrderMapper.InConstructor.Field(Actor::class, 7) {
+    class walkTurnRightSequence : OrderMapper.InConstructor.Field(Actor::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

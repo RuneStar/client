@@ -55,10 +55,11 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
 
     private fun animString(p: XActor): String {
         return "m=${p.movementSequence} ${p.movementFrame.pad()}:${p.movementFrameCycle.pad()}," +
-        "a=${p.spotAnimation} ${p.spotAnimationFrame.pad()}:${p.spotAnimationFrameCycle.pad()}," +
-        "q=${p.sequence} ${p.sequenceFrame.pad()}:${p.sequenceFrameCycle.pad()}," +
+        "sa=${p.spotAnimation} ${p.spotAnimationFrame.pad()}:${p.spotAnimationFrameCycle.pad()}," +
+        "sq=${p.sequence} ${p.sequenceFrame.pad()}:${p.sequenceFrameCycle.pad()}," +
         "i=${p.idleSequence} w=${p.walkSequence} r=${p.runSequence}," +
-        "t=${p.turnSequence} l=${p.turnLeftSequence} r=${p.turnRightSequence}"
+        "wt=${p.walkTurnSequence} wtl=${p.walkTurnLeftSequence} wtr=${p.walkTurnRightSequence}," +
+        "tl=${p.turnLeftSequence} tr=${p.turnRightSequence}"
     }
 
     private fun Int.pad(): String {

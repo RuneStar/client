@@ -144,13 +144,11 @@ class NpcDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // todo
-    class walkSequenceA : OrderMapper.InConstructor.Field(NpcDefinition::class, 2) {
+    class turnLeftSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    // todo
-    class walkSequenceB : OrderMapper.InConstructor.Field(NpcDefinition::class, 3) {
+    class turnRightSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -158,15 +156,15 @@ class NpcDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 5) {
+    class walkTurnSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnLeftSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 6) {
+    class walkTurnLeftSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class turnRightSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 7) {
+    class walkTurnRightSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
