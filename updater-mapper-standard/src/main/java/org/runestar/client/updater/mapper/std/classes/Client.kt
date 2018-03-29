@@ -1003,6 +1003,8 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
+    class Strings_hidden : StringsUniqueMapper("Hidden")
+    class Strings_null : StringsUniqueMapper("null")
     class Strings_space : StringsUniqueMapper(" ")
     class Strings_walkHere : StringsUniqueMapper("Walk here")
     class Strings_cancel : StringsUniqueMapper("Cancel")
