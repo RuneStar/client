@@ -61,7 +61,7 @@
         <kotlin.version>1.2.30</kotlin.version>
         <jackson.version>2.9.4</jackson.version>
         <logback.version>1.2.3</logback.version>
-        <asm.version>6.1</asm.version>
+        <asm.version>6.1.1</asm.version>
         <slf4j.version>1.7.25</slf4j.version>
         <maven.version>3.5.0</maven.version>
     </properties>
@@ -232,7 +232,7 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.8.0</version>
+                <version>1.8.1</version>
             </dependency>
             <dependency>
                 <groupId>org.runestar.cache</groupId>
