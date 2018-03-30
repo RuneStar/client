@@ -546,41 +546,41 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<IterableNodeDeque>() }
     }
 
-    @DependsOn(NpcDefinition::class, EvictingHashTable::class)
+    @DependsOn(NpcDefinition::class, EvictingDualNodeHashTable::class)
     class NpcDefinition_cached : CachedDefinitionMapper(NpcDefinition::class)
 
-    @DependsOn(EnumDefinition::class, EvictingHashTable::class)
+    @DependsOn(EnumDefinition::class, EvictingDualNodeHashTable::class)
     class EnumDefinition_cached : CachedDefinitionMapper(EnumDefinition::class)
 
-    @DependsOn(Sprite::class, EvictingHashTable::class)
+    @DependsOn(Sprite::class, EvictingDualNodeHashTable::class)
     class Sprite_cached : CachedDefinitionMapper(Sprite::class)
 
-    @DependsOn(KitDefinition::class, EvictingHashTable::class)
+    @DependsOn(KitDefinition::class, EvictingDualNodeHashTable::class)
     class KitDefinition_cached : CachedDefinitionMapper(KitDefinition::class)
 
     @SinceVersion(141)
-    @DependsOn(OverlayDefinition::class, EvictingHashTable::class)
+    @DependsOn(OverlayDefinition::class, EvictingDualNodeHashTable::class)
     class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
 
-    @DependsOn(UnderlayDefinition::class, EvictingHashTable::class)
+    @DependsOn(UnderlayDefinition::class, EvictingDualNodeHashTable::class)
     class UnderlayDefinition_cached : CachedDefinitionMapper(UnderlayDefinition::class)
 
-    @DependsOn(SpotAnimationDefinition::class, EvictingHashTable::class)
+    @DependsOn(SpotAnimationDefinition::class, EvictingDualNodeHashTable::class)
     class SpotAnimationDefinition_cached : CachedDefinitionMapper(SpotAnimationDefinition::class)
 
-    @DependsOn(ItemDefinition::class, EvictingHashTable::class)
+    @DependsOn(ItemDefinition::class, EvictingDualNodeHashTable::class)
     class ItemDefinition_cached : CachedDefinitionMapper(ItemDefinition::class)
 
-    @DependsOn(VarbitDefinition::class, EvictingHashTable::class)
+    @DependsOn(VarbitDefinition::class, EvictingDualNodeHashTable::class)
     class VarbitDefinition_cached : CachedDefinitionMapper(VarbitDefinition::class)
 
-    @DependsOn(SequenceDefinition::class, EvictingHashTable::class)
+    @DependsOn(SequenceDefinition::class, EvictingDualNodeHashTable::class)
     class SequenceDefinition_cached : CachedDefinitionMapper(SequenceDefinition::class)
 
-    @DependsOn(ObjectDefinition::class, EvictingHashTable::class)
+    @DependsOn(ObjectDefinition::class, EvictingDualNodeHashTable::class)
     class ObjectDefinition_cached : CachedDefinitionMapper(ObjectDefinition::class)
 
-    @DependsOn(GzipDecompressor::class, EvictingHashTable::class)
+    @DependsOn(GzipDecompressor::class, EvictingDualNodeHashTable::class)
     class gzipDecompressor : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<GzipDecompressor>() }
     }
@@ -1115,14 +1115,14 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Client>() }
     }
 
-    @DependsOn(Widget.getFont::class, EvictingHashTable::class)
+    @DependsOn(Widget.getFont::class, EvictingDualNodeHashTable::class)
     class Widget_cachedFonts : UniqueMapper.InMethod.Field(Widget.getFont::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
-    @DependsOn(Widget.getModel::class, EvictingHashTable::class)
+    @DependsOn(Widget.getModel::class, EvictingDualNodeHashTable::class)
     class Widget_cachedModels : UniqueMapper.InMethod.Field(Widget.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
     @SinceVersion(141)
@@ -2081,9 +2081,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(EvictingHashTable::class, NpcDefinition.getModel::class)
+    @DependsOn(EvictingDualNodeHashTable::class, NpcDefinition.getModel::class)
     class NpcDefinition_cachedModels : UniqueMapper.InMethod.Field(NpcDefinition.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
     @DependsOn(AbstractIndexCache::class, NpcDefinition.getModel::class)
@@ -2104,9 +2104,9 @@ class Client : IdentityMapper.Class() {
 //                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
 //    }
 
-    @DependsOn(ItemDefinition.getModel::class, EvictingHashTable::class)
+    @DependsOn(ItemDefinition.getModel::class, EvictingDualNodeHashTable::class)
     class ItemDefinition_cachedModels : OrderMapper.InMethod.Field(ItemDefinition.getModel::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
     @DependsOn(AbstractIndexCache::class, ItemDefinition.getModel::class)
@@ -2134,9 +2134,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
-    @DependsOn(EvictingHashTable::class, SpotAnimationDefinition.getModel::class)
+    @DependsOn(EvictingDualNodeHashTable::class, SpotAnimationDefinition.getModel::class)
     class SpotAnimationDefinition_cachedModels : UniqueMapper.InMethod.Field(SpotAnimationDefinition.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
     @DependsOn(AbstractIndexCache::class, SpotAnimationDefinition.getModel::class)
@@ -2573,10 +2573,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<AreaDefinition>().withDimensions(1) }
     }
 
-    @DependsOn(AreaDefinition::class, EvictingHashTable::class)
+    @DependsOn(AreaDefinition::class, EvictingDualNodeHashTable::class)
     class AreaDefinition_cachedSprites : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.klass == klass<AreaDefinition>() }
-                .and { it.type == type<EvictingHashTable>() }
+                .and { it.type == type<EvictingDualNodeHashTable>() }
     }
 
     class ByteArrayPool_small : ByteArrayPoolArray(0)

@@ -17,7 +17,7 @@ import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 
 @DependsOn(DualNodeDeque::class, DualNode::class, NodeHashTable::class)
-class EvictingHashTable : IdentityMapper.Class() {
+class EvictingDualNodeHashTable : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.instanceFields.count { it.type == type<DualNode>() } == 1 }
             .and { it.instanceFields.count { it.type == type<NodeHashTable>() } == 1 }
@@ -41,7 +41,7 @@ class EvictingHashTable : IdentityMapper.Class() {
     }
 
 
-    @MethodParameters("dualNode", "key")
+    @MethodParameters("value", "key")
     @DependsOn(DualNode::class)
     class put : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

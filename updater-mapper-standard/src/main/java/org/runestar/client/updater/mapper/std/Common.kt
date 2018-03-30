@@ -10,8 +10,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.tree.Method2
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -32,10 +30,10 @@ abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order
             .next { it.opcode == PUTSTATIC && it.fieldType == type<IndexCache>() }
 }
 
-//@DependsOn(EvictingHashTable::class)
+//@DependsOn(EvictingDualNodeHashTable::class)
 abstract class CachedDefinitionMapper(classMapper: KClass<out Mapper<Class2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == context.classes.getValue(classMapper).type }
-            .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingHashTable>() }
+            .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
 }
 
 @DependsOn(Sprite::class)
