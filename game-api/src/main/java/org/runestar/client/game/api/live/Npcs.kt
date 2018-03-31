@@ -6,7 +6,9 @@ import org.runestar.client.game.raw.Client.accessor
 object Npcs : AbstractCollection<Npc>() {
 
     override fun iterator() = object : AbstractIterator<Npc>() {
+
         private var i = 0
+
         override fun computeNext() {
             if (i >= size) return done()
             val x = accessor.npcs[accessor.npcIndices[i++]] ?: return done()

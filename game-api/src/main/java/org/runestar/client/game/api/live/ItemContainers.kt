@@ -9,7 +9,9 @@ object ItemContainers : AbstractMap<Int, ItemContainer>() {
 
     // Long keys?
 
-    override fun get(key: Int) = accessor.itemContainers.get(key.toLong())?.let { ItemContainer(it as XItemContainer) }
+    override fun get(key: Int): ItemContainer? {
+        return accessor.itemContainers.get(key.toLong())?.let { ItemContainer(it as XItemContainer) }
+    }
 
     override val entries: Set<Map.Entry<Int, ItemContainer>> = object : AbstractSet<Map.Entry<Int, ItemContainer>>() {
 

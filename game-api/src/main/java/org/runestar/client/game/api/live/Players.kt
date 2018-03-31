@@ -8,7 +8,9 @@ object Players : AbstractCollection<Player>() {
     val local: Player? get() = accessor.localPlayer?.let { Player(it) }
 
     override fun iterator() = object : AbstractIterator<Player>() {
+
         private var i = 0
+
         override fun computeNext() {
             if (i >= size) return done()
             val x = accessor.players[accessor.players_indices[i++]] ?: return done()

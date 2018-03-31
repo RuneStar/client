@@ -2,6 +2,7 @@ package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.EquipmentSlot
 import org.runestar.client.game.api.Item
+import org.runestar.client.game.api.ItemContainer
 import org.runestar.client.game.api.ItemContainerId
 
 object Equipment {
@@ -10,7 +11,7 @@ object Equipment {
 
     const val COUNT = 11
 
-    val container get() = ItemContainers[ItemContainerId.EQUIPMENT]
+    val container: ItemContainer? get() = ItemContainers[ItemContainerId.EQUIPMENT]
 
     operator fun get(slot: EquipmentSlot): Item? = container?.get(slot.id)
 }

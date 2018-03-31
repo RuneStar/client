@@ -1,16 +1,15 @@
 package org.runestar.client.game.api.live
 
-import org.runestar.client.game.api.Item
+import org.runestar.client.game.api.ItemContainer
 import org.runestar.client.game.api.ItemContainerId
+import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetGroupId
 
-object Inventory : AbstractList<Item?>(), RandomAccess {
+object Inventory {
 
-    val widget get() = Widgets[WidgetGroupId.Inventory.items]
+    val widget: Widget.Parent? get() = Widgets[WidgetGroupId.Inventory.items]
 
-    val container get() = ItemContainers[ItemContainerId.INVENTORY]
+    val container: ItemContainer? get() = ItemContainers[ItemContainerId.INVENTORY]
 
-    override fun get(index: Int): Item? = container?.get(index)
-
-    override val size = 28
+    const val size = 28
 }

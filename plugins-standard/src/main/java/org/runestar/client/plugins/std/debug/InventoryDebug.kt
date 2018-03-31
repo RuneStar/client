@@ -21,7 +21,8 @@ class InventoryDebug : DisposablePlugin<PluginSettings>() {
             var y = 40
             g.font = RUNESCAPE_CHAT_FONT
             g.color = Color.WHITE
-            Inventory.forEach { i ->
+            val cn = Inventory.container ?: return@subscribe
+            cn.forEach { i ->
                 g.drawString(i.toString(), x, y)
                 y += g.font.size + 5
             }
