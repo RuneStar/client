@@ -125,6 +125,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(worlds::class)
+    @MethodParameters()
     class loadWorlds : StaticMethod() {
         override val predicate = predicateOf<Method2> {
             it.instructions.any {
@@ -2317,7 +2318,7 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Varps::class)
-    class Varps_mask : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
+    class Varps_masks : OrderMapper.InClassInitializer.Field(Varps::class, 0, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 32 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
