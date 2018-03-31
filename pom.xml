@@ -106,7 +106,7 @@
             <dependency>
                 <groupId>org.runestar</groupId>
                 <artifactId>general</artifactId>
-                <version>0.165.0</version>
+                <version>0.167.0</version>
             </dependency>
             <dependency>
                 <groupId>com.hunterwb</groupId>
@@ -121,7 +121,7 @@
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
                 <artifactId>rxjava</artifactId>
-                <version>2.1.10</version>
+                <version>2.1.11</version>
             </dependency>
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
@@ -146,7 +146,7 @@
             <dependency>
                 <groupId>com.github.akarnokd</groupId>
                 <artifactId>rxjava2-swing</artifactId>
-                <version>0.2.10</version>
+                <version>0.2.11</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>

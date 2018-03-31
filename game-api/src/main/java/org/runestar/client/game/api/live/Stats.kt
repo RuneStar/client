@@ -8,7 +8,7 @@ object Stats : AbstractMap<Skill, SkillLevel>() {
 
     override val entries: Set<Map.Entry<Skill, SkillLevel>> = object : AbstractSet<Map.Entry<Skill, SkillLevel>>() {
 
-        override val size = Skill.VALUES.size - 1
+        override val size = Skill.VALUES.size
 
         override fun iterator() = object : AbstractIterator<Map.Entry<Skill, SkillLevel>>() {
 
@@ -23,11 +23,11 @@ object Stats : AbstractMap<Skill, SkillLevel>() {
     }
 
     override fun get(key: Skill) : SkillLevel {
-        require(key != Skill.OVERALL) { "Must be a regular skill" } // todo
+        val id = key.id
         return SkillLevel(
-                accessor.currentLevels[key.id],
-                accessor.levels[key.id],
-                accessor.experience[key.id]
+                accessor.currentLevels[id],
+                accessor.levels[id],
+                accessor.experience[id]
         )
     }
 
