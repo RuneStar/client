@@ -1,7 +1,7 @@
 package org.runestar.client.game.api.live
 
-import org.runestar.client.game.api.SkillLevel
 import org.runestar.client.game.api.Prayer
+import org.runestar.client.game.api.SkillLevel
 import org.runestar.general.Skill
 
 object Prayers {

@@ -7,7 +7,7 @@ import org.runestar.client.game.raw.access.XTile
 
 abstract class TileEntities<T> {
 
-    abstract protected fun fromTile(sceneTile: SceneTile, xTile: XTile?): T
+    protected abstract fun fromTile(sceneTile: SceneTile, xTile: XTile?): T
 
     fun getAt(sceneTile: SceneTile): T {
         require(sceneTile.isLoaded) { sceneTile }
