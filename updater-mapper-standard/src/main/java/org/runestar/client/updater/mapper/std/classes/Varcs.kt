@@ -1,10 +1,12 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
@@ -58,5 +60,48 @@ class Varcs : IdentityMapper.Class() {
 
     class lastWriteTimeMs : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == LONG_TYPE }
+    }
+
+    @MethodParameters("index")
+    class getString : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+    }
+
+    @MethodParameters("index")
+    class getInt : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+    }
+
+    @MethodParameters()
+    class hasUnwrittenChanges : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters("index", "s")
+    class setString : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
+    }
+
+    @MethodParameters("index", "n")
+    class setInt : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters()
+    class clearTransient : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.node.tryCatchBlocks.isEmpty() }
+                .and { it.instructions.any { it.opcode == AASTORE } }
+    }
+
+    @MethodParameters()
+    class tryWrite : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.node.tryCatchBlocks.isEmpty() }
+                .and { it.instructions.none { it.opcode == AASTORE } }
     }
 }
