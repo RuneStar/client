@@ -167,4 +167,10 @@ class NpcDefinition : IdentityMapper.Class() {
     class walkTurnRightSequence : OrderMapper.InConstructor.Field(NpcDefinition::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters()
+    class init : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+    }
 }
