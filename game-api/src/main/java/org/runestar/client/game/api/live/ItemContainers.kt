@@ -13,9 +13,13 @@ object ItemContainers : AbstractMap<Int, ItemContainer>() {
         return accessor.itemContainers.get(key.toLong())?.let { ItemContainer(it as XItemContainer) }
     }
 
+    override fun containsKey(key: Int): Boolean {
+        return accessor.itemContainers.get(key.toLong()) != null
+    }
+
     override val entries: Set<Map.Entry<Int, ItemContainer>> = object : AbstractSet<Map.Entry<Int, ItemContainer>>() {
 
-        override val size get() = accessor.itemContainers.size // not actual size, just number of buckets
+        override val size get() = sumBy { 1 }
 
         override fun iterator() = object : AbstractIterator<Map.Entry<Int, ItemContainer>>() {
 
