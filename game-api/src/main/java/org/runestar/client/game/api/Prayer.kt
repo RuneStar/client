@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-// todo : drain rate
+// todo : drain rate https://twitter.com/JagexAsh/status/814540902542802944
 enum class Prayer(
         val level: Int,
         val isMembersOnly: Boolean,
@@ -35,4 +35,9 @@ enum class Prayer(
     PIETY(70, true, Varbit.PRAYER_PIETY),
     RIGOUR(74, true, Varbit.PRAYER_RIGOUR),
     AUGURY(77, true, Varbit.PRAYER_AUGURY);
+
+    companion object {
+
+        @JvmField val VALUES = values().asList()
+    }
 }
