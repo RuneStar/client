@@ -6,7 +6,7 @@ import org.runestar.general.Skill
 
 object Prayers {
 
-    fun isEnabled(prayer: Prayer) = Game.varps[prayer.varbit] == 1
+    fun isEnabled(prayer: Prayer) = Game.getVarbit(prayer.varbit) == 1
 
     val level: SkillLevel get() = Stats[Skill.PRAYER]
 }

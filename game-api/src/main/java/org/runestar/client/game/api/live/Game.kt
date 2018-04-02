@@ -49,16 +49,18 @@ object Game {
      */
     val containerEvents = SwingObservable.container(accessor as Container)
 
-    val varps = Varps(Client.accessor.varps_main)
+    fun getVarbit(varbitId: Int): Int = Client.accessor.getVarbit(varbitId)
+
+    fun getVarp(varpId: Int): Int = Client.accessor.varps_main[varpId]
 
     val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
 
     val friendsSystem: FriendsSystem get() = FriendsSystem(Client.accessor.friendSystem)
 
-    val specialAttackEnabled get() = varps[Varbit.SPECIAL_ATTACK_ENABLED] != 0
+    val specialAttackEnabled get() = getVarp(VarpId.SPECIAL_ATTACK_ENABLED) != 0
 
     /**
      * 0 - 100
      */
-    val specialAttackPercent get() = varps[Varbit.SPECIAL_ATTACK_PERCENT] / 10
+    val specialAttackPercent get() = getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
 }
