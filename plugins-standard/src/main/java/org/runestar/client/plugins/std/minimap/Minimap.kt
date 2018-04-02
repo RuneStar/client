@@ -17,36 +17,32 @@ class Minimap : DisposablePlugin<Minimap.Settings>() {
     override fun start() {
         super.start()
 
-        if (settings.dots.enabled) {
-            originalDots = Client.accessor.mapDotSprites.clone()
-            val dots = Client.accessor.mapDotSprites
-            if (settings.dots.items.enabled) {
-                recolorDot(dots, 0, settings.dots.items.color.get())
-            }
-            if (settings.dots.npcs.enabled) {
-                recolorDot(dots, 1, settings.dots.npcs.color.get())
-            }
-            if (settings.dots.players.enabled) {
-                recolorDot(dots, 2, settings.dots.players.color.get())
-            }
-            if (settings.dots.friends.enabled) {
-                recolorDot(dots, 3, settings.dots.friends.color.get())
-            }
-            if (settings.dots.team.enabled) {
-                recolorDot(dots, 4, settings.dots.team.color.get())
-            }
-            if (settings.dots.clan.enabled) {
-                recolorDot(dots, 5, settings.dots.clan.color.get())
-            }
+        originalDots = Client.accessor.mapDotSprites.clone()
+        val dots = Client.accessor.mapDotSprites
+        if (settings.items.enabled) {
+            recolorDot(dots, 0, settings.items.color.get())
+        }
+        if (settings.npcs.enabled) {
+            recolorDot(dots, 1, settings.npcs.color.get())
+        }
+        if (settings.players.enabled) {
+            recolorDot(dots, 2, settings.players.color.get())
+        }
+        if (settings.friends.enabled) {
+            recolorDot(dots, 3, settings.friends.color.get())
+        }
+        if (settings.team.enabled) {
+            recolorDot(dots, 4, settings.team.color.get())
+        }
+        if (settings.clan.enabled) {
+            recolorDot(dots, 5, settings.clan.color.get())
         }
     }
 
     override fun stop() {
         super.stop()
 
-        originalDots?.let {
-            Client.accessor.mapDotSprites = it
-        }
+        Client.accessor.mapDotSprites = originalDots
     }
 
     private fun recolorDot(dots: Array<XSprite>, index: Int, color: Color) {
@@ -62,18 +58,13 @@ class Minimap : DisposablePlugin<Minimap.Settings>() {
     }
 
     data class Settings(
-            val dots: Dots = Dots()
+            val items: Dot = Dot(RgbForm(Color.RED)),
+            val npcs: Dot = Dot(RgbForm(Color.ORANGE)),
+            val players: Dot = Dot(RgbForm(Color.WHITE)),
+            val friends: Dot = Dot(RgbForm(Color.GREEN)),
+            val team: Dot = Dot(RgbForm(Color.BLUE)),
+            val clan: Dot = Dot(RgbForm(Color.MAGENTA))
     ) : PluginSettings() {
-
-        data class Dots(
-                val items: Dot = Dot(RgbForm(Color.RED)),
-                val npcs: Dot = Dot(RgbForm(Color.ORANGE)),
-                val players: Dot = Dot(RgbForm(Color.WHITE)),
-                val friends: Dot = Dot(RgbForm(Color.GREEN)),
-                val team: Dot = Dot(RgbForm(Color.BLUE)),
-                val clan: Dot = Dot(RgbForm(Color.MAGENTA)),
-                val enabled: Boolean = false
-        )
 
         data class Dot(
                 val color: RgbForm,
