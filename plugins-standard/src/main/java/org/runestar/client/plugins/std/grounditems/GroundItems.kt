@@ -8,7 +8,7 @@ import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XItemDefinition
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
+import org.runestar.client.utils.RgbaForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.client.utils.drawStringShadowed
@@ -123,7 +123,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     }
 
     data class Settings(
-            val color: ColorForm = ColorForm(255, 255, 255),
+            val color: RgbaForm = RgbaForm(255, 255, 255),
             val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
             val spacing: Int = -2,
             val initialOffset: Int = 9,

@@ -4,7 +4,7 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
+import org.runestar.client.utils.RgbaForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
 import org.runestar.client.utils.drawStringShadowed
@@ -80,9 +80,9 @@ class MouseHighlight : DisposablePlugin<MouseHighlight.Settings>() {
             val offsetX: Int = 3,
             val offsetY: Int = 3,
             val offsetYFlipped: Int = 22,
-            val outlineColor: ColorForm = ColorForm(14, 13, 15),
-            val fillColor: ColorForm = ColorForm(70, 61, 50, 156),
+            val outlineColor: RgbaForm = RgbaForm(14, 13, 15),
+            val fillColor: RgbaForm = RgbaForm(70, 61, 50, 156),
             val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
-            val fontColor: ColorForm = ColorForm(255, 255, 255)
+            val fontColor: RgbaForm = RgbaForm(255, 255, 255)
     ) : PluginSettings()
 }

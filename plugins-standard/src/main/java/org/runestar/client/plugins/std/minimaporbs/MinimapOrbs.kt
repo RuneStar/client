@@ -5,7 +5,7 @@ import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
+import org.runestar.client.utils.RgbaForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.general.Skill
 import java.awt.BasicStroke
@@ -113,13 +113,13 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
     data class Settings(
             val stroke: Float = 2f,
-            val hpRegen: Element = Element(ColorForm(220, 0, 0)),
-            val specRegen: Element = Element(ColorForm(0, 200, 200)),
-            val specFill: Element = Element(ColorForm(255, 255, 255, 120))
+            val hpRegen: Element = Element(RgbaForm(220, 0, 0)),
+            val specRegen: Element = Element(RgbaForm(0, 200, 200)),
+            val specFill: Element = Element(RgbaForm(255, 255, 255, 120))
     ) : PluginSettings() {
 
         data class Element(
-                val color: ColorForm,
+                val color: RgbaForm,
                 val enabled: Boolean = true
         )
     }

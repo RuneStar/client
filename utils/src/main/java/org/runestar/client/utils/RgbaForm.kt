@@ -3,7 +3,7 @@ package org.runestar.client.utils
 import java.awt.Color
 import java.util.function.Supplier
 
-data class ColorForm(
+data class RgbaForm(
         val red: Int,
         val green: Int,
         val blue: Int,

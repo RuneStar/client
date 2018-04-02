@@ -5,12 +5,9 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.ColorForm
 import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.FontForm
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
-import java.awt.Font
 
 class ViewportDebug : DisposablePlugin<PluginSettings>() {
 
