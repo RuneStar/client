@@ -78,7 +78,7 @@ class NpcDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(transform::class)
-    class transformVarpsIndex : OrderMapper.InMethod.Field(transform::class, 2) {
+    class transformVarp : OrderMapper.InMethod.Field(transform::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
