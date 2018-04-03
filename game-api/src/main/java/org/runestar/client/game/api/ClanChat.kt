@@ -2,6 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XClanChat
 import org.runestar.client.game.raw.access.XClanMate
+import org.runestar.client.game.raw.access.XUser
 
 class ClanChat(override val accessor: XClanChat) : UserList<ClanMate>(accessor) {
 
@@ -9,7 +10,7 @@ class ClanChat(override val accessor: XClanChat) : UserList<ClanMate>(accessor) 
 
     val owner: String? get() = accessor.owner
 
-    override fun get(index: Int): ClanMate {
-        return ClanMate(accessor.get(index) as XClanMate)
+    override fun wrap(user: XUser): ClanMate {
+        return ClanMate(user as XClanMate)
     }
 }
