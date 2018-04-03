@@ -74,6 +74,11 @@ object MultiplierFinder : Transformer {
             return x
         }
 
+        fun slotsPut(index: Int, s: Slot) {
+            slotsRemove(index)
+            slots[index] = s
+        }
+
         out@
         for (i in 0 until insns.size - 1) {
             val insn = insns[i]
@@ -83,7 +88,7 @@ object MultiplierFinder : Transformer {
                     insn as LdcInsnNode
                     val cst = insn.cst
                     if (cst is Int || cst is Long) {
-                        slots[frames[i + 1].stackSize - 1] = Slot.Operand.Ldc(cst as Number)
+                        slotsPut(frames[i + 1].stackSize - 1, Slot.Operand.Ldc(cst as Number))
                         continue@out
                     }
                 }
@@ -92,7 +97,7 @@ object MultiplierFinder : Transformer {
                     val desc = insn.desc
                     if (desc == INT_TYPE.descriptor || desc == LONG_TYPE.descriptor) {
                         val fieldName = "${insn.owner}.${insn.name}"
-                        slots[frames[i + 1].stackSize - 1] = Slot.Operand.Field(fieldName)
+                        slotsPut(frames[i + 1].stackSize - 1, Slot.Operand.Field(fieldName))
                         continue@out
                     }
                 }
@@ -103,12 +108,12 @@ object MultiplierFinder : Transformer {
                     if (x is Slot.Operand && y is Slot.Operand && x.javaClass != y.javaClass) {
                         val opf = x as? Slot.Operand.Field ?: y as Slot.Operand.Field
                         val opl = x as? Slot.Operand.Ldc ?: y as Slot.Operand.Ldc
-                        slots[stackSize - 2] = Slot.Mul.Field(opl.n, opf.f)
+                        slotsPut(stackSize - 2, Slot.Mul.Field(opl.n, opf.f))
                         continue@out
                     }
                     if (x is Slot.Operand.Ldc || y is Slot.Operand.Ldc) {
                         val opl = x as? Slot.Operand.Ldc ?: y as Slot.Operand.Ldc
-                        slots[stackSize - 2] = Slot.Mul.Other(opl.n)
+                        slotsPut(stackSize - 2, Slot.Mul.Other(opl.n))
                         continue@out
                     }
                 }
@@ -117,7 +122,7 @@ object MultiplierFinder : Transformer {
                     val desc = insn.desc
                     if (desc == INT_TYPE.descriptor || desc == LONG_TYPE.descriptor) {
                         val stackSize = frames[i].stackSize
-                        val x = slots.remove(stackSize - 1)
+                        val x = slotsRemove(stackSize - 1)
                         if (x != null) {
                             val fieldName = "${insn.owner}.${insn.name}"
                             if (x is Slot.Mul.Field) {
@@ -185,8 +190,7 @@ object MultiplierFinder : Transformer {
 
         candidateFields.forEach { f ->
             val direct = directDecoders.get(f) ?: return@forEach
-            //            val indirect = indirectDecoders.get(f)
-
+            val indirect = indirectDecoders.get(f)
             val dir = direct.maxBy { Collections.frequency(direct, it) }
             if (dir != null) {
                 result[f] = dir
