@@ -32,5 +32,4 @@ object VarbitId {
     const val PRAYER_RIGOUR = 5464
     const val PRAYER_AUGURY = 5465
     const val PRAYER_PRESERVE = 5466
-
 }
