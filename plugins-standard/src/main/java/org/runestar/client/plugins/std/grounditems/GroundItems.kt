@@ -1,5 +1,6 @@
 package org.runestar.client.plugins.std.grounditems
 
+import com.google.common.collect.Lists
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
@@ -8,9 +9,9 @@ import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XItemDefinition
 import org.runestar.client.plugins.PluginSettings
-import org.runestar.client.utils.RgbaForm
 import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.FontForm
+import org.runestar.client.utils.RgbaForm
 import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
@@ -30,7 +31,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun start() {
         super.start()
         settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
-        LiveGroundItems.getOnPlaneFlat(Game.plane).forEach { gi ->
+        LiveGroundItems.onPlane(Game.plane).forEach { gi ->
             tiles.add(gi.location)
         }
         add(LiveGroundItems.pileChanges.subscribe { st ->
@@ -54,7 +55,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 if (tile.plane != Game.plane) continue
                 val pt = tile.center.toScreen()
                 if (pt == null || pt !in g.clip) continue
-                val gis = LiveGroundItems.getAt(tile).asReversed()
+                val gis = LiveGroundItems.at(tile).toList().asReversed()
                 if (gis.isEmpty()) {
                     itr.remove()
                     continue

@@ -1,23 +1,31 @@
 package org.runestar.client.game.api.live
 
+import io.reactivex.Observable
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.api.TileObjects
+import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XGroundItem
+import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
-import io.reactivex.Observable
+import java.util.*
 
-object GroundItems : TileEntities.Many<GroundItem>() {
+object GroundItems : TileObjects.Many<GroundItem>(Client.accessor.scene) {
 
-    override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<GroundItem> {
-        val pile = xTile?.groundItemPile ?: return emptyList()
-        val list = ArrayList<GroundItem>()
-        var obj = pile.bottom
-        while (obj is XGroundItem) {
-            list.add(GroundItem(obj, sceneTile))
-            obj = obj.previous as? XGroundItem
+    override fun fromTile(tile: XTile): Iterator<GroundItem> {
+        val pile = tile.groundItemPile ?: return Collections.emptyIterator()
+        val sceneTile = SceneTile(tile.x, tile.y, tile.plane)
+        return object : AbstractIterator<GroundItem>() {
+
+            private var cur: XNode? = pile.bottom
+
+            override fun computeNext() {
+                val gi = cur as? XGroundItem ?: return done()
+                setNext(GroundItem(gi, sceneTile))
+                cur = gi.previous
+            }
         }
-        return list
     }
 
     /**

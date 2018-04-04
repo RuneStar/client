@@ -21,7 +21,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (settings.interactable) {
                 g.color = Color.CYAN
-                SceneObjects.Interactable.getOnPlaneFlat(Game.plane).forEach { i ->
+                SceneObjects.Interactable.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -30,7 +30,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (settings.wall) {
                 g.color = Color.ORANGE
-                SceneObjects.Wall.getOnPlaneFlat(Game.plane).forEach { i ->
+                SceneObjects.Wall.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -39,7 +39,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (settings.floor) {
                 g.color = Color.GREEN
-                SceneObjects.Floor.getOnPlaneFlat(Game.plane).forEach { i ->
+                SceneObjects.Floor.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -48,7 +48,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (settings.boundary) {
                 g.color = Color.WHITE
-                SceneObjects.Boundary.getOnPlaneFlat(Game.plane).forEach { i ->
+                SceneObjects.Boundary.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())

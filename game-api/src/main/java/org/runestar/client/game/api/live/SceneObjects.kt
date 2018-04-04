@@ -1,49 +1,58 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.SceneObject
-import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.api.TileObjects
+import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XTile
 
-object SceneObjects : TileEntities.Many<SceneObject>() {
+object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
 
-    override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<SceneObject> {
+    override fun fromTile(tile: XTile): Iterator<SceneObject> {
         val list = ArrayList<SceneObject>()
-        xTile?.floorDecoration?.let { list.add(SceneObject.Floor(it, sceneTile.plane)) }
-        xTile?.wallDecoration?.let { list.add(SceneObject.Wall(it, sceneTile.plane)) }
-        xTile?.boundaryObject?.let { list.add(SceneObject.Boundary(it, sceneTile.plane)) }
-        xTile?.gameObjects?.mapNotNullTo(list) { it?.let { SceneObject.Interactable(it) } }
-        return list
+        tile.floorDecoration?.let { list.add(SceneObject.Floor(it, tile.plane)) }
+        tile.wallDecoration?.let { list.add(SceneObject.Wall(it, tile.plane)) }
+        tile.boundaryObject?.let { list.add(SceneObject.Boundary(it, tile.plane)) }
+        tile.gameObjects?.let { it.mapNotNullTo(list) { SceneObject.Interactable(it) } }
+        return list.iterator()
     }
 
-    object Wall : TileEntities.Single<SceneObject.Wall>() {
+    object Wall : TileObjects.Single<SceneObject.Wall>(Client.accessor.scene) {
 
-        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Wall? {
-            val obj = xTile?.wallDecoration ?: return null
-            return SceneObject.Wall(obj, sceneTile.plane)
+        override fun fromTile(tile: XTile): SceneObject.Wall? {
+            val v = tile.wallDecoration ?: return null
+            return SceneObject.Wall(v, tile.plane)
         }
     }
 
-    object Floor : TileEntities.Single<SceneObject.Floor>() {
+    object Floor : TileObjects.Single<SceneObject.Floor>(Client.accessor.scene) {
 
-        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Floor? {
-            val obj = xTile?.floorDecoration ?: return null
-            return SceneObject.Floor(obj, sceneTile.plane)
+        override fun fromTile(tile: XTile): SceneObject.Floor? {
+            val v = tile.floorDecoration ?: return null
+            return SceneObject.Floor(v, tile.plane)
         }
     }
 
-    object Boundary : TileEntities.Single<SceneObject.Boundary>() {
+    object Boundary : TileObjects.Single<SceneObject.Boundary>(Client.accessor.scene) {
 
-        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): SceneObject.Boundary? {
-            val obj = xTile?.boundaryObject ?: return null
-            return SceneObject.Boundary(obj, sceneTile.plane)
+        override fun fromTile(tile: XTile): SceneObject.Boundary? {
+            val v = tile.boundaryObject ?: return null
+            return SceneObject.Boundary(v, tile.plane)
         }
     }
 
-    object Interactable : TileEntities.Many<SceneObject.Interactable>() {
+    object Interactable : TileObjects.Many<SceneObject.Interactable>(Client.accessor.scene) {
 
-        override fun fromTile(sceneTile: SceneTile, xTile: XTile?): List<SceneObject.Interactable> {
-            val obj = xTile?.gameObjects ?: return emptyList()
-            return obj.mapNotNull { it?.let { SceneObject.Interactable(it) } }
+        override fun fromTile(tile: XTile): Iterator<SceneObject.Interactable> {
+            return object : AbstractIterator<SceneObject.Interactable>() {
+
+                private var i = 0
+
+                override fun computeNext() {
+                    if (i >= tile.gameObjectsCount) return done()
+                    val o = tile.gameObjects[i++] ?: return done()
+                    setNext(SceneObject.Interactable(o))
+                }
+            }
         }
     }
 }
