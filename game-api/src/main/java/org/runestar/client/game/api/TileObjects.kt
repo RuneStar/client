@@ -1,7 +1,6 @@
 package org.runestar.client.game.api
 
 import com.google.common.collect.Iterators
-import org.runestar.client.game.api.live.GroundItems
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
 import java.util.*
@@ -35,6 +34,7 @@ sealed class TileObjects<T>(val accessor: XScene) {
         }
 
         override fun at(sceneTile: SceneTile): Iterable<T> {
+            require(sceneTile.isLoaded) { sceneTile }
             return Iterable<T> {
                 val e = get(sceneTile)
                 if (e == null) {
