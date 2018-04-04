@@ -220,12 +220,12 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(getTileHeight::class)
-    class tileRenderFlags : OrderMapper.InMethod.Field(getTileHeight::class, 0) {
+    class Tiles_renderFlags : OrderMapper.InMethod.Field(getTileHeight::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BYTE_TYPE.withDimensions(3) }
     }
 
     @DependsOn(getTileHeight::class)
-    class tileHeights : OrderMapper.InMethod.Field(getTileHeight::class, 0) {
+    class Tiles_heights : OrderMapper.InMethod.Field(getTileHeight::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE.withDimensions(3) }
     }
 

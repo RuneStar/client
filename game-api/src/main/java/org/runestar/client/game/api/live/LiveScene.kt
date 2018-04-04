@@ -19,9 +19,9 @@ object LiveScene : Scene {
 
     override val collisionFlags get() = accessor.collisionMaps.map { it.flags }.toTypedArray()
 
-    override val renderFlags get() = accessor.tileRenderFlags
+    override val renderFlags get() = accessor.tiles_renderFlags
 
-    override val heights get() = accessor.tileHeights
+    override val heights get() = accessor.tiles_heights
 
     override val base get() = GlobalTile(accessor.baseX, accessor.baseY, 0)
 
