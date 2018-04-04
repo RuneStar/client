@@ -2841,4 +2841,10 @@ class Client : IdentityMapper.Class() {
     class varcs : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<Varcs>() }
     }
+
+    @DependsOn(Scene::class, NodeDeque::class)
+    class Scene_tilesDeque : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<Scene>() }
+                .and { it.type == type<NodeDeque>() }
+    }
 }

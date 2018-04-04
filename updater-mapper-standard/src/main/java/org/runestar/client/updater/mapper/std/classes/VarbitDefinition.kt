@@ -31,7 +31,7 @@ class VarbitDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(readNext::class)
-    class index : OrderMapper.InMethod.Field(readNext::class, 0) {
+    class varp : OrderMapper.InMethod.Field(readNext::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
