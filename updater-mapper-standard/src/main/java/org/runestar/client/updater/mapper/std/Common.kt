@@ -10,6 +10,8 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.annotations.SinceVersion
+import org.runestar.client.updater.mapper.extensions.Predicate
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -81,4 +83,12 @@ abstract class ByteArrayPoolCount(index: Int) : OrderMapper.InClassInitializer.F
 @DependsOn(PlatformInfo.length::class)
 abstract class PlatformInfoString(index: Int) : OrderMapper.InMethod.Field(PlatformInfo.length::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type }
+}
+
+@DependsOn(Client.friendSystem::class)
+@SinceVersion(164)
+abstract class UserComparatorClass(opcode: Int) : AllUniqueMapper.Class() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == opcode }
+            .nextWithin(30) { it.isField && it.fieldId == field<Client.friendSystem>().id }
+            .nextWithin(3) { it.opcode == NEW }
 }
