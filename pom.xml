@@ -43,6 +43,10 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>repo.runestar.org</id>
+            <url>http://repo.runestar.org</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
