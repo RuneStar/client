@@ -122,7 +122,7 @@ object MultiplierFinder : Transformer {
                     val desc = insn.desc
                     if (desc == INT_TYPE.descriptor || desc == LONG_TYPE.descriptor) {
                         val stackSize = frames[i].stackSize
-                        val x = slotsRemove(stackSize - 1)
+                        val x = slots.remove(stackSize - 1)
                         if (x != null) {
                             val fieldName = "${insn.owner}.${insn.name}"
                             if (x is Slot.Mul.Field) {
