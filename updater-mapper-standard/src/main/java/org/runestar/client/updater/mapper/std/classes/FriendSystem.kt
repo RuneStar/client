@@ -32,12 +32,12 @@ class FriendSystem : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<IgnoreList>() }
     }
 
-    @MethodParameters()
-    @DependsOn(UserList.clear::class)
-    class clear : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.instructions.any { it.isMethod && it.methodMark == method<UserList.clear>().mark } }
-    }
+//    @MethodParameters()
+//    @DependsOn(UserList.clear::class)
+//    class clear : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.instructions.any { it.isMethod && it.methodMark == method<UserList.clear>().mark } }
+//    }
 
     @DependsOn(ignoreList::class)
     @MethodParameters("name")
