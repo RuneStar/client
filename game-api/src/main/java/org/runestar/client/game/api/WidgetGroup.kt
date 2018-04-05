@@ -8,7 +8,7 @@ import org.runestar.client.game.raw.access.XWidgetNode
 class WidgetGroup(
         val id: Int,
         val accessor: Array<XWidget>
-) {
+) : AbstractList<Widget.Parent>(), RandomAccess {
 
     val parent: Widget.Parent? get() {
         val table = Client.accessor.widgetNodes // todo
@@ -22,13 +22,11 @@ class WidgetGroup(
         return null
     }
 
-    val roots: List<Widget.Parent> get() = all.filter { it.predecessor == null }
+    val roots: Iterable<Widget.Parent> get() = asSequence().filter { it.predecessor == null }.asIterable()
 
-    val size get() = accessor.size
+    override val size get() = accessor.size
 
-    val flat: List<Widget> get() = all.flatMap { it.flat }
+    val flat: Iterable<Widget> get() = asSequence().flatMap { it.flat.asSequence() }.asIterable()
 
-    val all: List<Widget.Parent> get() = accessor.map { Widget.Parent(it) }
-
-    operator fun get(id: Int): Widget.Parent? = accessor.getOrNull(id)?.let { Widget.Parent(it) }
+    override fun get(index: Int): Widget.Parent = accessor[index].let { Widget.Parent(it) }
 }

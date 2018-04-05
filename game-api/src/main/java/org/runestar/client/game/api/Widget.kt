@@ -81,12 +81,12 @@ sealed class Widget(open val accessor: XWidget) {
 
         operator fun get(childId: Int) : Widget.Child? = accessor.children?.getOrNull(childId)?.let { Widget.Child(it) }
 
-        val successors: List<Widget.Parent> get() = group.all.filter { it.predecessor == this }
+        val successors: List<Widget.Parent> get() = group.filter { it.predecessor == this }
 
         val descendantsGroup: WidgetGroup? get() =
             (Client.accessor.widgetNodes.get(accessor.id.toLong()) as XWidgetNode?)?.let { checkNotNull(WidgetGroups[it.id]) }
 
-        val descendants: List<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
+        val descendants: Iterable<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
 
         val predecessor get() = accessor.parentId.takeIf { it != -1 }?.let { Widgets[WidgetParentId(it)] }
 
