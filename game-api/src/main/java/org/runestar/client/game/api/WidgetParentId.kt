@@ -6,4 +6,6 @@ data class WidgetParentId(
 ) {
 
     constructor(packed: Int) : this(packed shr 16, packed and 0xFFFF)
+
+    internal val packed: Int get() = (group shl 16) or parent
 }

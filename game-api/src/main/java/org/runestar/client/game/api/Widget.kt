@@ -1,15 +1,17 @@
 package org.runestar.client.game.api
 
+import com.google.common.collect.Iterables
+import org.runestar.client.game.api.live.WidgetChain
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XWidget
-import org.runestar.client.game.raw.access.XWidgetNode
 import java.awt.Dimension
 import java.awt.Point
 import java.awt.Rectangle
+import java.util.*
 
-sealed class Widget(open val accessor: XWidget) {
+sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val group get() = checkNotNull(WidgetGroups[parentId.group])
 
@@ -52,6 +54,8 @@ sealed class Widget(open val accessor: XWidget) {
 
     val shape: Rectangle? get() = location?.let { Rectangle(it, dimension) }
 
+    abstract fun idString(): String
+
     class Child(override val accessor: XWidget) : Widget(accessor) {
 
         init {
@@ -67,6 +71,10 @@ sealed class Widget(open val accessor: XWidget) {
         override fun toString(): String {
             return "Widget.Child(group=${group.id}, parent=${parentId.parent}, child=$childId)"
         }
+
+        override fun idString(): String {
+            return "${group.id}.${parentId.parent}:$childId"
+        }
     }
 
     class Parent(override val accessor: XWidget) : Widget(accessor) {
@@ -75,16 +83,21 @@ sealed class Widget(open val accessor: XWidget) {
             require(accessor.childIndex == -1)
         }
 
-        val flat: List<Widget> get() = listOf(this) + children
+        val flat: Iterable<Widget> get() = Iterables.concat(Collections.singleton(this), children)
 
-        val children: List<Widget.Child> get() = accessor.children?.map { Widget.Child(it) } ?: emptyList()
+        val children: List<Widget.Child> get() = object : AbstractList<Widget.Child>(), RandomAccess {
 
-        operator fun get(childId: Int) : Widget.Child? = accessor.children?.getOrNull(childId)?.let { Widget.Child(it) }
+            override val size: Int get() = accessor.children?.size ?: 0
 
-        val successors: List<Widget.Parent> get() = group.filter { it.predecessor == this }
+            override fun get(index: Int): Child {
+                val array = checkNotNull(accessor.children)
+                return Widget.Child(array[index])
+            }
+        }
 
-        val descendantsGroup: WidgetGroup? get() =
-            (Client.accessor.widgetNodes.get(accessor.id.toLong()) as XWidgetNode?)?.let { checkNotNull(WidgetGroups[it.id]) }
+        val successors: Iterable<Widget.Parent> get() = group.asSequence().filter { it.predecessor == this }.asIterable()
+
+        val descendantsGroup: WidgetGroup? get() = WidgetChain[this]?.let { WidgetGroups[it] }
 
         val descendants: Iterable<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
 
@@ -118,6 +131,10 @@ sealed class Widget(open val accessor: XWidget) {
 
         override fun toString(): String {
             return "Widget.Parent(group=${group.id}, parent=${parentId.parent})"
+        }
+
+        override fun idString(): String {
+            return "${group.id}.${parentId.parent}"
         }
 
         private companion object {

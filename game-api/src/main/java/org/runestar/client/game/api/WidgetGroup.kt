@@ -1,9 +1,7 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Widgets
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.api.live.WidgetChain
 import org.runestar.client.game.raw.access.XWidget
-import org.runestar.client.game.raw.access.XWidgetNode
 
 class WidgetGroup(
         val id: Int,
@@ -11,15 +9,8 @@ class WidgetGroup(
 ) : AbstractList<Widget.Parent>(), RandomAccess {
 
     val parent: Widget.Parent? get() {
-        val table = Client.accessor.widgetNodes // todo
-        var node = table.first() as XWidgetNode?
-        while (node != null) {
-            if (node.id == id) {
-                return Widgets[WidgetParentId(node.key.toInt())]
-            }
-            node = table.next() as XWidgetNode?
-        }
-        return null
+        val entry = WidgetChain.entries.firstOrNull { it.value == id } ?: return null
+        return entry.key
     }
 
     val roots: Iterable<Widget.Parent> get() = asSequence().filter { it.predecessor == null }.asIterable()
