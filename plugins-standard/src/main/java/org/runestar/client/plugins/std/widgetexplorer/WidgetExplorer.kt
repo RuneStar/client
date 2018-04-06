@@ -56,7 +56,8 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
 
     override fun stop() {
         super.stop()
-        SwingUtilities.invokeLater { frame?.dispose() }
-        frame = null
+        SwingUtilities.invokeLater {
+            frame?.dispose()
+        }
     }
 }
