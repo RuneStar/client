@@ -2,7 +2,6 @@ package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Projectile
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XProjectile
 

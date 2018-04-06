@@ -1,51 +1,25 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.ItemContainer
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.api.NodeHashTable
+import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XItemContainer
 import org.runestar.client.game.raw.access.XNode
+import org.runestar.client.game.raw.access.XNodeHashTable
 
-object ItemContainers : AbstractMap<Int, ItemContainer>() {
+object ItemContainers : NodeHashTable<Int, ItemContainer>() {
 
-    // Long keys?
+    override val accessor: XNodeHashTable get() = Client.accessor.itemContainers
 
-    override fun get(key: Int): ItemContainer? {
-        return accessor.itemContainers.get(key.toLong())?.let { ItemContainer(it as XItemContainer) }
+    override fun wrapKey(node: XNode): Int {
+        return node.key.toInt()
     }
 
-    override fun containsKey(key: Int): Boolean {
-        return accessor.itemContainers.get(key.toLong()) != null
+    override fun unwrapKey(k: Int): Long {
+        return k.toLong()
     }
 
-    override val entries: Set<Map.Entry<Int, ItemContainer>> = object : AbstractSet<Map.Entry<Int, ItemContainer>>() {
-
-        override val size get() = sumBy { 1 }
-
-        override fun iterator() = object : AbstractIterator<Map.Entry<Int, ItemContainer>>() {
-
-            private var index = 0
-
-            private lateinit var curr: XNode
-
-            override fun computeNext() {
-                if (index > 0 && curr != accessor.itemContainers.buckets[index - 1]) {
-                    setNext(makeEntry(curr))
-                    curr = curr.previous
-                    return
-                }
-                while (index < accessor.itemContainers.size) {
-                    val p = accessor.itemContainers.buckets[index++].previous
-                    if (p != accessor.itemContainers.buckets[index - 1]) {
-                        curr = p.previous
-                        return setNext(makeEntry(p))
-                    }
-                }
-                done()
-            }
-
-            private fun makeEntry(node: XNode): Map.Entry<Int, ItemContainer> {
-                return java.util.AbstractMap.SimpleImmutableEntry(node.key.toInt(), ItemContainer(node as XItemContainer))
-            }
-        }
+    override fun wrapValue(node: XNode): ItemContainer {
+        return ItemContainer(node as XItemContainer)
     }
 }
