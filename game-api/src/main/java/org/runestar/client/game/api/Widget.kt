@@ -83,15 +83,17 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             require(accessor.childIndex == -1)
         }
 
-        val flat: Iterable<Widget> get() = Iterables.concat(Collections.singleton(this), children)
+        val flat: Iterable<Widget> get() {
+            return sequenceOf(this).plus(children.asSequence().filterNotNull()).asIterable()
+        }
 
-        val children: List<Widget.Child> get() = object : AbstractList<Widget.Child>(), RandomAccess {
+        val children: List<Widget.Child?> get() = object : AbstractList<Widget.Child?>(), RandomAccess {
 
             override val size: Int get() = accessor.children?.size ?: 0
 
-            override fun get(index: Int): Child {
-                val array = checkNotNull(accessor.children)
-                return Widget.Child(array[index])
+            override fun get(index: Int): Child? {
+                val array = accessor.children ?: return null
+                return array[index]?.let { Widget.Child(it) }
             }
         }
 

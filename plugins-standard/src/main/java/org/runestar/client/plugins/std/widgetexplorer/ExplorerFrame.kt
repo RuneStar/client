@@ -30,6 +30,7 @@ class ExplorerFrame : JFrame("Widget Explorer") {
         tree = JTree(treeModel)
         tree.isRootVisible = false
         tree.showsRootHandles = true
+        textArea.isEditable = false
         add(
                 JSplitPane(
                     JSplitPane.HORIZONTAL_SPLIT,

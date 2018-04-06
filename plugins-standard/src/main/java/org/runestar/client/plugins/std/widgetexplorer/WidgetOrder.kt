@@ -17,7 +17,7 @@ enum class WidgetOrder {
                 val groupNode = DefaultMutableTreeNode(wg.id)
                 wg.forEach { wp ->
                     val parentNode = DefaultMutableTreeNode(WidgetWrapper(wp))
-                    wp.children.forEach { wc ->
+                    wp.children.asSequence().filterNotNull().forEach { wc ->
                         val childNode = DefaultMutableTreeNode(WidgetWrapper(wc))
                         parentNode.add(childNode)
                     }
@@ -54,7 +54,7 @@ enum class WidgetOrder {
                 addChildren(c)
                 node.add(c)
             }
-            widget.children.forEach {
+            widget.children.asSequence().filterNotNull().forEach {
                 val c = DefaultMutableTreeNode(WidgetWrapper(it))
                 node.add(c)
             }
