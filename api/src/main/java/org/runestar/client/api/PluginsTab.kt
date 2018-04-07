@@ -55,10 +55,10 @@ class PluginsTab(val pluginLoader: PluginLoader) : SidePanelTab(){
     private fun PluginHandle.createComponent(): Component {
         val popup = JPopupMenu().apply {
             add(JMenuItem("settings").apply {
-                addActionListener { openFile(settingsFile) }
+                addActionListener { desktop?.safeOpen(settingsFile) }
             })
             add(JMenuItem("directory").apply {
-                addActionListener { openFile(directory) }
+                addActionListener { desktop?.safeOpen(directory) }
             })
         }
         return Box.createHorizontalBox().apply {

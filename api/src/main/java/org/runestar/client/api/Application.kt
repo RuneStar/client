@@ -1,6 +1,7 @@
 package org.runestar.client.api
 
 import io.reactivex.Observable
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.blockingSubscribeBy
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
@@ -32,6 +33,7 @@ object Application {
         isImageAutoSize = true
     }
 
+    @Volatile
     lateinit var frame: JFrame
         private set
 
@@ -80,16 +82,15 @@ object Application {
             })
         }
 
-        try {
-            SystemTray.getSystemTray().add(trayIcon)
-        } catch (e: Exception) {
-            logger.warn("Unable to use system tray")
-        }
+        systemTray?.add(trayIcon)
     }
 
     private fun setup() {
         AwtTaskbar.setIconImage(ICON)
         logger.info(systemDebugString)
+        RxJavaPlugins.setErrorHandler {
+            logger.warn("RxJavaPlugins error handler", it)
+        }
     }
 
     private fun appletPreInit(
@@ -138,11 +139,7 @@ object Application {
         override fun windowClosing(e: WindowEvent) {
             frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
                 pluginLoader.close()
-                try {
-                    SystemTray.getSystemTray().remove(trayIcon)
-                } catch (e: Exception) {
-                    //
-                }
+                systemTray?.remove(trayIcon)
                 WindowConstants.EXIT_ON_CLOSE
             } else {
                 WindowConstants.DO_NOTHING_ON_CLOSE

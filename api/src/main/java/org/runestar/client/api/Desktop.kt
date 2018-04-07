@@ -6,28 +6,53 @@ import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.Desktop
+import java.awt.SystemTray
 import java.nio.file.Files
 import java.nio.file.Path
 
-private val desktop = if (Desktop.isDesktopSupported()) Desktop.getDesktop() else null
-
-private val isOpenFileSupported = desktop != null && desktop.isSupported(Desktop.Action.OPEN)
-
 private val logger = getLogger()
 
-fun openFile(path: Path) {
-    if (desktop != null && isOpenFileSupported) {
+val desktop: Desktop? get() {
+    return if (Desktop.isDesktopSupported()) {
         try {
-            desktop.open(path.toFile())
+            Desktop.getDesktop()
         } catch (e: Exception) {
-            logger.warn(e) { "failed to open $path" }
+            logger.warn(e) { "Error getting desktop" }
+            null
+        }
+    } else {
+        logger.warn { "Desktop is unsupported" }
+        null
+    }
+}
+
+fun Desktop.safeOpen(path: Path) {
+    if (isSupported(Desktop.Action.OPEN)) {
+        try {
+            open(path.toFile())
+        } catch (e: Exception) {
+            logger.warn(e) { "Desktop failed to open $path" }
             if (Files.isRegularFile(path)) {
                 val dir = path.parent
-                logger.info { "opening parent directory $dir" }
-                openFile(dir)
+                logger.info { "Desktop opening parent directory $dir" }
+                safeOpen(dir)
             }
         }
     } else {
-        logger.warn("file open is not supported")
+        logger.warn { "Desktop open is not supported" }
+    }
+}
+
+val systemTray: SystemTray? get() {
+    return if (SystemTray.isSupported()) {
+        try {
+            SystemTray.getSystemTray()
+        } catch (e: Exception) {
+            logger.warn(e) { "Error getting system tray" }
+            null
+        }
+    } else {
+        logger.warn { "System tray is not supported" }
+        null
     }
 }
