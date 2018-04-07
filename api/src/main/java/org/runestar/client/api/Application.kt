@@ -35,9 +35,9 @@ object Application {
     lateinit var frame: JFrame
         private set
 
-    private lateinit var pluginLoader: PluginLoader
+    val sidePanel = SidePanel()
 
-    private var pluginsWindow: PluginsWindow? = null
+    private lateinit var pluginLoader: PluginLoader
 
     private var started = false
 
@@ -69,7 +69,7 @@ object Application {
                 add(MenuItem("Change profile").apply {
                     addActionListener { changeProfile() }
                 })
-                add(MenuItem("Plugins").apply {
+                add(MenuItem("Toggle side panel").apply {
                     addActionListener { openPluginsAction() }
                 })
             }
@@ -121,8 +121,10 @@ object Application {
 
     private fun newGameWindow(applet: Component): JFrame {
         return JFrame(TITLE).apply {
+            layout = BorderLayout()
             defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             add(applet)
+            add(sidePanel, BorderLayout.EAST)
             iconImage = ICON
             pack()
             setLocationRelativeTo(null)
@@ -136,6 +138,11 @@ object Application {
         override fun windowClosing(e: WindowEvent) {
             frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
                 pluginLoader.close()
+                try {
+                    SystemTray.getSystemTray().remove(trayIcon)
+                } catch (e: Exception) {
+                    //
+                }
                 WindowConstants.EXIT_ON_CLOSE
             } else {
                 WindowConstants.DO_NOTHING_ON_CLOSE
@@ -153,20 +160,15 @@ object Application {
     }
 
     private fun openPluginsAction() {
-        pluginsWindow.apply {
-            if (this == null) {
-                pluginsWindow = PluginsWindow(pluginLoader).apply {
-                    addWindowListener(object : WindowAdapter() {
-                        override fun windowClosing(e: WindowEvent) {
-                            pluginsWindow = null
-                        }
-                    })
-                }
-            } else {
-                state = JFrame.NORMAL
-                requestFocus()
-            }
+        if (sidePanel.isVisible) {
+            frame.size = Dimension(frame.size.width - sidePanel.width, frame.height)
+            sidePanel.isVisible = false
+        } else {
+            frame.size = Dimension(frame.size.width + sidePanel.width, frame.height)
+            sidePanel.isVisible = true
         }
+        frame.revalidate()
+        frame.repaint()
     }
 
     private fun changeProfile() {
@@ -205,10 +207,11 @@ object Application {
         val title = if (profile == DEFAULT_PROFILE) TITLE else "$TITLE - $profile"
         frame.title = title
         trayIcon.toolTip = title
-        pluginsWindow?.dispose()
         if (::pluginLoader.isInitialized) pluginLoader.close()
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
+        sidePanel.clear()
         pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
+        sidePanel.add(PluginsTab(pluginLoader))
     }
 }

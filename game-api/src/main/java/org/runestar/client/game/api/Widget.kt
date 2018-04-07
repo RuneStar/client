@@ -1,6 +1,5 @@
 package org.runestar.client.game.api
 
-import com.google.common.collect.Iterables
 import org.runestar.client.game.api.live.WidgetChain
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets

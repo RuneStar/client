@@ -4,10 +4,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder
 import java.io.Closeable
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadFactory
-import java.util.concurrent.TimeUnit
+import java.util.*
+import java.util.concurrent.*
 
 class PluginLoader(
         private val pluginsJarsDir: Path,
@@ -21,7 +19,7 @@ class PluginLoader(
 
     private val currentJarPluginNames = HashMap<Path, Collection<String>>()
 
-    private val currentPlugins = HashMap<String, PluginHolder<*>>()
+    private val currentPlugins = ConcurrentSkipListMap<String, PluginHolder<*>>()
 
     /**
      * A view of the current plugins.
