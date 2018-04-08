@@ -6,6 +6,7 @@ import com.alee.skin.dark.DarkSkin
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.general.fonts.RUNESCAPE_CHAT_BOLD_FONT
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
+import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import javax.swing.plaf.FontUIResource
 
@@ -22,7 +23,9 @@ internal object LafInstallation : Runnable {
 
         StyleManager.setDefaultSkin(DarkSkin::class.java)
         if (!WebLookAndFeel.install()) {
-            logger.info("Failed to install LAF")
+            logger.warn("Failed to install LAF")
         }
+
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false)
     }
 }

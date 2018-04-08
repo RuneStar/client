@@ -1,6 +1,8 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
+import com.alee.managers.tooltip.TooltipManager
+import com.alee.managers.tooltip.WebCustomTooltip
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.component.windowAncestor
@@ -110,7 +112,7 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
         return JButton(icon).apply {
             preferredSize = maximumSize
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIcon)
-//            TooltipManager.addTooltip(this, this@makeButton.name)
+//            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener {
                 if (selectedTab != this@makeButton || !panel.isVisible) {
                     selectedTab = this@makeButton
@@ -131,7 +133,7 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
         return JButton(icon).apply {
             preferredSize = maximumSize
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
-//            TooltipManager.addTooltip(this, this@makeButton.name)
+//            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener(this@makeButton)
         }
     }

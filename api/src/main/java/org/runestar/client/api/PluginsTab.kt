@@ -24,12 +24,13 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
 
     init {
         pluginsBox = Box.createVerticalBox()
-        component = JScrollPane(
-                pluginsBox,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
-        ).apply {
-            verticalScrollBar.unitIncrement = 16
+        component = JScrollPane(pluginsBox).apply {
+            verticalScrollBar.apply {
+                unitIncrement = 16
+                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.scrollbarUndecoratedButtonless)
+            }
+            verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+            horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
         }
         curPlugins = pluginLoader.snapshot()
         refresh()
