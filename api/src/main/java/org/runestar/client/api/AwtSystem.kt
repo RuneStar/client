@@ -1,4 +1,4 @@
-@file:JvmName("Desktop")
+@file:JvmName("AwtSystem")
 
 package org.runestar.client.api
 

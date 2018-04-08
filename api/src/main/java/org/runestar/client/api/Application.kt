@@ -12,32 +12,31 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.PluginLoader
 import org.runestar.general.JavConfig
-import java.awt.*
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
+import java.awt.Frame
+import java.awt.MenuItem
+import java.awt.PopupMenu
+import java.awt.TrayIcon
+import java.awt.event.*
 import java.nio.file.Files
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.swing.*
 
 object Application {
 
+    private val logger = getLogger()
+
     private const val DEFAULT_PROFILE = "default"
 
     private val VALID_PROFILE_REGEX = "[a-zA-Z0-9 _-]+".toRegex()
-
-    private val logger = getLogger()
 
     val trayIcon: TrayIcon = TrayIcon(ICON, TITLE).apply {
         isImageAutoSize = true
     }
 
     @Volatile
-    lateinit var frame: JFrame
+    lateinit var frame: GameFrame
         private set
-
-    val sidePanel = SidePanel()
 
     private lateinit var pluginLoader: PluginLoader
 
@@ -54,8 +53,10 @@ object Application {
         @Suppress("DEPRECATION")
         val applet = Client.accessor as java.applet.Applet
 
-        appletPreInit(applet, javConfig)
-        SwingUtilities.invokeAndWait { frame = newGameWindow(applet) }
+        SwingUtilities.invokeAndWait {
+            buildApplet(applet, javConfig)
+            frame = GameFrame(applet)
+        }
         applet.init()
         applet.start()
 
@@ -72,7 +73,10 @@ object Application {
                     addActionListener { changeProfile() }
                 })
                 add(MenuItem("Toggle side panel").apply {
-                    addActionListener { openPluginsAction() }
+                    addActionListener { frame.toggleSidePanelVisibility() }
+                })
+                add(MenuItem("Toggle top bar").apply {
+                    addActionListener { frame.toggleTopBarVisibility() }
                 })
             }
             addMouseListener(object : MouseAdapter() {
@@ -91,20 +95,7 @@ object Application {
         RxJavaPlugins.setErrorHandler {
             logger.warn("RxJavaPlugins error handler", it)
         }
-    }
-
-    private fun appletPreInit(
-            @Suppress("DEPRECATION") applet: java.applet.Applet,
-            javConfig: JavConfig
-    ) {
-        applet.apply {
-            layout = null
-            setStub(JavConfig.AppletStub(javConfig))
-            minimumSize = Dimension(200, 350)
-            maximumSize = javConfig.appletMaxSize
-            preferredSize = javConfig.appletMinSize
-            size = preferredSize
-        }
+        SwingUtilities.invokeLater(LafInstallation)
     }
 
     private fun waitForTitle() {
@@ -118,21 +109,6 @@ object Application {
                             AwtTaskbar.requestWindowUserAttention(frame)
                         }
                 )
-    }
-
-    private fun newGameWindow(applet: Component): JFrame {
-        return JFrame(TITLE).apply {
-            layout = BorderLayout()
-            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-            add(applet)
-            add(sidePanel, BorderLayout.EAST)
-            iconImage = ICON
-            pack()
-            setLocationRelativeTo(null)
-            isVisible = true
-            preferredSize = size
-            minimumSize = applet.minimumSize
-        }
     }
 
     private class FrameCloseConfirmListener : WindowAdapter() {
@@ -154,18 +130,6 @@ object Application {
                 "Exit",
                 JOptionPane.YES_NO_OPTION
         )
-    }
-
-    private fun openPluginsAction() {
-        if (sidePanel.isVisible) {
-            frame.size = Dimension(frame.size.width - sidePanel.width, frame.height)
-            sidePanel.isVisible = false
-        } else {
-            frame.size = Dimension(frame.size.width + sidePanel.width, frame.height)
-            sidePanel.isVisible = true
-        }
-        frame.revalidate()
-        frame.repaint()
     }
 
     private fun changeProfile() {
@@ -207,8 +171,9 @@ object Application {
         if (::pluginLoader.isInitialized) pluginLoader.close()
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
-        sidePanel.clear()
+        frame.sidePanel.clear()
+        frame.topBar.clear()
         pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
-        sidePanel.add(PluginsTab(pluginLoader))
+        frame.sidePanel.add(PluginsTab(pluginLoader))
     }
 }

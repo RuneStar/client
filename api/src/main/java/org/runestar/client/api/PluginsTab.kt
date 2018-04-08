@@ -1,5 +1,6 @@
 package org.runestar.client.api
 
+import com.alee.managers.style.StyleId
 import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
@@ -22,7 +23,13 @@ class PluginsTab(val pluginLoader: PluginLoader) : SidePanelTab(){
 
     init {
         pluginsBox = Box.createVerticalBox()
-        component = JScrollPane(pluginsBox)
+        component = JScrollPane(
+                pluginsBox,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        ).apply {
+            verticalScrollBar.unitIncrement = 16
+        }
         curPlugins = pluginLoader.snapshot()
         refresh()
         timer.apply {
@@ -54,16 +61,18 @@ class PluginsTab(val pluginLoader: PluginLoader) : SidePanelTab(){
 
     private fun PluginHandle.createComponent(): Component {
         val popup = JPopupMenu().apply {
-            add(JMenuItem("settings").apply {
+            add(JMenuItem("Settings").apply {
                 addActionListener { desktop?.safeOpen(settingsFile) }
             })
-            add(JMenuItem("directory").apply {
+            add(JMenuItem("Directory").apply {
                 addActionListener { desktop?.safeOpen(directory) }
             })
         }
         return Box.createHorizontalBox().apply {
             add(Box.createHorizontalStrut(3))
-            add(JLabel(this@createComponent.toString()))
+            add(JLabel(this@createComponent.toString()).apply {
+                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.labelShade)
+            })
             add(Box.createGlue())
             add(JCheckBox().apply {
                 isSelected = isRunning
@@ -73,7 +82,7 @@ class PluginsTab(val pluginLoader: PluginLoader) : SidePanelTab(){
                 }
             })
             add(JButton("...").apply {
-                border = BorderFactory.createLoweredSoftBevelBorder()
+                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonHover)
                 addActionListener {
                     popup.show(this, 0, bounds.height)
                 }
