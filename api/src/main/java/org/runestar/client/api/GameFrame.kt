@@ -5,11 +5,11 @@ package org.runestar.client.api
 import org.runestar.client.common.ICON
 import org.runestar.client.common.TITLE
 import java.applet.Applet
-import java.awt.BorderLayout
 import java.awt.Dimension
+import javax.swing.Box
+import javax.swing.BoxLayout
 import javax.swing.JFrame
 import javax.swing.WindowConstants
-import kotlin.math.max
 
 class GameFrame internal constructor(
         val applet: Applet
@@ -20,10 +20,14 @@ class GameFrame internal constructor(
     val topBar = TopBar()
 
     init {
-        layout = BorderLayout()
-        add(applet, BorderLayout.CENTER)
-        add(sidePanel, BorderLayout.EAST)
-        add(topBar, BorderLayout.NORTH)
+        layout = BoxLayout(contentPane, BoxLayout.X_AXIS)
+        add(
+                Box.createVerticalBox().apply {
+                    add(topBar)
+                    add(applet)
+                }
+        )
+        add(sidePanel)
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         iconImage = ICON
         pack()
@@ -34,12 +38,23 @@ class GameFrame internal constructor(
 
     internal fun refit() {
         // todo
-        minimumSize = layout.minimumLayoutSize(this)
-        val appletMinSize = applet.minimumSize
-        applet.minimumSize = applet.size
-        size = layout.minimumLayoutSize(this)
+
+        val app = applet.size
+
         revalidate()
+
+        val insets = insets.let {
+            Dimension(it.left + it.right, it.top + it.bottom)
+        }
+        val top = topBar.size
+        val side = sidePanel.size
+
+        minimumSize = layout.minimumLayoutSize(this)
+        size = Dimension(
+                app.width + insets.width + side.width,
+                app.height + insets.height + top.height
+        )
+
         repaint()
-        applet.minimumSize = appletMinSize
     }
 }

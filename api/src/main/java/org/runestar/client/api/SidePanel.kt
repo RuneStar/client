@@ -1,16 +1,16 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import com.alee.managers.tooltip.TooltipManager
-import com.alee.managers.tooltip.WebCustomTooltip
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.component.windowAncestor
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Dimension
 import java.util.*
 import javax.swing.*
 
-class SidePanel internal constructor() : JPanel(BorderLayout()) {
+class SidePanel internal constructor() : JPanel() {
 
     companion object {
         const val PANEL_WIDTH = 225
@@ -31,23 +31,26 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
     private var selectedTab: TabButton? = null
 
     init {
+        layout = BoxLayout(this, BoxLayout.X_AXIS)
         panel = JPanel(BorderLayout()).apply {
+            alignmentX = JComponent.RIGHT_ALIGNMENT
+            alignmentY = JComponent.CENTER_ALIGNMENT
             preferredSize = Dimension(PANEL_WIDTH, 0)
-            minimumSize = preferredSize
+            minimumSize = Dimension(PANEL_WIDTH, 0)
             maximumSize = Dimension(PANEL_WIDTH, Int.MAX_VALUE)
             isVisible = false
         }
         buttonsBox = Box.createVerticalBox().apply {
+            alignmentX = JComponent.LEFT_ALIGNMENT
+            alignmentY = JComponent.CENTER_ALIGNMENT
             preferredSize = Dimension(BAR_WIDTH, 0)
-            minimumSize = preferredSize
+            minimumSize = Dimension(BAR_WIDTH, 0)
             maximumSize = Dimension(BAR_WIDTH, Int.MAX_VALUE)
         }
-        add(
-                Box.createHorizontalBox().apply {
-                    add(buttonsBox)
-                    add(panel)
-                }
-        )
+        alignmentX = JComponent.CENTER_ALIGNMENT
+        alignmentY = JComponent.CENTER_ALIGNMENT
+        add(buttonsBox)
+        add(panel)
     }
 
     fun add(tab: TabButton) {
@@ -110,7 +113,8 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
 
     private fun TabButton.makeButton(): Component {
         return JButton(icon).apply {
-            preferredSize = maximumSize
+            alignmentY = JComponent.TOP_ALIGNMENT
+            alignmentX = JComponent.CENTER_ALIGNMENT
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIcon)
 //            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener {
@@ -131,7 +135,8 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
 
     private fun BarButton.makeButton(): Component {
         return JButton(icon).apply {
-            preferredSize = maximumSize
+            alignmentY = JComponent.BOTTOM_ALIGNMENT
+            alignmentX = JComponent.CENTER_ALIGNMENT
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
 //            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener(this@makeButton)

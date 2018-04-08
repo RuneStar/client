@@ -2,17 +2,16 @@ package org.runestar.client.api
 
 import com.alee.managers.language.data.TooltipWay
 import com.alee.managers.style.StyleId
-import com.alee.managers.tooltip.TooltipManager
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
-import java.awt.BorderLayout
 import java.awt.Dimension
 import java.util.*
 import javax.swing.Box
+import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 
-class TopBar internal constructor(): JPanel(BorderLayout()) {
+class TopBar internal constructor(): JPanel() {
 
     companion object {
         const val HEIGHT = 24
@@ -22,18 +21,14 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
 
     private val right = TreeSet<BarButton>()
 
-    private val box = Box.createHorizontalBox()
-
     private val logger = getLogger()
 
     init {
-        box.apply {
-            preferredSize = Dimension(0, HEIGHT)
-            minimumSize = preferredSize
-            maximumSize = Dimension(Int.MAX_VALUE, HEIGHT)
-        }
+        layout = BoxLayout(this, BoxLayout.X_AXIS)
+        preferredSize = Dimension(0, HEIGHT)
+        minimumSize = Dimension(0, HEIGHT)
+        maximumSize = Dimension(Int.MAX_VALUE, HEIGHT)
         isVisible = false
-        add(box)
         rebuild()
     }
 
@@ -76,13 +71,13 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
     }
 
     private fun rebuild() {
-        box.removeAll()
+        removeAll()
         left.forEach {
-            box.add(it.makeButton(TooltipWay.right))
+            add(it.makeButton(TooltipWay.right))
         }
-        box.add(Box.createGlue())
+        add(Box.createGlue())
         right.forEach {
-            box.add(it.makeButton(TooltipWay.left))
+            add(it.makeButton(TooltipWay.left))
         }
         revalidate()
         repaint()
