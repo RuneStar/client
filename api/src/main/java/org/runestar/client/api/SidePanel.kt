@@ -44,8 +44,8 @@ class SidePanel internal constructor() : JPanel(BorderLayout()) {
         }
         add(
                 Box.createHorizontalBox().apply {
-                    add(panel)
                     add(buttonsBox)
+                    add(panel)
                 }
         )
     }
