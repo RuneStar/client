@@ -9,9 +9,10 @@ import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.JFrame
 import javax.swing.WindowConstants
+import kotlin.math.max
 
 class GameFrame internal constructor(
-        applet: Applet
+        val applet: Applet
 ) : JFrame(TITLE) {
 
     val sidePanel = SidePanel()
@@ -22,7 +23,7 @@ class GameFrame internal constructor(
         layout = BorderLayout()
         add(applet, BorderLayout.CENTER)
         add(sidePanel, BorderLayout.EAST)
-//        add(topBar, BorderLayout.NORTH)
+        add(topBar, BorderLayout.NORTH)
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         iconImage = ICON
         pack()
@@ -31,33 +32,14 @@ class GameFrame internal constructor(
         isVisible = true
     }
 
-    internal fun toggleSidePanelVisibility() {
-        val startSize = size
-        if (sidePanel.isShowing) {
-            remove(sidePanel)
-            minimumSize = layout.minimumLayoutSize(this)
-            size = Dimension(startSize.width - SidePanel.WIDTH, startSize.height)
-        } else {
-            add(sidePanel, BorderLayout.EAST)
-            minimumSize = layout.minimumLayoutSize(this)
-            size = Dimension(startSize.width + SidePanel.WIDTH, startSize.height)
-        }
+    internal fun refit() {
+        // todo
+        minimumSize = layout.minimumLayoutSize(this)
+        val appletMinSize = applet.minimumSize
+        applet.minimumSize = applet.size
+        size = layout.minimumLayoutSize(this)
         revalidate()
         repaint()
-    }
-
-    internal fun toggleTopBarVisibility() {
-        val startSize = size
-        if (topBar.isShowing) {
-            remove(topBar)
-            minimumSize = layout.minimumLayoutSize(this)
-            size = Dimension(startSize.width, startSize.height - TopBar.HEIGHT)
-        } else {
-            add(topBar, BorderLayout.NORTH)
-            minimumSize = layout.minimumLayoutSize(this)
-            size = Dimension(startSize.width, startSize.height + TopBar.HEIGHT)
-        }
-        revalidate()
-        repaint()
+        applet.minimumSize = appletMinSize
     }
 }

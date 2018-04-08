@@ -9,6 +9,8 @@
 
 #-noverify
 
+#-XX:+HeapDumpOnOutOfMemoryError
+
 # used by sun.awt.SunToolkit
 # default value: false
 # recommended value: true

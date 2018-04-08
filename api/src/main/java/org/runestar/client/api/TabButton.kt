@@ -3,7 +3,7 @@ package org.runestar.client.api
 import java.awt.Component
 import javax.swing.Icon
 
-abstract class SidePanelTab : Comparable<SidePanelTab> {
+abstract class TabButton : Comparable<TabButton> {
 
     abstract val name: String
 
@@ -11,7 +11,7 @@ abstract class SidePanelTab : Comparable<SidePanelTab> {
 
     abstract val component: Component
 
-    override fun compareTo(other: SidePanelTab): Int {
+    override fun compareTo(other: TabButton): Int {
         return name.compareTo(other.name)
     }
 }

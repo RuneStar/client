@@ -11,17 +11,16 @@ import java.util.*
 import javax.swing.Box
 import javax.swing.JButton
 import javax.swing.JPanel
-import javax.swing.ToolTipManager
 
 class TopBar internal constructor(): JPanel(BorderLayout()) {
 
     companion object {
-        const val HEIGHT = 30
+        const val HEIGHT = 24
     }
 
-    private val left = TreeSet<TopBarButton>()
+    private val left = TreeSet<BarButton>()
 
-    private val right = TreeSet<TopBarButton>()
+    private val right = TreeSet<BarButton>()
 
     private val box = Box.createHorizontalBox()
 
@@ -33,11 +32,12 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
             minimumSize = preferredSize
             maximumSize = Dimension(Int.MAX_VALUE, HEIGHT)
         }
+        isVisible = false
         add(box)
         rebuild()
     }
 
-    fun addLeft(button: TopBarButton) {
+    fun addLeft(button: BarButton) {
         if (button !in right && left.add(button)) {
             rebuild()
         } else {
@@ -45,7 +45,7 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
         }
     }
 
-    fun addRight(button: TopBarButton) {
+    fun addRight(button: BarButton) {
         if (button !in left && right.add(button)) {
             rebuild()
         } else {
@@ -53,7 +53,7 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
         }
     }
 
-    fun removeLeft(button: TopBarButton) {
+    fun removeLeft(button: BarButton) {
         if (left.remove(button)) {
             rebuild()
         } else {
@@ -61,7 +61,7 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
         }
     }
 
-    fun removeRight(button: TopBarButton) {
+    fun removeRight(button: BarButton) {
         if (right.remove(button)) {
             rebuild()
         } else {
@@ -88,11 +88,11 @@ class TopBar internal constructor(): JPanel(BorderLayout()) {
         repaint()
     }
 
-    private fun TopBarButton.makeButton(tooltipWay: TooltipWay): JButton {
+    private fun BarButton.makeButton(tooltipWay: TooltipWay): JButton {
         return JButton(icon).apply {
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
             addActionListener(this@makeButton)
-            TooltipManager.addTooltip(this, this@makeButton.name, tooltipWay)
+//            TooltipManager.addTooltip(this, this@makeButton.name, tooltipWay) // todo
         }
     }
 }

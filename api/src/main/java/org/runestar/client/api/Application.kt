@@ -18,7 +18,6 @@ import java.awt.PopupMenu
 import java.awt.TrayIcon
 import java.awt.event.*
 import java.nio.file.Files
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.swing.*
 
@@ -73,10 +72,10 @@ object Application {
                     addActionListener { changeProfile() }
                 })
                 add(MenuItem("Toggle side panel").apply {
-                    addActionListener { frame.toggleSidePanelVisibility() }
-                })
-                add(MenuItem("Toggle top bar").apply {
-                    addActionListener { frame.toggleTopBarVisibility() }
+                    addActionListener {
+                        frame.sidePanel.isVisible = !frame.sidePanel.isVisible
+                        frame.refit()
+                    }
                 })
             }
             addMouseListener(object : MouseAdapter() {
@@ -171,9 +170,13 @@ object Application {
         if (::pluginLoader.isInitialized) pluginLoader.close()
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
+
+
         frame.sidePanel.clear()
         frame.topBar.clear()
         pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
         frame.sidePanel.add(PluginsTab(pluginLoader))
+        frame.sidePanel.add(HideTopBarButton())
+        frame.sidePanel.add(HideSidePanelButton())
     }
 }

@@ -5,13 +5,14 @@ import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
 import java.awt.Component
+import javax.imageio.ImageIO
 import javax.swing.*
 
-class PluginsTab(val pluginLoader: PluginLoader) : SidePanelTab(){
+class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
 
     override val name = "Plugins"
 
-    override val icon = ImageIcon(ICON)
+    override val icon = ImageIcon(ImageIO.read(javaClass.getResource("cog.png")))
 
     override val component: JScrollPane
 
