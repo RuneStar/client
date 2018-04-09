@@ -1,7 +1,6 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import org.runestar.client.common.ICON
 import org.runestar.client.plugins.PluginHandle
 import org.runestar.client.plugins.PluginLoader
 import java.awt.Component
@@ -73,7 +72,7 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
         return Box.createHorizontalBox().apply {
             add(Box.createHorizontalStrut(3))
             add(JLabel(this@createComponent.toString()).apply {
-                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.labelShade)
+                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.labelShadow)
             })
             add(Box.createGlue())
             add(JCheckBox().apply {

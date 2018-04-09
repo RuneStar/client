@@ -125,9 +125,13 @@ class SidePanel internal constructor() : JPanel() {
                     if (!panel.isVisible) {
                         panel.isVisible = true
                         (windowAncestor() as GameFrame).refit() // todo
+                    } else {
+                        panel.revalidate()
+                        panel.repaint()
                     }
-                    panel.revalidate()
-                    panel.repaint()
+                } else {
+                    panel.isVisible = false
+                    (windowAncestor() as GameFrame).refit()
                 }
             }
         }

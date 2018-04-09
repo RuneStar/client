@@ -1,7 +1,8 @@
 package org.runestar.client.api
 
-import com.alee.managers.language.data.TooltipWay
 import com.alee.managers.style.StyleId
+import com.alee.managers.tooltip.TooltipManager
+import com.alee.managers.tooltip.TooltipWay
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import java.awt.Dimension

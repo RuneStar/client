@@ -47,6 +47,13 @@
             <id>repo.runestar.org</id>
             <url>http://repo.runestar.org</url>
         </repository>
+        <repository>
+            <id>sonatype.snapshots</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <distributionManagement>
