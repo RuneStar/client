@@ -177,6 +177,5 @@ object Application {
         pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
         frame.sidePanel.add(PluginsTab(pluginLoader))
         frame.sidePanel.add(HideTopBarButton())
-        frame.sidePanel.add(HideSidePanelButton())
     }
 }
