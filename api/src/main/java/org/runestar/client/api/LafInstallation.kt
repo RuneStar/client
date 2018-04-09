@@ -2,7 +2,6 @@ package org.runestar.client.api
 
 import com.alee.laf.WebLookAndFeel
 import com.alee.skin.dark.DarkSkin
-import org.runestar.general.fonts.RUNESCAPE_CHAT_BOLD_FONT
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
@@ -12,10 +11,13 @@ internal object LafInstallation : Runnable {
 
     override fun run() {
         val chatFont = FontUIResource(RUNESCAPE_CHAT_FONT)
-        val boldFont = FontUIResource(RUNESCAPE_CHAT_BOLD_FONT)
 
         UIManager.put("Label.font", chatFont)
-        UIManager.put("MenuItem.font", boldFont)
+        UIManager.put("Button.font", chatFont)
+        UIManager.put("ToggleButton.font", chatFont)
+        UIManager.put("Tree.font", chatFont)
+        UIManager.put("ComboBox.font", chatFont)
+        UIManager.put("MenuItem.font", chatFont)
 
         WebLookAndFeel.install(DarkSkin::class.java)
 
