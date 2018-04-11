@@ -20,13 +20,11 @@
             <groupId>org.runestar.client</groupId>
             <artifactId>client-api</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.runestar.client</groupId>
             <artifactId>client-utils</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -39,19 +37,11 @@
             <plugin>
                 <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
                 <artifactId>serviceloader-maven-plugin</artifactId>
-                <version>1.1.0</version>
                 <configuration>
                     <services>
                         <param>org.runestar.client.plugins.spi.Plugin</param>
                     </services>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
