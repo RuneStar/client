@@ -17,6 +17,7 @@ internal fun buildApplet(
         preferredSize = javConfig.appletMinSize
         minimumSize = preferredSize
         background = Color.BLACK
+        foreground = Color.BLACK
         size = preferredSize
     }
 }

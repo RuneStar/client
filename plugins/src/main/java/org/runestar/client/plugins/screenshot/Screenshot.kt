@@ -1,12 +1,14 @@
 package org.runestar.client.plugins.screenshot
 
 import org.runestar.client.api.Application
+import org.runestar.client.api.BarButton
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import java.awt.TrayIcon
+import java.awt.event.ActionEvent
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.awt.image.RenderedImage
@@ -18,6 +20,8 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
+import javax.swing.Icon
+import javax.swing.ImageIcon
 
 class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
@@ -31,6 +35,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     lateinit var timeFormatter: DateTimeFormatter
     lateinit var screenshotDirectory: Path
 
+    private val button = Button()
+
     override fun start() {
         timeFormatter = createTimeFormatter()
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
@@ -41,6 +47,12 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 .map { it.instance.image as BufferedImage }
                 .subscribe { takeScreenshot(it) }
         )
+        Application.frame.topBar.addLeft(button)
+    }
+
+    override fun stop() {
+        super.stop()
+        Application.frame.topBar.removeLeft(button)
     }
 
     fun createTimeFormatter(): DateTimeFormatter {
@@ -74,4 +86,17 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
             val localizeTimeZone: Boolean = true,
             val trayNotify: Boolean = true
     ) : PluginSettings()
+
+    inner class Button : BarButton() {
+
+        override val name: String = "Screenshot"
+
+        override val icon: Icon = ImageIcon(ImageIO.read(javaClass.getResource("camera.png")))
+
+        override fun actionPerformed(e: ActionEvent) {
+            val me = XRasterProvider.drawFull0.exit.firstOrError().blockingGet()
+            val img = me.instance.image as BufferedImage
+            takeScreenshot(img)
+        }
+    }
 }
