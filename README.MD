@@ -6,4 +6,4 @@
 
 Installs to `{user.home}/RuneStar/`
 
-[Included plugins](https://github.com/RuneStar/client/tree/master/plugins-standard)
+[Included plugins](https://github.com/RuneStar/client/tree/master/plugins)

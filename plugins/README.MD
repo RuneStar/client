@@ -1,3 +1,3 @@
-# plugins-standard
+# plugins
 
 Included plugins.
