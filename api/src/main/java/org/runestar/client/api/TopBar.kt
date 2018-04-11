@@ -1,7 +1,6 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import com.alee.managers.tooltip.TooltipManager
 import com.alee.managers.tooltip.TooltipWay
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -18,9 +17,7 @@ class TopBar internal constructor(): JPanel() {
         const val HEIGHT = 24
     }
 
-    private val left = TreeSet<BarButton>()
-
-    private val right = TreeSet<BarButton>()
+    private val buttons = TreeSet<BarButton>()
 
     private val logger = getLogger()
 
@@ -33,32 +30,16 @@ class TopBar internal constructor(): JPanel() {
         rebuild()
     }
 
-    fun addLeft(button: BarButton) {
-        if (button !in right && left.add(button)) {
+    fun add(button: BarButton) {
+        if (buttons.add(button)) {
             rebuild()
         } else {
             logger.info { "Cannot add $button, it is already present" }
         }
     }
 
-    fun addRight(button: BarButton) {
-        if (button !in left && right.add(button)) {
-            rebuild()
-        } else {
-            logger.info { "Cannot add $button, it is already present" }
-        }
-    }
-
-    fun removeLeft(button: BarButton) {
-        if (left.remove(button)) {
-            rebuild()
-        } else {
-            logger.info { "Cannot remove $button, it is not present" }
-        }
-    }
-
-    fun removeRight(button: BarButton) {
-        if (right.remove(button)) {
+    fun remove(button: BarButton) {
+        if (buttons.remove(button)) {
             rebuild()
         } else {
             logger.info { "Cannot remove $button, it is not present" }
@@ -66,20 +47,16 @@ class TopBar internal constructor(): JPanel() {
     }
 
     internal fun clear() {
-        left.clear()
-        right.clear()
+        buttons.clear()
         rebuild()
     }
 
     private fun rebuild() {
         removeAll()
-        left.forEach {
+        buttons.forEach {
             add(it.makeButton(TooltipWay.right))
         }
         add(Box.createGlue())
-        right.forEach {
-            add(it.makeButton(TooltipWay.left))
-        }
         revalidate()
         repaint()
     }

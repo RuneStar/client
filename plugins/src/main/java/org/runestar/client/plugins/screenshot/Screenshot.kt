@@ -47,12 +47,12 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 .map { it.instance.image as BufferedImage }
                 .subscribe { takeScreenshot(it) }
         )
-        Application.frame.topBar.addLeft(button)
+        Application.frame.topBar.add(button)
     }
 
     override fun stop() {
         super.stop()
-        Application.frame.topBar.removeLeft(button)
+        Application.frame.topBar.remove(button)
     }
 
     fun createTimeFormatter(): DateTimeFormatter {
