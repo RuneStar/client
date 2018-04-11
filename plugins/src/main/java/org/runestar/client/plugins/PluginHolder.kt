@@ -1,90 +1,61 @@
 package org.runestar.client.plugins
 
+import org.kxtra.slf4j.loggerfactory.getLogger
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.WatchKey
-import java.util.concurrent.ExecutorService
+import java.nio.file.*
 
 internal class PluginHolder<T : PluginSettings>(
-        private val plugin: Plugin<T>,
-        private val watchKey: WatchKey,
-        private val executor: ExecutorService,
-        private val settingsReadWriter: FileReadWriter
-) : PluginHandle {
+        val plugin: Plugin<T>,
+        val ctx: PluginContext<T>,
+        val settingsReadWriter: FileReadWriter,
+        val watchKey: WatchKey
+) {
 
-    override val directory = watchKey.watchable() as Path
-
-    private val logger get() = plugin.logger
-
-    override val settingsFile: Path =
-            directory.resolve("${PluginHandle.SETTINGS_FILE_NAME_BASE}.${settingsReadWriter.fileExtension}")
+    private val logger = getLogger("PluginHolder(${ctx.name})")
 
     private var ignoreNextEvent = false
 
-    init {
-        plugin.directory = directory
+    fun init() {
         createSettings()
-        if (isRunning) {
+        plugin.init(ctx)
+        if (ctx.settings.enabled) {
             startPlugin()
         }
     }
 
-    override fun start() {
-        executor.submit {
-            if (isRunning) return@submit
-            plugin.settings.enabled = true
-            startPlugin()
-            writeSettings()
-        }
-    }
-
-    override fun stop() {
-        executor.submit {
-            if (!isRunning) return@submit
-            plugin.settings.enabled = false
-            writeSettings()
-            stopPlugin()
-        }
-    }
-
-    override val isRunning: Boolean get() {
-        return plugin.settings.enabled
-    }
-
-    private fun writeSettings() {
+    internal fun writeSettings() {
         try {
             ignoreNextEvent = true
-            logger.info("Writing settings...")
-            settingsReadWriter.write(settingsFile, plugin.settings)
-            logger.info("Write successful.")
+            logger.debug("Writing settings...")
+            settingsReadWriter.write(ctx.settingsFile, ctx.settings)
+            logger.debug("Write successful.")
         } catch (e: IOException) {
             logger.warn("Write failed.", e)
-            if (isRunning) {
+            if (ctx.isRunning()) {
                 stopPlugin()
-                plugin.settings.enabled = false
+                ctx.settings.enabled = false
             }
         }
     }
 
     private fun readSettings() {
         try {
-            plugin.settings = settingsReadWriter.read(settingsFile, plugin.defaultSettings.javaClass)
-            logger.info("Read successful.")
+            ctx.settings = settingsReadWriter.read(ctx.settingsFile, plugin.defaultSettings.javaClass)
+            logger.debug("Read successful.")
         } catch (e: IOException) {
             logger.warn("Read failed. Reverting to default settings.", e)
-            plugin.settings = plugin.defaultSettings
+            ctx.settings = plugin.defaultSettings
             writeSettings()
         }
     }
 
     private fun createSettings() {
-        if (Files.exists(settingsFile)) {
-            logger.info("Settings file exists. Reading...")
+        if (Files.exists(ctx.settingsFile)) {
+            logger.debug("Settings file exists. Reading...")
             readSettings()
         } else {
-            logger.info("Settings file does not exist. Using default settings.")
-            plugin.settings = plugin.defaultSettings
+            logger.debug("Settings file does not exist. Using default settings.")
+            ctx.settings = plugin.defaultSettings
             writeSettings()
         }
     }
@@ -95,47 +66,67 @@ internal class PluginHolder<T : PluginSettings>(
             ignoreNextEvent = false
             return
         }
-        if (isRunning) stopPlugin()
-        if (Files.notExists(settingsFile)) {
-            logger.info("Settings file missing. Switching to default settings.")
-            plugin.settings = plugin.defaultSettings
+        if (ctx.isRunning()) stopPlugin()
+        if (Files.notExists(ctx.settingsFile)) {
+            logger.debug("Settings file missing. Switching to default settings.")
+            ctx.settings = plugin.defaultSettings
             writeSettings()
         } else {
-            logger.info("Settings file modified. Reading new settings...")
+            logger.debug("Settings file modified. Reading new settings...")
             readSettings()
         }
-        if (isRunning) {
+        if (ctx.isRunning()) {
             startPlugin()
         }
     }
 
     internal fun destroy() {
         watchKey.cancel()
-        if (isRunning) {
+        if (ctx.isRunning()) {
             stopPlugin()
         }
     }
 
-    private fun startPlugin() {
+    internal fun startPlugin() {
         try {
+            ctx.logger.debug("Starting...")
             plugin.start()
+            ctx.logger.debug("Started")
         } catch (e: Exception) {
             logger.warn("Exception starting plugin.", e)
             stopPlugin()
-            plugin.settings.enabled = false
+            ctx.settings.enabled = false
         }
     }
 
-    private fun stopPlugin() {
+    internal fun stopPlugin() {
         try {
+            ctx.logger.debug("Stopping...")
             plugin.stop()
+            ctx.logger.debug("Stopped")
         } catch (e: Exception) {
             logger.warn("Exception stopping plugin.", e)
-            plugin.settings.enabled = false
+            ctx.settings.enabled = false
         }
     }
 
-    override fun toString(): String {
-        return plugin.name
+    companion object {
+
+        fun <T : PluginSettings> of(
+                plugin: Plugin<T>,
+                pluginsDir: Path,
+                settingsReadWriter: FileReadWriter,
+                watchService: WatchService
+        ): PluginHolder<T> {
+            val pluginDir = pluginsDir.resolve(plugin.name)
+            Files.createDirectories(pluginDir)
+            val watchKey = pluginDir.register(
+                    watchService,
+                    StandardWatchEventKinds.ENTRY_MODIFY,
+                    StandardWatchEventKinds.ENTRY_DELETE
+            )
+            val ctx = PluginContext.of(pluginsDir, plugin, settingsReadWriter)
+            return PluginHolder(plugin, ctx, settingsReadWriter, watchKey)
+        }
     }
 }

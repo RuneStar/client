@@ -21,8 +21,6 @@ class FontTest : DisposablePlugin<PluginSettings>() {
     val s = "1234567890 abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_/:><"
 
     override fun start() {
-        super.start()
-
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.WHITE
             val x = 20

@@ -17,8 +17,6 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
     var old = varps.copyOf()
 
     override fun start() {
-        super.start()
-
         add(LiveCanvas.repaints.subscribe { g ->
             val curr = varps.copyOf()
             for (i in old.indices) {
@@ -29,7 +27,7 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
                     val lastBitChanged = Integer.SIZE - changedBits.lastIndexOf('1') - 1
                     val firstBitChanged = Integer.SIZE - changedBits.indexOf('1') - 1
 
-                    logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
+                    ctx.logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
                             "${intToString(o)} ->\n" +
                             intToString(c)
                     }

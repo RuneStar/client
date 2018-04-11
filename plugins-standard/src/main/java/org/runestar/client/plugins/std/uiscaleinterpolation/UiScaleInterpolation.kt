@@ -13,8 +13,7 @@ class UiScaleInterpolation : DisposablePlugin<UiScaleInterpolation.Settings>() {
     override val name = "UI Scale Interpolation"
 
     override fun start() {
-        super.start()
-        val interpolationValue = settings.interpolation.renderingHintValue
+        val interpolationValue = ctx.settings.interpolation.renderingHintValue
         add(XRasterProvider.drawFull0.enter.subscribe { e ->
             val g = e.arguments[0] as Graphics2D
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, interpolationValue)

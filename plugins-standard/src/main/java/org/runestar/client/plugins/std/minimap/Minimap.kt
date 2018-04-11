@@ -14,28 +14,25 @@ class Minimap : DisposablePlugin<Minimap.Settings>() {
 
     private var originalDots: Array<XSprite>? = null
 
-    override fun start() {
-        super.start()
-
-        originalDots = Client.accessor.mapDotSprites.clone()
+    override fun start() {originalDots = Client.accessor.mapDotSprites.clone()
         val dots = Client.accessor.mapDotSprites
-        if (settings.items.enabled) {
-            recolorDot(dots, 0, settings.items.color.get())
+        if (ctx.settings.items.enabled) {
+            recolorDot(dots, 0, ctx.settings.items.color.get())
         }
-        if (settings.npcs.enabled) {
-            recolorDot(dots, 1, settings.npcs.color.get())
+        if (ctx.settings.npcs.enabled) {
+            recolorDot(dots, 1, ctx.settings.npcs.color.get())
         }
-        if (settings.players.enabled) {
-            recolorDot(dots, 2, settings.players.color.get())
+        if (ctx.settings.players.enabled) {
+            recolorDot(dots, 2, ctx.settings.players.color.get())
         }
-        if (settings.friends.enabled) {
-            recolorDot(dots, 3, settings.friends.color.get())
+        if (ctx.settings.friends.enabled) {
+            recolorDot(dots, 3, ctx.settings.friends.color.get())
         }
-        if (settings.team.enabled) {
-            recolorDot(dots, 4, settings.team.color.get())
+        if (ctx.settings.team.enabled) {
+            recolorDot(dots, 4, ctx.settings.team.color.get())
         }
-        if (settings.clan.enabled) {
-            recolorDot(dots, 5, settings.clan.color.get())
+        if (ctx.settings.clan.enabled) {
+            recolorDot(dots, 5, ctx.settings.clan.color.get())
         }
     }
 

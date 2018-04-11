@@ -15,7 +15,6 @@ class ActorHealthDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
 
             g.font = RUNESCAPE_CHAT_FONT

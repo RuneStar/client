@@ -25,8 +25,6 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     @Volatile private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
     override fun start() {
-        super.start()
-
         add(Game.ticks.subscribe {
 
             tickFreezes(npcFreezes)

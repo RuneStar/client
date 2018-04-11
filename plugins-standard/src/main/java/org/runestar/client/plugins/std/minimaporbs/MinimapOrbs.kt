@@ -31,8 +31,6 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     @Volatile private var hpTickLimit = HP_TICKS
 
     override fun start() {
-        super.start()
-
         add(Game.stateChanges.subscribe { state ->
             if (state == GameState.LOGGING_IN || state == GameState.CHANGING_WORLD) {
                 specTicks = -1
@@ -49,7 +47,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             hpTicks = (hpTicks + 1) % hpTickLimit
         })
 
-        val stroke = BasicStroke(settings.stroke)
+        val stroke = BasicStroke(ctx.settings.stroke)
 
         add(LiveCanvas.repaints.subscribe { g ->
 
@@ -68,7 +66,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE)
 
-            if (settings.hpRegen.enabled && hpTicks > 0) {
+            if (ctx.settings.hpRegen.enabled && hpTicks > 0) {
                 Widgets[WidgetGroupId.MinimapOrbs.hp_circle]?.shape?.let { hpRect ->
                     val lvl = Stats[Skill.HITPOINTS]
                     val hpPercent = when {
@@ -76,15 +74,15 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                         lvl.currentLevel > lvl.level -> 1 - (hpTicks.toDouble() / hpTickLimit)
                         else -> return@let
                     }
-                    g.color = settings.hpRegen.color.get()
+                    g.color = ctx.settings.hpRegen.color.get()
                     g.draw(orbArc(hpRect, hpPercent))
                 }
             }
 
             Widgets[WidgetGroupId.MinimapOrbs.spec_circle]?.shape?.let { specRect ->
 
-                if (settings.specFill.enabled && Game.specialAttackEnabled) {
-                    g.color = settings.specFill.color.get()
+                if (ctx.settings.specFill.enabled && Game.specialAttackEnabled) {
+                    g.color = ctx.settings.specFill.color.get()
                     g.fillOval(
                             specRect.x,
                             specRect.y,
@@ -93,9 +91,9 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                     )
                 }
 
-                if (settings.specRegen.enabled && specTicks > 0) {
+                if (ctx.settings.specRegen.enabled && specTicks > 0) {
                     val specPercent = specTicks.toDouble() / SPEC_TICKS
-                    g.color = settings.specRegen.color.get()
+                    g.color = ctx.settings.specRegen.color.get()
                     g.draw(orbArc(specRect, specPercent))
                 }
             }

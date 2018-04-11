@@ -3,6 +3,8 @@ package org.runestar.client.api
 import io.reactivex.Observable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.blockingSubscribeBy
+import org.kxtra.slf4j.logger.error
+import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.common.*
@@ -16,10 +18,16 @@ import java.awt.Frame
 import java.awt.MenuItem
 import java.awt.PopupMenu
 import java.awt.TrayIcon
-import java.awt.event.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
-import javax.swing.*
+import javax.swing.ImageIcon
+import javax.swing.JOptionPane
+import javax.swing.SwingUtilities
+import javax.swing.WindowConstants
 
 object Application {
 
@@ -91,8 +99,11 @@ object Application {
     private fun setup() {
         AwtTaskbar.setIconImage(ICON)
         logger.info(systemDebugString)
-        RxJavaPlugins.setErrorHandler {
-            logger.warn("RxJavaPlugins error handler", it)
+        RxJavaPlugins.setErrorHandler { e ->
+            logger.warn(e) { "RxJavaPlugins error handler" }
+        }
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            logger.error(e) { "Uncaught exception for thread $t" }
         }
         SwingUtilities.invokeLater(LafInstallation)
     }
@@ -171,10 +182,11 @@ object Application {
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
 
-
+        pluginLoader = PluginLoader(javaClass.classLoader, profileDir, YamlFileReadWriter)
         frame.sidePanel.clear()
         frame.topBar.clear()
-        pluginLoader = PluginLoader(PLUGINS_DIR_PATH, profileDir, YamlFileReadWriter)
+        frame.sidePanel.panel.isVisible = false
+        frame.refit()
         frame.sidePanel.add(PluginsTab(pluginLoader))
         frame.sidePanel.add(HideTopBarButton())
     }

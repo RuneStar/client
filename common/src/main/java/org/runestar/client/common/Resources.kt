@@ -31,13 +31,5 @@ val CLIENT_PATH: Path = ROOT_DIR_PATH.resolve("$CLIENT_ARTIFACT_ID.jar")
 @JvmField
 val PROFILES_DIR_PATH: Path = ROOT_DIR_PATH.resolve("profiles")
 
-const val PLUGINS_STANDARD_ARTIFACT_ID = "client-plugins-standard"
-
-@JvmField
-val PLUGINS_DIR_PATH: Path = ROOT_DIR_PATH.resolve("plugins")
-
-@JvmField
-val PLUGINS_STANDARD_PATH: Path = PLUGINS_DIR_PATH.resolve("$PLUGINS_STANDARD_ARTIFACT_ID.jar")
-
 @JvmField
 val CLIENT_PRM_PATH: Path = ROOT_DIR_PATH.resolve("client.prm")

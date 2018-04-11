@@ -21,7 +21,6 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
     private var frame: ExplorerFrame? = null
 
     override fun start() {
-        super.start()
         SwingUtilities.invokeAndWait {
             frame = ExplorerFrame()
         }

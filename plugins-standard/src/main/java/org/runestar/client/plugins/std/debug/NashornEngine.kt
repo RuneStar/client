@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.std.debug
 
-import org.runestar.client.plugins.Plugin
+import org.runestar.client.plugins.AbstractPlugin
 import org.runestar.client.plugins.PluginSettings
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 
-class NashornEngine : Plugin<PluginSettings>() {
+class NashornEngine : AbstractPlugin<PluginSettings>() {
 
     companion object {
         const val PROMPT = "> "
@@ -17,7 +17,6 @@ class NashornEngine : Plugin<PluginSettings>() {
     var running = false
 
     override fun start() {
-        super.start()
         running = true
         Thread({
             val reader = System.`in`.bufferedReader()
@@ -35,7 +34,6 @@ class NashornEngine : Plugin<PluginSettings>() {
     }
 
     override fun stop() {
-        super.stop()
         running = false
     }
 }

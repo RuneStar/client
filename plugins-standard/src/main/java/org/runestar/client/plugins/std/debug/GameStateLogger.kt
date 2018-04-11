@@ -9,9 +9,8 @@ class GameStateLogger : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(Game.stateChanges.subscribe {
-            logger.info(it.toString())
+            ctx.logger.info(it.toString())
         })
     }
 }

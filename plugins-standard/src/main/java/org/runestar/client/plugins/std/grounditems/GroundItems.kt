@@ -29,8 +29,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     val blockRegexes = ArrayList<Regex>()
 
     override fun start() {
-        super.start()
-        settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
+        ctx.settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
         LiveGroundItems.onPlane(Game.plane).forEach { gi ->
             tiles.add(gi.location)
         }
@@ -41,8 +40,8 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             tiles.remove(st)
         })
 
-        val defaultColor = settings.color.get()
-        val font = settings.font.get()
+        val defaultColor = ctx.settings.color.get()
+        val font = ctx.settings.font.get()
 
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = font
@@ -68,7 +67,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     }
                 }
                 val x = pt.x
-                var y = pt.y - settings.initialOffset
+                var y = pt.y - ctx.settings.initialOffset
                 for ((def, count) in items) {
                     if (isBlocked(def, count)) {
                         continue
@@ -80,7 +79,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     g.color = defaultColor
                     g.drawStringShadowed(string, leftX, y)
 
-                    y -= height + settings.spacing
+                    y -= height + ctx.settings.spacing
 
                 }
             }

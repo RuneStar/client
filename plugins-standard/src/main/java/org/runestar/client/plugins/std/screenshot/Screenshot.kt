@@ -32,10 +32,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     lateinit var screenshotDirectory: Path
 
     override fun start() {
-        super.start()
-
         timeFormatter = createTimeFormatter()
-        screenshotDirectory = directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
+        screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
         add(Keyboard.events
                 .filter { it.extendedKeyCode == KeyEvent.VK_PRINTSCREEN && it.id == KeyEvent.KEY_RELEASED }
@@ -46,8 +44,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     fun createTimeFormatter(): DateTimeFormatter {
-        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
-        return DateTimeFormatter.ofPattern(settings.dateTimeFormatterPattern)
+        val zoneId = if (ctx.settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
+        return DateTimeFormatter.ofPattern(ctx.settings.dateTimeFormatterPattern)
                 .withZone(zoneId)
     }
 
@@ -59,7 +57,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         try {
             Files.createDirectories(path)
             ImageIO.write(img, IMAGE_FILE_EXTENSION, path.toFile())
-            if (settings.trayNotify) {
+            if (ctx.settings.trayNotify) {
                 Application.trayIcon.displayMessage(
                         "Screenshot Taken",
                         fileName,
@@ -67,7 +65,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 )
             }
         } catch (e: IOException) {
-            logger.error("Failed to take screenshot", e)
+            ctx.logger.error("Failed to take screenshot", e)
         }
     }
 

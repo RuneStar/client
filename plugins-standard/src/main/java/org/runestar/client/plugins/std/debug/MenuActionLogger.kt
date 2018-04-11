@@ -9,9 +9,8 @@ class MenuActionLogger : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(Menu.actions.subscribe { a ->
-            logger.info(a.toString())
+            ctx.logger.info(a.toString())
         })
     }
 }

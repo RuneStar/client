@@ -14,12 +14,11 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
     override val defaultSettings = Settings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
 
             g.font = RUNESCAPE_SMALL_FONT
 
-            if (settings.interactable) {
+            if (ctx.settings.interactable) {
                 g.color = Color.CYAN
                 SceneObjects.Interactable.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -28,7 +27,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
                 }
             }
 
-            if (settings.wall) {
+            if (ctx.settings.wall) {
                 g.color = Color.ORANGE
                 SceneObjects.Wall.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -37,7 +36,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
                 }
             }
 
-            if (settings.floor) {
+            if (ctx.settings.floor) {
                 g.color = Color.GREEN
                 SceneObjects.Floor.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -46,7 +45,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
                 }
             }
 
-            if (settings.boundary) {
+            if (ctx.settings.boundary) {
                 g.color = Color.WHITE
                 SceneObjects.Boundary.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach

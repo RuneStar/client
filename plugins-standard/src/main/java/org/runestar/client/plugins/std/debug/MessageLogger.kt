@@ -10,9 +10,8 @@ class MessageLogger : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(Chat.messages.subscribe { m ->
-            logger.info("type=${MessageType.LOOKUP[m.type]}, $m")
+            ctx.logger.info("type=${MessageType.LOOKUP[m.type]}, $m")
         })
     }
 }

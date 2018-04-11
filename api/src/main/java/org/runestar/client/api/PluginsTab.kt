@@ -1,7 +1,7 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import org.runestar.client.plugins.PluginHandle
+import org.runestar.client.plugins.PluginContext
 import org.runestar.client.plugins.PluginLoader
 import java.awt.Component
 import javax.imageio.ImageIO
@@ -17,7 +17,7 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
 
     private val timer = Timer(600, null)
 
-    private var curPlugins: MutableMap<PluginHandle, Boolean>
+    private var curPlugins: MutableMap<PluginContext<*>, Boolean>
 
     private val pluginsBox: Box
 
@@ -60,7 +60,7 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
         pluginsBox.repaint()
     }
 
-    private fun PluginHandle.createComponent(): Component {
+    private fun PluginContext<*>.createComponent(): Component {
         val popup = JPopupMenu().apply {
             add(JMenuItem("Settings").apply {
                 addActionListener { desktop?.safeOpen(settingsFile) }
@@ -76,9 +76,9 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
             })
             add(Box.createGlue())
             add(JCheckBox().apply {
-                isSelected = isRunning
+                isSelected = isRunning()
                 addActionListener {
-                    if (isSelected) this@createComponent.start() else this@createComponent.stop()
+                    if (isSelected) pluginLoader.start(this@createComponent) else pluginLoader.stop(this@createComponent)
                     curPlugins[this@createComponent] = isSelected
                 }
             })
@@ -92,7 +92,7 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
         }
     }
 
-    private fun PluginLoader.snapshot(): MutableMap<PluginHandle, Boolean> {
-        return plugins.associateTo(LinkedHashMap()) { it to it.isRunning }
+    private fun PluginLoader.snapshot(): MutableMap<PluginContext<*>, Boolean> {
+        return plugins.associateTo(LinkedHashMap()) { it to it.isRunning() }
     }
 }

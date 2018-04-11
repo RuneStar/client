@@ -44,8 +44,6 @@ private fun update() {
     aether.session.transferListener = frame
 
     try {
-        Files.createDirectories(PLUGINS_DIR_PATH)
-        installArtifact(aether.updateArtifact(GROUP_ID, PLUGINS_STANDARD_ARTIFACT_ID), PLUGINS_STANDARD_PATH)
         installArtifact(aether.updateArtifact(GROUP_ID, CLIENT_ARTIFACT_ID), CLIENT_PATH)
     } catch (e: Exception) {
         logger.warn("Error while updating", e)

@@ -18,7 +18,6 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             val p = Players.local?.accessor ?: return@subscribe
 

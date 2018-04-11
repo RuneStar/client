@@ -1,33 +1,32 @@
 package org.runestar.client.plugins.std.debug
 
 import org.runestar.client.game.raw.Client.accessor
-import org.runestar.client.plugins.Plugin
+import org.runestar.client.plugins.AbstractPlugin
 import org.runestar.client.plugins.PluginSettings
 
-class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
+class DevOptionsDebug : AbstractPlugin<DevOptionsDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
     override fun start() {
-        super.start()
-        if (settings.boundingBoxes2D.draw) {
+        if (ctx.settings.boundingBoxes2D.draw) {
             accessor.boundingBoxes_draw2D = true
         }
-        if (settings.boundingBoxes3D.draw) {
+        if (ctx.settings.boundingBoxes3D.draw) {
             accessor.boundingBoxes_draw3D = true
         }
-        if (settings.boundingBoxes3D.drawAll) {
+        if (ctx.settings.boundingBoxes3D.drawAll) {
             accessor.boundingBoxes_3DDrawMode = accessor.boundingBox3DDrawMode_all
         } else {
             accessor.boundingBoxes_3DDrawMode = accessor.boundingBox3DDrawMode_mouseOver
         }
-        if (settings.displayFps) {
+        if (ctx.settings.displayFps) {
             accessor.displayFps = true
         }
-        if (!settings.useBoundingBoxes3D) {
+        if (!ctx.settings.useBoundingBoxes3D) {
             accessor.useBoundingBoxes3D = false
         }
-        if (settings.boundingBoxes2D.drawObjectGeometry) {
+        if (ctx.settings.boundingBoxes2D.drawObjectGeometry) {
             accessor.boundingBoxes_drawObjectGeometry2D = true
         }
 //        if (settings.numberMenuOptions) {
@@ -36,7 +35,6 @@ class DevOptionsDebug : Plugin<DevOptionsDebug.Settings>() {
     }
 
     override fun stop() {
-        super.stop()
         accessor.boundingBoxes_draw2D = false
         accessor.boundingBoxes_draw3D = false
         accessor.displayFps = false

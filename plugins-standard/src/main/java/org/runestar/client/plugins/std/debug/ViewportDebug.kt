@@ -14,7 +14,6 @@ class ViewportDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.CYAN
             g.draw(LiveViewport.shape)

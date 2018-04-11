@@ -11,7 +11,6 @@ class GrandExchangeOfferDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40

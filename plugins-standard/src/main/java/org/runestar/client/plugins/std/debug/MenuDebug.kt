@@ -12,8 +12,6 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
-
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40
@@ -39,11 +37,11 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
         })
 
         add(Menu.openings.subscribe { pt ->
-            logger.info("Menu opened at $pt")
+            ctx.logger.info("Menu opened at $pt")
         })
 
         add(Menu.actions.subscribe { a ->
-            logger.info(a.toString())
+            ctx.logger.info(a.toString())
         })
     }
 }

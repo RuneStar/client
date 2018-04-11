@@ -12,7 +12,6 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             val p = Client.accessor.clientPreferences ?: return@subscribe
             val strings = listOf(

@@ -12,7 +12,6 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
     override val defaultSettings = Settings()
 
     override fun start() {
-        super.start()
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.WHITE
             g.font = RUNESCAPE_SMALL_FONT
@@ -21,7 +20,7 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
             var y = 40
             val lines = ArrayList<String>()
 
-            when (settings.mode) {
+            when (ctx.settings.mode) {
                 Mode.CLAN -> {
                     val cc = Game.clanChat ?: return@subscribe
                     lines.add("owner=${cc.owner}")

@@ -1,34 +1,14 @@
 package org.runestar.client.plugins
 
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper
-import org.kxtra.slf4j.loggerfactory.getLogger
-import java.nio.file.Path
+interface Plugin<T : PluginSettings> {
 
-abstract class Plugin<T : PluginSettings> {
+    val name: String
 
-    @JvmField
-    val logger = getLogger(javaClass)
+    val defaultSettings: T
 
-    abstract val defaultSettings: T
+    fun init(ctx: PluginContext<T>)
 
-    /**
-     * Should not be modified. Any modifications will not be saved.
-     */
-    lateinit var settings: T
-        internal set
+    fun start()
 
-    lateinit var directory: Path
-        internal set
-
-    @OverridingMethodsMustInvokeSuper
-    open fun start() {
-        logger.info("start")
-    }
-
-    @OverridingMethodsMustInvokeSuper
-    open fun stop() {
-        logger.info("stop")
-    }
-
-    open val name: String = javaClass.simpleName
+    fun stop()
 }
