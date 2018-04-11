@@ -29,7 +29,7 @@ object JarInfo : Transformer {
         logger.info { "Signatures: $signatures" }
 
         val sourceDebug = classNodes.mapNotNull { it.sourceDebug }.toSortedSet()
-        logger.info { "Class source debug: $sourceDebug" }
+        logger.info { "Class source dev: $sourceDebug" }
 
         val outerMethods = classNodes.filter { it.outerMethod != null }.map { it.name + ":" + it.outerClass + "." + it.outerMethod + it.outerMethodDesc }.sorted()
         logger.info { "Outer methods: $outerMethods" }

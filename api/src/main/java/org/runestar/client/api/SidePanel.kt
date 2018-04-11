@@ -70,7 +70,6 @@ class SidePanel internal constructor() : JPanel() {
     }
 
     internal fun clear() {
-        logger.info("Clear")
         tabs.clear()
         buttons.clear()
         rebuild()

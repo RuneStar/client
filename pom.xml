@@ -24,7 +24,7 @@
         <module>game-inject-maven-plugin</module>
         <module>plugins</module>
         <module>utils</module>
-        <module>plugins-standard</module>
+        <module>plugins-spi</module>
         <module>updater</module>
         <module>updater-common</module>
         <module>updater-deob</module>

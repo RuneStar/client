@@ -1,8 +1,8 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import org.runestar.client.plugins.PluginContext
-import org.runestar.client.plugins.PluginLoader
+import org.runestar.client.plugins.spi.PluginContext
+import org.runestar.client.plugins.spi.PluginLoader
 import java.awt.Component
 import javax.imageio.ImageIO
 import javax.swing.*

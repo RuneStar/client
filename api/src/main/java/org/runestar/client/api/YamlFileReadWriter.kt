@@ -1,7 +1,7 @@
 package org.runestar.client.api
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import org.runestar.client.plugins.FileReadWriter
+import org.runestar.client.plugins.spi.FileReadWriter
 import java.nio.file.Path
 
 internal object YamlFileReadWriter : FileReadWriter {

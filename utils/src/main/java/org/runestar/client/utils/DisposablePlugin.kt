@@ -4,8 +4,8 @@ import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.internal.disposables.ListCompositeDisposable
-import org.runestar.client.plugins.AbstractPlugin
-import org.runestar.client.plugins.PluginSettings
+import org.runestar.client.plugins.spi.AbstractPlugin
+import org.runestar.client.plugins.spi.PluginSettings
 
 /**
  * A [Plugin] that allows [Disposable] instances to be registered in the [start] method using [add] which will

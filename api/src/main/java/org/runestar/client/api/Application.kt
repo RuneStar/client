@@ -12,7 +12,7 @@ import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.PluginLoader
+import org.runestar.client.plugins.spi.PluginLoader
 import org.runestar.general.JavConfig
 import java.awt.Frame
 import java.awt.MenuItem

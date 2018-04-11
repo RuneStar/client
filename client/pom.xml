@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-plugins-standard</artifactId>
+            <artifactId>client-plugins</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
