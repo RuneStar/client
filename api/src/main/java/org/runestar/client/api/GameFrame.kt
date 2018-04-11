@@ -36,7 +36,7 @@ class GameFrame internal constructor(
         isVisible = true
     }
 
-    internal fun refit() {
+    fun refit() {
         // todo
 
         val app = applet.size
