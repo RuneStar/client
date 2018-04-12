@@ -7,7 +7,7 @@ import java.awt.Component
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class PluginsTab(val pluginLoader: PluginLoader) : TabButton(){
+class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
 
     override val name = "Plugins"
 
