@@ -3,8 +3,6 @@
 
 #-Drunestar.world=30
 
-#-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
-
 #-Dsun.java2d.trace=log,timestamp,count,out:sun.java2d.trace.log
 
 #-noverify
