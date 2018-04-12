@@ -10,7 +10,7 @@ class PluginContext<T : PluginSettings>(
         val logger: Logger,
         val directory: Path,
         val settingsFile: Path
-) {
+) : Comparable<PluginContext<*>> {
 
     lateinit var settings: T
         internal set
@@ -21,6 +21,10 @@ class PluginContext<T : PluginSettings>(
 
     fun isRunning(): Boolean {
         return this::settings.isInitialized && settings.enabled
+    }
+
+    override fun compareTo(other: PluginContext<*>): Int {
+        return name.compareTo(other.name)
     }
 
     companion object {

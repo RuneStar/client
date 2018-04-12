@@ -24,7 +24,7 @@ class PluginLoader(
 
     private val pluginNames: Map<String, PluginHolder<*>>
 
-    val plugins: Collection<PluginContext<*>>
+    val plugins: SortedSet<PluginContext<*>>
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor(threadFactory)
 
@@ -35,7 +35,7 @@ class PluginLoader(
     init {
         val ps = findPlugins(classLoader)
         val holders = ps.map { PluginHolder.of(it, pluginsDir, settingsReadWriter, watchService) }
-        plugins = holders.map { it.ctx }
+        plugins = holders.mapTo(TreeSet()) { it.ctx }
         pluginNames = holders.associateBy { it.ctx.name }
 
         executor.submit {
