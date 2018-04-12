@@ -23,5 +23,7 @@ internal object LafInstallation : Runnable {
                 e.setValue(chatFont)
             }
         }
+
+        System.setProperty("sun.awt.noerasebackground", true.toString())
     }
 }
