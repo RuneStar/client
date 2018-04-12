@@ -105,7 +105,7 @@ class SidePanel internal constructor() : JPanel() {
             selectedTab = tabs.firstOrNull()
         }
         selectedTab?.component?.let {
-            panel.add(it)
+            panel.add(it, BorderLayout.CENTER)
         }
         revalidate()
         repaint()
@@ -115,13 +115,13 @@ class SidePanel internal constructor() : JPanel() {
         return JButton(icon).apply {
             alignmentY = JComponent.TOP_ALIGNMENT
             alignmentX = JComponent.CENTER_ALIGNMENT
-            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIcon)
+            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
 //            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener {
                 if (selectedTab != this@makeButton || !panel.isVisible) {
                     selectedTab = this@makeButton
                     panel.removeAll()
-                    panel.add(component)
+                    panel.add(component, BorderLayout.CENTER)
                     if (!panel.isVisible) {
                         panel.isVisible = true
                         (windowAncestor() as GameFrame).refit() // todo
