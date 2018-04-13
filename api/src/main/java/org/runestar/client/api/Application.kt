@@ -187,7 +187,7 @@ object Application {
         frame.topBar.clear()
         frame.sidePanel.panel.isVisible = false
         frame.refit()
-        frame.sidePanel.add(PluginsTab(pluginLoader))
+        frame.sidePanel.addFirst(PluginsTab(pluginLoader))
         frame.sidePanel.add(HideTopBarButton())
     }
 }

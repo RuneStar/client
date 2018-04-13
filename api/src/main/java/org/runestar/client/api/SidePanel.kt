@@ -22,6 +22,8 @@ class SidePanel internal constructor() : JPanel() {
 
     private val buttons: SortedSet<BarButton> = TreeSet()
 
+    private var firstTabs: SortedSet<TabButton> = TreeSet()
+
     internal val panel: JPanel
 
     private val buttonsBox: Box
@@ -61,7 +63,15 @@ class SidePanel internal constructor() : JPanel() {
         rebuild()
     }
 
-    fun add(button: BarButton) {
+    internal fun addFirst(tab: TabButton) {
+        if (!firstTabs.add(tab)) {
+            logger.info { "Cannot add $tab, it is already present" }
+            return
+        }
+        rebuild()
+    }
+
+    internal fun add(button: BarButton) {
         if (!buttons.add(button)) {
             logger.info { "Cannot add $button, it is already present" }
             return
@@ -70,6 +80,7 @@ class SidePanel internal constructor() : JPanel() {
     }
 
     internal fun clear() {
+        firstTabs.clear()
         tabs.clear()
         buttons.clear()
         rebuild()
@@ -83,7 +94,15 @@ class SidePanel internal constructor() : JPanel() {
         rebuild()
     }
 
-    fun remove(button: BarButton) {
+    internal fun removeFirst(tab: TabButton) {
+        if (!firstTabs.remove(tab)) {
+            logger.info { "Cannot remove $tab, it is not present" }
+            return
+        }
+        rebuild()
+    }
+
+    internal fun remove(button: BarButton) {
         if (!buttons.remove(button)) {
             logger.info { "Cannot remove $button, it is not present" }
             return
@@ -94,6 +113,9 @@ class SidePanel internal constructor() : JPanel() {
     private fun rebuild() {
         buttonsBox.removeAll()
         panel.removeAll()
+        firstTabs.forEach {
+            buttonsBox.add(it.makeButton())
+        }
         tabs.forEach {
             buttonsBox.add(it.makeButton())
         }
@@ -102,7 +124,7 @@ class SidePanel internal constructor() : JPanel() {
             buttonsBox.add(it.makeButton())
         }
         if (selectedTab == null) {
-            selectedTab = tabs.firstOrNull()
+            selectedTab = firstTabs.firstOrNull() ?: tabs.firstOrNull()
         }
         selectedTab?.component?.let {
             panel.add(it, BorderLayout.CENTER)
