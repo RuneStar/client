@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.runestar.client</groupId>
+        <artifactId>client-parent</artifactId>
+        <version>0.168.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>client-plugins-dev</artifactId>
+    <packaging>jar</packaging>
+
+    <name>client/plugins/dev</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.runestar.client</groupId>
+            <artifactId>client-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.runestar.client</groupId>
+            <artifactId>client-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
+                <artifactId>serviceloader-maven-plugin</artifactId>
+                <configuration>
+                    <services>
+                        <param>org.runestar.client.plugins.spi.Plugin</param>
+                    </services>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

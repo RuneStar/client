@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.widgetexplorer
+package org.runestar.client.plugins.dev.widgetexplorer
 
 import org.runestar.client.common.ICON
 import org.runestar.client.game.api.Widget
