@@ -1,6 +1,7 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
+import com.alee.managers.tooltip.TooltipManager
 import com.alee.managers.tooltip.TooltipWay
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
@@ -54,18 +55,18 @@ class TopBar internal constructor(): JPanel() {
     private fun rebuild() {
         removeAll()
         buttons.forEach {
-            add(it.makeButton(TooltipWay.right))
+            add(it.makeButton())
         }
         add(Box.createGlue())
         revalidate()
         repaint()
     }
 
-    private fun BarButton.makeButton(tooltipWay: TooltipWay): JButton {
+    private fun BarButton.makeButton(): JButton {
         return JButton(icon).apply {
             putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
             addActionListener(this@makeButton)
-//            TooltipManager.addTooltip(this, this@makeButton.name, tooltipWay) // todo
+            TooltipManager.addTooltip(this, this@makeButton.name, TooltipWay.right) // todo
         }
     }
 }
