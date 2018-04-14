@@ -2847,4 +2847,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.klass == klass<Scene>() }
                 .and { it.type == type<NodeDeque>() }
     }
+
+    @DependsOn(Rasterizer2D_setClip::class)
+    class minimapState : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Rasterizer2D_setClip>().id }
+                .nextWithin(5) { it.opcode == ICONST_2 }
+                .nextWithin(10) { it.opcode == ICONST_5 }
+                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }

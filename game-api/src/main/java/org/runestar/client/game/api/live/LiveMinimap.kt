@@ -4,6 +4,7 @@ import org.runestar.client.game.api.Angle
 import org.runestar.client.game.api.Minimap
 import org.runestar.client.game.api.Scene
 import org.runestar.client.game.api.WindowMode
+import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.Client.accessor
 import java.awt.Point
 import java.awt.geom.Ellipse2D
@@ -31,6 +32,21 @@ object LiveMinimap : Minimap {
      * Due to overlapping orbs, this is not the clickable area.
      */
     val circle get() = Ellipse2D.Float().apply { setFrameFromCenter(center, Point(center.x + RADIUS, center.y + RADIUS)) }
+
+    var isDrawn: Boolean
+        get() = Client.accessor.minimapState.let { it != 2 && it != 5 }
+        set(value) {
+            val old = Client.accessor.minimapState
+            Client.accessor.minimapState = if (isDrawn) {
+                old + 1
+            } else {
+                old - 1
+            }
+        }
+
+    val isClickable: Boolean get() = Client.accessor.minimapState < 3
+
+    val isCompassDrawn: Boolean get() = Client.accessor.minimapState.let { it != 2 && it != 5 }
 
     override fun toString(): String {
         return "LiveMinimap(orientation=$orientation, reference=$reference, center=$center)"
