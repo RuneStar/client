@@ -19,7 +19,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
             add(XNpcDefinition.init.exit.subscribe {
                 val def = it.instance
                 when (def.id) {
-                    NpcId.BARRICADE, NpcId.BARRICADE_5723, NpcId.BARRICADE_5724, NpcId.BARRICADE_5725 -> {
+                    NpcId.BARRICADE_5722, NpcId.BARRICADE_5723, NpcId.BARRICADE_5724, NpcId.BARRICADE_5725 -> {
                         def.drawMapDot = true
                     }
                 }

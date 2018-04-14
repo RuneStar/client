@@ -90,17 +90,17 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
         fun ids(): Set<Int> {
             val b = ImmutableSet.builder<Int>()
-            if (baby) b.add(NpcId.BABY_IMPLING).add(NpcId.BABY_IMPLING_1645)
-            if (young) b.add(NpcId.YOUNG_IMPLING).add(NpcId.YOUNG_IMPLING_1646)
-            if (gourmet) b.add(NpcId.GOURMET_IMPLING).add(NpcId.GOURMET_IMPLING_1647)
-            if (earth) b.add(NpcId.EARTH_IMPLING).add(NpcId.EARTH_IMPLING_1648)
-            if (essence) b.add(NpcId.ESSENCE_IMPLING).add(NpcId.ESSENCE_IMPLING_1649)
-            if (eclectic) b.add(NpcId.ECLECTIC_IMPLING).add(NpcId.ECLECTIC_IMPLING_1650)
-            if (nature) b.add(NpcId.NATURE_IMPLING).add(NpcId.NATURE_IMPLING_1651)
-            if (magpie) b.add(NpcId.MAGPIE_IMPLING).add(NpcId.MAGPIE_IMPLING_1652)
-            if (ninja) b.add(NpcId.NINJA_IMPLING).add(NpcId.NINJA_IMPLING_1653)
-            if (dragon) b.add(NpcId.DRAGON_IMPLING).add(NpcId.DRAGON_IMPLING_1654)
-            if (lucky) b.add(NpcId.LUCKY_IMPLING).add(NpcId.LUCKY_IMPLING_7302)
+            if (baby) b.add(NpcId.BABY_IMPLING_1635).add(NpcId.BABY_IMPLING_1645)
+            if (young) b.add(NpcId.YOUNG_IMPLING_1636).add(NpcId.YOUNG_IMPLING_1646)
+            if (gourmet) b.add(NpcId.GOURMET_IMPLING_1637).add(NpcId.GOURMET_IMPLING_1647)
+            if (earth) b.add(NpcId.EARTH_IMPLING_1638).add(NpcId.EARTH_IMPLING_1648)
+            if (essence) b.add(NpcId.ESSENCE_IMPLING_1639).add(NpcId.ESSENCE_IMPLING_1649)
+            if (eclectic) b.add(NpcId.ECLECTIC_IMPLING_1640).add(NpcId.ECLECTIC_IMPLING_1650)
+            if (nature) b.add(NpcId.NATURE_IMPLING_1641).add(NpcId.NATURE_IMPLING_1651)
+            if (magpie) b.add(NpcId.MAGPIE_IMPLING_1642).add(NpcId.MAGPIE_IMPLING_1652)
+            if (ninja) b.add(NpcId.NINJA_IMPLING_1643).add(NpcId.NINJA_IMPLING_1653)
+            if (dragon) b.add(NpcId.DRAGON_IMPLING_1644).add(NpcId.DRAGON_IMPLING_1654)
+            if (lucky) b.add(NpcId.LUCKY_IMPLING_7233).add(NpcId.LUCKY_IMPLING_7302)
             return b.build()
         }
     }
