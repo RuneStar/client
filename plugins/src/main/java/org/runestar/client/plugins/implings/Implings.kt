@@ -29,7 +29,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         implingIds = ctx.settings.ids()
         if (implingIds.isNotEmpty()) {
             add(Game.ticks.subscribe {
-                implings = Npcs.filter { it.definition?.let { it.id in implingIds } ?: false }
+                implings = Npcs.filter { it.isImpling() }
             })
             add(LiveCanvas.repaints.subscribe { g ->
                 val npcs = implings
@@ -55,8 +55,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         }
         if (ctx.settings.drawMinimapInPuroPuro) {
             add(Game.ticks.subscribe {
-                val region = Players.local?.location?.toGlobalTile()?.region ?: return@subscribe
-                if (region == PURO_PURO_REGION && !LiveMinimap.isDrawn) {
+                if (inPuroPuro() && !LiveMinimap.isDrawn) {
                     LiveMinimap.isDrawn = true
                 }
             })
@@ -65,12 +64,19 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     override fun stop() {
         super.stop()
-        if (ctx.settings.drawMinimapInPuroPuro) {
-            val region = Players.local?.location?.toGlobalTile()?.region ?: return
-            if (region == PURO_PURO_REGION && LiveMinimap.isDrawn) {
-                LiveMinimap.isDrawn = false
-            }
+        if (ctx.settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
+            LiveMinimap.isDrawn = false
         }
+    }
+
+    private fun Npc.isImpling(): Boolean {
+        val def = definition ?: return false
+        return implingIds.contains(def.id)
+    }
+
+    private fun inPuroPuro(): Boolean {
+        val region = Players.local?.location?.toGlobalTile()?.region ?: return false
+        return region == PURO_PURO_REGION
     }
 
     class Settings(
