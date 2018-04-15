@@ -8,8 +8,6 @@ Direct access to game values through:
 
 * A singleton for accessing the `client` class instance.
  
- Generated sources available [here](http://repo.runestar.org/org/runestar/client/client-game-raw/).
- 
 #### Build Dependencies:
 
 * [game-raw-accessors-maven-plugin](https://github.com/RuneStar/client/tree/master/game-raw-accessors-maven-plugin) - Generates all of the accessor interfaces.
