@@ -29,6 +29,7 @@ class Angle(value: Int) {
     val cos get() = Math.cos(radians)
 
     companion object {
+        val ZERO = Angle(0)
         const val MAX_VALUE = 2048
         private const val DEGREES_INTERVAL = 360.0 / MAX_VALUE
         private val RADIANS_INTERVAL = Math.toRadians(DEGREES_INTERVAL)
