@@ -4,10 +4,13 @@ import org.kxtra.swing.polygon.Polygon
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.game.raw.access.XModel
 import java.awt.Graphics2D
-import java.awt.Point
 import java.awt.Polygon
 
-class Model(override val accessor: XModel) : Wrapper(accessor) {
+class Model internal constructor(
+        val accessor: XModel,
+        val base: Position,
+        val yaw: Angle
+) {
 
     private val localXMin get() = accessor.xMid - accessor.xMidOffset
 
@@ -23,8 +26,6 @@ class Model(override val accessor: XModel) : Wrapper(accessor) {
 
     fun drawBoundingBox(
             g: Graphics2D,
-            base: Position,
-            yaw: Angle = Angle.ZERO,
             projection: Projection = Projections.viewport
     ) {
         accessor.calculateBoundingBox(yaw.value) // todo
@@ -32,8 +33,8 @@ class Model(override val accessor: XModel) : Wrapper(accessor) {
         val xMax = base.localX + localXMax
         val yMin = base.localY + localYMin
         val yMax = base.localY + localYMax
-        val hMin = base.height - heightMin
-        val hMax = base.height - heightMax
+        val hMin = base.height + heightMin
+        val hMax = base.height + heightMax
         for (i in 0 until 8) {
             val x0 = if (i and 1 == 0) xMin else xMax
             val y0 = if (i and 2 == 0) yMin else yMax
@@ -61,10 +62,7 @@ class Model(override val accessor: XModel) : Wrapper(accessor) {
         }
     }
 
-    fun boundingBoxBottomCorners(
-            base: Position,
-            yaw: Angle = Angle.ZERO
-    ): List<Position> {
+    fun boundingBoxBottomCorners(): List<Position> {
         accessor.calculateBoundingBox(yaw.value) // todo
         return listOf(
                 base.plusLocal(localXMin, localYMin, heightMin),
@@ -74,11 +72,7 @@ class Model(override val accessor: XModel) : Wrapper(accessor) {
         )
     }
 
-    fun boundingBoxBottomOutline(
-            base: Position,
-            yaw: Angle = Angle.ZERO,
-            projection: Projection = Projections.viewport
-    ): Polygon {
-        return Polygon(boundingBoxBottomCorners(base, yaw).mapNotNull { projection.toScreen(it, base) })
+    fun boundingBoxBottomOutline(projection: Projection = Projections.viewport): Polygon {
+        return Polygon(boundingBoxBottomCorners().mapNotNull { projection.toScreen(it, base) })
     }
 }

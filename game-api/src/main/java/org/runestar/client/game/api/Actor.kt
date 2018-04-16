@@ -15,7 +15,7 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
     override val playerTargetIndex: Int?
         get() = accessor.targetIndex.let { if (it > 32768) it - 32768 else null }
 
-    override val position get() = Position(accessor.x, accessor.y, accessor.height, plane)
+    override val position get() = Position(accessor.x, accessor.y, 0, plane)
 
     val location get() = SceneTile(accessor.pathX[0], accessor.pathY[0], plane)
 

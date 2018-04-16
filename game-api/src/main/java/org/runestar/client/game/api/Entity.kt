@@ -10,5 +10,5 @@ abstract class Entity(override val accessor: XEntity) : Wrapper(accessor) {
 
     abstract val orientation: Angle
 
-    val model: Model? get() = accessor.model?.let { Model(it) }
+    val model: Model? get() = accessor.model?.let { Model(it, position, orientation) }
 }
