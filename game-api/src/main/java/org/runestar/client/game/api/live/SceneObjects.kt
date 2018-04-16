@@ -12,7 +12,7 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         tile.floorDecoration?.let { list.add(SceneObject.Floor(it, tile.plane)) }
         tile.wallDecoration?.let { list.add(SceneObject.Wall(it, tile.plane)) }
         tile.boundaryObject?.let { list.add(SceneObject.Boundary(it, tile.plane)) }
-        tile.gameObjects?.let { it.mapNotNullTo(list) { SceneObject.Interactable(it) } }
+        tile.gameObjects?.let { it.mapNotNullTo(list) { it?.let { SceneObject.Interactable(it) } } }
         return list.iterator()
     }
 
