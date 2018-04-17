@@ -52,23 +52,25 @@ class WallDecoration : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // todo
     @DependsOn(Scene.newWallDecoration::class)
     class orientation : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // todo
     @DependsOn(Scene.newWallDecoration::class)
     class int7 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Scene.newWallDecoration::class)
-    class int8 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 7) {
+    class xOffset : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Scene.newWallDecoration::class)
-    class int9 : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 8) {
+    class yOffset : OrderMapper.InMethod.Field(Scene.newWallDecoration::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }
