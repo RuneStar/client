@@ -69,9 +69,10 @@ abstract class SceneObject {
             val plane: Int = Client.accessor.plane
     ) : SceneObject() {
 
-        override val orientation: Angle get() = Angle(accessor.orientation)
+        override val orientation: Angle get() = Angle.ZERO
 
-        override val position: Position get() = location.center // todo
+        // todo: this is model1 position, model2 is location.center
+        override val position: Position get() = location.center.plusLocal(accessor.xOffset, accessor.yOffset, 0)
 
         val model1: Model? get() {
             val m = accessor.entity1 as? XModel ?: accessor.entity1?.model ?: return null
@@ -80,7 +81,7 @@ abstract class SceneObject {
 
         val model2: Model? get() {
             val m = accessor.entity2 as? XModel ?: accessor.entity2?.model ?: return null
-            return Model(m, position, orientation)
+            return Model(m, location.center, orientation)
         }
 
         override val models: List<Model> get() {
