@@ -162,4 +162,9 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<GameObject>()) }
     }
+
+    @MethodParameters()
+    class clear : OrderMapper.InConstructor.Method(Scene::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
 }
