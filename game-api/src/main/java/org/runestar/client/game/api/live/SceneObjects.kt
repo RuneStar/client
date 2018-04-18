@@ -1,8 +1,13 @@
 package org.runestar.client.game.api.live
 
+import io.reactivex.Observable
+import org.runestar.client.game.api.EntityKind
+import org.runestar.client.game.api.EntityTag
 import org.runestar.client.game.api.SceneObject
 import org.runestar.client.game.api.TileObjects
 import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.access.XGameObject
+import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
 
 object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
@@ -18,6 +23,16 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
 
     object Wall : TileObjects.Single<SceneObject.Wall>(Client.accessor.scene) {
 
+        val additions: Observable<SceneObject.Wall> = XScene.newWallDecoration.exit.map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneObject.Wall(tile.wallDecoration, tile.plane)
+        }
+
+        val removals: Observable<SceneObject.Wall> = XScene.removeWallDecoration.enter.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneObject.Wall(tile.wallDecoration, tile.plane)
+        }
+
         override fun fromTile(tile: XTile): SceneObject.Wall? {
             val v = tile.wallDecoration ?: return null
             return SceneObject.Wall(v, tile.plane)
@@ -25,6 +40,16 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
     }
 
     object Floor : TileObjects.Single<SceneObject.Floor>(Client.accessor.scene) {
+
+        val additions: Observable<SceneObject.Floor> = XScene.newFloorDecoration.exit.map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneObject.Floor(tile.floorDecoration, tile.plane)
+        }
+
+        val removals: Observable<SceneObject.Floor> = XScene.removeFloorDecoration.enter.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneObject.Floor(tile.floorDecoration, tile.plane)
+        }
 
         override fun fromTile(tile: XTile): SceneObject.Floor? {
             val v = tile.floorDecoration ?: return null
@@ -34,6 +59,16 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
 
     object Boundary : TileObjects.Single<SceneObject.Boundary>(Client.accessor.scene) {
 
+        val additions: Observable<SceneObject.Boundary> = XScene.newBoundaryObject.exit.map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneObject.Boundary(tile.boundaryObject, tile.plane)
+        }
+
+        val removals: Observable<SceneObject.Boundary> = XScene.removeBoundaryObject.enter.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneObject.Boundary(tile.boundaryObject, tile.plane)
+        }
+
         override fun fromTile(tile: XTile): SceneObject.Boundary? {
             val v = tile.boundaryObject ?: return null
             return SceneObject.Boundary(v, tile.plane)
@@ -41,6 +76,17 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
     }
 
     object Interactable : TileObjects.Many<SceneObject.Interactable>(Client.accessor.scene) {
+
+        val additions: Observable<SceneObject.Interactable> = XScene.newGameObject.exit
+                .filter { it.returned && EntityTag(it.arguments[11] as Int).kind == EntityKind.OBJECT }
+                .map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneObject.Interactable(tile.gameObjects[tile.gameObjectsCount - 1])
+                }
+
+        val removals: Observable<SceneObject.Interactable> = XScene.removeGameObject.enter
+                .map { SceneObject.Interactable(it.arguments[0] as XGameObject) }
+                .filter { it.tag.kind == EntityKind.OBJECT }
 
         override fun fromTile(tile: XTile): Iterator<SceneObject.Interactable> {
             return object : AbstractIterator<SceneObject.Interactable>() {
