@@ -5,11 +5,9 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.*
 import java.util.*
 
-abstract class SceneObject {
+abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     abstract val tag: EntityTag
-
-    abstract val accessor: Accessor
 
     val location get() = tag.location
 
@@ -21,7 +19,7 @@ abstract class SceneObject {
 
     class Interactable(
             override val accessor: XGameObject
-    ) : SceneObject() {
+    ) : SceneObject(accessor) {
 
         override val orientation: Angle get() = Angle(accessor.orientation)
 
@@ -44,7 +42,7 @@ abstract class SceneObject {
     class Floor(
             override val accessor: XFloorDecoration,
             val plane: Int = Client.accessor.plane
-    ) : SceneObject() {
+    ) : SceneObject(accessor) {
 
         override val orientation: Angle get() = Angle.ZERO
 
@@ -67,7 +65,7 @@ abstract class SceneObject {
     class Wall(
             override val accessor: XWallDecoration,
             val plane: Int = Client.accessor.plane
-    ) : SceneObject() {
+    ) : SceneObject(accessor) {
 
         override val orientation: Angle get() = Angle.ZERO
 
@@ -100,7 +98,7 @@ abstract class SceneObject {
     class Boundary(
             override val accessor: XBoundaryObject,
             val plane: Int = Client.accessor.plane
-    ) : SceneObject() {
+    ) : SceneObject(accessor) {
 
         override val orientation: Angle get() = Angle.ZERO
 
