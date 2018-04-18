@@ -11,6 +11,7 @@ import java.awt.Polygon
 import java.awt.Rectangle
 import java.awt.geom.Area
 import java.awt.geom.Line2D
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -131,18 +132,26 @@ class Model internal constructor(
     fun geometryRectangles(projection: Projection = Projections.viewport): List<Rectangle> {
         val sin = yaw.sinInternal
         val cos = yaw.cosInternal
-        return List(accessor.indicesCount) {
-            val a = vertexToScreen(accessor.indices1[it], projection, sin, cos) ?: return emptyList()
-            val b = vertexToScreen(accessor.indices2[it], projection, sin, cos) ?: return emptyList()
-            val c = vertexToScreen(accessor.indices3[it], projection, sin, cos) ?: return emptyList()
+        val count = accessor.indicesCount
+        val list = ArrayList<Rectangle>(count)
+        for (i in 0 until count) {
+            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
+            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
+            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
 
-            val xl = min(a.x, min(b.x, c.x)) - 4
-            val yl = min(a.y, min(b.y, c.y)) - 4
-            val xh = max(a.x, max(b.x, c.x)) + 4
-            val yh = max(a.y, max(b.y, c.y)) + 4
+            val xMin = min(a.x, min(b.x, c.x)) - 4 // pad all sides by 4
+            val yMin = min(a.y, min(b.y, c.y)) - 4
+            val xMax = max(a.x, max(b.x, c.x)) + 4
+            val yMax = max(a.y, max(b.y, c.y)) + 4
 
-            Rectangle(xl, yl, xh - xl, yh - yl)
+            val w = xMax - xMin
+            val h = yMax - yMin
+
+            if (list.none { it.contains(xMin, yMin, w, h) }) {
+                list.add(Rectangle(xMin, yMin, w, h))
+            }
         }
+        return list
     }
 
     fun geometryOutline(projection: Projection = Projections.viewport): Area {
