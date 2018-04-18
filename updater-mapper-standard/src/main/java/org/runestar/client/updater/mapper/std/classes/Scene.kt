@@ -1,6 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -10,8 +12,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.*
 
 @DependsOn(GameObject::class)
 class Scene : IdentityMapper.Class() {
@@ -28,6 +28,7 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type.arrayDimensions == 3 && it.type.baseType in it.jar }
     }
 
+    @MethodParameters("plane", "startX", "startY", "sizeX", "sizeY", "centerX", "centerY", "height", "entity", "orientation", "b", "tag", "flags")
     @DependsOn(Entity::class)
     class newGameObject : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
@@ -36,6 +37,7 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.size in 13..14 }
     }
 
+    @MethodParameters("plane", "x", "y", "tileHeight", "entity", "tag", "flags")
     @DependsOn(Entity::class)
     class newFloorDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -44,6 +46,7 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.size in 7..8 }
     }
 
+    @MethodParameters("plane", "x", "y", "tileHeight", "entity1", "entity2", "orientation", "int7", "xOffset", "yOffset", "tag", "flags")
     @DependsOn(Entity::class)
     class newWallDecoration : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -52,7 +55,7 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.size in 12..13 }
     }
 
-    @MethodParameters("plane", "x", "y", "int0", "bottom", "int1", "middle", "top")
+    @MethodParameters("plane", "x", "y", "tileHeight", "bottom", "tag", "middle", "top")
     @DependsOn(Entity::class)
     class newGroundItemPile : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -97,6 +100,7 @@ class Scene : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.boundaryObject>().id } }
     }
 
+    @MethodParameters("plane", "x", "y", "tileHeight", "entity1", "entity2", "orientationA", "orientationB", "tag", "flags")
     @DependsOn(Entity::class)
     class newBoundaryObject : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -150,5 +154,12 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size == 4 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("gameObject")
+    @DependsOn(GameObject::class)
+    class removeGameObject : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<GameObject>()) }
     }
 }

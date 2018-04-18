@@ -1,20 +1,20 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.runestar.client.updater.mapper.std.*
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
+import org.objectweb.asm.tree.JumpInsnNode
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.std.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.objectweb.asm.tree.JumpInsnNode
 import java.applet.Applet
 import java.io.File
 import java.lang.management.GarbageCollectorMXBean
@@ -2854,5 +2854,9 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(5) { it.opcode == ICONST_2 }
                 .nextWithin(10) { it.opcode == ICONST_5 }
                 .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class visibilityMaps : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE.withDimensions(4) }
     }
 }
