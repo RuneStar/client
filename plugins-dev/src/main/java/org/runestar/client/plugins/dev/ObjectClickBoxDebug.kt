@@ -16,12 +16,10 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
 
     private val objs: MutableSet<SceneObject> = LinkedHashSet()
 
-    private val isObjInteractable: (SceneObject) -> Boolean = { it.tag.isInteractable }
-
     override fun start() {
         add(XScene.clear.exit.subscribe { objs.clear() })
-        add(SceneObjects.removals.filter(isObjInteractable).subscribe { objs.remove(it) })
-        add(SceneObjects.additions.filter(isObjInteractable).subscribe { objs.add(it) })
+        add(SceneObjects.removals.filter(SceneObject::isInteractable).subscribe { objs.remove(it) })
+        add(SceneObjects.additions.filter(SceneObject::isInteractable).subscribe { objs.add(it) })
 
         val color = Color(0, 255, 255, 80)
         add(LiveCanvas.repaints.subscribe { g ->
