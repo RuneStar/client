@@ -19,11 +19,11 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
 
     private var curPlugins: MutableMap<PluginContext<*>, Boolean>
 
-    private val pluginsBox: Box
+    private val pluginsBox = JPanel().apply { layout = BoxLayout(this, BoxLayout.Y_AXIS) }
 
     init {
-        pluginsBox = Box.createVerticalBox()
-        component = JScrollPane(pluginsBox).apply {
+        component = JScrollPane(null).apply {
+            setViewportView(pluginsBox)
             verticalScrollBar.apply {
                 unitIncrement = 16
                 putClientProperty(StyleId.STYLE_PROPERTY, StyleId.scrollbarUndecoratedButtonless)

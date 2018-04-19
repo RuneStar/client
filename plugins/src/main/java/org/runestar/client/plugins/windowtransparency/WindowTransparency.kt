@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities
 /**
  * Tested on:
  *
- * Windows 10 - Java 9, 10
+ * Windows 10 - Java 8, 9, 10
  *
  */
 class WindowTransparency : AbstractPlugin<WindowTransparency.Settings>() {
