@@ -9,41 +9,23 @@ import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import java.awt.Color
-import java.util.concurrent.CopyOnWriteArraySet
 
 class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    private val objs = CopyOnWriteArraySet<SceneObject>()
+    private val objs: MutableSet<SceneObject> = LinkedHashSet()
 
-    private val addition: (SceneObject) -> Unit = {
-        if (it.tag.isInteractable) {
-            objs.add(it)
-        }
-    }
-
-    private val removal: (SceneObject) -> Unit = {
-        if (it.tag.isInteractable) {
-            objs.remove(it)
-        }
-    }
+    private val isObjInteractable: (SceneObject) -> Boolean = { it.tag.isInteractable }
 
     override fun start() {
         add(XScene.clear.exit.subscribe { objs.clear() })
+        add(SceneObjects.removals.filter(isObjInteractable).subscribe { objs.remove(it) })
+        add(SceneObjects.additions.filter(isObjInteractable).subscribe { objs.add(it) })
 
-        add(SceneObjects.Wall.removals.subscribe(removal))
-        add(SceneObjects.Floor.removals.subscribe(removal))
-        add(SceneObjects.Boundary.removals.subscribe(removal))
-        add(SceneObjects.Interactable.removals.subscribe(removal))
-
-        add(SceneObjects.Wall.additions.subscribe(addition))
-        add(SceneObjects.Floor.additions.subscribe(addition))
-        add(SceneObjects.Boundary.additions.subscribe(addition))
-        add(SceneObjects.Interactable.additions.subscribe(addition))
-
+        val color = Color(0, 255, 255, 80)
         add(LiveCanvas.repaints.subscribe { g ->
-            g.color = Color.WHITE
+            g.color = color
             val viewport = LiveViewport.shape
             objs.forEach {
                 val loc = it.location
@@ -51,7 +33,7 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
                 val center = loc.center.toScreen() ?: return@forEach
                 if (center !in viewport) return@forEach
                 it.models.forEach {
-                    g.draw(it.objectClickBoxOutline())
+                    g.fill(it.objectClickBoxOutline())
                 }
             }
         })
