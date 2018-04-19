@@ -33,7 +33,7 @@ class BoundingBoxTest : DisposablePlugin<PluginSettings>() {
             }
 
             g.color = Color.CYAN
-            SceneObjects.Interactable.onPlane(Game.plane).forEach {
+            SceneObjects.Game.onPlane(Game.plane).forEach {
                 val m = it.model ?: return@forEach
                 m.drawBoundingBox(g)
             }

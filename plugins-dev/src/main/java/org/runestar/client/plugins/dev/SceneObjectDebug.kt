@@ -20,7 +20,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (ctx.settings.interactable) {
                 g.color = Color.CYAN
-                SceneObjects.Interactable.onPlane(Game.plane).forEach { i ->
+                SceneObjects.Game.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())

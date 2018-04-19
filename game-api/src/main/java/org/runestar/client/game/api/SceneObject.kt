@@ -17,7 +17,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     abstract val models: Collection<Model>
 
-    class Interactable(
+    class Game(
             override val accessor: XGameObject
     ) : SceneObject(accessor) {
 
@@ -35,7 +35,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
         override val tag get() = EntityTag(accessor.tag, accessor.plane)
 
         override fun toString(): String {
-            return "SceneObject.Interactable(tag=$tag)"
+            return "SceneObject.Game(tag=$tag)"
         }
     }
 

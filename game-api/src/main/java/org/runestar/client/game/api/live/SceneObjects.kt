@@ -17,7 +17,7 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         tile.floorDecoration?.let { list.add(SceneObject.Floor(it, tile.plane)) }
         tile.wallDecoration?.let { list.add(SceneObject.Wall(it, tile.plane)) }
         tile.boundaryObject?.let { list.add(SceneObject.Boundary(it, tile.plane)) }
-        tile.gameObjects?.let { it.mapNotNullTo(list) { it?.let { SceneObject.Interactable(it) } } }
+        tile.gameObjects?.let { it.mapNotNullTo(list) { it?.let { SceneObject.Game(it) } } }
         return list.iterator()
     }
 
@@ -25,13 +25,13 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
             .mergeWith(Wall.additions)
             .mergeWith(Floor.additions)
             .mergeWith(Boundary.additions)
-            .mergeWith(Interactable.additions)
+            .mergeWith(Game.additions)
 
     val removals: Observable<SceneObject> = Observable.empty<SceneObject>()
             .mergeWith(Wall.removals)
             .mergeWith(Floor.removals)
             .mergeWith(Boundary.removals)
-            .mergeWith(Interactable.removals)
+            .mergeWith(Game.removals)
 
     object Wall : TileObjects.Single<SceneObject.Wall>(Client.accessor.scene) {
 
@@ -87,28 +87,28 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         }
     }
 
-    object Interactable : TileObjects.Many<SceneObject.Interactable>(Client.accessor.scene) {
+    object Game : TileObjects.Many<SceneObject.Game>(Client.accessor.scene) {
 
-        val additions: Observable<SceneObject.Interactable> = XScene.newGameObject.exit
+        val additions: Observable<SceneObject.Game> = XScene.newGameObject.exit
                 .filter { it.returned && EntityTag(it.arguments[11] as Int).kind == EntityKind.OBJECT }
                 .map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                    SceneObject.Interactable(tile.gameObjects[tile.gameObjectsCount - 1])
+                    SceneObject.Game(tile.gameObjects[tile.gameObjectsCount - 1])
                 }
 
-        val removals: Observable<SceneObject.Interactable> = XScene.removeGameObject.enter
-                .map { SceneObject.Interactable(it.arguments[0] as XGameObject) }
+        val removals: Observable<SceneObject.Game> = XScene.removeGameObject.enter
+                .map { SceneObject.Game(it.arguments[0] as XGameObject) }
                 .filter { it.tag.kind == EntityKind.OBJECT }
 
-        override fun fromTile(tile: XTile): Iterator<SceneObject.Interactable> {
-            return object : AbstractIterator<SceneObject.Interactable>() {
+        override fun fromTile(tile: XTile): Iterator<SceneObject.Game> {
+            return object : AbstractIterator<SceneObject.Game>() {
 
                 private var i = 0
 
                 override fun computeNext() {
                     if (i >= tile.gameObjectsCount) return done()
                     val o = tile.gameObjects[i++] ?: return done()
-                    setNext(SceneObject.Interactable(o))
+                    setNext(SceneObject.Game(o))
                 }
             }
         }
