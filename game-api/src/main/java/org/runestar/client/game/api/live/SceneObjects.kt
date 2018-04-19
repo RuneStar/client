@@ -21,6 +21,18 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         return list.iterator()
     }
 
+    val additions: Observable<SceneObject> = Observable.empty<SceneObject>()
+            .mergeWith(Wall.additions)
+            .mergeWith(Floor.additions)
+            .mergeWith(Boundary.additions)
+            .mergeWith(Interactable.additions)
+
+    val removals: Observable<SceneObject> = Observable.empty<SceneObject>()
+            .mergeWith(Wall.removals)
+            .mergeWith(Floor.removals)
+            .mergeWith(Boundary.removals)
+            .mergeWith(Interactable.removals)
+
     object Wall : TileObjects.Single<SceneObject.Wall>(Client.accessor.scene) {
 
         val additions: Observable<SceneObject.Wall> = XScene.newWallDecoration.exit.map {
