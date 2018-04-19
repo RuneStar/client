@@ -11,7 +11,6 @@ import java.awt.Polygon
 import java.awt.Rectangle
 import java.awt.geom.Area
 import java.awt.geom.Line2D
-import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -147,16 +146,18 @@ class Model internal constructor(
             val w = xMax - xMin
             val h = yMax - yMin
 
-            if (list.none { it.contains(xMin, yMin, w, h) }) {
-                list.add(Rectangle(xMin, yMin, w, h))
-            }
+            list.add(Rectangle(xMin, yMin, w, h))
         }
         return list
     }
 
     fun geometryOutline(projection: Projection = Projections.viewport): Area {
         return Area().apply {
-            geometryRectangles(projection).forEach { add(Area(it)) }
+            for (rect in geometryRectangles(projection)) {
+                if (!contains(rect)) {
+                    add(Area(rect))
+                }
+            }
         }
     }
 
