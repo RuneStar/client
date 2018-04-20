@@ -1,12 +1,12 @@
 package org.runestar.client.game.api.live
 
+import hu.akarnokd.rxjava2.swing.SwingObservable
+import io.reactivex.Observable
 import org.kxtra.swing.component.windowAncestor
+import org.runestar.client.game.api.*
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
-import hu.akarnokd.rxjava2.swing.SwingObservable
-import io.reactivex.Observable
-import org.runestar.client.game.api.*
 import org.runestar.client.game.raw.access.XPacketBuffer
 import java.awt.Component
 import java.awt.Container
@@ -63,4 +63,6 @@ object Game {
      * 0 - 100
      */
     val specialAttackPercent get() = getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
+
+    val visibilityMap = VisibilityMap(Client.accessor.visibilityMaps, LiveCamera)
 }
