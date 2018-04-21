@@ -1,7 +1,10 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.game.api.SceneObject
-import org.runestar.client.game.api.live.*
+import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.SceneObjects
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
@@ -22,10 +25,9 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = color
             val viewport = LiveViewport.shape
-            val cam = LiveCamera.position.sceneTile
             objs.forEach {
                 val loc = it.location
-                if (loc.plane != Game.plane || !loc.isVisible(cam)) return@forEach
+                if (loc.plane != Game.plane || Game.visibilityMap.isVisible(loc)) return@forEach
                 val pt = loc.center.toScreen() ?: return@forEach
                 if (pt !in viewport) return@forEach
                 it.models.forEach {

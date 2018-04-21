@@ -1,10 +1,8 @@
 package org.runestar.client.game.api
 
 import org.kxtra.swing.polygon.Polygon
-import org.runestar.client.game.api.live.LiveCamera
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Projections
-import org.runestar.client.game.raw.Client
 import java.awt.Polygon
 
 data class SceneTile(
@@ -47,17 +45,5 @@ data class SceneTile(
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }
         return Polygon(corners.mapNotNull { it.toScreen(projection) })
-    }
-
-    fun isVisible(
-            camera: SceneTile = LiveCamera.position.sceneTile,
-            visibility: Array<BooleanArray>? = Client.accessor.visibleTiles
-    ): Boolean {
-        val vis = visibility ?: return false
-        val vx = x - camera.x + 25
-        if (vx !in 0..50) return false
-        val vy = y - camera.y + 25
-        if (vy !in 0..50) return false
-        return vis[vx][vy]
     }
 }
