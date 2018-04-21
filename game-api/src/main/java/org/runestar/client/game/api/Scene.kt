@@ -26,7 +26,11 @@ interface Scene {
 
     fun getHeight(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }
-        return heights[sceneTile.plane][sceneTile.x][sceneTile.y]
+        return getHeight(sceneTile.x, sceneTile.y, sceneTile.plane)
+    }
+
+    fun getHeight(x: Int, y: Int, plane: Int): Int {
+        return heights[plane][x][y]
     }
 
     val heights: Array<Array<IntArray>>
@@ -34,20 +38,24 @@ interface Scene {
     fun getTileHeight(position: Position): Int {
         require(position.isLoaded) { position }
         var p = position.plane
-        if (p < 3 && 0 != (getRenderFlags(SceneTile(position.x, position.y, 1)).toInt() and 2)) {
+        if (p < 3 && 0 != getRenderFlags(position.x, position.y, 1).toInt() and 2) {
             p++
         }
-        val o = getHeight(SceneTile(position.x, position.y, p))
-        val ne = if (position.x != SIZE - 1 && position.y != SIZE - 1) getHeight(SceneTile(1 + position.x, 1 + position.y, p)) else o
-        val n = if (position.y != SIZE - 1) getHeight(SceneTile(position.x, 1 + position.y, p)) else o
-        val e = if (position.x != SIZE - 1) getHeight(SceneTile(1 + position.x, position.y, p)) else o
+        val o = getHeight(position.x, position.y, p)
+        val ne = if (position.x != SIZE - 1 && position.y != SIZE - 1) getHeight(1 + position.x, 1 + position.y, p) else o
+        val n = if (position.y != SIZE - 1) getHeight(position.x, 1 + position.y, p) else o
+        val e = if (position.x != SIZE - 1) getHeight(1 + position.x, position.y, p) else o
         return position.subY * (ne * position.subX + n * (128 - position.subX) shr 7) +
                 (128 - position.subY) * (position.subX * e + o * (128 - position.subX) shr 7) shr 7
     }
 
     fun getRenderFlags(sceneTile: SceneTile): Byte {
         require(sceneTile.isLoaded) { sceneTile }
-        return renderFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
+        return getRenderFlags(sceneTile.x, sceneTile.y, sceneTile.plane)
+    }
+
+    fun getRenderFlags(x: Int, y: Int, plane: Int): Byte {
+        return renderFlags[plane][x][y]
     }
 
     val renderFlags: Array<Array<ByteArray>>
