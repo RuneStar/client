@@ -27,7 +27,7 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
             val viewport = LiveViewport.shape
             objs.forEach {
                 val loc = it.location
-                if (loc.plane != Game.plane || Game.visibilityMap.isVisible(loc)) return@forEach
+                if (loc.plane != Game.plane || !Game.visibilityMap.isVisible(loc)) return@forEach
                 val pt = loc.center.toScreen() ?: return@forEach
                 if (pt !in viewport) return@forEach
                 it.models.forEach {
