@@ -2859,4 +2859,18 @@ class Client : IdentityMapper.Class() {
     class visibilityMaps : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE.withDimensions(4) }
     }
+
+    @DependsOn(Scene::class)
+    class Scene_buildVisiblityMaps : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.klass == klass<Scene>() }
+                .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    class Scene_viewportXMin : SceneViewportField(0)
+    class Scene_viewportYMin : SceneViewportField(1)
+    class Scene_viewportXMax : SceneViewportField(2)
+    class Scene_viewportYMax : SceneViewportField(3)
+    class Scene_viewportXCenter : SceneViewportField(4)
+    class Scene_viewportYCenter : SceneViewportField(5)
 }
