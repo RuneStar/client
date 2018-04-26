@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
+import org.runestar.client.updater.deob.Transformer
+import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.deob.writeJar
 import java.nio.file.Path
 import java.util.*
 
@@ -53,7 +53,7 @@ object UnusedMethodRemover : Transformer {
                 val m = methods.next()
                 m.instructions
                 val mName = c.name + "." + m.name + m.desc
-                if (m.name.length > 2) continue // overrides a jdk method
+                if (m.name.length > 3) continue // overrides a jdk method
                 if (usedMethods.contains(mName)) continue
                 if (methodUsedIn(c, m, usedMethods, supers)) continue
                 if (methodUsedIn(c, m, usedMethods, subs)) continue
