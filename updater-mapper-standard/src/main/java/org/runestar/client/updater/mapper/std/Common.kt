@@ -97,3 +97,8 @@ abstract class UserComparatorClass(opcode: Int) : AllUniqueMapper.Class() {
 abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Client.Scene_buildVisiblityMaps::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }
+
+@DependsOn(Client.loadRegions::class)
+abstract class LoadRegionIntArrayField(index: Int) : OrderMapper.InMethod.Field(Client.loadRegions::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+}

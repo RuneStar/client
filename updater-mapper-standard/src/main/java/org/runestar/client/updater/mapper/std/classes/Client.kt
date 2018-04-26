@@ -1004,6 +1004,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
+    class Strings_membersObject : StringsUniqueMapper("Members object")
     class Strings_hidden : StringsUniqueMapper("Hidden")
     class Strings_space : StringsUniqueMapper(" ")
     class Strings_walkHere : StringsUniqueMapper("Walk here")
@@ -1183,6 +1184,7 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(25) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+//    @MethodParameters("widget")
     @SinceVersion(141)
     @DependsOn(Widget::class)
     class widgetMethod0 : IdentityMapper.InstanceMethod() {
@@ -2873,4 +2875,101 @@ class Client : IdentityMapper.Class() {
     class Scene_viewportYMax : SceneViewportField(3)
     class Scene_viewportXCenter : SceneViewportField(4)
     class Scene_viewportYCenter : SceneViewportField(5)
+
+    @MethodParameters("isInInstance", "packetBuffer")
+    @DependsOn(xteaKeys::class)
+    class loadRegions : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<xteaKeys>().id } }
+    }
+
+    @DependsOn(loadRegions::class)
+    class isInInstance : OrderMapper.InMethod.Field(loadRegions::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class regions : LoadRegionIntArrayField(0)
+    class regionMapArchiveIds : LoadRegionIntArrayField(1)
+    class regionLandArchiveIds : LoadRegionIntArrayField(2)
+
+    @DependsOn(updatePlayer::class)
+    class localPlayerIndex : OrderMapper.InMethod.Field(updatePlayer::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(widgetMethod0::class)
+    class canvasWidth : OrderMapper.InMethod.Field(widgetMethod0::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return if (instruction.jar.contains(instruction.fieldId)) {
+                instruction.jar[instruction.fieldId]
+            } else {
+                val superType = instruction.jar[instruction.fieldOwner].superType
+                instruction.jar[superType to instruction.fieldName]
+            }
+        }
+    }
+
+    @DependsOn(widgetMethod0::class)
+    class canvasHeight : OrderMapper.InMethod.Field(widgetMethod0::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+        override fun resolve(instruction: Instruction2): Field2 {
+            return if (instruction.jar.contains(instruction.fieldId)) {
+                instruction.jar[instruction.fieldId]
+            } else {
+                val superType = instruction.jar[instruction.fieldOwner].superType
+                instruction.jar[superType to instruction.fieldName]
+            }
+        }
+    }
+
+    @DependsOn(Widget::class)
+    class viewportWidget : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 6203 }
+                .nextWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
+    }
+
+    @DependsOn(menuAction::class)
+    class destinationX : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1001 }
+                .nextWithin(15) { it.opcode == ICONST_0 }
+                .nextWithin(3) { it.opcode == ILOAD && it.varVar == 0 }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(menuAction::class)
+    class destinationY : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1001 }
+                .nextWithin(15) { it.opcode == ICONST_0 }
+                .nextWithin(10) { it.opcode == ILOAD && it.varVar == 1 }
+                .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Sprite::class)
+    class mapIcons : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1000 }
+                .next { it.opcode == ANEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
+    }
+
+    @DependsOn(mapIcons::class)
+    class mapIconYs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<mapIcons>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(mapIcons::class)
+    class mapIconXs : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<mapIcons>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(mapIcons::class)
+    class mapIconCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<mapIcons>().id }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }
