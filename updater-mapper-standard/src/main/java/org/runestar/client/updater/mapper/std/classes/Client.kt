@@ -535,9 +535,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<KeyHandler>() }
     }
 
-    @DependsOn(WidgetNode::class, NodeHashTable::class)
-    class widgetNodes : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<WidgetNode>() }
+    @DependsOn(WidgetGroupParent::class, NodeHashTable::class)
+    class widgetGroupParents : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<WidgetGroupParent>() }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 
@@ -2981,5 +2981,18 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
                 .prevWithin(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class instanceChunkTemplates : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_4 }
+                .next { it.opcode == BIPUSH && it.intOperand == 13 }
+                .next { it.opcode == BIPUSH && it.intOperand == 13 }
+                .nextIn(2) { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(IntegerNode::class, NodeHashTable::class)
+    class widgetClickMasks : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<IntegerNode>() }
+                .prev { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
 }

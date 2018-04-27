@@ -6,11 +6,11 @@ import org.runestar.client.game.api.WidgetParentId
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XNodeHashTable
-import org.runestar.client.game.raw.access.XWidgetNode
+import org.runestar.client.game.raw.access.XWidgetGroupParent
 
 object WidgetChain : NodeHashTable<Widget.Parent, Int>() {
 
-    override val accessor: XNodeHashTable get() = Client.accessor.widgetNodes
+    override val accessor: XNodeHashTable get() = Client.accessor.widgetGroupParents
 
     override fun wrapKey(node: XNode): Widget.Parent {
         return checkNotNull(Widgets[WidgetParentId(node.key.toInt())])
@@ -21,6 +21,6 @@ object WidgetChain : NodeHashTable<Widget.Parent, Int>() {
     }
 
     override fun wrapValue(node: XNode): Int {
-        return (node as XWidgetNode).id
+        return (node as XWidgetGroupParent).group
     }
 }
