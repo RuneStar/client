@@ -609,11 +609,6 @@ class Client : IdentityMapper.Class() {
     class fps : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Fps:" }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-
-        // static field called through subclass
-        override fun resolve(instruction: Instruction2): Field2 {
-            return instruction.jar[instruction.jar[instruction.fieldOwner].superType to instruction.fieldName]
-        }
     }
 
     class worldToMinimap : IdentityMapper.StaticMethod() {
@@ -1248,15 +1243,6 @@ class Client : IdentityMapper.Class() {
     @DependsOn(SoundSystem.remaining::class)
     class isStereo : UniqueMapper.InMethod.Field(SoundSystem.remaining::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
-        // sometimes accesses static field through the subclass
-        override fun resolve(instruction: Instruction2): Field2 {
-            return if (instruction.jar.contains(instruction.fieldId)) {
-                instruction.jar[instruction.fieldId]
-            } else {
-                val superType = instruction.jar[instruction.fieldOwner].superType
-                instruction.jar[superType to instruction.fieldName]
-            }
-        }
     }
 
     @MethodParameters("color")
@@ -1968,14 +1954,6 @@ class Client : IdentityMapper.Class() {
     class garbageCollectorLastCheckTimeMs : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<garbageCollector>().id }
                 .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return if (instruction.jar.contains(instruction.fieldId)) {
-                instruction.jar[instruction.fieldId]
-            } else {
-                val superType = instruction.jar[instruction.fieldOwner].superType
-                instruction.jar[superType to instruction.fieldName]
-            }
-        }
     }
 
     @DependsOn(garbageCollector::class)
@@ -1983,14 +1961,6 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<garbageCollector>().id }
                 .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
                 .nextWithin(4) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return if (instruction.jar.contains(instruction.fieldId)) {
-                instruction.jar[instruction.fieldId]
-            } else {
-                val superType = instruction.jar[instruction.fieldOwner].superType
-                instruction.jar[superType to instruction.fieldName]
-            }
-        }
     }
 
     @DependsOn(Model.draw::class)
@@ -2291,17 +2261,17 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(ByteArray::class.type) }
     }
 
-    @DependsOn(Player::class, Actor.targetIndex::class, Actor.orientation::class)
+    @DependsOn(Actor::class, Actor.targetIndex::class, Actor.orientation::class)
     class Players_targetIndices : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Player>() }
-                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Player>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Actor>() }
+                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Actor>() }
                 .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(Player::class, Actor.targetIndex::class, Actor.orientation::class)
+    @DependsOn(Actor::class, Actor.targetIndex::class, Actor.orientation::class)
     class Players_orientations : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Player>() }
-                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Player>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldName == field<Actor.targetIndex>().name && it.fieldOwner == type<Actor>() }
+                .prevWithin(8) { it.opcode == PUTFIELD && it.fieldName == field<Actor.orientation>().name && it.fieldOwner == type<Actor>() }
                 .prevWithin(7) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
@@ -2910,27 +2880,11 @@ class Client : IdentityMapper.Class() {
     @DependsOn(widgetMethod0::class)
     class canvasWidth : OrderMapper.InMethod.Field(widgetMethod0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return if (instruction.jar.contains(instruction.fieldId)) {
-                instruction.jar[instruction.fieldId]
-            } else {
-                val superType = instruction.jar[instruction.fieldOwner].superType
-                instruction.jar[superType to instruction.fieldName]
-            }
-        }
     }
 
     @DependsOn(widgetMethod0::class)
     class canvasHeight : OrderMapper.InMethod.Field(widgetMethod0::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return if (instruction.jar.contains(instruction.fieldId)) {
-                instruction.jar[instruction.fieldId]
-            } else {
-                val superType = instruction.jar[instruction.fieldOwner].superType
-                instruction.jar[superType to instruction.fieldName]
-            }
-        }
     }
 
     @DependsOn(Widget::class)

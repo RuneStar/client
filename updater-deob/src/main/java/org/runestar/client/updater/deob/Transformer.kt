@@ -1,9 +1,6 @@
 package org.runestar.client.updater.deob
 
-import org.runestar.client.updater.deob.common.DebugRemover
-import org.runestar.client.updater.deob.common.FrameRemover
-import org.runestar.client.updater.deob.common.SortMethodsByLineNumber
-import org.runestar.client.updater.deob.common.UnnecessaryGotoRemover
+import org.runestar.client.updater.deob.common.*
 import org.runestar.client.updater.deob.common.controlflow.ControlFlowFixer
 import org.runestar.client.updater.deob.jagex.*
 import org.runestar.client.updater.deob.jagex.mult.MultiplierFinder
@@ -33,6 +30,7 @@ interface Transformer {
          */
         val TESTING = Transformer.Composite(
                 JarInfo,
+                FieldResolver,
                 MultiplierFinder,
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
@@ -50,6 +48,7 @@ interface Transformer {
         )
 
         val DEFAULT = Transformer.Composite(
+                FieldResolver,
                 MultiplierFinder,
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
@@ -69,6 +68,7 @@ interface Transformer {
          * enclosing method attributes.
          */
         val CLEAN = Transformer.Composite(
+                FieldResolver,
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
