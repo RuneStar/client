@@ -1,17 +1,19 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.runestar.client.updater.mapper.*
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.*
+import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Field2
+import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.tree.Method2
 import java.lang.reflect.Modifier
 
 @DependsOn(Entity::class)
@@ -140,26 +142,18 @@ class Actor : IdentityMapper.Class() {
     class x : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.SIPUSH && it.intOperand == 3308 }
                 .nextWithin(15) { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE }
-
-        override fun resolve(instruction: Instruction2): Field2 {
-            return instruction.jar[type<Actor>() to instruction.fieldName]
-        }
     }
 
     @DependsOn(x::class)
     class y : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.SIPUSH && it.intOperand == 3308 }
                 .nextWithin(25) { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE && it.fieldName != field<x>().name }
-
-        override fun resolve(instruction: Instruction2): Field2 {
-            return instruction.jar[type<Actor>() to instruction.fieldName]
-        }
     }
 
-    class orientation : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == Math::atan2.id }
-                .nextWithin(6) { it.opcode == SIPUSH && it.intOperand == 2047 }
-                .nextWithin(6) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
+    @DependsOn(Player.getModel::class, Model.offsetBy::class)
+    class orientation : UniqueMapper.InMethod.Field(Player.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+                .nextWithin(5) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
     }
 
     class overheadTextCyclesRemaining : OrderMapper.InConstructor.Field(Actor::class, 9) {
@@ -170,17 +164,11 @@ class Actor : IdentityMapper.Class() {
     class heightOffset : UniqueMapper.InMethod.Field(Npc.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
                 .prevWithin(8) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return instruction.jar[type<Actor>() to instruction.fieldName]
-        }
     }
 
     @DependsOn(Npc.getModel::class, Npc::class)
     class defaultHeight : UniqueMapper.InMethod.Field(Npc.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Npc>() }
-        override fun resolve(instruction: Instruction2): Field2 {
-            return instruction.jar[type<Actor>() to instruction.fieldName]
-        }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
     }
 
     // spotAnimationStartCycle

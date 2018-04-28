@@ -1,9 +1,12 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -11,11 +14,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GETSTATIC
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.INT_TYPE
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 
 @DependsOn(Actor::class)
 class Player : IdentityMapper.Class() {
@@ -71,7 +69,7 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class team : OrderMapper.InConstructor.Field(Player::class, 3) {
+    class skillLevel : OrderMapper.InConstructor.Field(Player::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -87,5 +85,63 @@ class Player : IdentityMapper.Class() {
 
     class isLowDetail : OrderMapper.InConstructor.Field(Player::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Client.updatePlayer::class)
+    class index : OrderMapper.InMethod.Field(Client.updatePlayer::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD }
+    }
+
+    @DependsOn(Model.offsetBy::class)
+    class tileHeight : OrderMapper.InMethod.Field(getModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+                .prevWithin(6) { it.opcode == ISUB }
+                .prevWithin(10) { it.opcode == ISUB }
+                .prevWithin(10) { it.opcode == ISUB }
+                .nextWithin(5) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class team : OrderMapper.InConstructor.Field(Player::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class isHidden : OrderMapper.InConstructor.Field(Player::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Client.plane::class, Client.updatePlayer::class)
+    class plane : UniqueMapper.InMethod.Field(Client.updatePlayer::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Client.plane>().id }
+                .prevWithin(5) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Model.offsetBy::class)
+    class tileHeight2 : OrderMapper.InMethod.Field(getModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+                .prevWithin(6) { it.opcode == ISUB }
+                .prevWithin(10) { it.opcode == ISUB }
+                .prevWithin(5) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters("x", "y")
+    @DependsOn(transformedSize::class)
+    class resetPath : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<transformedSize>().id } }
+    }
+
+    @DependsOn(resetPath::class)
+    class tileY : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodId == method<resetPath>().id }
+                .prevWithin(4) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Player>() }
+    }
+
+    @DependsOn(resetPath::class)
+    class tileX : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodId == method<resetPath>().id }
+                .prevWithin(4) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Player>() }
+                .prevWithin(6) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Player>() }
     }
 }

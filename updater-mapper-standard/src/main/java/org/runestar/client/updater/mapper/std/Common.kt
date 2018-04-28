@@ -1,17 +1,17 @@
 package org.runestar.client.updater.mapper.std
 
-import org.runestar.client.updater.mapper.std.classes.*
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.BYTE_TYPE
+import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.std.classes.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.annotations.SinceVersion
-import org.runestar.client.updater.mapper.extensions.Predicate
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -91,4 +91,14 @@ abstract class UserComparatorClass(opcode: Int) : AllUniqueMapper.Class() {
     override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == opcode }
             .nextWithin(30) { it.isField && it.fieldId == field<Client.friendSystem>().id }
             .nextWithin(3) { it.opcode == NEW }
+}
+
+@DependsOn(Client.Scene_buildVisiblityMaps::class)
+abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Client.Scene_buildVisiblityMaps::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+}
+
+@DependsOn(Client.loadRegions::class)
+abstract class LoadRegionIntArrayField(index: Int) : OrderMapper.InMethod.Field(Client.loadRegions::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
 }
