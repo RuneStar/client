@@ -1,20 +1,6 @@
 # ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF
--Drunestar.log.level=INFO
+#-Drunestar.log.level=INFO
 
 #-Drunestar.world=30
 
-#-Dsun.java2d.trace=log,timestamp,count,out:sun.java2d.trace.log
-
-#-noverify
-
-#-XX:+HeapDumpOnOutOfMemoryError
-
-# used by sun.java2d.SunGraphicsEnvironment
-# default value: -1
 #-Dsun.java2d.uiScale=-1
-
-# used by sun.awt.Win32GraphicsEnvironment
-# default value: -1
-# takes priority over sun.java2d.uiScale
-#-Dsun.java2d.win.uiScaleX=-1
-#-Dsun.java2d.win.uiScaleY=-1
