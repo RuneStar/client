@@ -7,6 +7,7 @@ import org.runestar.client.plugins.spi.AbstractPlugin
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Component
 import java.awt.Dimension
+import javax.swing.SwingUtilities
 
 class WindowSize : AbstractPlugin<WindowSize.Settings>() {
 
@@ -15,16 +16,22 @@ class WindowSize : AbstractPlugin<WindowSize.Settings>() {
     override val name = "Window Size"
 
     override fun start() {
-        (Client.accessor as Component).size = ctx.settings.size
-        Application.frame.refit()
-        ctx.logger.info { "frame size: ${Application.frame.size}" }
+        SwingUtilities.invokeLater {
+            (Client.accessor as Component).size = ctx.settings.gameSize
+            val frame = Application.frame
+            frame.refit()
+            frame.isResizable = false
+            ctx.logger.info { "frame size: ${frame.size}" }
+        }
     }
 
     override fun stop() {
-
+        SwingUtilities.invokeLater {
+            Application.frame.isResizable = true
+        }
     }
 
     data class Settings(
-            val size: Dimension = Client.accessor.canvas.size
+            val gameSize: Dimension = Client.accessor.canvas.size
     ) : PluginSettings()
 }
