@@ -37,4 +37,6 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
         }
         return null
     }
+
+    val defaultHeight: Int get() = accessor.defaultHeight
 }
