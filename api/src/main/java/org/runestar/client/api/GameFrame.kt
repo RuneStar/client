@@ -1,18 +1,17 @@
-@file:Suppress("DEPRECATION")
-
 package org.runestar.client.api
 
 import org.runestar.client.common.ICON
 import org.runestar.client.common.TITLE
-import java.applet.Applet
+import org.runestar.client.game.api.GameState
+import org.runestar.client.game.api.live.Game
+import java.awt.Container
 import java.awt.Dimension
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JFrame
-import javax.swing.WindowConstants
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
+import javax.swing.*
 
 class GameFrame internal constructor(
-        val applet: Applet
+        val applet: Container
 ) : JFrame(TITLE) {
 
     val sidePanel = SidePanel()
@@ -28,7 +27,8 @@ class GameFrame internal constructor(
                 }
         )
         add(sidePanel)
-        defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+        addWindowListener(WindowListener())
+        defaultCloseOperation = WindowConstants.DO_NOTHING_ON_CLOSE
         iconImage = ICON
         pack()
         minimumSize = layout.minimumLayoutSize(this)
@@ -56,5 +56,24 @@ class GameFrame internal constructor(
         )
 
         repaint()
+    }
+
+    private inner class WindowListener : WindowAdapter() {
+
+        override fun windowClosing(e: WindowEvent) {
+            if (Game.state.id <= GameState.TITLE.id || confirmExit()) {
+                Application.close()
+                defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            }
+        }
+
+        private fun confirmExit(): Boolean {
+            return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                    this@GameFrame,
+                    "Are you sure you want to exit?",
+                    "Exit",
+                    JOptionPane.YES_NO_OPTION
+            )
+        }
     }
 }

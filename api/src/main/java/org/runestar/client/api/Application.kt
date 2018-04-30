@@ -20,16 +20,13 @@ import java.awt.PopupMenu
 import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
 import javax.swing.ImageIcon
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
 
-object Application {
+object Application : AutoCloseable {
 
     private val logger = getLogger()
 
@@ -45,9 +42,13 @@ object Application {
     lateinit var frame: GameFrame
         private set
 
-    private lateinit var pluginLoader: PluginLoader
+    private var pluginLoader: PluginLoader? = null
 
     private var started = false
+
+    private var rsn: String? = null
+
+    private var profileName: String = DEFAULT_PROFILE
 
     fun start() {
         check(!started)
@@ -70,30 +71,17 @@ object Application {
         waitForTitle()
         Client.accessor.gameDrawingMode = 2
 
-        setProfile()
+        setProfile(DEFAULT_PROFILE)
 
-        frame.addWindowListener(FrameCloseConfirmListener())
+        buildTray()
 
-        trayIcon.apply {
-            popupMenu = PopupMenu(TITLE).apply {
-                add(MenuItem("Change profile").apply {
-                    addActionListener { changeProfile() }
-                })
-                add(MenuItem("Toggle side panel").apply {
-                    addActionListener {
-                        frame.sidePanel.isVisible = !frame.sidePanel.isVisible
-                        frame.refit()
-                    }
-                })
+        Observable.interval(2, TimeUnit.SECONDS).subscribe {
+            val name = if (Game.state == GameState.TITLE) null else Client.accessor.localPlayerName
+            if (name != rsn) {
+                rsn = name
+                setTitle()
             }
-            addMouseListener(object : MouseAdapter() {
-                override fun mouseClicked(e: MouseEvent) {
-                    if (e.isLeftButton) frame.state = Frame.NORMAL
-                }
-            })
         }
-
-        systemTray?.add(trayIcon)
     }
 
     private fun setup() {
@@ -121,46 +109,25 @@ object Application {
                 )
     }
 
-    private class FrameCloseConfirmListener : WindowAdapter() {
-        override fun windowClosing(e: WindowEvent) {
-            frame.defaultCloseOperation = if (Game.state == GameState.TITLE || confirmExit(frame)) {
-                pluginLoader.close()
-                systemTray?.remove(trayIcon)
-                WindowConstants.EXIT_ON_CLOSE
-            } else {
-                WindowConstants.DO_NOTHING_ON_CLOSE
-            }
-        }
-    }
-
-    private fun confirmExit(frame: Frame): Boolean {
-        return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
-                frame,
-                "Are you sure you want to exit?",
-                "Exit",
-                JOptionPane.YES_NO_OPTION
-        )
-    }
-
     private fun changeProfile() {
-        val existingCustomProfiles = ArrayList<String>()
+        val existingProfiles = ArrayList<String>()
         for (p in Files.newDirectoryStream(PROFILES_DIR_PATH)) {
             if (Files.isDirectory(p)) {
                 val name = p.fileName.toString()
-                if (name != DEFAULT_PROFILE) {
-                    existingCustomProfiles.add(name)
+                if (name != profileName) {
+                    existingProfiles.add(name)
                 }
             }
         }
-        val p = showProfileDialog(existingCustomProfiles)
-        if (p != null) {
+        val p = showProfileDialog(existingProfiles)
+        if (p != null && p != profileName) {
             setProfile(p)
         }
     }
 
     // todo
     private fun showProfileDialog(profiles: List<String>): String? {
-        val msg = "Existing profiles: [${profiles.joinToString()}]"
+        val msg = "Current: $profileName\nOthers: [${profiles.joinToString()}]"
         return JOptionPane.showInputDialog(
                 frame,
                 msg,
@@ -168,26 +135,60 @@ object Application {
                 JOptionPane.PLAIN_MESSAGE,
                 ImageIcon(ICON),
                 null,
-                DEFAULT_PROFILE
+                profileName
         ).takeIf {
             it is String && !it.isBlank() && it.matches(VALID_PROFILE_REGEX)
         } as String?
     }
 
-    private fun setProfile(profile: String = DEFAULT_PROFILE) {
-        val title = if (profile == DEFAULT_PROFILE) TITLE else "$TITLE - $profile"
-        frame.title = title
-        trayIcon.toolTip = title
-        if (::pluginLoader.isInitialized) pluginLoader.close()
+    private fun setProfile(profile: String) {
+        profileName = profile
+        pluginLoader?.close()
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
 
-        pluginLoader = PluginLoader(javaClass.classLoader, profileDir, YamlFileReadWriter)
+        val pl = PluginLoader(javaClass.classLoader, profileDir, YamlFileReadWriter)
+        pluginLoader = pl
         frame.sidePanel.clear()
         frame.topBar.clear()
         frame.sidePanel.panel.isVisible = false
         frame.refit()
-        frame.sidePanel.addFirst(PluginsTab(pluginLoader))
+        frame.sidePanel.addFirst(PluginsTab(pl))
         frame.sidePanel.add(HideTopBarButton())
+    }
+
+    private fun setTitle() {
+        val title = rsn?.let { "$TITLE - $it" } ?: TITLE
+        frame.title = title
+        trayIcon.toolTip = title
+    }
+
+    private fun buildTray() {
+        trayIcon.apply {
+            popupMenu = PopupMenu(TITLE).apply {
+                add(MenuItem("Change profile").apply {
+                    addActionListener { changeProfile() }
+                })
+                add(MenuItem("Toggle side panel").apply {
+                    addActionListener {
+                        frame.sidePanel.isVisible = !frame.sidePanel.isVisible
+                        frame.refit()
+                    }
+                })
+            }
+            addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent) {
+                    if (e.isLeftButton) frame.state = Frame.NORMAL
+                }
+            })
+        }
+
+        systemTray?.add(trayIcon)
+    }
+
+    override fun close() {
+        frame.dispose()
+        pluginLoader?.close()
+        systemTray?.remove(trayIcon)
     }
 }
