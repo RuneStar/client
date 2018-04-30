@@ -1,6 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -11,9 +14,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.*
 
 @DependsOn(Entity::class)
 class Projectile : IdentityMapper.Class() {
@@ -42,6 +42,7 @@ class Projectile : IdentityMapper.Class() {
                 .and { it.arguments.size in 1..2 }
     }
 
+    @MethodParameters("x", "y", "height", "cycle")
     class adjust : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
