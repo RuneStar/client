@@ -2,6 +2,7 @@ package org.runestar.client.plugins.implings
 
 import com.google.common.collect.ImmutableSet
 import org.runestar.cache.generated.NpcId
+import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Npc
 import org.runestar.client.game.api.Region
 import org.runestar.client.game.api.live.*
@@ -10,16 +11,20 @@ import org.runestar.client.utils.DisposablePlugin
 import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.RenderingHints
 
+@Suppress("UNUSED_PARAMETER")
 class Implings : DisposablePlugin<Implings.Settings>() {
 
     private companion object {
         val PURO_PURO_REGION = Region(40, 67, 0)
+        val DRAW_COLOR = Color(255, 255, 255,140)
+        val TEXT_COLOR = Color.WHITE
     }
 
     override val defaultSettings = Settings()
 
-    @Volatile
     private lateinit var implingIds: Set<Int>
 
     @Volatile
@@ -27,50 +32,76 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     override fun start() {
         implingIds = ctx.settings.ids()
-        if (implingIds.isNotEmpty()) {
-            add(Game.ticks.subscribe {
-                implings = Npcs.filter { it.isImpling() }
-            })
-            add(LiveCanvas.repaints.subscribe { g ->
-                val npcs = implings
-                if (npcs.isEmpty()) return@subscribe
-                g.color = Color.WHITE
-                g.font = RUNESCAPE_CHAT_FONT
-                npcs.forEach { npc ->
-                    val pos = npc.position
-                    if (!pos.isLoaded) return@forEach
-                    val name: String = npc.accessor.definition?.name ?: return@forEach
-
-                    val mmPt = pos.toScreen(Projections.minimap)
-                    if (mmPt != null) {
-                        g.drawStringShadowed(name, mmPt.x, mmPt.y)
-                    }
-
-                    val pt = pos.toScreen(Projections.viewport)
-                    if (pt != null) {
-                        g.drawStringShadowed(name, pt.x, pt.y)
-                    }
-                }
-            })
-        }
+        add(Game.ticks.subscribe(::onTick))
+        add(Game.stateChanges.filter { it == GameState.TITLE }.subscribe(::onLogOut))
+        add(LiveCanvas.repaints.subscribe(::onRepaint))
         if (ctx.settings.drawMinimapInPuroPuro) {
-            add(Game.ticks.subscribe {
-                if (inPuroPuro() && !LiveMinimap.isDrawn) {
-                    LiveMinimap.isDrawn = true
-                }
-            })
+            add(Game.ticks.subscribe(::onTickMinimap))
         }
     }
 
     override fun stop() {
         super.stop()
+        implings = emptyList()
         if (ctx.settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
             LiveMinimap.isDrawn = false
         }
     }
 
-    private fun Npc.isImpling(): Boolean {
-        val def = definition ?: return false
+    private fun onTick(u: Unit) {
+        implings = Npcs.filter(::isImpling)
+    }
+
+    private fun onTickMinimap(u: Unit) {
+        if (!LiveMinimap.isDrawn && inPuroPuro()) {
+            LiveMinimap.isDrawn = true
+        }
+    }
+
+    private fun onLogOut(gameState: GameState) {
+        implings = emptyList()
+    }
+
+    private fun onRepaint(g: Graphics2D) {
+        val npcs = implings
+        if (npcs.isEmpty()) return
+
+        g.font = RUNESCAPE_CHAT_FONT
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        npcs.forEach { npc ->
+            val loc = npc.location
+            if (!loc.isLoaded) return@forEach
+
+            g.color = DRAW_COLOR
+            val model = npc.model
+            if (model != null) {
+                model.drawBoundingBox(g)
+            } else {
+                val tileOutline = loc.outline()
+                g.draw(tileOutline)
+            }
+
+            g.color = TEXT_COLOR
+            val pos = npc.position.copy(height = npc.accessor.defaultHeight / 3)
+            if (!pos.isLoaded) return@forEach
+            val name = npc.definition?.name?.substringBefore(' ') ?: "Impling"
+
+            val minimapPt = pos.toScreen(Projections.minimap)
+            if (minimapPt != null) {
+                g.drawStringShadowed(name, minimapPt.x, minimapPt.y)
+            }
+
+            val viewportPt = pos.toScreen(Projections.viewport)
+            if (viewportPt != null) {
+                val nameWidth = g.fontMetrics.stringWidth(name)
+                g.drawStringShadowed(name, viewportPt.x - nameWidth / 2, viewportPt.y)
+            }
+        }
+    }
+
+    private fun isImpling(npc: Npc): Boolean {
+        val def = npc.definition ?: return false
         return implingIds.contains(def.id)
     }
 
@@ -86,16 +117,17 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             val gourmet: Boolean = false,
             val earth: Boolean = false,
             val essence: Boolean = false,
-            val eclectic: Boolean = false,
-            val nature: Boolean = false,
-            val magpie: Boolean = false,
-            val ninja: Boolean = false,
+            val eclectic: Boolean = true,
+            val nature: Boolean = true,
+            val magpie: Boolean = true,
+            val ninja: Boolean = true,
             val dragon: Boolean = true,
             val lucky: Boolean = true
     ) : PluginSettings() {
 
         fun ids(): Set<Int> {
             val b = ImmutableSet.builder<Int>()
+            b.add(1618).add(1633) // spawns
             if (baby) b.add(NpcId.BABY_IMPLING_1635).add(NpcId.BABY_IMPLING_1645)
             if (young) b.add(NpcId.YOUNG_IMPLING_1636).add(NpcId.YOUNG_IMPLING_1646)
             if (gourmet) b.add(NpcId.GOURMET_IMPLING_1637).add(NpcId.GOURMET_IMPLING_1647)
