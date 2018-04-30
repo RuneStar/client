@@ -1,13 +1,12 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XActor
 import org.runestar.client.game.raw.access.XHealthBar
 import org.runestar.client.game.raw.access.XHitSplat
 
 abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTargeting {
 
-    private val plane = Client.accessor.plane // todo
+    abstract val plane: Int
 
     override val npcTargetIndex: Int?
         get() = accessor.targetIndex.let { if (it in 0..32767) it else null }

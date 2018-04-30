@@ -4,6 +4,8 @@ import org.runestar.client.game.raw.access.XPlayer
 
 class Player(override val accessor: XPlayer) : Actor(accessor) {
 
+    override val plane: Int get() = accessor.plane
+
     val name: Username? get() = accessor.username?.let { Username(it) }
 
     val actions: List<String> get() = accessor.actions.toList()
