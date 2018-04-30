@@ -19,7 +19,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     private companion object {
         val PURO_PURO_REGION = Region(40, 67, 0)
-        val DRAW_COLOR = Color(255, 255, 255,140)
+        val DRAW_COLOR = Color(255, 255, 255, 140)
         val TEXT_COLOR = Color.WHITE
     }
 
@@ -127,7 +127,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
         fun ids(): Set<Int> {
             val b = ImmutableSet.builder<Int>()
-            b.add(1618).add(1633) // spawns
+            b.add(1618).add(1633).add(1634) // spawns
             if (baby) b.add(NpcId.BABY_IMPLING_1635).add(NpcId.BABY_IMPLING_1645)
             if (young) b.add(NpcId.YOUNG_IMPLING_1636).add(NpcId.YOUNG_IMPLING_1646)
             if (gourmet) b.add(NpcId.GOURMET_IMPLING_1637).add(NpcId.GOURMET_IMPLING_1647)
