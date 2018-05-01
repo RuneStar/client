@@ -8,7 +8,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
     val id get() = accessor.id
 
     val sourcePosition: Position
-        get() = Position(accessor.sourceX, accessor.sourceY, 0, accessor.plane)
+        get() = Position(accessor.sourceX, accessor.sourceY, 0, plane)
                 .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.sourceZ) }
 
     val pitch get() = accessor.pitch
@@ -16,7 +16,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
     override val orientation get() = Angle(accessor.yaw)
 
     override val position: Position
-        get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, accessor.plane)
+        get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, plane)
                 .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.z.toInt()) }
 
     override val npcTargetIndex: Int?
@@ -32,4 +32,6 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
     val speedY get() = accessor.speedY
 
     val speedZ get() = accessor.speedZ
+
+    val plane get() = accessor.plane
 }
