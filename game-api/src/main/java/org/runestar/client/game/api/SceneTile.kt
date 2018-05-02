@@ -23,7 +23,7 @@ data class SceneTile(
     }
 
     @JvmOverloads
-    fun height(scene: Scene = LiveScene): Int? {
+    fun height(scene: Scene = LiveScene): Int {
         return scene.getHeight(this)
     }
 
