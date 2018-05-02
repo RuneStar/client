@@ -1,7 +1,5 @@
 package org.runestar.client.game.api
 
-import org.kxtra.lang.array.deepCopyOf
-
 /**
  * The loaded area that follows the local player.
  */
@@ -24,16 +22,16 @@ interface Scene {
 
     val base: GlobalTile
 
+    fun getHeight(x: Int, y: Int, plane: Int): Int
+
+    fun getRenderFlags(x: Int, y: Int, plane: Int): Byte
+
+    fun getCollisionFlags(x: Int, y: Int, plane: Int): Int
+
     fun getHeight(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }
         return getHeight(sceneTile.x, sceneTile.y, sceneTile.plane)
     }
-
-    fun getHeight(x: Int, y: Int, plane: Int): Int {
-        return heights[plane][x][y]
-    }
-
-    val heights: Array<Array<IntArray>>
 
     fun isLinkBelow(x: Int, y: Int, plane: Int): Boolean {
         return plane < 3 && getRenderFlags(x, y, 1).toInt() and 2 != 0
@@ -63,37 +61,8 @@ interface Scene {
         return getRenderFlags(sceneTile.x, sceneTile.y, sceneTile.plane)
     }
 
-    fun getRenderFlags(x: Int, y: Int, plane: Int): Byte {
-        return renderFlags[plane][x][y]
-    }
-
-    val renderFlags: Array<Array<ByteArray>>
-
     fun getCollisionFlags(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }
-        return collisionFlags[sceneTile.plane][sceneTile.x][sceneTile.y]
-    }
-
-    fun getCollisionFlags(plane: Int): Array<IntArray> {
-        require(plane in 0 until Scene.PLANE_SIZE) { plane }
-        return collisionFlags[plane]
-    }
-
-    val collisionFlags: Array<Array<IntArray>>
-
-    fun copyOf(): Copy {
-        return Copy(base, renderFlags.deepCopyOf(), heights.deepCopyOf(), collisionFlags.deepCopyOf())
-    }
-
-    class Copy(
-            override val base: GlobalTile,
-            override val renderFlags: Array<Array<ByteArray>>,
-            override val heights: Array<Array<IntArray>>,
-            override val collisionFlags: Array<Array<IntArray>>
-    ) : Scene {
-
-        override fun toString(): String {
-            return "Scene.Copy(base=$base)"
-        }
+        return getCollisionFlags(sceneTile.x, sceneTile.y, sceneTile.plane)
     }
 }
