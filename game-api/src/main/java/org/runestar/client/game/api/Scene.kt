@@ -35,10 +35,19 @@ interface Scene {
 
     val heights: Array<Array<IntArray>>
 
+    fun isLinkBelow(x: Int, y: Int, plane: Int): Boolean {
+        return plane < 3 && getRenderFlags(x, y, 1).toInt() and 2 != 0
+    }
+
+    fun isLinkBelow(sceneTile: SceneTile): Boolean {
+        require(sceneTile.isLoaded) { sceneTile }
+        return isLinkBelow(sceneTile.x, sceneTile.y, sceneTile.plane)
+    }
+
     fun getTileHeight(position: Position): Int {
         require(position.isLoaded) { position }
         var p = position.plane
-        if (p < 3 && 0 != getRenderFlags(position.x, position.y, 1).toInt() and 2) {
+        if (isLinkBelow(position.x, position.y, position.plane)) {
             p++
         }
         val o = getHeight(position.x, position.y, p)
