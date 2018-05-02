@@ -4,6 +4,8 @@ import org.kxtra.swing.polygon.Polygon
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Projections
 import java.awt.Polygon
+import kotlin.math.abs
+import kotlin.math.max
 
 data class SceneTile(
         val x: Int,
@@ -45,5 +47,12 @@ data class SceneTile(
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }
         return Polygon(corners.mapNotNull { it.toScreen(projection) })
+    }
+
+    /**
+     * Chebyshev distance, ignoring planes
+     */
+    fun distanceTo(other: SceneTile): Int {
+        return max(abs(x - other.x), abs(y - other.y))
     }
 }
