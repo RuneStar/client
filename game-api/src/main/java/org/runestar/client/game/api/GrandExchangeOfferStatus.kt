@@ -12,7 +12,6 @@ enum class GrandExchangeOfferStatus(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of (id: Int): GrandExchangeOfferStatus {
             return VALUES[id - 1]
         }

@@ -12,7 +12,6 @@ enum class PublicChatMode(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): PublicChatMode {
             return VALUES[id]
         }

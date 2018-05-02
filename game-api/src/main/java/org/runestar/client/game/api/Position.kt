@@ -29,7 +29,6 @@ data class Position(
     operator fun plus(position: Position) =
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
-    @JvmOverloads
     fun toScreen(projection: Projection = Projections.viewport): Point? {
         check(isLoaded) { this }
         return projection.toScreen(this)

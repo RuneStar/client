@@ -16,7 +16,6 @@ enum class HeadIconPrayer(
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): HeadIconPrayer? {
             if (id == -1) return null
             return VALUES[id]

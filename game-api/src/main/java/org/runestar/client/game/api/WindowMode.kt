@@ -9,7 +9,6 @@ enum class WindowMode(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): WindowMode {
             return VALUES[id - 1]
         }

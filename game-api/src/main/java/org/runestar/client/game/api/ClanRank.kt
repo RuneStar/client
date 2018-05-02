@@ -16,7 +16,6 @@ enum class ClanRank(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): ClanRank {
             return VALUES[id + 1]
         }

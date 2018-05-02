@@ -11,7 +11,6 @@ data class Item(
 
     companion object {
 
-        @JvmStatic
         fun of(id: Int, quantity: Int): Item? {
             if (id < 0 || quantity <= 0) return null
             return Item(id, quantity)

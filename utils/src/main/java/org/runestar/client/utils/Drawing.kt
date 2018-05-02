@@ -24,7 +24,6 @@ private fun scale(valueIn: Double, baseMin: Double, baseMax: Double): Int {
     return (255 * (valueIn - baseMin) / (baseMax - baseMin)).roundToInt()
 }
 
-@JvmOverloads
 fun Graphics2D.drawStringShadowed(string: String, x: Int, y: Int, shadow: Color = Color.BLACK) {
     val c = color
     color = shadow

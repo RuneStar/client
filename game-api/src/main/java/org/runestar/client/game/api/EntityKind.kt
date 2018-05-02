@@ -11,7 +11,6 @@ enum class EntityKind(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of (id: Int): EntityKind {
             return VALUES[id]
         }

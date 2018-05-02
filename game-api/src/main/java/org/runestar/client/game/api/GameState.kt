@@ -16,7 +16,6 @@ enum class GameState(val id: Int) {
 
         @JvmField val LOOKUP = values().associateBy { it.id }
 
-        @JvmStatic
         fun of(id: Int): GameState {
             return LOOKUP.getValue(id)
         }

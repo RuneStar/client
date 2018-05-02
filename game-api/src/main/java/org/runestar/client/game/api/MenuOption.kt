@@ -85,7 +85,6 @@ interface MenuOption {
             @JvmField
             val LOOKUP = values().associateBy { it.opcode }
 
-            @JvmStatic
             fun fromOpcode(opcode: Int): MenuOption.Operator {
                 val fixed = if (opcode >= 2000) opcode - 2000 else opcode
                 return MenuOption.Operator.LOOKUP[fixed] ?: MenuOption.Operator.OTHER_UNKNOWN

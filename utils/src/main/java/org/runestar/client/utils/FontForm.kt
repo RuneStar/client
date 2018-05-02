@@ -21,7 +21,6 @@ data class FontForm(
         companion object {
             @JvmField val VALUES = values().asList()
 
-            @JvmStatic
             fun of(style: Int): Style = VALUES.first { it.asInt == style }
         }
     }

@@ -20,7 +20,6 @@ enum class HeadIconPk(val id: Int) {
 
         @JvmField val LOOKUP = values().associateBy { it.id }
 
-        @JvmStatic
         fun of(id: Int): HeadIconPk? {
             if (id == -1) return null
             return LOOKUP.getValue(id)

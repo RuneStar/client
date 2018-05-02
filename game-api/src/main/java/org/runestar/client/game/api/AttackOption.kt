@@ -14,7 +14,6 @@ enum class AttackOption(val accessor: XAttackOption) {
 
         @JvmField val LOOKUP = values().associateBy { it.accessor }
 
-        @JvmStatic
         fun of(accessor: XAttackOption): AttackOption {
             return LOOKUP.getValue(accessor)
         }

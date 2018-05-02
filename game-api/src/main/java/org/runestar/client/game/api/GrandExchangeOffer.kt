@@ -38,7 +38,6 @@ class GrandExchangeOffer(val accessor: XGrandExchangeOffer) {
 
     companion object {
 
-        @JvmStatic
         fun of(accessor: XGrandExchangeOffer): GrandExchangeOffer? {
             if (accessor.id == 0) return null
             return GrandExchangeOffer(accessor)

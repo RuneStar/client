@@ -9,7 +9,6 @@ enum class GrandExchangeOfferType(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): GrandExchangeOfferType {
             return VALUES[id]
         }

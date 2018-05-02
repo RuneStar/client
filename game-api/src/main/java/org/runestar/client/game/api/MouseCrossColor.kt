@@ -9,7 +9,6 @@ enum class MouseCrossColor(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        @JvmStatic
         fun of(id: Int): MouseCrossColor? {
             if (id == 0) return null
             return VALUES[id - 1]
