@@ -161,6 +161,38 @@ class Model internal constructor(
         }
     }
 
+    fun drawTriangles(
+            g: Graphics2D,
+            projection: Projection = Projections.viewport
+    ) {
+        val sin = yaw.sinInternal
+        val cos = yaw.cosInternal
+        for (i in 0 until accessor.indicesCount) {
+            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
+            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
+            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
+
+            g.drawLine(a.x, a.y, b.x, b.y)
+            g.drawLine(b.x, b.y, c.x, c.y)
+            g.drawLine(c.x, c.y, a.x, a.y)
+        }
+    }
+
+    fun fillTriangles(
+            g: Graphics2D,
+            projection: Projection = Projections.viewport
+    ) {
+        val sin = yaw.sinInternal
+        val cos = yaw.cosInternal
+        for (i in 0 until accessor.indicesCount) {
+            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
+            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
+            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
+
+            g.fillPolygon(intArrayOf(a.x, b.x, c.x), intArrayOf(a.y, b.y, c.y), 3)
+        }
+    }
+
     private fun vertexToScreen(i: Int, projection: Projection, sin: Int, cos: Int): Point? {
         val vx = accessor.verticesX[i]
         val vy = accessor.verticesY[i]
