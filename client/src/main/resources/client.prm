@@ -4,3 +4,6 @@
 #-Drunestar.world=30
 
 #-Dsun.java2d.uiScale=-1
+
+-Xmx512m
+-Xms128m
