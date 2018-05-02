@@ -11,14 +11,5 @@ interface Minimap {
     val reference: Position
 
     val center: Point
-
-    fun copyOf(): Copy = Copy(zoom, orientation, reference, center)
-
-    data class Copy(
-            override val zoom: Int,
-            override val orientation: Angle,
-            override val reference: Position,
-            override val center: Point
-    ) : Minimap
 }
 

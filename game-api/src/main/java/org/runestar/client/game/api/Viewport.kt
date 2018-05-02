@@ -31,14 +31,4 @@ interface Viewport {
             @JvmField val DEFAULT = Fixed(ZOOM_DEFAULT)
         }
     }
-
-    fun copyOf(): Copy = Copy(zoom, x, y, width, height)
-
-    data class Copy(
-            override val zoom: Int,
-            override val x: Int,
-            override val y: Int,
-            override val width: Int,
-            override val height: Int
-    ) : Viewport
 }

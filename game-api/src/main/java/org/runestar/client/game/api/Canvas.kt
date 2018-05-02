@@ -9,8 +9,4 @@ interface Canvas {
     object Fixed : Canvas {
         override val shape = Rectangle(0, 0, 765, 503)
     }
-
-    fun copyOf(): Copy = Copy(shape)
-
-    data class Copy(override val shape: Rectangle): Canvas
 }
