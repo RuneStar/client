@@ -12,13 +12,11 @@ class LowDetail : AbstractPlugin<PluginSettings>() {
 
     override fun start() {
         Client.accessor.isLowDetail = true
-        Client.accessor.objectDefinition_isLowDetail = true
         Client.accessor.scene_isLowDetail = true
     }
 
     override fun stop() {
         Client.accessor.isLowDetail = false
-        Client.accessor.objectDefinition_isLowDetail = false
         Client.accessor.scene_isLowDetail = false
     }
 }
