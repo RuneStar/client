@@ -13,7 +13,8 @@ class Minimap : DisposablePlugin<Minimap.Settings>() {
 
     private var originalDots: Array<XSprite>? = null
 
-    override fun start() {originalDots = Client.accessor.mapDotSprites.clone()
+    override fun start() {
+        originalDots = Client.accessor.mapDotSprites.clone()
         val dots = Client.accessor.mapDotSprites
         if (ctx.settings.items.enabled) {
             recolorDot(dots, 0, ctx.settings.items.color.get())

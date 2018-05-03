@@ -2949,4 +2949,39 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<IntegerNode>() }
                 .prev { it.opcode == GETSTATIC && it.fieldType == type<NodeHashTable>() }
     }
+
+    @DependsOn(Scene.init::class)
+    class Tiles_minPlane : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Scene.init>().id }
+                .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters("w", "b")
+    @DependsOn(WidgetGroupParent::class)
+    class closeWidgetGroup : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<WidgetGroupParent>(), BOOLEAN_TYPE) }
+    }
+
+    // inlined
+//    @MethodParameters("key", "group", "type")
+//    @DependsOn(WidgetGroupParent::class)
+//    class openWidgetGroup : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<WidgetGroupParent>() }
+//                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
+//    }
+
+    @MethodParameters("id", "quantity", "n0", "n1", "n2", "b0")
+    @DependsOn(Sprite::class)
+    class getItemSprite : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
+    }
+
+    @DependsOn(Sprite::class)
+    class sceneMinimapSprite : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 512 }
+                .next { it.opcode == SIPUSH && it.intOperand == 512 }
+                .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>() }
+    }
 }

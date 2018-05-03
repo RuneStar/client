@@ -1,10 +1,11 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.*
@@ -20,15 +21,20 @@ class Scene : IdentityMapper.Class() {
             .and { it.instanceFields.any { it.type == type<GameObject>().withDimensions(1) } }
 
     @DependsOn(GameObject::class)
-    class gameObjects : IdentityMapper.InstanceField() {
+    class tempGameObjects : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<GameObject>().withDimensions(1) }
+    }
+
+    @DependsOn(clear::class)
+    class tempGameObjectsCount : OrderMapper.InMethod.Field(clear::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     class tiles : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type.arrayDimensions == 3 && it.type.baseType in it.jar }
     }
 
-    @MethodParameters("plane", "startX", "startY", "sizeX", "sizeY", "centerX", "centerY", "height", "entity", "orientation", "b", "tag", "flags")
+    @MethodParameters("plane", "startX", "startY", "sizeX", "sizeY", "centerX", "centerY", "height", "entity", "orientation", "isTemp", "tag", "flags")
     @DependsOn(Entity::class)
     class newGameObject : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
@@ -166,5 +172,34 @@ class Scene : IdentityMapper.Class() {
     @MethodParameters()
     class clear : OrderMapper.InConstructor.Method(Scene::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters("minPlane")
+    @DependsOn(Tile::class)
+    class init : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.startsWith(INT_TYPE) }
+                .and { it.instructions.count { it.opcode == NEW && it.typeType == type<Tile>() } == 1 }
+                .and { it.instructions.none { it.opcode == IAND } }
+    }
+
+    @DependsOn(init::class)
+    class minPlane : UniqueMapper.InMethod.Field(init::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(tempGameObjects::class)
+    class clearTempGameObjects : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == GETFIELD && it.fieldId == field<tempGameObjects>().id } == 2 }
+    }
+
+    @MethodParameters("pixels", "index", "width", "plane", "x", "y")
+    class drawTileMinimap : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 }
