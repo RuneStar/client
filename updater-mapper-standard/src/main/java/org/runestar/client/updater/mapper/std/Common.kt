@@ -1,6 +1,7 @@
 package org.runestar.client.updater.mapper.std
 
 import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type
 import org.objectweb.asm.Type.BYTE_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.*
@@ -99,6 +100,6 @@ abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Clien
 }
 
 @DependsOn(Client.loadRegions::class)
-abstract class LoadRegionIntArrayField(index: Int) : OrderMapper.InMethod.Field(Client.loadRegions::class, index) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+abstract class LoadRegionPutStatic(type: Type, index: Int) : OrderMapper.InMethod.Field(Client.loadRegions::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type }
 }

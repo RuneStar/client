@@ -2868,9 +2868,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class regions : LoadRegionIntArrayField(0)
-    class regionMapArchiveIds : LoadRegionIntArrayField(1)
-    class regionLandArchiveIds : LoadRegionIntArrayField(2)
+    class regions : LoadRegionPutStatic(IntArray::class.type, 0)
+    class regionMapArchiveIds : LoadRegionPutStatic(IntArray::class.type, 1)
+    class regionLandArchiveIds : LoadRegionPutStatic(IntArray::class.type, 2)
+    class regionMapArchives : LoadRegionPutStatic(BYTE_TYPE.withDimensions(2), 1)
+    class regionLandArchives : LoadRegionPutStatic(BYTE_TYPE.withDimensions(2), 2)
 
     @DependsOn(updatePlayer::class)
     class localPlayerIndex : OrderMapper.InMethod.Field(updatePlayer::class, 0) {
