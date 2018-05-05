@@ -26,11 +26,11 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
                     g.fill(shapeAt(fromViewportPt))
                 }
 
-                val toMinimapPt = Projections.minimap.toScreen(fromViewportPos)
+                val toMinimapPt = Projections.minimap.toScreen(fromViewportPos) ?: return@subscribe
                 g.color = Color.GREEN
                 g.fill(shapeAt(toMinimapPt))
             }
-            val fromMinimapPos = Projections.minimap.toGame(mousePt)
+            val fromMinimapPos = Projections.minimap.toGame(mousePt) ?: return@subscribe
             if (fromMinimapPos.isLoaded) {
                 g.color = Color.BLUE
                 g.draw(fromMinimapPos.sceneTile.outline())

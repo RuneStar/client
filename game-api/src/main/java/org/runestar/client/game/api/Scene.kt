@@ -38,22 +38,30 @@ interface Scene {
     }
 
     fun isLinkBelow(sceneTile: SceneTile): Boolean {
-        require(sceneTile.isLoaded) { sceneTile }
         return isLinkBelow(sceneTile.x, sceneTile.y, sceneTile.plane)
     }
 
     fun getTileHeight(position: Position): Int {
-        require(position.isLoaded) { position }
-        var p = position.plane
-        if (isLinkBelow(position.x, position.y, position.plane)) {
-            p++
+        return getTileHeight(position.localX, position.localY, position.plane)
+    }
+
+    fun getTileHeight(localX: Int, localY: Int, plane: Int): Int {
+        val x = Position.toScene(localX)
+        val y = Position.toScene(localY)
+        require(SceneTile.isLoaded(x, y, plane))
+        val subX = Position.toSub(localX)
+        val subY = Position.toSub(localY)
+        val p = if (isLinkBelow(x, y, plane)) {
+            plane + 1
+        } else {
+            plane
         }
-        val o = getHeight(position.x, position.y, p)
-        val ne = if (position.x != SIZE - 1 && position.y != SIZE - 1) getHeight(1 + position.x, 1 + position.y, p) else o
-        val n = if (position.y != SIZE - 1) getHeight(position.x, 1 + position.y, p) else o
-        val e = if (position.x != SIZE - 1) getHeight(1 + position.x, position.y, p) else o
-        return position.subY * (ne * position.subX + n * (128 - position.subX) shr 7) +
-                (128 - position.subY) * (position.subX * e + o * (128 - position.subX) shr 7) shr 7
+        val o = getHeight(x, y, p)
+        val ne = if (x != SIZE - 1 && y != SIZE - 1) getHeight(1 + x, 1 + y, p) else o
+        val n = if (y != SIZE - 1) getHeight(x, 1 + y, p) else o
+        val e = if (x != SIZE - 1) getHeight(1 + x, y, p) else o
+        return subY * (ne * subX + n * (128 - subX) shr 7) +
+                (128 - subY) * (subX * e + o * (128 - subX) shr 7) shr 7
     }
 
     fun getRenderFlags(sceneTile: SceneTile): Byte {

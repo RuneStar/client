@@ -128,15 +128,12 @@ class Model internal constructor(
         return boundingBoxOutline(projection).apply { intersect(geometryOutline(projection)) }
     }
 
-    fun geometryRectangles(projection: Projection = Projections.viewport): List<Rectangle> {
-        val sin = yaw.sinInternal
-        val cos = yaw.cosInternal
-        val count = accessor.indicesCount
-        val list = ArrayList<Rectangle>(count)
-        for (i in 0 until count) {
-            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
-            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
-            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
+    fun geometryOutline(projection: Projection = Projections.viewport): Area {
+        val area = Area()
+        for (i in 0 until accessor.indicesCount) {
+            val a = vertexToScreen(accessor.indices1[i], projection) ?: continue
+            val b = vertexToScreen(accessor.indices2[i], projection) ?: continue
+            val c = vertexToScreen(accessor.indices3[i], projection) ?: continue
 
             val xMin = min(a.x, min(b.x, c.x)) - 4 // pad all sides by 4
             val yMin = min(a.y, min(b.y, c.y)) - 4
@@ -146,31 +143,21 @@ class Model internal constructor(
             val w = xMax - xMin
             val h = yMax - yMin
 
-            list.add(Rectangle(xMin, yMin, w, h))
-        }
-        return list
-    }
-
-    fun geometryOutline(projection: Projection = Projections.viewport): Area {
-        return Area().apply {
-            for (rect in geometryRectangles(projection)) {
-                if (!contains(rect)) {
-                    add(Area(rect))
-                }
+            if (!area.contains(xMin.toDouble(), yMin.toDouble(), w.toDouble(), h.toDouble())) {
+                area.add(Area(Rectangle(xMin, yMin, w, h)))
             }
         }
+        return area
     }
 
     fun drawTriangles(
             g: Graphics2D,
             projection: Projection = Projections.viewport
     ) {
-        val sin = yaw.sinInternal
-        val cos = yaw.cosInternal
         for (i in 0 until accessor.indicesCount) {
-            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
-            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
-            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
+            val a = vertexToScreen(accessor.indices1[i], projection) ?: continue
+            val b = vertexToScreen(accessor.indices2[i], projection) ?: continue
+            val c = vertexToScreen(accessor.indices3[i], projection) ?: continue
 
             g.drawLine(a.x, a.y, b.x, b.y)
             g.drawLine(b.x, b.y, c.x, c.y)
@@ -182,28 +169,38 @@ class Model internal constructor(
             g: Graphics2D,
             projection: Projection = Projections.viewport
     ) {
-        val sin = yaw.sinInternal
-        val cos = yaw.cosInternal
+        val xs = IntArray(3)
+        val ys = IntArray(3)
         for (i in 0 until accessor.indicesCount) {
-            val a = vertexToScreen(accessor.indices1[i], projection, sin, cos) ?: continue
-            val b = vertexToScreen(accessor.indices2[i], projection, sin, cos) ?: continue
-            val c = vertexToScreen(accessor.indices3[i], projection, sin, cos) ?: continue
 
-            g.fillPolygon(intArrayOf(a.x, b.x, c.x), intArrayOf(a.y, b.y, c.y), 3)
+            val a = vertexToScreen(accessor.indices1[i], projection) ?: continue
+            xs[0] = a.x
+            ys[0] = a.y
+
+            val b = vertexToScreen(accessor.indices2[i], projection) ?: continue
+            xs[1] = b.x
+            ys[1] = b.y
+
+            val c = vertexToScreen(accessor.indices3[i], projection) ?: continue
+            xs[2] = c.x
+            ys[2] = c.y
+
+            g.fillPolygon(xs, ys, 3)
         }
     }
 
-    private fun vertexToScreen(i: Int, projection: Projection, sin: Int, cos: Int): Point? {
+    private fun vertexToScreen(i: Int, projection: Projection): Point? {
         val vx = accessor.verticesX[i]
         val vy = accessor.verticesY[i]
         val vz = accessor.verticesZ[i]
 
-        val x = (vx * cos + vz * sin) shr 16
-        val y = (vz * cos - vx * sin) shr 16
+        val x = (vx * yaw.cosInternal + vz * yaw.sinInternal) shr 16
+        val y = (vz * yaw.cosInternal - vx * yaw.sinInternal) shr 16
         val h = -1 * vy
 
-        val pos = base.plusLocal(x, y, h)
-        if (!pos.isLoaded) return null
-        return projection.toScreen(pos, base)
+        val localX = base.localX + x
+        val localY = base.localY + y
+        if (!Position.isLoaded(localX, localY, base.plane)) return null
+        return projection.toScreen(localX, localY, h, base.plane, base.localX, base.localY)
     }
 }

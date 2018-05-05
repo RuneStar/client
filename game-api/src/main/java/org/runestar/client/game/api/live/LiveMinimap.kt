@@ -26,7 +26,7 @@ object LiveMinimap : Minimap {
 
     override val zoom get() = 0
 
-    override val orientation get() = Angle(accessor.minimapOrientation)
+    override val orientation get() = Angle.of(accessor.minimapOrientation)
 
     /**
      * Due to overlapping orbs, this is not the clickable area.

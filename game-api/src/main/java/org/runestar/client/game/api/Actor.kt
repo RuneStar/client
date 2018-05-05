@@ -18,7 +18,7 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
 
     val location get() = SceneTile(accessor.pathX[0], accessor.pathY[0], plane)
 
-    override val orientation get() = Angle(accessor.orientation)
+    override val orientation get() = Angle.of(accessor.orientation)
 
     val overheadText: String? get() = accessor.overheadText
 

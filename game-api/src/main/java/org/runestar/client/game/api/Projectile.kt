@@ -13,7 +13,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
 
     val pitch get() = accessor.pitch
 
-    override val orientation get() = Angle(accessor.yaw)
+    override val orientation get() = Angle.of(accessor.yaw)
 
     override val position: Position
         get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, plane)

@@ -4,25 +4,27 @@ import org.runestar.client.game.api.live.Projections
 import java.awt.Point
 
 data class Position(
-        val x: Int,
-        val subX: Int,
-        val y: Int,
-        val subY: Int,
+        val localX: Int,
+        val localY: Int,
         val height: Int,
         val plane: Int
 ) {
-    internal constructor(localX: Int, localY: Int, height: Int, plane: Int) :
-            this(localX shr 7, localX and MAX_SUB, localY shr 7, localY and MAX_SUB, height, plane)
+    constructor(x: Int, subX: Int, y: Int, subY: Int, height: Int, plane: Int) :
+            this(toLocal(x, subX), toLocal(y, subY), height, plane)
 
-    val localX get() = (x shl 7) or subX
+    val x get() = toScene(localX)
 
-    val localY get() = (y shl 7) or subY
+    val y get() = toScene(localY)
+
+    val subX get() = toSub(localX)
+
+    val subY get() = toSub(localY)
 
     val sceneTile get() = SceneTile(x, y, plane)
 
-    val isLoaded get() = sceneTile.isLoaded
+    val isLoaded get() = isLoaded(localX, localY, plane)
 
-    internal fun plusLocal(localX: Int = 0, localY: Int = 0, height: Int = 0): Position {
+    fun plusLocal(localX: Int = 0, localY: Int = 0, height: Int = 0): Position {
         return Position(localX + this.localX, localY + this.localY, height + this.height, plane)
     }
 
@@ -35,10 +37,27 @@ data class Position(
     }
 
     companion object {
+
         const val MAX_SUB = 127
         const val MID_SUB = 64
         const val MIN_SUB = 0
+
+        val MAX_LOCAL = toLocal(Scene.SIZE - 1, MAX_SUB)
+
+        fun toScene(local: Int): Int {
+            return local shr 7
+        }
+
+        fun toSub(local: Int): Int {
+            return local and MAX_SUB
+        }
+
+        fun toLocal(scene: Int, sub: Int): Int {
+            return scene shl 7 or sub
+        }
+
+        fun isLoaded(localX: Int, localY: Int, plane: Int): Boolean {
+            return SceneTile.isLoaded(toScene(localX), toScene(localY), plane)
+        }
     }
 }
-
-

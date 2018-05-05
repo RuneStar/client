@@ -13,11 +13,26 @@ data class SceneTile(
         val plane: Int
 ) {
 
+    companion object {
+
+        fun isXyLoaded(n: Int): Boolean {
+            return n in 0 until Scene.SIZE
+        }
+
+        fun isPlaneLoaded(plane: Int): Boolean {
+            return plane in 0 until Scene.PLANE_SIZE
+        }
+
+        fun isLoaded(x: Int, y: Int, plane: Int): Boolean {
+            return isXyLoaded(x) && isXyLoaded(y) && isPlaneLoaded(plane)
+        }
+    }
+
     val center get() = Position(x, Position.MID_SUB, y, Position.MID_SUB, 0, plane)
 
     val base get() = Position(x, 0, y, 0, 0, plane)
 
-    val isLoaded get() = x in 0 until Scene.SIZE && y in 0 until Scene.SIZE && plane in 0 until Scene.PLANE_SIZE
+    val isLoaded get() = isLoaded(x, y, plane)
 
     fun toGlobalTile(scene: Scene = LiveScene): GlobalTile {
         return GlobalTile(x + scene.base.x, y + scene.base.y, plane)
@@ -32,14 +47,12 @@ data class SceneTile(
     }
 
     val corners: List<Position>
-        get() = base.run {
-            listOf(
-                    this,
-                    copy(subX = Position.MAX_SUB),
-                    copy(subX = Position.MAX_SUB, subY = Position.MAX_SUB),
-                    copy(subY = Position.MAX_SUB)
-            )
-        }
+        get() = listOf(
+                Position(x, 0, y, 0, 0, plane),
+                Position(x, Position.MAX_SUB, y, 0, 0, plane),
+                Position(x, Position.MAX_SUB, y, Position.MAX_SUB, 0, plane),
+                Position(x, 0, y, Position.MAX_SUB, 0, plane)
+        )
 
     fun outline(projection: Projection = Projections.viewport): Polygon {
         check(isLoaded) { this }

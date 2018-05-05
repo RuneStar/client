@@ -4,22 +4,34 @@ import java.awt.Point
 
 interface Projection {
 
-    fun toGame(point: Point): Position?
+    fun toGame(x: Int, y: Int): Position?
+
+    fun toScreen(localX: Int, localY: Int, height: Int, plane: Int, tileHeightLocalX: Int, tileHeightLocalY: Int): Point?
+
+    fun toGame(point: Point): Position? {
+        return toGame(point.x, point.y)
+    }
 
     fun toScreen(position: Position): Point? {
         return toScreen(position, position)
     }
 
-    fun toScreen(position: Position, tileHeight: Position): Point?
+    fun toScreen(position: Position, tileHeight: Position): Point? {
+        return toScreen(position.localX, position.localY, position.height, position.plane, tileHeight.localX, tileHeight.localY)
+    }
+
+    fun toScreen(localX: Int, localY: Int, height: Int, plane: Int): Point? {
+        return toScreen(localX, localY, height, plane, localX, localY)
+    }
 
     data class Minimap(
             val minimap: org.runestar.client.game.api.Minimap
     ) : Projection {
 
-        override fun toScreen(position: Position, tileHeight: Position): Point {
+        override fun toScreen(localX: Int, localY: Int, height: Int, plane: Int, tileHeightLocalX: Int, tileHeightLocalY: Int): Point {
             val minimapReference = minimap.reference
-            val dx = (position.localX - minimapReference.localX) shr 5
-            val dy = (position.localY - minimapReference.localY) shr 5
+            val dx = (localX - minimapReference.localX) shr 5
+            val dy = (localY - minimapReference.localY) shr 5
             val minimapZoom = minimap.zoom + 256
             val minimapOrientation = minimap.orientation
             val sin = minimapOrientation.sinInternal * 256 / minimapZoom
@@ -30,10 +42,10 @@ interface Projection {
             return Point(minimapCenter.x + x2, minimapCenter.y - y2)
         }
 
-        override fun toGame(point: Point): Position {
+        override fun toGame(x: Int, y: Int): Position {
             val minimapCenter = minimap.center
-            val x2 = minimapCenter.x - point.x
-            val y2 = minimapCenter.y - point.y
+            val x2 = minimapCenter.x - x
+            val y2 = minimapCenter.y - y
             val minimapOrientation = minimap.orientation
             val minimapZoom = minimap.zoom + 256
             val sin = minimapOrientation.sinInternal * minimapZoom shr 8
@@ -41,10 +53,6 @@ interface Projection {
             val dx = (y2 * sin + x2 * cos) shr 11
             val dy = (y2 * cos - x2 * sin) shr 11
             return minimap.reference.plusLocal(dx * -1, dy).copy(height = 0)
-        }
-
-        override fun toScreen(position: Position): Point {
-            return toScreen(position, position)
         }
     }
 
@@ -54,15 +62,15 @@ interface Projection {
             val scene: Scene
     ) : Projection {
 
-        override fun toScreen(position: Position, tileHeight: Position): Point? {
-            require(tileHeight.isLoaded) { tileHeight }
-            var x1 = position.localX
-            var y1 = position.localY
-            var z1 = scene.getTileHeight(tileHeight) - position.height
-            val cameraPosition = camera.position
-            x1 -= cameraPosition.localX
-            y1 -= cameraPosition.localY
-            z1 -= scene.getTileHeight(cameraPosition) - cameraPosition.height
+        override fun toScreen(localX: Int, localY: Int, height: Int, plane: Int, tileHeightLocalX: Int, tileHeightLocalY: Int): Point? {
+            var x1 = localX
+            var y1 = localY
+            var z1 = scene.getTileHeight(tileHeightLocalX, tileHeightLocalY, plane) - height
+            val camLocalX = camera.localX
+            val camLocalY = camera.localY
+            x1 -= camLocalX
+            y1 -= camLocalY
+            z1 -= scene.getTileHeight(camLocalX, camLocalY, plane) - camera.height
             val cameraPitch = camera.pitch
             val sinY = cameraPitch.sinInternal
             val cosY = cameraPitch.cosInternal
@@ -85,14 +93,14 @@ interface Projection {
             )
         }
 
-        override fun toGame(point: Point): Position? {
+        override fun toGame(x: Int, y: Int): Position? {
             // todo
-            val plane = camera.position.plane
-            for (x in 0 until Scene.SIZE) {
-                for (y in 0 until Scene.SIZE) {
-                    val tile = SceneTile(x, y, plane)
+            val plane = camera.plane
+            for (xi in 0 until Scene.SIZE) {
+                for (yi in 0 until Scene.SIZE) {
+                    val tile = SceneTile(xi, yi, plane)
                     val bounds = tile.outline(this)
-                    if (point in bounds) {
+                    if (bounds.contains(x, y)) {
                         return tile.center
                     }
                 }

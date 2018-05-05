@@ -2,7 +2,15 @@ package org.runestar.client.game.api
 
 interface Camera {
 
-    val position: Position
+    val localX: Int
+
+    val localY: Int
+
+    val height: Int
+
+    val plane: Int
+
+    val position: Position get() = Position(localX, localY, height, plane)
 
     val pitch: Angle
 

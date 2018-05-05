@@ -40,7 +40,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
             override val accessor: XGameObject
     ) : SceneObject(accessor) {
 
-        override val orientation: Angle get() = Angle(accessor.orientation)
+        override val orientation: Angle get() = Angle.of(accessor.orientation)
 
         override val position: Position get() = Position(accessor.centerX, accessor.centerY, 0, location.plane)
 

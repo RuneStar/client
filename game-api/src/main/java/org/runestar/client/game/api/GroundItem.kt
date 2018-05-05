@@ -7,7 +7,7 @@ class GroundItem(
         val location: SceneTile
 ) : Entity(accessor) {
 
-    override val orientation get() = Angle(0)
+    override val orientation get() = Angle.ZERO
 
     override val position get() = location.center
 
