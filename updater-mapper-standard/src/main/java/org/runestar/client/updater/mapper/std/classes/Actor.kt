@@ -7,6 +7,7 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -172,4 +173,10 @@ class Actor : IdentityMapper.Class() {
     }
 
     // spotAnimationStartCycle
+
+    @SinceVersion(165)
+    @DependsOn(Client.addPlayerToScene::class)
+    class playerCycle : OrderMapper.InMethod.Field(Client.addPlayerToScene::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Actor>() && it.fieldType == INT_TYPE }
+    }
 }

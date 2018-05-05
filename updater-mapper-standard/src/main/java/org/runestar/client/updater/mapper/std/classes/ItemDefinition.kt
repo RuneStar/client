@@ -1,6 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -8,15 +10,11 @@ import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.prevIn
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.prevIn
-import org.runestar.client.updater.mapper.prevWithin
 
 @DependsOn(DualNode::class)
 class ItemDefinition : IdentityMapper.Class() {
@@ -101,7 +99,7 @@ class ItemDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
-    class team : OrderMapper.InConstructor.Field(ItemDefinition::class, 8) {
+    class shiftClickIndex0 : OrderMapper.InConstructor.Field(ItemDefinition::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
@@ -223,5 +221,11 @@ class ItemDefinition : IdentityMapper.Class() {
     class retextureTo : OrderMapper.InMethod.Field(getModel::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @MethodParameters()
+    class getShiftClickIndex : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 0..1 }
     }
 }

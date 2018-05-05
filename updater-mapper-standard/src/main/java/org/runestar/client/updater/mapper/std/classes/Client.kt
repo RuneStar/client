@@ -2435,6 +2435,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "<lt>" } }
     }
 
+    @MethodParameters("widgetGroup")
     @DependsOn(Widget::class)
     class loadWidgetGroup : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
@@ -2985,5 +2986,74 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 512 }
                 .next { it.opcode == SIPUSH && it.intOperand == 512 }
                 .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>() }
+    }
+
+    @MethodParameters("w0", "w1", "mode", "b")
+    @DependsOn(World::class)
+    class compareWorlds : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 4..5 }
+                .and { it.arguments.startsWith(type<World>(), type<World>(), INT_TYPE, BOOLEAN_TYPE) }
+    }
+
+    @DependsOn(Actor::class)
+    class drawActor2d : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<Actor>(), INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    // inlined
+//    @DependsOn(drawActor2d::class)
+//    class drawActors2d : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments.size in 4..5 }
+//                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+//                .and { it.instructions.any { it.isMethod && it.methodId == method<drawActor2d>().id } }
+//    }
+
+    @SinceVersion(164)
+    class renderSelf : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "renderself" }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @SinceVersion(165)
+    class showMouseOverText : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "mouseovertext" }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters("player", "b")
+    @SinceVersion(155)
+    @DependsOn(Player::class)
+    class addPlayerToScene : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(type<Player>(), BOOLEAN_TYPE) }
+    }
+
+    @DependsOn(Sprite::class, AbstractIndexCache::class)
+    @MethodParameters("indexCache", "index", "record")
+    class readSprite : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments.size in 3..4 }
+                .and { it.arguments.startsWith(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("player", "menuArg0", "menuArg1", "menuArg2")
+    @DependsOn(Player::class, Client.playerMenuOpcodes::class)
+    class addPlayerToMenu : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 4..5 }
+                .and { it.arguments.startsWith(type<Player>(), INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.playerMenuOpcodes>().id } }
+    }
+
+    @MethodParameters("npc", "menuArg0", "menuArg1", "menuArg2")
+    @DependsOn(NpcDefinition::class)
+    class addNpcToMenu : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 4..5 }
+                .and { it.arguments.startsWith(type<NpcDefinition>(), INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 }

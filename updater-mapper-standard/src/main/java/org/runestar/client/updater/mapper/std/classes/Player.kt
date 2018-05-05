@@ -83,7 +83,7 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class isLowDetail : OrderMapper.InConstructor.Field(Player::class, 0) {
+    class isUnanimated : OrderMapper.InConstructor.Field(Player::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 

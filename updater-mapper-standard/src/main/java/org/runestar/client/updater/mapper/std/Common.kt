@@ -103,3 +103,8 @@ abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Clien
 abstract class LoadRegionPutStatic(type: Type, index: Int) : OrderMapper.InMethod.Field(Client.loadRegions::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type }
 }
+
+@DependsOn(SpriteMask::class)
+abstract class SpriteMaskConstructorField(type: Type, index: Int) : OrderMapper.InConstructor.Field(SpriteMask::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type }
+}

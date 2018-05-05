@@ -1,12 +1,11 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -36,5 +35,19 @@ class AreaDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 16 } }
+    }
+
+    @MethodParameters("id")
+    @DependsOn(Sprite::class)
+    class getSprite0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments.startsWith(INT_TYPE) }
+    }
+
+    @MethodParameters("b")
+    @DependsOn(Sprite::class)
+    class getSprite : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments.startsWith(BOOLEAN_TYPE) }
     }
 }

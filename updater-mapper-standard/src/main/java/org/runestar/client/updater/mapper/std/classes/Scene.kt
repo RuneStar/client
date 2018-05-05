@@ -202,4 +202,14 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
+
+    @MethodParameters("plane", "x", "y")
+    @DependsOn(FloorDecoration.tag::class)
+    class getFloorDecorationTag : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments.size in 3..4 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<FloorDecoration.tag>().id } }
+                .and { it.instructions.none { it.opcode == IAND } }
+    }
 }
