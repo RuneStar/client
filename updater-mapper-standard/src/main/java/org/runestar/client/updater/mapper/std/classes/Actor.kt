@@ -2,8 +2,7 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
@@ -11,6 +10,8 @@ import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.std.ActorHitSplatField
+import org.runestar.client.updater.mapper.std.ConstructorPutField
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -179,4 +180,35 @@ class Actor : IdentityMapper.Class() {
     class playerCycle : OrderMapper.InMethod.Field(Client.addPlayerToScene::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Actor>() && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("healthBarDefinition")
+    @DependsOn(HealthBar::class)
+    class removeHealthBar : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 1..2 }
+                .and { it.instructions.any { it.opcode == CHECKCAST && it.typeType == type<HealthBar>() } }
+    }
+
+    @MethodParameters("healthBarDefinition", "cycle", "n0", "n1", "n2", "n3")
+    @DependsOn(HealthBar::class)
+    class addHealthBar : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 6..7 }
+                .and { it.instructions.any { it.opcode == CHECKCAST && it.typeType == type<HealthBar>() } }
+    }
+
+    class hitSplatTypes : ActorHitSplatField(0)
+    class hitSplatValues : ActorHitSplatField(1)
+    class hitSplatCycles : ActorHitSplatField(2)
+    class hitSplatTypes2 : ActorHitSplatField(3)
+    class hitSplatValues2 : ActorHitSplatField(4)
+
+    @MethodParameters("type", "value", "type2", "value2", "cycle", "cycle2")
+    class addHitSplat : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 6..7 }
+                .and { it.instructions.any { it.opcode == IALOAD }  }
+    }
+
+    class hitSplatCount : ConstructorPutField(Actor::class, 0, BYTE_TYPE)
 }

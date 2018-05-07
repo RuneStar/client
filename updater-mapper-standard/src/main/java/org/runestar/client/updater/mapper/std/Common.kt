@@ -108,3 +108,13 @@ abstract class LoadRegionPutStatic(type: Type, index: Int) : OrderMapper.InMetho
 abstract class SpriteMaskConstructorField(type: Type, index: Int) : OrderMapper.InConstructor.Field(SpriteMask::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type }
 }
+
+@DependsOn(Actor::class)
+abstract class ActorHitSplatField(index: Int) : OrderMapper.InConstructor.Field(Actor::class, index, 5) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_4 }
+            .nextIn(2) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+}
+
+abstract class ConstructorPutField(klass: KClass<out Mapper<Class2>>, index: Int, type: Type) : OrderMapper.InConstructor.Field(klass, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type }
+}

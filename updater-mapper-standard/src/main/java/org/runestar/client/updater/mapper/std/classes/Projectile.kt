@@ -43,7 +43,7 @@ class Projectile : IdentityMapper.Class() {
     }
 
     @MethodParameters("x", "y", "height", "cycle")
-    class adjust : InstanceMethod() {
+    class setDestination : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
     }
@@ -112,13 +112,13 @@ class Projectile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(adjust::class)
-    class speed : OrderMapper.InMethod.Field(adjust::class, -3) {
+    @DependsOn(setDestination::class)
+    class speed : OrderMapper.InMethod.Field(setDestination::class, -3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 
-    @DependsOn(adjust::class)
-    class accelerationZ : OrderMapper.InMethod.Field(adjust::class, -1) {
+    @DependsOn(setDestination::class)
+    class accelerationZ : OrderMapper.InMethod.Field(setDestination::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == DOUBLE_TYPE }
     }
 

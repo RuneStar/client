@@ -20,7 +20,7 @@ object Projectiles : Iterable<Projectile> {
         }
     }
 
-    val adjustments: Observable<Pair<Projectile, Position>> = XProjectile.adjust.enter.map {
+    val destinationChanges: Observable<Pair<Projectile, Position>> = XProjectile.setDestination.enter.map {
         val localX = it.arguments[0] as Int
         val localY = it.arguments[1] as Int
         val height = it.arguments[2] as Int // todo

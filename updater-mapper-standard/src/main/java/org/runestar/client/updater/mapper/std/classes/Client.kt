@@ -591,6 +591,9 @@ class Client : IdentityMapper.Class() {
     @DependsOn(ObjectDefinition::class, EvictingDualNodeHashTable::class)
     class ObjectDefinition_cached : CachedDefinitionMapper(ObjectDefinition::class)
 
+    @DependsOn(HitSplatDefinition::class, EvictingDualNodeHashTable::class)
+    class HitSplatDefinition_cached : CachedDefinitionMapper(HitSplatDefinition::class)
+
     @DependsOn(GzipDecompressor::class, EvictingDualNodeHashTable::class)
     class gzipDecompressor : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<GzipDecompressor>() }
@@ -3055,5 +3058,27 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 4..5 }
                 .and { it.arguments.startsWith(type<NpcDefinition>(), INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(EvictingDualNodeHashTable::class, HealthBarDefinition.getSprite1::class)
+    class HealthBarDefinition_cachedSprites : UniqueMapper.InMethod.Field(HealthBarDefinition.getSprite1::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
+    }
+
+    @DependsOn(HealthBarDefinition::class, EvictingDualNodeHashTable::class)
+    class HealthBarDefinition_cached : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<HealthBarDefinition>() }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
+    }
+
+    @MethodParameters("id")
+    @DependsOn(HitSplatDefinition::class)
+    class getHitSplatDefinition : StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<HitSplatDefinition>() }
+    }
+
+    @DependsOn(HitSplatDefinition.getFont::class, EvictingDualNodeHashTable::class)
+    class HitSplatDefinition_cachedFonts : UniqueMapper.InMethod.Field(HitSplatDefinition.getFont::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 }

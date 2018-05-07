@@ -1,10 +1,10 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.objectweb.asm.Type.*
+import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
@@ -24,7 +24,7 @@ class HealthBar : IdentityMapper.Class() {
     }
 
     @DependsOn(IterableNodeDeque::class)
-    class hitSplats : InstanceField() {
+    class updates : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
     }
 
@@ -34,9 +34,9 @@ class HealthBar : IdentityMapper.Class() {
     }
 
     @MethodParameters("cycle")
-    @DependsOn(HitSplat::class)
+    @DependsOn(HealthBarUpdate::class)
     class get : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<HitSplat>() }
+        override val predicate = predicateOf<Method2> { it.returnType == type<HealthBarUpdate>() }
     }
 
 //    @MethodParameters

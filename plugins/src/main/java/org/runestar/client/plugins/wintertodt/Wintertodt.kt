@@ -25,7 +25,7 @@ class Wintertodt : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(
-                Projectiles.adjustments
+                Projectiles.destinationChanges
                         .filter { (proj, _) -> proj.isFallingSnow() }
                         .subscribe { (proj, pos) -> fallingSnow[proj] = pos.sceneTile }
         )
