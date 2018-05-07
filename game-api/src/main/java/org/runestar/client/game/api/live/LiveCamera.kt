@@ -11,7 +11,9 @@ object LiveCamera : Camera {
 
     override val localY: Int get() = accessor.cameraZ.coerceIn(0, Position.MAX_LOCAL)
 
-    override val height: Int get() = LiveScene.getTileHeight(localX, localY, plane) - accessor.cameraY
+    override val absoluteHeight: Int get() = accessor.cameraY
+
+    override val height: Int get() = LiveScene.getTileHeight(localX, localY, plane) - absoluteHeight
 
     override val plane: Int get() = accessor.plane
 

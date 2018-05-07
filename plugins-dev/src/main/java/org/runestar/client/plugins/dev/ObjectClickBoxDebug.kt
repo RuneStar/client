@@ -21,9 +21,9 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
         add(SceneObjects.removals.filter(SceneObject::isInteractable).subscribe { objs.remove(it) })
         add(SceneObjects.additions.filter(SceneObject::isInteractable).subscribe { objs.add(it) })
 
-        val color = Color(0, 255, 255, 80)
         add(LiveCanvas.repaints.subscribe { g ->
-            g.color = color
+            g.color = Color.RED
+
             val viewport = LiveViewport.shape
             objs.forEach {
                 val loc = it.location
@@ -31,7 +31,7 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
                 val pt = loc.center.toScreen() ?: return@forEach
                 if (pt !in viewport) return@forEach
                 it.models.forEach {
-                    g.fill(it.objectClickBoxOutline())
+                    g.draw(it.objectClickBoxOutline())
                 }
             }
         })

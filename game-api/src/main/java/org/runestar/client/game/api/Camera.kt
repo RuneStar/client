@@ -6,6 +6,8 @@ interface Camera {
 
     val localY: Int
 
+    val absoluteHeight: Int
+
     val height: Int
 
     val plane: Int

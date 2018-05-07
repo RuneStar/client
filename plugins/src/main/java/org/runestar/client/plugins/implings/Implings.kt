@@ -12,7 +12,6 @@ import org.runestar.client.utils.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.RenderingHints
 
 @Suppress("UNUSED_PARAMETER")
 class Implings : DisposablePlugin<Implings.Settings>() {
@@ -67,7 +66,6 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         if (npcs.isEmpty()) return
 
         g.font = RUNESCAPE_CHAT_FONT
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
         npcs.forEach { npc ->
             val loc = npc.location
@@ -76,7 +74,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             g.color = DRAW_COLOR
             val model = npc.model
             if (model != null) {
-                model.drawBoundingBox(g)
+                g.draw(model.boundingBoxOutline())
             } else {
                 val tileOutline = loc.outline()
                 g.draw(tileOutline)

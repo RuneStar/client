@@ -10,13 +10,10 @@ import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.utils.DisposablePlugin
 import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.RenderingHints
 
 class MotherlodeMine : DisposablePlugin<PluginSettings>() {
 
     private companion object {
-
-        val DRAW_COLOR = Color(255, 200, 0, 70)
 
         val VEIN_IDS = ImmutableSet.of(
                 ObjectId.ORE_VEIN_26661,
@@ -52,8 +49,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
     private fun onRepaint(g: Graphics2D) {
 
         g.clip(LiveViewport.shape)
-        g.color = DRAW_COLOR
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        g.color = Color.LIGHT_GRAY
 
         val myLoc = Players.local?.location ?: return
 
@@ -61,10 +57,10 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
             val veinLoc = vein.location
             if (!Game.visibilityMap.isVisible(veinLoc)) return@forEach
             if (!areOnSameFloor(myLoc, veinLoc)) return@forEach
-            val pt = veinLoc.center.toScreen() ?: return@forEach
+            val pt = veinLoc.center.copy(height = 200).toScreen() ?: return@forEach
             if (!g.clip.contains(pt)) return@forEach
             val model = vein.primaryModel ?: return@forEach
-            model.fillTriangles(g)
+            model.drawTriangles(g)
         }
     }
 
