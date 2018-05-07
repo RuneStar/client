@@ -11,12 +11,13 @@ object Npcs : AbstractCollection<Npc>() {
 
         override fun computeNext() {
             if (i >= size) return done()
-            val x = accessor.npcs[accessor.npcIndices[i++]] ?: return done()
-            setNext(Npc(x))
+            val index = accessor.npcIndices[i++]
+            val x = accessor.npcs[index] ?: return done()
+            setNext(Npc(x, index, Game.plane))
         }
     }
 
     override val size get() = accessor.npcCount
 
-    internal operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it) }
+    internal operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it, index, Game.plane) }
 }
