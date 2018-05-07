@@ -7,11 +7,11 @@ class Angle private constructor(val value: Int) {
     val radians get() = value * RADIANS_INTERVAL
 
     operator fun plus(other: Angle): Angle {
-        return Angle(value + other.value)
+        return of(value + other.value)
     }
 
     operator fun minus(other: Angle): Angle {
-        return Angle(value - other.value)
+        return of(value - other.value)
     }
 
     internal val sinInternal = (sin * 65536.0).toInt()
