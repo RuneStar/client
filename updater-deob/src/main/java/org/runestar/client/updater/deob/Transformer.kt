@@ -73,7 +73,7 @@ interface Transformer {
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
                 FrameRemover,
-                UnnecessaryGotoRemover,
+//                UnnecessaryGotoRemover,
                 SortMethodsByLineNumber,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes
