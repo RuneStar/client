@@ -65,4 +65,11 @@ object Game {
     val specialAttackPercent get() = getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
 
     val visibilityMap = VisibilityMap(Client.accessor.visibilityMaps, LiveCamera)
+
+    val destination: SceneTile? get() {
+        val x = Client.accessor.destinationX
+        val y = Client.accessor.destinationY
+        if (x == 0 && y == 0) return null
+        return SceneTile(x, y, plane)
+    }
 }
