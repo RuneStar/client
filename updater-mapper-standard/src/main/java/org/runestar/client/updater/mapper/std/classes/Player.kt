@@ -92,7 +92,7 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD }
     }
 
-    @DependsOn(Model.offsetBy::class)
+    @DependsOn(Model.offsetBy::class, Player.getModel::class)
     class tileHeight : OrderMapper.InMethod.Field(getModel::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
                 .prevWithin(6) { it.opcode == ISUB }

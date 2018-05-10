@@ -13,6 +13,7 @@ import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.std.classes.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.tree.Method2
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -116,5 +117,9 @@ abstract class ActorHitSplatField(index: Int) : OrderMapper.InConstructor.Field(
 }
 
 abstract class ConstructorPutField(klass: KClass<out Mapper<Class2>>, index: Int, type: Type) : OrderMapper.InConstructor.Field(klass, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type }
+}
+
+abstract class MethodPutField(method: KClass<out Mapper<Method2>>, index: Int, type: Type) : OrderMapper.InMethod.Field(method, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type }
 }

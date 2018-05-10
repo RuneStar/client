@@ -109,7 +109,6 @@ interface MenuOption {
             val base = MenuOption.Base(opcode, operator, argument0, argument1, argument2, targetName, action)
             return when(operator) {
                 // todo: subclasses
-                // todo: Object Examine is wrong
                 in MenuOption.OnObjectIndexed.operators -> MenuOption.OnObjectIndexed(base)
                 in MenuOption.Cancel.operators -> MenuOption.Cancel(base)
                 in MenuOption.WalkHere.operators -> MenuOption.WalkHere(base)
@@ -143,7 +142,7 @@ interface MenuOption {
     }
 
     interface OnObject: MenuOption {
-        val tag: EntityTag get() = EntityTag(argument0)
+        val id: Int get() = argument0
     }
 
     interface OnGroundItem: MenuOption {
@@ -289,7 +288,7 @@ interface MenuOption {
             )
         }
         override fun toString(): String {
-            return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, tag=$tag, targetName=$targetName, action=$action)"
+            return "OnObjectIndexed(opcode=$opcode, operator=$operator, index=$index, id=$id, targetName=$targetName, action=$action)"
         }
     }
 
@@ -370,7 +369,7 @@ interface MenuOption {
             override val operators = setOf(Operator.SPELL_ON_OBJECT, Operator.OBJECT_EXAMINE, Operator.ITEM_ON_OBJECT)
         }
         override fun toString(): String {
-            return "OnObjectSimple(opcode=$opcode, operator=$operator, tag=$tag, location=$location, targetName=$targetName, action=$action)"
+            return "OnObjectSimple(opcode=$opcode, operator=$operator, id=$id, location=$location, targetName=$targetName, action=$action)"
         }
     }
 }

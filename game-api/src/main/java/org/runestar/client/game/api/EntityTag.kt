@@ -8,19 +8,23 @@ data class EntityTag(
         val location: SceneTile,
         val isInteractable: Boolean
 ) {
+
     internal constructor(
-            packed: Int,
+            packed: Long,
             plane: Int = Client.accessor.plane
     ) : this(
-            EntityKind.of(packed shr 29 and 0x3),
-            packed shr 14 and 0x7FFF,
-            SceneTile(packed and 0x7F, packed shr 7 and 0x7F, plane),
-            packed > 0
+            EntityKind.of((packed shr 14 and 0x3).toInt()),
+            (packed ushr 17).toInt(),
+            SceneTile((packed and 0x7F).toInt(), (packed shr 7 and 0x7F).toInt(), plane),
+            packed and 65536L == 0L
     )
 
-    internal val packed: Int get() {
-        var uid = kind.id shl 29 + id shl 14 + location.y shl 7 + location.x
-        if (!isInteractable) uid -= Int.MAX_VALUE
+    internal val packed: Long get() {
+        var uid = id.toLong() shl 17 +
+                kind.id shl 14 +
+                location.y shl 7 +
+                location.x
+        if (!isInteractable) uid = uid or 65536L
         return uid
     }
 

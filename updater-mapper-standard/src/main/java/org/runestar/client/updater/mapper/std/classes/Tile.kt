@@ -1,18 +1,22 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.annotations.SinceVersion
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.baseType
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import java.awt.image.TileObserver
 
+@SinceVersion(170)
 @DependsOn(Node::class, Scene.tiles::class)
 class Tile : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }

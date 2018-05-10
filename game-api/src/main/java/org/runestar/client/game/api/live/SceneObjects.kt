@@ -90,7 +90,7 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
     object Game : TileObjects.Many<SceneObject.Game>(Client.accessor.scene) {
 
         val additions: Observable<SceneObject.Game> = XScene.newGameObject.exit
-                .filter { it.returned && EntityTag(it.arguments[11] as Int).kind == EntityKind.OBJECT }
+                .filter { it.returned && EntityTag(it.arguments[11] as Long).kind == EntityKind.OBJECT }
                 .map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
                     SceneObject.Game(tile.gameObjects[tile.gameObjectsCount - 1])
