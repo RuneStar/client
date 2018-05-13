@@ -57,9 +57,10 @@ interface Scene {
             plane
         }
         val o = getHeight(x, y, p)
-        val ne = if (x != SIZE - 1 && y != SIZE - 1) getHeight(1 + x, 1 + y, p) else o
-        val n = if (y != SIZE - 1) getHeight(x, 1 + y, p) else o
-        val e = if (x != SIZE - 1) getHeight(1 + x, y, p) else o
+        if (x == SIZE - 1 || y == SIZE - 1) return o
+        val ne = getHeight(1 + x, 1 + y, p)
+        val n = getHeight(x, 1 + y, p)
+        val e = getHeight(1 + x, y, p)
         return subY * (ne * subX + n * (128 - subX) shr 7) +
                 (128 - subY) * (subX * e + o * (128 - subX) shr 7) shr 7
     }
