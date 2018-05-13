@@ -17,7 +17,7 @@ import java.awt.Graphics2D
 class Implings : DisposablePlugin<Implings.Settings>() {
 
     private companion object {
-        val PURO_PURO_REGION = Region(40, 67, 0)
+        val PURO_PURO_REGION_ID = Region(40, 67).id
         val DRAW_COLOR = Color(255, 255, 255, 140)
         val TEXT_COLOR = Color.WHITE
     }
@@ -31,11 +31,10 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     override fun start() {
         implingIds = ctx.settings.ids()
-        add(Game.ticks.subscribe(::onTick))
-        add(Game.stateChanges.filter { it == GameState.TITLE }.subscribe(::onLogOut))
-        add(LiveCanvas.repaints.subscribe(::onRepaint))
+        add(Game.ticks.filter(::isLoggedIn).subscribe(::onTick))
+        add(LiveCanvas.repaints.filter(::isLoggedIn).subscribe(::onRepaint))
         if (ctx.settings.drawMinimapInPuroPuro) {
-            add(Game.ticks.subscribe(::onTickMinimap))
+            add(Game.ticks.filter(::shouldDrawMinimap).subscribe { LiveMinimap.isDrawn = true })
         }
     }
 
@@ -51,14 +50,8 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         implings = Npcs.filter(::isImpling)
     }
 
-    private fun onTickMinimap(u: Unit) {
-        if (!LiveMinimap.isDrawn && inPuroPuro()) {
-            LiveMinimap.isDrawn = true
-        }
-    }
-
-    private fun onLogOut(gameState: GameState) {
-        implings = emptyList()
+    private fun shouldDrawMinimap(u: Unit): Boolean {
+        return !LiveMinimap.isDrawn && inPuroPuro()
     }
 
     private fun onRepaint(g: Graphics2D) {
@@ -104,8 +97,11 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     }
 
     private fun inPuroPuro(): Boolean {
-        val region = Players.local?.location?.toGlobalTile()?.region ?: return false
-        return region == PURO_PURO_REGION
+        return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(PURO_PURO_REGION_ID)
+    }
+
+    private fun isLoggedIn(o: Any): Boolean {
+        return Game.state == GameState.LOGGED_IN
     }
 
     class Settings(
