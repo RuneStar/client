@@ -16,8 +16,6 @@ data class SceneTile(
 
     companion object {
 
-        private val tempPoint = Point()
-
         fun isXyLoaded(n: Int): Boolean {
             return n in 0 until Scene.SIZE
         }
@@ -59,6 +57,7 @@ data class SceneTile(
 
     fun outline(projection: Projection = Projections.viewport): Shape {
         check(isLoaded) { this }
+        val tempPoint = Point()
 
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, 6)
 

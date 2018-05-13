@@ -12,6 +12,7 @@ data class GlobalTile(val x: Int, val y: Int, val plane: Int) {
     }
 
     fun isLoaded(scene: Scene = LiveScene): Boolean {
-        return toSceneTile(scene).isLoaded
+        val base = scene.base
+        return SceneTile.isLoaded(x - base.x, y - base.y, plane)
     }
 }
