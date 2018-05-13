@@ -1,52 +1,25 @@
 package org.runestar.client.game.api
 
-enum class CollisionFlag(val index: Int) {
+object CollisionFlag {
 
-    WALK_NORTHWEST(1),
-    WALK_NORTH(2),
-    WALK_NORTHEAST(3),
-    WALK_EAST(4),
-    WALK_SOUTHEAST(5),
-    WALK_SOUTH(6),
-    WALK_SOUTHWEST(7),
-    WALK_WEST(8),
+    const val WALK_NORTHWEST =  1
+    const val WALK_NORTH =      1 shl 1
+    const val WALK_NORTHEAST =  1 shl 2
+    const val WALK_EAST =       1 shl 3
+    const val WALK_SOUTHEAST =  1 shl 4
+    const val WALK_SOUTH =      1 shl 5
+    const val WALK_SOUTHWEST =  1 shl 6
+    const val WALK_WEST =       1 shl 7
+    const val WALK_OBJECT =     1 shl 8
+    const val PROJECTILE_NORTHWEST =    1 shl 9
+    const val PROJECTILE_NORTH =        1 shl 10
+    const val PROJECTILE_NORTHEAST =    1 shl 11
+    const val PROJECTILE_EAST =         1 shl 12
+    const val PROJECTILE_SOUTHEAST =    1 shl 13
+    const val PROJECTILE_SOUTH =        1 shl 14
+    const val PROJECTILE_SOUTHWEST =    1 shl 15
+    const val PROJECTILE_WEST =         1 shl 16
+    const val PROJECTILE_OBJECT =       1 shl 17
 
-    OBJECT_ALL(9),
-
-    PROJECTILE_NORTHWEST(10),
-    PROJECTILE_NORTH(11),
-    PROJECTILE_NORTHEAST(12),
-    PROJECTILE_EAST(13),
-    PROJECTILE_SOUTHEAST(14),
-    PROJECTILE_SOUTH(15),
-    PROJECTILE_SOUTHWEST(16),
-    PROJECTILE_WEST(17),
-
-    GROUND_ALL(22);
-
-    val mask = 1 shl (index - 1)
+    const val WALK_GROUND = 1 shl 21
 }
-
-//fun main(args: Array<String>) {
-//    CollisionFlag.values().forEach {
-//        println("$it ${it.mask.toString(16)}")
-//    }
-//}
-
-//WALK_NORTHWEST 1
-//WALK_NORTH 2
-//WALK_NORTHEAST 4
-//WALK_EAST 8
-//WALK_SOUTHEAST 10
-//WALK_SOUTH 20
-//WALK_SOUTHWEST 40
-//WALK_WEST 80
-//ALL 100
-//PROJECTILE_NORTHWEST 200
-//PROJECTILE_NORTH 400
-//PROJECTILE_NORTHEAST 800
-//PROJECTILE_EAST 1000
-//PROJECTILE_SOUTHEAST 2000
-//PROJECTILE_SOUTH 4000
-//PROJECTILE_SOUTHWEST 8000
-//PROJECTILE_WEST 10000
