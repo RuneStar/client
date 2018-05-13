@@ -104,4 +104,8 @@ data class SceneTile(
     fun distanceTo(other: SceneTile): Int {
         return max(abs(x - other.x), abs(y - other.y))
     }
+
+    operator fun plus(direction: OctantDirection): SceneTile {
+        return SceneTile(x + direction.x, y + direction.y, plane)
+    }
 }
