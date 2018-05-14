@@ -1,6 +1,9 @@
 package org.runestar.client.plugins.freezetimers
 
-import org.runestar.client.game.api.*
+import org.runestar.client.game.api.Actor
+import org.runestar.client.game.api.HeadIconPrayer
+import org.runestar.client.game.api.Player
+import org.runestar.client.game.api.SequenceId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
@@ -12,45 +15,47 @@ import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
+@Suppress("UNUSED_PARAMETER")
 class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
     override val name: String = "Freeze Timers"
 
-    private val playerFreezes = HashMap<String, FreezeState>()
+    private val playerFreezes: MutableMap<String, FreezeState> = LinkedHashMap()
 
-    private val npcFreezes = HashMap<Npc, FreezeState>()
+    private val npcFreezes: MutableMap<Int, FreezeState> = LinkedHashMap()
 
     @Volatile private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
     override fun start() {
-        add(Game.ticks.subscribe {
+        add(Game.ticks.subscribe(::onTick))
+        add(LiveCanvas.repaints.subscribe(::onRepaint))
+    }
 
-            tickFreezes(npcFreezes)
-            tickFreezes(playerFreezes)
+    private fun onTick(u: Unit) {
+        tickFreezes(npcFreezes)
+        tickFreezes(playerFreezes)
 
-            val loaded = ArrayList<Pair<Actor, FreezeState>>()
+        val loaded = ArrayList<Pair<Actor, FreezeState>>()
 
-            for (npc in Npcs) {
-                processActor(npc, npc, npcFreezes, loaded)
-            }
+        for (npc in Npcs) {
+            processActor(npc, npc.index, npcFreezes, loaded)
+        }
 
-            for (player in Players) {
-                val name = player.name?.name ?: continue
-                processActor(player, name, playerFreezes, loaded)
-            }
+        for (player in Players) {
+            val name = player.name?.name ?: continue
+            processActor(player, name, playerFreezes, loaded)
+        }
 
-            loadedFrozenActors = loaded
-        })
+        loadedFrozenActors = loaded
+    }
 
-        add(LiveCanvas.repaints.subscribe { g ->
-            g.font = RUNESCAPE_SMALL_FONT
-
-            for ((actor, freezeState) in loadedFrozenActors) {
-                drawActor(g, actor, freezeState)
-            }
-        })
+    private fun onRepaint(g: Graphics2D) {
+        g.font = RUNESCAPE_SMALL_FONT
+        for ((actor, freezeState) in loadedFrozenActors) {
+            drawActor(g, actor, freezeState)
+        }
     }
 
     private fun drawActor(
@@ -116,6 +121,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     }
 
     private fun tickFreezes(freezes: MutableMap<*, FreezeState>) {
+        if (freezes.isEmpty()) return
         val itr = freezes.iterator()
         while (itr.hasNext()) {
             val e = itr.next()
