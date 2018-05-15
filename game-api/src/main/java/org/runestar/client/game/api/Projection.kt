@@ -92,7 +92,7 @@ interface Projection {
                 tileHeightLocalX: Int, tileHeightLocalY: Int,
                 result: Point
         ): Boolean {
-            if (!Position.isLoaded(tileHeightLocalX, tileHeightLocalY, 0)) return false
+            if (!Position.isLoaded(tileHeightLocalX, tileHeightLocalY, plane)) return false
             var x1 = localX
             var y1 = localY
             var z1 = scene.getTileHeight(tileHeightLocalX, tileHeightLocalY, plane) - height
