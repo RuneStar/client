@@ -1,7 +1,6 @@
 package org.runestar.client.updater.create
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.maven.plugin.AbstractMojo
@@ -30,8 +29,7 @@ class CreateMojo : AbstractMojo() {
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject
 
-    private val jsonMapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+    private val jsonMapper = jacksonObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
     private val targetDir by lazy { Paths.get(project.build.directory) }
     private val gamepackJar by lazy { targetDir.resolve("gamepack.jar") }
