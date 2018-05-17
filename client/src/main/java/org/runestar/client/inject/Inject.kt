@@ -1,5 +1,8 @@
 package org.runestar.client.inject
 
+import com.google.common.io.Files
+import com.google.common.io.MoreFiles
+import com.google.common.io.RecursiveDeleteOption
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.ClassFileLocator
@@ -33,13 +36,14 @@ private val BYTEBUDDY = ByteBuddy().with(TypeValidation.DISABLED)
 
 private val METHOD_NAME_TRANSFORMER = MethodNameTransformer.Suffixing("0")
 
-fun inject(sourceJar: Path, destinationDirectory: Path) {
+fun inject(sourceJar: Path, destinationJar: Path) {
+    val tempDir = Files.createTempDir().toPath()
     val classFileLocator = ClassFileLocator.Compound(
             ClassFileLocator.ForClassLoader.ofClassPath(),
             ClassFileLocator.ForJarFile.of(sourceJar.toFile())
     )
     val typePool = TypePool.Default.of(classFileLocator)
-    ZipUtil.unpack(sourceJar.toFile(), destinationDirectory.toFile())
+    ZipUtil.unpack(sourceJar.toFile(), tempDir.toFile())
     hookClassNames().forEach { cn ->
         val typeDescription = typePool.describe(cn).resolve()
         var typeBuilder = BYTEBUDDY.rebase<Any>(typeDescription, classFileLocator, METHOD_NAME_TRANSFORMER)
@@ -78,8 +82,15 @@ fun inject(sourceJar: Path, destinationDirectory: Path) {
                 }
             }
         }
-        typeBuilder.make().saveIn(destinationDirectory.toFile())
+        typeBuilder.make().saveIn(tempDir.toFile())
     }
+    deleteMetaInf(tempDir)
+    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile())
+}
+
+private fun deleteMetaInf(dir: Path) {
+    val metaInfDir = dir.resolve("META-INF")
+    MoreFiles.deleteRecursively(metaInfDir, RecursiveDeleteOption.ALLOW_INSECURE)
 }
 
 private fun createMethodProxy(typePool: TypePool, methodHook: MethodHook): Implementation {

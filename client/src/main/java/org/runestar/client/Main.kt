@@ -2,13 +2,12 @@
 
 package org.runestar.client
 
-import com.google.common.io.Files
 import org.runestar.client.api.Application
 import org.runestar.client.inject.inject
 import org.runestar.general.downloadGamepack
 import org.runestar.general.updateRevision
-import java.io.IOException
 import java.net.URLClassLoader
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.jar.JarFile
 
@@ -16,16 +15,30 @@ fun main(args: Array<String>) {
     Application.start(injectGamepack())
 }
 
+private val TMPDIR = Paths.get(System.getProperty("java.io.tmpdir"))
+
 private fun injectGamepack(): ClassLoader {
     val revision = updateRevision()
-    val gamepackPath = Paths.get(System.getProperty("java.io.tmpdir"), "runescape-gamepack.$revision.jar")
-    try {
-        JarFile(gamepackPath.toFile(), true).close()
-    } catch (e: IOException) {
-        // jar does not exist or was partially downloaded
-        downloadGamepack(gamepackPath)
+    val injectedGamepackPath = TMPDIR.resolve("runescape-gamepack.$revision.inject.jar")
+    if (!verifyJar(injectedGamepackPath)) {
+        val gamepackPath = TMPDIR.resolve("runescape-gamepack.$revision.jar")
+        if (!verifyJar(gamepackPath)) {
+            downloadGamepack(gamepackPath)
+        }
+        inject(gamepackPath, injectedGamepackPath)
     }
-    val injectedGamepackDirectory = Files.createTempDir().toPath()
-    inject(gamepackPath, injectedGamepackDirectory)
-    return URLClassLoader(arrayOf(injectedGamepackDirectory.toUri().toURL()))
+    return URLClassLoader(injectedGamepackPath)
+}
+
+private fun URLClassLoader(path: Path): URLClassLoader {
+    return URLClassLoader(arrayOf(path.toUri().toURL()))
+}
+
+private fun verifyJar(jar: Path): Boolean {
+    try {
+        JarFile(jar.toFile(), true).close()
+        return true
+    } catch (e: Exception) {
+        return false
+    }
 }
