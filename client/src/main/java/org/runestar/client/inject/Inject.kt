@@ -29,6 +29,7 @@ import org.runestar.client.updater.common.finalArgumentNarrowed
 import org.zeroturnaround.zip.ZipUtil
 import java.lang.reflect.Modifier
 import java.nio.file.Path
+import java.util.zip.Deflater
 
 private val ACCESS_PKG = XClient::class.java.`package`.name
 
@@ -85,7 +86,7 @@ fun inject(sourceJar: Path, destinationJar: Path) {
         typeBuilder.make().saveIn(tempDir.toFile())
     }
     deleteMetaInf(tempDir)
-    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile())
+    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile(), Deflater.BEST_SPEED)
 }
 
 private fun deleteMetaInf(dir: Path) {
