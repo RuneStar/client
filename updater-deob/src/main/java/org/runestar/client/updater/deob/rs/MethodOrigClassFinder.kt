@@ -1,4 +1,4 @@
-package org.runestar.client.updater.deob.jagex
+package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

@@ -1,15 +1,13 @@
-package org.runestar.client.updater.deob.jagex
+package org.runestar.client.updater.deob.rs
 
 import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
-import org.objectweb.asm.Label
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.AbstractInsnNode
-import org.objectweb.asm.tree.LabelNode
 import java.nio.file.Path
 
 object UnusedTryCatchRemover : Transformer {

@@ -1,4 +1,4 @@
-package org.runestar.client.updater.deob.jagex
+package org.runestar.client.updater.deob.rs
 
 import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar

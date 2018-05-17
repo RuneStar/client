@@ -1076,9 +1076,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
-    @DependsOn(JagexGame::class)
-    class jagexGame : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<JagexGame>() && it.klass != klass<JagexGame>() }
+    @DependsOn(StudioGame::class)
+    class studioGame : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<StudioGame>() && it.klass != klass<StudioGame>() }
     }
 
     @DependsOn(LoginType::class)
@@ -1129,8 +1129,8 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.jar[it.methodId].arguments.size in 1..2 }
     }
 
-    class jagexClDat : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst is String && (it.ldcCst as String).contains("jagex_cl_") }
+    class clDat : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst is String && (it.ldcCst as String).contains("ex_cl_") }
                 .nextWithin(25) { it.opcode == PUTSTATIC && it.fieldType == File::class.type }
     }
 

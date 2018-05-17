@@ -11,7 +11,7 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.LDC
 import org.objectweb.asm.Type
 
-class JagexGame : IdentityMapper.Class() {
+class StudioGame : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.interfaces.isNotEmpty() }
             .and { it.classInitializer != null }
