@@ -4,20 +4,21 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.runestar.client.updater.common.ClassHook
-import org.runestar.client.updater.common.FieldHook
-import org.runestar.client.updater.common.MethodHook
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.mapper.std.classes.Client
-import org.runestar.general.downloadGamepack
-import org.runestar.general.updateRevision
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-import org.runestar.client.updater.deob.common.Renamer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.mapper.*
+import org.runestar.client.updater.common.ClassHook
+import org.runestar.client.updater.common.FieldHook
+import org.runestar.client.updater.common.MethodHook
+import org.runestar.client.updater.deob.Transformer
+import org.runestar.client.updater.mapper.IdClass
+import org.runestar.client.updater.mapper.JarMapper
+import org.runestar.client.updater.mapper.Mapper
+import org.runestar.client.updater.mapper.buildIdHierarchy
+import org.runestar.client.updater.mapper.std.classes.Client
+import org.runestar.general.downloadGamepack
+import org.runestar.general.updateRevision
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -34,9 +35,7 @@ class CreateMojo : AbstractMojo() {
 
     private val targetDir by lazy { Paths.get(project.build.directory) }
     private val gamepackJar by lazy { targetDir.resolve("gamepack.jar") }
-    private val cleanJar by lazy { targetDir.resolve("gamepack.clean.jar") }
     private val deobJar by lazy { targetDir.resolve("gamepack.deob.jar") }
-    private val renamedJar by lazy { targetDir.resolve("gamepack.deob.renamed.jar") }
     private val namesJson by lazy { deobJar.appendFileName(".names.json") }
     private val opJson by lazy { deobJar.appendFileName(".op.json") }
     private val multJson by lazy { deobJar.appendFileName(".mult.json") }
@@ -46,11 +45,9 @@ class CreateMojo : AbstractMojo() {
         if (Files.notExists(gamepackJar) || !verifyJar(gamepackJar)) {
             dl()
         }
-        clean()
         deob()
         map()
         mergeHooks()
-        rename()
     }
 
     private fun verifyJar(jar: Path): Boolean {
@@ -74,10 +71,6 @@ class CreateMojo : AbstractMojo() {
         Transformer.DEFAULT.transform(gamepackJar, deobJar)
     }
 
-    private fun clean() {
-        Transformer.CLEAN.transform(gamepackJar, cleanJar)
-    }
-
     private fun map() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
@@ -99,11 +92,5 @@ class CreateMojo : AbstractMojo() {
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
         }
         jsonMapper.writeValue(hooksJson.toFile(), hooks)
-    }
-
-    private fun rename() {
-        val names = jsonMapper.readValue<List<IdClass>>(namesJson.toFile())
-        val remapper = IdRemapper(names, readJar(deobJar))
-        Renamer(remapper).transform(deobJar, renamedJar)
     }
 }

@@ -20,8 +20,6 @@
         <module>game-api</module>
         <module>game-raw</module>
         <module>game-raw-accessors-maven-plugin</module>
-        <module>game</module>
-        <module>game-inject-maven-plugin</module>
         <module>plugins</module>
         <module>plugins-dev</module>
         <module>utils</module>

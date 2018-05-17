@@ -49,10 +49,6 @@
                 <directory>target</directory>
                 <includes>
                     <include>hooks.json</include>
-                    <include>gamepack.deob.jar</include>
-                    <include>gamepack.deob.renamed.jar</include>
-                    <include>gamepack.clean.jar</include>
-                    <include>gamepack.jar</include>
                 </includes>
             </resource>
         </resources>
