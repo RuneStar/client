@@ -117,7 +117,7 @@
             <dependency>
                 <groupId>org.runestar</groupId>
                 <artifactId>general</artifactId>
-                <version>0.167.0</version>
+                <version>0.170.0</version>
             </dependency>
             <dependency>
                 <groupId>com.jakewharton.rxrelay2</groupId>
