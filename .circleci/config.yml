@@ -11,15 +11,17 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-
 
       - run: mvn install
 
-      - run: |
-          if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-            mvn -pl client github-release:release -s .circleci/settings.xml
-          fi
+      - run:
+          name: GitHub Release
+          command: |
+            if [[ "${CIRCLE_BRANCH}" == "master" && -z "${CIRCLE_PULL_REQUEST}" ]]; then
+              mvn -pl client github-release:release -s .circleci/settings.xml
+            fi
 
       - save_cache:
           paths:
