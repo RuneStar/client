@@ -6,9 +6,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.runestar.client.updater.common.ClassHook
 import java.lang.invoke.MethodHandles
+import java.net.URL
 
-// ClassLoader that loaded this class
-private val classLoader = MethodHandles.lookup().lookupClass().classLoader
+val hooksFile: URL get() = MethodHandles.lookup().lookupClass().classLoader.getResource("hooks.json")
 
-@JvmField
-val HOOKS: List<ClassHook> = jacksonObjectMapper().readValue(classLoader.getResource("hooks.json"))
+fun readHooks(): List<ClassHook> {
+    return jacksonObjectMapper().readValue(hooksFile)
+}

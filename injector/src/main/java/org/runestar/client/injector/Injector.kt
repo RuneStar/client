@@ -21,11 +21,11 @@ import net.bytebuddy.implementation.bytecode.member.MethodReturn
 import net.bytebuddy.implementation.bytecode.member.MethodVariableAccess
 import net.bytebuddy.pool.TypePool
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.updater.HOOKS
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.common.decoderNarrowed
 import org.runestar.client.updater.common.finalArgumentNarrowed
+import org.runestar.client.updater.readHooks
 import org.zeroturnaround.zip.ZipUtil
 import java.lang.reflect.Modifier
 import java.nio.file.Path
@@ -45,10 +45,11 @@ fun inject(sourceJar: Path, destinationJar: Path) {
     )
     val typePool = TypePool.Default.of(classFileLocator)
     ZipUtil.unpack(sourceJar.toFile(), tempDir.toFile())
-    hookClassNames().forEach { cn ->
+    val hooks = readHooks()
+    hookClassNames(hooks).forEach { cn ->
         val typeDescription = typePool.describe(cn).resolve()
         var typeBuilder = BYTEBUDDY.rebase<Any>(typeDescription, classFileLocator, METHOD_NAME_TRANSFORMER)
-        HOOKS.forEach { ch ->
+        hooks.forEach { ch ->
             val xClass = Class.forName("$ACCESS_PKG.X${ch.`class`}")
             if (cn == ch.name) {
                 typeBuilder = typeBuilder.implement(xClass)

@@ -4,7 +4,7 @@ import net.bytebuddy.description.field.FieldDescription
 import net.bytebuddy.description.method.MethodDescription
 import net.bytebuddy.jar.asm.Type
 import net.bytebuddy.matcher.ElementMatcher
-import org.runestar.client.updater.HOOKS
+import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 
@@ -26,6 +26,6 @@ internal fun MethodHook.matcher(): ElementMatcher<MethodDescription> = ElementMa
 
 internal fun MethodHook.proxyMatcher(): ElementMatcher<MethodDescription> = ElementMatcher { it.name == method }
 
-internal fun hookClassNames(): Collection<String> {
-    return HOOKS.flatMap { (it.methods.map { it.owner }).plus(it.name) }.toSet()
+internal fun hookClassNames(hooks: List<ClassHook>): Collection<String> {
+    return hooks.flatMap { (it.methods.map { it.owner }).plus(it.name) }.toSet()
 }

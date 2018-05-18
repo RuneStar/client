@@ -1,9 +1,5 @@
 package org.runestar.client.game.raw.accessors
 
-import org.kxtra.lang.classloader.loadClassFromDescriptor
-import org.runestar.client.updater.HOOKS
-import org.runestar.client.updater.common.ClassHook
-import org.runestar.client.updater.common.MethodHook
 import com.squareup.javapoet.*
 import org.apache.commons.lang3.ClassUtils
 import org.apache.maven.plugin.AbstractMojo
@@ -11,7 +7,11 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.jetbrains.annotations.NotNull
+import org.kxtra.lang.classloader.loadClassFromDescriptor
 import org.objectweb.asm.Type
+import org.runestar.client.updater.common.ClassHook
+import org.runestar.client.updater.common.MethodHook
+import org.runestar.client.updater.readHooks
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
 import kotlin.reflect.jvm.jvmName
@@ -41,16 +41,18 @@ class AccessorsMojo : AbstractMojo() {
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject
 
+    private val hooks = readHooks()
+
     private val accessorTypeName: ClassName by lazy { ClassName.bestGuess(accessorClass) }
 
     private val callbackFieldTypeName: ClassName by lazy { ClassName.bestGuess(callbackFieldClass) }
 
     private val outputDir by lazy { Paths.get(project.build.directory, "generated-sources") }
 
-    private val typeTransforms by lazy { HOOKS.associate { it.name to "X" + it.`class` } }
+    private val typeTransforms by lazy { hooks.associate { it.name to "X" + it.`class` } }
 
     override fun execute() {
-        HOOKS.forEach { c ->
+        hooks.forEach { c ->
             val typeBuilder = TypeSpec.interfaceBuilder("X" + c.`class`)
                     .addSuperinterface(accessorTypeName)
                     .addModifiers(Modifier.PUBLIC)
