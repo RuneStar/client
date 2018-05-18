@@ -105,6 +105,16 @@
                     <skip>false</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>de.jutzig</groupId>
+                <artifactId>github-release-plugin</artifactId>
+                <configuration>
+                    <releaseName>Client ${project.version}-${maven.build.timestamp}</releaseName>
+                    <tag>${project.version}-${maven.build.timestamp}</tag>
+                    <repositoryId>runestar/client</repositoryId>
+                    <prerelease>true</prerelease>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

@@ -68,6 +68,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
 
         <kotlin.version>1.2.41</kotlin.version>
         <jackson.version>2.9.5</jackson.version>
@@ -318,6 +319,11 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>de.jutzig</groupId>
+                    <artifactId>github-release-plugin</artifactId>
+                    <version>1.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
