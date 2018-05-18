@@ -3018,4 +3018,9 @@ class Client : IdentityMapper.Class() {
     class HitSplatDefinition_cachedFonts : UniqueMapper.InMethod.Field(HitSplatDefinition.getFont::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
+
+    @DependsOn(WorldMap::class)
+    class worldMap : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMap>() }
+    }
 }
