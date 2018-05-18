@@ -52,13 +52,15 @@ object Application : AutoCloseable {
 
     private var profileName: String = DEFAULT_PROFILE
 
-    fun start(gamepack: ClassLoader) {
+    fun start(
+            javConfig: JavConfig,
+            gamepack: ClassLoader
+    ) {
         check(!started)
         started = true
 
         setup()
 
-        val javConfig = JavConfig.load(System.getProperty("runestar.world", ""))
         Client.accessor = gamepack.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
         @Suppress("DEPRECATION")
         val applet = Client.accessor as java.applet.Applet
