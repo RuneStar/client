@@ -1,4 +1,4 @@
-package org.runestar.client.inject
+package org.runestar.client.injector
 
 import java.math.BigInteger
 

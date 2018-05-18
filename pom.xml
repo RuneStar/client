@@ -24,6 +24,7 @@
         <module>plugins-dev</module>
         <module>utils</module>
         <module>plugins-spi</module>
+        <module>injector</module>
         <module>updater</module>
         <module>updater-common</module>
         <module>updater-deob</module>

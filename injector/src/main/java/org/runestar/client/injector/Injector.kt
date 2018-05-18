@@ -1,4 +1,4 @@
-package org.runestar.client.inject
+package org.runestar.client.injector
 
 import com.google.common.io.Files
 import com.google.common.io.MoreFiles
