@@ -325,6 +325,23 @@
                     <artifactId>github-release-plugin</artifactId>
                     <version>1.2.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>net.nicoulaj.maven.plugins</groupId>
+                    <artifactId>checksum-maven-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>artifacts</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <algorithms>
+                            <algorithm>SHA-256</algorithm>
+                        </algorithms>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
