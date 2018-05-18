@@ -76,4 +76,8 @@ interface WidgetGroupId {
     object CombatOptions : WidgetGroupId {
         override val id = 593
     }
+
+    object WorldMap : WidgetGroupId {
+        override val id = 595
+    }
 }

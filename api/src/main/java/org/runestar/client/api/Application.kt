@@ -9,9 +9,11 @@ import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.common.*
 import org.runestar.client.game.api.GameState
+import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.game.raw.access.XWidgetGroupParent
 import org.runestar.client.plugins.spi.PluginLoader
 import org.runestar.general.JavConfig
 import java.awt.Frame
@@ -69,7 +71,7 @@ object Application : AutoCloseable {
         applet.start()
 
         waitForTitle()
-        Client.accessor.gameDrawingMode = 2
+        modifyClient()
 
         setProfile(DEFAULT_PROFILE)
 
@@ -107,6 +109,20 @@ object Application : AutoCloseable {
                             AwtTaskbar.requestWindowUserAttention(frame)
                         }
                 )
+    }
+
+    private fun modifyClient() {
+        Client.accessor.gameDrawingMode = 2
+
+        XClient.closeWidgetGroup.exit.subscribe {
+            val wgp = it.arguments[0] as XWidgetGroupParent
+            val group = wgp.group
+            if (group == WidgetGroupId.WorldMap.id) {
+                val wm = Client.accessor.worldMap
+                wm.initializeWorldMapManager(wm.worldMapData)
+                System.gc()
+            }
+        }
     }
 
     private fun changeProfile() {
