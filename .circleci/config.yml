@@ -23,6 +23,9 @@ jobs:
               mvn -pl client github-release:release -s .circleci/settings.xml
             fi
 
+      - store_artifacts:
+          client/target
+
       - save_cache:
           paths:
             - ~/.m2
