@@ -24,7 +24,7 @@ jobs:
             fi
 
       - store_artifacts:
-          client/target
+          path: client/target
 
       - save_cache:
           paths:
