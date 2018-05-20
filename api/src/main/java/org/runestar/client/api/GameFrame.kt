@@ -1,7 +1,5 @@
 package org.runestar.client.api
 
-import org.runestar.client.common.ICON
-import org.runestar.client.common.TITLE
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import java.awt.Container

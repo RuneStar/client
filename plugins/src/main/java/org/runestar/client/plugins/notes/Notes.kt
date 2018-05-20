@@ -4,7 +4,6 @@ import com.alee.managers.style.StyleId
 import org.runestar.client.api.Application
 import org.runestar.client.api.TabButton
 import org.runestar.client.api.TopBar
-import org.runestar.client.common.ICON
 import org.runestar.client.plugins.spi.AbstractPlugin
 import org.runestar.client.plugins.spi.PluginContext
 import org.runestar.client.plugins.spi.PluginSettings

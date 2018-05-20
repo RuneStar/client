@@ -7,10 +7,8 @@ import org.kxtra.slf4j.logger.error
 import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
-import org.runestar.client.common.AwtTaskbar
-import org.runestar.client.common.ICON
-import org.runestar.client.common.PROFILES_DIR_PATH
-import org.runestar.client.common.TITLE
+import org.runestar.client.api.util.AwtTaskbar
+import org.runestar.client.api.util.systemTray
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.Game

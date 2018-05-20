@@ -15,7 +15,6 @@
     <modules>
         <module>client</module>
         <module>api</module>
-        <module>common</module>
         <module>game-api</module>
         <module>game-raw</module>
         <module>game-raw-accessors-maven-plugin</module>

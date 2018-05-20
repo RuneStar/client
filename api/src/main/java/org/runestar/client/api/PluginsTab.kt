@@ -1,6 +1,8 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
+import org.runestar.client.api.util.desktop
+import org.runestar.client.api.util.safeOpen
 import org.runestar.client.plugins.spi.PluginContext
 import org.runestar.client.plugins.spi.PluginLoader
 import java.awt.Component

@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.dev.widgetexplorer
 
-import org.runestar.client.common.ICON
+import org.runestar.client.api.ICON
 import org.runestar.client.game.api.Widget
 import java.awt.BorderLayout
 import java.awt.Dimension

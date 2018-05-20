@@ -1,6 +1,6 @@
 @file:JvmName("Resources")
 
-package org.runestar.client.common
+package org.runestar.client.api
 
 import java.awt.image.BufferedImage
 import java.lang.invoke.MethodHandles
