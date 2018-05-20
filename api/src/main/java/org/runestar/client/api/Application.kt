@@ -1,10 +1,7 @@
 package org.runestar.client.api
 
 import io.reactivex.Observable
-import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.blockingSubscribeBy
-import org.kxtra.slf4j.logger.error
-import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.api.util.AwtTaskbar
@@ -60,7 +57,7 @@ object Application : AutoCloseable {
         check(!started)
         started = true
 
-        setup()
+        SwingUtilities.invokeLater(LafInstallation)
 
         Client.accessor = gamepack.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
         @Suppress("DEPRECATION")
@@ -87,17 +84,6 @@ object Application : AutoCloseable {
                 setTitle()
             }
         }
-    }
-
-    private fun setup() {
-        AwtTaskbar.setIconImage(ICON)
-        RxJavaPlugins.setErrorHandler { e ->
-            logger.warn(e) { "RxJavaPlugins error handler" }
-        }
-        Thread.setDefaultUncaughtExceptionHandler { t, e ->
-            logger.error(e) { "Uncaught exception for thread $t" }
-        }
-        SwingUtilities.invokeLater(LafInstallation)
     }
 
     private fun waitForTitle() {
@@ -205,6 +191,7 @@ object Application : AutoCloseable {
     }
 
     override fun close() {
+        check(started)
         frame.dispose()
         pluginLoader?.close()
         systemTray?.remove(trayIcon)
