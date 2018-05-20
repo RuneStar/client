@@ -13,7 +13,6 @@
     <name>client parent</name>
 
     <modules>
-        <module>launcher</module>
         <module>client</module>
         <module>api</module>
         <module>common</module>
