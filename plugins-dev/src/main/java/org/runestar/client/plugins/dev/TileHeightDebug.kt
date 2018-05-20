@@ -8,7 +8,7 @@ import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Point

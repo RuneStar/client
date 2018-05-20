@@ -5,7 +5,7 @@ import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 

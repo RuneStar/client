@@ -5,7 +5,7 @@ import org.kxtra.slf4j.logger.info
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 
 class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
 

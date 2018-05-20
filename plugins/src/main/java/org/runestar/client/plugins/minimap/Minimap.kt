@@ -3,8 +3,8 @@ package org.runestar.client.plugins.minimap
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XSprite
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.RgbForm
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.RgbForm
 import java.awt.Color
 
 class Minimap : DisposablePlugin<Minimap.Settings>() {

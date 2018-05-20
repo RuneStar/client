@@ -2,7 +2,7 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 
 class MenuActionLogger : DisposablePlugin<PluginSettings>() {
 

@@ -7,8 +7,8 @@ import org.runestar.client.game.api.Npc
 import org.runestar.client.game.api.Region
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.drawStringShadowed
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Graphics2D

@@ -7,7 +7,7 @@ import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.api.live.SceneObjects
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 
 class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {

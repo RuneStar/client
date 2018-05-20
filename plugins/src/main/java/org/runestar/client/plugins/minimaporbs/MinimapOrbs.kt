@@ -5,8 +5,8 @@ import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.RgbaForm
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.RgbaForm
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.general.Skill
 import java.awt.BasicStroke
 import java.awt.RenderingHints

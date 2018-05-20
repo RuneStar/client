@@ -6,7 +6,7 @@ import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.TrayIcon
 import java.awt.event.ActionEvent
 import java.awt.event.KeyEvent

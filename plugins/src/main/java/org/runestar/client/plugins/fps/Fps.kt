@@ -3,8 +3,8 @@ package org.runestar.client.plugins.fps
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.drawStringShadowed
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 

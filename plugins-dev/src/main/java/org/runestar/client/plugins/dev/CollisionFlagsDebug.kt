@@ -6,7 +6,7 @@ import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 

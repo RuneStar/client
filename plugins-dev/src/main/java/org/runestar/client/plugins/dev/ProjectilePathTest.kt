@@ -6,7 +6,7 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 
 class ProjectilePathTest : DisposablePlugin<PluginSettings>() {

@@ -1,4 +1,4 @@
-package org.runestar.client.utils
+package org.runestar.client.api.util
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper
 import io.reactivex.disposables.Disposable

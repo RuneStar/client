@@ -7,7 +7,7 @@ import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.BasicStroke
 import java.awt.Color
 

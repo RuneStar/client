@@ -3,7 +3,7 @@ package org.runestar.client.plugins.hidelowerfloors
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 
 class HideLowerFloors : DisposablePlugin<PluginSettings>() {
 

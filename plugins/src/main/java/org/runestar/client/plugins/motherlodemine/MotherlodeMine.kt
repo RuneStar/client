@@ -7,7 +7,7 @@ import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.*
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 import java.awt.Graphics2D
 

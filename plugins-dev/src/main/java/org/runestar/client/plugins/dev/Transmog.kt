@@ -5,7 +5,7 @@ import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XPlayer
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
+import org.runestar.client.api.util.DisposablePlugin
 
 class Transmog : DisposablePlugin<Transmog.Settings>() {
 

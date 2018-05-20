@@ -4,10 +4,10 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.RgbaForm
-import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.FontForm
-import org.runestar.client.utils.drawStringShadowed
+import org.runestar.client.api.util.RgbaForm
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.FontForm
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Rectangle
 import kotlin.math.min

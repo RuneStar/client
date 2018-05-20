@@ -6,8 +6,8 @@ import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.access.XActor
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.utils.DisposablePlugin
-import org.runestar.client.utils.drawStringShadowed
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
