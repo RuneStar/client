@@ -8,9 +8,9 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XPacketBuffer
+import org.runestar.client.game.raw.access.XRasterProvider
 import java.awt.Component
 import java.awt.Container
-import java.util.concurrent.TimeUnit
 
 object Game {
 
@@ -23,7 +23,7 @@ object Game {
     val ticks: Observable<Unit> = XPacketBuffer.readSmartByteShortIsaac.exit
             .filter { it.returned == 43 } // update npcs
             .map { Unit }
-            .delay { Observable.timer(1, TimeUnit.MILLISECONDS) }
+            .delay { XRasterProvider.drawFull.enter }
 
     val cycle get() = accessor.cycle
 
