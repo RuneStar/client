@@ -26,7 +26,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     private val npcFreezes: MutableMap<Int, FreezeState> = LinkedHashMap()
 
-    @Volatile private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
+    private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
     override fun start() {
         add(Game.ticks.subscribe(::onTick))

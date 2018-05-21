@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.minimaporbs
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.RgbaForm
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.RgbaForm
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.general.Skill
 import java.awt.BasicStroke
 import java.awt.RenderingHints
@@ -26,9 +26,9 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     override val name = "Minimap Orbs"
 
     private var rapidHeal = false
-    @Volatile private var hpTicks = -1
-    @Volatile private var specTicks = -1
-    @Volatile private var hpTickLimit = HP_TICKS
+    private var hpTicks = -1
+    private var specTicks = -1
+    private var hpTickLimit = HP_TICKS
 
     override fun start() {
         add(Game.stateChanges.subscribe { state ->

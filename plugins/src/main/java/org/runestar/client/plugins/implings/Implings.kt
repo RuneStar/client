@@ -26,7 +26,6 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     private lateinit var implingIds: Set<Int>
 
-    @Volatile
     private var implings: List<Npc> = emptyList()
 
     override fun start() {
