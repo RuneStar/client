@@ -57,8 +57,6 @@ object Application : AutoCloseable {
         check(!started)
         started = true
 
-        SwingUtilities.invokeLater(LafInstallation)
-
         Client.accessor = gamepack.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
         @Suppress("DEPRECATION")
         val applet = Client.accessor as java.applet.Applet
