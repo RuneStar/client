@@ -2771,13 +2771,14 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    class visibilityMaps : IdentityMapper.StaticField() {
+    class visibilityMap : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE.withDimensions(4) }
     }
 
     @SinceVersion(170)
+    @MethodParameters("a", "b", "c", "viewportWidth", "viewportHeight")
     @DependsOn(Scene::class)
-    class Scene_buildVisiblityMaps : IdentityMapper.StaticMethod() {
+    class Scene_buildVisiblityMap : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.klass == klass<Scene>() }
                 .and { it.arguments.startsWith(IntArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }

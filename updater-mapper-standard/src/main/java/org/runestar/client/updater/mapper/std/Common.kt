@@ -95,8 +95,8 @@ abstract class UserComparatorClass(opcode: Int) : AllUniqueMapper.Class() {
             .nextWithin(3) { it.opcode == NEW }
 }
 
-@DependsOn(Client.Scene_buildVisiblityMaps::class)
-abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Client.Scene_buildVisiblityMaps::class, index) {
+@DependsOn(Client.Scene_buildVisiblityMap::class)
+abstract class SceneViewportField(index: Int) : OrderMapper.InMethod.Field(Client.Scene_buildVisiblityMap::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }
 
