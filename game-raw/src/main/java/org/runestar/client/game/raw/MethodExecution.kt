@@ -3,7 +3,6 @@ package org.runestar.client.game.raw
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Observer
-import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Wraps a method and provides access to the state of the method calls both before execution starts and after it ends.
@@ -30,7 +29,7 @@ interface MethodExecution<I, R> {
     /**
      * For internal use only.
      */
-    class Implementation<I, R> internal constructor(): MethodExecution<I, R>  {
+    class Implementation<I, R> internal constructor() : MethodExecution<I, R> {
 
         @JvmField
         val _enter: PublishRelay<MethodEvent.Enter<I>> = PublishRelay.create<MethodEvent.Enter<I>>()
