@@ -956,6 +956,7 @@ class Client : IdentityMapper.Class() {
     class Strings_membersObject : StringsUniqueMapper("Members object")
     class Strings_hidden : StringsUniqueMapper("Hidden")
     class Strings_space : StringsUniqueMapper(" ")
+    class Strings_loading : StringsUniqueMapper("Loading...")
     class Strings_walkHere : StringsUniqueMapper("Walk here")
     class Strings_cancel : StringsUniqueMapper("Cancel")
     class Strings_take : StringsUniqueMapper("Take")
@@ -3024,4 +3025,8 @@ class Client : IdentityMapper.Class() {
     class worldMap : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMap>() }
     }
+
+    class WorldMapLabelSize_small : WorldMapLabelSizeConstant("SMALL")
+    class WorldMapLabelSize_medium : WorldMapLabelSizeConstant("MEDIUM")
+    class WorldMapLabelSize_large : WorldMapLabelSizeConstant("LARGE")
 }

@@ -1,15 +1,20 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.GETSTATIC
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
+import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -52,5 +57,27 @@ class WorldMap : IdentityMapper.Class() {
     @DependsOn(initializeWorldMapManager::class, WorldMapData::class)
     class worldMapData : UniqueMapper.InMethod.Field(initializeWorldMapManager::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<WorldMapData>() }
+    }
+
+    @SinceVersion(165)
+    @DependsOn(Sprite::class)
+    class sprite : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Sprite>() }
+    }
+
+    @DependsOn(IndexedSprite::class)
+    class mapSceneSprites : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IndexedSprite>().withDimensions(1) }
+    }
+
+    @DependsOn(init::class)
+    class fonts : OrderMapper.InMethod.Field(WorldMap.init::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
+    }
+
+    @DependsOn(Client.Strings_loading::class)
+    class drawLoading : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_loading>().id } }
     }
 }

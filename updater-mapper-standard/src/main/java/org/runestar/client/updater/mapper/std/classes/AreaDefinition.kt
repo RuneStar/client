@@ -1,16 +1,19 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.BIPUSH
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
+import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.nextWithin
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
+import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(DualNode::class)
@@ -49,5 +52,17 @@ class AreaDefinition : IdentityMapper.Class() {
     class getSprite : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
                 .and { it.arguments.startsWith(BOOLEAN_TYPE) }
+    }
+
+    @DependsOn(readNext::class)
+    class string1 : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 17 }
+                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    @DependsOn(readNext::class)
+    class name : UniqueMapper.InMethod.Field(readNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_3 }
+                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 }
