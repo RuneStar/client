@@ -105,10 +105,11 @@
                 <groupId>de.jutzig</groupId>
                 <artifactId>github-release-plugin</artifactId>
                 <configuration>
-                    <releaseName>Client ${project.version}-${maven.build.timestamp}</releaseName>
-                    <tag>${project.version}-${maven.build.timestamp}</tag>
+                    <releaseName>Client ${project.version}-${env.CIRCLE_BUILD_NUM}</releaseName>
+                    <tag>${project.version}-${env.CIRCLE_BUILD_NUM}</tag>
                     <repositoryId>runestar/client</repositoryId>
                     <prerelease>true</prerelease>
+                    <description>${env.CIRCLE_COMPARE_URL}</description>
                 </configuration>
             </plugin>
         </plugins>
