@@ -1,10 +1,15 @@
 # RuneStar Client for Old School RuneScape
 
-[![Build Status](https://circleci.com/gh/RuneStar/client.svg?style=shield)](https://circleci.com/gh/RuneStar/client)
-[![Discord](https://img.shields.io/discord/384870460640329728.svg)](https://discord.gg/G2kxrnU)
+[![Build Status](https://img.shields.io/circleci/project/github/RuneStar/client.svg)](https://circleci.com/gh/RuneStar/client)
+[![Discord](https://img.shields.io/discord/384870460640329728.svg?logo=discord)](https://discord.gg/G2kxrnU)
 
-[Download](http://repo.runestar.org/org/runestar/client/client-launcher/) (Work in Progress) - Requires Java 8+
+## [Download](https://github.com/RuneStar/launcher/releases)
 
-Installs to `{user.home}/RuneStar/`
+## Running
 
-[Included plugins](https://github.com/RuneStar/client/tree/master/plugins)
+Requirements:
+
+* [Java JRE 8+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Launcher](https://github.com/RuneStar/launcher/releases)
+
+## [Plugins](https://github.com/RuneStar/client/tree/master/plugins)
