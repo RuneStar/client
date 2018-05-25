@@ -1,9 +1,9 @@
 package org.runestar.client.game.api.live
 
+import io.reactivex.Observable
 import org.runestar.client.game.api.MenuOption
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
-import io.reactivex.Observable
 import java.awt.Point
 import java.awt.Rectangle
 
@@ -53,6 +53,13 @@ object Menu {
                 accessor.menuArguments2[i],
                 checkNotNull(accessor.menuTargetNames[i]),
                 checkNotNull(accessor.menuActions[i])
+        )
+    }
+
+    val optionAdditions: Observable<MenuOption> = XClient.insertMenuItem.exit.map {
+        MenuOption.of(
+                it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[4] as Int, it.arguments[5] as Int,
+                it.arguments[1] as String, it.arguments[0] as String
         )
     }
 
