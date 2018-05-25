@@ -113,6 +113,7 @@ class Client : IdentityMapper.Class() {
         }
     }
 
+    @MethodParameters("action", "targetName", "opcode", "arg0", "arg1", "arg2", "b")
     @SinceVersion(134)
     class insertMenuItem : StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -3029,4 +3030,11 @@ class Client : IdentityMapper.Class() {
     class WorldMapLabelSize_small : WorldMapLabelSizeConstant("SMALL")
     class WorldMapLabelSize_medium : WorldMapLabelSizeConstant("MEDIUM")
     class WorldMapLabelSize_large : WorldMapLabelSizeConstant("LARGE")
+
+    @DependsOn(KeyHandler::class)
+    class KeyHandler_pressedKeys : UniqueMapper.InClassInitializer.Field(KeyHandler::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 112 }
+                .next { it.opcode == NEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BooleanArray::class.type }
+    }
 }
