@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 import java.awt.Font
 
@@ -20,12 +20,14 @@ class SelectionDebug : DisposablePlugin<PluginSettings>() {
             g.font = font
             g.color = Color.WHITE
             val strings = listOf(
-                    "item: ${accessor.lastSelectedItemName}",
-                    "spellAction: ${accessor.lastSelectedSpellActionName}",
-                    "spellName: ${accessor.lastSelectedSpellName}",
+                    "item: ${accessor.selectedItemName}",
+                    "spellAction: ${accessor.selectedSpellActionName}",
+                    "spellName: ${accessor.selectedSpellName}",
                     "isItemSelected: ${accessor.isItemSelected}",
-                    "inventorySlotHovered: ${accessor.inventorySlotHovered}",
-                    "inventorySlotPressed: ${accessor.inventorySlotPressed}"
+                    "selectedItemId: ${accessor.selectedItemId}",
+                    "selectedItemSlot: ${accessor.selectedItemSlot}",
+                    "selectedItemWidget: ${accessor.selectedItemWidget}",
+                    "itemDragDuration: ${accessor.itemDragDuration}"
             )
             strings.forEach { s ->
                 g.drawString(s, x, y)

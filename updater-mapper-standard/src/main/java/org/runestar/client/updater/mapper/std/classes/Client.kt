@@ -1714,20 +1714,20 @@ class Client : IdentityMapper.Class() {
 
     // nullable, includes color tags
     @DependsOn(Strings_use::class)
-    class lastSelectedItemName : AllUniqueMapper.Field() {
+    class selectedItemName : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_use>().id }
                 .nextIn(4) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
     }
 
     @DependsOn(Widget.spellName::class)
-    class lastSelectedSpellName : AllUniqueMapper.Field() {
+    class selectedSpellName : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.spellName>().id }
                 .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
     // "Cast"
     @DependsOn(menuAction::class)
-    class lastSelectedSpellActionName : UniqueMapper.InMethod.Field(menuAction::class) {
+    class selectedSpellActionName : UniqueMapper.InMethod.Field(menuAction::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Null" }
                 .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
@@ -2728,19 +2728,19 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractFont_placeGlyphAlpha>().id } }
     }
 
-    // 0 - 27
-    @DependsOn(Widget.swapItems::class)
-    class inventorySlotHovered : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
-                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
-
-    @DependsOn(Widget.swapItems::class)
-    class inventorySlotPressed : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
-                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
+//    // 0 - 27
+//    @DependsOn(Widget.swapItems::class)
+//    class inventorySlotHovered : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
+//                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
+//
+//    @DependsOn(Widget.swapItems::class)
+//    class inventorySlotPressed : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.swapItems>().id }
+//                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
 
     @DependsOn(GameShell.focusGained::class)
     class hasFocus : UniqueMapper.InMethod.Field(GameShell.focusGained::class) {
@@ -3036,5 +3036,40 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 112 }
                 .next { it.opcode == NEWARRAY }
                 .next { it.opcode == PUTSTATIC && it.fieldType == BooleanArray::class.type }
+    }
+
+    @DependsOn(menuAction::class)
+    class selectedItemSlot : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 38 }
+                .nextWithin(2) { it.node is JumpInsnNode }
+                .nextWithin(15) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(menuAction::class)
+    class selectedItemWidget : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 38 }
+                .nextWithin(2) { it.node is JumpInsnNode }
+                .nextWithin(15) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(menuAction::class)
+    class selectedItemId : UniqueMapper.InMethod.Field(menuAction::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 38 }
+                .nextWithin(2) { it.node is JumpInsnNode }
+                .nextWithin(15) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(6) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(MouseHandler_currentButton::class)
+    class itemDragDuration : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton>().id }
+                .prevWithin(4) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+                .prev { it.opcode == IADD }
+                .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 }
