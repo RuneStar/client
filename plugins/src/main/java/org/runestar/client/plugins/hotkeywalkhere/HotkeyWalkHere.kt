@@ -1,4 +1,4 @@
-package org.runestar.client.plugins.shiftclickwalkhere
+package org.runestar.client.plugins.hotkeywalkhere
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.MenuOption
@@ -8,11 +8,11 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.event.KeyEvent
 
-class ShiftClickWalkHere : DisposablePlugin<ShiftClickWalkHere.Settings>() {
+class HotkeyWalkHere : DisposablePlugin<HotkeyWalkHere.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override val name = "Shift-click Walk-here"
+    override val name = "Hotkey Walk-Here"
 
     override fun start() {
         add(Menu.optionAdditions.filter { Keyboard.isKeyPressed(ctx.settings.keyCode) }.subscribe(::onMenuOptionAdded))

@@ -11,7 +11,7 @@ class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override val name = "Anti-drag"
+    override val name = "Anti-Drag"
 
     private var dragDurationBuffer = 0
 
