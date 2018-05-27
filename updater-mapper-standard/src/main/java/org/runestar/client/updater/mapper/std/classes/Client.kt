@@ -3072,4 +3072,15 @@ class Client : IdentityMapper.Class() {
                 .prev { it.opcode == IADD }
                 .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(ChatBox::class)
+    class chatBoxes : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ChatBox>() }
+                .prevIn(4) { it.opcode == GETSTATIC && it.fieldType == Map::class.type }
+    }
+
+    @DependsOn(addMessage::class, IterableDualNodeQueue::class)
+    class messagesQueue : UniqueMapper.InMethod.Field(addMessage::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<IterableDualNodeQueue>() }
+    }
 }

@@ -1,19 +1,21 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.*
-import org.objectweb.asm.Type.INT_TYPE
 
 @DependsOn(DualNode::class)
 class Message : IdentityMapper.Class() {
@@ -50,5 +52,11 @@ class Message : IdentityMapper.Class() {
     class set : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }
+    }
+
+    @SinceVersion(162)
+    @DependsOn(Username::class)
+    class senderUsername : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Username>() }
     }
 }
