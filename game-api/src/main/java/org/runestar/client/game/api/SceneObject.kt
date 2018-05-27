@@ -1,7 +1,6 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.Accessor
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.*
 import java.util.*
 
@@ -9,16 +8,14 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     private companion object {
 
-        private fun xModelFromEntity(e: XEntity?): XModel? {
+        fun xModelFromEntity(e: XEntity?): XModel? {
             return e as? XModel ?: e?.model
-        }
-
-        private fun <T> asListOrEmpty(t: T?): List<T> {
-            return t?.let { Collections.singletonList(t) } ?: emptyList()
         }
     }
 
     abstract val tag: EntityTag
+
+    abstract val flags: Int
 
     val id: Int get() = tag.id
 
@@ -26,32 +23,56 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     val isInteractable: Boolean get() = tag.isInteractable
 
-    abstract val orientation: Angle
+    // todo
+//    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
+
+    abstract val dynamicOrientation: Angle
+
+//    val orientation: Angle get() = baseOrientation + dynamicOrientation
 
     abstract val position: Position
 
-    abstract val primaryModel: Model?
+    protected abstract val entity: XEntity?
 
-    abstract val secondaryModel: Model?
+    val model: Model? get() = xModelFromEntity(entity)?.let { Model(it, position, dynamicOrientation) }
 
     abstract val models: List<Model>
 
-    class Game(
-            override val accessor: XGameObject
+    abstract class OneModel(
+            accessor: Accessor
     ) : SceneObject(accessor) {
 
-        override val orientation: Angle get() = Angle.of(accessor.orientation)
+        final override val models: List<Model> get() = model?.let { Collections.singletonList(it) } ?: emptyList()
+    }
+
+    abstract class TwoModels(
+            accessor: Accessor
+    ) : SceneObject(accessor) {
+
+        protected abstract val entity2: XEntity?
+
+        abstract val position2: Position
+
+        val model2: Model? get() = xModelFromEntity(entity2)?.let { Model(it, position2, dynamicOrientation) }
+
+        final override val models: List<Model> get() {
+            val m1 = model ?: return emptyList()
+            val m2 = model2 ?: return Collections.singletonList(m1)
+            return listOf(m1, m2)
+        }
+    }
+
+    class Game(
+            override val accessor: XGameObject
+    ) : OneModel(accessor) {
+
+        override val flags: Int get() = accessor.flags
+
+        override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
 
         override val position: Position get() = Position(accessor.centerX, accessor.centerY, 0, location.plane)
 
-        override val primaryModel: Model? get() {
-            val m = xModelFromEntity(accessor.entity) ?: return null
-            return Model(m, position, orientation)
-        }
-
-        override val secondaryModel: Model? = null
-
-        override val models: List<Model> get() = asListOrEmpty(primaryModel)
+        override val entity: XEntity? get() = accessor.entity
 
         override val tag get() = EntityTag(accessor.tag, accessor.plane)
 
@@ -62,21 +83,16 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     class Floor(
             override val accessor: XFloorDecoration,
-            val plane: Int = Client.accessor.plane
-    ) : SceneObject(accessor) {
+            val plane: Int
+    ) : OneModel(accessor) {
 
-        override val orientation: Angle get() = Angle.ZERO
+        override val flags: Int get() = accessor.flags
+
+        override val dynamicOrientation: Angle get() = Angle.ZERO
 
         override val position: Position get() = location.center
 
-        override val primaryModel: Model? get() {
-            val m = xModelFromEntity(accessor.entity) ?: return null
-            return Model(m, position, orientation)
-        }
-
-        override val secondaryModel: Model? = null
-
-        override val models: List<Model> get() = asListOrEmpty(primaryModel)
+        override val entity: XEntity? get() = accessor.entity
 
         override val tag get() = EntityTag(accessor.tag, plane)
 
@@ -87,29 +103,20 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     class Wall(
             override val accessor: XWallDecoration,
-            val plane: Int = Client.accessor.plane
-    ) : SceneObject(accessor) {
+            val plane: Int
+    ) : TwoModels(accessor) {
 
-        override val orientation: Angle get() = Angle.ZERO
+        override val flags: Int get() = accessor.flags
 
-        // todo: this is model1 position, model2 is location.center
+        override val dynamicOrientation: Angle get() = Angle.ZERO
+
         override val position: Position get() = location.center.plusLocal(accessor.xOffset, accessor.yOffset, 0)
 
-        override val primaryModel: Model? get() {
-            val m = xModelFromEntity(accessor.entity1) ?: return null
-            return Model(m, position, orientation)
-        }
+        override val entity: XEntity? get() = accessor.entity1
 
-        override val secondaryModel: Model? get() {
-            val m = xModelFromEntity(accessor.entity2) ?: return null
-            return Model(m, location.center, orientation)
-        }
+        override val position2: Position get() = location.center
 
-        override val models: List<Model> get() {
-            val m1 = primaryModel ?: return emptyList()
-            val m2 = secondaryModel ?: return Collections.singletonList(m1)
-            return listOf(m1, m2)
-        }
+        override val entity2: XEntity? get() = accessor.entity2
 
         override val tag get() = EntityTag(accessor.tag, plane)
 
@@ -120,28 +127,20 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     class Boundary(
             override val accessor: XBoundaryObject,
-            val plane: Int = Client.accessor.plane
-    ) : SceneObject(accessor) {
+            val plane: Int
+    ) : TwoModels(accessor) {
 
-        override val orientation: Angle get() = Angle.ZERO
+        override val flags: Int get() = accessor.flags
+
+        override val dynamicOrientation: Angle get() = Angle.ZERO
 
         override val position: Position get() = location.center
 
-        override val primaryModel: Model? get() {
-            val m = accessor.entity1 as? XModel ?: accessor.entity1?.model ?: return null
-            return Model(m, position, orientation)
-        }
+        override val position2: Position get() = position
 
-        override val secondaryModel: Model? get() {
-            val m = accessor.entity2 as? XModel ?: accessor.entity2?.model ?: return null
-            return Model(m, position, orientation)
-        }
+        override val entity: XEntity? get() = accessor.entity1
 
-        override val models: List<Model> get() {
-            val m1 = primaryModel ?: return emptyList()
-            val m2 = secondaryModel ?: return Collections.singletonList(m1)
-            return listOf(m1, m2)
-        }
+        override val entity2: XEntity? get() = accessor.entity2
 
         override val tag get() = EntityTag(accessor.tag, plane)
 

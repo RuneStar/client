@@ -59,7 +59,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
             if (!areOnSameFloor(myLoc, veinLoc)) return@forEach
             val pt = veinLoc.center.copy(height = 200).toScreen() ?: return@forEach
             if (!g.clip.contains(pt)) return@forEach
-            val model = vein.primaryModel ?: return@forEach
+            val model = vein.model ?: return@forEach
             model.drawTriangles(g)
         }
     }

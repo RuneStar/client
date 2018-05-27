@@ -40,7 +40,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
             obstacles.forEach { obstacle ->
                 val loc = obstacle.location
                 if (loc.plane != Game.plane || !Game.visibilityMap.isVisible(loc)) return@forEach
-                val model = obstacle.primaryModel ?: return@forEach
+                val model = obstacle.model ?: return@forEach
                 val shape = model.objectClickBoxOutline()
 
                 if (ctx.settings.fill) {
