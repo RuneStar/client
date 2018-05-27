@@ -12,4 +12,4 @@ Requirements:
 * [Java JRE 8+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Launcher](https://github.com/RuneStar/launcher/releases)
 
-## [Plugins](https://github.com/RuneStar/client/tree/master/plugins)
+## [Plugins](https://github.com/RuneStar/client/tree/master/plugins/src/main/java/org/runestar/client/plugins)
