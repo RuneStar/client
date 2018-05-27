@@ -56,7 +56,6 @@ data class SceneTile(
         )
 
     fun outline(projection: Projection = Projections.viewport): Shape {
-        check(isLoaded) { this }
         val tempPoint = Point()
 
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, 6)

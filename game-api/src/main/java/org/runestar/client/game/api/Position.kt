@@ -32,7 +32,6 @@ data class Position(
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
     fun toScreen(projection: Projection = Projections.viewport): Point? {
-        check(isLoaded) { this }
         return projection.toScreen(this)
     }
 
