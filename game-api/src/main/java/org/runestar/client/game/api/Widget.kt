@@ -28,7 +28,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val isHidden get() = accessor.isHidden
 
-    val isVisible get() = cycle >= Client.accessor.cycle
+    val isVisible get() = !isHidden || cycle >= Client.accessor.cycle
 
     val cycle get() = accessor.cycle
 
@@ -38,14 +38,14 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
         var anc = ancestor
         var x = 0
         var y = 0
-        while(anc != null) {
+        while (anc != null) {
             x += cur.accessor.x - cur.accessor.scrollX
             y += cur.accessor.y - cur.accessor.scrollY
             cur = anc
             anc = anc.ancestor
         }
-        x += Client.accessor.widgetXs[cur.accessor.index]
-        y += Client.accessor.widgetYs[cur.accessor.index]
+        x += Client.accessor.widgetXs.getOrElse(cur.accessor.index, { i -> 0 })
+        y += Client.accessor.widgetYs.getOrElse(cur.accessor.index, { i -> 0 })
         return Point(x, y)
     }
 
