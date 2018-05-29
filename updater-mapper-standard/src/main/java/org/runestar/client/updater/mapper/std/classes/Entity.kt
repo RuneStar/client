@@ -1,5 +1,7 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
@@ -8,8 +10,6 @@ import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
 import java.lang.reflect.Modifier
 
 @DependsOn(DualNode::class)
@@ -29,6 +29,7 @@ class Entity : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType in it.jar }
     }
 
+    @MethodParameters("yaw", "cameraPitchSine", "cameraPitchCosine", "cameraYawSine", "cameraYawCosine", "x", "y", "z", "tag")
     class draw : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
     }

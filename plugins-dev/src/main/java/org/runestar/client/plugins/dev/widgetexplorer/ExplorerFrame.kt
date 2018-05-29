@@ -94,7 +94,7 @@ scrollMax: ${x.scrollMax}
 width: ${x.width}
 height: ${x.height}
 
-index: ${x.index}
+rootIndex: ${x.rootIndex}
 cycle: ${x.cycle}
 isHidden: ${x.isHidden}
 

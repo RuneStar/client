@@ -1,6 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -12,10 +15,6 @@ import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Entity.getModel::class)
 class Model : IdentityMapper.Class() {
@@ -51,6 +50,7 @@ class Model : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
+    @MethodParameters("yaw", "cameraPitchSine", "cameraPitchCosine", "cameraYawSine", "cameraYawCosine", "x", "y", "z", "tag")
     @DependsOn(Entity.draw::class)
     class draw : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<Entity.draw>().mark }

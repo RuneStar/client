@@ -1,18 +1,21 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
 class Widget : IdentityMapper.Class() {
@@ -91,7 +94,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class index : OrderMapper.InConstructor.Field(Widget::class, -2) {
+    class rootIndex : OrderMapper.InConstructor.Field(Widget::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

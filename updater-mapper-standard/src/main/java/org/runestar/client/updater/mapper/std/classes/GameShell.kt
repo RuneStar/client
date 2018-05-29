@@ -1,6 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -12,9 +15,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
 import java.applet.Applet
 import java.awt.*
 import java.awt.Canvas
@@ -109,12 +109,6 @@ class GameShell : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-//    class setUpKeyboard : IdentityMapper.InstanceMethod() {
-//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-//                .and { it.arguments.size in 0..1 }
-//                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "microsoft" } }
-//    }
-
     @MethodParameters()
     @SinceVersion(141)
     class setUpClipboard : IdentityMapper.InstanceMethod() {
@@ -149,13 +143,22 @@ class GameShell : IdentityMapper.Class() {
         }
     }
 
-//    @MethodParameters()
-//    @DependsOn(Bounds::class)
-//    class getBounds : IdentityMapper.InstanceMethod() {
-//        override val predicate = predicateOf<Method2> { it.returnType == type<Bounds>() }
-//    }
+    @MethodParameters()
+    @DependsOn(Bounds::class)
+    @SinceVersion(165)
+    class getFrameContentBounds : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Bounds>() }
+    }
 
     class focusGained : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.name == "focusGained" }
+    }
+
+    @MethodParameters()
+    @DependsOn(frame::class)
+    class hasFrame : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<frame>().id } }
     }
 }

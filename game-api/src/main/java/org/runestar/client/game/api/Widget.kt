@@ -44,8 +44,8 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             cur = anc
             anc = anc.ancestor
         }
-        x += Client.accessor.widgetXs[cur.accessor.index]
-        y += Client.accessor.widgetYs[cur.accessor.index]
+        x += Client.accessor.rootWidgetXs[cur.accessor.rootIndex]
+        y += Client.accessor.rootWidgetYs[cur.accessor.rootIndex]
         return Point(x, y)
     }
 
