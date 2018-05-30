@@ -28,7 +28,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val isHidden get() = accessor.isHidden
 
-    val isVisible get() = cycle >= Client.accessor.cycle
+    val isActive get() = cycle >= Client.accessor.cycle
 
     val cycle get() = accessor.cycle
 
