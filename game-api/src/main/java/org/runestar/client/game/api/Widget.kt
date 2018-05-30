@@ -5,6 +5,7 @@ import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XWidget
+import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
 import java.awt.Rectangle
@@ -20,7 +21,10 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val text: String? get() = accessor.text
 
-    val textColor get() = accessor.textColor
+    /**
+     * Color of [text]. Default is [Color.BLACK]
+     */
+    val textColor: Color get() = Color(accessor.textColor)
 
     val width get() = accessor.width
 
