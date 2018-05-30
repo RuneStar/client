@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.dev.widgetexplorer
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import javax.swing.SwingUtilities
@@ -37,7 +37,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
             val mouseWidget = Widgets.flat
                     .filter {
                         val s = it.shape
-                        s != null && mouse in s
+                        s != null && mouse in s && it.isActive
                     }
                     .minBy { it.width + it.height } ?: return@subscribe
             g.draw(mouseWidget.shape)
