@@ -33,7 +33,6 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
     val cycle get() = accessor.cycle
 
     val location: Point? get() {
-        if (!isVisible) return null
         var cur = this
         var anc = ancestor
         var x = 0
@@ -44,6 +43,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             cur = anc
             anc = anc.ancestor
         }
+        if (cur.group != WidgetGroups.root) return null
         x += Client.accessor.rootWidgetXs[cur.accessor.rootIndex]
         y += Client.accessor.rootWidgetYs[cur.accessor.rootIndex]
         return Point(x, y)
