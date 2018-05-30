@@ -11,6 +11,8 @@ import org.kxtra.lang.classloader.loadClassFromDescriptor
 import org.objectweb.asm.Type
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.MethodHook
+import org.runestar.client.updater.common.getterMethod
+import org.runestar.client.updater.common.setterMethod
 import org.runestar.client.updater.readHooks
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
@@ -67,13 +69,13 @@ class AccessorsMojo : AbstractMojo() {
             }
             c.fields.forEach { f ->
                 val fieldTypeName = poetType(f.descriptor)
-                typeBuilder.addMethod(MethodSpec.methodBuilder(f.getterName)
+                typeBuilder.addMethod(MethodSpec.methodBuilder(f.getterMethod)
                         .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                         .addJavadoc(fieldModifiersToString(f.access))
                         .returns(fieldTypeName)
                         .build())
                 if (!RModifier.isFinal(f.access)) {
-                    typeBuilder.addMethod(MethodSpec.methodBuilder(f.setterName)
+                    typeBuilder.addMethod(MethodSpec.methodBuilder(f.setterMethod)
                             .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                             .addParameter(fieldTypeName, SETTER_PARAM_NAME)
                             .addJavadoc(fieldModifiersToString(f.access))

@@ -19,6 +19,10 @@ data class FieldHook(
         val decoder: Long?
 )
 
+val FieldHook.getterMethod: String get() = "get${field.capitalize()}"
+
+val FieldHook.setterMethod: String get() = "set${field.capitalize()}"
+
 val FieldHook.decoderNarrowed: Number? get() = when(decoder) {
     null -> null
     else -> {
