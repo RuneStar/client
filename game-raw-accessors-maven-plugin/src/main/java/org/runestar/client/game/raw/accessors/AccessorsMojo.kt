@@ -11,8 +11,6 @@ import org.kxtra.lang.classloader.loadClassFromDescriptor
 import org.objectweb.asm.Type
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.MethodHook
-import org.runestar.client.updater.common.getterMethod
-import org.runestar.client.updater.common.setterMethod
 import org.runestar.client.updater.readHooks
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier

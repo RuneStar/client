@@ -4,7 +4,9 @@ import net.bytebuddy.description.field.FieldDescription
 import net.bytebuddy.description.method.MethodDescription
 import net.bytebuddy.jar.asm.Type
 import net.bytebuddy.matcher.ElementMatcher
-import org.runestar.client.updater.common.*
+import org.runestar.client.updater.common.ClassHook
+import org.runestar.client.updater.common.FieldHook
+import org.runestar.client.updater.common.MethodHook
 
 internal fun FieldHook.matcher(): ElementMatcher<FieldDescription> = ElementMatcher { it.name == name }
 

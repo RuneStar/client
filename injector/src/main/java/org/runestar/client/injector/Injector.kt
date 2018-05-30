@@ -23,8 +23,6 @@ import net.bytebuddy.pool.TypePool
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
-import org.runestar.client.updater.common.decoderNarrowed
-import org.runestar.client.updater.common.finalArgumentNarrowed
 import org.runestar.client.updater.readHooks
 import org.zeroturnaround.zip.ZipUtil
 import java.lang.reflect.Modifier

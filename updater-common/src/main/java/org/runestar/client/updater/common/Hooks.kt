@@ -17,19 +17,19 @@ data class FieldHook(
         val access: Int,
         val descriptor: String,
         val decoder: Long?
-)
+) {
+    val getterMethod get() = "get${field.capitalize()}"
 
-val FieldHook.getterMethod: String get() = "get${field.capitalize()}"
+    val setterMethod get() = "set${field.capitalize()}"
 
-val FieldHook.setterMethod: String get() = "set${field.capitalize()}"
-
-val FieldHook.decoderNarrowed: Number? get() = when(decoder) {
-    null -> null
-    else -> {
-        when (descriptor) {
-            "I" -> decoder.toInt()
-            "J" -> decoder
-            else -> error(this)
+    val decoderNarrowed: Number? get() = when(decoder) {
+        null -> null
+        else -> {
+            when (descriptor) {
+                "I" -> decoder.toInt()
+                "J" -> decoder
+                else -> error(this)
+            }
         }
     }
 }
@@ -42,11 +42,11 @@ data class MethodHook(
         val parameters: List<String>?,
         val descriptor: String,
         val finalArgument: Int?
-)
-
-val MethodHook.finalArgumentNarrowed: Number? get() = when(finalArgument) {
-    null -> null
-    in Byte.MIN_VALUE..Byte.MAX_VALUE -> finalArgument.toByte()
-    in Short.MIN_VALUE..Short.MAX_VALUE -> finalArgument.toShort()
-    else -> finalArgument
+) {
+    val finalArgumentNarrowed: Number? get() = when(finalArgument) {
+        null -> null
+        in Byte.MIN_VALUE..Byte.MAX_VALUE -> finalArgument.toByte()
+        in Short.MIN_VALUE..Short.MAX_VALUE -> finalArgument.toShort()
+        else -> finalArgument
+    }
 }
