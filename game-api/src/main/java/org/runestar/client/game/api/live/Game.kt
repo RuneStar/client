@@ -52,6 +52,8 @@ object Game {
 
     fun getVarp(varpId: Int): Int = Client.accessor.varps_main[varpId]
 
+    val varcs: Varcs = Varcs(Client.accessor.varcs)
+
     val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
 
     val friendsSystem: FriendsSystem get() = FriendsSystem(Client.accessor.friendSystem)
