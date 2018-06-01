@@ -3,6 +3,7 @@ package org.runestar.client.game.raw.accessors
 import com.squareup.javapoet.*
 import org.apache.commons.lang3.ClassUtils
 import org.apache.maven.plugin.AbstractMojo
+import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
@@ -17,7 +18,10 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.jvm.jvmName
 import java.lang.reflect.Modifier as RModifier
 
-@Mojo(name = "accessors")
+@Mojo(
+        name = "accessors",
+        defaultPhase = LifecyclePhase.GENERATE_SOURCES
+)
 class AccessorsMojo : AbstractMojo() {
 
     private companion object {

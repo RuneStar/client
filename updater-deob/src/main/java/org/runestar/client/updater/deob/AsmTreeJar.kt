@@ -2,7 +2,6 @@ package org.runestar.client.updater.deob
 
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import java.io.FileOutputStream
 import java.nio.file.Path

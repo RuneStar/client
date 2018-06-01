@@ -2,18 +2,18 @@
 
 package org.runestar.client
 
-import com.google.common.hash.Hashing
 import io.reactivex.plugins.RxJavaPlugins
 import org.kxtra.slf4j.logger.error
 import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
-import org.runestar.client.injector.inject
-import org.runestar.client.updater.hooksFile
+import org.runestar.client.gamepack.patch.patch
 import org.runestar.general.JavConfig
 import org.runestar.general.revision
 import org.runestar.general.updateRevision
+import java.lang.invoke.MethodHandles
+import java.nio.file.Files
 import java.nio.file.Paths
 import javax.swing.SwingUtilities
 
@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
 
     updateRevision(javConfig.codebase.host)
 
-    Application.start(javConfig, injectGamepack(javConfig))
+    Application.start(javConfig, patchGamePack(javConfig))
 }
 
 private fun setupLogging() {
@@ -39,19 +39,22 @@ private fun setupLogging() {
     }
 }
 
-private fun injectGamepack(javConfig: JavConfig): ClassLoader {
+private fun patchGamePack(javConfig: JavConfig): ClassLoader {
     val tmpdir = Paths.get(System.getProperty("java.io.tmpdir"))
-    val injectedGamepackPath = tmpdir.resolve("$revision-${clientVersion()}.zip")
-    if (!verifyJar(injectedGamepackPath)) {
+    val patchedGamepackPath = tmpdir.resolve("${clientVersion()}.zip")
+    if (!verifyJar(patchedGamepackPath)) {
         val gamepackPath = tmpdir.resolve("runescape-gamepack.$revision.jar")
         if (!verifyJar(gamepackPath)) {
             downloadFile(javConfig.gamepackUrl, gamepackPath)
         }
-        inject(gamepackPath, injectedGamepackPath)
+        patch(gamepackPath, patchedGamepackPath)
     }
-    return URLClassLoader(injectedGamepackPath)
+    return URLClassLoader(patchedGamepackPath)
 }
 
 private fun clientVersion(): String {
-    return Hashing.crc32().hashBytes(hooksFile.readBytes()).asInt().toString() // todo
+    val klass = MethodHandles.lookup().lookupClass()
+    val codeSource = klass.protectionDomain.codeSource ?: return System.currentTimeMillis().toString()
+    val file = Paths.get(codeSource.location.toURI())
+    return Files.getLastModifiedTime(file).toMillis().toString()
 }

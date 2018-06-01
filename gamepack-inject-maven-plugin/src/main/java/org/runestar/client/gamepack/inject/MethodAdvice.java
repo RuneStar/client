@@ -1,4 +1,4 @@
-package org.runestar.client.injector;
+package org.runestar.client.gamepack.inject;
 
 import org.runestar.client.game.raw.MethodEvent;
 import org.runestar.client.game.raw.MethodExecution;

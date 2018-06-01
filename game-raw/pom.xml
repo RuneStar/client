@@ -46,8 +46,6 @@
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>accessors</id>
-                        <phase>generate-sources</phase>
                         <goals>
                             <goal>accessors</goal>
                         </goals>

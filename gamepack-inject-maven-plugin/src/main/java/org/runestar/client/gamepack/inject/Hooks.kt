@@ -1,4 +1,4 @@
-package org.runestar.client.injector
+package org.runestar.client.gamepack.inject
 
 import net.bytebuddy.description.field.FieldDescription
 import net.bytebuddy.description.method.MethodDescription

@@ -22,16 +22,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-updater</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-injector</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>client-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -43,6 +33,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>client-plugins-dev</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-gamepack-patch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.apache.maven.model.Resource
 import org.apache.maven.plugin.AbstractMojo
+import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
@@ -23,9 +25,13 @@ import org.runestar.general.updateRevision
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.util.jar.JarFile
 
-@Mojo(name = "create")
+@Mojo(
+        name = "create",
+        defaultPhase = LifecyclePhase.GENERATE_RESOURCES
+)
 class CreateMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}")
@@ -35,21 +41,34 @@ class CreateMojo : AbstractMojo() {
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
 
-    private val targetDir by lazy { Paths.get(project.build.directory) }
-    private val gamepackJar by lazy { targetDir.resolve("gamepack.jar") }
-    private val deobJar by lazy { targetDir.resolve("gamepack.deob.jar") }
-    private val namesJson by lazy { deobJar.appendFileName(".names.json") }
-    private val opJson by lazy { deobJar.appendFileName(".op.json") }
-    private val multJson by lazy { deobJar.appendFileName(".mult.json") }
-    private val hooksJson by lazy { targetDir.resolve("hooks.json") }
+    private val targetDir: Path get() =  Paths.get(project.build.directory)
+
+    private val generatedResourcesDir: Path get() = targetDir.resolve("generated-resources")
+
+    private val gamepackJar: Path get() = targetDir.resolve("gamepack.jar")
+
+    private val deobJar: Path get() = targetDir.resolve("gamepack.deob.jar")
+
+    private val cleanJar: Path get() = targetDir.resolve("gamepack.clean.jar")
+
+    private val namesJson: Path get() = deobJar.appendFileName(".names.json")
+
+    private val opJson: Path get() = deobJar.appendFileName(".op.json")
+
+    private val multJson: Path get() = deobJar.appendFileName(".mult.json")
+
+    private val hooksJson: Path get() = targetDir.resolve("hooks.json")
 
     override fun execute() {
         if (Files.notExists(gamepackJar) || !verifyJar(gamepackJar)) {
             dl()
         }
         deob()
+        clean()
         map()
         mergeHooks()
+
+        addResources()
     }
 
     private fun verifyJar(jar: Path): Boolean {
@@ -73,6 +92,10 @@ class CreateMojo : AbstractMojo() {
         Transformer.DEFAULT.transform(gamepackJar, deobJar)
     }
 
+    private fun clean() {
+        Transformer.CLEAN.transform(gamepackJar, cleanJar)
+    }
+
     private fun map() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
@@ -94,5 +117,15 @@ class CreateMojo : AbstractMojo() {
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
         }
         jsonMapper.writeValue(hooksJson.toFile(), hooks)
+    }
+
+    private fun addResources() {
+        Files.createDirectories(generatedResourcesDir)
+        project.addResource(Resource().apply {
+            directory = generatedResourcesDir.toString()
+        })
+        Files.copy(gamepackJar, generatedResourcesDir.resolve(gamepackJar.fileName), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(cleanJar, generatedResourcesDir.resolve(cleanJar.fileName), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(hooksJson, generatedResourcesDir.resolve(hooksJson.fileName), StandardCopyOption.REPLACE_EXISTING)
     }
 }

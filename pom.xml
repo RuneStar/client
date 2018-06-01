@@ -21,7 +21,8 @@
         <module>plugins</module>
         <module>plugins-dev</module>
         <module>plugins-spi</module>
-        <module>injector</module>
+        <module>gamepack-inject-maven-plugin</module>
+        <module>gamepack-patch</module>
         <module>updater</module>
         <module>updater-common</module>
         <module>updater-deob</module>
@@ -243,6 +244,11 @@
                 <groupId>org.apache.bcel</groupId>
                 <artifactId>bcel</artifactId>
                 <version>6.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.sigpipe</groupId>
+                <artifactId>jbsdiff</artifactId>
+                <version>1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,8 +1,6 @@
-package org.runestar.client.injector
+package org.runestar.client.gamepack.inject
 
 import com.google.common.io.Files
-import com.google.common.io.MoreFiles
-import com.google.common.io.RecursiveDeleteOption
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.ClassFileLocator
@@ -84,13 +82,7 @@ fun inject(sourceJar: Path, destinationJar: Path) {
         }
         typeBuilder.make().saveIn(tempDir.toFile())
     }
-    deleteMetaInf(tempDir)
     ZipUtil.pack(tempDir.toFile(), destinationJar.toFile(), Deflater.BEST_SPEED)
-}
-
-private fun deleteMetaInf(dir: Path) {
-    val metaInfDir = dir.resolve("META-INF")
-    MoreFiles.deleteRecursively(metaInfDir, RecursiveDeleteOption.ALLOW_INSECURE)
 }
 
 private fun createMethodProxy(typePool: TypePool, methodHook: MethodHook): Implementation {
