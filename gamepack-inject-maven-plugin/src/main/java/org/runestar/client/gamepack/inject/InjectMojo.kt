@@ -27,8 +27,9 @@ class InjectMojo : AbstractMojo() {
 
         val cleanJar = dir.resolve("gamepack.clean.jar")
         cleanGamepackUrl.openStream().use { input ->
-            Files.copy(input, cleanJar)
+            Files.copy(input, cleanJar, StandardCopyOption.REPLACE_EXISTING)
         }
+
         val injectedJar = dir.resolve("gamepack.inject.jar")
         inject(cleanJar, injectedJar)
 
