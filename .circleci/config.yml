@@ -9,13 +9,15 @@ jobs:
     steps:
       - checkout
 
-      - run: mvn install
+      - run:
+          name: Maven Install
+          command: mvn install --show-version --batch-mode --errors
 
       - run:
           name: GitHub Release
           command: |
             if [[ "${CIRCLE_BRANCH}" == "master" && -z "${CIRCLE_PULL_REQUEST}" ]]; then
-              mvn -pl client github-release:release -s .circleci/settings.xml
+              mvn --projects client github-release:release --settings .circleci/settings.xml
             fi
 
       - store_artifacts:
