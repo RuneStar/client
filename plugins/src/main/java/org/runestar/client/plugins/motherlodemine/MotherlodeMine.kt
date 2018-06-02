@@ -2,12 +2,12 @@ package org.runestar.client.plugins.motherlodemine
 
 import com.google.common.collect.ImmutableSet
 import org.runestar.cache.generated.ObjectId
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.SceneObject
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.*
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 import java.awt.Graphics2D
 
@@ -60,7 +60,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
             val pt = veinLoc.center.copy(height = 200).toScreen() ?: return@forEach
             if (!g.clip.contains(pt)) return@forEach
             val model = vein.model ?: return@forEach
-            model.drawTriangles(g)
+            model.drawWireFrame(g.color)
         }
     }
 

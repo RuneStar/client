@@ -1,5 +1,6 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.SceneObject
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
@@ -7,7 +8,6 @@ import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.api.live.SceneObjects
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 import java.awt.Color
 
 class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
@@ -17,6 +17,7 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
     private val objs: MutableSet<SceneObject> = LinkedHashSet()
 
     override fun start() {
+        objs.addAll(SceneObjects.all().filter(SceneObject::isInteractable))
         add(XScene.clear.exit.subscribe { objs.clear() })
         add(SceneObjects.removals.filter(SceneObject::isInteractable).subscribe { objs.remove(it) })
         add(SceneObjects.additions.filter(SceneObject::isInteractable).subscribe { objs.add(it) })
@@ -31,7 +32,7 @@ class ObjectClickBoxDebug : DisposablePlugin<PluginSettings>() {
                 val pt = loc.center.toScreen() ?: return@forEach
                 if (pt !in viewport) return@forEach
                 it.models.forEach {
-                    g.draw(it.objectClickBoxOutline())
+                    g.draw(it.objectClickBox())
                 }
             }
         })

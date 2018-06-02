@@ -794,6 +794,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 
+    @MethodParameters("x0", "y0", "x1", "y1", "color")
     @DependsOn(Rasterizer2D::class)
     class Rasterizer2D_drawLine : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer2D>() }

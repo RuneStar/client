@@ -66,7 +66,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             g.color = DRAW_COLOR
             val model = npc.model
             if (model != null) {
-                g.draw(model.boundingBoxOutline())
+                g.draw(model.boundingBox())
             } else {
                 val tileOutline = loc.outline()
                 g.draw(tileOutline)
