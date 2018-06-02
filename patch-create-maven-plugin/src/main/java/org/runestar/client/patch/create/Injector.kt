@@ -1,4 +1,4 @@
-package org.runestar.client.gamepack.inject
+package org.runestar.client.patch.create
 
 import com.google.common.io.Files
 import net.bytebuddy.ByteBuddy

@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-gamepack-patch</artifactId>
+            <artifactId>client-patch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

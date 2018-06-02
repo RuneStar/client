@@ -10,10 +10,10 @@
         <version>0.171.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>client-gamepack-patch</artifactId>
+    <artifactId>client-patch</artifactId>
     <packaging>jar</packaging>
 
-    <name>client/gamepack/patch</name>
+    <name>client/patch</name>
 
     <dependencies>
         <dependency>
@@ -40,12 +40,12 @@
             </plugin>
             <plugin>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>client-gamepack-inject-maven-plugin</artifactId>
+                <artifactId>client-patch-create-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>inject</goal>
+                            <goal>create</goal>
                         </goals>
                     </execution>
                 </executions>

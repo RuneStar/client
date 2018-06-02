@@ -1,4 +1,4 @@
-package org.runestar.client.gamepack.inject
+package org.runestar.client.patch.create
 
 import java.math.BigInteger
 

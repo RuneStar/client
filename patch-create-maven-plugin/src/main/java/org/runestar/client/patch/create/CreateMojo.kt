@@ -1,4 +1,4 @@
-package org.runestar.client.gamepack.inject
+package org.runestar.client.patch.create
 
 import io.sigpipe.jbsdiff.Diff
 import org.apache.maven.model.Resource
@@ -14,10 +14,10 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 @Mojo(
-        name = "inject",
+        name = "create",
         defaultPhase = LifecyclePhase.GENERATE_RESOURCES
 )
-class InjectMojo : AbstractMojo() {
+class CreateMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}")
     lateinit var project: MavenProject

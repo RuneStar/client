@@ -21,8 +21,8 @@
         <module>plugins</module>
         <module>plugins-dev</module>
         <module>plugins-spi</module>
-        <module>gamepack-inject-maven-plugin</module>
-        <module>gamepack-patch</module>
+        <module>patch-create-maven-plugin</module>
+        <module>patch</module>
         <module>updater</module>
         <module>updater-common</module>
         <module>updater-deob</module>

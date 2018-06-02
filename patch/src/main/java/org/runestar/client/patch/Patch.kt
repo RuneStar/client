@@ -1,4 +1,4 @@
-package org.runestar.client.gamepack.patch
+package org.runestar.client.patch
 
 import io.sigpipe.jbsdiff.Patch
 import java.lang.invoke.MethodHandles

@@ -8,7 +8,7 @@ import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
-import org.runestar.client.gamepack.patch.patch
+import org.runestar.client.patch.patch
 import org.runestar.general.JavConfig
 import org.runestar.general.revision
 import org.runestar.general.updateRevision
