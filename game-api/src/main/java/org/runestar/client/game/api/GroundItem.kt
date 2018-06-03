@@ -1,15 +1,14 @@
 package org.runestar.client.game.api
 
+import org.runestar.client.game.api.live.Mouse.location
 import org.runestar.client.game.raw.access.XGroundItem
 
 class GroundItem(
         override val accessor: XGroundItem,
-        val location: SceneTile
+        override val modelPosition: Position
 ) : Entity(accessor) {
 
     override val orientation get() = Angle.ZERO
-
-    override val position get() = location.center
 
     val id get() = accessor.id
 

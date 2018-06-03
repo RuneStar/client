@@ -43,7 +43,7 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
     }
 
     private fun drawActor(g: Graphics2D, actor: Actor) {
-        val pos = actor.position
+        val pos = actor.modelPosition
         if (!pos.isLoaded) return
         val height = actor.accessor.defaultHeight * 2 / 3
         val pt = pos.copy(height = height).toScreen() ?: return

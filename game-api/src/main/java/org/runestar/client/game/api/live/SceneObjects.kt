@@ -17,20 +17,25 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         tile.floorDecoration?.let { list.add(SceneObject.Floor(it, tile.plane)) }
         tile.wallDecoration?.let { list.add(SceneObject.Wall(it, tile.plane)) }
         tile.boundaryObject?.let { list.add(SceneObject.Boundary(it, tile.plane)) }
+        tile.groundItemPile?.let { list.add(SceneObject.ItemPile(it, tile.plane)) }
         tile.gameObjects?.let { it.mapNotNullTo(list) { it?.let { SceneObject.Game(it) } } }
         return list.iterator()
     }
+
+    val clears: Observable<Unit> = XScene.clear.exit.map { Unit }
 
     val additions: Observable<SceneObject> = Observable.empty<SceneObject>()
             .mergeWith(Wall.additions)
             .mergeWith(Floor.additions)
             .mergeWith(Boundary.additions)
+            .mergeWith(ItemPile.additions)
             .mergeWith(Game.additions)
 
     val removals: Observable<SceneObject> = Observable.empty<SceneObject>()
             .mergeWith(Wall.removals)
             .mergeWith(Floor.removals)
             .mergeWith(Boundary.removals)
+            .mergeWith(ItemPile.removals)
             .mergeWith(Game.removals)
 
     object Wall : TileObjects.Single<SceneObject.Wall>(Client.accessor.scene) {
@@ -87,10 +92,38 @@ object SceneObjects : TileObjects.Many<SceneObject>(Client.accessor.scene) {
         }
     }
 
+    object ItemPile : TileObjects.Single<SceneObject.ItemPile>(Client.accessor.scene) {
+
+        val additions: Observable<SceneObject.ItemPile> = XScene.newGroundItemPile.exit.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneObject.ItemPile(tile.groundItemPile, tile.plane)
+        }
+
+        private val changes: Observable<SceneObject.ItemPile> = XScene.newGroundItemPile.enter
+                .map {
+                    checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                }
+                .filter { it.groundItemPile != null }
+                .map { SceneObject.ItemPile(it.groundItemPile, it.plane) }
+
+        val removals: Observable<SceneObject.ItemPile> = XScene.removeGroundItemPile.enter
+                .map {
+                    checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                }
+                .filter { it.groundItemPile != null }
+                .map { SceneObject.ItemPile(it.groundItemPile, it.plane) }
+                .mergeWith(changes)
+
+        override fun fromTile(tile: XTile): SceneObject.ItemPile? {
+            val v = tile.groundItemPile ?: return null
+            return SceneObject.ItemPile(v, tile.plane)
+        }
+    }
+
     object Game : TileObjects.Many<SceneObject.Game>(Client.accessor.scene) {
 
         val additions: Observable<SceneObject.Game> = XScene.newGameObject.exit
-                .filter { it.returned && EntityTag(it.arguments[11] as Long).kind == EntityKind.OBJECT }
+                .filter { it.returned && EntityTag.getEntityKind(it.arguments[11] as Long) == EntityKind.OBJECT }
                 .map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
                     SceneObject.Game(tile.gameObjects[tile.gameObjectsCount - 1])

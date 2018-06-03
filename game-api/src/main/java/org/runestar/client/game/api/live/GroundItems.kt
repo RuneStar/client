@@ -11,6 +11,7 @@ import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
 import java.util.*
 
+// todo
 object GroundItems : TileObjects.Many<GroundItem>(Client.accessor.scene) {
 
     override fun fromTile(tile: XTile): Iterator<GroundItem> {
@@ -18,11 +19,11 @@ object GroundItems : TileObjects.Many<GroundItem>(Client.accessor.scene) {
         val sceneTile = SceneTile(tile.x, tile.y, tile.plane)
         return object : AbstractIterator<GroundItem>() {
 
-            private var cur: XNode? = pile.bottom
+            private var cur: XNode? = pile.first
 
             override fun computeNext() {
                 val gi = cur as? XGroundItem ?: return done()
-                setNext(GroundItem(gi, sceneTile))
+                setNext(GroundItem(gi, sceneTile.center))
                 cur = gi.previous
             }
         }

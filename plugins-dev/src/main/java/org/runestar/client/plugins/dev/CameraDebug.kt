@@ -22,7 +22,7 @@ class CameraDebug : DisposablePlugin<PluginSettings>() {
             g.color = Color.WHITE
 
             val player = Players.local ?: return@subscribe
-            val playerPosition = player.position.takeIf { it.isLoaded } ?: return@subscribe
+            val playerPosition = player.modelPosition.takeIf { it.isLoaded } ?: return@subscribe
             val playerPt = playerPosition.toScreen() ?: return@subscribe
             g.fill(shapeAt(playerPt))
 

@@ -63,7 +63,7 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.size in 12..13 }
     }
 
-    @MethodParameters("plane", "x", "y", "tileHeight", "bottom", "tag", "middle", "top")
+    @MethodParameters("plane", "x", "y", "tileHeight", "first", "tag", "second", "third")
     @DependsOn(Entity::class)
     class newGroundItemPile : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

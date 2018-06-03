@@ -15,7 +15,7 @@ object LiveMinimap : Minimap {
 
     private const val PADDING = 3
 
-    override val reference get() = Players.local?.position ?: Scene.CENTER.center
+    override val reference get() = Players.local?.modelPosition ?: Scene.CENTER.center
 
     private val FIXED_CENTER = Point(641, RADIUS + PADDING)
 

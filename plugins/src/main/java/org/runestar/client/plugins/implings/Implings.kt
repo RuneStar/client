@@ -73,7 +73,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             }
 
             g.color = TEXT_COLOR
-            val pos = npc.position.copy(height = npc.accessor.defaultHeight / 3)
+            val pos = npc.modelPosition.copy(height = npc.accessor.defaultHeight / 3)
             if (!pos.isLoaded) return@forEach
             val name = npc.definition?.name?.substringBefore(' ') ?: "Impling"
 

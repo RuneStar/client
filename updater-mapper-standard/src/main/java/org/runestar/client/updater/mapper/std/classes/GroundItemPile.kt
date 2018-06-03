@@ -20,17 +20,17 @@ class GroundItemPile : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == type<Entity>() } == 3 }
 
     @DependsOn(Scene.newGroundItemPile::class, Entity::class)
-    class bottom : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 0) {
+    class first : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 
     @DependsOn(Scene.newGroundItemPile::class, Entity::class)
-    class middle : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 1) {
+    class second : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 
     @DependsOn(Scene.newGroundItemPile::class, Entity::class)
-    class top : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 2) {
+    class third : OrderMapper.InMethod.Field(Scene.newGroundItemPile::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Entity>() }
     }
 

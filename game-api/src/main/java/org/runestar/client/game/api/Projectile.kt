@@ -15,7 +15,7 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
 
     override val orientation get() = Angle.of(accessor.yaw)
 
-    override val position: Position
+    override val modelPosition: Position
         get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, plane)
                 .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.z.toInt()) }
 
