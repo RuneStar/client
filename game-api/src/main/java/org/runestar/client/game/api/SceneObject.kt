@@ -10,6 +10,28 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
         fun xModelFromEntity(e: XEntity?): XModel? {
             return e as? XModel ?: e?.model
         }
+
+        inline fun makeModel(e: XEntity?, f: (XModel) -> Model): Model? {
+            return xModelFromEntity(e)?.let(f)
+        }
+
+        fun <T> cascadingList(a: T?): List<T> {
+            val m1 = a ?: return listOf()
+            return listOf(m1)
+        }
+
+        fun <T> cascadingList(a: T?, b: T?): List<T> {
+            val m1 = a ?: return listOf()
+            val m2 = b ?: return listOf(m1)
+            return listOf(m1, m2)
+        }
+
+        fun <T> cascadingList(a: T?, b: T?, c: T?): List<T> {
+            val m1 = a ?: return listOf()
+            val m2 = b ?: return listOf(m1)
+            val m3 = c ?: return listOf(m1, m2)
+            return listOf(m1, m2, m3)
+        }
     }
 
     protected abstract val tagPacked: Long
@@ -30,6 +52,8 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     val kind: EntityKind get() = EntityTag.getEntityKind(tagPacked)
 
+    val isObject: Boolean get() = kind == EntityKind.OBJECT
+
     // todo
 //    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
 
@@ -41,32 +65,21 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     protected abstract val entity: XEntity?
 
-    val model: Model? get() = xModelFromEntity(entity)?.let { Model(it, modelPosition, dynamicOrientation) }
+    val model: Model? get() = makeModel(entity) { Model(it, modelPosition, dynamicOrientation) }
 
-    abstract val models: List<Model>
-
-    abstract class OneModel(
-            accessor: Accessor
-    ) : SceneObject(accessor) {
-
-        override val models: List<Model> get() = model?.let { listOf(it) } ?: listOf()
-    }
+    open val models: List<Model> get() = cascadingList(model)
 
     abstract class TwoModels(
             accessor: Accessor
-    ) : OneModel(accessor) {
+    ) : SceneObject(accessor) {
 
         protected abstract val entity2: XEntity?
 
         abstract val modelPosition2: Position
 
-        val model2: Model? get() = xModelFromEntity(entity2)?.let { Model(it, modelPosition2, dynamicOrientation) }
+        val model2: Model? get() = makeModel(entity2) { Model(it, modelPosition2, dynamicOrientation) }
 
-        override val models: List<Model> get() {
-            val m1 = model ?: return listOf()
-            val m2 = model2 ?: return listOf(m1)
-            return listOf(m1, m2)
-        }
+        override val models: List<Model> get() = cascadingList(model, model2)
     }
 
     abstract class ThreeModels(
@@ -77,19 +90,14 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         abstract val modelPosition3: Position
 
-        val model3: Model? get() = xModelFromEntity(entity3)?.let { Model(it, modelPosition3, dynamicOrientation) }
+        val model3: Model? get() = makeModel(entity3) { Model(it, modelPosition3, dynamicOrientation) }
 
-        override val models: List<Model> get() {
-            val m1 = model ?: return listOf()
-            val m2 = model2 ?: return listOf(m1)
-            val m3 = model3 ?: return listOf(m1, m2)
-            return listOf(m1, m2, m3)
-        }
+        override val models: List<Model> get() = cascadingList(model, model2, model3)
     }
 
     class Game(
             override val accessor: XGameObject
-    ) : OneModel(accessor) {
+    ) : SceneObject(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
 
@@ -107,7 +115,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
     class Floor(
             override val accessor: XFloorDecoration,
             override val plane: Int
-    ) : OneModel(accessor) {
+    ) : SceneObject(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
