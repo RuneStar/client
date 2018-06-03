@@ -13,7 +13,7 @@ data class EntityTag(
     ) : this(
             getEntityKind(tag),
             getId(tag),
-            SceneTile(getX(tag), getY(tag), plane),
+            getLocation(tag, plane),
             isInteractable(tag)
     )
 
@@ -39,6 +39,8 @@ data class EntityTag(
         fun getX(tag: Long): Int = (tag and 0x7F).toInt()
 
         fun getY(tag: Long): Int = (tag shr 7 and 0x7F).toInt()
+
+        fun getLocation(tag: Long, plane: Int): SceneTile = SceneTile(getX(tag), getY(tag), plane)
 
         fun isInteractable(tag: Long): Boolean = tag and 65536L == 0L
     }
