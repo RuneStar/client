@@ -85,9 +85,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
 
-        override val modelPosition: Position get() = Position(accessor.centerX, accessor.centerY, 0, plane).also {
-//            println("${accessor.height} ${LiveScene.getTileHeight(it)}")
-        }
+        override val modelPosition: Position get() = Position(accessor.centerX, accessor.centerY, 0, plane)
 
         override val entity: XEntity? get() = accessor.entity
 
