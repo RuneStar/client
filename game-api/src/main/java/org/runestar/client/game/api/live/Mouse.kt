@@ -27,7 +27,7 @@ object Mouse {
 
     val entityCount get() = accessor.viewportMouse_entityCount
 
-    val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it]) }
+    val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it], Game.plane) }
 
     val cross get() = MouseCrossColor.of(accessor.mouseCrossColor)?.let { MouseCross(it, accessor.mouseCrossState) }
 

@@ -1,7 +1,5 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.Client
-
 data class EntityTag(
         val kind: EntityKind,
         val id: Int,
@@ -10,13 +8,13 @@ data class EntityTag(
 ) {
 
     internal constructor(
-            packed: Long,
-            plane: Int = Client.accessor.plane
+            tag: Long,
+            plane: Int
     ) : this(
-            EntityKind.of((packed shr 14 and 0x3).toInt()),
-            (packed ushr 17).toInt(),
-            SceneTile((packed and 0x7F).toInt(), (packed shr 7 and 0x7F).toInt(), plane),
-            packed and 65536L == 0L
+            getEntityKind(tag),
+            getId(tag),
+            SceneTile(getX(tag), getY(tag), plane),
+            isInteractable(tag)
     )
 
     internal val packed: Long get() {
@@ -30,5 +28,18 @@ data class EntityTag(
 
     override fun toString(): String {
         return "EntityTag(kind=$kind, id=$id, location=$location, isInteractable=$isInteractable)"
+    }
+
+    companion object {
+
+        fun getEntityKind(tag: Long): EntityKind = EntityKind.of((tag shr 14 and 0x3).toInt())
+
+        fun getId(tag: Long): Int = (tag ushr 17).toInt()
+
+        fun getX(tag: Long): Int = (tag and 0x7F).toInt()
+
+        fun getY(tag: Long): Int = (tag shr 7 and 0x7F).toInt()
+
+        fun isInteractable(tag: Long): Boolean = tag and 65536L == 0L
     }
 }
