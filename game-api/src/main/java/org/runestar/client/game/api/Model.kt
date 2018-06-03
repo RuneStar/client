@@ -125,6 +125,7 @@ class Model internal constructor(
 
         val localX = base.localX + x
         val localY = base.localY + y
-        return projection.toScreen(localX, localY, h, base.plane, base.localX, base.localY, result)
+        val height = base.height + h
+        return projection.toScreen(localX, localY, height, base.plane, base.localX, base.localY, result)
     }
 }
