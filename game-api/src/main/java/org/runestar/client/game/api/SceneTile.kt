@@ -29,7 +29,7 @@ data class SceneTile(
         }
     }
 
-    val center get() = Position(x, Position.MID_SUB, y, Position.MID_SUB, 0, plane)
+    val center get() = Position.centerOfTile(x, y, 0, plane)
 
     val base get() = Position(x, 0, y, 0, 0, plane)
 

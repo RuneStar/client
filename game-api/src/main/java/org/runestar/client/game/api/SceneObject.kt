@@ -12,15 +12,23 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
         }
     }
 
-    abstract val tag: EntityTag
+    protected abstract val tagPacked: Long
 
-    val id: Int get() = tag.id
+    abstract val plane: Int
 
-    val location: SceneTile get() = tag.location
+    val tag: EntityTag get() = EntityTag(tagPacked, plane)
 
-    val isInteractable: Boolean get() = tag.isInteractable
+    val id: Int get() = EntityTag.getId(tagPacked)
 
-    open val plane: Int get() = location.plane
+    val x: Int get() = EntityTag.getX(tagPacked)
+
+    val y: Int get() = EntityTag.getY(tagPacked)
+
+    val location: SceneTile get() = EntityTag.getLocation(tagPacked, plane)
+
+    val isInteractable: Boolean get() = EntityTag.isInteractable(tagPacked)
+
+    val kind: EntityKind get() = EntityTag.getEntityKind(tagPacked)
 
     // todo
 //    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
@@ -91,7 +99,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val plane: Int get() = accessor.plane
 
-        override val tag get() = EntityTag(accessor.tag, plane)
+        override val tagPacked get() = accessor.tag
 
         override fun toString(): String = "SceneObject.Game(tag=$tag)"
     }
@@ -103,11 +111,11 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
-        override val modelPosition: Position get() = location.center
+        override val modelPosition: Position get() = Position.centerOfTile(x, y, 0, plane)
 
         override val entity: XEntity? get() = accessor.entity
 
-        override val tag get() = EntityTag(accessor.tag, plane)
+        override val tagPacked get() = accessor.tag
 
         override fun toString(): String = "SceneObject.Floor(tag=$tag)"
     }
@@ -119,15 +127,20 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
-        override val modelPosition: Position get() = location.center.plusLocal(accessor.xOffset, accessor.yOffset, 0)
+        override val modelPosition: Position get() = Position(
+                Position.toLocal(x, Position.MID_SUB) + accessor.xOffset,
+                Position.toLocal(y, Position.MID_SUB) + accessor.yOffset,
+                0,
+                plane
+        )
 
         override val entity: XEntity? get() = accessor.entity1
 
-        override val modelPosition2: Position get() = location.center
+        override val modelPosition2: Position get() = Position.centerOfTile(x, y, 0, plane)
 
         override val entity2: XEntity? get() = accessor.entity2
 
-        override val tag get() = EntityTag(accessor.tag, plane)
+        override val tagPacked get() = accessor.tag
 
         override fun toString(): String = "SceneObject.Wall(tag=$tag)"
     }
@@ -139,7 +152,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
-        override val modelPosition: Position get() = location.center
+        override val modelPosition: Position get() = Position.centerOfTile(x, y, 0, plane)
 
         override val modelPosition2: Position get() = modelPosition
 
@@ -147,7 +160,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val entity2: XEntity? get() = accessor.entity2
 
-        override val tag get() = EntityTag(accessor.tag, plane)
+        override val tagPacked get() = accessor.tag
 
         override fun toString(): String = "SceneObject.Boundary(tag=$tag)"
     }
@@ -157,13 +170,13 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
             override val plane: Int
     ) : ThreeModels(accessor) {
 
-        override val tag: EntityTag get() = EntityTag(accessor.tag, plane)
+        override val tagPacked get() = accessor.tag
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
         override val entity: XEntity? get() = accessor.first
 
-        override val modelPosition: Position get() = location.center.copy(height = accessor.height)
+        override val modelPosition: Position get() = Position.centerOfTile(x, y, accessor.height, plane)
 
         override val entity2: XEntity? get() = accessor.second
 

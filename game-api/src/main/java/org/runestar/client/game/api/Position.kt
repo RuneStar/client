@@ -58,5 +58,9 @@ data class Position(
         fun isLoaded(localX: Int, localY: Int, plane: Int): Boolean {
             return SceneTile.isLoaded(toScene(localX), toScene(localY), plane)
         }
+
+        fun centerOfTile(x: Int, y: Int, height: Int, plane: Int): Position {
+            return Position(x, Position.MID_SUB, y, Position.MID_SUB, height, plane)
+        }
     }
 }
