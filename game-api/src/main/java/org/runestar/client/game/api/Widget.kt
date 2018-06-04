@@ -13,6 +13,10 @@ import java.util.*
 
 sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
+    companion object {
+        const val ITEM_SLOT_SIZE = 32
+    }
+
     val group get() = checkNotNull(WidgetGroups[parentId.group])
 
     val parentId get() = WidgetParentId(accessor.id)
@@ -26,9 +30,19 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
      */
     val textColor: Color get() = Color(accessor.textColor)
 
-    val width get() = accessor.width
+    val width: Int get() {
+        return when (accessor.type) {
+            2 -> accessor.width * (ITEM_SLOT_SIZE + accessor.paddingX) - accessor.paddingX
+            else -> accessor.width
+        }
+    }
 
-    val height get() = accessor.height
+    val height: Int get() {
+        return when (accessor.type) {
+            2 -> accessor.height * (ITEM_SLOT_SIZE + accessor.paddingY) - accessor.paddingY
+            else -> accessor.height
+        }
+    }
 
     val isHidden get() = accessor.isHidden
 
@@ -114,27 +128,26 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
         override val ancestor get() = predecessor ?: group.parent
 
-        fun getItem(slot: Int): WidgetItem? {
-            return getItem(slot, location)
+        fun getItem(slot: Int): WidgetItem {
+            return getItem(slot, checkNotNull(location))
         }
 
-        private fun getItem(slot: Int, location: Point?): WidgetItem? {
-            if (location == null) return null
-            if (accessor.type != 2) return null
-            val id = accessor.itemIds.getOrNull(slot) ?: return null
-            val quantity = accessor.itemQuantities.getOrNull(slot) ?: return null
+        private fun getItem(slot: Int, location: Point): WidgetItem {
+            check(accessor.type == 2)
+            val id = accessor.itemIds[slot]
+            val quantity = accessor.itemQuantities[slot]
             val item = Item.of(id, quantity)
-            val row = slot / width
-            val col = slot % width
+            val row = slot / accessor.width
+            val col = slot % accessor.width
             val x = location.x + ((ITEM_SLOT_SIZE + accessor.paddingX) * col)
             val y = location.y + ((ITEM_SLOT_SIZE + accessor.paddingY) * row)
             val rect = Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
             return WidgetItem(item, rect)
         }
 
-        val items: List<WidgetItem?>? get() {
-            if (accessor.type != 2) return null
-            val loc = location
+        val items: List<WidgetItem> get() {
+            check(accessor.type == 2)
+            val loc = checkNotNull(location)
             return List(accessor.itemIds.size) { getItem(it, loc) }
         }
 
@@ -144,10 +157,6 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
         override fun idString(): String {
             return "${group.id}.${parentId.parent}"
-        }
-
-        private companion object {
-            const val ITEM_SLOT_SIZE = 32
         }
     }
 }
