@@ -19,10 +19,10 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
     private val objs: MutableSet<SceneElement> = LinkedHashSet()
 
     override fun start() {
-        SceneElements.all().filterTo(objs, SceneElement::isInteractable)
         add(SceneElements.clears.subscribe { objs.clear() })
         add(SceneElements.removals.subscribe { objs.remove(it) })
         add(SceneElements.additions.filter(SceneElement::isInteractable).subscribe { objs.add(it) })
+        SceneElements.all().filterTo(objs, SceneElement::isInteractable)
 
         add(LiveCanvas.repaints.subscribe { g ->
             objs.forEach {

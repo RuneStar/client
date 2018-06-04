@@ -3,8 +3,8 @@ package org.runestar.client.plugins.motherlodemine
 import com.google.common.collect.ImmutableSet
 import org.runestar.cache.generated.ObjectId
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.SceneElement
+import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -29,10 +29,11 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
     private val veins: MutableSet<SceneElement.Boundary> = LinkedHashSet()
 
     override fun start() {
-        SceneElements.Boundary.all().filterTo(veins, ::isVein)
         add(SceneElements.clears.subscribe { veins.clear() })
         add(SceneElements.Boundary.additions.filter(::isVein).subscribe { veins.add(it) })
         add(SceneElements.Boundary.removals.filter(::isVein).subscribe { veins.remove(it) })
+        SceneElements.Boundary.all().filterTo(veins, ::isVein)
+
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }
 

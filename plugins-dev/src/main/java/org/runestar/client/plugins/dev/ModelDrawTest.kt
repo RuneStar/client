@@ -19,10 +19,10 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
     private val objs: MutableSet<SceneElement> = LinkedHashSet()
 
     override fun start() {
-        objs.addAll(SceneElements.all())
         add(SceneElements.clears.subscribe { objs.clear() })
         add(SceneElements.removals.subscribe { objs.remove(it) })
         add(SceneElements.additions.subscribe { objs.add(it) })
+        objs.addAll(SceneElements.all())
 
         add(LiveCanvas.repaints.subscribe { g ->
             objs.forEach {
