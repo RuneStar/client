@@ -2,6 +2,7 @@ package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
 import org.runestar.client.game.api.SceneElement
+import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.TileObjects
 import org.runestar.client.game.api.utils.addNotNull
 import org.runestar.client.game.raw.Client
@@ -124,19 +125,18 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
 
         private val changes: Observable<SceneElement.ItemPile> = XScene.newGroundItemPile.enter
-                .map {
-                    checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                }
+                .map { checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int)) }
                 .filter { it.groundItemPile != null }
                 .map { SceneElement.ItemPile(it.groundItemPile, it.plane) }
 
-        override val removals: Observable<SceneElement.ItemPile> = XScene.removeGroundItemPile.enter
-                .map {
-                    checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                }
+        private val removes: Observable<SceneElement.ItemPile> = XScene.removeGroundItemPile.enter
+                .map { SceneTile(it.arguments[1] as Int, it.arguments[2] as Int, it.arguments[0] as Int) }
+                .filter { getTile(it.plane, it.x, it.y) != null }
+                .map { getTile(it.plane, it.x, it.y) }
                 .filter { it.groundItemPile != null }
                 .map { SceneElement.ItemPile(it.groundItemPile, it.plane) }
-                .mergeWith(changes)
+
+        override val removals: Observable<SceneElement.ItemPile> = Observable.merge(changes, removes)
 
         override fun fromTile(tile: XTile): SceneElement.ItemPile? {
             val v = tile.groundItemPile ?: return null
