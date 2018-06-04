@@ -25,33 +25,37 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
 
     val clears: Observable<Unit> = XScene.clear.exit.map { Unit }
 
-    override val additions: Observable<SceneElement> = Observable.empty<SceneElement>()
-            .mergeWith(Wall.additions)
-            .mergeWith(Floor.additions)
-            .mergeWith(Boundary.additions)
-            .mergeWith(ItemPile.additions)
-            .mergeWith(Game.additions)
+    override val additions: Observable<SceneElement> = Observable.mergeArray(
+            Wall.additions,
+            Floor.additions,
+            Boundary.additions,
+            ItemPile.additions,
+            Game.additions
+    )
 
-    override val removals: Observable<SceneElement> = Observable.empty<SceneElement>()
-            .mergeWith(Wall.removals)
-            .mergeWith(Floor.removals)
-            .mergeWith(Boundary.removals)
-            .mergeWith(ItemPile.removals)
-            .mergeWith(Game.removals)
+    override val removals: Observable<SceneElement> = Observable.mergeArray(
+            Wall.removals,
+            Floor.removals,
+            Boundary.removals,
+            ItemPile.removals,
+            Game.removals
+    )
 
     object Object : TileObjects.Many<SceneElement>(Client.accessor.scene) {
 
-        override val additions: Observable<SceneElement> = Observable.empty<SceneElement>()
-                .mergeWith(Wall.additions)
-                .mergeWith(Floor.additions)
-                .mergeWith(Boundary.additions)
-                .mergeWith(Game.additions.filter(SceneElement::isObject))
+        override val additions: Observable<SceneElement> = Observable.mergeArray(
+                Wall.additions,
+                Floor.additions,
+                Boundary.additions,
+                Game.additions.filter(SceneElement::isObject)
+        )
 
-        override val removals: Observable<SceneElement> = Observable.empty<SceneElement>()
-                .mergeWith(Wall.removals)
-                .mergeWith(Floor.removals)
-                .mergeWith(Boundary.removals)
-                .mergeWith(Game.removals.filter(SceneElement::isObject))
+        override val removals: Observable<SceneElement> = Observable.mergeArray(
+                Wall.removals,
+                Floor.removals,
+                Boundary.removals,
+                Game.removals.filter(SceneElement::isObject)
+        )
 
         override fun fromTile(tile: XTile): List<SceneElement> {
             val list = ArrayList<SceneElement>()
