@@ -59,6 +59,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
     private fun shouldDraw(model: Model): Boolean {
         val pos = model.base
         val tile = pos.sceneTile
+        if (tile.plane != Game.plane) return false
         if (!tile.isLoaded || !Game.visibilityMap.isVisible(tile)) return false
         val pt = pos.toScreen() ?: return false
         if (pt !in LiveViewport.shape) return false

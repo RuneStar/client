@@ -84,6 +84,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
 
+        // todo: height
         override val modelPosition: Position get() = Position(accessor.centerX, accessor.centerY, 0, plane)
 
         override val entity: XEntity? get() = accessor.entity

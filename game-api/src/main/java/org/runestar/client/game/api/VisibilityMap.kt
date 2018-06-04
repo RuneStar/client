@@ -7,7 +7,6 @@ class VisibilityMap(
 
     fun isVisible(sceneTile: SceneTile): Boolean {
         val camTile = camera.position.sceneTile
-        if (camTile.plane != sceneTile.plane) return false
         val vpitch = (camera.pitch.value - 128) / 32
         if (vpitch !in 0..7) return false
         val vx = sceneTile.x - camTile.x + 25
