@@ -1,15 +1,15 @@
 package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawString
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.SceneObjects
+import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 
-class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
+class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
@@ -18,9 +18,9 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             g.font = RUNESCAPE_SMALL_FONT
 
-            if (ctx.settings.interactable) {
+            if (ctx.settings.game) {
                 g.color = Color.CYAN
-                SceneObjects.Game.onPlane(Game.plane).forEach { i ->
+                SceneElements.Game.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -29,7 +29,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (ctx.settings.wall) {
                 g.color = Color.ORANGE
-                SceneObjects.Wall.onPlane(Game.plane).forEach { i ->
+                SceneElements.Wall.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -38,7 +38,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (ctx.settings.floor) {
                 g.color = Color.GREEN
-                SceneObjects.Floor.onPlane(Game.plane).forEach { i ->
+                SceneElements.Floor.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -47,7 +47,7 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
 
             if (ctx.settings.boundary) {
                 g.color = Color.WHITE
-                SceneObjects.Boundary.onPlane(Game.plane).forEach { i ->
+                SceneElements.Boundary.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -60,6 +60,6 @@ class SceneObjectDebug : DisposablePlugin<SceneObjectDebug.Settings>() {
             val floor: Boolean = false,
             val wall: Boolean = true,
             val boundary: Boolean = true,
-            val interactable: Boolean = true
+            val game: Boolean = true
     ) : PluginSettings()
 }

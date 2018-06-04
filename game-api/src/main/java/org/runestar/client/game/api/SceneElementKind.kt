@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-enum class EntityKind(val id: Int) {
+enum class SceneElementKind(val id: Int) {
 
     PLAYER(0),
     NPC(1),
@@ -11,7 +11,7 @@ enum class EntityKind(val id: Int) {
 
         @JvmField val VALUES = values().asList()
 
-        fun of(id: Int): EntityKind {
+        fun of(id: Int): SceneElementKind {
             return VALUES[id]
         }
     }

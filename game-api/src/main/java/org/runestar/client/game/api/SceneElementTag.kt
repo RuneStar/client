@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
-data class EntityTag(
-        val kind: EntityKind,
+data class SceneElementTag(
+        val kind: SceneElementKind,
         val id: Int,
         val location: SceneTile,
         val isInteractable: Boolean
@@ -11,7 +11,7 @@ data class EntityTag(
             tag: Long,
             plane: Int
     ) : this(
-            getEntityKind(tag),
+            getKind(tag),
             getId(tag),
             getLocation(tag, plane),
             isInteractable(tag)
@@ -27,12 +27,12 @@ data class EntityTag(
     }
 
     override fun toString(): String {
-        return "EntityTag(kind=$kind, id=$id, location=$location, isInteractable=$isInteractable)"
+        return "SceneElementTag(kind=$kind, id=$id, location=$location, isInteractable=$isInteractable)"
     }
 
     companion object {
 
-        fun getEntityKind(tag: Long): EntityKind = EntityKind.of((tag shr 14 and 0x3).toInt())
+        fun getKind(tag: Long): SceneElementKind = SceneElementKind.of((tag shr 14 and 0x3).toInt())
 
         fun getId(tag: Long): Int = (tag ushr 17).toInt()
 

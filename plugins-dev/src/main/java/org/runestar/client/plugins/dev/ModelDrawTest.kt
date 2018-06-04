@@ -2,8 +2,12 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Model
-import org.runestar.client.game.api.SceneObject
-import org.runestar.client.game.api.live.*
+import org.runestar.client.game.api.SceneElement
+import org.runestar.client.game.api.SceneElementKind
+import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -12,46 +16,39 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    private val objs: MutableSet<SceneObject> = LinkedHashSet()
+    private val objs: MutableSet<SceneElement> = LinkedHashSet()
 
     override fun start() {
-        objs.addAll(SceneObjects.all())
-        add(SceneObjects.clears.subscribe { objs.clear() })
-        add(SceneObjects.removals.subscribe { objs.remove(it) })
-        add(SceneObjects.additions.subscribe { objs.add(it) })
+        objs.addAll(SceneElements.all())
+        add(SceneElements.clears.subscribe { objs.clear() })
+        add(SceneElements.removals.subscribe { objs.remove(it) })
+        add(SceneElements.additions.subscribe { objs.add(it) })
 
         add(LiveCanvas.repaints.subscribe { g ->
-
             objs.forEach {
-                g.color = colorForSceneObject(it)
+                g.color = colorFor(it)
                 it.models.forEach { drawModel(g, it) }
-            }
-
-            g.color = Color.WHITE
-            Players.forEach {
-                it.model?.let { drawModel(g, it) }
-            }
-
-            g.color = Color.YELLOW
-            Npcs.forEach {
-                it.model?.let { drawModel(g, it) }
-            }
-
-            g.color = Color.GREEN
-            Projectiles.forEach {
-                it.model?.let { drawModel(g, it) }
             }
         })
     }
 
-    private fun colorForSceneObject(obj: SceneObject): Color {
-        return when (obj) {
-            is SceneObject.ItemPile -> Color.RED
-            is SceneObject.Boundary -> Color.MAGENTA
-            is SceneObject.Game -> Color.BLUE
-            is SceneObject.Floor -> Color.CYAN
-            is SceneObject.Wall -> Color.ORANGE
-            else -> throw IllegalStateException()
+    override fun stop() {
+        super.stop()
+        objs.clear()
+    }
+
+    private fun colorFor(obj: SceneElement): Color {
+        return when (obj.kind) {
+            SceneElementKind.GROUND_ITEM -> Color.RED
+            SceneElementKind.NPC -> Color.YELLOW
+            SceneElementKind.PLAYER -> Color.WHITE
+            SceneElementKind.OBJECT -> when (obj) {
+                is SceneElement.Boundary -> Color.MAGENTA
+                is SceneElement.Game -> Color.BLUE
+                is SceneElement.Floor -> Color.CYAN
+                is SceneElement.Wall -> Color.ORANGE
+                else -> throw IllegalStateException()
+            }
         }
     }
 

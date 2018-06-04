@@ -1,9 +1,10 @@
 package org.runestar.client.game.api
 
+import org.runestar.client.game.api.utils.cascadingListOf
 import org.runestar.client.game.raw.Accessor
 import org.runestar.client.game.raw.access.*
 
-abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
+abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
     private companion object {
 
@@ -14,45 +15,27 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
         inline fun makeModel(e: XEntity?, f: (XModel) -> Model): Model? {
             return xModelFromEntity(e)?.let(f)
         }
-
-        fun <T> cascadingList(a: T?): List<T> {
-            val m1 = a ?: return listOf()
-            return listOf(m1)
-        }
-
-        fun <T> cascadingList(a: T?, b: T?): List<T> {
-            val m1 = a ?: return listOf()
-            val m2 = b ?: return listOf(m1)
-            return listOf(m1, m2)
-        }
-
-        fun <T> cascadingList(a: T?, b: T?, c: T?): List<T> {
-            val m1 = a ?: return listOf()
-            val m2 = b ?: return listOf(m1)
-            val m3 = c ?: return listOf(m1, m2)
-            return listOf(m1, m2, m3)
-        }
     }
 
     protected abstract val tagPacked: Long
 
     abstract val plane: Int
 
-    val tag: EntityTag get() = EntityTag(tagPacked, plane)
+    val tag: SceneElementTag get() = SceneElementTag(tagPacked, plane)
 
-    val id: Int get() = EntityTag.getId(tagPacked)
+    val id: Int get() = SceneElementTag.getId(tagPacked)
 
-    val x: Int get() = EntityTag.getX(tagPacked)
+    val x: Int get() = SceneElementTag.getX(tagPacked)
 
-    val y: Int get() = EntityTag.getY(tagPacked)
+    val y: Int get() = SceneElementTag.getY(tagPacked)
 
-    val location: SceneTile get() = EntityTag.getLocation(tagPacked, plane)
+    val location: SceneTile get() = SceneElementTag.getLocation(tagPacked, plane)
 
-    val isInteractable: Boolean get() = EntityTag.isInteractable(tagPacked)
+    val isInteractable: Boolean get() = SceneElementTag.isInteractable(tagPacked)
 
-    val kind: EntityKind get() = EntityTag.getEntityKind(tagPacked)
+    val kind: SceneElementKind get() = SceneElementTag.getKind(tagPacked)
 
-    val isObject: Boolean get() = kind == EntityKind.OBJECT
+    val isObject: Boolean get() = kind == SceneElementKind.OBJECT
 
     // todo
 //    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
@@ -67,11 +50,11 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
     val model: Model? get() = makeModel(entity) { Model(it, modelPosition, dynamicOrientation) }
 
-    open val models: List<Model> get() = cascadingList(model)
+    open val models: List<Model> get() = cascadingListOf(model)
 
     abstract class TwoModels(
             accessor: Accessor
-    ) : SceneObject(accessor) {
+    ) : SceneElement(accessor) {
 
         protected abstract val entity2: XEntity?
 
@@ -79,7 +62,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         val model2: Model? get() = makeModel(entity2) { Model(it, modelPosition2, dynamicOrientation) }
 
-        override val models: List<Model> get() = cascadingList(model, model2)
+        override val models: List<Model> get() = cascadingListOf(model, model2)
     }
 
     abstract class ThreeModels(
@@ -92,12 +75,12 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         val model3: Model? get() = makeModel(entity3) { Model(it, modelPosition3, dynamicOrientation) }
 
-        override val models: List<Model> get() = cascadingList(model, model2, model3)
+        override val models: List<Model> get() = cascadingListOf(model, model2, model3)
     }
 
     class Game(
             override val accessor: XGameObject
-    ) : SceneObject(accessor) {
+    ) : SceneElement(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
 
@@ -109,13 +92,13 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val tagPacked get() = accessor.tag
 
-        override fun toString(): String = "SceneObject.Game(tag=$tag)"
+        override fun toString(): String = "SceneElement.Game(tag=$tag)"
     }
 
     class Floor(
             override val accessor: XFloorDecoration,
             override val plane: Int
-    ) : SceneObject(accessor) {
+    ) : SceneElement(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
@@ -125,7 +108,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val tagPacked get() = accessor.tag
 
-        override fun toString(): String = "SceneObject.Floor(tag=$tag)"
+        override fun toString(): String = "SceneElement.Floor(tag=$tag)"
     }
 
     class Wall(
@@ -150,7 +133,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val tagPacked get() = accessor.tag
 
-        override fun toString(): String = "SceneObject.Wall(tag=$tag)"
+        override fun toString(): String = "SceneElement.Wall(tag=$tag)"
     }
 
     class Boundary(
@@ -170,7 +153,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
 
         override val tagPacked get() = accessor.tag
 
-        override fun toString(): String = "SceneObject.Boundary(tag=$tag)"
+        override fun toString(): String = "SceneElement.Boundary(tag=$tag)"
     }
 
     class ItemPile(
@@ -213,6 +196,6 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
             }
         }
 
-        override fun toString(): String = "SceneObject.ItemPile(tag=$tag)"
+        override fun toString(): String = "SceneElement.ItemPile(tag=$tag)"
     }
 }

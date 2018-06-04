@@ -1,6 +1,7 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.utils.addNotNull
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XModel
 import java.awt.Color
@@ -28,10 +29,6 @@ class Model internal constructor(
     private val heightMin get() = base.height - (accessor.yMid + accessor.yMidOffset)
 
     private val heightMax get() = base.height - (accessor.yMid - accessor.yMidOffset)
-
-    private fun <T> MutableList<T>.addNotNull(t: T?) {
-        t?.let { add(it) }
-    }
 
     private fun boundingBoxCornerPoints(projection: Projection = Projections.viewport): List<Point> {
         accessor.calculateBoundingBox(yaw.value) // todo

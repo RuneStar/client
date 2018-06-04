@@ -5,15 +5,15 @@ import org.runestar.client.api.util.FontForm
 import org.runestar.client.api.util.RgbaForm
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.GroundItem
-import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XItemDefinition
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
-import org.runestar.client.game.api.live.GroundItems as LiveGroundItems
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
@@ -21,7 +21,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override val name = "Ground Items"
 
-    val tiles = LinkedHashSet<SceneTile>()
+    val piles = LinkedHashSet<SceneElement.ItemPile>()
 
     val blockedIds = HashSet<Int>()
     val unblockedIds = HashSet<Int>()
@@ -29,15 +29,9 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override fun start() {
         ctx.settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
-        LiveGroundItems.onPlane(Game.plane).forEach { gi ->
-            tiles.add(gi.modelPosition.sceneTile)
-        }
-        add(LiveGroundItems.pileChanges.subscribe { st ->
-            tiles.add(st)
-        })
-        add(LiveGroundItems.pileRemovals.subscribe { st ->
-            tiles.remove(st)
-        })
+        piles.addAll(SceneElements.ItemPile.all())
+        SceneElements.ItemPile.additions.subscribe { piles.add(it) }
+        SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
 
         val defaultColor = ctx.settings.color.get()
         val font = ctx.settings.font.get()
@@ -47,13 +41,13 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             g.clip(LiveViewport.shape)
             val height = g.fontMetrics.height
 
-            val itr = tiles.iterator()
+            val itr = piles.iterator()
             while (itr.hasNext()) {
-                val tile = itr.next()
-                if (tile.plane != Game.plane) continue
-                val pt = tile.center.toScreen()
+                val pile = itr.next()
+                if (pile.plane != Game.plane) continue
+                val pt = pile.modelPosition.toScreen()
                 if (pt == null || pt !in g.clip) continue
-                val gis = LiveGroundItems.at(tile).toList().asReversed()
+                val gis = pile.toList().asReversed()
                 if (gis.isEmpty()) {
                     itr.remove()
                     continue
@@ -115,7 +109,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override fun stop() {
         super.stop()
-        tiles.clear()
+        piles.clear()
         blockedIds.clear()
         unblockedIds.clear()
         blockRegexes.clear()

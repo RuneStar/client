@@ -26,8 +26,8 @@ class MouseDebug : DisposablePlugin<PluginSettings>() {
                 add("cross: ${Mouse.cross}")
                 add("isInViewport: ${Mouse.isInViewport}")
                 add("entityCount: ${Mouse.entityCount}")
-                add("entityTags:")
-                Mouse.entityTags.mapTo(this) { it.toString() }
+                add("tags:")
+                Mouse.tags.mapTo(this) { it.toString() }
             }
 
             strings.forEach { s ->

@@ -2,9 +2,9 @@ package org.runestar.client.game.api.live
 
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
-import org.runestar.client.game.api.EntityTag
 import org.runestar.client.game.api.MouseCross
 import org.runestar.client.game.api.MouseCrossColor
+import org.runestar.client.game.api.SceneElementTag
 import org.runestar.client.game.raw.Client.accessor
 import java.awt.Point
 import java.awt.event.MouseEvent
@@ -27,7 +27,7 @@ object Mouse {
 
     val entityCount get() = accessor.viewportMouse_entityCount
 
-    val entityTags get() = List(entityCount) { EntityTag(accessor.viewportMouse_entityTags[it], Game.plane) }
+    val tags get() = List(entityCount) { SceneElementTag(accessor.viewportMouse_entityTags[it], Game.plane) }
 
     val cross get() = MouseCrossColor.of(accessor.mouseCrossColor)?.let { MouseCross(it, accessor.mouseCrossState) }
 

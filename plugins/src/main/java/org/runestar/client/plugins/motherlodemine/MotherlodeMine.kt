@@ -3,10 +3,9 @@ package org.runestar.client.plugins.motherlodemine
 import com.google.common.collect.ImmutableSet
 import org.runestar.cache.generated.ObjectId
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.SceneObject
 import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.*
-import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -27,13 +26,13 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
 
     override val name = "Motherlode Mine"
 
-    private val veins: MutableSet<SceneObject.Boundary> = LinkedHashSet()
+    private val veins: MutableSet<SceneElement.Boundary> = LinkedHashSet()
 
     override fun start() {
-        SceneObjects.Boundary.all().filterTo(veins, ::isVein)
-        add(XScene.clear.enter.subscribe { veins.clear() })
-        add(SceneObjects.Boundary.additions.filter(::isVein).subscribe { veins.add(it) })
-        add(SceneObjects.Boundary.removals.filter(::isVein).subscribe { veins.remove(it) })
+        SceneElements.Boundary.all().filterTo(veins, ::isVein)
+        add(SceneElements.clears.subscribe { veins.clear() })
+        add(SceneElements.Boundary.additions.filter(::isVein).subscribe { veins.add(it) })
+        add(SceneElements.Boundary.removals.filter(::isVein).subscribe { veins.remove(it) })
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }
 
@@ -42,7 +41,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
         veins.clear()
     }
 
-    private fun isVein(o: SceneObject.Boundary): Boolean {
+    private fun isVein(o: SceneElement.Boundary): Boolean {
         return VEIN_IDS.contains(o.id)
     }
 
