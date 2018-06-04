@@ -176,7 +176,7 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
     class ItemPile(
             override val accessor: XGroundItemPile,
             override val plane: Int
-    ) : ThreeModels(accessor) {
+    ) : ThreeModels(accessor), Iterable<GroundItem> {
 
         override val tagPacked get() = accessor.tag
 
@@ -199,6 +199,19 @@ abstract class SceneObject(accessor: Accessor) : Wrapper(accessor) {
         val second: GroundItem? get() = accessor.second?.let { GroundItem(it as XGroundItem, modelPosition) }
 
         val third: GroundItem? get() = accessor.third?.let { GroundItem(it as XGroundItem, modelPosition) }
+
+        override fun iterator(): Iterator<GroundItem> = object : AbstractIterator<GroundItem>() {
+
+            private val position = modelPosition
+
+            private var cur: XNode? = accessor.first
+
+            override fun computeNext() {
+                val gi = cur as? XGroundItem ?: return done()
+                setNext(GroundItem(gi, position))
+                cur = gi.previous
+            }
+        }
 
         override fun toString(): String = "SceneObject.ItemPile(tag=$tag)"
     }
