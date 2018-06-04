@@ -29,9 +29,11 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override fun start() {
         ctx.settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
+
         piles.addAll(SceneElements.ItemPile.all())
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
         SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
+        SceneElements.clears.subscribe { piles.clear() }
 
         val defaultColor = ctx.settings.color.get()
         val font = ctx.settings.font.get()
