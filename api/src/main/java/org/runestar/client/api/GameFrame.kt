@@ -1,7 +1,7 @@
 package org.runestar.client.api
 
 import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.raw.Client
 import java.awt.Container
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
@@ -59,7 +59,7 @@ class GameFrame internal constructor(
     private inner class WindowListener : WindowAdapter() {
 
         override fun windowClosing(e: WindowEvent) {
-            if (Game.state.id <= GameState.TITLE.id || confirmExit()) {
+            if (Client.accessor.gameState <= GameState.TITLE.id || confirmExit()) {
                 Application.close()
                 defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             }
