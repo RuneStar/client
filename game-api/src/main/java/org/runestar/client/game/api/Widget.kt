@@ -128,27 +128,27 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
         override val ancestor get() = predecessor ?: group.parent
 
-        fun getItem(slot: Int): WidgetItem {
-            return getItem(slot, checkNotNull(location))
-        }
+        val inventory: List<WidgetItem> get() = object : AbstractList<WidgetItem>(), RandomAccess {
 
-        private fun getItem(slot: Int, location: Point): WidgetItem {
-            check(accessor.type == 2)
-            val id = accessor.itemIds[slot]
-            val quantity = accessor.itemQuantities[slot]
-            val item = Item.of(id, quantity)
-            val row = slot / accessor.width
-            val col = slot % accessor.width
-            val x = location.x + ((ITEM_SLOT_SIZE + accessor.paddingX) * col)
-            val y = location.y + ((ITEM_SLOT_SIZE + accessor.paddingY) * row)
-            val rect = Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
-            return WidgetItem(item, rect)
-        }
+            init {
+                check(accessor.type == 2)
+            }
 
-        val items: List<WidgetItem> get() {
-            check(accessor.type == 2)
-            val loc = checkNotNull(location)
-            return List(accessor.itemIds.size) { getItem(it, loc) }
+            private val location = checkNotNull(this@Parent.location)
+
+            override val size: Int get() = accessor.width * accessor.height
+
+            override fun get(index: Int): WidgetItem {
+                val id = accessor.itemIds[index]
+                val quantity = accessor.itemQuantities[index]
+                val item = Item.of(id, quantity)
+                val row = index / accessor.width
+                val col = index % accessor.width
+                val x = location.x + ((ITEM_SLOT_SIZE + accessor.paddingX) * col)
+                val y = location.y + ((ITEM_SLOT_SIZE + accessor.paddingY) * row)
+                val rect = Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
+                return WidgetItem(item, rect)
+            }
         }
 
         override fun toString(): String {
