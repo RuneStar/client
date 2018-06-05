@@ -82,7 +82,7 @@ fun inject(sourceJar: Path, destinationJar: Path) {
         }
         typeBuilder.make().saveIn(tempDir.toFile())
     }
-    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile(), Deflater.BEST_SPEED)
+    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile(), Deflater.NO_COMPRESSION)
 }
 
 private fun createMethodProxy(typePool: TypePool, methodHook: MethodHook): Implementation {
