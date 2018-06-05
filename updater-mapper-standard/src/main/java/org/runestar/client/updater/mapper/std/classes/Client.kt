@@ -554,9 +554,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == GarbageCollectorMXBean::class.type }
     }
 
-    @DependsOn(ClassInfo::class, IterableNodeDeque::class)
-    class classInfos : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ClassInfo>() }
+    @DependsOn(ReflectionCheck::class, IterableNodeDeque::class)
+    class reflectionChecks : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ReflectionCheck>() }
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == type<IterableNodeDeque>() }
     }
 
