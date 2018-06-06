@@ -121,7 +121,7 @@ class AccessorsMojo : AbstractMojo() {
             ClassName.bestGuess(typeTransforms[baseType.className])
         } else {
             var klass = ClassLoader.getSystemClassLoader().loadClassFromDescriptor(baseType.descriptor)
-            if (wrapPrimitives && klass.isPrimitive) {
+            if (baseType == type && wrapPrimitives && klass.isPrimitive) {
                 klass = if (klass == Void.TYPE) Void::class.java else ClassUtils.primitiveToWrapper(klass)
             }
             TypeName.get(klass)
