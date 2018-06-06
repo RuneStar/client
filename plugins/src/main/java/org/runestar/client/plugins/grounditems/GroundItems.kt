@@ -30,10 +30,10 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun start() {
         ctx.settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
 
-        piles.addAll(SceneElements.ItemPile.all())
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
         SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
         SceneElements.clears.subscribe { piles.clear() }
+        piles.addAll(SceneElements.ItemPile.all())
 
         val defaultColor = ctx.settings.color.get()
         val font = ctx.settings.font.get()
@@ -49,23 +49,15 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 if (pile.plane != Game.plane) continue
                 val pt = pile.modelPosition.toScreen()
                 if (pt == null || pt !in g.clip) continue
-                val gis = pile.toList().asReversed()
-                if (gis.isEmpty()) {
-                    itr.remove()
-                    continue
-                }
-                val items = LinkedHashMap<XItemDefinition, Int>()
-                for (gi in gis) {
-                    val def = Client.accessor.getItemDefinition(gi.id)
-                    if (def != null) {
-                        items.merge(def, gi.quantity) { old, new -> old + new }
-                    }
-                }
+                val items = pile.toList().asReversed()
                 val x = pt.x
                 var y = pt.y - ctx.settings.initialOffset
-                for ((def, count) in items) {
+                items.forEach { item ->
+                    val def = Client.accessor.getItemDefinition(item.id)
+                    val count = item.quantity
+
                     if (isBlocked(def, count)) {
-                        continue
+                        return@forEach
                     }
                     val string = itemToString(def, count)
                     val width = g.fontMetrics.stringWidth(string)
@@ -75,7 +67,6 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     g.drawStringShadowed(string, leftX, y)
 
                     y -= height + ctx.settings.spacing
-
                 }
             }
         })

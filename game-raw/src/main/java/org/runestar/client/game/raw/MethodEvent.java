@@ -80,8 +80,7 @@ public interface MethodEvent<I> {
 
         @Override
         public String toString() {
-            return "MethodEvent(" +
-                    "instance=" + instance +
+            return "MethodEvent(instance=" + instance +
                     ", arguments=" + Arrays.toString(arguments) +
                     ", returned=" + returned +
                     ')';
