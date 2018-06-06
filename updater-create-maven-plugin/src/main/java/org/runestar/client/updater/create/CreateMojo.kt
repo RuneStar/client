@@ -3,6 +3,7 @@ package org.runestar.client.updater.create
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.PropertyAccessor
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.maven.model.Resource
@@ -11,15 +12,15 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import org.objectweb.asm.Type
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.mapper.IdClass
-import org.runestar.client.updater.mapper.JarMapper
-import org.runestar.client.updater.mapper.Mapper
-import org.runestar.client.updater.mapper.buildIdHierarchy
+import org.runestar.client.updater.mapper.*
+import org.runestar.client.updater.mapper.extensions.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
+import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.general.downloadGamepack
 import org.runestar.general.updateRevision
 import java.nio.file.Files
@@ -40,6 +41,7 @@ class CreateMojo : AbstractMojo() {
     private val jsonMapper = jacksonObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+            .enable(SerializationFeature.INDENT_OUTPUT)
 
     private val targetDir: Path get() =  Paths.get(project.build.directory)
 
@@ -100,7 +102,51 @@ class CreateMojo : AbstractMojo() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
         JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, updateRevision())
-        jsonMapper.writeValue(namesJson.toFile(), ctx.buildIdHierarchy())
+        val idClasses = if (System.getProperty("runestar.placeholderhooks", "false") == true.toString()) {
+            ctx.buildIdHierarchyAll()
+        } else {
+            ctx.buildIdHierarchy()
+        }
+        jsonMapper.writeValue(namesJson.toFile(), idClasses)
+    }
+
+    private fun Mapper.Context.buildIdHierarchyAll(): List<IdClass> {
+        val identified = buildIdHierarchy().toMutableList()
+        var i = 0
+        val jar = classes.values.first().jar
+        jar.classes.iterator().forEachRemaining { c ->
+            if (classes.containsValue(c)) {
+                c.instanceFields.filter { !fields.containsValue(it) }.forEach { f ->
+                    if (!isTypeDenotable(f.type, classes.values)) return@forEach
+                    val klass = identified.first { it.name == f.klass.name }
+                    identified.remove(klass)
+                    identified.add(klass.copy(fields = klass.fields.plus(IdField("__${f.name}", f.klass.name, f.name, f.access, f.desc))))
+                }
+                c.instanceMethods.filter { !methods.containsValue(it) }.iterator().forEach { m ->
+                    if (!isTypeDenotable(m.returnType, classes.values)) return@forEach
+                    if (m.arguments.any { !isTypeDenotable(it, classes.values) }) return@forEach
+                    val klass = identified.first { it.name == m.klass.name }
+                    identified.remove(klass)
+                    val ps = m.arguments.mapIndexed { i, _ -> "arg$i" }
+                    identified.add(klass.copy(methods = klass.methods.plus(IdMethod("__${m.name}_${i++}", m.klass.name, m.name, m.access, ps, m.desc))))
+                }
+            }
+            c.staticFields.filter { !fields.containsValue(it) }.forEach { f ->
+                if (!isTypeDenotable(f.type, classes.values)) return@forEach
+                val klass = identified.first { it.name == "client" }
+                identified.remove(klass)
+                identified.add(klass.copy(fields = klass.fields.plus(IdField("__${f.klass.name}_${f.name}", f.klass.name, f.name, f.access, f.desc))))
+            }
+        }
+        return identified
+    }
+
+    private fun isTypeDenotable(t: Type, classes: Collection<Class2>): Boolean {
+        return when {
+            t.isPrimitive -> true
+            t.sort == Type.ARRAY -> isTypeDenotable(t.elementType, classes)
+            else -> classes.any { it.name == t.internalName } || try { Class.forName(t.className); true } catch (e: Exception) { false }
+        }
     }
 
     private fun mergeHooks() {
