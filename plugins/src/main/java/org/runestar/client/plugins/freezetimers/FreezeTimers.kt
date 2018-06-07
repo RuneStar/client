@@ -1,5 +1,7 @@
 package org.runestar.client.plugins.freezetimers
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.Actor
 import org.runestar.client.game.api.HeadIconPrayer
 import org.runestar.client.game.api.Player
@@ -9,13 +11,10 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
-@Suppress("UNUSED_PARAMETER")
 class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
@@ -29,11 +28,11 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
     override fun start() {
-        add(Game.ticks.subscribe(::onTick))
+        add(Game.ticks.subscribe { onTick() })
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }
 
-    private fun onTick(u: Unit) {
+    private fun onTick() {
         tickFreezes(npcFreezes)
         tickFreezes(playerFreezes)
 

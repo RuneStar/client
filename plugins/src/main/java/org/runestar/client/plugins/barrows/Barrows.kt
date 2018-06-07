@@ -1,16 +1,15 @@
 package org.runestar.client.plugins.barrows
 
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Region
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.RenderingHints
 
-@Suppress("UNUSED_PARAMETER")
 class Barrows : DisposablePlugin<Barrows.Settings>() {
 
     private companion object {
@@ -23,9 +22,9 @@ class Barrows : DisposablePlugin<Barrows.Settings>() {
     override val defaultSettings = Settings()
 
     override fun start() {
-        add(LiveCanvas.repaints.filter(::inBarrowsAboveGround).subscribe(::onRepaintAboveGround))
+        add(LiveCanvas.repaints.filter { inBarrowsAboveGround() }.subscribe(::onRepaintAboveGround))
         if (ctx.settings.drawMinimap) {
-            add(Game.ticks.filter(::shouldDrawMinimap).subscribe { LiveMinimap.isDrawn = true })
+            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { LiveMinimap.isDrawn = true })
         }
     }
 
@@ -40,11 +39,11 @@ class Barrows : DisposablePlugin<Barrows.Settings>() {
         return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(REGION_ID_UNDER_GROUND)
     }
 
-    private fun inBarrowsAboveGround(o: Any): Boolean {
+    private fun inBarrowsAboveGround(): Boolean {
         return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(REGION_ID_ABOVE_GROUND)
     }
 
-    private fun shouldDrawMinimap(o: Any): Boolean {
+    private fun shouldDrawMinimap(): Boolean {
         return !LiveMinimap.isDrawn && inBarrowsUnderground()
     }
 
