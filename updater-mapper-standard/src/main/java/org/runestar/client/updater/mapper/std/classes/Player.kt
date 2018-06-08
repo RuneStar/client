@@ -144,4 +144,23 @@ class Player : IdentityMapper.Class() {
                 .prevWithin(4) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Player>() }
                 .prevWithin(6) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Player>() }
     }
+
+    @SinceVersion(162)
+    @DependsOn(TriBool::class)
+    class isFriend : OrderMapper.InConstructor.Field(Player::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
+    }
+
+    @SinceVersion(162)
+    @DependsOn(TriBool::class)
+    class isInClanChat : OrderMapper.InConstructor.Field(Player::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
+    }
+
+    @MethodParameters("buffer")
+    @DependsOn(Buffer::class)
+    class read : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<Buffer>()) }
+    }
 }

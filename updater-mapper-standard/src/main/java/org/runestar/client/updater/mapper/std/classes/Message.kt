@@ -48,6 +48,18 @@ class Message : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(162)
+    @DependsOn(TriBool::class)
+    class isFromFriend : OrderMapper.InConstructor.Field(Message::class, 0, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
+    }
+
+    @SinceVersion(162)
+    @DependsOn(TriBool::class)
+    class isFromIgnored : OrderMapper.InConstructor.Field(Message::class, 1, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
+    }
+
     @MethodParameters("type", "sender", "prefix", "text")
     class set : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

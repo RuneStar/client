@@ -129,3 +129,9 @@ abstract class WorldMapLabelSizeConstant(val ldcString: String) : UniqueMapper.I
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ldcString }
             .nextWithin(7) { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapLabelSize>() }
 }
+
+@SinceVersion(162)
+@DependsOn(TriBool::class)
+abstract class TriBoolConst(index: Int) : OrderMapper.InClassInitializer.Field(TriBool::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<TriBool>() }
+}

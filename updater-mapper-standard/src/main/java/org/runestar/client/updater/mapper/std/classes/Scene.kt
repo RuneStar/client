@@ -214,4 +214,13 @@ class Scene : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<FloorDecoration.tag>().id } }
                 .and { it.instructions.none { it.opcode == LAND } }
     }
+
+    @MethodParameters("x", "y")
+    @DependsOn(Tile.linkedBelowTile::class)
+    class setLinkBelow : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.linkedBelowTile>().id } }
+    }
 }

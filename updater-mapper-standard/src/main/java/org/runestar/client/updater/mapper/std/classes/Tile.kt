@@ -8,10 +8,7 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.SinceVersion
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.baseType
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -72,5 +69,17 @@ class Tile : IdentityMapper.Class() {
     @DependsOn(Scene.newGroundItemPile::class)
     class gameObjectsCount : UniqueMapper.InMethod.Field(Scene.newGroundItemPile::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    class gameObjectEdgeMasks : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == IntArray::class.type }
+    }
+
+    class gameObjectsEdgeMask : OrderMapper.InMethod.Field(Scene.removeGameObject::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    class linkedBelowTile : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Tile>() }
     }
 }

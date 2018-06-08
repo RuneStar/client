@@ -1,17 +1,17 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
+import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.objectweb.asm.Type.INT_TYPE
-import org.runestar.client.updater.mapper.*
 
 @DependsOn(DualNode::class)
 class SpotAnimationDefinition : IdentityMapper.Class() {
@@ -21,11 +21,13 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == INT_TYPE } >= 8 }
             .and { it.instanceFields.all { it.type == INT_TYPE || it.type == ShortArray::class.type } }
 
+    @MethodParameters("buffer", "n")
     class readNext : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 40 } }
     }
 
+    @MethodParameters("buffer")
     @DependsOn(readNext::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

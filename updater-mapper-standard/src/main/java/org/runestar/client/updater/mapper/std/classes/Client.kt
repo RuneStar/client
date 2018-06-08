@@ -3133,4 +3133,54 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 30 }
                 .nextWithin(10) { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<Client>() }
     }
+
+    class TriBool_unknown : TriBoolConst(0)
+    class TriBool_true : TriBoolConst(1)
+    class TriBool_false : TriBoolConst(2)
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlays : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == BYTE_TYPE.withDimensions(3) }
+    }
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlayHues : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlaySaturations : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlayLightnesses : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlayHueMultipliers : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(getUnderlayDefinition::class)
+    class underlayCounts : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<getUnderlayDefinition>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
