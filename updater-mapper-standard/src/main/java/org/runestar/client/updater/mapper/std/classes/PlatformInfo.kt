@@ -1,25 +1,26 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.BIPUSH
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.id
 import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.std.PlatformInfoString
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.std.PlatformInfoString
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Node::class)
 class PlatformInfo : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
             .and { it.interfaces.isEmpty() }
+            .and { it.constructors.isNotEmpty() }
             .and { it.constructors.first().instructions.any { it.isMethod && it.methodId == Runtime::maxMemory.id } }
 
     // mac, windows, linux, other
