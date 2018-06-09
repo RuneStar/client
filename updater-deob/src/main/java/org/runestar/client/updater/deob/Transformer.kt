@@ -41,6 +41,7 @@ interface Transformer {
                 UnusedMethodRemover,
                 FrameRemover,
                 UnnecessaryGotoRemover,
+                SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 MethodOrigClassFinder,
                 DebugRemover,
@@ -59,6 +60,7 @@ interface Transformer {
                 UnusedMethodRemover,
                 FrameRemover,
                 UnnecessaryGotoRemover,
+                SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes
@@ -78,6 +80,7 @@ interface Transformer {
                 UnusedMethodReplacer,
                 FrameRemover,
 //                UnnecessaryGotoRemover,
+                SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes
