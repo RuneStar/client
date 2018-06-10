@@ -75,6 +75,7 @@ class Tile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == IntArray::class.type }
     }
 
+    @DependsOn(Scene.removeGameObject::class)
     class gameObjectsEdgeMask : OrderMapper.InMethod.Field(Scene.removeGameObject::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
