@@ -7,7 +7,8 @@ data class ClassHook(
         val access : Int,
         val interfaces: List<String>,
         val fields: List<FieldHook>,
-        val methods: List<MethodHook>
+        val methods: List<MethodHook>,
+        val constructors: List<ConstructorHook>
 )
 
 data class FieldHook(
@@ -50,3 +51,8 @@ data class MethodHook(
         else -> finalArgument
     }
 }
+
+data class ConstructorHook(
+        val access: Int,
+        val descriptor: String
+)

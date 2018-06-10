@@ -17,3 +17,7 @@ internal fun fieldModifiersToString(modifiers: Int): String {
 internal fun methodModifiersToString(modifiers: Int): String {
     return Modifier.toString(Modifier.methodModifiers() and modifiers) + " method"
 }
+
+internal fun constructorModifiers(modifiers: Int): String {
+    return Modifier.toString(Modifier.constructorModifiers() and modifiers) + " constructor"
+}

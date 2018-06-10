@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.common.collect.Multimap
+import com.google.common.collect.MultimapBuilder
 import org.apache.maven.model.Resource
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -14,9 +16,11 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.objectweb.asm.Type
 import org.runestar.client.updater.common.ClassHook
+import org.runestar.client.updater.common.ConstructorHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
+import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.extensions.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
@@ -149,10 +153,24 @@ class CreateMojo : AbstractMojo() {
         }
     }
 
+    private fun findConstructors(): Multimap<String, ConstructorHook> {
+        val classNodes = readJar(deobJar)
+        val constructors = MultimapBuilder.hashKeys().arrayListValues().build<String, ConstructorHook>()
+        classNodes.forEach { c ->
+            c.methods.forEach { m ->
+                if (m.name == "<init>") {
+                    constructors.put(c.name, ConstructorHook(m.access, m.desc))
+                }
+            }
+        }
+        return constructors
+    }
+
     private fun mergeHooks() {
         val ops = jsonMapper.readValue<Map<String, Int>>(opJson.toFile())
         val mults = jsonMapper.readValue<Map<String, Long>>(multJson.toFile())
         val names = jsonMapper.readValue<List<IdClass>>(namesJson.toFile())
+        val constructors = findConstructors()
         val hooks = names.map { c ->
             val fields = c.fields.map { f ->
                 FieldHook(f.field, f.owner, f.name, f.access, f.descriptor, mults["${f.owner}.${f.name}"])
@@ -160,7 +178,8 @@ class CreateMojo : AbstractMojo() {
             val methods = c.methods.map { m ->
                 MethodHook(m.method, m.owner, m.name, m.access, m.parameters, m.descriptor, ops["${m.owner}.${m.name}${m.descriptor}"])
             }
-            ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
+            val cons = constructors[c.name].toList()
+            ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods, cons)
         }
         jsonMapper.writeValue(hooksJson.toFile(), hooks)
     }

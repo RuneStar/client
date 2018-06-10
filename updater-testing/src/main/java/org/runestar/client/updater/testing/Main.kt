@@ -57,7 +57,7 @@ fun mergeHooks(revision: Int) {
         val methods = c.methods.map { m ->
             MethodHook(m.method, m.owner, m.name, m.access, m.parameters, m.descriptor, ops["${m.owner}.${m.name}${m.descriptor}"])
         }
-        ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods)
+        ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods, emptyList())
     }
     jsonMapper.writeValue(hooksJson(revision).toFile(), hooks)
 }

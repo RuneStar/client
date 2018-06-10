@@ -28,6 +28,7 @@ class AccessorsMojo : AbstractMojo() {
         const val INDENT = "\t"
         const val SETTER_PARAM_NAME = "value"
         val VOID_OBJECT_TYPENAME: TypeName = TypeName.get(Void::class.java)
+        const val CONSTRUCTOR_ARG_PREFIX = "arg"
     }
 
     @Parameter(property = "outputPackage", required = true)
@@ -104,6 +105,21 @@ class AccessorsMojo : AbstractMojo() {
                             .addJavadoc(seeMethodTag(c, m))
                             .build()
                     )
+                }
+            }
+            if (c.name == "client") {
+                hooks.filter { !RModifier.isAbstract(it.access) }.forEach { hc ->
+                    hc.constructors.forEach { hcon ->
+                        val name = hc.`class`
+                        typeBuilder.addMethod(MethodSpec.methodBuilder("_${name}_")
+                                .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
+                                .addJavadoc(constructorModifiers(hcon.access))
+                                .returns(poetType(Type.getObjectType(hc.name).descriptor))
+                                .addParameters(Type.getArgumentTypes(hcon.descriptor).mapIndexed { i, t ->
+                                    ParameterSpec.builder(poetType(t.descriptor), "$CONSTRUCTOR_ARG_PREFIX$i").build() })
+                                .build()
+                        )
+                    }
                 }
             }
             JavaFile.builder(outputPackage, typeBuilder.build())
