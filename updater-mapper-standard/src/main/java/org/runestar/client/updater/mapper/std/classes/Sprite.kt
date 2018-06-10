@@ -1,9 +1,12 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Opcodes.ISUB
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -11,10 +14,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Rasterizer2D::class, Client.worldToMinimap::class)
 class Sprite : IdentityMapper.Class() {
@@ -55,14 +54,16 @@ class Sprite : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    // todo
     @MethodParameters()
     class copy : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
                 .and { it.instructions.any { it.opcode == ISUB } }
     }
 
+    // todo
     @MethodParameters()
-    class compressedCopy : IdentityMapper.InstanceMethod() {
+    class copyNormalized : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
                 .and { it.instructions.none { it.opcode == ISUB } }
     }
