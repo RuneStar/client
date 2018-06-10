@@ -75,9 +75,9 @@ interface Transformer {
          */
         val CLEAN = Transformer.Composite(
                 FieldResolver,
-                UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
+                UnusedTryCatchRemover,
                 RemoveErrorConstructors,
                 UnusedMethodFinder,
                 UnusedMethodReplacer,
