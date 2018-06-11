@@ -2940,6 +2940,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<World>(), type<World>(), INT_TYPE, BOOLEAN_TYPE) }
     }
 
+    @MethodParameters("actor", "a", "b", "c", "d", "e")
     @DependsOn(Actor::class)
     class drawActor2d : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
