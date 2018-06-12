@@ -3,6 +3,7 @@ package org.runestar.client.plugins.chatcolors
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.RgbForm
 import org.runestar.client.game.api.MessageType
+import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XChatBox
 import org.runestar.client.game.raw.access.XMessage
@@ -68,14 +69,9 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
         }
     }
 
-    private fun getColorTag(c: Color): String {
-        val rgb = c.rgb and 0xFFFFFF
-        return "<col=${rgb.toString(16)}>"
-    }
-
     private fun colorString(s: String?, color: Color): String? {
         if (s == null) return null
-        return getColorTag(color) + s
+        return TextEffect.Simple(TextEffect.Type.COLOR, color).openTag + s
     }
 
     private fun decolorString(s: String?): String? {

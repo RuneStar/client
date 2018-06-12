@@ -2,6 +2,7 @@ package org.runestar.client.plugins.emojis
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Sprite
+import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.Client
@@ -90,7 +91,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
                 if (shortCodeIndex == -1) {
                     sb.append(s.substring(colon1, colon2))
                 } else {
-                    sb.append("<img=${shortCodeIndex + spritesStartIndex}>")
+                    sb.append(TextSymbol.Image(shortCodeIndex + spritesStartIndex).tag)
                     i++
                 }
             } else {

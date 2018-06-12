@@ -7,7 +7,10 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -29,6 +32,7 @@ class AbstractFont : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
+    @MethodParameters("s")
     class decodeTag : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size in 1..2 }
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "/shad" } }
