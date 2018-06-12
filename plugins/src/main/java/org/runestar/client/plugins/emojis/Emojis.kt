@@ -6,7 +6,7 @@ import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.access.XChatBox
+import org.runestar.client.game.raw.access.XChatChannel
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.image.BufferedImage
 import java.util.*
@@ -63,7 +63,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
         if (spritesStartIndex == -1) {
             addSprites()
         }
-        add(XChatBox.addMessage.exit.map { it.returned }.subscribe { msg ->
+        add(XChatChannel.addMessage.exit.map { it.returned }.subscribe { msg ->
             val text = msg.text ?: return@subscribe
             msg.text = replaceEmojis(text)
         })

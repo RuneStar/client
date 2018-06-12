@@ -1510,11 +1510,11 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(160)
-    @DependsOn(AbstractChannel::class, NetCache_pendingPriorityWritesCount::class)
+    @DependsOn(AbstractSocket::class, NetCache_pendingPriorityWritesCount::class)
     class NetCache_socket : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<NetCache_pendingPriorityWritesCount>().id }
                 .prevWithin(3) { it.opcode == ISUB }
-                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<AbstractChannel>() }
+                .prevWithin(20) { it.opcode == GETSTATIC && it.fieldType == type<AbstractSocket>() }
     }
 
     @DependsOn(NetCache_pendingPriorityWritesCount::class)
@@ -3075,9 +3075,9 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(ChatBox::class)
-    class chatBoxes : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ChatBox>() }
+    @DependsOn(ChatChannel::class)
+    class chatChannels : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ChatChannel>() }
                 .prevIn(4) { it.opcode == GETSTATIC && it.fieldType == Map::class.type }
     }
 

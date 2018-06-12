@@ -5,7 +5,7 @@ import org.runestar.client.api.util.RgbForm
 import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.access.XChatBox
+import org.runestar.client.game.raw.access.XChatChannel
 import org.runestar.client.game.raw.access.XMessage
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -17,7 +17,7 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     override val name = "Chat Colors"
 
     override fun start() {
-        add(XChatBox.addMessage.exit.subscribe { colorMessage(it.returned) })
+        add(XChatChannel.addMessage.exit.subscribe { colorMessage(it.returned) })
         existingMessagesForEach { colorMessage(it) }
     }
 
@@ -27,8 +27,8 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     }
 
     private inline fun existingMessagesForEach(action: (XMessage) -> Unit) {
-        Client.accessor.chatBoxes.values.forEach { chatBox ->
-            chatBox as XChatBox
+        Client.accessor.chatChannels.values.forEach { chatBox ->
+            chatBox as XChatChannel
             chatBox.messages.forEach { msg ->
                 if (msg != null) {
                     action(msg)

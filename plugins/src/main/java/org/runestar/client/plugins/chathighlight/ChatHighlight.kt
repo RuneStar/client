@@ -9,7 +9,7 @@ import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XAbstractFont
-import org.runestar.client.game.raw.access.XChatBox
+import org.runestar.client.game.raw.access.XChatChannel
 import org.runestar.client.game.raw.access.XMessage
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -38,7 +38,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
         add(messageAdditions.filter { it.type in MSG_TYPES }.subscribe { it.text = highlight(it.text) })
     }
 
-    private val messageAdditions: Observable<XMessage> get() = XChatBox.addMessage.exit.map { it.returned }
+    private val messageAdditions: Observable<XMessage> get() = XChatChannel.addMessage.exit.map { it.returned }
 
     private val decodedTags: Observable<String> get() = XAbstractFont.decodeTag.exit.map { it.arguments[0] as String }
 

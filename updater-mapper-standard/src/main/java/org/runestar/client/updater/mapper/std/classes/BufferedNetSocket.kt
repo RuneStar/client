@@ -13,11 +13,11 @@ import org.runestar.client.updater.mapper.tree.Method2
 import java.net.Socket
 
 @SinceVersion(160)
-@DependsOn(AbstractChannel::class)
+@DependsOn(AbstractSocket::class)
 class BufferedNetSocket : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
-            .and { it.superType == type<AbstractChannel>() }
+            .and { it.superType == type<AbstractSocket>() }
 
     class socket : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Socket::class.type }
