@@ -23,9 +23,39 @@ class Emojis : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    private lateinit var shortCodes: List<String>
+    private var shortCodes: List<String> = emptyList()
 
     private var spritesStartIndex = -1
+
+    override fun start() {
+        val ids = readEmojiIds()
+        shortCodes = ids.map { it.shortCode }
+        if (spritesStartIndex == -1) {
+            expandModIcons()
+        }
+        addSprites(ids)
+
+        add(Chat.messageAdditions.startWith(Chat).subscribe { msg ->
+            msg.text = replaceEmojis(msg.text)
+        })
+        add(Game.ticks.subscribe {
+            Players.forEach { p ->
+                val text = p.overheadText ?: return@forEach
+                p.overheadText = replaceEmojis(text)
+            }
+        })
+    }
+
+    override fun stop() {
+        super.stop()
+        Arrays.fill(
+                Client.accessor.abstractFont_modIconSprites,
+                spritesStartIndex,
+                spritesStartIndex + shortCodes.size,
+                null
+        )
+        shortCodes = emptyList()
+    }
 
     private fun readEmojiIds(): List<EmojiId> {
         javaClass.getResource(NAMES_CSV_NAME).openStream().bufferedReader().useLines {
@@ -37,15 +67,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
         return ImageIO.read(javaClass.getResource(SPRITE_SHEET_NAME))
     }
 
-    private fun addSprites() {
-        val ids = readEmojiIds()
-        shortCodes = ids.map { it.shortCode }
-
-        val originalArray = Client.accessor.abstractFont_modIconSprites
-        spritesStartIndex = originalArray.size
-        val spriteArray = Arrays.copyOf(originalArray, originalArray.size + ids.size)
-        Client.accessor.abstractFont_modIconSprites = spriteArray
-
+    private fun addSprites(ids: List<EmojiId>) {
         val sheet = readSpriteSheet()
         ids.forEachIndexed { i, id ->
             val subImage = sheet.getSubimage(
@@ -55,23 +77,15 @@ class Emojis : DisposablePlugin<PluginSettings>() {
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
             sprite.height = sprite.height - 4 // tricks the game into drawing the sprite further down
-            spriteArray[i + spritesStartIndex] = sprite
+            Client.accessor.abstractFont_modIconSprites[i + spritesStartIndex] = sprite
         }
     }
 
-    override fun start() {
-        if (spritesStartIndex == -1) {
-            addSprites()
-        }
-        add(Chat.messageAdditions.startWith(Chat).subscribe { msg ->
-            msg.text = replaceEmojis(msg.text)
-        })
-        add(Game.ticks.subscribe {
-            Players.forEach { p ->
-                val text = p.overheadText ?: return@forEach
-                p.overheadText = replaceEmojis(text)
-            }
-        })
+    private fun expandModIcons() {
+        val originalArray = Client.accessor.abstractFont_modIconSprites
+        spritesStartIndex = originalArray.size
+        val spriteArray = Arrays.copyOf(originalArray, originalArray.size + shortCodes.size)
+        Client.accessor.abstractFont_modIconSprites = spriteArray
     }
 
     private fun replaceEmojis(s: String): String {
