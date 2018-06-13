@@ -1,9 +1,11 @@
 package org.runestar.client.plugins.chathighlight
 
 import io.reactivex.Observable
+import org.runestar.client.api.Application
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.RegexForm
 import org.runestar.client.api.util.RgbForm
+import org.runestar.client.game.api.Message
 import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.TextSymbol
@@ -12,6 +14,7 @@ import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XAbstractFont
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
+import java.awt.TrayIcon
 import java.util.function.Supplier
 
 class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
@@ -34,19 +37,26 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
 
     override fun start() {
         decodedTags.filter { it == ResetSymbol.id }.subscribe { ResetSymbol.run() }
-        add(Chat.messageAdditions.filter { it.type in MSG_TYPES }.subscribe { it.text = highlight(it.text) })
+        add(Chat.messageAdditions.filter { it.type in MSG_TYPES }.subscribe { highlight(it) })
     }
 
     private val decodedTags: Observable<String> get() = XAbstractFont.decodeTag.exit.map { it.arguments[0] as String }
 
-    private fun highlight(s: String): String {
-        var str = s
+    private fun highlight(msg: Message) {
+        var txt = msg.text
         ctx.settings.highlights.forEach { highlight ->
-            str = str.replace(highlight.regex.get()) { matchResult ->
+            txt = txt.replace(highlight.regex.get()) { matchResult ->
+                if (highlight.trayNotify) {
+                    Application.trayIcon.displayMessage(
+                            msg.sender,
+                            msg.text,
+                            TrayIcon.MessageType.NONE
+                    )
+                }
                 ResetSymbol.tag + highlight.get().apply(matchResult.value)
             }
         }
-        return str
+        msg.text = txt
     }
 
     class Settings(
@@ -56,14 +66,16 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
                             mapOf(
                                     TextEffect.Type.UNDERLINE to RgbForm(Color.MAGENTA),
                                     TextEffect.Type.COLOR to RgbForm(Color.MAGENTA)
-                            )
+                            ),
+                            false
                     )
             )
     ) : PluginSettings()
 
     data class Highlight(
             val regex: RegexForm,
-            val effects: Map<TextEffect.Type, RgbForm>
+            val effects: Map<TextEffect.Type, RgbForm>,
+            val trayNotify: Boolean
     ) : Supplier<TextEffect> {
 
         @Transient
