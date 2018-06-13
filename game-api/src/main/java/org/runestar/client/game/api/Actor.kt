@@ -20,7 +20,9 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
 
     override val orientation get() = Angle.of(accessor.orientation)
 
-    val overheadText: String? get() = accessor.overheadText
+    var overheadText: String?
+        get() = accessor.overheadText
+        set(value) { accessor.overheadText = value }
 
     /**
      * Health percent between `0.0` and `1.0` of limited precision. `null` if the health-bar is not visible.

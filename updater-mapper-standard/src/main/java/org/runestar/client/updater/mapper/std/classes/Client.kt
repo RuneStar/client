@@ -1059,7 +1059,7 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(IterableNodeHashTable::class)
-    class messages : IdentityMapper.StaticField() {
+    class Messages_hashTable : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<IterableNodeHashTable>() }
     }
 
@@ -3076,13 +3076,13 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(ChatChannel::class)
-    class chatChannels : AllUniqueMapper.Field() {
+    class Messages_channels : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ChatChannel>() }
                 .prevIn(4) { it.opcode == GETSTATIC && it.fieldType == Map::class.type }
     }
 
     @DependsOn(addMessage::class, IterableDualNodeQueue::class)
-    class messagesQueue : UniqueMapper.InMethod.Field(addMessage::class) {
+    class Messages_queue : UniqueMapper.InMethod.Field(addMessage::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<IterableDualNodeQueue>() }
     }
 
@@ -3183,5 +3183,11 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
                 .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
                 .nextWithin(12) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Messages::class)
+    class Messages_count : OrderMapper.InClassInitializer.Field(Messages::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
+                .next { it.opcode == PUTSTATIC }
     }
 }

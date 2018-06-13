@@ -7,10 +7,9 @@ import org.runestar.client.api.util.RgbForm
 import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.TextSymbol
+import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XAbstractFont
-import org.runestar.client.game.raw.access.XChatChannel
-import org.runestar.client.game.raw.access.XMessage
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.util.function.Supplier
@@ -35,10 +34,8 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
 
     override fun start() {
         decodedTags.filter { it == ResetSymbol.id }.subscribe { ResetSymbol.run() }
-        add(messageAdditions.filter { it.type in MSG_TYPES }.subscribe { it.text = highlight(it.text) })
+        add(Chat.messageAdditions.filter { it.type in MSG_TYPES }.subscribe { it.text = highlight(it.text) })
     }
-
-    private val messageAdditions: Observable<XMessage> get() = XChatChannel.addMessage.exit.map { it.returned }
 
     private val decodedTags: Observable<String> get() = XAbstractFont.decodeTag.exit.map { it.arguments[0] as String }
 
@@ -46,7 +43,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
         var str = s
         ctx.settings.highlights.forEach { highlight ->
             str = str.replace(highlight.regex.get()) { matchResult ->
-                ResetSymbol.tag + highlight.get().wrap(matchResult.value)
+                ResetSymbol.tag + highlight.get().apply(matchResult.value)
             }
         }
         return str

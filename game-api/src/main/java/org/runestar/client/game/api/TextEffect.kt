@@ -1,14 +1,15 @@
 package org.runestar.client.game.api
 
 import java.awt.Color
+import java.util.function.UnaryOperator
 
-interface TextEffect {
+interface TextEffect : UnaryOperator<String> {
 
     val openTag: String
 
     val closeTag: String
 
-    fun wrap(s: String): String = "$openTag$s$closeTag"
+    override fun apply(s: String): String = "$openTag$s$closeTag"
 
     data class Simple(
         val type: Type,
