@@ -349,6 +349,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @MethodParameters("type", "sender", "text", "prefix")
     class addMessage : StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }

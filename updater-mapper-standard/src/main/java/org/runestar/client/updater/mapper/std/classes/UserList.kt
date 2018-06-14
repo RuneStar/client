@@ -38,6 +38,11 @@ class UserList : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<User>().withDimensions(1) }
     }
 
+    @SinceVersion(164)
+    class comparator : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == Comparator::class.type }
+    }
+
     @MethodParameters()
     class clear : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == HashMap<*, *>::clear.id } }
@@ -70,7 +75,7 @@ class UserList : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
     }
 
-    @MethodParameters("buddy")
+    @MethodParameters("user")
     class mapRemove : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
@@ -78,7 +83,7 @@ class UserList : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodName == "remove" } }
     }
 
-    @MethodParameters("buddy")
+    @MethodParameters("user")
     class mapPut : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
@@ -109,14 +114,14 @@ class UserList : IdentityMapper.Class() {
                 .and { it.instructions.none { it.opcode == IINC } }
     }
 
-    @MethodParameters("buddy", "username", "previousUsername")
+    @MethodParameters("user", "username", "previousUsername")
     class changeName : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 3..4 }
                 .and { it.arguments.startsWith(type<User>(), type<Username>(), type<Username>()) }
     }
 
-    @MethodParameters("buddy")
+    @MethodParameters("user")
     class indexOf : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size in 1..2 }
@@ -151,7 +156,7 @@ class UserList : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<getByPreviousUsername>().id } }
     }
 
-    @MethodParameters("buddy")
+    @MethodParameters("user")
     class arrayAddLast : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
@@ -181,7 +186,7 @@ class UserList : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodName == "arraycopy" } }
     }
 
-    @MethodParameters("buddy")
+    @MethodParameters("user")
     @DependsOn(arrayRemove::class)
     class remove : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -195,5 +200,20 @@ class UserList : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<remove>().id } }
+    }
+
+    @SinceVersion(164)
+    @MethodParameters()
+    @DependsOn(comparator::class)
+    class removeComparator : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { !it.arguments.startsWith(Comparator::class.type) }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<comparator>().id } }
+    }
+
+    @SinceVersion(164)
+    @MethodParameters("c")
+    @DependsOn(comparator::class)
+    class addComparator : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(Comparator::class.type) }
     }
 }

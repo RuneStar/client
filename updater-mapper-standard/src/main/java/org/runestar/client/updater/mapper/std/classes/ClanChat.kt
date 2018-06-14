@@ -1,9 +1,11 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
@@ -41,5 +43,12 @@ class ClanChat : IdentityMapper.Class() {
 
     class owner : OrderMapper.InConstructor.Field(ClanChat::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+    }
+
+    @MethodParameters("buffer")
+    @DependsOn(Buffer::class)
+    class readUpdate : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.instructions.any { it.opcode == IINC } }
     }
 }
