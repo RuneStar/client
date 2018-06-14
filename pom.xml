@@ -56,10 +56,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
 
-        <kotlin.version>1.2.41</kotlin.version>
+        <kotlin.version>1.2.50</kotlin.version>
         <jackson.version>2.9.5</jackson.version>
         <logback.version>1.2.3</logback.version>
         <asm.version>6.2</asm.version>
@@ -276,6 +274,9 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <jvmTarget>1.8</jvmTarget>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
