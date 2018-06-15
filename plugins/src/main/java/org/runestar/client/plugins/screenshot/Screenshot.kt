@@ -46,7 +46,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 .filter { it.keyCode == ctx.settings.keyCode && it.id == KeyEvent.KEY_RELEASED }
                 .delay { XRasterProvider.drawFull0.exit }
                 .map { copyCanvas() }
-                .subscribe { Schedulers.io().scheduleDirect { saveImage(it) } })
+                .observeOn(Schedulers.io())
+                .subscribe { saveImage(it) })
 
         Application.frame.topBar.add(button)
     }
@@ -109,7 +110,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         override fun actionPerformed(e: ActionEvent) {
             XRasterProvider.drawFull0.exit.firstOrError()
                     .map { copyCanvas() }
-                    .subscribeBy { Schedulers.io().scheduleDirect { saveImage(it) } }
+                    .observeOn(Schedulers.io())
+                    .subscribeBy { saveImage(it) }
         }
     }
 }
