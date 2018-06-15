@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.chatcolors
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.RgbForm
+import org.runestar.client.api.forms.RgbForm
 import org.runestar.client.game.api.Message
 import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect

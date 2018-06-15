@@ -1,4 +1,4 @@
-package org.runestar.client.api.util
+package org.runestar.client.api.forms
 
 import java.util.function.Supplier
 

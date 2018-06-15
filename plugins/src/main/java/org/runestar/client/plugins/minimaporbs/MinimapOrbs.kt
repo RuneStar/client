@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.minimaporbs
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.RgbaForm
+import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId

@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.minimapdots
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.RgbForm
+import org.runestar.client.api.forms.RgbForm
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XSprite
 import org.runestar.client.plugins.spi.PluginSettings

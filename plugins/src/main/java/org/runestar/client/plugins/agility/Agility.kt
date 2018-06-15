@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.agility
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.RgbaForm
+import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas

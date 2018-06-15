@@ -1,4 +1,4 @@
-package org.runestar.client.api.util
+package org.runestar.client.api.forms
 
 import org.kxtra.swing.font.Font
 import java.awt.Font
@@ -19,6 +19,7 @@ data class FontForm(
         BOLDITALIC(Font.BOLD or Font.ITALIC);
 
         companion object {
+
             @JvmField val VALUES = values().asList()
 
             fun of(style: Int): Style = VALUES.first { it.asInt == style }
