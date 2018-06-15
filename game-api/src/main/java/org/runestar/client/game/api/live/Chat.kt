@@ -20,5 +20,7 @@ object Chat : Iterable<Message> {
 
     val publicMode get() = PublicChatMode.of(accessor.publicChatMode)
 
-    val typedText: String? get() = Game.varcs.getString(VarcStringId.TYPED_TEXT)
+    var typedText: String?
+        get() = Game.varcs.getString(VarcStringId.TYPED_TEXT)
+        set(value) { Game.varcs.setString(VarcStringId.TYPED_TEXT, value) }
 }
