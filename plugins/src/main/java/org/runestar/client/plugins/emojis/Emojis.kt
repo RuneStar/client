@@ -9,7 +9,6 @@ import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.Client
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.image.BufferedImage
-import java.util.*
 import javax.imageio.ImageIO
 
 class Emojis : DisposablePlugin<PluginSettings>() {
@@ -48,11 +47,10 @@ class Emojis : DisposablePlugin<PluginSettings>() {
 
     override fun stop() {
         super.stop()
-        Arrays.fill(
-                Client.accessor.abstractFont_modIconSprites,
+        Client.accessor.abstractFont_modIconSprites.fill(
+                null,
                 spritesStartIndex,
-                spritesStartIndex + shortCodes.size,
-                null
+                spritesStartIndex + shortCodes.size
         )
         shortCodes = emptyList()
     }
@@ -84,8 +82,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
     private fun expandModIcons() {
         val originalArray = Client.accessor.abstractFont_modIconSprites
         spritesStartIndex = originalArray.size
-        val spriteArray = Arrays.copyOf(originalArray, originalArray.size + shortCodes.size)
-        Client.accessor.abstractFont_modIconSprites = spriteArray
+        Client.accessor.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + shortCodes.size)
     }
 
     private fun replaceEmojis(s: String): String {
