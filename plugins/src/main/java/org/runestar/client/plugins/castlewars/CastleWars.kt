@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.castlewars
 
-import org.runestar.cache.generated.NpcId
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XNpcDefinition
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
 
 class CastleWars : DisposablePlugin<CastleWars.Settings>() {
 

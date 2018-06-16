@@ -42,10 +42,6 @@
             </snapshots>
         </repository>
         <repository>
-            <id>repo.runestar.org</id>
-            <url>http://repo.runestar.org</url>
-        </repository>
-        <repository>
             <id>sonatype.snapshots</id>
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>
             <releases>
@@ -227,11 +223,6 @@
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
                 <version>1.8.12</version>
-            </dependency>
-            <dependency>
-                <groupId>org.runestar.cache</groupId>
-                <artifactId>cache-generated</artifactId>
-                <version>0.1.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.weblookandfeel</groupId>

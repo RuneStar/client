@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.implings
 
 import com.google.common.collect.ImmutableSet
-import org.runestar.cache.generated.NpcId
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Npc
+import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.Region
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings

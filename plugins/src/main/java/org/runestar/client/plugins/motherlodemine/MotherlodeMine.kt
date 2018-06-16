@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.motherlodemine
 
 import com.google.common.collect.ImmutableSet
-import org.runestar.cache.generated.ObjectId
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.ObjectId
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.*
