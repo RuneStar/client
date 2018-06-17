@@ -36,16 +36,14 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
         val username = msg.senderUsername ?: return
         val cc = Game.clanChat ?: return
         val clanMate = cc[username] ?: return
-        val rank = clanMate.rank.id
-        if (rank < 0) return
-        msg.prefix += ' ' + TextSymbol.Image(rank + spritesStartIndex).tag
+        val rank = clanMate.rank ?: return
+        msg.prefix += ' ' + TextSymbol.Image(rank.id + spritesStartIndex).tag
     }
 
     private fun addSprites() {
         val sheet = readSpriteSheet()
         ClanRank.VALUES.forEach { rank ->
             val index = rank.id
-            if (index < 0) return@forEach
             val subImage = sheet.getSubimage(
                     index * SPRITE_SIZE,
                     0,
@@ -63,6 +61,6 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
     private fun expandModIcons() {
         val originalArray = Client.accessor.abstractFont_modIconSprites
         spritesStartIndex = originalArray.size
-        Client.accessor.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.VALUES.size - 1)
+        Client.accessor.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.VALUES.size)
     }
 }
