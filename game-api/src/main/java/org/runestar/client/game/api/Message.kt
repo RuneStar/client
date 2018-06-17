@@ -8,6 +8,8 @@ class Message(val accessor: XMessage) {
         get() = accessor.sender
         set(value) { accessor.sender = value }
 
+    val senderUsername: Username? get() = accessor.senderUsername?.let { Username(it) }
+
     var prefix: String?
         get() = accessor.prefix
         set(value) { accessor.prefix = value }
