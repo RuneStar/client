@@ -1,6 +1,7 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.WidgetChain
+import org.runestar.client.game.api.live.WidgetGroupParentage
+import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.access.XWidget
 
 class WidgetGroup(
@@ -9,8 +10,8 @@ class WidgetGroup(
 ) : AbstractList<Widget.Parent>(), RandomAccess {
 
     val parent: Widget.Parent? get() {
-        val entry = WidgetChain.entries.firstOrNull { it.value == id } ?: return null
-        return entry.key
+        val entry = WidgetGroupParentage.entries.firstOrNull { it.value == id } ?: return null
+        return Widgets[entry.key]
     }
 
     val roots: Sequence<Widget.Parent> get() = asSequence().filter { it.predecessor == null }

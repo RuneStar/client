@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.WidgetChain
+import org.runestar.client.game.api.live.WidgetGroupParentage
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.Client
@@ -120,7 +120,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
         val successors: Sequence<Widget.Parent> get() = group.asSequence().filter { it.predecessor == this }
 
-        val descendantsGroup: WidgetGroup? get() = WidgetChain[this]?.let { WidgetGroups[it] }
+        val descendantsGroup: WidgetGroup? get() = WidgetGroupParentage[parentId]?.let { WidgetGroups[it] }
 
         val descendants: Sequence<Widget.Parent> get() = descendantsGroup?.roots ?: emptySequence()
 
