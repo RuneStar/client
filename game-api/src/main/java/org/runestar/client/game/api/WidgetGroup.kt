@@ -13,11 +13,11 @@ class WidgetGroup(
         return entry.key
     }
 
-    val roots: Iterable<Widget.Parent> get() = asSequence().filter { it.predecessor == null }.asIterable()
+    val roots: Sequence<Widget.Parent> get() = asSequence().filter { it.predecessor == null }
 
     override val size get() = accessor.size
 
-    val flat: Iterable<Widget> get() = asSequence().flatMap { it.flat.asSequence() }.asIterable()
+    val flat: Sequence<Widget> get() = asSequence().flatMap { it.flat.asSequence() }
 
     override fun get(index: Int): Widget.Parent = accessor[index].let { Widget.Parent(it) }
 }

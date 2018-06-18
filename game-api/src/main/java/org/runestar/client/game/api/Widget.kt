@@ -104,8 +104,8 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             require(accessor.childIndex == -1)
         }
 
-        val flat: Iterable<Widget> get() {
-            return sequenceOf(this).plus(children.asSequence().filterNotNull()).asIterable()
+        val flat: Sequence<Widget> get() {
+            return sequenceOf(this).plus(children.asSequence().filterNotNull())
         }
 
         val children: List<Widget.Child?> get() = object : AbstractList<Widget.Child?>(), RandomAccess {
@@ -118,11 +118,11 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             }
         }
 
-        val successors: Iterable<Widget.Parent> get() = group.asSequence().filter { it.predecessor == this }.asIterable()
+        val successors: Sequence<Widget.Parent> get() = group.asSequence().filter { it.predecessor == this }
 
         val descendantsGroup: WidgetGroup? get() = WidgetChain[this]?.let { WidgetGroups[it] }
 
-        val descendants: Iterable<Widget.Parent> get() = descendantsGroup?.roots ?: emptyList()
+        val descendants: Sequence<Widget.Parent> get() = descendantsGroup?.roots ?: emptySequence()
 
         val predecessor get() = accessor.parentId.takeIf { it != -1 }?.let { Widgets[WidgetParentId(it)] }
 

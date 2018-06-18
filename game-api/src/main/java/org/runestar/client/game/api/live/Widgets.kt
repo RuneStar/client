@@ -6,12 +6,12 @@ import org.runestar.client.game.raw.Client
 
 object Widgets {
 
-    val flat: Iterable<Widget> get() {
-        return WidgetGroups.asSequence().filterNotNull().flatMap { it.flat.asSequence() }.asIterable()
+    val flat: Sequence<Widget> get() {
+        return WidgetGroups.asSequence().filterNotNull().flatMap { it.flat }
     }
 
     operator fun get(id: WidgetParentId): Widget.Parent? =
             Client.accessor.widgets.getOrNull(id.group)?.getOrNull(id.parent)?.let { Widget.Parent(it) }
 
-    val roots: Iterable<Widget.Parent> get() = WidgetGroups.root?.roots ?: emptyList()
+    val roots: Sequence<Widget.Parent> get() = WidgetGroups.root?.roots ?: emptySequence()
 }
