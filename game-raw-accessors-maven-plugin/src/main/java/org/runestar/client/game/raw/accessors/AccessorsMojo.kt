@@ -113,7 +113,7 @@ class AccessorsMojo : AbstractMojo() {
                         val name = hc.`class`
                         typeBuilder.addMethod(MethodSpec.methodBuilder("_${name}_")
                                 .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                                .addJavadoc(constructorModifiers(hcon.access))
+                                .addJavadoc(constructorModifiersToString(hcon.access))
                                 .returns(poetType(Type.getObjectType(hc.name).descriptor))
                                 .addParameters(Type.getArgumentTypes(hcon.descriptor).mapIndexed { i, t ->
                                     ParameterSpec.builder(poetType(t.descriptor), "$CONSTRUCTOR_ARG_PREFIX$i").build() })
