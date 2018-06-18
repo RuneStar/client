@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.minimapdots
 
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.forms.RgbForm
-import org.runestar.client.game.raw.Client
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.raw.access.XSprite
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 
@@ -16,8 +16,8 @@ class MinimapDots : DisposablePlugin<MinimapDots.Settings>() {
     private var originalDots: Array<XSprite>? = null
 
     override fun start() {
-        originalDots = Client.accessor.mapDotSprites.clone()
-        val dots = Client.accessor.mapDotSprites
+        originalDots = CLIENT.mapDotSprites.clone()
+        val dots = CLIENT.mapDotSprites
         if (ctx.settings.items.enabled) {
             recolorDot(dots, 0, ctx.settings.items.color.get())
         }
@@ -41,7 +41,7 @@ class MinimapDots : DisposablePlugin<MinimapDots.Settings>() {
     override fun stop() {
         super.stop()
 
-        Client.accessor.mapDotSprites = originalDots
+        CLIENT.mapDotSprites = originalDots
     }
 
     private fun recolorDot(dots: Array<XSprite>, index: Int, color: Color) {

@@ -2,8 +2,8 @@ package org.runestar.client.plugins.antidrag
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.event.KeyEvent
 
@@ -24,9 +24,9 @@ class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
             dragDurationBuffer = 0
             return
         }
-        if (Client.accessor.itemDragDuration == 1) {
+        if (CLIENT.itemDragDuration == 1) {
             dragDurationBuffer++
-            Client.accessor.itemDragDuration = 0
+            CLIENT.itemDragDuration = 0
         }
     }
 

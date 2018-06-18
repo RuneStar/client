@@ -2,7 +2,7 @@ package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetParentId
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.CLIENT
 
 object Widgets {
 
@@ -11,7 +11,7 @@ object Widgets {
     }
 
     operator fun get(id: WidgetParentId): Widget.Parent? =
-            Client.accessor.widgets.getOrNull(id.group)?.getOrNull(id.parent)?.let { Widget.Parent(it) }
+            CLIENT.widgets.getOrNull(id.group)?.getOrNull(id.parent)?.let { Widget.Parent(it) }
 
     val roots: Sequence<Widget.Parent> get() = WidgetGroups.root?.roots ?: emptySequence()
 }

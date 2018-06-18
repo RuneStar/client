@@ -2,8 +2,8 @@ package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
 import org.runestar.client.game.api.MenuOption
-import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.game.raw.CLIENT
 import java.awt.Point
 import java.awt.Rectangle
 
@@ -11,19 +11,19 @@ object Menu {
 
     const val OPTION_HEIGHT = 15
 
-    val isOpen get() = accessor.isMenuOpen
+    val isOpen get() = CLIENT.isMenuOpen
 
-    val x get() = accessor.menuX
+    val x get() = CLIENT.menuX
 
-    val y get() = accessor.menuY
+    val y get() = CLIENT.menuY
 
-    val width get() = accessor.menuWidth
+    val width get() = CLIENT.menuWidth
 
-    val height get() = accessor.menuHeight
+    val height get() = CLIENT.menuHeight
 
     val shape get() = Rectangle(x, y, width, height)
 
-    val optionsCount get() = accessor.menuOptionsCount
+    val optionsCount get() = CLIENT.menuOptionsCount
 
     val actions: Observable<MenuOption> = XClient.menuAction.exit.map {
         MenuOption.of(
@@ -47,12 +47,12 @@ object Menu {
         val i = optionsCount - index - 1
         require(i >= 0)
         return MenuOption.of(
-                accessor.menuOpcodes[i],
-                accessor.menuArguments0[i],
-                accessor.menuArguments1[i],
-                accessor.menuArguments2[i],
-                checkNotNull(accessor.menuTargetNames[i]),
-                checkNotNull(accessor.menuActions[i])
+                CLIENT.menuOpcodes[i],
+                CLIENT.menuArguments0[i],
+                CLIENT.menuArguments1[i],
+                CLIENT.menuArguments2[i],
+                checkNotNull(CLIENT.menuTargetNames[i]),
+                checkNotNull(CLIENT.menuActions[i])
         )
     }
 

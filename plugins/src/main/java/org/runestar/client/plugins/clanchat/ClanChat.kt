@@ -4,7 +4,7 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.*
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -50,7 +50,7 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
                     SPRITE_SIZE, SPRITE_SIZE
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
-            Client.accessor.abstractFont_modIconSprites[index + spritesStartIndex] = sprite
+            CLIENT.abstractFont_modIconSprites[index + spritesStartIndex] = sprite
         }
     }
 
@@ -59,8 +59,8 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
     }
 
     private fun expandModIcons() {
-        val originalArray = Client.accessor.abstractFont_modIconSprites
+        val originalArray = CLIENT.abstractFont_modIconSprites
         spritesStartIndex = originalArray.size
-        Client.accessor.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.VALUES.size)
+        CLIENT.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.VALUES.size)
     }
 }

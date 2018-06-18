@@ -4,13 +4,13 @@ import io.reactivex.Observable
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.TileObjects
 import org.runestar.client.game.api.utils.addNotNull
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XGameObject
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
+import org.runestar.client.game.raw.CLIENT
 
-object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
+object SceneElements : TileObjects.Many<SceneElement>(CLIENT.scene) {
 
     override fun fromTile(tile: XTile): List<SceneElement> {
         val list = ArrayList<SceneElement>()
@@ -40,7 +40,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
             Game.removals
     )
 
-    object Object : TileObjects.Many<SceneElement>(Client.accessor.scene) {
+    object Object : TileObjects.Many<SceneElement>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement> = Observable.mergeArray(
                 Wall.additions,
@@ -66,7 +66,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
     }
 
-    object Wall : TileObjects.Single<SceneElement.Wall>(Client.accessor.scene) {
+    object Wall : TileObjects.Single<SceneElement.Wall>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement.Wall> = XScene.newWallDecoration.exit.map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
@@ -84,7 +84,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
     }
 
-    object Floor : TileObjects.Single<SceneElement.Floor>(Client.accessor.scene) {
+    object Floor : TileObjects.Single<SceneElement.Floor>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement.Floor> = XScene.newFloorDecoration.exit.map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
@@ -102,7 +102,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
     }
 
-    object Boundary : TileObjects.Single<SceneElement.Boundary>(Client.accessor.scene) {
+    object Boundary : TileObjects.Single<SceneElement.Boundary>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement.Boundary> = XScene.newBoundaryObject.exit.map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
@@ -120,7 +120,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
     }
 
-    object ItemPile : TileObjects.Single<SceneElement.ItemPile>(Client.accessor.scene) {
+    object ItemPile : TileObjects.Single<SceneElement.ItemPile>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement.ItemPile> = XScene.newGroundItemPile.exit.map {
             val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
@@ -140,7 +140,7 @@ object SceneElements : TileObjects.Many<SceneElement>(Client.accessor.scene) {
         }
     }
 
-    object Game : TileObjects.Many<SceneElement.Game>(Client.accessor.scene) {
+    object Game : TileObjects.Many<SceneElement.Game>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement.Game> = XScene.newGameObject.exit
                 .filter { it.returned }

@@ -1,11 +1,11 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Player
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.raw.CLIENT
 
 object Players : AbstractCollection<Player>() {
 
-    val local: Player? get() = accessor.localPlayer?.let { Player(it) }
+    val local: Player? get() = CLIENT.localPlayer?.let { Player(it) }
 
     override fun iterator() = object : AbstractIterator<Player>() {
 
@@ -13,12 +13,12 @@ object Players : AbstractCollection<Player>() {
 
         override fun computeNext() {
             if (i >= size) return done()
-            val x = accessor.players[accessor.players_indices[i++]] ?: return done()
+            val x = CLIENT.players[CLIENT.players_indices[i++]] ?: return done()
             setNext(Player(x))
         }
     }
 
-    override val size get() = accessor.players_count
+    override val size get() = CLIENT.players_count
 
-    internal operator fun get(index: Int): Player? = accessor.players[index]?.let { Player(it) }
+    internal operator fun get(index: Int): Player? = CLIENT.players[index]?.let { Player(it) }
 }

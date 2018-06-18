@@ -3,8 +3,8 @@ package org.runestar.client.plugins.castlewars
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.live.Npcs
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XNpcDefinition
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 
 class CastleWars : DisposablePlugin<CastleWars.Settings>() {
@@ -38,9 +38,9 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     }
 
     private fun resetNpcDefinitions() {
-        Client.accessor.npcDefinition_cached.clear()
+        CLIENT.npcDefinition_cached.clear()
         Npcs.forEach {
-            it.accessor.definition = Client.accessor.getNpcDefinition(it.accessor.definition.id)
+            it.accessor.definition = CLIENT.getNpcDefinition(it.accessor.definition.id)
         }
     }
 

@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.fpsthrottle
 
-import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.access.XRasterProvider
-import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.raw.access.XRasterProvider
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.plugins.spi.PluginSettings
 
 class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
 
@@ -16,7 +16,7 @@ class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
         val sleepTimeMs = ctx.settings.sleepTimeMs
         if (ctx.settings.onlyWhenUnfocused) {
             add(XRasterProvider.drawFull0.exit.subscribe {
-                if (!Client.accessor.canvas.isFocusOwner) {
+                if (!CLIENT.canvas.isFocusOwner) {
                     Thread.sleep(sleepTimeMs)
                 }
             })

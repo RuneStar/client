@@ -3,15 +3,15 @@ package org.runestar.client.game.api.live
 import io.reactivex.Observable
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.Projectile
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XProjectile
+import org.runestar.client.game.raw.CLIENT
 
 object Projectiles : Iterable<Projectile> {
 
     override fun iterator() = object : AbstractIterator<Projectile>() {
 
-        private var cur: XNode? = Client.accessor.projectiles.sentinel.previous
+        private var cur: XNode? = CLIENT.projectiles.sentinel.previous
 
         override fun computeNext() {
             val p = cur as? XProjectile ?: return done()

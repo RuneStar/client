@@ -3,8 +3,8 @@ package org.runestar.client.game.api
 import org.runestar.client.game.api.live.WidgetGroupParentage
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XWidget
+import org.runestar.client.game.raw.CLIENT
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
@@ -46,7 +46,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val isHidden get() = accessor.isHidden
 
-    val isActive get() = cycle >= Client.accessor.cycle
+    val isActive get() = cycle >= CLIENT.cycle
 
     val cycle get() = accessor.cycle
 
@@ -66,8 +66,8 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
             anc = anc.ancestor
         }
         if (cur.group != WidgetGroups.root) return null
-        x += Client.accessor.rootWidgetXs[cur.accessor.rootIndex]
-        y += Client.accessor.rootWidgetYs[cur.accessor.rootIndex]
+        x += CLIENT.rootWidgetXs[cur.accessor.rootIndex]
+        y += CLIENT.rootWidgetYs[cur.accessor.rootIndex]
         return Point(x, y)
     }
 

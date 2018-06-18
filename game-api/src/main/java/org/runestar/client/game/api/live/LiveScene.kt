@@ -3,26 +3,25 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.Region
 import org.runestar.client.game.api.Scene
-import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.raw.CLIENT
 
 object LiveScene : Scene {
 
     override fun getHeight(x: Int, y: Int, plane: Int): Int {
-        return accessor.tiles_heights[plane][x][y]
+        return CLIENT.tiles_heights[plane][x][y]
     }
 
     override fun getRenderFlags(x: Int, y: Int, plane: Int): Byte {
-        return accessor.tiles_renderFlags[plane][x][y]
+        return CLIENT.tiles_renderFlags[plane][x][y]
     }
 
     override fun getCollisionFlags(x: Int, y: Int, plane: Int): Int {
-        return accessor.collisionMaps[plane].flags[x][y]
+        return CLIENT.collisionMaps[plane].flags[x][y]
     }
 
-    override val base get() = GlobalTile(accessor.baseX, accessor.baseY, 0)
+    override val base get() = GlobalTile(CLIENT.baseX, CLIENT.baseY, 0)
 
-    val regionIds: IntArray get() = Client.accessor.regions ?: IntArray(0)
+    val regionIds: IntArray get() = CLIENT.regions ?: IntArray(0)
 
     val regions: List<Region> get() = regionIds.map { Region(it) }
 

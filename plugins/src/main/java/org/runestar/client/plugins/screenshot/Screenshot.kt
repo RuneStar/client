@@ -6,8 +6,8 @@ import org.runestar.client.api.Application
 import org.runestar.client.api.BarButton
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XRasterProvider
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.TrayIcon
 import java.awt.event.ActionEvent
@@ -64,7 +64,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     private fun copyCanvas(): BufferedImage {
-        val rasterProvider = Client.accessor.rasterProvider
+        val rasterProvider = CLIENT.rasterProvider
         val pixelsCopy = rasterProvider.pixels.copyOf()
         val w = rasterProvider.width
         val h = rasterProvider.height
@@ -75,7 +75,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     private fun saveImage(img: RenderedImage) {
-        val rsn = Client.accessor.localPlayerName
+        val rsn = CLIENT.localPlayerName
         val timeString = timeFormatter.format(Instant.now())
         val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
         val path = screenshotDirectory.resolve(fileName)

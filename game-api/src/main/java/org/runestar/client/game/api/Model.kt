@@ -2,8 +2,8 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.game.api.utils.addNotNull
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XModel
+import org.runestar.client.game.raw.CLIENT
 import java.awt.Color
 import java.awt.Point
 import java.awt.Rectangle
@@ -83,12 +83,11 @@ class Model internal constructor(
             color: Color,
             projection: Projection = Projections.viewport
     ) {
-        val client = Client.accessor
         val rgb = color.rgb
         trianglesForEach(projection) { x0, y0, x1, y1, x2, y2 ->
-            client.Rasterizer2D_drawLine(x0, y0, x1, y1, rgb)
-            client.Rasterizer2D_drawLine(x0, y0, x2, y2, rgb)
-            client.Rasterizer2D_drawLine(x2, y2, x1, y1, rgb)
+            CLIENT.Rasterizer2D_drawLine(x0, y0, x1, y1, rgb)
+            CLIENT.Rasterizer2D_drawLine(x0, y0, x2, y2, rgb)
+            CLIENT.Rasterizer2D_drawLine(x2, y2, x1, y1, rgb)
         }
     }
 

@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 
 class ReduceVisibility : DisposablePlugin<ReduceVisibility.Settings>() {
@@ -16,7 +16,7 @@ class ReduceVisibility : DisposablePlugin<ReduceVisibility.Settings>() {
 
     private fun adjustVisibilityMap() {
         val amt = ctx.settings.amount
-        val vm = Client.accessor.visibilityMap
+        val vm = CLIENT.visibilityMap
         for (pitch in 0 until vm.size) {
             val atPitch = vm[pitch]
             for (yaw in 0 until atPitch.size) {

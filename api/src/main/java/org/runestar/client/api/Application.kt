@@ -7,7 +7,7 @@ import org.runestar.client.api.util.AwtTaskbar
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginLoader
 import org.runestar.general.JavConfig
 import java.awt.Frame
@@ -51,7 +51,7 @@ object Application : AutoCloseable {
         started = true
 
         @Suppress("DEPRECATION")
-        val applet = Client.accessor as java.applet.Applet
+        val applet = CLIENT as java.applet.Applet
 
         SwingUtilities.invokeAndWait {
             buildApplet(applet, javConfig)
@@ -68,7 +68,7 @@ object Application : AutoCloseable {
         buildTray()
 
         Observable.interval(2, TimeUnit.SECONDS).subscribe {
-            val name = if (Game.state == GameState.TITLE) null else Client.accessor.localPlayerName
+            val name = if (Game.state == GameState.TITLE) null else CLIENT.localPlayerName
             if (name != rsn) {
                 rsn = name
                 setTitle()
@@ -78,7 +78,7 @@ object Application : AutoCloseable {
 
     private fun waitForTitle() {
         Observable.interval(20, TimeUnit.MILLISECONDS)
-                .map { ((Client.accessor.titleLoadingStage.toDouble() / 150) * 100).toInt() }
+                .map { ((CLIENT.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
                 .blockingSubscribeBy(
                         onNext = { AwtTaskbar.setWindowProgressValue(frame, it) },
@@ -90,7 +90,7 @@ object Application : AutoCloseable {
     }
 
     private fun modifyClient() {
-        Client.accessor.gameDrawingMode = 2
+        CLIENT.gameDrawingMode = 2
     }
 
     private fun changeProfile() {

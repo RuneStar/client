@@ -2,16 +2,16 @@ package org.runestar.client.plugins.chathighlight
 
 import io.reactivex.Observable
 import org.runestar.client.api.Application
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.forms.RegexForm
 import org.runestar.client.api.forms.RgbForm
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Message
 import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Chat
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XAbstractFont
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.TrayIcon
@@ -97,8 +97,8 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
         override val tag: String = "<$id>"
 
         override fun run() {
-            Client.accessor.abstractFont_previousColor = Client.accessor.abstractFont_color
-            Client.accessor.abstractFont_previousShadow = Client.accessor.abstractFont_shadow
+            CLIENT.abstractFont_previousColor = CLIENT.abstractFont_color
+            CLIENT.abstractFont_previousShadow = CLIENT.abstractFont_shadow
         }
     }
 }

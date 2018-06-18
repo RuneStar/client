@@ -6,7 +6,7 @@ import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Players
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -47,7 +47,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
 
     override fun stop() {
         super.stop()
-        Client.accessor.abstractFont_modIconSprites.fill(
+        CLIENT.abstractFont_modIconSprites.fill(
                 null,
                 spritesStartIndex,
                 spritesStartIndex + shortCodes.size
@@ -75,14 +75,14 @@ class Emojis : DisposablePlugin<PluginSettings>() {
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
             sprite.height = sprite.height - 4 // tricks the game into drawing the sprite further down
-            Client.accessor.abstractFont_modIconSprites[i + spritesStartIndex] = sprite
+            CLIENT.abstractFont_modIconSprites[i + spritesStartIndex] = sprite
         }
     }
 
     private fun expandModIcons() {
-        val originalArray = Client.accessor.abstractFont_modIconSprites
+        val originalArray = CLIENT.abstractFont_modIconSprites
         spritesStartIndex = originalArray.size
-        Client.accessor.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + shortCodes.size)
+        CLIENT.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + shortCodes.size)
     }
 
     private fun replaceEmojis(s: String): String {

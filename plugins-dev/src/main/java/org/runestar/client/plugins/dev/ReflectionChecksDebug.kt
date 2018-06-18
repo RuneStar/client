@@ -2,9 +2,9 @@ package org.runestar.client.plugins.dev
 
 import io.reactivex.Observable
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XIterableNodeDeque
 import org.runestar.client.game.raw.access.XReflectionCheck
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.lang.reflect.Modifier
 
@@ -17,7 +17,7 @@ class ReflectionChecksDebug : DisposablePlugin<PluginSettings>() {
     }
 
     private val creations: Observable<XReflectionCheck> get() = XIterableNodeDeque.addFirst.exit
-            .filter { it.instance == Client.accessor.reflectionChecks }
+            .filter { it.instance == CLIENT.reflectionChecks }
             .map { it.arguments[0] as XReflectionCheck }
 
     private fun onCreated(rc: XReflectionCheck) {

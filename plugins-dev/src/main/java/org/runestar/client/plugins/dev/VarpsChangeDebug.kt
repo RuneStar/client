@@ -2,16 +2,16 @@ package org.runestar.client.plugins.dev
 
 import com.google.common.base.Splitter
 import org.kxtra.slf4j.logger.info
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.raw.Client
-import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.plugins.spi.PluginSettings
 
 class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    val varps = Client.accessor.varps_main
+    val varps = CLIENT.varps_main
 
     @Volatile
     var old = varps.copyOf()

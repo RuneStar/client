@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.fps
 
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.raw.Client
-import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
@@ -20,8 +20,8 @@ class Fps : DisposablePlugin<PluginSettings>() {
             g.font = RUNESCAPE_CHAT_FONT
 
             g.drawStringShadowed(
-                    Client.accessor.fps.toString(),
-                    Client.accessor.canvasWidth - 43,
+                    CLIENT.fps.toString(),
+                    CLIENT.canvasWidth - 43,
                     g.fontMetrics.height
             )
         })

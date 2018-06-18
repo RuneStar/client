@@ -2,7 +2,7 @@ package org.runestar.client.plugins.windowsize
 
 import org.kxtra.slf4j.logger.info
 import org.runestar.client.api.Application
-import org.runestar.client.game.raw.Client
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.AbstractPlugin
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Component
@@ -17,7 +17,7 @@ class WindowSize : AbstractPlugin<WindowSize.Settings>() {
 
     override fun start() {
         SwingUtilities.invokeLater {
-            (Client.accessor as Component).size = ctx.settings.gameSize
+            (CLIENT as Component).size = ctx.settings.gameSize
             val frame = Application.frame
             frame.refit()
             frame.isResizable = false
@@ -32,6 +32,6 @@ class WindowSize : AbstractPlugin<WindowSize.Settings>() {
     }
 
     data class Settings(
-            val gameSize: Dimension = Client.accessor.canvas.size
+            val gameSize: Dimension = CLIENT.canvas.size
     ) : PluginSettings()
 }

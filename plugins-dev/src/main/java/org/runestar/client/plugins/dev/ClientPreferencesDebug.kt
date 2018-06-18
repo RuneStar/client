@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.raw.Client
-import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
@@ -13,7 +13,7 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
-            val p = Client.accessor.clientPreferences ?: return@subscribe
+            val p = CLIENT.clientPreferences ?: return@subscribe
             val strings = listOf(
                     "titleMusicDisabled: ${p.titleMusicDisabled}",
                     "roofsHidden: ${p.roofsHidden}",

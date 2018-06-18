@@ -1,7 +1,7 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.SkillLevel
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.general.Skill
 
 object Stats : AbstractMap<Skill, SkillLevel>() {
@@ -25,9 +25,9 @@ object Stats : AbstractMap<Skill, SkillLevel>() {
     override fun get(key: Skill) : SkillLevel {
         val id = key.id
         return SkillLevel(
-                accessor.currentLevels[id],
-                accessor.levels[id],
-                accessor.experience[id]
+                CLIENT.currentLevels[id],
+                CLIENT.levels[id],
+                CLIENT.experience[id]
         )
     }
 

@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Widgets
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.raw.CLIENT
 import java.awt.Point
 
 interface MenuOption {
@@ -222,7 +222,7 @@ interface MenuOption {
     }
 
     data class OnGroundItemIndexed(private val menuOption: MenuOption) : MenuOption by menuOption, Indexed, OnGroundItem, AtLocation {
-        override val plane: Int = accessor.plane
+        override val plane: Int = CLIENT.plane
         init {
             check(operator)
         }
@@ -239,7 +239,7 @@ interface MenuOption {
     }
 
     data class OnGroundItemSimple(private val menuOption: MenuOption) : MenuOption by menuOption, OnGroundItem, AtLocation {
-        override val plane: Int = accessor.plane
+        override val plane: Int = CLIENT.plane
         init {
             check(operator)
         }
@@ -279,7 +279,7 @@ interface MenuOption {
         init {
             check(operator)
         }
-        override val plane: Int = accessor.plane
+        override val plane: Int = CLIENT.plane
         override val index: Int get() = opcode - Operator.OBJECT_ACTION_0.opcode
         companion object : Factory {
             override val operators = setOf(
@@ -364,7 +364,7 @@ interface MenuOption {
         init {
             check(operator)
         }
-        override val plane: Int = accessor.plane
+        override val plane: Int = CLIENT.plane
         companion object : Factory {
             override val operators = setOf(Operator.SPELL_ON_OBJECT, Operator.OBJECT_EXAMINE, Operator.ITEM_ON_OBJECT)
         }

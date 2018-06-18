@@ -4,16 +4,15 @@ import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import org.kxtra.swing.component.windowAncestor
 import org.runestar.client.game.api.*
-import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.Client.accessor
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XPacketBuffer
+import org.runestar.client.game.raw.CLIENT
 import java.awt.Component
 import java.awt.Container
 
 object Game {
 
-    val state get() = GameState.of(accessor.gameState)
+    val state get() = GameState.of(CLIENT.gameState)
 
     val stateChanges: Observable<GameState> = XClient.updateGameState.exit.map {
         checkNotNull(GameState.of(it.arguments[0] as Int)) { it.arguments[0] }
@@ -24,15 +23,15 @@ object Game {
             .map { Unit }
             .delay { XClient.doCycle.enter }
 
-    val cycle get() = accessor.cycle
+    val cycle get() = CLIENT.cycle
 
-    val plane get() = accessor.plane
+    val plane get() = CLIENT.plane
 
-    val runEnergy get() = accessor.runEnergy
+    val runEnergy get() = CLIENT.runEnergy
 
-    val weight get() = accessor.weight
+    val weight get() = CLIENT.weight
 
-    val windowMode get() = WindowMode.of(accessor.clientPreferences.windowMode)
+    val windowMode get() = WindowMode.of(CLIENT.clientPreferences.windowMode)
 
     /**
      * @see[java.awt.event.WindowListener]
@@ -40,23 +39,23 @@ object Game {
      * @see[java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
-            checkNotNull((accessor as Component).windowAncestor()) { "Client has no window" }
+            checkNotNull((CLIENT as Component).windowAncestor()) { "Client has no window" }
     )
 
     /**
      * @see[java.awt.event.ContainerListener]
      */
-    val containerEvents = SwingObservable.container(accessor as Container)
+    val containerEvents = SwingObservable.container(CLIENT as Container)
 
-    fun getVarbit(varbitId: Int): Int = Client.accessor.getVarbit(varbitId)
+    fun getVarbit(varbitId: Int): Int = CLIENT.getVarbit(varbitId)
 
-    fun getVarp(varpId: Int): Int = Client.accessor.varps_main[varpId]
+    fun getVarp(varpId: Int): Int = CLIENT.varps_main[varpId]
 
-    val varcs: Varcs = Varcs(Client.accessor.varcs)
+    val varcs: Varcs = Varcs(CLIENT.varcs)
 
-    val clanChat: ClanChat? get() = Client.accessor.clanChat?.let { ClanChat(it) }
+    val clanChat: ClanChat? get() = CLIENT.clanChat?.let { ClanChat(it) }
 
-    val friendsSystem: FriendsSystem get() = FriendsSystem(Client.accessor.friendSystem)
+    val friendsSystem: FriendsSystem get() = FriendsSystem(CLIENT.friendSystem)
 
     val specialAttackEnabled get() = getVarp(VarpId.SPECIAL_ATTACK_ENABLED) != 0
 
@@ -65,11 +64,11 @@ object Game {
      */
     val specialAttackPercent get() = getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
 
-    val visibilityMap = VisibilityMap(Client.accessor.visibilityMap, LiveCamera)
+    val visibilityMap = VisibilityMap(CLIENT.visibilityMap, LiveCamera)
 
     val destination: SceneTile? get() {
-        val x = Client.accessor.destinationX
-        val y = Client.accessor.destinationY
+        val x = CLIENT.destinationX
+        val y = CLIENT.destinationY
         if (x == 0 && y == 0) return null
         return SceneTile(x, y, plane)
     }

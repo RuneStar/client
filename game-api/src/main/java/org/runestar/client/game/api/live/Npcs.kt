@@ -1,7 +1,7 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Npc
-import org.runestar.client.game.raw.Client.accessor
+import org.runestar.client.game.raw.CLIENT
 
 object Npcs : AbstractCollection<Npc>() {
 
@@ -11,13 +11,13 @@ object Npcs : AbstractCollection<Npc>() {
 
         override fun computeNext() {
             if (i >= size) return done()
-            val index = accessor.npcIndices[i++]
-            val x = accessor.npcs[index] ?: return done()
+            val index = CLIENT.npcIndices[i++]
+            val x = CLIENT.npcs[index] ?: return done()
             setNext(Npc(x, index, Game.plane))
         }
     }
 
-    override val size get() = accessor.npcCount
+    override val size get() = CLIENT.npcCount
 
-    internal operator fun get(index: Int): Npc? = accessor.npcs[index]?.let { Npc(it, index, Game.plane) }
+    internal operator fun get(index: Int): Npc? = CLIENT.npcs[index]?.let { Npc(it, index, Game.plane) }
 }

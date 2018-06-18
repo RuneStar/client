@@ -4,9 +4,9 @@ import org.kxtra.lang.intarray.replaceEach
 import org.kxtra.swing.bufferedimage.toCompatibleImage
 import org.kxtra.swing.graphics.drawImage
 import org.runestar.client.game.raw.Accessor
-import org.runestar.client.game.raw.Client
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite
+import org.runestar.client.game.raw.CLIENT
 import java.awt.image.*
 
 abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
@@ -42,7 +42,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
             }
 
             fun copy(bufferedImage: BufferedImage): Sprite {
-                val xs = Client.accessor._Sprite_(bufferedImage.width, bufferedImage.height)
+                val xs = CLIENT._Sprite_(bufferedImage.width, bufferedImage.height)
                 wrapSprite(xs).graphics.drawImage(bufferedImage)
                 xs.pixels.replaceEach {
                     it and 0xFFFFFF
@@ -76,7 +76,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
             fun copy(bufferedImage: BufferedImage): Indexed {
                 val w = bufferedImage.width
                 val h = bufferedImage.height
-                val x = Client.accessor._IndexedSprite_()
+                val x = CLIENT._IndexedSprite_()
                 x.width = w
                 x.height = h
                 x.subWidth = w
