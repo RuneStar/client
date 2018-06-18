@@ -8,6 +8,8 @@ import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
+import org.runestar.client.game.raw.ClientProvider
+import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.patch.patch
 import org.runestar.general.JavConfig
 import org.runestar.general.revision
@@ -19,15 +21,21 @@ import javax.swing.SwingUtilities
 
 private val logger = getLogger()
 
+private val javConfig: JavConfig = JavConfig.load(System.getProperty("runestar.world", ""))
+
 fun main(args: Array<String>) {
     setupLogging()
     SwingUtilities.invokeLater(LafInstallation)
 
-    val javConfig = JavConfig.load(System.getProperty("runestar.world", ""))
-
     updateRevision(javConfig.codebase.host)
 
-    Application.start(javConfig, patchGamePack(javConfig))
+    Application.start(javConfig)
+}
+
+class ClientProviderImpl : ClientProvider {
+    override fun get(): XClient {
+        return patchGamePack(javConfig).loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
+    }
 }
 
 private fun setupLogging() {

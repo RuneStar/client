@@ -2,14 +2,12 @@ package org.runestar.client.api
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.blockingSubscribeBy
-import org.kxtra.slf4j.loggerfactory.getLogger
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.api.util.AwtTaskbar
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.Client
-import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginLoader
 import org.runestar.general.JavConfig
 import java.awt.Frame
@@ -25,8 +23,6 @@ import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 
 object Application : AutoCloseable {
-
-    private val logger = getLogger()
 
     private const val DEFAULT_PROFILE = "default"
 
@@ -49,13 +45,11 @@ object Application : AutoCloseable {
     private var profileName: String = DEFAULT_PROFILE
 
     fun start(
-            javConfig: JavConfig,
-            gamepack: ClassLoader
+            javConfig: JavConfig
     ) {
         check(!started)
         started = true
 
-        Client.accessor = gamepack.loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
         @Suppress("DEPRECATION")
         val applet = Client.accessor as java.applet.Applet
 

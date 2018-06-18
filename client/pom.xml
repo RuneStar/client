@@ -53,6 +53,15 @@
                 <artifactId>kotlin-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
+                <artifactId>serviceloader-maven-plugin</artifactId>
+                <configuration>
+                    <services>
+                        <param>org.runestar.client.game.raw.ClientProvider</param>
+                    </services>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
