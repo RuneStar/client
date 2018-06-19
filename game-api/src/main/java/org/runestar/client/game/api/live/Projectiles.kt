@@ -1,23 +1,17 @@
 package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
+import org.runestar.client.game.api.NodeDeque
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.Projectile
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XProjectile
-import org.runestar.client.game.raw.CLIENT
 
-object Projectiles : Iterable<Projectile> {
+object Projectiles : NodeDeque<Projectile>(CLIENT.projectiles) {
 
-    override fun iterator() = object : AbstractIterator<Projectile>() {
-
-        private var cur: XNode? = CLIENT.projectiles.sentinel.previous
-
-        override fun computeNext() {
-            val p = cur as? XProjectile ?: return done()
-            setNext(Projectile(p))
-            cur = p.previous
-        }
+    override fun wrap(t: XNode): Projectile {
+        return Projectile(t as XProjectile)
     }
 
     val destinationChanges: Observable<Pair<Projectile, Position>> = XProjectile.setDestination.enter.map {
