@@ -3215,4 +3215,11 @@ class Client : IdentityMapper.Class() {
     class Model_sharedSequenceModelFaceAlphas : UniqueMapper.InMethod.Field(Model.toSharedSequenceModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == ByteArray::class.type }
     }
+
+    @MethodParameters("id")
+    @DependsOn(Frames::class)
+    class getFrames : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Frames>() }
+                .and { it.arguments.size in 1..2 }
+    }
 }

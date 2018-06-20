@@ -233,4 +233,10 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == Array<Any?>::class.type }
                 .and { it.arguments.startsWith(type<Buffer>()) }
     }
+
+    @MethodParameters("b")
+    @DependsOn(SpriteMask::class)
+    class getSpriteMask : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<SpriteMask>() }
+    }
 }

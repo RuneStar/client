@@ -60,16 +60,19 @@ class SequenceDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
+    @MethodParameters("model", "frame")
     @DependsOn(SpotAnimationDefinition.getModel::class)
     class animateSpotAnimation : UniqueMapper.InMethod.Method(SpotAnimationDefinition.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }
     }
 
+    @MethodParameters("model", "frame", "orientation")
     @DependsOn(ObjectDefinition.getModelDynamic::class)
     class animateObject : UniqueMapper.InMethod.Method(ObjectDefinition.getModelDynamic::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }
     }
 
+    @MethodParameters("model", "frame", "sequence", "sequenceFrame")
     @DependsOn(Model::class)
     class animateSequence2 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
@@ -77,11 +80,13 @@ class SequenceDefinition : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<Model>(), INT_TYPE, type<SequenceDefinition>(), INT_TYPE) }
     }
 
+    @MethodParameters("model", "frame")
     @DependsOn(animateSequence2::class)
     class animateSequence : UniqueMapper.InMethod.Method(animateSequence2::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }
     }
 
+    @MethodParameters("model", "frame")
     @DependsOn(Widget.getModel::class)
     class animateWidget : UniqueMapper.InMethod.Method(Widget.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }

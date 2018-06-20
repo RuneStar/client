@@ -140,3 +140,8 @@ abstract class TriBoolConst(index: Int) : OrderMapper.InClassInitializer.Field(T
 abstract class ModelTransformTempInt(index: Int) : OrderMapper.InMethod.Field(Model.animate::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }
+
+@DependsOn(Client.newScript::class, Script::class)
+abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(Client.newScript::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<Script>() }
+}
