@@ -1,18 +1,21 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Type.*
-import org.objectweb.asm.Opcodes.*
 
 @DependsOn(DualNode::class, NpcDefinition::class)
 class ObjectDefinition : IdentityMapper.Class() {
@@ -190,5 +193,17 @@ class ObjectDefinition : IdentityMapper.Class() {
     @DependsOn(Client.getObjectDefinition::class)
     class init : OrderMapper.InMethod.Method(Client.getObjectDefinition::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<ObjectDefinition>() }
+    }
+
+    @DependsOn(Model::class)
+    class getModel : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
+                .and { it.arguments.size in 6..7 }
+    }
+
+    @DependsOn(Model::class)
+    class getModelDynamic : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
+                .and { it.arguments.size in 8..9 }
     }
 }

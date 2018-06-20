@@ -3191,4 +3191,28 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
                 .next { it.opcode == PUTSTATIC }
     }
+
+    class Model_transformTempX : ModelTransformTempInt(0)
+    class Model_transformTempY : ModelTransformTempInt(1)
+    class Model_transformTempZ : ModelTransformTempInt(2)
+
+    @DependsOn(Model.toSharedSpotAnimationModel::class, Model::class)
+    class Model_sharedSpotAnimationModel : UniqueMapper.InMethod.Field(Model.toSharedSpotAnimationModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<Model>() }
+    }
+
+    @DependsOn(Model.toSharedSpotAnimationModel::class, Model::class)
+    class Model_sharedSpotAnimationModelFaceAlphas : UniqueMapper.InMethod.Field(Model.toSharedSpotAnimationModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == ByteArray::class.type }
+    }
+
+    @DependsOn(Model.toSharedSequenceModel::class, Model::class)
+    class Model_sharedSequenceModel : UniqueMapper.InMethod.Field(Model.toSharedSequenceModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<Model>() }
+    }
+
+    @DependsOn(Model.toSharedSequenceModel::class, Model::class)
+    class Model_sharedSequenceModelFaceAlphas : UniqueMapper.InMethod.Field(Model.toSharedSequenceModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == ByteArray::class.type }
+    }
 }

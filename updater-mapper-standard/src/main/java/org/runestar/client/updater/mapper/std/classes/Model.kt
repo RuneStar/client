@@ -12,6 +12,7 @@ import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
@@ -182,5 +183,52 @@ class Model : IdentityMapper.Class() {
     class copy0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
                 .and { it.arguments.startsWith(BOOLEAN_TYPE, type<Model>(), ByteArray::class.type) }
+    }
+
+    @MethodParameters("type", "labels", "tx", "ty", "tz")
+    class transform : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 5..6 }
+                .and { it.arguments.startsWith(INT_TYPE, IntArray::class.type, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(transform::class)
+    class vertexLabels : OrderMapper.InMethod.Field(transform::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE.withDimensions(2) }
+    }
+
+    @DependsOn(transform::class)
+    class faceLabelsAlpha : OrderMapper.InMethod.Field(transform::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE.withDimensions(2) }
+    }
+
+    @MethodParameters("frames", "frame")
+    @DependsOn(Frames::class)
+    class animate : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.startsWith(type<Frames>(), INT_TYPE) }
+    }
+
+    @DependsOn(Frames::class)
+    class animate2 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 5..6 }
+                .and { it.arguments.startsWith(type<Frames>(), INT_TYPE, type<Frames>(), INT_TYPE, IntArray::class.type) }
+    }
+
+    @DependsOn(SpotAnimationDefinition.getModel::class)
+    class toSharedSpotAnimationModel : UniqueMapper.InMethod.Method(SpotAnimationDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
+    }
+
+    @DependsOn(NpcDefinition.getModel::class)
+    class toSharedSequenceModel : UniqueMapper.InMethod.Method(NpcDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
+    }
+
+    @DependsOn(transform::class)
+    class faceAlphas : UniqueMapper.InMethod.Field(transform::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == ByteArray::class.type }
     }
 }
