@@ -36,17 +36,21 @@ interface MethodAdvice {
     }
 
     @SuppressWarnings("unchecked")
-    @Advice.OnMethodExit
+    @Advice.OnMethodExit(onThrowable = Throwable.class)
     static void onMethodExit(
             @Execution MethodExecution exec,
             @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
+            @Advice.Thrown(readOnly = false, typing = Assigner.Typing.DYNAMIC) Throwable exception,
             @Advice.Enter MethodEvent.Implementation event
     ) throws Throwable {
         if (event != null) {
             event.returned = returned;
+            event.exception = exception;
             ((MethodExecution.Implementation) exec)._exit.accept(event);
             //noinspection UnusedAssignment
             returned = event.returned;
+            //noinspection UnusedAssignment
+            exception = event.exception;
         }
     }
 }

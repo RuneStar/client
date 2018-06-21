@@ -44,6 +44,10 @@ public interface MethodEvent<I> {
         R getReturned();
 
         void setReturned(R returned);
+
+        Throwable getException();
+
+        void setException(Throwable exception);
     }
 
     /**
@@ -57,6 +61,8 @@ public interface MethodEvent<I> {
         public final Object[] arguments;
 
         public R returned;
+
+        public Throwable exception;
 
         public Implementation(I instance, @NotNull Object[] arguments) {
             this.instance = instance;
@@ -85,10 +91,21 @@ public interface MethodEvent<I> {
         }
 
         @Override
+        public Throwable getException() {
+            return exception;
+        }
+
+        @Override
+        public void setException(Throwable exception) {
+            this.exception = exception;
+        }
+
+        @Override
         public String toString() {
             return "MethodEvent(instance=" + instance +
                     ", arguments=" + Arrays.toString(arguments) +
                     ", returned=" + returned +
+                    ", exception=" + exception +
                     ')';
         }
     }
