@@ -21,12 +21,14 @@ interface MethodAdvice {
     static MethodEvent.Implementation onMethodEnter(
             @Execution MethodExecution exec,
             @Advice.This(optional = true) Object instance,
-            @Advice.AllArguments Object[] arguments
+            @Advice.AllArguments(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object[] arguments
     ) throws Throwable {
         MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
         if (execImpl.hasObservers()) {
             MethodEvent.Implementation event = new MethodEvent.Implementation(instance, arguments);
             execImpl._enter.accept(event);
+            //noinspection UnusedAssignment
+            arguments = event.arguments;
             return event;
         } else {
             return null;
@@ -37,12 +39,14 @@ interface MethodAdvice {
     @Advice.OnMethodExit
     static void onMethodExit(
             @Execution MethodExecution exec,
-            @Advice.Return(typing = Assigner.Typing.DYNAMIC) Object returned,
+            @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
             @Advice.Enter MethodEvent.Implementation event
     ) throws Throwable {
         if (event != null) {
             event.returned = returned;
             ((MethodExecution.Implementation) exec)._exit.accept(event);
+            //noinspection UnusedAssignment
+            returned = event.returned;
         }
     }
 }

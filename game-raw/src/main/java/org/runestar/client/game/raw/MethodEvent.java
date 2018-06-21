@@ -17,8 +17,7 @@ public interface MethodEvent<I> {
     I getInstance();
 
     /**
-     * The arguments used to call the method, boxing primitive values. Should not be modified, modifications will have
-     * no effect.
+     * The arguments used to call the method, boxing primitive values.
      */
     Object[] getArguments();
 
@@ -43,6 +42,8 @@ public interface MethodEvent<I> {
          * The value returned from the method, boxing primitives, {@code null} for {@code void} methods.
          */
         R getReturned();
+
+        void setReturned(R returned);
     }
 
     /**
@@ -76,6 +77,11 @@ public interface MethodEvent<I> {
         @Override
         public R getReturned() {
             return returned;
+        }
+
+        @Override
+        public void setReturned(R returned) {
+            this.returned = returned;
         }
 
         @Override
