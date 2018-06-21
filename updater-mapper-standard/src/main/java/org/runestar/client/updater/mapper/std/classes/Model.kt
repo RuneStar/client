@@ -217,11 +217,13 @@ class Model : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<Frames>(), INT_TYPE, type<Frames>(), INT_TYPE, IntArray::class.type) }
     }
 
+    @MethodParameters("b")
     @DependsOn(SpotAnimationDefinition.getModel::class)
     class toSharedSpotAnimationModel : UniqueMapper.InMethod.Method(SpotAnimationDefinition.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
     }
 
+    @MethodParameters("b")
     @DependsOn(NpcDefinition.getModel::class)
     class toSharedSequenceModel : UniqueMapper.InMethod.Method(NpcDefinition.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
