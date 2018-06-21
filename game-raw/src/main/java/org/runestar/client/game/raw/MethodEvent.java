@@ -21,6 +21,8 @@ public interface MethodEvent<I> {
      */
     Object[] getArguments();
 
+    boolean getSkipBody();
+
     /**
      * An event representing the entrance to a method.
      *
@@ -28,6 +30,7 @@ public interface MethodEvent<I> {
      */
     interface Enter<I> extends MethodEvent<I> {
 
+        void setSkipBody(boolean skipBody);
     }
 
     /**
@@ -63,6 +66,8 @@ public interface MethodEvent<I> {
         public R returned;
 
         public Throwable exception;
+
+        public boolean skipBody = false;
 
         public Implementation(I instance, @NotNull Object[] arguments) {
             this.instance = instance;
@@ -101,12 +106,38 @@ public interface MethodEvent<I> {
         }
 
         @Override
+        public boolean getSkipBody() {
+            return false;
+        }
+
+        @Override
+        public void setSkipBody(boolean skipBody) {
+            this.skipBody = skipBody;
+        }
+
+        @Override
         public String toString() {
             return "MethodEvent(instance=" + instance +
                     ", arguments=" + Arrays.toString(arguments) +
                     ", returned=" + returned +
                     ", exception=" + exception +
+                    ", skipBody=" + skipBody +
                     ')';
+        }
+
+        public Object toReturnValue() {
+            if (skipBody) {
+                return new Object[] { this };
+            } else {
+                return this;
+            }
+        }
+
+        public static MethodEvent.Implementation<?, ?> fromReturnValue(Object o) {
+            if (o instanceof Object[]) {
+                o = ((Object[]) o)[0];
+            }
+            return (MethodEvent.Implementation) o;
         }
     }
 }
