@@ -17,10 +17,14 @@ public interface MethodEvent<I> {
     I getInstance();
 
     /**
-     * The arguments used to call the method, boxing primitive values.
+     * The arguments used to call the method, boxing primitive values, can be modified.
      */
+    @NotNull
     Object[] getArguments();
 
+    /**
+     * Whether the method body should be skipped or not, default is {@code false}.
+     */
     boolean getSkipBody();
 
     /**
@@ -48,15 +52,18 @@ public interface MethodEvent<I> {
 
         void setReturned(R returned);
 
-        Throwable getException();
+        /**
+         * The exception thrown by the method, {@code null} if there was no exception.
+         */
+        Throwable getThrown();
 
-        void setException(Throwable exception);
+        void setThrown(Throwable thrown);
     }
 
     /**
      * For internal use only.
      */
-    class Implementation<I, R> implements MethodEvent.Enter<I>, MethodEvent.Exit<I, R> {
+    final class Implementation<I, R> implements MethodEvent.Enter<I>, MethodEvent.Exit<I, R> {
 
         public final I instance;
 
@@ -65,9 +72,9 @@ public interface MethodEvent<I> {
 
         public R returned;
 
-        public Throwable exception;
+        public Throwable thrown;
 
-        public boolean skipBody = false;
+        private boolean skipBody;
 
         public Implementation(I instance, @NotNull Object[] arguments) {
             this.instance = instance;
@@ -96,13 +103,13 @@ public interface MethodEvent<I> {
         }
 
         @Override
-        public Throwable getException() {
-            return exception;
+        public Throwable getThrown() {
+            return thrown;
         }
 
         @Override
-        public void setException(Throwable exception) {
-            this.exception = exception;
+        public void setThrown(Throwable thrown) {
+            this.thrown = thrown;
         }
 
         @Override
@@ -120,12 +127,13 @@ public interface MethodEvent<I> {
             return "MethodEvent(instance=" + instance +
                     ", arguments=" + Arrays.toString(arguments) +
                     ", returned=" + returned +
-                    ", exception=" + exception +
+                    ", thrown=" + thrown +
                     ", skipBody=" + skipBody +
                     ')';
         }
 
-        public Object toReturnValue() {
+        @NotNull
+        public Object toSkippable() {
             if (skipBody) {
                 return new Object[] { this };
             } else {
@@ -133,7 +141,8 @@ public interface MethodEvent<I> {
             }
         }
 
-        public static MethodEvent.Implementation<?, ?> fromReturnValue(Object o) {
+        @NotNull
+        public static MethodEvent.Implementation<?, ?> fromSkippable(@NotNull Object o) {
             if (o instanceof Object[]) {
                 o = ((Object[]) o)[0];
             }

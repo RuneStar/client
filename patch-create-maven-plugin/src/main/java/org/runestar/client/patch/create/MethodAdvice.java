@@ -29,7 +29,7 @@ interface MethodAdvice {
         execImpl._enter.accept(event);
         //noinspection UnusedAssignment
         arguments = event.arguments;
-        return event.toReturnValue();
+        return event.toSkippable();
     }
 
     @SuppressWarnings("unchecked")
@@ -37,17 +37,17 @@ interface MethodAdvice {
     static void onMethodExit(
             @Execution MethodExecution exec,
             @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
-            @Advice.Thrown(readOnly = false, typing = Assigner.Typing.DYNAMIC) Throwable exception,
+            @Advice.Thrown(readOnly = false, typing = Assigner.Typing.DYNAMIC) Throwable thrown,
             @Advice.Enter Object enter
     ) throws Throwable {
         if (enter == null) return;
-        MethodEvent.Implementation event = MethodEvent.Implementation.fromReturnValue(enter);
+        MethodEvent.Implementation event = MethodEvent.Implementation.fromSkippable(enter);
         event.returned = returned;
-        event.exception = exception;
+        event.thrown = thrown;
         ((MethodExecution.Implementation) exec)._exit.accept(event);
         //noinspection UnusedAssignment
         returned = event.returned;
         //noinspection UnusedAssignment
-        exception = event.exception;
+        thrown = event.thrown;
     }
 }
