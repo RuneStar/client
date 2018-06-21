@@ -2,12 +2,14 @@ package org.runestar.client.api
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.blockingSubscribeBy
+import io.reactivex.rxkotlin.subscribeBy
 import org.kxtra.swing.mouseevent.isLeftButton
 import org.runestar.client.api.util.AwtTaskbar
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginLoader
 import org.runestar.general.JavConfig
 import java.awt.Frame
@@ -60,8 +62,8 @@ object Application : AutoCloseable {
         applet.init()
         applet.start()
 
-        waitForTitle()
         modifyClient()
+        waitForTitle()
 
         setProfile(DEFAULT_PROFILE)
 
@@ -77,7 +79,7 @@ object Application : AutoCloseable {
     }
 
     private fun waitForTitle() {
-        Observable.interval(20, TimeUnit.MILLISECONDS)
+        XClient.doCycle.exit
                 .map { ((CLIENT.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
                 .blockingSubscribeBy(
@@ -90,7 +92,15 @@ object Application : AutoCloseable {
     }
 
     private fun modifyClient() {
-        CLIENT.gameDrawingMode = 2
+        XClient.doCycle.enter.firstOrError().subscribeBy {
+
+            CLIENT.gameDrawingMode = 2 // always redraw entire canvas
+
+            // pre load worlds
+            while (!CLIENT.loadWorlds()) {
+                Thread.sleep(10)
+            }
+        }
     }
 
     private fun changeProfile() {
