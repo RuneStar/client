@@ -17,14 +17,14 @@ interface MethodExecution<I, R> {
      * [Observer.onNext] is ran synchronously before the body of the method is executed. [Observer.onComplete] will
      * never be triggered.
      */
-    val enter: Observable<MethodEvent.Enter<I>>
+    val enter: Observable<MethodEvent<I, R>>
 
     /**
      * [Observable] which emits an event each time the underlying method is returned from. By default all subscribers
      * [Observer.onNext] is ran synchronously before control returns to the caller. [Observer.onComplete] will never be
      * triggered.
      */
-    val exit: Observable<MethodEvent.Exit<I, R>>
+    val exit: Observable<MethodEvent<I, R>>
 
     /**
      * For internal use only.
@@ -32,14 +32,14 @@ interface MethodExecution<I, R> {
     class Implementation<I, R> internal constructor() : MethodExecution<I, R> {
 
         @JvmField
-        val _enter: PublishRelay<MethodEvent.Enter<I>> = PublishRelay.create<MethodEvent.Enter<I>>()
+        val _enter: PublishRelay<MethodEvent<I, R>> = PublishRelay.create<MethodEvent<I, R>>()
 
-        override val enter: Observable<MethodEvent.Enter<I>> get() = _enter
+        override val enter: Observable<MethodEvent<I, R>> get() = _enter
 
         @JvmField
-        val _exit: PublishRelay<MethodEvent.Exit<I, R>> = PublishRelay.create<MethodEvent.Exit<I, R>>()
+        val _exit: PublishRelay<MethodEvent<I, R>> = PublishRelay.create<MethodEvent<I, R>>()
 
-        override val exit: Observable<MethodEvent.Exit<I, R>> get() = _exit
+        override val exit: Observable<MethodEvent<I, R>> get() = _exit
 
         fun hasObservers() = _enter.hasObservers() || _exit.hasObservers()
     }

@@ -25,11 +25,11 @@ interface MethodAdvice {
     ) throws Throwable {
         MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
         if (!execImpl.hasObservers()) return null;
-        MethodEvent.Implementation event = new MethodEvent.Implementation(instance, arguments);
+        MethodEvent event = new MethodEvent(instance, arguments);
         execImpl._enter.accept(event);
         //noinspection UnusedAssignment
         arguments = event.arguments;
-        return event.toSkippable();
+        return MethodEvent.toSkippable(event);
     }
 
     @SuppressWarnings("unchecked")
@@ -41,9 +41,7 @@ interface MethodAdvice {
             @Advice.Enter Object enter
     ) throws Throwable {
         if (enter == null) return;
-        MethodEvent.Implementation event = MethodEvent.Implementation.fromSkippable(enter);
-        event.returned = returned;
-        event.thrown = thrown;
+        MethodEvent event = MethodEvent.fromSkippable(enter, returned, thrown);
         ((MethodExecution.Implementation) exec)._exit.accept(event);
         //noinspection UnusedAssignment
         returned = event.returned;

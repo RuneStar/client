@@ -7,146 +7,75 @@ import java.util.Arrays;
 /**
  * An event representing a point in the execution of a method.
  *
+ * Changes made to {@link #arguments} before the method is executed will replace the originals.
+ * Changes made to {@link #returned} or {@link #thrown} before the method is returned from will replace the originals.
+ *
  * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
+ * @param <R> the return type of the method, wrappers for primitives, {@link Void} for {@code void} methods
  */
-public interface MethodEvent<I> {
+public final class MethodEvent<I, R> {
 
     /**
      * The instance the method was called on, {@code null} for {@code static} methods.
      */
-    I getInstance();
+    public final I instance;
 
     /**
-     * The arguments used to call the method, boxing primitive values, can be modified.
+     * The arguments used to call the method, boxing primitives.
      */
     @NotNull
-    Object[] getArguments();
+    public final Object[] arguments;
 
     /**
-     * Whether the method body should be skipped or not, default is {@code false}.
+     * Whether the method body should be skipped, default is {@code false}.
      */
-    boolean getSkipBody();
+    public boolean skipBody = false;
 
     /**
-     * An event representing the entrance to a method.
-     *
-     * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
+     * The value returned from the method, boxing primitives, {@code null} for {@code void} methods, {@code null} if
+     * the method has not yet returned.
      */
-    interface Enter<I> extends MethodEvent<I> {
+    public R returned = null;
 
-        void setSkipBody(boolean skipBody);
+    /**
+     * The exception thrown by the method, {@code null} if there was no exception, {@code null} if the method has not
+     * yet returned.
+     */
+    public Throwable thrown = null;
+
+    public MethodEvent(I instance, @NotNull Object[] arguments) {
+        this.instance = instance;
+        this.arguments = arguments;
     }
 
-    /**
-     * An event representing the exit from a method.
-     *
-     * @param <I> the instance type the method is declared on, {@link Void} for {@code static} methods
-     * @param <R> the return type of the method, wrappers for primitives, {@link Void} for {@code void} methods
-     */
-    interface Exit<I, R> extends MethodEvent<I> {
-
-        /**
-         * The value returned from the method, boxing primitives, {@code null} for {@code void} methods.
-         */
-        R getReturned();
-
-        void setReturned(R returned);
-
-        /**
-         * The exception thrown by the method, {@code null} if there was no exception.
-         */
-        Throwable getThrown();
-
-        void setThrown(Throwable thrown);
+    @Override
+    public String toString() {
+        return "MethodEvent(instance=" + instance +
+                ", arguments=" + Arrays.toString(arguments) +
+                ", skipBody=" + skipBody +
+                ", returned=" + returned +
+                ", thrown=" + thrown +
+                ')';
     }
 
-    /**
-     * For internal use only.
-     */
-    final class Implementation<I, R> implements MethodEvent.Enter<I>, MethodEvent.Exit<I, R> {
-
-        public final I instance;
-
-        @NotNull
-        public final Object[] arguments;
-
-        public R returned;
-
-        public Throwable thrown;
-
-        private boolean skipBody;
-
-        public Implementation(I instance, @NotNull Object[] arguments) {
-            this.instance = instance;
-            this.arguments = arguments;
+    @NotNull
+    public static Object toSkippable(@NotNull MethodEvent event) {
+        if (event.skipBody) {
+            return new Object[] { event };
+        } else {
+            return event;
         }
+    }
 
-        @Override
-        public I getInstance() {
-            return instance;
-        }
-
-        @NotNull
-        @Override
-        public Object[] getArguments() {
-            return arguments;
-        }
-
-        @Override
-        public R getReturned() {
-            return returned;
-        }
-
-        @Override
-        public void setReturned(R returned) {
-            this.returned = returned;
-        }
-
-        @Override
-        public Throwable getThrown() {
-            return thrown;
-        }
-
-        @Override
-        public void setThrown(Throwable thrown) {
-            this.thrown = thrown;
-        }
-
-        @Override
-        public boolean getSkipBody() {
-            return false;
-        }
-
-        @Override
-        public void setSkipBody(boolean skipBody) {
-            this.skipBody = skipBody;
-        }
-
-        @Override
-        public String toString() {
-            return "MethodEvent(instance=" + instance +
-                    ", arguments=" + Arrays.toString(arguments) +
-                    ", returned=" + returned +
-                    ", thrown=" + thrown +
-                    ", skipBody=" + skipBody +
-                    ')';
-        }
-
-        @NotNull
-        public Object toSkippable() {
-            if (skipBody) {
-                return new Object[] { this };
-            } else {
-                return this;
-            }
-        }
-
-        @NotNull
-        public static MethodEvent.Implementation<?, ?> fromSkippable(@NotNull Object o) {
-            if (o instanceof Object[]) {
-                o = ((Object[]) o)[0];
-            }
-            return (MethodEvent.Implementation) o;
+    @NotNull
+    public static MethodEvent<?, ?> fromSkippable(@NotNull Object o, Object returned, Throwable thrown) {
+        if (o instanceof Object[]) {
+            return (MethodEvent) ((Object[]) o)[0];
+        } else {
+            MethodEvent event = (MethodEvent) o;
+            event.returned = returned;
+            event.thrown = thrown;
+            return event;
         }
     }
 }
