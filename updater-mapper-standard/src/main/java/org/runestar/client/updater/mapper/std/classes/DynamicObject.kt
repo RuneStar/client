@@ -1,15 +1,17 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Type
+import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Entity::class, SequenceDefinition::class)
 class DynamicObject : IdentityMapper.Class() {
@@ -54,5 +56,11 @@ class DynamicObject : IdentityMapper.Class() {
     // todo
     class cycleStart : OrderMapper.InConstructor.Field(DynamicObject::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == Type.INT_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(Entity.getModel::class)
+    class getModel : InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<Entity.getModel>().mark }
     }
 }

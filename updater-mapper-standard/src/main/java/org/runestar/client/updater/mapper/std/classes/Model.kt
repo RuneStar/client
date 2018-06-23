@@ -233,4 +233,21 @@ class Model : IdentityMapper.Class() {
     class faceAlphas : UniqueMapper.InMethod.Field(transform::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == ByteArray::class.type }
     }
+
+    @MethodParameters()
+    class rotateY180 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == INEG } == 2 }
+                .and { it.instructions.count { it.opcode == IASTORE } == 2 }
+    }
+
+    @MethodParameters()
+    @DependsOn(rotateY90Ccw::class)
+    class rotateY270Ccw : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 0..1 }
+                .and { it.instructions.count { it.opcode == INEG } == 1 }
+                .and { it != method<rotateY90Ccw>() }
+    }
 }

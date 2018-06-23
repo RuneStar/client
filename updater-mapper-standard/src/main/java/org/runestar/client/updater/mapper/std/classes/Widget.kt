@@ -74,6 +74,14 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class modelFrameCycle : OrderMapper.InConstructor.Field(Widget::class, -7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelFrame : OrderMapper.InConstructor.Field(Widget::class, -8) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class itemQuantity : OrderMapper.InConstructor.Field(Widget::class, -9) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -156,6 +164,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
+    @MethodParameters("sequence", "frame", "b", "appearance")
     @DependsOn(Model::class)
     class getModel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }

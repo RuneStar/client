@@ -91,4 +91,9 @@ class SequenceDefinition : IdentityMapper.Class() {
     class animateWidget : UniqueMapper.InMethod.Method(Widget.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }
     }
+
+    @DependsOn(animateWidget::class)
+    class frameIds2 : OrderMapper.InMethod.Field(animateWidget::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
 }
