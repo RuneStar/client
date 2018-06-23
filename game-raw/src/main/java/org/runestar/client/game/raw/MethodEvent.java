@@ -58,6 +58,9 @@ public final class MethodEvent<I, R> {
                 ')';
     }
 
+    /**
+     * For internal use.
+     */
     @NotNull
     public static Object toSkippable(@NotNull MethodEvent event) {
         if (event.skipBody) {
@@ -67,6 +70,9 @@ public final class MethodEvent<I, R> {
         }
     }
 
+    /**
+     * For internal use.
+     */
     @NotNull
     public static MethodEvent<?, ?> fromSkippable(@NotNull Object o, Object returned, Throwable thrown) {
         if (o instanceof Object[]) {
