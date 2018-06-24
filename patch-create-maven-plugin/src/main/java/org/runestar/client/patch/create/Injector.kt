@@ -76,7 +76,7 @@ fun inject(sourceJar: Path, destinationJar: Path) {
                         hc.constructors.forEach { hcon ->
                             val conOwner = typePool.describe(hc.name).resolve()
                             val con = conOwner.declaredMethods.first { it.isConstructor && it.descriptor == hcon.descriptor }
-                            typeBuilder = typeBuilder.method { it.name == "_${hc.`class`}_" && descMatches(hcon.descriptor, it.parameters, classNameMap) }
+                            typeBuilder = typeBuilder.method { it.name == hc.constructorName && descMatches(hcon.descriptor, it.parameters, classNameMap) }
                                     .intercept(MethodCall.construct(con).withAllArguments().withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC))
                         }
                     }

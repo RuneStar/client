@@ -110,8 +110,7 @@ class AccessorsMojo : AbstractMojo() {
             if (c.name == "client") {
                 hooks.filter { !RModifier.isAbstract(it.access) }.forEach { hc ->
                     hc.constructors.forEach { hcon ->
-                        val name = hc.`class`
-                        typeBuilder.addMethod(MethodSpec.methodBuilder("_${name}_")
+                        typeBuilder.addMethod(MethodSpec.methodBuilder(hc.constructorName)
                                 .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
                                 .addJavadoc(constructorModifiersToString(hcon.access))
                                 .returns(poetType(Type.getObjectType(hc.name).descriptor))

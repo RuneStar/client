@@ -9,7 +9,10 @@ data class ClassHook(
         val fields: List<FieldHook>,
         val methods: List<MethodHook>,
         val constructors: List<ConstructorHook>
-)
+) {
+
+    val constructorName get() = "_${`class`}_"
+}
 
 data class FieldHook(
         val field: String,
