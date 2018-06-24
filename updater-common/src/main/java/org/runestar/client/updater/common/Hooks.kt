@@ -12,6 +12,8 @@ data class ClassHook(
 ) {
 
     val constructorName get() = "_${`class`}_"
+
+    val descriptor get() = "L$name;"
 }
 
 data class FieldHook(
