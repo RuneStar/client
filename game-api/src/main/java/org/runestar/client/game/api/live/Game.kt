@@ -2,11 +2,12 @@ package org.runestar.client.game.api.live
 
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.kxtra.swing.component.windowAncestor
 import org.runestar.client.game.api.*
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XPacketBuffer
-import org.runestar.client.game.raw.CLIENT
 import java.awt.Component
 import java.awt.Container
 
@@ -72,4 +73,8 @@ object Game {
         if (x == 0 && y == 0) return null
         return SceneTile(x, y, plane)
     }
+
+    val executor = ObservableExecutor(XClient.doCycle.exit)
+
+    val scheduler = Schedulers.from(executor)
 }

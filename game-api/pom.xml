@@ -49,6 +49,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxkotlin</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
