@@ -12,6 +12,7 @@ import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.std.ConstructorPutField
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
@@ -96,4 +97,6 @@ class SequenceDefinition : IdentityMapper.Class() {
     class frameIds2 : OrderMapper.InMethod.Field(animateWidget::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
+
+    class frameCount : ConstructorPutField(SequenceDefinition::class, 0, INT_TYPE)
 }

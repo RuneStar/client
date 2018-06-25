@@ -29,6 +29,9 @@ class SmoothAnimations : DisposablePlugin<PluginSettings>() {
 
         add(XGraphicsObject.getModel.exit.subscribe(::graphicsObjectGetModelExit))
         add(XGraphicsObject.getModel.enter.subscribe(::graphicsObjectGetModelEnter))
+
+        add(XDynamicObject.getModel.enter.subscribe(::dynamicObjectGetModelEnter))
+        add(XSequenceDefinition.animateObject.enter.subscribe(::animateObjectEnter))
     }
 }
 
