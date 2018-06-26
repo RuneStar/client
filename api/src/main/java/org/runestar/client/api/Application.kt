@@ -100,6 +100,8 @@ object Application : AutoCloseable {
             while (!CLIENT.loadWorlds()) {
                 Thread.sleep(10)
             }
+
+            Thread.currentThread().name = "client"
         }
     }
 
