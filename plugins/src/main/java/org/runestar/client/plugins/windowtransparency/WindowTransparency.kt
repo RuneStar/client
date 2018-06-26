@@ -34,7 +34,7 @@ class WindowTransparency : AbstractPlugin<WindowTransparency.Settings>() {
     override val name = "Window Transparency"
 
     override fun start() {
-        setOpacity(ctx.settings.opacity)
+        setOpacity(settings.opacity)
     }
 
     override fun stop() {

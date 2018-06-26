@@ -13,7 +13,7 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
 
     override fun start() {
         add(Game.ticks.subscribe {
-            Players.local?.accessor?.let { transmog(it, ctx.settings.npcId) }
+            Players.local?.accessor?.let { transmog(it, settings.npcId) }
         })
     }
 

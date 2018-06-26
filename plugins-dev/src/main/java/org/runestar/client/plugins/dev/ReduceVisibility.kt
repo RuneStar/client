@@ -15,7 +15,7 @@ class ReduceVisibility : DisposablePlugin<ReduceVisibility.Settings>() {
     }
 
     private fun adjustVisibilityMap() {
-        val amt = ctx.settings.amount
+        val amt = settings.amount
         val vm = CLIENT.visibilityMap
         for (pitch in 0 until vm.size) {
             val atPitch = vm[pitch]

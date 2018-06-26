@@ -6,9 +6,9 @@ interface Plugin<T : PluginSettings> {
 
     val defaultSettings: T
 
-    fun init(ctx: PluginContext<T>)
+    fun init(ctx: PluginContext)
 
-    fun start()
+    fun start(settings: T)
 
     fun stop()
 }

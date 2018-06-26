@@ -38,20 +38,20 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     private fun colorMessage(msg: Message) {
         when (msg.type) {
             MessageType.CLAN_CHAT.id -> {
-                msg.prefix = colorString(checkNotNull(msg.prefix), ctx.settings.clanChatName.get())
-                msg.sender = colorString(msg.sender, ctx.settings.clanChatSender.get())
-                msg.text = colorString(msg.text, ctx.settings.clanChatText.get())
+                msg.prefix = colorString(checkNotNull(msg.prefix), settings.clanChatName.get())
+                msg.sender = colorString(msg.sender, settings.clanChatSender.get())
+                msg.text = colorString(msg.text, settings.clanChatText.get())
             }
             MessageType.AUTO_CHAT.id -> {
-                msg.sender = colorString(msg.sender, ctx.settings.publicSender.get())
-                msg.text = colorString(msg.text, ctx.settings.publicAutoText.get())
+                msg.sender = colorString(msg.sender, settings.publicSender.get())
+                msg.text = colorString(msg.text, settings.publicAutoText.get())
             }
             MessageType.PUBLIC.id, MessageType.PUBLIC_MOD.id -> {
-                msg.sender = colorString(msg.sender, ctx.settings.publicSender.get())
-                msg.text = colorString(msg.text, ctx.settings.publicText.get())
+                msg.sender = colorString(msg.sender, settings.publicSender.get())
+                msg.text = colorString(msg.text, settings.publicText.get())
             }
             MessageType.TRADE_RECEIVED.id -> {
-                msg.text = colorString(msg.text, ctx.settings.tradeReceived.get())
+                msg.text = colorString(msg.text, settings.tradeReceived.get())
             }
         }
     }

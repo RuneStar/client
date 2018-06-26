@@ -28,15 +28,15 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     val blockRegexes = ArrayList<Regex>()
 
     override fun start() {
-        ctx.settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
+        settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
 
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
         SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
         SceneElements.clears.subscribe { piles.clear() }
         piles.addAll(SceneElements.ItemPile.all())
 
-        val defaultColor = ctx.settings.color.get()
-        val font = ctx.settings.font.get()
+        val defaultColor = settings.color.get()
+        val font = settings.font.get()
 
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = font
@@ -51,7 +51,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 if (pt == null || pt !in g.clip) continue
                 val items = pile.toList().asReversed()
                 val x = pt.x
-                var y = pt.y - ctx.settings.initialOffset
+                var y = pt.y - settings.initialOffset
                 items.forEach { item ->
                     val def = CLIENT.getItemDefinition(item.id)
                     val count = item.quantity
@@ -66,7 +66,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                     g.color = defaultColor
                     g.drawStringShadowed(string, leftX, y)
 
-                    y -= height + ctx.settings.spacing
+                    y -= height + settings.spacing
                 }
             }
         })

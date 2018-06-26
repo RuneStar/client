@@ -6,8 +6,8 @@ import org.runestar.client.api.Application
 import org.runestar.client.api.BarButton
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.TrayIcon
 import java.awt.event.ActionEvent
@@ -43,7 +43,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
         add(Keyboard.events
-                .filter { it.keyCode == ctx.settings.keyCode && it.id == KeyEvent.KEY_RELEASED }
+                .filter { it.keyCode == settings.keyCode && it.id == KeyEvent.KEY_RELEASED }
                 .delay { XRasterProvider.drawFull0.exit }
                 .map { copyCanvas() }
                 .observeOn(Schedulers.io())
@@ -58,8 +58,8 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     private fun createTimeFormatter(): DateTimeFormatter {
-        val zoneId = if (ctx.settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
-        return DateTimeFormatter.ofPattern(ctx.settings.dateTimeFormatterPattern)
+        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
+        return DateTimeFormatter.ofPattern(settings.dateTimeFormatterPattern)
                 .withZone(zoneId)
     }
 
@@ -82,7 +82,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         try {
             Files.createDirectories(path)
             ImageIO.write(img, IMAGE_FILE_EXTENSION, path.toFile())
-            if (ctx.settings.trayNotify) {
+            if (settings.trayNotify) {
                 Application.trayIcon.displayMessage(
                         "Screenshot Taken",
                         fileName,
@@ -90,7 +90,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 )
             }
         } catch (e: IOException) {
-            ctx.logger.error("Failed to take screenshot", e)
+            logger.error("Failed to take screenshot", e)
         }
     }
 

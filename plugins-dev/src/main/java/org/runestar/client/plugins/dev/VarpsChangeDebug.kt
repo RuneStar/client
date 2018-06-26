@@ -27,7 +27,7 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
                     val lastBitChanged = Integer.SIZE - changedBits.lastIndexOf('1') - 1
                     val firstBitChanged = Integer.SIZE - changedBits.indexOf('1') - 1
 
-                    ctx.logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
+                    logger.info { "$i: $firstBitChanged - $lastBitChanged\n" +
                             "${intToString(o)} ->\n" +
                             intToString(c)
                     }

@@ -10,7 +10,7 @@ class MenuActionLogger : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(Menu.actions.subscribe { a ->
-            ctx.logger.info(a.toString())
+            logger.info(a.toString())
         })
     }
 }

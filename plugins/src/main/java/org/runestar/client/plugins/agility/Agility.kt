@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.agility
 
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.forms.RgbaForm
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
@@ -54,13 +54,13 @@ class Agility : DisposablePlugin<Agility.Settings>() {
         val model = obstacle.model ?: return
         val shape = model.objectClickBox()
 
-        if (ctx.settings.fill) {
-            g.color = ctx.settings.fillColor.get()
+        if (settings.fill) {
+            g.color = settings.fillColor.get()
             g.fill(shape)
         }
 
-        if (ctx.settings.outline) {
-            g.color = ctx.settings.outlineColor.get()
+        if (settings.outline) {
+            g.color = settings.outlineColor.get()
             g.draw(shape)
         }
     }

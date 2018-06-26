@@ -37,11 +37,11 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
         })
 
         add(Menu.openings.subscribe { pt ->
-            ctx.logger.info("Menu opened at $pt")
+            logger.info("Menu opened at $pt")
         })
 
         add(Menu.actions.subscribe { a ->
-            ctx.logger.info(a.toString())
+            logger.info(a.toString())
         })
     }
 }

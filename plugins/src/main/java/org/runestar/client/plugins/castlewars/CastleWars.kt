@@ -14,7 +14,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     override val name = "Castle Wars"
 
     override fun start() {
-        if (ctx.settings.drawBarricadesOnMinimap) {
+        if (settings.drawBarricadesOnMinimap) {
 
             add(XNpcDefinition.init.exit.subscribe {
                 val def = it.instance
@@ -32,7 +32,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     override fun stop() {
         super.stop()
 
-        if (ctx.settings.drawBarricadesOnMinimap) {
+        if (settings.drawBarricadesOnMinimap) {
             resetNpcDefinitions()
         }
     }

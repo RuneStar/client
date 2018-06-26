@@ -18,7 +18,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
 
             g.font = RUNESCAPE_SMALL_FONT
 
-            if (ctx.settings.game) {
+            if (settings.game) {
                 g.color = Color.CYAN
                 SceneElements.Game.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -27,7 +27,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
                 }
             }
 
-            if (ctx.settings.wall) {
+            if (settings.wall) {
                 g.color = Color.ORANGE
                 SceneElements.Wall.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -36,7 +36,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
                 }
             }
 
-            if (ctx.settings.floor) {
+            if (settings.floor) {
                 g.color = Color.GREEN
                 SceneElements.Floor.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
@@ -45,7 +45,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
                 }
             }
 
-            if (ctx.settings.boundary) {
+            if (settings.boundary) {
                 g.color = Color.WHITE
                 SceneElements.Boundary.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach

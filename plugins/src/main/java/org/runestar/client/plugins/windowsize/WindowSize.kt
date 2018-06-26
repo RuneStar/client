@@ -17,11 +17,11 @@ class WindowSize : AbstractPlugin<WindowSize.Settings>() {
 
     override fun start() {
         SwingUtilities.invokeLater {
-            (CLIENT as Component).size = ctx.settings.gameSize
+            (CLIENT as Component).size = settings.gameSize
             val frame = Application.frame
             frame.refit()
             frame.isResizable = false
-            ctx.logger.info { "frame size: ${frame.size}" }
+            logger.info { "frame size: ${frame.size}" }
         }
     }
 

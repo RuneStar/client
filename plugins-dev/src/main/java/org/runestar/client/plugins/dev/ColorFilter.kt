@@ -16,9 +16,9 @@ class ColorFilter : DisposablePlugin<ColorFilter.Settings>() {
 
     override fun start() {
         add(XRasterProvider.drawFull0.enter.filter { Game.state == GameState.LOGGED_IN }.subscribe {
-            val rl = ctx.settings.redBrightness
-            val gl = ctx.settings.greenBrightness
-            val bl = ctx.settings.blueBrightness
+            val rl = settings.redBrightness
+            val gl = settings.greenBrightness
+            val bl = settings.blueBrightness
             it.instance.pixels.replaceEach {
                 val r = min(((it shr 16 and 0xFF) * rl).toInt(), 0xFF)
                 val g = min(((it shr 8 and 0xFF) * gl).toInt(), 0xFF)

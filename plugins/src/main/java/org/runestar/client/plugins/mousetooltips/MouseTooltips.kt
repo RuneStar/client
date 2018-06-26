@@ -25,16 +25,16 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
     // todo : color tags
 
     override fun start() {
-        val outlineColor = ctx.settings.outlineColor.get()
-        val fillColor = ctx.settings.fillColor.get()
-        val font = ctx.settings.font.get()
-        val fontColor = ctx.settings.fontColor.get()
+        val outlineColor = settings.outlineColor.get()
+        val fillColor = settings.fillColor.get()
+        val font = settings.font.get()
+        val fontColor = settings.fontColor.get()
         add(LiveCanvas.repaints.subscribe { g ->
             if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
             val option = Menu.getOption(0)
             val action = option.action
             val target = option.targetName
-            if (action in ctx.settings.ignoredActions) return@subscribe
+            if (action in settings.ignoredActions) return@subscribe
             val canvas = LiveCanvas.shape
             val mousePt = Mouse.location
             if (mousePt !in canvas) return@subscribe
@@ -47,14 +47,14 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             g.font = font
             val textHeight = g.fontMetrics.height
             val textWidth = g.fontMetrics.stringWidth(text)
-            val boxWidth = textWidth + 2 * ctx.settings.paddingX
-            val boxHeight = textHeight + ctx.settings.paddingBottom + ctx.settings.paddingTop
+            val boxWidth = textWidth + 2 * settings.paddingX
+            val boxHeight = textHeight + settings.paddingBottom + settings.paddingTop
 
-            val boxX = min(canvas.width - 1, mousePt.x + boxWidth + ctx.settings.offsetX) - boxWidth
-            val boxY = if (mousePt.y - boxHeight - ctx.settings.offsetY > 0) {
-                mousePt.y - ctx.settings.offsetY - boxHeight
+            val boxX = min(canvas.width - 1, mousePt.x + boxWidth + settings.offsetX) - boxWidth
+            val boxY = if (mousePt.y - boxHeight - settings.offsetY > 0) {
+                mousePt.y - settings.offsetY - boxHeight
             } else {
-                mousePt.y + ctx.settings.offsetYFlipped
+                mousePt.y + settings.offsetYFlipped
             }
             val box = Rectangle(boxX, boxY, boxWidth, boxHeight)
 
@@ -64,8 +64,8 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             g.color = outlineColor
             g.draw(box)
 
-            val textX = boxX + ctx.settings.paddingX
-            val textY = boxY + ctx.settings.paddingTop + g.fontMetrics.ascent
+            val textX = boxX + settings.paddingX
+            val textY = boxY + settings.paddingTop + g.fontMetrics.ascent
             g.color = fontColor
             g.drawStringShadowed(text, textX, textY)
         })

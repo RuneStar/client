@@ -10,7 +10,7 @@ class GameStateLogger : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(Game.stateChanges.subscribe {
-            ctx.logger.info(it.toString())
+            logger.info(it.toString())
         })
     }
 }

@@ -141,13 +141,13 @@ object Application : AutoCloseable {
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
 
-        val pl = PluginLoader(javaClass.classLoader, profileDir, YamlFileReadWriter)
+        val pl = PluginLoader(javaClass.classLoader, profileDir, YamlFileReadWriter, Game.executor)
         pluginLoader = pl
         frame.sidePanel.clear()
         frame.topBar.clear()
         frame.sidePanel.panel.isVisible = false
         frame.refit()
-        frame.sidePanel.addFirst(PluginsTab(pl))
+        frame.sidePanel.addFirst(PluginsTab(pl.plugins))
         frame.sidePanel.add(HideTopBarButton())
     }
 

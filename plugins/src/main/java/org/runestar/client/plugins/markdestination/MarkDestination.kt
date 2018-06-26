@@ -16,8 +16,8 @@ class MarkDestination : DisposablePlugin<MarkDestination.Settings>() {
     override val name = "Mark Destination"
 
     override fun start() {
-        val stroke = BasicStroke(ctx.settings.stroke)
-        val color = ctx.settings.color.get()
+        val stroke = BasicStroke(settings.stroke)
+        val color = settings.color.get()
         add(LiveCanvas.repaints.subscribe { g ->
             val destination = Game.destination ?: return@subscribe
             if (!destination.isLoaded) return@subscribe

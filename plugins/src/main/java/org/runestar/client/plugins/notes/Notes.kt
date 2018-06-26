@@ -5,7 +5,6 @@ import org.runestar.client.api.Application
 import org.runestar.client.api.TabButton
 import org.runestar.client.api.TopBar
 import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginContext
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Component
 import java.awt.Dimension
@@ -23,8 +22,7 @@ class Notes : AbstractPlugin<PluginSettings>() {
 
     private lateinit var file: File
 
-    override fun init(ctx: PluginContext<PluginSettings>) {
-        super.init(ctx)
+    override fun init() {
         file = ctx.directory.resolve("notes.txt").toFile()
     }
 

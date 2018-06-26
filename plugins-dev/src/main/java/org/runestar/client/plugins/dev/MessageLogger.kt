@@ -11,7 +11,7 @@ class MessageLogger : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(Chat.messageAdditions.subscribe { m ->
-            ctx.logger.info("type=${MessageType.LOOKUP[m.type]}, $m")
+            logger.info("type=${MessageType.LOOKUP[m.type]}, $m")
         })
     }
 }

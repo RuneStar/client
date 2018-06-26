@@ -17,12 +17,12 @@ class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
     override fun start() {
         val keyPressedEvents = XKeyHandler.keyPressed.enter.map { it.arguments[0] as KeyEvent }
         add(keyPressedEvents
-                .filter { isShortcutPressed(it, ctx.settings.clearAll) }
+                .filter { isShortcutPressed(it, settings.clearAll) }
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearAll() }
         )
         add(keyPressedEvents
-                .filter { isShortcutPressed(it, ctx.settings.clearWord) }
+                .filter { isShortcutPressed(it, settings.clearWord) }
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearWord() }
         )

@@ -14,40 +14,40 @@ class SwingEventsLogger : DisposablePlugin<SwingEventsLogger.Settings>() {
     override val defaultSettings = Settings()
 
     override fun start() {
-        val s = ctx.settings
+        val s = settings
         if (s.focus) {
             add(LiveCanvas.focusEvents.subscribe {
-                ctx.logger.info(it.toString())
+                logger.info(it.toString())
             })
         }
         if (s.window) {
             add(Game.windowEvents.subscribe {
-                ctx.logger.info(it.toString())
+                logger.info(it.toString())
             })
         }
         if (s.component) {
             add(LiveCanvas.componentEvents.subscribe {
-                ctx.logger.info(it.toString())
+                logger.info(it.toString())
             })
         }
         if (s.container) {
             add(Game.containerEvents.subscribe {
-                ctx.logger.info(it.toString())
+                logger.info(it.toString())
             })
         }
         if (s.mouse.others || s.mouse.motion || s.mouse.wheel) {
             add(Mouse.events.subscribe {
                 when (it.id) {
-                    MouseEvent.MOUSE_WHEEL -> if (s.mouse.wheel) ctx.logger.info(it.toString())
-                    MouseEvent.MOUSE_MOVED -> if (s.mouse.motion) ctx.logger.info(it.toString())
-                    else -> if (s.mouse.others) ctx.logger.info(it.toString())
+                    MouseEvent.MOUSE_WHEEL -> if (s.mouse.wheel) logger.info(it.toString())
+                    MouseEvent.MOUSE_MOVED -> if (s.mouse.motion) logger.info(it.toString())
+                    else -> if (s.mouse.others) logger.info(it.toString())
                 }
             })
         }
         if (s.keyboard.all || s.keyboard.typed) {
             add(Keyboard.events.subscribe {
-                if (s.keyboard.typed && it.id == KeyEvent.KEY_TYPED) ctx.logger.info(it.toString())
-                else if (s.keyboard.all) ctx.logger.info(it.toString())
+                if (s.keyboard.typed && it.id == KeyEvent.KEY_TYPED) logger.info(it.toString())
+                else if (s.keyboard.all) logger.info(it.toString())
             })
         }
     }

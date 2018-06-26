@@ -17,7 +17,7 @@ class EvictingHashTableDebug : DisposablePlugin<PluginSettings>() {
                     .filter { !it.methodName.contains('$') }
                     .map { "${it.className}.${it.methodName}" }
             val elementType = it.instance.deque.sentinel.nextDual.javaClass.interfaces.firstOrNull()?.simpleName ?: "?"
-            ctx.logger.info {
+            logger.info {
                 "Cache miss: ${it.arguments[0]} in ${it.instance}(capacity=${it.instance.capacity}, type=$elementType) at $stack"
             }
         })

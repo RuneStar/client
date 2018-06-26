@@ -20,7 +20,7 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
             var y = 40
             val lines = ArrayList<String>()
 
-            when (ctx.settings.mode) {
+            when (settings.mode) {
                 Mode.CLAN -> {
                     val cc = Game.clanChat ?: return@subscribe
                     lines.add("owner=${cc.owner}")

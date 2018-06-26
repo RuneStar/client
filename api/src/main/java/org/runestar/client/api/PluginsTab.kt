@@ -1,25 +1,21 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
+import hu.akarnokd.rxjava2.swing.SwingSchedulers
 import org.runestar.client.api.util.desktop
 import org.runestar.client.api.util.safeOpen
-import org.runestar.client.plugins.spi.PluginContext
 import org.runestar.client.plugins.spi.PluginLoader
 import java.awt.Component
 import javax.imageio.ImageIO
 import javax.swing.*
 
-class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
+class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() {
 
     override val name = "Plugins"
 
     override val icon = ImageIcon(ImageIO.read(javaClass.getResource("cog.png")))
 
     override val component: JScrollPane
-
-    private val timer = Timer(600, null)
-
-    private var curPlugins: MutableMap<PluginContext<*>, Boolean>
 
     private val pluginsBox = JPanel().apply { layout = BoxLayout(this, BoxLayout.Y_AXIS) }
 
@@ -33,42 +29,18 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
             verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
             horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
         }
-        curPlugins = pluginLoader.snapshot()
-        refresh()
-        timer.apply {
-            addActionListener {
-                if (component.isShowing) {
-                    tryRefresh()
-                }
-            }
-            start()
-        }
-    }
-
-    private fun tryRefresh() {
-        val ps = pluginLoader.snapshot()
-        if (ps != curPlugins) {
-            curPlugins = ps
-            refresh()
-        }
-    }
-
-    private fun refresh() {
-        pluginsBox.removeAll()
-        curPlugins.keys.forEach {
+        plugins.forEach {
             pluginsBox.add(it.createComponent())
         }
-        pluginsBox.revalidate()
-        pluginsBox.repaint()
     }
 
-    private fun PluginContext<*>.createComponent(): Component {
+    private fun PluginLoader.Holder<*>.createComponent(): Component {
         val popup = JPopupMenu().apply {
             add(JMenuItem("Settings").apply {
-                addActionListener { desktop?.safeOpen(settingsFile) }
+                addActionListener { desktop?.safeOpen(ctx.settingsFile) }
             })
             add(JMenuItem("Directory").apply {
-                addActionListener { desktop?.safeOpen(directory) }
+                addActionListener { desktop?.safeOpen(ctx.directory) }
             })
         }
         return Box.createHorizontalBox().apply {
@@ -78,10 +50,12 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
             })
             add(Box.createGlue())
             add(JCheckBox().apply {
-                isSelected = isRunning()
+                isSelected = false
+                isRunningChanged.subscribeOn(SwingSchedulers.edt()).subscribe {
+                    isSelected = it
+                }
                 addActionListener {
-                    if (isSelected) pluginLoader.start(this@createComponent) else pluginLoader.stop(this@createComponent)
-                    curPlugins[this@createComponent] = isSelected
+                    setIsRunning(isSelected)
                 }
             })
             add(JButton("...").apply {
@@ -92,9 +66,5 @@ class PluginsTab(val pluginLoader: PluginLoader) : TabButton() {
             })
             add(Box.createHorizontalStrut(3))
         }
-    }
-
-    private fun PluginLoader.snapshot(): MutableMap<PluginContext<*>, Boolean> {
-        return plugins.associateTo(LinkedHashMap()) { it to it.isRunning() }
     }
 }

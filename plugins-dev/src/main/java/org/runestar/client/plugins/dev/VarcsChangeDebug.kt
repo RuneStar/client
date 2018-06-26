@@ -14,13 +14,13 @@ class VarcsChangeDebug : DisposablePlugin<PluginSettings>() {
             val index = it.arguments[0] as Int
             val newValue = it.arguments[1] as Int
             val oldValue = it.instance.getInt(index)
-            ctx.logger.debug { "Varcs int $index: $oldValue -> $newValue" }
+            logger.debug { "Varcs int $index: $oldValue -> $newValue" }
         })
         add(XVarcs.setString.enter.subscribe {
             val index = it.arguments[0] as Int
             val newValue = it.arguments[1] as String
             val oldValue = it.instance.getString(index)
-            ctx.logger.debug { "Varcs str $index: $oldValue -> $newValue" }
+            logger.debug { "Varcs str $index: $oldValue -> $newValue" }
         })
     }
 }

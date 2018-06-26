@@ -44,7 +44,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
 
     private fun highlight(msg: Message) {
         var txt = msg.text
-        ctx.settings.highlights.forEach { highlight ->
+        settings.highlights.forEach { highlight ->
             txt = txt.replace(highlight.regex.get()) { matchResult ->
                 if (highlight.trayNotify) {
                     Application.trayIcon.displayMessage(

@@ -33,7 +33,7 @@ class ReflectionChecksDebug : DisposablePlugin<PluginSettings>() {
                 msg.append(creationErrorType(rc.creationErrors[i]).name)
             }
         }
-        ctx.logger.info(msg.toString())
+        logger.info(msg.toString())
     }
 
     private fun creationErrorType(n: Int): Class<out Throwable> {

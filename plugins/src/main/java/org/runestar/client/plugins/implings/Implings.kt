@@ -28,10 +28,10 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     private var implings: List<Npc> = emptyList()
 
     override fun start() {
-        implingIds = ctx.settings.ids()
+        implingIds = settings.ids()
         add(Game.ticks.filter { isLoggedIn() }.subscribe { onTick() })
         add(LiveCanvas.repaints.filter { isLoggedIn() }.subscribe(::onRepaint))
-        if (ctx.settings.drawMinimapInPuroPuro) {
+        if (settings.drawMinimapInPuroPuro) {
             add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { LiveMinimap.isDrawn = true })
         }
     }
@@ -39,7 +39,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     override fun stop() {
         super.stop()
         implings = emptyList()
-        if (ctx.settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
+        if (settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
             LiveMinimap.isDrawn = false
         }
     }
