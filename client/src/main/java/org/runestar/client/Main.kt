@@ -20,7 +20,7 @@ private lateinit var javConfig: JavConfig
 
 fun main(args: Array<String>) {
     setupLogging()
-    SwingUtilities.invokeLater(LafInstallation)
+    SwingUtilities.invokeLater(LafInstallation())
 
     javConfig = JavConfig.load(System.getProperty("runestar.world", ""))
     updateRevision(javConfig.codebase.host)

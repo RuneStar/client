@@ -8,7 +8,7 @@ import javax.swing.ToolTipManager
 import javax.swing.UIManager
 import javax.swing.plaf.FontUIResource
 
-object LafInstallation : Runnable {
+class LafInstallation : Runnable {
 
     override fun run() {
         WebLookAndFeel.install(DarkSkin::class.java)
