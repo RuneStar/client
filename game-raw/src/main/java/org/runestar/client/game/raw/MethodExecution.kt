@@ -1,6 +1,5 @@
 package org.runestar.client.game.raw
 
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Observer
 
@@ -32,12 +31,12 @@ interface MethodExecution<I, R> {
     class Implementation<I, R> internal constructor() : MethodExecution<I, R> {
 
         @JvmField
-        val _enter: PublishRelay<MethodEvent<I, R>> = PublishRelay.create<MethodEvent<I, R>>()
+        val _enter: PublishRelay<MethodEvent<I, R>> = PublishRelay()
 
         override val enter: Observable<MethodEvent<I, R>> get() = _enter
 
         @JvmField
-        val _exit: PublishRelay<MethodEvent<I, R>> = PublishRelay.create<MethodEvent<I, R>>()
+        val _exit: PublishRelay<MethodEvent<I, R>> = PublishRelay()
 
         override val exit: Observable<MethodEvent<I, R>> get() = _exit
 

@@ -24,10 +24,6 @@
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.jakewharton.rxrelay2</groupId>
-            <artifactId>rxrelay</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
