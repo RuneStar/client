@@ -3222,4 +3222,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Frames>() }
                 .and { it.arguments.size in 1..2 }
     }
+
+    @DependsOn(Script::class, EvictingDualNodeHashTable::class)
+    class Script_cached : CachedDefinitionMapper(Script::class)
 }
