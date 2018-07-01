@@ -2557,6 +2557,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Player>() } }
     }
 
+    @MethodParameters("buffer", "plane", "x", "y", "x0", "y0", "n")
     @DependsOn(Buffer::class)
     class loadTerrain : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
