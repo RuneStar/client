@@ -11,13 +11,13 @@ interface Transformer {
     fun transform(source: Path, destination: Path)
 
     class Composite(
-            private val d0: Transformer,
-            private vararg val ds: Transformer
+            private val t0: Transformer,
+            private vararg val ts: Transformer
     ) : Transformer {
 
         override fun transform(source: Path, destination: Path) {
-            d0.transform(source, destination)
-            ds.forEach {
+            t0.transform(source, destination)
+            ts.forEach {
                 it.transform(destination, destination)
             }
         }

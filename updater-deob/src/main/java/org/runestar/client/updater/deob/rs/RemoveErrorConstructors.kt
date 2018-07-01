@@ -11,6 +11,9 @@ import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
 import java.nio.file.Path
 
+/**
+ * Removes constructors that contain only `throw new Error();`
+ */
 object RemoveErrorConstructors : Transformer {
 
     private val EXCEPTIONS_LIST = listOf(Type.getType(Throwable::class.java).internalName)

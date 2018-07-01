@@ -10,6 +10,9 @@ import org.runestar.client.updater.deob.writeJar
 import java.nio.file.Files
 import java.nio.file.Path
 
+/**
+ * Removes methods found by [UnusedMethodFinder]
+ */
 object UnusedMethodRemover : Transformer {
 
     private val mapper = jacksonObjectMapper()

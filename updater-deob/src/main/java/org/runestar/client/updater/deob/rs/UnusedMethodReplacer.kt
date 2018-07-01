@@ -15,6 +15,9 @@ import java.lang.reflect.Modifier
 import java.nio.file.Files
 import java.nio.file.Path
 
+/**
+ * Replaces the bodies of methods found by [UnusedMethodFinder] with `throw null;`
+ */
 object UnusedMethodReplacer : Transformer {
 
     private val mapper = jacksonObjectMapper()
@@ -27,7 +30,7 @@ object UnusedMethodReplacer : Transformer {
         val unusedMethodsFile: Path = source.resolveSibling(source.fileName.toString() + ".unused-methods.json")
         check(Files.exists(unusedMethodsFile))
 
-        val unusedMethodNames: Set<String> = mapper.readValue<Set<String>>(unusedMethodsFile.toFile())
+        val unusedMethodNames: Set<String> = mapper.readValue(unusedMethodsFile.toFile())
 
         classNodes.forEach { c ->
             for (m in c.methods) {

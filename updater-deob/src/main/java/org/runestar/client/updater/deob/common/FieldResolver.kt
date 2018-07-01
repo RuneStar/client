@@ -12,6 +12,9 @@ import org.runestar.client.updater.deob.writeJar
 import java.lang.reflect.Modifier
 import java.nio.file.Path
 
+/**
+ * Resolves and replaces the owner of field instructions by JVMS 5.4.3.2
+ */
 object FieldResolver : Transformer {
 
     private val logger = getLogger()
@@ -40,7 +43,7 @@ object FieldResolver : Transformer {
             }
         }
 
-        logger.info { "Field instruction owners narrowed = $changedCount" }
+        logger.info { "Field instruction owners narrowed: $changedCount" }
 
         writeJar(classNodes, destination)
     }
