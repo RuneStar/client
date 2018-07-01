@@ -24,6 +24,10 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
         get() = accessor.overheadText
         set(value) { accessor.overheadText = value }
 
+    var overheadTextCyclesRemaining: Int
+        get() = accessor.overheadTextCyclesRemaining
+        set(value) { accessor.overheadTextCyclesRemaining = value }
+
     /**
      * Health percent between `0.0` and `1.0` of limited precision. `null` if the health-bar is not visible.
      */
