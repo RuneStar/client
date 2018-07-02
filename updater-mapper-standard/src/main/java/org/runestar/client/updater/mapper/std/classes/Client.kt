@@ -3226,4 +3226,23 @@ class Client : IdentityMapper.Class() {
 
     @DependsOn(Script::class, EvictingDualNodeHashTable::class)
     class Script_cached : CachedDefinitionMapper(Script::class)
+
+    @DependsOn(ParamKeyDefinition::class, EvictingDualNodeHashTable::class)
+    class ParamKeyDefinition_cached : CachedDefinitionMapper(ParamKeyDefinition::class)
+
+    @MethodParameters("id")
+    @DependsOn(ParamKeyDefinition::class)
+    class getParamKeyDefinition : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<ParamKeyDefinition>() }
+    }
+
+    @DependsOn(VarpDefinition::class, EvictingDualNodeHashTable::class)
+    class VarpDefinition_cached : CachedDefinitionMapper(VarpDefinition::class)
+
+    @DependsOn(addPlayerToMenu::class, players::class)
+    class combatTargetPlayerIndex : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<addPlayerToMenu>().id }
+                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldId == field<players>().id }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }
