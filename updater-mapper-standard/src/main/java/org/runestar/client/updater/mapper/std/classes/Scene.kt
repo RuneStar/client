@@ -151,7 +151,8 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE.withDimensions(3) }
     }
 
-    class method1 : IdentityMapper.InstanceMethod() {
+    @MethodParameters("x", "y", "z", "pitch", "yaw", "plane")
+    class draw : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 6..7 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
