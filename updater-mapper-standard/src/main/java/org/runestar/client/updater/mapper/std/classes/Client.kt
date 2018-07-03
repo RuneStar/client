@@ -3245,4 +3245,11 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(15) { it.opcode == GETSTATIC && it.fieldId == field<players>().id }
                 .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("x", "y", "width", "height", "clear")
+    class setViewportShape : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size in 5..6 }
+                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
+    }
 }
