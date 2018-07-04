@@ -225,11 +225,6 @@
                 <version>1.2.9-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.bcel</groupId>
-                <artifactId>bcel</artifactId>
-                <version>6.0</version>
-            </dependency>
-            <dependency>
                 <groupId>io.sigpipe</groupId>
                 <artifactId>jbsdiff</artifactId>
                 <version>1.0</version>
