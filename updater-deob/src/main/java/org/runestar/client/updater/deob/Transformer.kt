@@ -31,7 +31,6 @@ interface Transformer {
         val TESTING = Transformer.Composite(
                 JarInfo,
                 FieldResolver,
-                MultiplierFinder,
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
@@ -46,13 +45,13 @@ interface Transformer {
                 SortMethodsByLineNumber,
                 MethodOrigClassFinder,
                 DebugRemover,
-                RemoveEnclosingMethodAttributes
+                RemoveEnclosingMethodAttributes,
+                MultiplierFinder
 //                OpaquePredicateArgumentRemover
         )
 
         val DEFAULT = Transformer.Composite(
                 FieldResolver,
-                MultiplierFinder,
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
@@ -65,7 +64,8 @@ interface Transformer {
                 SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 DebugRemover,
-                RemoveEnclosingMethodAttributes
+                RemoveEnclosingMethodAttributes,
+                MultiplierFinder
 //                OpaquePredicateArgumentRemover
         )
 
