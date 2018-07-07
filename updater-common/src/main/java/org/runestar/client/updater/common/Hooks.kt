@@ -38,6 +38,8 @@ data class FieldHook(
             }
         }
     }
+
+    val encoderNarrowed: Number? get() = decoderNarrowed?.let { invert(it) }
 }
 
 data class MethodHook(

@@ -10,6 +10,7 @@ import org.objectweb.asm.tree.analysis.BasicInterpreter
 import org.objectweb.asm.tree.analysis.BasicValue
 import org.objectweb.asm.tree.analysis.Interpreter
 import org.objectweb.asm.tree.analysis.Value
+import org.runestar.client.updater.common.invert
 
 class MultInterpreter(
         val decoders: Multimap<String, Number>,

@@ -172,7 +172,7 @@ private fun createFieldSetter(typePool: TypePool, fieldHook: FieldHook): Impleme
     val fieldOwnerDescription = typePool.describe(fieldHook.owner).resolve()
     val fieldDescription = fieldOwnerDescription.declaredFields.filter(fieldHook.matcher()).only
     val fieldAccess = FieldAccess.forField(fieldDescription)
-    val encoder = invert(fieldHook.decoderNarrowed)
+    val encoder = fieldHook.encoderNarrowed
     return when(encoder) {
         is Int -> {
             Implementation.Simple(

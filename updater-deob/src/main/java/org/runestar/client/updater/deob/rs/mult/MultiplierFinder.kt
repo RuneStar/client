@@ -7,6 +7,7 @@ import com.google.common.collect.MultimapBuilder
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.analysis.Analyzer
+import org.runestar.client.updater.common.invert
 import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.readJar
 import org.runestar.client.updater.deob.writeJar
