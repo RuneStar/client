@@ -6,8 +6,8 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 import java.util.*
 import kotlin.collections.HashMap

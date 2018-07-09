@@ -5,8 +5,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Files
 import java.nio.file.Path
 

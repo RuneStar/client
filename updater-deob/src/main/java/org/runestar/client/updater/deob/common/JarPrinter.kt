@@ -1,7 +1,7 @@
 package org.runestar.client.updater.deob.common
 
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.deob.util.readJar
 import org.objectweb.asm.util.TraceClassVisitor
 import java.io.PrintWriter
 import java.nio.file.Files

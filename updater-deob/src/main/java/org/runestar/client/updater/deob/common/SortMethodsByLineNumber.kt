@@ -3,8 +3,8 @@ package org.runestar.client.updater.deob.common
 import org.objectweb.asm.tree.LineNumberNode
 import org.objectweb.asm.tree.MethodNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 
 object SortMethodsByLineNumber : Transformer {

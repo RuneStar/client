@@ -1,4 +1,4 @@
-package org.runestar.client.updater.deob
+package org.runestar.client.updater.deob.util
 
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter

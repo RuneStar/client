@@ -7,8 +7,8 @@ import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 
 /**

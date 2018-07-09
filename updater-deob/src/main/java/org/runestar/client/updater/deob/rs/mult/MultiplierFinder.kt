@@ -9,8 +9,8 @@ import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.tree.analysis.Analyzer
 import org.runestar.client.updater.common.invert
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 import java.util.*
 

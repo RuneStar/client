@@ -8,8 +8,8 @@ import com.google.common.collect.MultimapBuilder
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.MethodInsnNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
-import org.runestar.client.updater.deob.writeJar
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 
 object OpaquePredicateArgumentRemover : Transformer {

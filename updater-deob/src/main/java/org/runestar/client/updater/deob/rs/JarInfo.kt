@@ -1,7 +1,7 @@
 package org.runestar.client.updater.deob.rs
 
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.deob.util.readJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Attribute

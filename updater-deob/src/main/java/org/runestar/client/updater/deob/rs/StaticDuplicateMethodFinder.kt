@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.TreeMultimap
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.deob.util.readJar
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*

@@ -20,7 +20,7 @@ import org.runestar.client.updater.common.ConstructorHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.readJar
+import org.runestar.client.updater.deob.util.readJar
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.extensions.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
