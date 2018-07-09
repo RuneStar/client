@@ -2,20 +2,22 @@ package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*
-import org.objectweb.asm.util.Printer
+import org.runestar.client.updater.deob.Transformer
+import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
 import java.nio.file.Path
 import java.util.*
 
 object OpaquePredicateCheckRemover : Transformer {
+
+    private val ISE_INTERNAL_NAME = Type.getInternalName(IllegalStateException::class.java)
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
@@ -49,7 +51,7 @@ object OpaquePredicateCheckRemover : Transformer {
                         instructions.next()
                         instructions.remove()
                     }
-                    instructions.add(JumpInsnNode(Opcodes.GOTO, LabelNode(label)))
+                    instructions.add(JumpInsnNode(GOTO, LabelNode(label)))
                     passingArgs[c.name + "." + m.name + m.desc] = passingVal(constantPushed, ifOpcode)
                 }
             }
@@ -62,7 +64,7 @@ object OpaquePredicateCheckRemover : Transformer {
 
     private fun AbstractInsnNode.matchesReturn(lastParamIndex: Int): Boolean {
         val i0 = this
-        if (i0.opcode != Opcodes.ILOAD) return false
+        if (i0.opcode != ILOAD) return false
         i0 as VarInsnNode
         if (i0.`var` != lastParamIndex) return false
         val i1 = i0.next
@@ -76,7 +78,7 @@ object OpaquePredicateCheckRemover : Transformer {
 
     private fun AbstractInsnNode.matchesException(lastParamIndex: Int): Boolean {
         val i0 = this
-        if (i0.opcode != Opcodes.ILOAD) return false
+        if (i0.opcode != ILOAD) return false
         i0 as VarInsnNode
         if (i0.`var` != lastParamIndex) return false
         val i1 = i0.next
@@ -84,15 +86,15 @@ object OpaquePredicateCheckRemover : Transformer {
         val i2 = i1.next
         if (!i2.isIf) return false
         val i3 = i2.next
-        if (i3.opcode != Opcodes.NEW) return false
+        if (i3.opcode != NEW) return false
         val i4 = i3.next
-        if (i4.opcode != Opcodes.DUP) return false
+        if (i4.opcode != DUP) return false
         val i5 = i4.next
-        if (i5.opcode != Opcodes.INVOKESPECIAL) return false
+        if (i5.opcode != INVOKESPECIAL) return false
         i5 as MethodInsnNode
-        if (i5.owner != Type.getInternalName(IllegalStateException::class.java)) return false
+        if (i5.owner != ISE_INTERNAL_NAME) return false
         val i6 = i5.next
-        if (i6.opcode != Opcodes.ATHROW) return false
+        if (i6.opcode != ATHROW) return false
         return true
     }
 
@@ -103,45 +105,47 @@ object OpaquePredicateCheckRemover : Transformer {
 
     private fun passingVal(pushed: Int, ifOpcode: Int): Int {
         return when(ifOpcode) {
-            Opcodes.IF_ICMPEQ -> pushed
-            Opcodes.IF_ICMPGE,
-            Opcodes.IF_ICMPGT -> pushed + 1
-            Opcodes.IF_ICMPLE,
-            Opcodes.IF_ICMPLT,
-            Opcodes.IF_ICMPNE -> pushed - 1
+            IF_ICMPEQ -> pushed
+            IF_ICMPGE,
+            IF_ICMPGT -> pushed + 1
+            IF_ICMPLE,
+            IF_ICMPLT,
+            IF_ICMPNE -> pushed - 1
             else -> error(ifOpcode)
         }
     }
 
     private val AbstractInsnNode.isConstantIntProducer: Boolean get() {
         return when (opcode) {
-            -1 -> false
-            Opcodes.LDC -> (this as LdcInsnNode).cst is Int
-            else -> Printer.OPCODES[opcode].let { it.endsWith("IPUSH") || it.startsWith("ICONST_") }
+            LDC -> (this as LdcInsnNode).cst is Int
+            SIPUSH, BIPUSH, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1 -> true
+            else -> false
         }
     }
 
     private val AbstractInsnNode.constantIntProduced: Int get() {
         return when (opcode) {
-            Opcodes.LDC -> (this as LdcInsnNode).cst as Int
-            -1 -> error(-1)
-            else -> Printer.OPCODES[opcode].let {
-                if (it.endsWith("IPUSH")) {
-                    this as IntInsnNode
-                    operand
-                } else {
-                    val suf = it.removePrefix("ICONST_")
-                    suf.replace('M', '-').toInt()
-                }
-            }
+            LDC -> (this as LdcInsnNode).cst as Int
+            SIPUSH, BIPUSH -> (this as IntInsnNode).operand
+            ICONST_0 -> 0
+            ICONST_1 -> 1
+            ICONST_2 -> 2
+            ICONST_3 -> 3
+            ICONST_4 -> 4
+            ICONST_5 -> 5
+            ICONST_M1 -> -1
+            else -> error(this)
         }
     }
 
-    val AbstractInsnNode.isIf: Boolean get() {
+    private val AbstractInsnNode.isIf: Boolean get() {
         return this is JumpInsnNode && opcode != Opcodes.GOTO
     }
 
-    val AbstractInsnNode.isReturn: Boolean get() {
-        return opcode >= 0 && Printer.OPCODES[opcode].endsWith("RETURN")
+    private val AbstractInsnNode.isReturn: Boolean get() {
+        return when (opcode) {
+            RETURN, ARETURN, DRETURN, FRETURN, IRETURN, LRETURN -> true
+            else -> false
+        }
     }
 }
