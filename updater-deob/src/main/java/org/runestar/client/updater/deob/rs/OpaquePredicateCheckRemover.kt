@@ -9,6 +9,8 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*
 import org.runestar.client.updater.deob.Transformer
+import org.runestar.client.updater.deob.util.constantIntProduced
+import org.runestar.client.updater.deob.util.isConstantIntProducer
 import org.runestar.client.updater.deob.util.readJar
 import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
@@ -112,29 +114,6 @@ object OpaquePredicateCheckRemover : Transformer {
             IF_ICMPLT,
             IF_ICMPNE -> pushed - 1
             else -> error(ifOpcode)
-        }
-    }
-
-    private val AbstractInsnNode.isConstantIntProducer: Boolean get() {
-        return when (opcode) {
-            LDC -> (this as LdcInsnNode).cst is Int
-            SIPUSH, BIPUSH, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1 -> true
-            else -> false
-        }
-    }
-
-    private val AbstractInsnNode.constantIntProduced: Int get() {
-        return when (opcode) {
-            LDC -> (this as LdcInsnNode).cst as Int
-            SIPUSH, BIPUSH -> (this as IntInsnNode).operand
-            ICONST_0 -> 0
-            ICONST_1 -> 1
-            ICONST_2 -> 2
-            ICONST_3 -> 3
-            ICONST_4 -> 4
-            ICONST_5 -> 5
-            ICONST_M1 -> -1
-            else -> error(this)
         }
     }
 

@@ -28,3 +28,26 @@ fun pushConstLongInsn(n: Long): AbstractInsnNode {
         else -> LdcInsnNode(n)
     }
 }
+
+val AbstractInsnNode.isConstantIntProducer: Boolean get() {
+    return when (opcode) {
+        Opcodes.LDC -> (this as LdcInsnNode).cst is Int
+        Opcodes.SIPUSH, Opcodes.BIPUSH, Opcodes.ICONST_0, Opcodes.ICONST_1, Opcodes.ICONST_2, Opcodes.ICONST_3, Opcodes.ICONST_4, Opcodes.ICONST_5, Opcodes.ICONST_M1 -> true
+        else -> false
+    }
+}
+
+val AbstractInsnNode.constantIntProduced: Int get() {
+    return when (opcode) {
+        Opcodes.LDC -> (this as LdcInsnNode).cst as Int
+        Opcodes.SIPUSH, Opcodes.BIPUSH -> (this as IntInsnNode).operand
+        Opcodes.ICONST_0 -> 0
+        Opcodes.ICONST_1 -> 1
+        Opcodes.ICONST_2 -> 2
+        Opcodes.ICONST_3 -> 3
+        Opcodes.ICONST_4 -> 4
+        Opcodes.ICONST_5 -> 5
+        Opcodes.ICONST_M1 -> -1
+        else -> error(this)
+    }
+}
