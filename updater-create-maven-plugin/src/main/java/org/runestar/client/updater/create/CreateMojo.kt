@@ -61,6 +61,8 @@ class CreateMojo : AbstractMojo() {
 
     private val opJson: Path get() = deobJar.appendFileName(".op.json")
 
+    private val opDescsJson: Path get() = deobJar.appendFileName(".op-descs.json")
+
     private val multJson: Path get() = deobJar.appendFileName(".mult.json")
 
     private val hooksJson: Path get() = targetDir.resolve("hooks.json")
@@ -155,11 +157,14 @@ class CreateMojo : AbstractMojo() {
 
     private fun findConstructors(): Multimap<String, ConstructorHook> {
         val classNodes = readJar(deobJar)
+        val opDescs = jsonMapper.readValue<Map<String, String>>(opDescsJson.toFile())
         val constructors = MultimapBuilder.hashKeys().arrayListValues().build<String, ConstructorHook>()
         classNodes.forEach { c ->
             c.methods.forEach { m ->
                 if (m.name == "<init>") {
-                    constructors.put(c.name, ConstructorHook(m.access, m.desc))
+                    val s = "${c.name}.${m.name}${m.desc}"
+                    val desc = opDescs[s] ?: m.desc
+                    constructors.put(c.name, ConstructorHook(m.access, desc))
                 }
             }
         }
@@ -168,6 +173,7 @@ class CreateMojo : AbstractMojo() {
 
     private fun mergeHooks() {
         val ops = jsonMapper.readValue<Map<String, Int>>(opJson.toFile())
+        val opDescs = jsonMapper.readValue<Map<String, String>>(opDescsJson.toFile())
         val mults = jsonMapper.readValue<Map<String, Long>>(multJson.toFile())
         val names = jsonMapper.readValue<List<IdClass>>(namesJson.toFile())
         val constructors = findConstructors()
@@ -176,7 +182,9 @@ class CreateMojo : AbstractMojo() {
                 FieldHook(f.field, f.owner, f.name, f.access, f.descriptor, mults["${f.owner}.${f.name}"])
             }
             val methods = c.methods.map { m ->
-                MethodHook(m.method, m.owner, m.name, m.access, m.parameters, m.descriptor, ops["${m.owner}.${m.name}${m.descriptor}"])
+                val s = "${m.owner}.${m.name}${m.descriptor}"
+                val desc = opDescs[s] ?: m.descriptor
+                MethodHook(m.method, m.owner, m.name, m.access, m.parameters, desc, ops[s])
             }
             val cons = constructors[c.name].toList()
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods, cons)

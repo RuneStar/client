@@ -1,10 +1,12 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.runestar.client.updater.mapper.*
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
+import org.objectweb.asm.tree.JumpInsnNode
+import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -12,9 +14,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
-import org.objectweb.asm.tree.JumpInsnNode
 
 @DependsOn(Npc.definition::class)
 class NpcDefinition : IdentityMapper.Class() {
@@ -104,7 +103,7 @@ class NpcDefinition : IdentityMapper.Class() {
     class headIconPrayer : UniqueMapper.InMethod.Field(readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 102 }
                 .nextWithin(2) { it.node is JumpInsnNode }
-                .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+                .nextWithin(12) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     class size : OrderMapper.InConstructor.Field(NpcDefinition::class, 0) {
@@ -171,6 +170,6 @@ class NpcDefinition : IdentityMapper.Class() {
     @MethodParameters()
     class init : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.size in 0..1 }
+                .and { it.arguments.isEmpty() }
     }
 }

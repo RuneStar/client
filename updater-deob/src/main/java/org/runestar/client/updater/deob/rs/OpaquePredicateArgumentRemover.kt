@@ -1,6 +1,10 @@
 package org.runestar.client.updater.deob.rs
 
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.MultimapBuilder
+import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
@@ -12,13 +16,21 @@ import org.runestar.client.updater.deob.util.readJar
 import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
 import java.nio.file.Path
+import java.util.*
 
 object OpaquePredicateArgumentRemover : Transformer {
+
+    private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
+
+    private val logger = getLogger()
 
     override fun transform(source: Path, destination: Path) {
         val classNodes = readJar(source)
 
         val classNames = classNodes.associateBy { it.name }
+
+        val methodDescriptorsChanged = TreeMap<String, String>()
+        var changedInstructionCount = 0
 
         val topMethods = HashSet<String>()
         for (c in classNodes) {
@@ -30,18 +42,18 @@ object OpaquePredicateArgumentRemover : Transformer {
             }
         }
 
-        val implementationsMulti = MultimapBuilder.hashKeys().arrayListValues().build<String, MethodNode>()
+        val implementationsMulti = MultimapBuilder.hashKeys().arrayListValues().build<String, ClassMethod>()
         val implementations = implementationsMulti.asMap()
         for (c in classNodes) {
             for (m in c.methods) {
                 val s = overrides(c.name, m.name + m.desc, topMethods, classNames) ?: continue
-                implementationsMulti.put(s, m)
+                implementationsMulti.put(s, ClassMethod(c, m))
             }
         }
 
         val itr = implementations.iterator()
         for (e in itr) {
-            if (e.value.any { !hasUnusedLastParamInt(it) }) {
+            if (e.value.any { !hasUnusedLastParamInt(it.m) }) {
                 itr.remove()
             }
         }
@@ -59,8 +71,11 @@ object OpaquePredicateArgumentRemover : Transformer {
             }
         }
 
-        implementationsMulti.values().forEach { m ->
-            m.desc = dropLastArg(m.desc)
+        implementationsMulti.values().forEach { (c, m) ->
+            val oldDesc = m.desc
+            val newDesc = dropLastArg(oldDesc)
+            m.desc = newDesc
+            methodDescriptorsChanged["${c.name}.${m.name}$newDesc"] = oldDesc
         }
 
         for (c in classNodes) {
@@ -73,10 +88,16 @@ object OpaquePredicateArgumentRemover : Transformer {
                         val prev = insn.previous
                         check(prev.isConstantIntProducer)
                         insnList.remove(prev)
+                        changedInstructionCount++
                     }
                 }
             }
         }
+
+        logger.info { "Opaque predicate descriptors changed: methods ${methodDescriptorsChanged.size}, instructions: $changedInstructionCount" }
+
+        val opFile = destination.resolveSibling(destination.fileName.toString() + ".op-descs.json").toFile()
+        mapper.writeValue(opFile, methodDescriptorsChanged)
 
         writeJar(classNodes, destination)
     }
@@ -114,4 +135,6 @@ object OpaquePredicateArgumentRemover : Transformer {
         val type = Type.getMethodType(desc)
         return Type.getMethodDescriptor(type.returnType, *type.argumentTypes.copyOf(type.argumentTypes.size - 1))
     }
+
+    private data class ClassMethod(val c: ClassNode, val m: MethodNode)
 }

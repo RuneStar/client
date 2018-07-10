@@ -1,6 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -15,8 +17,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
 import java.lang.reflect.Modifier
 
 class AbstractIndexCache : IdentityMapper.Class() {
@@ -102,7 +102,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
     class getRecord : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
-                .and { it.arguments.size in 2..3 }
+                .and { it.arguments.size == 2 }
                 .and { it.instructions.none { it.isMethod && it.methodId == method<takeRecordEncrypted>().id } }
                 .and { it.instructions.none { it.opcode == NEW && it.typeType == RuntimeException::class.type } }
 //                .and { it.instructions.count { it.opcode == ACONST_NULL } == 5 }

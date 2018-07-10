@@ -127,8 +127,7 @@ class Player : IdentityMapper.Class() {
     @DependsOn(transformedSize::class)
     class resetPath : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.size in 2..3 }
-                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<transformedSize>().id } }
     }
 

@@ -34,20 +34,18 @@ interface Transformer {
                 UnusedTryCatchRemover,
                 OpaquePredicateCheckRemover,
                 ControlFlowFixer,
-                StaticDuplicateMethodFinder,
                 UnusedFieldRemover,
                 RemoveErrorConstructors,
                 UnusedMethodFinder,
                 UnusedMethodRemover,
+                OpaquePredicateArgumentRemover,
                 FrameRemover,
                 UnnecessaryGotoRemover,
                 SortFieldsByModifiers,
                 SortMethodsByLineNumber,
-                MethodOrigClassFinder,
                 DebugRemover,
                 RemoveEnclosingMethodAttributes,
                 MultiplierFinder
-//                OpaquePredicateArgumentRemover
         )
 
         val DEFAULT = Transformer.Composite(
@@ -59,6 +57,7 @@ interface Transformer {
                 RemoveErrorConstructors,
                 UnusedMethodFinder,
                 UnusedMethodRemover,
+                OpaquePredicateArgumentRemover,
                 FrameRemover,
                 UnnecessaryGotoRemover,
                 SortFieldsByModifiers,
@@ -66,7 +65,6 @@ interface Transformer {
                 DebugRemover,
                 RemoveEnclosingMethodAttributes,
                 MultiplierFinder
-//                OpaquePredicateArgumentRemover
         )
 
         /**
