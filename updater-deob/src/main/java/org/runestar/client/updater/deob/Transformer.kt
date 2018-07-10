@@ -25,29 +25,6 @@ interface Transformer {
 
     companion object {
 
-        /**
-         * Same resulting bytecode as [DEFAULT] but does additional analysis.
-         */
-        val TESTING = Transformer.Composite(
-                JarInfo,
-                FieldResolver,
-                UnusedTryCatchRemover,
-                OpaquePredicateCheckRemover,
-                ControlFlowFixer,
-                UnusedFieldRemover,
-                RemoveErrorConstructors,
-                UnusedMethodFinder,
-                UnusedMethodRemover,
-                OpaquePredicateArgumentRemover,
-                FrameRemover,
-                UnnecessaryGotoRemover,
-                SortFieldsByModifiers,
-                SortMethodsByLineNumber,
-                DebugRemover,
-                RemoveEnclosingMethodAttributes,
-                MultiplierFinder
-        )
-
         val DEFAULT = Transformer.Composite(
                 FieldResolver,
                 UnusedTryCatchRemover,

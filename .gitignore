@@ -1,6 +1,5 @@
 .idea/
 target
 *.iml
-updater-testing/reference
-updater-testing/workspace
+updater-testing/
 */dependency-reduced-pom.xml
