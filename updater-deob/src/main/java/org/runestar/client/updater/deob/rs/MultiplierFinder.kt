@@ -1,4 +1,4 @@
-package org.runestar.client.updater.deob.rs.mult
+package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -205,7 +205,7 @@ object MultiplierFinder : Transformer {
 
         override fun naryOperation(insn: AbstractInsnNode, values: MutableList<out Expr>): Expr? {
             val bv = basicInterpreter.naryOperation(insn, emptyList()) ?: return null
-            return  Expr.Var(bv)
+            return Expr.Var(bv)
         }
 
         override fun newOperation(insn: AbstractInsnNode): Expr {

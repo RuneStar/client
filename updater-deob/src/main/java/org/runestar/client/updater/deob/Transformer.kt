@@ -3,8 +3,6 @@ package org.runestar.client.updater.deob
 import org.runestar.client.updater.deob.common.*
 import org.runestar.client.updater.deob.common.controlflow.ControlFlowFixer
 import org.runestar.client.updater.deob.rs.*
-import org.runestar.client.updater.deob.rs.mult.MultiplierFinder
-import org.runestar.client.updater.deob.rs.mult.MultiplierFixer
 import java.nio.file.Path
 
 interface Transformer {

@@ -1,4 +1,4 @@
-package org.runestar.client.updater.deob.rs.mult
+package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -328,7 +328,7 @@ object MultiplierFixer : Transformer {
 
         data class Mul(override val sv: SourceValue, val a: Expr, val b: Expr) : Expr() {
 
-            val const get() = a as? Expr.Const ?: b as Expr.Const
+            val const get() = a as? Const ?: b as Const
 
             val other get() = if (const == a) b else a
 
