@@ -6,6 +6,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.LONG_TYPE
 import org.objectweb.asm.tree.*
 import org.objectweb.asm.tree.analysis.*
 import org.runestar.client.updater.common.invert
@@ -44,20 +46,25 @@ object MultiplierFixer : Transformer {
         val insnList = m.instructions
         for (insn in insnList.iterator()) {
             if (insn !is FieldInsnNode) continue
-            if (insn.desc != Type.INT_TYPE.descriptor && insn.desc != Type.LONG_TYPE.descriptor) continue
+            if (insn.desc != INT_TYPE.descriptor && insn.desc != LONG_TYPE.descriptor) continue
             val fieldName = "${insn.owner}.${insn.name}"
             val decoder = decoders[fieldName] ?: continue
             when (insn.opcode) {
                 GETFIELD, GETSTATIC -> {
                     when (insn.desc) {
-                        Type.INT_TYPE.descriptor -> insnList.insertSafe(insn, LdcInsnNode(invert(decoder.toInt())), InsnNode(IMUL))
-                        Type.LONG_TYPE.descriptor -> insnList.insertSafe(insn, LdcInsnNode(invert(decoder)), InsnNode(LMUL))
+                        INT_TYPE.descriptor -> {
+                            when (insn.next.opcode) {
+                                I2L -> insnList.insertSafe(insn.next, LdcInsnNode(invert(decoder)), InsnNode(LMUL))
+                                else -> insnList.insertSafe(insn, LdcInsnNode(invert(decoder.toInt())), InsnNode(IMUL))
+                            }
+                        }
+                        LONG_TYPE.descriptor -> insnList.insertSafe(insn, LdcInsnNode(invert(decoder)), InsnNode(LMUL))
                         else -> error(insn)
                     }
                 }
                 PUTFIELD -> {
                     when (insn.desc) {
-                        Type.INT_TYPE.descriptor -> {
+                        INT_TYPE.descriptor -> {
                             when (insn.previous.opcode) {
                                 DUP_X1 -> {
                                     insnList.insertBeforeSafe(insn.previous, LdcInsnNode(decoder.toInt()), InsnNode(IMUL))
@@ -67,7 +74,7 @@ object MultiplierFixer : Transformer {
                                 else -> insnList.insertBeforeSafe(insn, LdcInsnNode(decoder.toInt()), InsnNode(IMUL))
                             }
                         }
-                        Type.LONG_TYPE.descriptor -> {
+                        LONG_TYPE.descriptor -> {
                             when (insn.previous.opcode) {
                                 DUP2_X1 -> {
                                     insnList.insertBeforeSafe(insn.previous, LdcInsnNode(decoder), InsnNode(LMUL))
@@ -82,7 +89,7 @@ object MultiplierFixer : Transformer {
                 }
                 PUTSTATIC -> {
                     when (insn.desc) {
-                        Type.INT_TYPE.descriptor -> {
+                        INT_TYPE.descriptor -> {
                             when (insn.previous.opcode) {
                                 DUP -> {
                                     insnList.insertBeforeSafe(insn.previous, LdcInsnNode(decoder.toInt()), InsnNode(IMUL))
@@ -92,7 +99,7 @@ object MultiplierFixer : Transformer {
                                 else -> insnList.insertBeforeSafe(insn, LdcInsnNode(decoder.toInt()), InsnNode(IMUL))
                             }
                         }
-                        Type.LONG_TYPE.descriptor -> {
+                        LONG_TYPE.descriptor -> {
                             when (insn.previous.opcode) {
                                 DUP2 -> {
                                     insnList.insertBeforeSafe(insn.previous, LdcInsnNode(decoder), InsnNode(LMUL))
