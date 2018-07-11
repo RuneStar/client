@@ -2,7 +2,6 @@ package org.runestar.client.updater.deob.common.controlflow
 
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
-import org.objectweb.asm.Label
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
 import org.runestar.client.updater.deob.Transformer
@@ -56,9 +55,9 @@ object ControlFlowFixer : Transformer {
         return instructions
     }
 
-    class LabelMap : AbstractMap<LabelNode, LabelNode>() {
+    private class LabelMap : AbstractMap<LabelNode, LabelNode>() {
         private val map = HashMap<LabelNode, LabelNode>()
         override val entries get() = throw IllegalStateException()
-        override fun get(key: LabelNode) = map.getOrPut(key) { LabelNode(Label()) }
+        override fun get(key: LabelNode) = map.getOrPut(key) { LabelNode() }
     }
 }

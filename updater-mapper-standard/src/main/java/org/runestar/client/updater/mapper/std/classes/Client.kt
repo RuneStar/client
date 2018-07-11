@@ -422,8 +422,8 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Widget.x::class)
     class rootWidgetCount : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.x>().id }
-                .prevWithin(9) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
-                .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .nextWithin(1) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(Widget.y::class)
@@ -699,8 +699,8 @@ class Client : IdentityMapper.Class() {
 
     class cycle : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3300 }
-                .nextWithin(30) { it.isLabel }
-                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+                .nextWithin(16) { it.isLabel }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(loadWorlds::class)
@@ -2286,7 +2286,7 @@ class Client : IdentityMapper.Class() {
 
     class publicChatMode : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 5001 }
-                .skip(10)
+                .skip(8)
                 .nextWithin(10) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 

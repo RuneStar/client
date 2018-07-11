@@ -1,13 +1,14 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -16,8 +17,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
 
 @DependsOn(Node::class)
 class Buffer : IdentityMapper.Class() {
@@ -194,14 +193,14 @@ class Buffer : IdentityMapper.Class() {
     class writeStringCp1252NullTerminated : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(String::class.type) }
-                .and { it.instructions.count { it.opcode == ICONST_1 } == 1 }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 2 }
     }
 
     @MethodParameters("string")
-    class writeStringCp1252NullSurrounded : IdentityMapper.InstanceMethod() {
+    class writeStringCp1252NullCircumfixed : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(String::class.type) }
-                .and { it.instructions.count { it.opcode == ICONST_1 } > 1 }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 4 }
     }
 
     @SinceVersion(154)
@@ -215,23 +214,24 @@ class Buffer : IdentityMapper.Class() {
     @MethodParameters()
     class readStringCp1252NullTerminated : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
-                .and { it.arguments.size in 0..1 }
-                .and { it.instructions.count { it.opcode == ICONST_1 } == 2 }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 3 }
     }
 
     @MethodParameters()
     @DependsOn(readStringCp1252NullTerminated::class)
     class readStringCp1252NullTerminatedOrNull : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
-                .and { it.arguments.size in 0..1 }
+                .and { it.arguments.isEmpty() }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<readStringCp1252NullTerminated>().id } }
     }
 
     @MethodParameters()
-    class readStringCp1252NullSurrounded : IdentityMapper.InstanceMethod() {
+    class readStringCp1252NullCircumfixed : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
-                .and { it.arguments.size in 0..1 }
-                .and { it.instructions.count { it.opcode == ICONST_1 } == 3 }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.count { it.opcode == ICONST_1 } == 5 }
+                .and { it.instructions.none { it.opcode == CASTORE } }
     }
 
     @MethodParameters()
