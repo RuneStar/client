@@ -21,12 +21,12 @@ fun readJar(source: Path, classReaderFlags: Int = 0) : Collection<ClassNode> {
     }
 }
 
-fun writeJar(classes: Iterable<ClassNode>, destination: Path, classWriterFlags: Int = 0) {
+fun writeJar(classes: Iterable<ClassNode>, destination: Path, classWriter: () -> ClassWriter = { ClassWriter(0) }) {
     FileOutputStream(destination.toFile()).use { fos ->
         ZipOutputStream(fos).use { zos ->
             classes.forEach { c ->
                 zos.putNextEntry(ZipEntry(c.name + ".class"))
-                val cw = ClassWriter(classWriterFlags)
+                val cw = classWriter()
                 c.accept(cw)
                 zos.write(cw.toByteArray())
                 zos.closeEntry()

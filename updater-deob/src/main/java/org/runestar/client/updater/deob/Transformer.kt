@@ -61,7 +61,8 @@ interface Transformer {
                 SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 DebugRemover,
-                RemoveEnclosingMethodAttributes
+                RemoveEnclosingMethodAttributes,
+                ComputeFrames
         )
     }
 }
