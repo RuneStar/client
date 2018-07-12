@@ -131,7 +131,6 @@ object MultiplierFixer : Transformer {
     }
 
     private fun associateMultiplication(insnList: InsnList, mul: Expr.Mul, num: Int) {
-        if (mul.const.insn !in insnList) return
         val n = num * mul.const.n.toInt()
         val other = mul.other
         when {
@@ -154,7 +153,6 @@ object MultiplierFixer : Transformer {
     }
 
     private fun associateMultiplication(insnList: InsnList, mul: Expr.Mul, num: Long) {
-        if (mul.const.insn !in insnList) return
         val n = num * mul.const.n.toLong()
         val other = mul.other
         when {
@@ -222,7 +220,7 @@ object MultiplierFixer : Transformer {
             }
         }
 
-        override fun copyOperation(insn: AbstractInsnNode, value: Expr): Expr = value
+        override fun copyOperation(insn: AbstractInsnNode, value: Expr): Expr = Expr.Var(sourceInterpreter.copyOperation(insn, value.sv))
 
         override fun merge(value1: Expr, value2: Expr): Expr {
             if (value1 == value2) {
@@ -246,6 +244,8 @@ object MultiplierFixer : Transformer {
                     }
                 }
             }
+            if (value1 is Expr.Mul) mults.remove(value1.insn)
+            if (value2 is Expr.Mul) mults.remove(value2.insn)
             return Expr.Var(sourceInterpreter.merge(value1.sv, value2.sv))
         }
 
