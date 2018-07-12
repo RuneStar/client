@@ -3252,4 +3252,10 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.size in 5..6 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
     }
+
+    @DependsOn(addNpcToMenu::class, selectedSpellActionName::class)
+    class isSpellSelected : UniqueMapper.InMethod.Field(addNpcToMenu::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<selectedSpellActionName>().id }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 }

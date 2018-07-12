@@ -21,6 +21,7 @@ class SelectionDebug : DisposablePlugin<PluginSettings>() {
             g.color = Color.WHITE
             val strings = listOf(
                     "item: ${CLIENT.selectedItemName}",
+                    "isSpellSelected: ${CLIENT.isSpellSelected}",
                     "spellAction: ${CLIENT.selectedSpellActionName}",
                     "spellName: ${CLIENT.selectedSpellName}",
                     "isItemSelected: ${CLIENT.isItemSelected}",
