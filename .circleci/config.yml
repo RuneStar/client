@@ -11,7 +11,7 @@ jobs:
 
       - run:
           name: Maven Install
-          command: mvn install --show-version --batch-mode --errors
+          command: mvn install --show-version --batch-mode --errors --activate-profiles release
 
       - run:
           name: GitHub Release

@@ -15,6 +15,21 @@
 
     <name>client/updater</name>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <runestar.placeholderhooks>true</runestar.placeholderhooks>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

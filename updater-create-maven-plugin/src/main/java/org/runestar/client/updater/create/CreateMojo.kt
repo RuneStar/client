@@ -108,7 +108,7 @@ class CreateMojo : AbstractMojo() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
         JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, updateRevision())
-        val idClasses = if (System.getProperty("runestar.placeholderhooks", "false") == true.toString()) {
+        val idClasses = if (project.properties.getProperty("runestar.placeholderhooks") == "true") {
             ctx.buildIdHierarchyAll()
         } else {
             ctx.buildIdHierarchy()
