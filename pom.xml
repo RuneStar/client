@@ -63,12 +63,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <kotlin.version>1.2.51</kotlin.version>
-        <jackson.version>2.9.6</jackson.version>
-        <logback.version>1.2.3</logback.version>
-        <asm.version>6.2</asm.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <maven.version>3.5.0</maven.version>
+        <version.kotlin>1.2.51</version.kotlin>
+        <version.jackson>2.9.6</version.jackson>
+        <version.logback>1.2.3</version.logback>
+        <version.asm>6.2</version.asm>
+        <version.slf4j>1.7.25</version.slf4j>
+        <version.maven>3.5.0</version.maven>
     </properties>
 
     <dependencyManagement>
@@ -76,37 +76,37 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin.version}</version>
+                <version>${version.kotlin}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
+                <version>${version.kotlin}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm</artifactId>
-                <version>${asm.version}</version>
+                <version>${version.asm}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-tree</artifactId>
-                <version>${asm.version}</version>
+                <version>${version.asm}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-analysis</artifactId>
-                <version>${asm.version}</version>
+                <version>${version.asm}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-util</artifactId>
-                <version>${asm.version}</version>
+                <version>${version.asm}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-commons</artifactId>
-                <version>${asm.version}</version>
+                <version>${version.asm}</version>
             </dependency>
             <dependency>
                 <groupId>org.runestar</groupId>
@@ -146,32 +146,32 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-kotlin</artifactId>
-                <version>${jackson.version}</version>
+                <version>${version.jackson}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
+                <version>${version.jackson}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
+                <version>${version.jackson}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jackson.version}</version>
+                <version>${version.jackson}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
+                <version>${version.logback}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>${logback.version}</version>
+                <version>${version.logback}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.errorprone</groupId>
@@ -191,7 +191,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
+                <version>${version.slf4j}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -201,12 +201,12 @@
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-plugin-api</artifactId>
-                <version>${maven.version}</version>
+                <version>${version.maven}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-core</artifactId>
-                <version>${maven.version}</version>
+                <version>${version.maven}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.plugin-tools</groupId>
@@ -248,7 +248,7 @@
                 <plugin>
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
+                    <version>${version.kotlin}</version>
                     <executions>
                         <execution>
                             <id>compile</id>
