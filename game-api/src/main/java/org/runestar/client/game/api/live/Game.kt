@@ -77,4 +77,18 @@ object Game {
     val executor = ObservableExecutor(XClient.doCycle.exit)
 
     val scheduler = Schedulers.from(executor)
+
+    val hintArrow: HintArrow? get() = when (CLIENT.hintArrowType) {
+        1 -> Npcs[CLIENT.hintArrowNpcIndex]?.let { HintArrow.OnNpc(it) }
+        2 -> HintArrow.Static(
+                Position(
+                        Position.toLocal(CLIENT.hintArrowX - CLIENT.baseX, CLIENT.hintArrowSubX),
+                        Position.toLocal(CLIENT.hintArrowY - CLIENT.baseY, CLIENT.hintArrowSubY),
+                        CLIENT.hintArrowHeight * 2,
+                        CLIENT.plane
+                )
+        )
+        10 -> Players[CLIENT.hintArrowPlayerIndex]?.let { HintArrow.OnPlayer(it) }
+        else -> null
+    }
 }

@@ -3258,4 +3258,63 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<selectedSpellActionName>().id }
                 .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
+
+    @DependsOn(mapMarkerSprites::class, players::class)
+    class hintArrowType : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
+                .prevWithin(35) { it.opcode == GETSTATIC && it.fieldId == field<players>().id }
+                .prevWithin(11) { it.isLabel }
+                .nextWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(mapMarkerSprites::class, players::class)
+    class hintArrowPlayerIndex : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
+                .prevWithin(35) { it.opcode == GETSTATIC && it.fieldId == field<players>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(mapMarkerSprites::class, npcs::class)
+    class hintArrowNpcIndex : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
+                .prevWithin(35) { it.opcode == GETSTATIC && it.fieldId == field<npcs>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(mapMarkerSprites::class, baseY::class)
+    class hintArrowY : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
+                .prevWithin(18) { it.opcode == GETSTATIC && it.fieldId == field<baseY>().id }
+                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(mapMarkerSprites::class, baseX::class)
+    class hintArrowX : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
+                .prevWithin(35) { it.opcode == GETSTATIC && it.fieldId == field<baseX>().id }
+                .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(hintArrowType::class)
+    class hintArrowSubX : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowType>().id }
+                .nextWithin(3) { it.opcode == BIPUSH && it.intOperand == 64 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(hintArrowType::class)
+    class hintArrowSubY : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowType>().id }
+                .nextWithin(3) { it.opcode == BIPUSH && it.intOperand == 64 }
+                .nextWithin(2) { it.opcode == BIPUSH && it.intOperand == 64 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(hintArrowY::class, baseY::class)
+    class hintArrowHeight : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowY>().id }
+                .next { it.opcode == GETSTATIC && it.fieldId == field<baseY>().id }
+                .nextWithin(15) { it.opcode == INVOKESTATIC }
+                .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }

@@ -52,7 +52,7 @@ data class Position(
         }
 
         fun toLocal(scene: Int, sub: Int): Int {
-            return scene shl 7 or sub
+            return (scene shl 7) + sub
         }
 
         fun isLoaded(localX: Int, localY: Int, plane: Int): Boolean {
