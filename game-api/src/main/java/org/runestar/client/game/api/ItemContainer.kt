@@ -4,10 +4,14 @@ import org.runestar.client.game.raw.access.XItemContainer
 
 class ItemContainer(val accessor: XItemContainer) : AbstractList<Item?>(), RandomAccess {
 
-    override val size get() = accessor.ids.size
+    val ids: IntArray get() = accessor.ids
+
+    val quantities: IntArray get() = accessor.quantities
+
+    override val size get() = ids.size
 
     override fun get(index: Int): Item? {
         if (index >= size) return null
-        return Item.of(accessor.ids[index], accessor.quantities[index])
+        return Item.of(ids[index], quantities[index])
     }
 }
