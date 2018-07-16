@@ -2,8 +2,7 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -65,7 +64,7 @@ class GameShell : IdentityMapper.Class() {
     @MethodParameters()
     @SinceVersion(141)
     @DependsOn(canvas::class)
-    class replaceCanvas : InstanceMethod() {
+    class addCanvas : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<canvas>().id } }
     }
@@ -160,5 +159,60 @@ class GameShell : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<frame>().id } }
+    }
+
+    @DependsOn(getFrameContentBounds::class)
+    class contentWidth0 : OrderMapper.InMethod.Field(getFrameContentBounds::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(getFrameContentBounds::class)
+    class contentHeight0 : OrderMapper.InMethod.Field(getFrameContentBounds::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(addCanvas::class)
+    class canvasSetTimeMs : OrderMapper.InMethod.Field(addCanvas::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
+    }
+
+    @DependsOn(addCanvas::class)
+    class isCanvasInvalid : OrderMapper.InMethod.Field(addCanvas::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(addCanvas::class)
+    class replaceCanvas : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<addCanvas>().id } }
+                .and { it.name != "run" }
+    }
+
+    @MethodParameters("width", "height", "revision")
+    class startThread : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters()
+    class kill : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == INVOKESTATIC && it.methodName == "exit" } }
+    }
+
+    @MethodParameters()
+    @DependsOn(kill::class)
+    class kill0 : OrderMapper.InMethod.Method(kill::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<GameShell>() }
+    }
+
+    class run : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.name == "run" }
+    }
+
+    @DependsOn(run::class)
+    class stopTimeMs : UniqueMapper.InMethod.Field(run::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == LONG_TYPE }
     }
 }

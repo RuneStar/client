@@ -17,6 +17,7 @@ enum class MessageType(val id: Int) {
     SYSTEM_FRIENDS(30),
     SYSTEM_IGNORE(31),
     AUTO_CHAT(90),
+    AUTO_CHAT_MOD(91), // todo
     TRADE_RECEIVED(101), // XX wishes to trade with you
     TRADE_INFO(102), // Other player declined trade; accepted trade
     // todo

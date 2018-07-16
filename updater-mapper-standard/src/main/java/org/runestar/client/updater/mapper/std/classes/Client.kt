@@ -2624,6 +2624,13 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextAscents : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .nextWithin(5) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
     class overheadTextXs : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
                 .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
@@ -2638,6 +2645,18 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
                 .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
                 .nextWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadTextColor::class)
+    class overheadTextColors : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadTextColor>().id }
+                .prevIn(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Actor.overheadTextEffect::class)
+    class overheadTextEffects : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadTextEffect>().id }
+                .prevIn(3) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
     @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
@@ -3259,6 +3278,12 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
+    @DependsOn(addNpcToMenu::class, selectedSpellActionName::class)
+    class selectedSpellFlags : UniqueMapper.InMethod.Field(addNpcToMenu::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<selectedSpellActionName>().id }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
     @DependsOn(mapMarkerSprites::class, players::class)
     class hintArrowType : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3316,5 +3341,25 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == GETSTATIC && it.fieldId == field<baseY>().id }
                 .nextWithin(15) { it.opcode == INVOKESTATIC }
                 .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(GameShell.startThread::class)
+    class revision : OrderMapper.InMethod.Field(GameShell.startThread::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(TaskHandler::class)
+    class taskHandler : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TaskHandler>() }
+    }
+
+    @DependsOn(GameShell.startThread::class)
+    class applet : UniqueMapper.InMethod.Field(GameShell.startThread::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == Applet::class.type }
+    }
+
+    @DependsOn(GameShell.kill::class)
+    class isKilled : OrderMapper.InMethod.Field(GameShell.kill::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 }

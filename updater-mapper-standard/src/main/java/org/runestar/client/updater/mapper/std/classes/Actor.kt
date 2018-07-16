@@ -211,4 +211,30 @@ class Actor : IdentityMapper.Class() {
     }
 
     class hitSplatCount : ConstructorPutField(Actor::class, 0, BYTE_TYPE)
+
+    @DependsOn(Actor.overheadTextCyclesRemaining::class)
+    class isAutoChatting : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldId == field<Actor.overheadTextCyclesRemaining>().id }
+                .prev { it.opcode == SIPUSH && it.intOperand == 150 }
+                .prevWithin(9) { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Actor.overheadTextCyclesRemaining::class)
+    class overheadTextEffect : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldId == field<Actor.overheadTextCyclesRemaining>().id }
+                .prev { it.opcode == SIPUSH && it.intOperand == 150 }
+                .prevWithin(2) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Actor.overheadTextCyclesRemaining::class)
+    class overheadTextColor : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldId == field<Actor.overheadTextCyclesRemaining>().id }
+                .prev { it.opcode == SIPUSH && it.intOperand == 150 }
+                .prevWithin(2) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+                .prevWithin(3) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class false0 : OrderMapper.InConstructor.Field(Actor::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
 }

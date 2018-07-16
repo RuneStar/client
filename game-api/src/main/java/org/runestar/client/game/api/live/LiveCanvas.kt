@@ -3,9 +3,9 @@ package org.runestar.client.game.api.live
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import org.runestar.client.game.api.Canvas
+import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XGameShell
 import org.runestar.client.game.raw.access.XRasterProvider
-import org.runestar.client.game.raw.CLIENT
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.event.ComponentEvent
@@ -19,7 +19,7 @@ object LiveCanvas : Canvas {
         it.instance.image.graphics as Graphics2D
     }
 
-    val canvasReplacements: Observable<java.awt.Canvas> = XGameShell.replaceCanvas.exit.map { CLIENT.canvas }
+    val canvasReplacements: Observable<java.awt.Canvas> = XGameShell.addCanvas.exit.map { CLIENT.canvas }
             .startWith(CLIENT.canvas)
 
     /**
