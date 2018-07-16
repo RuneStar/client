@@ -28,12 +28,6 @@ fun main(args: Array<String>) {
     Application.start(javConfig)
 }
 
-class ClientProviderImpl : ClientProvider {
-    override fun get(): XClient {
-        return patchGamePack(javConfig).loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
-    }
-}
-
 private fun setupLogging() {
     val logger = getLogger()
     RxJavaPlugins.setErrorHandler { e ->
@@ -44,15 +38,22 @@ private fun setupLogging() {
     }
 }
 
-private fun patchGamePack(javConfig: JavConfig): ClassLoader {
-    val tmpdir = tmpdir()
-    val patchedGamepackPath = tmpdir.resolve("${codeSourceLastModifiedMillis()}.zip")
-    if (!verifyJar(patchedGamepackPath)) {
-        val gamepackPath = tmpdir.resolve("runescape-gamepack.$revision.jar")
-        if (!verifyJar(gamepackPath)) {
-            downloadFile(javConfig.gamepackUrl, gamepackPath)
-        }
-        patch(gamepackPath, patchedGamepackPath)
+class PatchedClientProvider : ClientProvider {
+
+    override fun get(): XClient {
+        return patchGamePack(javConfig).loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
     }
-    return URLClassLoader(patchedGamepackPath)
+
+    private fun patchGamePack(javConfig: JavConfig): ClassLoader {
+        val tmpdir = tmpdir()
+        val patchedGamepackPath = tmpdir.resolve("${codeSourceLastModifiedMillis()}.zip")
+        if (!verifyJar(patchedGamepackPath)) {
+            val gamepackPath = tmpdir.resolve("runescape-gamepack.$revision.jar")
+            if (!verifyJar(gamepackPath)) {
+                downloadFile(javConfig.gamepackUrl, gamepackPath)
+            }
+            patch(gamepackPath, patchedGamepackPath)
+        }
+        return URLClassLoader(patchedGamepackPath)
+    }
 }
