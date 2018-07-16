@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.utils.cascadingListOf
-import org.runestar.client.game.raw.Accessor
+import org.runestar.client.game.raw.base.Accessor
 import org.runestar.client.game.raw.access.*
 
 abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {

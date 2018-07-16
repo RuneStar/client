@@ -3,10 +3,10 @@ package org.runestar.client.game.api
 import org.kxtra.lang.intarray.replaceEach
 import org.kxtra.swing.bufferedimage.toCompatibleImage
 import org.kxtra.swing.graphics.drawImage
-import org.runestar.client.game.raw.Accessor
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite
+import org.runestar.client.game.raw.base.Accessor
 import java.awt.image.*
 
 abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {

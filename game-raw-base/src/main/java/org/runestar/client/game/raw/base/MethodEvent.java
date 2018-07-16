@@ -1,4 +1,4 @@
-package org.runestar.client.game.raw;
+package org.runestar.client.game.raw.base;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,11 +63,7 @@ public final class MethodEvent<I, R> {
      */
     @NotNull
     public static Object toSkippable(@NotNull MethodEvent event) {
-        if (event.skipBody) {
-            return new Object[] { event };
-        } else {
-            return event;
-        }
+        return event.skipBody ? new Object[] { event } : event;
     }
 
     /**

@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.smoothanimations
 
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.MethodEvent
 import org.runestar.client.game.raw.access.XModel
 import org.runestar.client.game.raw.access.XSequenceDefinition
 import org.runestar.client.game.raw.access.XWidget
+import org.runestar.client.game.raw.base.MethodEvent
 
 internal fun widgetGetModelEnter(event: MethodEvent<XWidget, XModel>) {
     val widget = event.instance
