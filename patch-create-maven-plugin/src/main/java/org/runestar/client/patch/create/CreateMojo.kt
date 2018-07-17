@@ -20,7 +20,7 @@ import java.nio.file.StandardCopyOption
 class CreateMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}")
-    lateinit var project: MavenProject
+    private lateinit var project: MavenProject
 
     override fun execute() {
         val dir = Paths.get(project.build.directory)

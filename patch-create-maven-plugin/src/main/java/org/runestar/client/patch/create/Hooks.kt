@@ -2,7 +2,6 @@ package org.runestar.client.patch.create
 
 import net.bytebuddy.description.field.FieldDescription
 import net.bytebuddy.description.method.MethodDescription
-import net.bytebuddy.jar.asm.Type
 import net.bytebuddy.matcher.ElementMatcher
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.FieldHook
@@ -13,10 +12,6 @@ internal fun FieldHook.matcher(): ElementMatcher<FieldDescription> = ElementMatc
 internal fun FieldHook.getterMatcher(): ElementMatcher<MethodDescription> = ElementMatcher { it.name == getterMethod }
 
 internal fun FieldHook.setterMatcher(): ElementMatcher<MethodDescription> = ElementMatcher { it.name == setterMethod }
-
-internal val MethodHook.argumentsCount get() = Type.getMethodType(descriptor).argumentTypes.size
-
-internal val MethodHook.actualArgumentsCount get() = parameters!!.size
 
 internal fun MethodHook.matcher(): ElementMatcher<MethodDescription> = ElementMatcher { it.name == name && it.descriptor == descriptor }
 
