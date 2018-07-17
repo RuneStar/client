@@ -84,10 +84,11 @@ fun inject(sourceJar: Path, destinationJar: Path) {
             }
             ch.methods.forEach { m ->
                 if (m.parameters != null && m.owner == cn && !Modifier.isAbstract(m.access)) {
+                    val execField = xClass.getDeclaredField(m.method)
                     typeBuilder = typeBuilder.method(m.matcher())
                             .intercept(
                                     Advice.withCustomMapping()
-                                            .bind(MethodAdvice.Execution::class.java, xClass.getDeclaredField(m.method))
+                                            .bind(MethodAdvice.Execution::class.java, execField, Assigner.Typing.DYNAMIC)
                                             .to(MethodAdvice::class.java)
                             )
 //                            log.info("Injected callbacks -> ${m.owner}.${m.name} (X${ch.`class`}.${m.method})")

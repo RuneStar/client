@@ -57,27 +57,4 @@ public final class MethodEvent<I, R> {
                 ", thrown=" + thrown +
                 ')';
     }
-
-    /**
-     * For internal use.
-     */
-    @NotNull
-    public static Object toSkippable(@NotNull MethodEvent event) {
-        return event.skipBody ? new Object[] { event } : event;
-    }
-
-    /**
-     * For internal use.
-     */
-    @NotNull
-    public static MethodEvent<?, ?> fromSkippable(@NotNull Object o, Object returned, Throwable thrown) {
-        if (o instanceof Object[]) {
-            return (MethodEvent) ((Object[]) o)[0];
-        } else {
-            MethodEvent event = (MethodEvent) o;
-            event.returned = returned;
-            event.thrown = thrown;
-            return event;
-        }
-    }
 }

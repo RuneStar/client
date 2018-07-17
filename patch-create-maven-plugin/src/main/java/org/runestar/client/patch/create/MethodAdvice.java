@@ -16,33 +16,39 @@ interface MethodAdvice {
     @Target(ElementType.PARAMETER)
     @interface Execution { }
 
-    @SuppressWarnings("unchecked")
-    @Advice.OnMethodEnter(skipOn = Object[].class)
-    static Object onMethodEnter(
-            @Execution MethodExecution exec,
+    @SuppressWarnings({"unchecked", "ParameterCanBeLocal", "RedundantThrows"})
+    @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
+    static boolean onMethodEnter(
+            @Execution MethodExecution.Implementation getExec,
+            @Advice.Local("exec") MethodExecution.Implementation exec,
+            @Advice.Local("event") MethodEvent event,
             @Advice.This(optional = true) Object instance,
             @Advice.AllArguments(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object[] arguments
     ) throws Throwable {
-        MethodExecution.Implementation execImpl = (MethodExecution.Implementation) exec;
-        if (!execImpl.hasObservers()) return null;
-        MethodEvent event = new MethodEvent(instance, arguments);
-        execImpl._enter.accept(event);
+        exec = getExec;
+        if (!exec.hasObservers()) return false;
+        event = new MethodEvent(instance, arguments);
+        exec._enter.accept(event);
         //noinspection UnusedAssignment
         arguments = event.arguments;
-        return MethodEvent.toSkippable(event);
+        return event.skipBody;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "RedundantThrows"})
     @Advice.OnMethodExit(onThrowable = Throwable.class)
     static void onMethodExit(
-            @Execution MethodExecution exec,
+            @Advice.Local("exec") MethodExecution.Implementation exec,
+            @Advice.Local("event") MethodEvent event,
             @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
             @Advice.Thrown(readOnly = false, typing = Assigner.Typing.DYNAMIC) Throwable thrown,
-            @Advice.Enter Object enter
+            @Advice.Enter boolean skipped
     ) throws Throwable {
-        if (enter == null) return;
-        MethodEvent event = MethodEvent.fromSkippable(enter, returned, thrown);
-        ((MethodExecution.Implementation) exec)._exit.accept(event);
+        if (event == null) return;
+        if (!skipped) {
+            event.returned = returned;
+            event.thrown = thrown;
+        }
+        exec._exit.accept(event);
         //noinspection UnusedAssignment
         returned = event.returned;
         //noinspection UnusedAssignment
