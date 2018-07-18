@@ -1,10 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.GETSTATIC
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -79,5 +77,39 @@ class WorldMap : IdentityMapper.Class() {
     class drawLoading : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_loading>().id } }
+    }
+
+    @MethodParameters("x", "y", "width", "height", "cycle")
+    class draw : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "Coord: " } }
+    }
+
+    @MethodParameters("x", "y", "width", "height")
+    @DependsOn(Client.isMembersWorld::class)
+    class drawOverview : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.isMembersWorld>().id } }
+    }
+
+    @DependsOn(WorldMapIndexCacheLoader::class)
+    class cacheLoader : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMapIndexCacheLoader>() }
+    }
+
+    @MethodParameters()
+    @DependsOn(WorldMapIndexCacheLoader.load::class)
+    class loadCache : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapIndexCacheLoader.load>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(WorldMapIndexCacheLoader.isLoaded::class)
+    class isCacheLoaded : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapIndexCacheLoader.isLoaded>().id } }
     }
 }

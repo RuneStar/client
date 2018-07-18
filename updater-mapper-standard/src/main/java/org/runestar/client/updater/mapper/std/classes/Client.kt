@@ -3096,6 +3096,26 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @DependsOn(clickWidget::class)
+    class widgetClickX : OrderMapper.InMethod.Field(clickWidget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class widgetClickY : OrderMapper.InMethod.Field(clickWidget::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class widgetDragDuration : OrderMapper.InMethod.Field(clickWidget::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class isDraggingWidget : OrderMapper.InMethod.Field(clickWidget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
     @DependsOn(ChatChannel::class)
     class Messages_channels : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ChatChannel>() }
@@ -3361,5 +3381,27 @@ class Client : IdentityMapper.Class() {
     @DependsOn(GameShell.kill::class)
     class isKilled : OrderMapper.InMethod.Field(GameShell.kill::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(widgetDragDuration::class)
+    class dragWidget : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<widgetDragDuration>().id } }
+    }
+
+    @MethodParameters("widget")
+    @DependsOn(Widget::class, Widget.clickMask::class)
+    class getWidgetClickMask : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments == listOf(type<Widget>()) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.clickMask>().id } }
+    }
+
+    @DependsOn(Widget::class, clickedWidget::class, clickedWidgetParent::class)
+    class widgetDragTarget : UniqueMapper.InMethod.Field(dragWidget::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
+                .and { it.fieldId != field<clickedWidget>().id && it.fieldId != field<clickedWidgetParent>().id }
     }
 }

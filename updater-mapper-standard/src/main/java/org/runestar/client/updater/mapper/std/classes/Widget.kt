@@ -8,10 +8,9 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.std.Widget10Array
+import org.runestar.client.updater.mapper.std.WidgetInvArray
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -31,6 +30,10 @@ class Widget : IdentityMapper.Class() {
     }
 
     class hasScript : OrderMapper.InConstructor.Field(Widget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class isScrollBar : OrderMapper.InConstructor.Field(Widget::class, 8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -94,6 +97,14 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
+    class columns : OrderMapper.InConstructor.Field(Widget::class, 10) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class rows : OrderMapper.InConstructor.Field(Widget::class, 11) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class x : OrderMapper.InConstructor.Field(Widget::class, 12) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -123,6 +134,14 @@ class Widget : IdentityMapper.Class() {
     }
 
     class paddingY : OrderMapper.InConstructor.Field(Widget::class, -15) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class clickMask : OrderMapper.InConstructor.Field(Widget::class, -14) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class dragThreshold : OrderMapper.InConstructor.Field(Widget::class, -12) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -247,5 +266,33 @@ class Widget : IdentityMapper.Class() {
     @DependsOn(SpriteMask::class)
     class getSpriteMask : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<SpriteMask>() }
+    }
+
+    class inventoryXOffsets : WidgetInvArray(0)
+    class inventoryYOffsets : WidgetInvArray(1)
+    class inventorySprites : WidgetInvArray(2)
+
+
+    @DependsOn(Sprite::class)
+    class getInventorySprite : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments == listOf(INT_TYPE) }
+    }
+
+    @MethodParameters("b")
+    @DependsOn(Sprite::class)
+    class getSprite : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments == listOf(BOOLEAN_TYPE) }
+    }
+
+    // always null?
+    class ints0 : Widget10Array(0)
+    class ints1 : Widget10Array(1)
+
+    class rectangleMode : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type.arrayDimensions == 0 }
+                .and { it.type != it.klass.type }
+                .and { it.type in it.jar }
     }
 }

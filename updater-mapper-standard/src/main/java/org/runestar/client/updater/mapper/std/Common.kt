@@ -145,3 +145,15 @@ abstract class ModelTransformTempInt(index: Int) : OrderMapper.InMethod.Field(Mo
 abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(Client.newScript::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<Script>() }
 }
+
+@DependsOn(Widget.decode::class)
+abstract class WidgetInvArray(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 20 }
+            .nextIn(2) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+}
+
+@DependsOn(Widget.decode::class)
+abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == NEWARRAY && it.intOperand == 10 }
+            .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+}
