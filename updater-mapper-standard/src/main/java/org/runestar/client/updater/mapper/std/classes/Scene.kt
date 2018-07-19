@@ -181,7 +181,7 @@ class Scene : IdentityMapper.Class() {
     @DependsOn(Tile::class)
     class init : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.size in 1..2 }
+                .and { it.arguments.size == 1 }
                 .and { it.arguments.startsWith(INT_TYPE) }
                 .and { it.instructions.count { it.opcode == NEW && it.typeType == type<Tile>() } == 1 }
                 .and { it.instructions.none { it.opcode == LAND } }

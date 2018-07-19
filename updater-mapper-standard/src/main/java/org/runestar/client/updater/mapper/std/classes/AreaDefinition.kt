@@ -1,7 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Opcodes.BIPUSH
+import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -60,9 +61,9 @@ class AreaDefinition : IdentityMapper.Class() {
                 .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class name : UniqueMapper.InMethod.Field(readNext::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_3 }
-                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
-    }
+//    @DependsOn(readNext::class)
+//    class name : UniqueMapper.InMethod.Field(readNext::class) {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_3 }
+//                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
+//    }
 }

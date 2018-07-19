@@ -368,14 +368,30 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<FriendSystem>() }
     }
 
-    @DependsOn(MouseHandler::class)
-    class MouseHandler_x : OrderMapper.InClassInitializer.Field(MouseHandler::class, 6) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    @DependsOn(MouseHandler_currentButton0::class)
+    class MouseHandler_x : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton0>().id }
+                .nextIn(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(MouseHandler::class)
-    class MouseHandler_y : OrderMapper.InClassInitializer.Field(MouseHandler::class, 7) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC }
+    @DependsOn(MouseHandler_currentButton0::class)
+    class MouseHandler_y : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton0>().id }
+                .nextIn(5) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @SinceVersion(172)
+    @DependsOn(MouseHandler_currentButton0::class)
+    class MouseHandler_millis : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton0>().id }
+                .nextWithin(7) { it.opcode == PUTSTATIC && it.fieldType == LONG_TYPE }
+    }
+
+    @SinceVersion(172)
+    @DependsOn(MouseHandler_currentButton0::class)
+    class MouseHandler_millis0 : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<MouseHandler_currentButton0>().id }
+                .nextWithin(7) { it.opcode == GETSTATIC && it.fieldType == LONG_TYPE }
     }
 
     @DependsOn(ClientPreferences::class)
@@ -3059,9 +3075,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMap>() }
     }
 
-    class WorldMapLabelSize_small : WorldMapLabelSizeConstant("SMALL")
-    class WorldMapLabelSize_medium : WorldMapLabelSizeConstant("MEDIUM")
-    class WorldMapLabelSize_large : WorldMapLabelSizeConstant("LARGE")
+    // todo
+//    class WorldMapLabelSize_small : WorldMapLabelSizeConstant("SMALL")
+//    class WorldMapLabelSize_medium : WorldMapLabelSizeConstant("MEDIUM")
+//    class WorldMapLabelSize_large : WorldMapLabelSizeConstant("LARGE")
 
     @DependsOn(KeyHandler::class)
     class KeyHandler_pressedKeys : UniqueMapper.InClassInitializer.Field(KeyHandler::class) {
