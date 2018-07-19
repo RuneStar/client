@@ -22,6 +22,7 @@ import java.lang.reflect.Modifier
 import java.net.URL
 import java.util.*
 import java.util.zip.CRC32
+import kotlin.collections.ArrayList
 
 class Client : IdentityMapper.Class() {
 
@@ -934,9 +935,9 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(2) { it.opcode == GETSTATIC && it.fieldType == String::class.type }
     }
 
-    @DependsOn(Timer::class)
-    class timer : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Timer>() }
+    @DependsOn(Clock::class)
+    class clock : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Clock>() }
     }
 
     class userHomeDirectory : AllUniqueMapper.Field() {
@@ -2617,6 +2618,14 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
+    class overheadTextLimit : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
+                .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
+                .prevWithin(11) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Actor.overheadText::class, AbstractFont.stringWidth::class)
     class overheadTextXOffsets : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Actor.overheadText>().id }
                 .next { it.isMethod && it.methodMark == method<AbstractFont.stringWidth>().mark }
@@ -3399,9 +3408,33 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.clickMask>().id } }
     }
 
-    @DependsOn(Widget::class, clickedWidget::class, clickedWidgetParent::class)
+    @DependsOn(Widget::class, clickedWidget::class, clickedWidgetParent::class, dragWidget::class)
     class widgetDragTarget : UniqueMapper.InMethod.Field(dragWidget::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
                 .and { it.fieldId != field<clickedWidget>().id && it.fieldId != field<clickedWidgetParent>().id }
+    }
+
+    @DependsOn(Widget::class)
+    class updateWidgetGroup : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Widget>().withDimensions(1), INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
+                        INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(IndexCacheLoader::class)
+    class indexCacheLoaders : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<IndexCacheLoader>() }
+                .prevWithin(3) { it.opcode == GETSTATIC && it.fieldType == ArrayList::class.type }
+    }
+
+    @DependsOn(IndexCacheLoader::class)
+    class indexCacheLoaderIndex : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<IndexCacheLoader>() }
+                .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Timer::class)
+    class timer : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Timer>() }
     }
 }

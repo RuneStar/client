@@ -49,6 +49,10 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class buttonType : OrderMapper.InConstructor.Field(Widget::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class contentType : OrderMapper.InConstructor.Field(Widget::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -146,7 +150,7 @@ class Widget : IdentityMapper.Class() {
     }
 
     // ok, select, continue
-    class okText : OrderMapper.InConstructor.Field(Widget::class, -1) {
+    class buttonText : OrderMapper.InConstructor.Field(Widget::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 

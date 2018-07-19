@@ -103,7 +103,7 @@ textColor: ${x.textColor}
 dataText: ${x.dataText}
 string1: ${x.string1}
 actions: ${x.actions?.contentToString()}
-okText: ${x.okText}
+buttonText: ${x.buttonText}
 spellActionName: ${x.spellActionName}
 spellName: ${x.spellName}
 
