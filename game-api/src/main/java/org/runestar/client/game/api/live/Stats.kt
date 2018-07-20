@@ -1,8 +1,8 @@
 package org.runestar.client.game.api.live
 
+import org.runestar.client.game.api.Skill
 import org.runestar.client.game.api.SkillLevel
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.general.Skill
 
 object Stats : AbstractMap<Skill, SkillLevel>() {
 

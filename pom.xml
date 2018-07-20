@@ -13,6 +13,7 @@
     <name>client parent</name>
 
     <modules>
+        <module>common</module>
         <module>client</module>
         <module>api</module>
         <module>game-api</module>
@@ -22,8 +23,7 @@
         <module>plugins</module>
         <module>plugins-dev</module>
         <module>plugins-spi</module>
-        <module>patch-create-maven-plugin</module>
-        <module>patch</module>
+        <module>patch-maven-plugin</module>
         <module>updater</module>
         <module>updater-common</module>
         <module>updater-deob</module>
@@ -70,6 +70,8 @@
         <version.asm>6.2</version.asm>
         <version.slf4j>1.7.25</version.slf4j>
         <version.maven>3.5.0</version.maven>
+
+        <runescape.gamepack.revision>172</runescape.gamepack.revision>
     </properties>
 
     <dependencyManagement>
@@ -108,11 +110,6 @@
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-commons</artifactId>
                 <version>${version.asm}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.runestar</groupId>
-                <artifactId>general</artifactId>
-                <version>0.170.0</version>
             </dependency>
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>

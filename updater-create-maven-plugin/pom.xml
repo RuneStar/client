@@ -34,8 +34,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.runestar</groupId>
-            <artifactId>general</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

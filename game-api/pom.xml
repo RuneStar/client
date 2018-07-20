@@ -30,10 +30,6 @@
             <artifactId>rxjava</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.runestar</groupId>
-            <artifactId>general</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.kxtra</groupId>
             <artifactId>kxtra-swing</artifactId>
         </dependency>

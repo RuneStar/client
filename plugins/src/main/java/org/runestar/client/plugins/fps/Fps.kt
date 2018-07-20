@@ -2,10 +2,10 @@ package org.runestar.client.plugins.fps
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
 class Fps : DisposablePlugin<PluginSettings>() {
@@ -17,7 +17,7 @@ class Fps : DisposablePlugin<PluginSettings>() {
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.YELLOW
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
 
             g.drawStringShadowed(
                     CLIENT.fps.toString(),

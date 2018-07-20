@@ -1,14 +1,14 @@
 package org.runestar.client.plugins.mousetooltips
 
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.forms.RgbaForm
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Rectangle
 import kotlin.math.min
 
@@ -81,7 +81,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             val offsetYFlipped: Int = 22,
             val outlineColor: RgbaForm = RgbaForm(14, 13, 15),
             val fillColor: RgbaForm = RgbaForm(70, 61, 50, 156),
-            val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
+            val font: FontForm = FontForm(Fonts.SMALL),
             val fontColor: RgbaForm = RgbaForm(255, 255, 255)
     ) : PluginSettings()
 }

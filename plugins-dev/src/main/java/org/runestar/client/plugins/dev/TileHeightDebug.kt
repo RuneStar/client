@@ -2,14 +2,14 @@ package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawString
 import org.kxtra.swing.point2d.minus
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.Scene
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Point
 
@@ -19,7 +19,7 @@ class TileHeightDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
             g.color = Color.WHITE
 
             for (x in 0 until Scene.SIZE) {

@@ -8,24 +8,21 @@ import org.kxtra.slf4j.logger.warn
 import org.kxtra.slf4j.loggerfactory.getLogger
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
-import org.runestar.client.game.raw.ClientProvider
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.patch.patch
-import org.runestar.general.JavConfig
-import org.runestar.general.revision
-import org.runestar.general.updateRevision
+import org.runestar.client.common.JAV_CONFIG
+import org.runestar.client.common.REVISION
+import java.io.IOException
+import java.net.InetAddress
+import java.net.Socket
+import java.nio.ByteBuffer
 import javax.swing.SwingUtilities
-
-private lateinit var javConfig: JavConfig
 
 fun main(args: Array<String>) {
     setupLogging()
     SwingUtilities.invokeLater(LafInstallation())
 
-    javConfig = JavConfig.load(System.getProperty("runestar.world", ""))
-    updateRevision(javConfig.codebase.host)
+    if (isOutOfDate()) throw Exception("Client is out of date")
 
-    Application.start(javConfig)
+    Application.start()
 }
 
 private fun setupLogging() {
@@ -38,22 +35,13 @@ private fun setupLogging() {
     }
 }
 
-class PatchedClientProvider : ClientProvider {
-
-    override fun get(): XClient {
-        return patchGamePack(javConfig).loadClass(javConfig.initialClass).getDeclaredConstructor().newInstance() as XClient
-    }
-
-    private fun patchGamePack(javConfig: JavConfig): ClassLoader {
-        val tmpdir = tmpdir()
-        val patchedGamepackPath = tmpdir.resolve("${codeSourceLastModifiedMillis()}.zip")
-        if (!verifyJar(patchedGamepackPath)) {
-            val gamepackPath = tmpdir.resolve("runescape-gamepack.$revision.jar")
-            if (!verifyJar(gamepackPath)) {
-                downloadFile(javConfig.gamepackUrl, gamepackPath)
-            }
-            patch(gamepackPath, patchedGamepackPath)
-        }
-        return URLClassLoader(patchedGamepackPath)
+@Throws(IOException::class)
+fun isOutOfDate(): Boolean {
+    val rev = REVISION
+    val address = InetAddress.getByName(JAV_CONFIG.codebase.host)
+    Socket(address, 43594).use { socket ->
+        socket.outputStream.write(ByteBuffer.allocate(5).put(15).putInt(rev).array())
+        socket.outputStream.flush()
+        return socket.inputStream.read() != 0
     }
 }

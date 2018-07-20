@@ -1,13 +1,13 @@
 package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawString
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
 class CollisionFlagsDebug : DisposablePlugin<PluginSettings>() {
@@ -16,7 +16,7 @@ class CollisionFlagsDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
             g.color = Color.WHITE
 
             val mouseTile = Projections.viewport.toGame(Mouse.location)?.sceneTile ?: return@subscribe

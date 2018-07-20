@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Prayers
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
 class PrayerDebug : DisposablePlugin<PluginSettings>() {
@@ -16,7 +16,7 @@ class PrayerDebug : DisposablePlugin<PluginSettings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
             g.color = Color.WHITE
             val strings = ArrayList<String>()
             strings.add(Prayers.level.toString())

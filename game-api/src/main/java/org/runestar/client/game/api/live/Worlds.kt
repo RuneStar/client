@@ -3,7 +3,6 @@ package org.runestar.client.game.api.live
 import com.google.common.collect.Iterators
 import org.runestar.client.game.api.World
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.general.World
 
 object Worlds : AbstractCollection<World>() {
 

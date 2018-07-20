@@ -2,14 +2,15 @@
 
 package org.runestar.client.api
 
-import org.runestar.general.JavConfig
+import org.runestar.client.common.JAV_CONFIG
+import org.runestar.client.common.JavConfig
 import java.applet.Applet
 import java.awt.Color
 
 internal fun buildApplet(
-        applet: Applet,
-        javConfig: JavConfig
+        applet: Applet
 ) {
+    val javConfig = JAV_CONFIG
     applet.apply {
         layout = null
         setStub(JavConfig.AppletStub(javConfig))

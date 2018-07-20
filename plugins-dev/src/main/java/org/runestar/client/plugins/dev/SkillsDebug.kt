@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Stats
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 
 class SkillsDebug : DisposablePlugin<PluginSettings>() {
@@ -13,7 +13,7 @@ class SkillsDebug : DisposablePlugin<PluginSettings>() {
 
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
             g.color = Color.WHITE
 
             var y = 35

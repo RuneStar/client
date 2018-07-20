@@ -3,13 +3,9 @@ package org.runestar.client.plugins.implings
 import com.google.common.collect.ImmutableSet
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.Npc
-import org.runestar.client.game.api.NpcId
-import org.runestar.client.game.api.Region
+import org.runestar.client.game.api.*
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
@@ -56,7 +52,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         val npcs = implings
         if (npcs.isEmpty()) return
 
-        g.font = RUNESCAPE_CHAT_FONT
+        g.font = Fonts.CHAT
 
         npcs.forEach { npc ->
             val loc = npc.location

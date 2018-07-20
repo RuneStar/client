@@ -2,16 +2,12 @@ package org.runestar.client.plugins.freezetimers
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.Actor
-import org.runestar.client.game.api.HeadIconPrayer
-import org.runestar.client.game.api.Player
-import org.runestar.client.game.api.SequenceId
+import org.runestar.client.game.api.*
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
@@ -51,7 +47,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     }
 
     private fun onRepaint(g: Graphics2D) {
-        g.font = RUNESCAPE_SMALL_FONT
+        g.font = Fonts.SMALL
         for ((actor, freezeState) in loadedFrozenActors) {
             drawActor(g, actor, freezeState)
         }

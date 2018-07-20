@@ -4,16 +4,16 @@ import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.api.live.SceneElements
-import org.runestar.client.game.raw.access.XItemDefinition
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XItemDefinition
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
@@ -110,7 +110,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     data class Settings(
             val color: RgbaForm = RgbaForm(255, 255, 255),
-            val font: FontForm = FontForm(RUNESCAPE_SMALL_FONT),
+            val font: FontForm = FontForm(Fonts.SMALL),
             val spacing: Int = -2,
             val initialOffset: Int = 9,
             val blockedNames: List<String> = emptyList()

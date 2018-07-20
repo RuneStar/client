@@ -1,13 +1,13 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.general.fonts.RUNESCAPE_LARGE_FONT
 
 class OnTickTest : DisposablePlugin<PluginSettings>() {
 
@@ -25,7 +25,7 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
         })
 
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = RUNESCAPE_LARGE_FONT
+            g.font = Fonts.LARGE
             tiles.forEach { t ->
                 val o = t.outline()
                 g.draw(o)

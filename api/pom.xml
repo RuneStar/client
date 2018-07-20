@@ -22,6 +22,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>client-plugins-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -34,10 +39,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>client-game-raw</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.runestar</groupId>
-            <artifactId>general</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>

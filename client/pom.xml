@@ -41,6 +41,16 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-game-raw</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>client-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -50,13 +60,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-patch</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.sigpipe</groupId>
+            <artifactId>jbsdiff</artifactId>
         </dependency>
     </dependencies>
 
@@ -65,6 +74,18 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>client-patch-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>patch</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>eu.somatik.serviceloader-maven-plugin</groupId>

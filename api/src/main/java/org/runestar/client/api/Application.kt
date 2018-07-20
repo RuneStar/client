@@ -11,7 +11,6 @@ import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginLoader
-import org.runestar.general.JavConfig
 import java.awt.Frame
 import java.awt.MenuItem
 import java.awt.PopupMenu
@@ -46,9 +45,7 @@ object Application : AutoCloseable {
 
     private var profileName: String = DEFAULT_PROFILE
 
-    fun start(
-            javConfig: JavConfig
-    ) {
+    fun start() {
         check(!started)
         started = true
 
@@ -56,7 +53,7 @@ object Application : AutoCloseable {
         val applet = CLIENT as java.applet.Applet
 
         SwingUtilities.invokeAndWait {
-            buildApplet(applet, javConfig)
+            buildApplet(applet)
             frame = GameFrame(applet)
         }
         applet.init()

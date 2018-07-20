@@ -7,7 +7,7 @@ import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.*
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.Skill
+import org.runestar.client.game.api.Skill
 import java.awt.BasicStroke
 import java.awt.RenderingHints
 import java.awt.Shape

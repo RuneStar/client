@@ -1,14 +1,14 @@
 package org.runestar.client.plugins.dev
 
+import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.Actor
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.access.XActor
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.general.fonts.RUNESCAPE_SMALL_FONT
 import java.awt.Color
 import java.awt.Graphics2D
 
@@ -21,7 +21,7 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
             val p = Players.local?.accessor ?: return@subscribe
 
             g.color = Color.WHITE
-            g.font = RUNESCAPE_SMALL_FONT
+            g.font = Fonts.SMALL
 
             val x = 40
             var y = 40

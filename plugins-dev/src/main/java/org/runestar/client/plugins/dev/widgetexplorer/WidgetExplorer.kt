@@ -2,12 +2,12 @@ package org.runestar.client.plugins.dev.widgetexplorer
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
+import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.general.fonts.RUNESCAPE_CHAT_FONT
 import java.awt.Color
 import javax.swing.SwingUtilities
 
@@ -32,7 +32,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
         })
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.MAGENTA
-            g.font = RUNESCAPE_CHAT_FONT
+            g.font = Fonts.CHAT
             val mouse = Mouse.location
             val mouseWidget = Widgets.flat
                     .filter {

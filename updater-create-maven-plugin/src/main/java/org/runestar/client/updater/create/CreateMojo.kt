@@ -15,6 +15,8 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.objectweb.asm.Type
+import org.runestar.client.common.JAV_CONFIG
+import org.runestar.client.common.REVISION
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.ConstructorHook
 import org.runestar.client.updater.common.FieldHook
@@ -25,8 +27,6 @@ import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.extensions.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
 import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.general.downloadGamepack
-import org.runestar.general.updateRevision
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -93,7 +93,9 @@ class CreateMojo : AbstractMojo() {
     }
 
     private fun dl() {
-        downloadGamepack(gamepackJar)
+        JAV_CONFIG.gamepackUrl.openStream().use { input ->
+            Files.copy(input, gamepackJar, StandardCopyOption.REPLACE_EXISTING)
+        }
     }
 
     private fun deob() {
@@ -107,7 +109,7 @@ class CreateMojo : AbstractMojo() {
     private fun map() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
-        JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, updateRevision())
+        JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, REVISION)
         val idClasses = if (project.properties.getProperty("runestar.placeholderhooks") == "true") {
             ctx.buildIdHierarchyAll()
         } else {
