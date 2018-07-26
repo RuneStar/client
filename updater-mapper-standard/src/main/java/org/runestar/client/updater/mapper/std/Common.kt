@@ -157,3 +157,14 @@ abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Widget.dec
     override val predicate = predicateOf<Instruction2> { it.opcode == NEWARRAY && it.intOperand == 10 }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
+
+@DependsOn(Widget.decodeActive::class)
+abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Widget.decodeActive::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == Array<Any?>::class.type }
+}
+
+@DependsOn(Widget.decodeActive::class, Widget.readListenerTriggers::class)
+abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Widget.decodeActive::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.readListenerTriggers>().id }
+            .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+}

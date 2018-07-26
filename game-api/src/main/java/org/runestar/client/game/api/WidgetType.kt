@@ -2,7 +2,8 @@ package org.runestar.client.game.api
 
 object WidgetType {
 
-    // 0, 1
+    const val LAYER = 0
+    // 1
     const val INVENTORY = 2
     const val RECTANGLE = 3
     const val TEXT = 4

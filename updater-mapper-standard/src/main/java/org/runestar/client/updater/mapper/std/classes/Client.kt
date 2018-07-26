@@ -3454,4 +3454,20 @@ class Client : IdentityMapper.Class() {
     class timer : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<Timer>() }
     }
+
+    @MethodParameters("widget", "parentWidth", "parentHeight")
+    @DependsOn(Widget::class, Widget.xAlignment::class)
+    class alignWidgetPosition : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.isField && it.fieldId == field<Widget.xAlignment>().id } }
+    }
+
+    @MethodParameters("widget", "parentWidth", "parentHeight", "b")
+    @DependsOn(Widget::class, Widget.widthAlignment::class)
+    class alignWidgetSize : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.isField && it.fieldId == field<Widget.widthAlignment>().id } }
+    }
 }

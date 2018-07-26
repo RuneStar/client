@@ -224,4 +224,9 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.linkedBelowTile>().id } }
     }
+
+    class addTile : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size == 20 && it.arguments.all { it == INT_TYPE } }
+    }
 }

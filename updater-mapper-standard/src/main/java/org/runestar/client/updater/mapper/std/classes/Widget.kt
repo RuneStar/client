@@ -11,6 +11,8 @@ import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.std.Widget10Array
 import org.runestar.client.updater.mapper.std.WidgetInvArray
+import org.runestar.client.updater.mapper.std.WidgetListener
+import org.runestar.client.updater.mapper.std.WidgetListenerTriggers
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -33,7 +35,11 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class isScrollBar : OrderMapper.InConstructor.Field(Widget::class, 8) {
+    class textShadowed : OrderMapper.InConstructor.Field(Widget::class, -7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class isScrollBar : OrderMapper.InConstructor.Field(Widget::class, -6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -57,6 +63,30 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class xAlignment : OrderMapper.InConstructor.Field(Widget::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class yAlignment : OrderMapper.InConstructor.Field(Widget::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class widthAlignment : OrderMapper.InConstructor.Field(Widget::class, 6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class heightAlignment : OrderMapper.InConstructor.Field(Widget::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class rawX : OrderMapper.InConstructor.Field(Widget::class, 8) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class rawY : OrderMapper.InConstructor.Field(Widget::class, 9) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class width : OrderMapper.InConstructor.Field(Widget::class, 14) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -73,11 +103,23 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class textColor : OrderMapper.InConstructor.Field(Widget::class, 23) {
+    class color : OrderMapper.InConstructor.Field(Widget::class, 23) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class textureId : OrderMapper.InConstructor.Field(Widget::class, 30) {
+    class spriteId2 : OrderMapper.InConstructor.Field(Widget::class, 30) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class spriteId : OrderMapper.InConstructor.Field(Widget::class, 31) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelType : OrderMapper.InConstructor.Field(Widget::class, 35) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelId : OrderMapper.InConstructor.Field(Widget::class, 36) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -101,11 +143,11 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class columns : OrderMapper.InConstructor.Field(Widget::class, 10) {
+    class rawWidth : OrderMapper.InConstructor.Field(Widget::class, 10) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class rows : OrderMapper.InConstructor.Field(Widget::class, 11) {
+    class rawHeight : OrderMapper.InConstructor.Field(Widget::class, 11) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -133,6 +175,18 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class textLineHeight : OrderMapper.InConstructor.Field(Widget::class, -19) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class textXAlignment : OrderMapper.InConstructor.Field(Widget::class, -18) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class textYAlignment : OrderMapper.InConstructor.Field(Widget::class, -17) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class paddingX : OrderMapper.InConstructor.Field(Widget::class, -16) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -154,7 +208,11 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class scrollMax : OrderMapper.InConstructor.Field(Widget::class, 22) {
+    class scrollWidth : OrderMapper.InConstructor.Field(Widget::class, 21) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class scrollHeight : OrderMapper.InConstructor.Field(Widget::class, 22) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -254,14 +312,14 @@ class Widget : IdentityMapper.Class() {
 
     @MethodParameters("buffer")
     @DependsOn(Buffer::class)
-    class readInts : IdentityMapper.InstanceMethod() {
+    class readListenerTriggers : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == IntArray::class.type }
                 .and { it.arguments.startsWith(type<Buffer>()) }
     }
 
     @MethodParameters("buffer")
     @DependsOn(Buffer::class)
-    class readParameters : IdentityMapper.InstanceMethod() {
+    class readListener : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Array<Any?>::class.type }
                 .and { it.arguments.startsWith(type<Buffer>()) }
     }
@@ -298,5 +356,33 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type.arrayDimensions == 0 }
                 .and { it.type != it.klass.type }
                 .and { it.type in it.jar }
+    }
+
+    class onLoad : WidgetListener(0)
+    class onMouseOver : WidgetListener(1)
+    class onMouseLeave : WidgetListener(2)
+    class onTargetLeave : WidgetListener(3)
+    class onTargetEnter : WidgetListener(4)
+    class onVarTransmit : WidgetListener(5)
+    class onInvTransmit : WidgetListener(6)
+    class onStatTransmit : WidgetListener(7)
+    class onTimer : WidgetListener(8)
+    class onOp : WidgetListener(9)
+    class onMouseRepeat : WidgetListener(10)
+    class onClick : WidgetListener(11)
+    class onClickRepeat : WidgetListener(12)
+    class onRelease : WidgetListener(13)
+    class onHold : WidgetListener(14)
+    class onDrag : WidgetListener(15)
+    class onDragComplete : WidgetListener(16)
+    class onScroll : WidgetListener(17)
+
+    class varTransmitTriggers : WidgetListenerTriggers(0)
+    class invTransmitTriggers : WidgetListenerTriggers(1)
+    class statTransmitTriggers : WidgetListenerTriggers(2)
+
+    @DependsOn(readListener::class)
+    class hasListener : UniqueMapper.InMethod.Field(readListener::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 }

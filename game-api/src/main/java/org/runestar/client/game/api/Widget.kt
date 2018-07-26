@@ -3,8 +3,8 @@ package org.runestar.client.game.api
 import org.runestar.client.game.api.live.WidgetGroupParentage
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
-import org.runestar.client.game.raw.access.XWidget
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XWidget
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
@@ -26,9 +26,9 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
     val text: String? get() = accessor.text
 
     /**
-     * Color of [text]. Default is [Color.BLACK]
+     * Default is [Color.BLACK]
      */
-    val textColor: Color get() = Color(accessor.textColor)
+    val color: Color get() = Color(accessor.color)
 
     val width: Int get() {
         return when (accessor.type) {
@@ -58,7 +58,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
         while(anc != null) {
             x += cur.accessor.x
             y += cur.accessor.y
-            if (accessor.scrollMax == 0) {
+            if (accessor.scrollHeight == 0) {
                 x -= cur.accessor.scrollX
                 y -= cur.accessor.scrollY
             }

@@ -90,7 +90,8 @@ paddingX: ${x.paddingX}
 paddingY: ${x.paddingY}
 scrollX: ${x.scrollX}
 scrollY; ${x.scrollY}
-scrollMax: ${x.scrollMax}
+scrollWidth: ${x.scrollWidth}
+scrollHeight: ${x.scrollHeight}
 width: ${x.width}
 height: ${x.height}
 
@@ -99,7 +100,7 @@ cycle: ${x.cycle}
 isHidden: ${x.isHidden}
 
 text: ${x.text}
-textColor: ${x.textColor}
+color: ${x.color}
 dataText: ${x.dataText}
 string1: ${x.string1}
 actions: ${x.actions?.contentToString()}
@@ -121,7 +122,8 @@ itemQuantities: ${x.itemQuantities?.contentToString()}
 
 hasScript: ${x.hasScript}
 noClickThrough: ${x.noClickThrough}
-textureId: ${x.textureId}
+spriteId: ${x.spriteId}
+spriteId2: ${x.spriteId2}
 """
         ta.text = s
         ta.moveCaretPosition(0)

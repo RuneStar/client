@@ -56,14 +56,14 @@ class Tile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<GroundItemPile>() }
     }
 
-    @DependsOn(TilePaint::class)
-    class paint : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<TilePaint>() }
-    }
-
     @DependsOn(TileModel::class)
     class model : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<TileModel>() }
+    }
+
+    @DependsOn(TilePaint::class)
+    class paint : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TilePaint>() }
     }
 
     @DependsOn(Scene.newGroundItemPile::class)
