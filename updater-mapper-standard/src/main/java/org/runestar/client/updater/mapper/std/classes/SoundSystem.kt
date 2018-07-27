@@ -1,14 +1,17 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.extensions.and
+import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Type.*
 import javax.sound.sampled.AudioFormat
-import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.SourceDataLine
 
 class SoundSystem : IdentityMapper.Class() {
@@ -59,5 +62,12 @@ class SoundSystem : IdentityMapper.Class() {
 
     class bufferSize : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
+    }
+
+    @MethodParameters()
+    class init : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == Opcodes.I2F } }
     }
 }

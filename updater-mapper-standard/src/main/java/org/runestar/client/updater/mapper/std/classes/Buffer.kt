@@ -205,7 +205,7 @@ class Buffer : IdentityMapper.Class() {
 
     @SinceVersion(154)
     @MethodParameters("value")
-    class writeBooleanAsByte : IdentityMapper.InstanceMethod() {
+    class writeBoolean : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(BOOLEAN_TYPE) }
@@ -238,5 +238,26 @@ class Buffer : IdentityMapper.Class() {
     @DependsOn(UnderlayDefinition.readNext::class)
     class readMedium : UniqueMapper.InMethod.Method(UnderlayDefinition.readNext::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters("n")
+    class writeLong : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(LONG_TYPE) }
+                .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 56 } }
+    }
+
+    @MethodParameters("n")
+    class writeLongMedium : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(LONG_TYPE) }
+                .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 56 } }
+    }
+
+    @MethodParameters()
+    class readBoolean : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.none { it.opcode == ISUB } }
     }
 }

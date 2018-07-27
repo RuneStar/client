@@ -125,9 +125,8 @@ abstract class MethodPutField(method: KClass<out Mapper<Method2>>, index: Int, t
 }
 
 @DependsOn(WorldMapLabelSize::class)
-abstract class WorldMapLabelSizeConstant(val ldcString: String) : UniqueMapper.InClassInitializer.Field(WorldMapLabelSize::class) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ldcString }
-            .nextWithin(7) { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapLabelSize>() }
+abstract class WorldMapLabelSizeConstant(val index: Int) : OrderMapper.InClassInitializer.Field(WorldMapLabelSize::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapLabelSize>() }
 }
 
 @SinceVersion(162)

@@ -46,6 +46,7 @@ class NpcDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<NpcDefinition>() }
     }
 
+    @MethodParameters("s1", "n1", "s2", "n2")
     @DependsOn(Model::class)
     class getModel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }

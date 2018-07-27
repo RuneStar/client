@@ -20,7 +20,9 @@ import java.io.File
 import java.lang.management.GarbageCollectorMXBean
 import java.lang.reflect.Modifier
 import java.net.URL
+import java.security.SecureRandom
 import java.util.*
+import java.util.concurrent.ScheduledExecutorService
 import java.util.zip.CRC32
 import kotlin.collections.ArrayList
 
@@ -1136,17 +1138,17 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(25) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-//    @MethodParameters("widget")
+    @MethodParameters("widget")
     @SinceVersion(141)
     @DependsOn(Widget::class)
-    class widgetMethod0 : IdentityMapper.InstanceMethod() {
+    class alignWidget : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Widget>()) }
     }
 
     @MethodParameters("id")
     @SinceVersion(141)
-    @DependsOn(widgetMethod0::class)
-    class getWidget : UniqueMapper.InMethod.Method(widgetMethod0::class) {
+    @DependsOn(alignWidget::class)
+    class getWidget : UniqueMapper.InMethod.Method(alignWidget::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.jar[it.methodId].arguments.size in 1..2 }
     }
 
@@ -2869,13 +2871,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(widgetMethod0::class)
-    class canvasWidth : OrderMapper.InMethod.Field(widgetMethod0::class, 0) {
+    @DependsOn(alignWidget::class)
+    class canvasWidth : OrderMapper.InMethod.Field(alignWidget::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(widgetMethod0::class)
-    class canvasHeight : OrderMapper.InMethod.Field(widgetMethod0::class, 1) {
+    @DependsOn(alignWidget::class)
+    class canvasHeight : OrderMapper.InMethod.Field(alignWidget::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -3075,10 +3077,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMap>() }
     }
 
-    // todo
-//    class WorldMapLabelSize_small : WorldMapLabelSizeConstant("SMALL")
-//    class WorldMapLabelSize_medium : WorldMapLabelSizeConstant("MEDIUM")
-//    class WorldMapLabelSize_large : WorldMapLabelSizeConstant("LARGE")
+    class WorldMapLabelSize_small : WorldMapLabelSizeConstant(0)
+    class WorldMapLabelSize_medium : WorldMapLabelSizeConstant(1)
+    class WorldMapLabelSize_large : WorldMapLabelSizeConstant(2)
 
     @DependsOn(KeyHandler::class)
     class KeyHandler_pressedKeys : UniqueMapper.InClassInitializer.Field(KeyHandler::class) {
@@ -3469,5 +3470,26 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
                 .and { it.instructions.any { it.isField && it.fieldId == field<Widget.widthAlignment>().id } }
+    }
+
+    @DependsOn(newSoundSystem::class)
+    class soundSystemExecutor : UniqueMapper.InMethod.Field(newSoundSystem::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == ScheduledExecutorService::class.type }
+    }
+
+    @SinceVersion(172)
+    class newSecureRandom : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == SecureRandom::class.type }
+    }
+
+    @SinceVersion(172)
+    @DependsOn(SecureRandomFuture::class)
+    class secureRandomFuture : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SecureRandomFuture>() }
+    }
+
+    @SinceVersion(172)
+    class secureRandom : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == SecureRandom::class.type }
     }
 }

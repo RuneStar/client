@@ -12,6 +12,7 @@ import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.prevIn
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -205,5 +206,35 @@ class ObjectDefinition : IdentityMapper.Class() {
     class getModelDynamic : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
                 .and { it.arguments.size in 8..9 }
+    }
+
+    @MethodParameters("n", "m")
+    @DependsOn(ModelData::class)
+    class getModelData : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<ModelData>() }
+    }
+
+    @DependsOn(getModelData::class)
+    class recolorFrom : OrderMapper.InMethod.Field(getModelData::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModelData::class)
+    class recolorTo : OrderMapper.InMethod.Field(getModelData::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModelData::class)
+    class retextureFrom : OrderMapper.InMethod.Field(getModelData::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(getModelData::class)
+    class retextureTo : OrderMapper.InMethod.Field(getModelData::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
+                .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 }

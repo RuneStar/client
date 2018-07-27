@@ -35,6 +35,10 @@ class WorldMapRegion : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
     }
 
+    class fonts : OrderMapper.InConstructor.Field(WorldMapRegion::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
+    }
+
     @MethodParameters()
     class icons : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size in 0..1 }
