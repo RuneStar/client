@@ -23,7 +23,9 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     abstract val ancestor: Widget.Parent?
 
-    val text: String? get() = accessor.text
+    var text: String?
+        get() = accessor.text
+        set(value) { accessor.text = value }
 
     /**
      * Default is [Color.BLACK]

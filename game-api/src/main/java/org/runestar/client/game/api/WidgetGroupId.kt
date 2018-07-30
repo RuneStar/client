@@ -13,8 +13,23 @@ interface WidgetGroupId {
         override val id = 15
     }
 
+    object CastleWarsSaradomin: WidgetGroupId {
+        override val id = 58
+        val time_left = WidgetParentId(id, 25)
+    }
+
+    object CastleWarsZamorak: WidgetGroupId {
+        override val id = 59
+        val time_left = WidgetParentId(id, 25)
+    }
+
     object WorldSwitcher : WidgetGroupId {
         override val id = 69
+    }
+
+    object CastleWarsWaitingRoom : WidgetGroupId {
+        override val id = 131
+        val time_until_next_game = WidgetParentId(id, 2)
     }
 
     object Inventory : WidgetGroupId {
@@ -46,7 +61,7 @@ interface WidgetGroupId {
     }
 
     object ViewportResizableBottomLine : WidgetGroupId {
-        override val id = 161
+        override val id = 164
     }
 
     object Chat : WidgetGroupId {
@@ -70,7 +85,7 @@ interface WidgetGroupId {
     }
 
     object ViewportFixed : WidgetGroupId {
-        override val id = 541
+        override val id = 548
     }
 
     object CombatOptions : WidgetGroupId {
