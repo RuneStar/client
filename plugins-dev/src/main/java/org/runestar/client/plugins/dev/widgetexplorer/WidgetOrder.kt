@@ -17,9 +17,11 @@ enum class WidgetOrder {
                 val groupNode = DefaultMutableTreeNode(wg.id)
                 wg.forEach { wp ->
                     val parentNode = DefaultMutableTreeNode(WidgetWrapper(wp))
-                    wp.children.asSequence().filterNotNull().forEach { wc ->
-                        val childNode = DefaultMutableTreeNode(WidgetWrapper(wc))
-                        parentNode.add(childNode)
+                    if (wp is Widget.Layer) {
+                        wp.dynamicChildren.asSequence().filterNotNull().forEach { wc ->
+                            val childNode = DefaultMutableTreeNode(WidgetWrapper(wc))
+                            parentNode.add(childNode)
+                        }
                     }
                     groupNode.add(parentNode)
                 }
@@ -43,20 +45,13 @@ enum class WidgetOrder {
         }
 
         private fun addChildren(node: DefaultMutableTreeNode) {
-            val widget = (node.userObject as WidgetWrapper).widget as Widget.Parent
-            widget.descendants.forEach {
-                val c = DefaultMutableTreeNode(WidgetWrapper(it))
-                addChildren(c)
-                node.add(c)
-            }
-            widget.successors.forEach {
-                val c = DefaultMutableTreeNode(WidgetWrapper(it))
-                addChildren(c)
-                node.add(c)
-            }
-            widget.children.asSequence().filterNotNull().forEach {
-                val c = DefaultMutableTreeNode(WidgetWrapper(it))
-                node.add(c)
+            val widget = (node.userObject as WidgetWrapper).widget
+            if (widget is Widget.Layer) {
+                widget.children.forEach {
+                    val c = DefaultMutableTreeNode(WidgetWrapper(it))
+                    addChildren(c)
+                    node.add(c)
+                }
             }
         }
     };

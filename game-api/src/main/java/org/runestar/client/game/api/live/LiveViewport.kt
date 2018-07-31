@@ -16,7 +16,7 @@ object LiveViewport : Viewport {
 
     override val zoom: Int get() = CLIENT.viewportZoom
 
-    val widget: Widget.Parent? get() = CLIENT.viewportWidget?.let { Widget.Parent(it) }
+    val widget: Widget? get() = CLIENT.viewportWidget?.let { Widget.of(it) }
 
     override fun toString(): String {
         return "LiveViewport(zoom=$zoom, shape=$shape)"

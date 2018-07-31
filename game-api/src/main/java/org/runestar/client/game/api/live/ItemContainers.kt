@@ -2,16 +2,15 @@ package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.ItemContainer
 import org.runestar.client.game.api.NodeHashTable
-import org.runestar.client.game.raw.access.XItemContainer
-import org.runestar.client.game.raw.access.XNode
-import org.runestar.client.game.raw.access.XNodeHashTable
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XItemContainer
+import org.runestar.client.game.raw.access.XNodeHashTable
 
-object ItemContainers : NodeHashTable<Int, ItemContainer>() {
+object ItemContainers : NodeHashTable<Int, ItemContainer, XItemContainer>() {
 
     override val accessor: XNodeHashTable get() = CLIENT.itemContainers
 
-    override fun wrapKey(node: XNode): Int {
+    override fun wrapKey(node: XItemContainer): Int {
         return node.key.toInt()
     }
 
@@ -19,7 +18,7 @@ object ItemContainers : NodeHashTable<Int, ItemContainer>() {
         return k.toLong()
     }
 
-    override fun wrapValue(node: XNode): ItemContainer {
-        return ItemContainer(node as XItemContainer)
+    override fun wrapValue(node: XItemContainer): ItemContainer {
+        return ItemContainer(node)
     }
 }

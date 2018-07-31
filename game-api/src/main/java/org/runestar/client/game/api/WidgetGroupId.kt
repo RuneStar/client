@@ -6,7 +6,7 @@ interface WidgetGroupId {
 
     object Bank : WidgetGroupId {
         override val id = 12
-        val items = WidgetParentId(id, 12)
+        val items = WidgetId(id, 12)
     }
 
     object BankInventory : WidgetGroupId {
@@ -15,12 +15,12 @@ interface WidgetGroupId {
 
     object CastleWarsSaradomin: WidgetGroupId {
         override val id = 58
-        val time_left = WidgetParentId(id, 25)
+        val time_left = WidgetId(id, 25)
     }
 
     object CastleWarsZamorak: WidgetGroupId {
         override val id = 59
-        val time_left = WidgetParentId(id, 25)
+        val time_left = WidgetId(id, 25)
     }
 
     object WorldSwitcher : WidgetGroupId {
@@ -29,31 +29,31 @@ interface WidgetGroupId {
 
     object CastleWarsWaitingRoom : WidgetGroupId {
         override val id = 131
-        val time_until_next_game = WidgetParentId(id, 2)
+        val time_until_next_game = WidgetId(id, 2)
     }
 
     object Inventory : WidgetGroupId {
         override val id = 149
-        val items = WidgetParentId(id, 0)
+        val items = WidgetId(id, 0)
     }
 
     object MinimapOrbs : WidgetGroupId {
 
         override val id = 160
 
-        val xp = WidgetParentId(id, 1)
+        val xp = WidgetId(id, 1)
 
-        val hp = WidgetParentId(id, 2)
-        val hp_circle = WidgetParentId(id, 6)
+        val hp = WidgetId(id, 2)
+        val hp_circle = WidgetId(id, 6)
 
-        val pray = WidgetParentId(id, 12)
-        val pray_circle = WidgetParentId(id, 16)
+        val pray = WidgetId(id, 12)
+        val pray_circle = WidgetId(id, 16)
 
-        val run = WidgetParentId(id, 20)
-        val run_circle = WidgetParentId(id, 24)
+        val run = WidgetId(id, 20)
+        val run_circle = WidgetId(id, 24)
 
-        val spec = WidgetParentId(id, 28)
-        val spec_circle = WidgetParentId(id, 31)
+        val spec = WidgetId(id, 28)
+        val spec_circle = WidgetId(id, 31)
     }
 
     object ViewportResizableOldSchoolBox : WidgetGroupId {

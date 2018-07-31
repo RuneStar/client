@@ -7,9 +7,9 @@ object WidgetGroups : AbstractList<WidgetGroup?>(), RandomAccess {
 
     override val size: Int get() = CLIENT.widgets.size
 
-    override fun get(index: Int): WidgetGroup? {
-        return CLIENT.widgets.getOrNull(index)?.let { WidgetGroup(index, it) }
-    }
+    override fun get(index: Int): WidgetGroup? = CLIENT.widgets.getOrNull(index)?.let { WidgetGroup(index, it) }
 
-    val root: WidgetGroup? get() = get(CLIENT.rootWidgetGroup)
+    val rootId: Int get() = CLIENT.rootWidgetGroup
+
+    val root: WidgetGroup? get() = get(rootId)
 }

@@ -1,142 +1,129 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.WidgetGroupParentage
+import org.runestar.client.game.api.live.WidgetGroupParents
 import org.runestar.client.game.api.live.WidgetGroups
-import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XWidget
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Point
-import java.awt.Rectangle
-import java.util.*
 
 sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
-    companion object {
-        const val ITEM_SLOT_SIZE = 32
-    }
+    val type: Int get() = accessor.type
 
-    val group get() = checkNotNull(WidgetGroups[parentId.group])
-
-    val parentId get() = WidgetParentId(accessor.id)
-
-    abstract val ancestor: Widget.Parent?
-
-    var text: String?
-        get() = accessor.text
-        set(value) { accessor.text = value }
-
-    /**
-     * Default is [Color.BLACK]
-     */
-    val color: Color get() = Color(accessor.color)
-
-    val width: Int get() {
-        return when (accessor.type) {
-            2 -> accessor.width * (ITEM_SLOT_SIZE + accessor.paddingX) - accessor.paddingX
-            else -> accessor.width
-        }
-    }
-
-    val height: Int get() {
-        return when (accessor.type) {
-            2 -> accessor.height * (ITEM_SLOT_SIZE + accessor.paddingY) - accessor.paddingY
-            else -> accessor.height
-        }
-    }
-
-    val isHidden get() = accessor.isHidden
+    val cycle: Int get() = accessor.cycle
 
     val isActive get() = cycle >= CLIENT.cycle
 
-    val cycle get() = accessor.cycle
+    val isHidden: Boolean get() = accessor.isHidden
 
-    val location: Point? get() {
-        var cur = this
-        var anc = ancestor
-        var x = 0
-        var y = 0
-        while(anc != null) {
-            x += cur.accessor.x
-            y += cur.accessor.y
-            if (accessor.scrollHeight == 0) {
-                x -= cur.accessor.scrollX
-                y -= cur.accessor.scrollY
-            }
-            cur = anc
-            anc = anc.ancestor
-        }
-        if (cur.group != WidgetGroups.root) return null
-        x += CLIENT.rootWidgetXs[cur.accessor.rootIndex]
-        y += CLIENT.rootWidgetYs[cur.accessor.rootIndex]
-        return Point(x, y)
-    }
+    val id get() = WidgetId(accessor.id)
+
+    val index: Int get() = WidgetId.getIndex(accessor.id)
+
+    val group get() = checkNotNull(WidgetGroups[groupId])
+
+    val groupId: Int get() = WidgetId.getGroup(accessor.id)
+
+    val hasStaticParent: Boolean get() = accessor.parentId != -1
+
+    val staticParent: Widget.Layer? get() = staticParent(accessor)?.let { of(it) as Widget.Layer }
+
+    val parent: Widget.Layer? get() = parent(accessor)?.let { of(it) as Widget.Layer }
+
+    val dynamicChildIndex: Int get() = accessor.childIndex
+
+    val isDynamicChild: Boolean get() = dynamicChildIndex != -1
+
+    open val width: Int get() = accessor.width
+
+    open val height: Int get() = accessor.height
 
     val dimension: Dimension get() = Dimension(width, height)
 
-    val shape: Rectangle? get() = location?.let { Rectangle(it, dimension) }
+    val shape: java.awt.Rectangle? get() = location?.let { java.awt.Rectangle(it.x, it.y, width, height) }
 
-    abstract fun idString(): String
+    internal open val flat: Sequence<Widget> get() = sequenceOf(this)
 
-    class Child(override val accessor: XWidget) : Widget(accessor) {
-
-        init {
-            require(accessor.childIndex != -1)
+    val location: Point? get() {
+        var cur = accessor
+        var anc = parent(cur)
+        var x = 0
+        var y = 0
+        while(anc != null) {
+            x += cur.x
+            y += cur.y
+            if (cur.scrollHeight == 0) {
+                x -= cur.scrollX
+                y -= cur.scrollY
+            }
+            cur = anc
+            anc = parent(anc)
         }
+        if (WidgetId.getGroup(cur.id) != WidgetGroups.rootId) return null
+        if (cur.rootIndex == -1) return null
+        x += CLIENT.rootWidgetXs[cur.rootIndex]
+        y += CLIENT.rootWidgetYs[cur.rootIndex]
+        return Point(x, y)
+    }
 
-        val childId get() = accessor.childIndex
-
-        val parent get() = Widgets[parentId]
-
-        override val ancestor get() = parent
-
-        override fun toString(): String {
-            return "Widget.Child(group=${group.id}, parent=${parentId.parent}, child=$childId)"
-        }
-
-        override fun idString(): String {
-            return "${group.id}.${parentId.parent}:$childId"
+    fun idString(): String {
+        return if (isDynamicChild) {
+            "$groupId:$index:$dynamicChildIndex"
+        } else {
+            "$groupId:$index"
         }
     }
 
-    class Parent(override val accessor: XWidget) : Widget(accessor) {
+    override fun toString(): String {
+        return "${javaClass.simpleName}(${idString()})"
+    }
 
-        init {
-            require(accessor.childIndex == -1)
-        }
+    class Layer internal constructor(accessor: XWidget) : Widget(accessor) {
 
-        val flat: Sequence<Widget> get() {
-            return sequenceOf(this).plus(children.asSequence().filterNotNull())
-        }
+        val scrollX: Int get() = accessor.scrollX
 
-        val children: List<Widget.Child?> get() = object : AbstractList<Widget.Child?>(), RandomAccess {
+        val scrollY: Int get() = accessor.scrollY
+
+        val scrollWidth: Int get() = accessor.scrollWidth
+
+        val scrollHeight: Int get() = accessor.scrollHeight
+
+        val dynamicChildren: List<Widget?> get() = object : AbstractList<Widget?>(), RandomAccess {
 
             override val size: Int get() = accessor.children?.size ?: 0
 
-            override fun get(index: Int): Child? {
+            override fun get(index: Int): Widget? {
                 val array = accessor.children ?: return null
-                return array[index]?.let { Widget.Child(it) }
+                return array[index]?.let { of(it) }
             }
         }
 
-        val successors: Sequence<Widget.Parent> get() = group.asSequence().filter { it.predecessor == this }
+        override val flat: Sequence<Widget> get() = sequenceOf(this).plus(dynamicChildren.asSequence().filterNotNull())
 
-        val descendantsGroup: WidgetGroup? get() = WidgetGroupParentage[parentId]?.let { WidgetGroups[it] }
+        val staticChildren: Sequence<Widget> get() = group.asSequence().filter { it.accessor.parentId == accessor.id }
 
-        val descendants: Sequence<Widget.Parent> get() = descendantsGroup?.roots ?: emptySequence()
+        val nestedGroup: WidgetGroup? get() = WidgetGroupParents[id]?.let { WidgetGroups[it] }
 
-        val predecessor get() = accessor.parentId.takeIf { it != -1 }?.let { Widgets[WidgetParentId(it)] }
+        val nestedChildren: Sequence<Widget> get() = nestedGroup?.roots ?: emptySequence()
 
-        override val ancestor get() = predecessor ?: group.parent
+        val children: Sequence<Widget> get() = sequenceOf(dynamicChildren.asSequence().filterNotNull(), staticChildren, nestedChildren).flatten()
+    }
 
-        val inventory: List<WidgetItem> get() = object : AbstractList<WidgetItem>(), RandomAccess {
+    class Inventory internal constructor(accessor: XWidget) : Widget(accessor) {
 
-            init {
-                check(accessor.type == 2)
-            }
+        companion object {
+            const val ITEM_SLOT_SIZE = 32
+        }
 
-            private val location = checkNotNull(this@Parent.location)
+        override val width: Int get() = accessor.width * (ITEM_SLOT_SIZE + accessor.paddingX) - accessor.paddingX
+
+        override val height: Int get() = accessor.height * (ITEM_SLOT_SIZE + accessor.paddingY) - accessor.paddingY
+
+        val items: List<WidgetItem> get() = object : AbstractList<WidgetItem>(), RandomAccess {
+
+            private val location = checkNotNull(this@Inventory.location)
 
             override val size: Int get() = accessor.width * accessor.height
 
@@ -148,17 +135,81 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
                 val col = index % accessor.width
                 val x = location.x + ((ITEM_SLOT_SIZE + accessor.paddingX) * col)
                 val y = location.y + ((ITEM_SLOT_SIZE + accessor.paddingY) * row)
-                val rect = Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
+                val rect = java.awt.Rectangle(x, y, ITEM_SLOT_SIZE, ITEM_SLOT_SIZE)
                 return WidgetItem(item, rect)
             }
         }
+    }
 
-        override fun toString(): String {
-            return "Widget.Parent(group=${group.id}, parent=${parentId.parent})"
+    class Rectangle internal constructor(accessor: XWidget) : Widget(accessor) {
+
+        val color: Color get() = Color(accessor.color)
+    }
+
+    class Text internal constructor(accessor: XWidget) : Widget(accessor) {
+
+        val fontId: Int get() = accessor.fontId
+
+        var text: String?
+            get() = accessor.text
+            set(value) { accessor.text = value }
+
+        val color: Color get() = Color(accessor.color)
+
+        val textXAlignment: Int get() = accessor.textXAlignment
+
+        val textYAlignment: Int get() = accessor.textYAlignment
+
+        val isTextShadowed: Boolean get() = accessor.textShadowed
+
+        val textLineHeight: Int get() = accessor.textLineHeight
+    }
+
+    class Sprite internal constructor(accessor: XWidget) : Widget(accessor) {
+
+    }
+
+    class Model internal constructor(accessor: XWidget) : Widget(accessor) {
+
+
+        val modelType: Int get() = accessor.modelType
+
+        val modelId: Int get() = accessor.modelId
+    }
+
+    class Line internal constructor(accessor: XWidget) : Widget(accessor) {
+
+        val color: Color get() = Color(accessor.color)
+    }
+
+    companion object {
+
+        fun of(accessor: XWidget): Widget {
+            return when (accessor.type) {
+                WidgetType.LAYER -> Widget.Layer(accessor)
+                WidgetType.INVENTORY -> Widget.Inventory(accessor)
+                WidgetType.RECTANGLE -> Widget.Rectangle(accessor)
+                WidgetType.TEXT -> Widget.Text(accessor)
+                WidgetType.SPRITE -> Widget.Sprite(accessor)
+                WidgetType.MODEL -> Widget.Model(accessor)
+                WidgetType.LINE -> Widget.Line(accessor)
+                else -> error("type: ${accessor.type} id: ${WidgetId.getGroup(accessor.id)}:${WidgetId.getIndex(accessor.id)}:${accessor.childIndex}")
+            }
         }
 
-        override fun idString(): String {
-            return "${group.id}.${parentId.parent}"
+        private fun parent(widget: XWidget): XWidget? {
+            val staticParent = staticParent(widget)
+            if (staticParent != null) return staticParent
+            if (WidgetId.getGroup(widget.id) == WidgetGroups.rootId) return null
+            val nestedParentId = WidgetGroupParents.parentId(WidgetId.getGroup(widget.id))
+            if (nestedParentId == -1) return null
+            return CLIENT.widgets[WidgetId.getGroup(nestedParentId)][WidgetId.getIndex(nestedParentId)]
+        }
+
+        private fun staticParent(widget: XWidget): XWidget? {
+            val pid = widget.parentId
+            if (pid == -1) return null
+            return CLIENT.widgets[WidgetId.getGroup(pid)][WidgetId.getIndex(pid)]
         }
     }
 }

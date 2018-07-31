@@ -45,7 +45,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
             var w: Widget? = mouseWidget
             while (w != null) {
                 hierarchy.add(w)
-                w = w.ancestor
+                w = w.parent
             }
             g.color = Color.WHITE
             val hierarchyString = hierarchy.joinToString(" > ") { it.idString() }

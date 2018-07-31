@@ -155,13 +155,13 @@ interface MenuOption {
     }
 
     interface InWidget: MenuOption {
-        val widgetId get() = WidgetParentId(argument2)
-        val widgetParent: Widget.Parent get() = checkNotNull(Widgets[widgetId])
+        val widgetId get() = WidgetId(argument2)
+        val widget: Widget get() = checkNotNull(Widgets[widgetId])
     }
 
     interface OnWidget: MenuOption, InWidget {
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
-        val widget: Widget? get() = widgetParent.let { p -> widgetChildId?.let { c -> p.children[c] } ?: p }
+        val widgetChild: Widget? get() = widget.let { p -> widgetChildId?.let { c -> (p as Widget.Layer).dynamicChildren[c] } ?: p }
     }
 
     interface Factory {

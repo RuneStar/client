@@ -86,14 +86,14 @@ ${w.hierarchyString()}
 
 x: ${x.x}
 y: ${x.y}
+width: ${x.width}
+height: ${x.height}
 paddingX: ${x.paddingX}
 paddingY: ${x.paddingY}
 scrollX: ${x.scrollX}
-scrollY; ${x.scrollY}
+scrollY: ${x.scrollY}
 scrollWidth: ${x.scrollWidth}
 scrollHeight: ${x.scrollHeight}
-width: ${x.width}
-height: ${x.height}
 
 rootIndex: ${x.rootIndex}
 cycle: ${x.cycle}
@@ -109,7 +109,6 @@ spellActionName: ${x.spellActionName}
 spellName: ${x.spellName}
 
 fontId: ${x.fontId}
-font: ${x.font}
 
 type: ${x.type}
 contentType: ${x.contentType}
@@ -135,7 +134,7 @@ spriteId2: ${x.spriteId2}
         while (w != null) {
             sb.append(w.idString())
             sb.append(" >\n")
-            w = w.ancestor
+            w = w.parent
         }
         sb.deleteCharAt(sb.length - 1)
         return sb.toString()

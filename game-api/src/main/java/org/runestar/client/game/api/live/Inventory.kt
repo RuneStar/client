@@ -7,7 +7,7 @@ import org.runestar.client.game.api.WidgetGroupId
 
 object Inventory {
 
-    val widget: Widget.Parent? get() = Widgets[WidgetGroupId.Inventory.items]
+    val widget: Widget.Inventory? get() = Widgets[WidgetGroupId.Inventory.items] as Widget.Inventory?
 
     val container: ItemContainer? get() = ItemContainers[ItemContainerId.INVENTORY]
 

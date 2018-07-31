@@ -3,6 +3,7 @@ package org.runestar.client.plugins.castlewars
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.NpcId
+import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetGroupId
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Widgets
@@ -70,6 +71,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         if (w == null || w.accessor.cycle == -1) {
             w = Widgets[WidgetGroupId.CastleWarsSaradomin.time_left] ?: return
         }
+        w as Widget.Text
         val s = w.text ?: return
         if (s.endsWith(" Min")) {
             gameTimerSeconds.reset()
