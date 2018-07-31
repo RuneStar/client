@@ -4,7 +4,7 @@ import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.Widget
-import org.runestar.client.game.api.WidgetGroupId
+import org.runestar.client.game.api.WidgetId
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.game.raw.CLIENT
@@ -67,9 +67,9 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     }
 
     private fun onDrawWidgets() {
-        var w = Widgets[WidgetGroupId.CastleWarsZamorak.time_left]
+        var w = Widgets[WidgetId.CASTLE_WARS_ZAMORAK_TIME_LEFT]
         if (w == null || w.accessor.cycle == -1) {
-            w = Widgets[WidgetGroupId.CastleWarsSaradomin.time_left] ?: return
+            w = Widgets[WidgetId.CASTLE_WARS_SARADOMIN_TIME_LEFT] ?: return
         }
         w as Widget.Text
         val s = w.text ?: return

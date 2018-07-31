@@ -3,11 +3,11 @@ package org.runestar.client.game.api.live
 import org.runestar.client.game.api.ItemContainer
 import org.runestar.client.game.api.ItemContainerId
 import org.runestar.client.game.api.Widget
-import org.runestar.client.game.api.WidgetGroupId
+import org.runestar.client.game.api.WidgetId
 
 object Inventory {
 
-    val widget: Widget.Inventory? get() = Widgets[WidgetGroupId.Inventory.items] as Widget.Inventory?
+    val widget: Widget.Inventory? get() = Widgets[WidgetId.INVENTORY_ITEMS] as Widget.Inventory?
 
     val container: ItemContainer? get() = ItemContainers[ItemContainerId.INVENTORY]
 
