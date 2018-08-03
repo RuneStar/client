@@ -2,11 +2,10 @@ package org.runestar.client.plugins.clock
 
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetId
-import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.Worlds
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
 import java.time.Duration
@@ -45,7 +44,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
             }
         })
         if (settings.style == Style.LOGIN) {
-            add(Game.stateChanges.filter { it == GameState.LOGGED_IN }.subscribe { loginTimer.reset().start() })
+            add(Worlds.enter.subscribe { loginTimer.reset().start() })
         }
     }
 
