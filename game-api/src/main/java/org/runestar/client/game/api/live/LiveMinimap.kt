@@ -35,17 +35,18 @@ object LiveMinimap : Minimap {
     var isDrawn: Boolean
         get() = CLIENT.minimapState.let { it != 2 && it != 5 }
         set(value) {
-            val old = CLIENT.minimapState
-            CLIENT.minimapState = if (isDrawn) {
-                old + 1
+            val old = isDrawn
+            if (old == value) return
+            if (old) {
+                CLIENT.minimapState++
             } else {
-                old - 1
+                CLIENT.minimapState--
             }
         }
 
     val isClickable: Boolean get() = CLIENT.minimapState < 3
 
-    val isCompassDrawn: Boolean get() = CLIENT.minimapState.let { it != 2 && it != 5 }
+    val isCompassDrawn: Boolean get() = CLIENT.minimapState.let { it == 0 || it == 3 }
 
     override fun toString(): String {
         return "LiveMinimap(orientation=$orientation, reference=$reference, center=$center)"
