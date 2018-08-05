@@ -2,8 +2,8 @@ package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
 import org.runestar.client.game.api.MenuOption
-import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XClient
 import java.awt.Point
 import java.awt.Rectangle
 
@@ -37,9 +37,11 @@ object Menu {
     }
 
     val optionShapes: List<Rectangle> get() = when (isOpen) {
-        true -> List(optionsCount) { Rectangle(x, y + (it + 1) * OPTION_HEIGHT + 3, width, OPTION_HEIGHT) }
+        true -> List(optionsCount) { getOptionShape(it) }
         false -> emptyList()
     }
+
+    fun getOptionShape(index: Int): Rectangle =  Rectangle(x, y + (index + 1) * OPTION_HEIGHT + 3, width, OPTION_HEIGHT)
 
     val options: List<MenuOption> get() = List(optionsCount) { getOption(it) }
 

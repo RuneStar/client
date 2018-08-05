@@ -13,12 +13,12 @@ object Players : AbstractCollection<Player>() {
 
         override fun computeNext() {
             if (i >= size) return done()
-            val x = CLIENT.players[CLIENT.players_indices[i++]] ?: return done()
-            setNext(Player(x))
+            val player = get(CLIENT.players_indices[i++]) ?: return done()
+            setNext(player)
         }
     }
 
     override val size get() = CLIENT.players_count
 
-    internal operator fun get(index: Int): Player? = CLIENT.players[index]?.let { Player(it) }
+    operator fun get(index: Int): Player? = CLIENT.players[index]?.let { Player(it) }
 }

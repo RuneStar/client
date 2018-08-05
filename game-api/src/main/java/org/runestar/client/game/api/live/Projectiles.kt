@@ -5,14 +5,11 @@ import org.runestar.client.game.api.NodeDeque
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.Projectile
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XProjectile
 
-object Projectiles : NodeDeque<Projectile>(CLIENT.projectiles) {
+object Projectiles : NodeDeque<Projectile, XProjectile>(CLIENT.projectiles) {
 
-    override fun wrap(t: XNode): Projectile {
-        return Projectile(t as XProjectile)
-    }
+    override fun wrap(n: XProjectile): Projectile = Projectile(n)
 
     val destinationChanges: Observable<Pair<Projectile, Position>> = XProjectile.setDestination.enter.map {
         val localX = it.arguments[0] as Int

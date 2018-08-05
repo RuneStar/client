@@ -11,17 +11,11 @@ object WidgetGroupParents : NodeHashTable<WidgetId, Int, XWidgetGroupParent>() {
 
     override val accessor: XNodeHashTable get() = CLIENT.widgetGroupParents
 
-    override fun wrapKey(node: XWidgetGroupParent): WidgetId {
-        return WidgetId(node.key.toInt())
-    }
+    override fun wrapKey(node: XWidgetGroupParent): WidgetId = WidgetId(node.key.toInt())
 
-    override fun unwrapKey(k: WidgetId): Long {
-        return k.packed.toLong()
-    }
+    override fun unwrapKey(k: WidgetId): Long = k.packed.toLong()
 
-    override fun wrapValue(node: XWidgetGroupParent): Int {
-        return node.group
-    }
+    override fun wrapValue(node: XWidgetGroupParent): Int = node.group
 
     fun parentId(group: Int): Int {
         val node = nodes.firstOrNull { it.group == group } ?: return -1
