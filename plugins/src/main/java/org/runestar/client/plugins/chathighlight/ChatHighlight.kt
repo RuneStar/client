@@ -10,8 +10,8 @@ import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Chat
-import org.runestar.client.game.raw.access.XAbstractFont
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XAbstractFont
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.TrayIcon
@@ -21,13 +21,13 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
 
     private companion object {
         val MSG_TYPES = setOf(
-                MessageType.PUBLIC_MOD.id,
-                MessageType.PUBLIC.id,
-                MessageType.PRIVATE_RECEIVED_MOD.id,
-                MessageType.PRIVATE_RECEIVED.id,
-                MessageType.PRIVATE_SENT.id,
-                MessageType.AUTO_CHAT.id,
-                MessageType.CLAN_CHAT.id
+                MessageType.PUBLIC_MOD,
+                MessageType.PUBLIC,
+                MessageType.PRIVATE_RECEIVED_MOD,
+                MessageType.PRIVATE_RECEIVED,
+                MessageType.PRIVATE_SENT,
+                MessageType.AUTO_CHAT,
+                MessageType.CLAN_CHAT
         )
     }
 
