@@ -81,7 +81,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             val offsetYFlipped: Int = 22,
             val outlineColor: RgbaForm = RgbaForm(14, 13, 15),
             val fillColor: RgbaForm = RgbaForm(70, 61, 50, 156),
-            val font: FontForm = FontForm(Fonts.SMALL),
+            val font: FontForm = FontForm(Fonts.PLAIN_11),
             val fontColor: RgbaForm = RgbaForm(255, 255, 255)
     ) : PluginSettings()
 }

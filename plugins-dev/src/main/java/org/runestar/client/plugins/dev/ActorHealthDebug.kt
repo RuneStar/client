@@ -17,7 +17,7 @@ class ActorHealthDebug : DisposablePlugin<PluginSettings>() {
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
 
-            g.font = Fonts.CHAT
+            g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
 
             val actors = ArrayList<Actor>()

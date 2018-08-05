@@ -26,7 +26,7 @@ class ViewportDebug : DisposablePlugin<PluginSettings>() {
                     "viewportMouseX/Y: ${CLIENT.viewportMouse_x}, ${CLIENT.viewportMouse_y}",
                     "viewportContainsMouse: ${CLIENT.viewportMouse_isInViewport}"
             )
-            g.font = Fonts.CHAT
+            g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
             val x = 20
             var y = 40

@@ -14,7 +14,7 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.WHITE
-            g.font = Fonts.SMALL
+            g.font = Fonts.PLAIN_11
 
             val x = 20
             var y = 40

@@ -21,7 +21,7 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
             val p = Players.local?.accessor ?: return@subscribe
 
             g.color = Color.WHITE
-            g.font = Fonts.SMALL
+            g.font = Fonts.PLAIN_11
 
             val x = 40
             var y = 40

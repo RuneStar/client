@@ -32,7 +32,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
         })
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.MAGENTA
-            g.font = Fonts.CHAT
+            g.font = Fonts.PLAIN_12
             val mouse = Mouse.location
             val mouseWidget = Widgets.flat
                     .filter {

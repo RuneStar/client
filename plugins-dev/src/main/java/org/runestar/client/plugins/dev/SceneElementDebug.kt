@@ -16,7 +16,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
     override fun start() {
         add(LiveCanvas.repaints.subscribe { g ->
 
-            g.font = Fonts.SMALL
+            g.font = Fonts.PLAIN_11
 
             if (settings.game) {
                 g.color = Color.CYAN

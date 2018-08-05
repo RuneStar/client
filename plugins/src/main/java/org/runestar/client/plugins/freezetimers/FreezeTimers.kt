@@ -47,7 +47,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
     }
 
     private fun onRepaint(g: Graphics2D) {
-        g.font = Fonts.SMALL
+        g.font = Fonts.PLAIN_11
         for ((actor, freezeState) in loadedFrozenActors) {
             drawActor(g, actor, freezeState)
         }

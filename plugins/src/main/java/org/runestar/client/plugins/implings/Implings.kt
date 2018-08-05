@@ -52,7 +52,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         val npcs = implings
         if (npcs.isEmpty()) return
 
-        g.font = Fonts.CHAT
+        g.font = Fonts.PLAIN_12
 
         npcs.forEach { npc ->
             val loc = npc.location

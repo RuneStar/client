@@ -25,7 +25,7 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
         })
 
         add(LiveCanvas.repaints.subscribe { g ->
-            g.font = Fonts.LARGE
+            g.font = Fonts.QUILL
             tiles.forEach { t ->
                 val o = t.outline()
                 g.draw(o)

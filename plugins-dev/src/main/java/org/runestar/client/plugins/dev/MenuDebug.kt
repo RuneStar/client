@@ -15,7 +15,7 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40
-            g.font = Fonts.CHAT
+            g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
             val strings = ArrayList<String>()
 

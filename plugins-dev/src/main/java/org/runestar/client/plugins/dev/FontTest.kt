@@ -11,11 +11,11 @@ class FontTest : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     private val fonts = listOf(
-            Fonts.CHAT_BOLD,
-            Fonts.CHAT,
-            Fonts.LARGE,
-            Fonts.SMALL,
-            Fonts.NPC_CHAT
+            Fonts.BOLD_12,
+            Fonts.PLAIN_12,
+            Fonts.QUILL,
+            Fonts.PLAIN_11,
+            Fonts.QUILL_8
     )
 
     val s = "1234567890 abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_/:><"

@@ -22,7 +22,7 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
                     "rememberedUsername: ${p.rememberedUsername}",
                     "parameters: ${p.parameters}"
             )
-            g.font = Fonts.CHAT
+            g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
             val x = 20
             var y = 40
