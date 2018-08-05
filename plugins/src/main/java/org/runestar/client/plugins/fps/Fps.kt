@@ -22,7 +22,7 @@ class Fps : DisposablePlugin<PluginSettings>() {
             g.drawStringShadowed(
                     CLIENT.fps.toString(),
                     CLIENT.canvasWidth - 43,
-                    g.fontMetrics.height
+                    g.fontMetrics.ascent + 1
             )
         })
     }
