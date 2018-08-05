@@ -111,7 +111,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     data class Settings(
             val color: RgbaForm = RgbaForm(255, 255, 255),
             val font: FontForm = FontForm(Fonts.PLAIN_11),
-            val spacing: Int = -2,
+            val spacing: Int = 0,
             val initialOffset: Int = 9,
             val blockedNames: List<String> = emptyList()
     ) : PluginSettings()
