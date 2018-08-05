@@ -2,6 +2,10 @@ package org.runestar.client.game.api
 
 object VarbitId {
 
+    const val EQUIPPED_WEAPON_TYPE = 357
+
+    const val DEFENSIVE_CASTING_MODE = 2668
+
     const val PRAYER_THICK_SKIN = 4104
     const val PRAYER_BURST_OF_STRENGTH = 4105
     const val PRAYER_CLARITY_OF_THOUGHT = 4106
