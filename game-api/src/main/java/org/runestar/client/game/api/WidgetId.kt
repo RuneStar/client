@@ -21,7 +21,7 @@ data class WidgetId(
 
         val CASTLE_WARS_ZAMORAK_TIME_LEFT = WidgetId(WidgetGroupId.CASTLE_WARS_ZAMORAK, 25)
 
-        val CHAT_REPORT_TEXT = WidgetId(WidgetGroupId.CHAT, 29)
+        val CHAT_REPORT_TEXT = WidgetId(WidgetGroupId.CHAT, 28)
 
         val INVENTORY_ITEMS = WidgetId(WidgetGroupId.INVENTORY, 0)
 
