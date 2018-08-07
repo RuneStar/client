@@ -3,7 +3,7 @@ package org.runestar.client.plugins.dev
 import org.kxtra.swing.graphics.drawString
 import org.kxtra.swing.point2d.minus
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Fonts
+import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.Scene
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game

@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.grounditems
 
+import org.runestar.client.api.Fonts
 import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game

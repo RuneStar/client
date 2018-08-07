@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Fonts
+import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas

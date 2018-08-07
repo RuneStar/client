@@ -1,8 +1,12 @@
 package org.runestar.client.plugins.freezetimers
 
+import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.*
+import org.runestar.client.game.api.Actor
+import org.runestar.client.game.api.HeadIconPrayer
+import org.runestar.client.game.api.Player
+import org.runestar.client.game.api.SequenceId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Npcs

@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.mousetooltips
 
+import org.runestar.client.api.Fonts
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.game.api.live.Mouse

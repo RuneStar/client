@@ -36,7 +36,7 @@ private fun setupLogging() {
 }
 
 @Throws(IOException::class)
-fun isOutOfDate(): Boolean {
+private fun isOutOfDate(): Boolean {
     val rev = REVISION
     val address = InetAddress.getByName(JAV_CONFIG.codebase.host)
     Socket(address, 43594).use { socket ->
