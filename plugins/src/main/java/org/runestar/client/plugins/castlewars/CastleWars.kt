@@ -30,7 +30,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
 
     override val name = "Castle Wars"
 
-    private lateinit var gameTimerMinutes: Duration
+    private var gameTimerMinutes: Duration = Duration.ZERO
 
     private val gameTimerSeconds: Stopwatch = Stopwatch.createUnstarted()
 
@@ -74,15 +74,14 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         w as Widget.Text
         val s = w.text ?: return
         if (s.endsWith(" Min")) {
-            gameTimerSeconds.reset()
             val m = s.removeSuffix(" Min").toInt()
-            gameTimerMinutes = if (m in 1..20) {
-                gameTimerSeconds.start()
-                Duration.ofMinutes(m.toLong())
-            } else {
-                // 0 when game is ending
-                // 0 - 25 when game is starting
-                Duration.ZERO
+            val minutes = Duration.ofMinutes(m.toLong())
+            if (gameTimerMinutes != minutes) {
+                gameTimerSeconds.reset()
+                if (m != 0) {
+                    gameTimerSeconds.start()
+                }
+                gameTimerMinutes = minutes
             }
         }
         val elapsed = gameTimerSeconds.elapsed().coerceAtMost(ONE_MINUTE)
