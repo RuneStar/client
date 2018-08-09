@@ -50,7 +50,7 @@ object Game {
 
     fun getVarbit(varbitId: Int): Int = CLIENT.getVarbit(varbitId)
 
-    fun getVarp(varpId: Int): Int = CLIENT.varps_main[varpId]
+    val varps: IntArray = CLIENT.varps_main
 
     val varcs: Varcs = Varcs(CLIENT.varcs)
 
@@ -58,12 +58,12 @@ object Game {
 
     val friendsSystem: FriendsSystem get() = FriendsSystem(CLIENT.friendSystem)
 
-    val specialAttackEnabled get() = getVarp(VarpId.SPECIAL_ATTACK_ENABLED) != 0
+    val specialAttackEnabled get() = varps[VarpId.SPECIAL_ATTACK_ENABLED] != 0
 
     /**
      * 0 - 100
      */
-    val specialAttackPercent get() = getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
+    val specialAttackPercent get() = varps[VarpId.SPECIAL_ATTACK_PERCENT] / 10
 
     val visibilityMap = VisibilityMap(CLIENT.visibilityMap, LiveCamera)
 
