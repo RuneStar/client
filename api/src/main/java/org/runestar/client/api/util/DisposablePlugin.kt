@@ -21,4 +21,8 @@ abstract class DisposablePlugin<T : PluginSettings>(
     override fun stop() {
         listCompositeDisposable.clear()
     }
+
+    protected fun Disposable.add() {
+        add(this)
+    }
 }
