@@ -5,7 +5,11 @@ import org.runestar.client.game.raw.CLIENT
 
 object AttackOptions {
 
-    val npc get() = AttackOption.of(CLIENT.npcAttackOption)
+    var npc: AttackOption
+        get() = AttackOption.of(CLIENT.npcAttackOption)
+        set(value) { CLIENT.npcAttackOption = value.accessor }
 
-    val player get() = AttackOption.of(CLIENT.playerAttackOption)
+    var player: AttackOption
+        get() = AttackOption.of(CLIENT.playerAttackOption)
+        set(value) { CLIENT.playerAttackOption = value.accessor }
 }

@@ -1,13 +1,12 @@
 package org.runestar.client.plugins.hotkeyattackoption
 
+import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.AttackOption
+import org.runestar.client.game.api.live.AttackOptions
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XAttackOption
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.event.KeyEvent
 
 class HotkeyAttackOption : DisposablePlugin<HotkeyAttackOption.Settings>() {
 
@@ -15,24 +14,23 @@ class HotkeyAttackOption : DisposablePlugin<HotkeyAttackOption.Settings>() {
 
     override val name = "Hotkey Attack Option"
 
-    private var normalPlayerAttackOption: XAttackOption? = null
-
     override fun start() {
-        XClient.doCycleLoggedIn.enter.subscribe {
-            if (Keyboard.isKeyPressed(settings.keyCode)) {
-                if (CLIENT.playerAttackOption != settings.playerAttackOption.accessor) {
-                    normalPlayerAttackOption = CLIENT.playerAttackOption
-                    CLIENT.playerAttackOption = settings.playerAttackOption.accessor
+        Keyboard.events
+                .filter(settings.keyStroke::matches)
+                .delay { XClient.doCycle.enter }
+                .subscribe {
+                    AttackOptions.player = if (AttackOptions.player == settings.playerAttackOption1) {
+                        settings.playerAttackOption2
+                    } else {
+                        settings.playerAttackOption1
+                    }
                 }
-            } else if (normalPlayerAttackOption != null && CLIENT.playerAttackOption == settings.playerAttackOption.accessor) {
-                CLIENT.playerAttackOption = normalPlayerAttackOption
-                normalPlayerAttackOption = null
-            }
-        }
+                .add()
     }
 
     class Settings(
-            val playerAttackOption: AttackOption = AttackOption.LEFT_CLICK_WHERE_AVAILABLE,
-            val keyCode: Int = KeyEvent.VK_CONTROL
+            val playerAttackOption1: AttackOption = AttackOption.HIDDEN,
+            val playerAttackOption2: AttackOption = AttackOption.LEFT_CLICK_WHERE_AVAILABLE,
+            val keyStroke: KeyStrokeForm = KeyStrokeForm("released CONTROL")
     ) : PluginSettings()
 }
