@@ -36,7 +36,7 @@ object Mouse {
      * @see[java.awt.event.MouseMotionListener]
      * @see[java.awt.event.MouseWheelListener]
      */
-    val events: Observable<MouseEvent> = LiveCanvas.canvasReplacements.flatMap { SwingObservable.mouse(it) }
+    val events: Observable<MouseEvent> get() = LiveCanvas.canvasReplacements.flatMap { SwingObservable.mouse(it) }
 
     override fun toString(): String {
         return "Mouse(location=$location, cross=$cross)"

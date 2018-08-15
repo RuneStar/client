@@ -19,18 +19,18 @@ object LiveCanvas : Canvas {
         it.instance.image.graphics as Graphics2D
     }
 
-    val canvasReplacements: Observable<java.awt.Canvas> = XGameShell.addCanvas.exit.map { CLIENT.canvas }
+    val canvasReplacements: Observable<java.awt.Canvas> get() = XGameShell.addCanvas.exit.map { CLIENT.canvas }
             .startWith(CLIENT.canvas)
 
     /**
      * @see[java.awt.event.FocusListener]
      */
-    val focusEvents: Observable<FocusEvent> = canvasReplacements.flatMap { SwingObservable.focus(it) }
+    val focusEvents: Observable<FocusEvent> get() = canvasReplacements.flatMap { SwingObservable.focus(it) }
 
     /**
      * @see[java.awt.event.ComponentListener]
      */
-    val componentEvents: Observable<ComponentEvent> = canvasReplacements.flatMap { SwingObservable.component(it) }
+    val componentEvents: Observable<ComponentEvent> get() = canvasReplacements.flatMap { SwingObservable.component(it) }
 
     override fun toString(): String {
         return "LiveCanvas(shape=$shape)"
