@@ -2,8 +2,10 @@ package org.runestar.client.plugins.screenshot
 
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import org.kxtra.swing.bufferedimage.BufferedImage
 import org.runestar.client.api.Application
 import org.runestar.client.api.BarButton
+import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.CLIENT
@@ -11,8 +13,8 @@ import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.TrayIcon
 import java.awt.event.ActionEvent
-import java.awt.event.KeyEvent
-import java.awt.image.*
+import java.awt.image.BufferedImage
+import java.awt.image.RenderedImage
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -42,12 +44,13 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         timeFormatter = createTimeFormatter()
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
-        add(Keyboard.events
-                .filter { it.keyCode == settings.keyCode && it.id == KeyEvent.KEY_RELEASED }
+        Keyboard.strokes
+                .filter(settings.keyStroke.get()::equals)
                 .delay { XRasterProvider.drawFull0.exit }
                 .map { copyCanvas() }
                 .observeOn(Schedulers.io())
-                .subscribe { saveImage(it) })
+                .subscribe { saveImage(it) }
+                .add()
 
         Application.frame.topBar.add(button)
     }
@@ -58,20 +61,15 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     private fun createTimeFormatter(): DateTimeFormatter {
-        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneId.from(ZoneOffset.UTC)
+        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneOffset.UTC
         return DateTimeFormatter.ofPattern(settings.dateTimeFormatterPattern)
                 .withZone(zoneId)
     }
 
     private fun copyCanvas(): BufferedImage {
-        val rasterProvider = CLIENT.rasterProvider
-        val pixelsCopy = rasterProvider.pixels.copyOf()
-        val w = rasterProvider.width
-        val h = rasterProvider.height
-        val buf = DataBufferInt(pixelsCopy, pixelsCopy.size)
-        val colorModel = DirectColorModel(32, 16711680, 65280, 255)
-        val writableRaster = Raster.createWritableRaster(colorModel.createCompatibleSampleModel(w, h), buf, null)
-        return BufferedImage(colorModel, writableRaster, false, null)
+        val rp = CLIENT.rasterProvider as XRasterProvider
+        val img = rp.image as BufferedImage
+        return BufferedImage(img)
     }
 
     private fun saveImage(img: RenderedImage) {
@@ -95,7 +93,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
     }
 
     data class Settings(
-            val keyCode: Int = KeyEvent.VK_PRINTSCREEN,
+            val keyStroke: KeyStrokeForm = KeyStrokeForm("released PRINTSCREEN"),
             val dateTimeFormatterPattern: String = "yyyy-MM-dd_kk-mm-ss,SSS",
             val localizeTimeZone: Boolean = true,
             val trayNotify: Boolean = true
