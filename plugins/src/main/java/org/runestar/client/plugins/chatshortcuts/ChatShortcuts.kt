@@ -1,12 +1,11 @@
 package org.runestar.client.plugins.chatshortcuts
 
-import org.runestar.client.api.forms.KeyModifierForm
+import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Chat
+import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XKeyHandler
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.event.KeyEvent
 
 class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
 
@@ -15,17 +14,17 @@ class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
     override val defaultSettings = Settings()
 
     override fun start() {
-        val keyPressedEvents = XKeyHandler.keyPressed.enter.map { it.arguments[0] as KeyEvent }
-        add(keyPressedEvents
-                .filter { isShortcutPressed(it, settings.clearAll) }
+        Keyboard.strokes
+                .filter(settings.clearAll.get()::equals)
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearAll() }
-        )
-        add(keyPressedEvents
-                .filter { isShortcutPressed(it, settings.clearWord) }
+                .add()
+
+        Keyboard.strokes
+                .filter(settings.clearWord.get()::equals)
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearWord() }
-        )
+                .add()
     }
 
     private fun clearAll() {
@@ -41,20 +40,8 @@ class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
         }
     }
 
-    private fun isShortcutPressed(keyEvent: KeyEvent, shortcut: Shortcut): Boolean {
-        return keyEvent.modifiersEx == shortcut.mask && keyEvent.keyCode == shortcut.keyCode
-    }
-
     class Settings(
-            val clearWord: Shortcut = Shortcut(setOf(KeyModifierForm.CONTROL), KeyEvent.VK_W),
-            val clearAll: Shortcut = Shortcut(setOf(KeyModifierForm.CONTROL), KeyEvent.VK_BACK_SPACE)
+            val clearWord: KeyStrokeForm = KeyStrokeForm("control released W"),
+            val clearAll: KeyStrokeForm = KeyStrokeForm("control released BACK_SPACE")
     ) : PluginSettings()
-
-    class Shortcut(
-            val modifiers: Set<KeyModifierForm>,
-            val keyCode: Int
-    ) {
-        @Transient
-        val mask = modifiers.sumBy { it.mask }
-    }
 }
