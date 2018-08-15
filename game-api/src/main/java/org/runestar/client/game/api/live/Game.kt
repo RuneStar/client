@@ -3,7 +3,7 @@ package org.runestar.client.game.api.live
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import org.kxtra.swing.component.windowAncestor
+import org.kxtra.swing.component.window
 import org.runestar.client.game.api.*
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
@@ -40,7 +40,7 @@ object Game {
      * @see[java.awt.event.WindowFocusListener]
      */
     val windowEvents = SwingObservable.window(
-            checkNotNull((CLIENT as Component).windowAncestor()) { "Client has no window" }
+            checkNotNull((CLIENT as Component).window) { "Client has no window" }
     )
 
     /**

@@ -74,7 +74,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
                     SPRITE_SIZE, SPRITE_SIZE
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
-            sprite.height = sprite.height - 4 // tricks the game into drawing the sprite further down
+            sprite.height -= 4 // tricks the game into drawing the sprite further down
             CLIENT.abstractFont_modIconSprites[i + spritesStartIndex] = sprite
         }
     }

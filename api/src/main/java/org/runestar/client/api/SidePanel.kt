@@ -3,7 +3,7 @@ package org.runestar.client.api
 import com.alee.managers.style.StyleId
 import org.kxtra.slf4j.logger.info
 import org.kxtra.slf4j.loggerfactory.getLogger
-import org.kxtra.swing.component.windowAncestor
+import org.kxtra.swing.component.window
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -146,14 +146,14 @@ class SidePanel internal constructor() : JPanel() {
                     panel.add(component, BorderLayout.CENTER)
                     if (!panel.isVisible) {
                         panel.isVisible = true
-                        (windowAncestor() as GameFrame).refit() // todo
+                        (window as GameFrame).refit() // todo
                     } else {
                         panel.revalidate()
                         panel.repaint()
                     }
                 } else {
                     panel.isVisible = false
-                    (windowAncestor() as GameFrame).refit()
+                    (window as GameFrame).refit()
                 }
             }
         }

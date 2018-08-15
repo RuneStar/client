@@ -2,8 +2,10 @@ package org.runestar.client.game.api.live
 
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
+import org.kxtra.swing.keyevent.keyStroke
 import org.runestar.client.game.raw.CLIENT
 import java.awt.event.KeyEvent
+import javax.swing.KeyStroke
 
 object Keyboard {
 
@@ -11,6 +13,8 @@ object Keyboard {
      * @see[java.awt.event.KeyListener]
      */
     val events: Observable<KeyEvent> = LiveCanvas.canvasReplacements.flatMap { SwingObservable.keyboard(it) }
+
+    val strokes: Observable<KeyStroke> = events.map { it.keyStroke }
 
     /**
      * @see[KeyEvent.keyCode]

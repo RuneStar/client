@@ -1,8 +1,9 @@
 package org.runestar.client.game.api
 
 import org.kxtra.lang.intarray.replaceEach
-import org.kxtra.swing.bufferedimage.toCompatibleImage
-import org.kxtra.swing.graphics.drawImage
+import org.kxtra.swing.bufferedimage.BufferedImage
+import org.kxtra.swing.image.draw
+import org.kxtra.swing.imagetypespecifier.ImageTypeSpecifier
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite
@@ -38,12 +39,12 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
                 val cm = ColorModel.getRGBdefault()
                 val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
                 val wr = Raster.createWritableRaster(sm, buf, null)
-                return BufferedImage(cm, wr, false, null)
+                return BufferedImage(cm, wr)
             }
 
             fun copy(bufferedImage: BufferedImage): Sprite {
                 val xs = CLIENT._Sprite_(bufferedImage.width, bufferedImage.height)
-                wrapSprite(xs).graphics.drawImage(bufferedImage)
+                wrapSprite(xs).draw(bufferedImage)
                 xs.pixels.replaceEach {
                     it and 0xFFFFFF
                 }
@@ -56,7 +57,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         override fun toBufferedImage(): BufferedImage {
             accessor.normalize()
-            return wrapSprite(accessor).toCompatibleImage()
+            return BufferedImage(wrapSprite(accessor), ImageTypeSpecifier(ColorModel.getRGBdefault()))
         }
 
         override val width: Int get() = accessor.width
@@ -70,7 +71,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
                 val cm = IndexColorModel(8, accessor.palette.size, accessor.palette, 0, false, 0, DataBuffer.TYPE_BYTE)
                 val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
                 val wr = Raster.createWritableRaster(sm, buf, null)
-                return BufferedImage(cm, wr, false, null)
+                return BufferedImage(cm, wr)
             }
 
             fun copy(bufferedImage: BufferedImage): Indexed {
@@ -83,7 +84,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
                 x.subHeight = h
                 x.pixels = ByteArray(w * h)
                 x.palette = getPalette(bufferedImage)
-                wrapSprite(x).graphics.drawImage(bufferedImage)
+                wrapSprite(x).draw(bufferedImage)
                 return Indexed(x)
             }
 
