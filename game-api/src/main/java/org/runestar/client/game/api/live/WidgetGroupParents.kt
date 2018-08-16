@@ -18,7 +18,7 @@ object WidgetGroupParents : NodeHashTable<WidgetId, Int, XWidgetGroupParent>() {
     override fun wrapValue(node: XWidgetGroupParent): Int = node.group
 
     fun parentId(group: Int): Int {
-        val node = nodes.firstOrNull { it.group == group } ?: return -1
+        val node = firstOrNull { it.group == group } ?: return -1
         return node.key.toInt()
     }
 

@@ -4,7 +4,7 @@ import com.google.common.collect.Iterators
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XNodeHashTable
 
-abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>() {
+abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>(), Iterable<N> {
 
     abstract val accessor: XNodeHashTable
 
@@ -32,37 +32,35 @@ abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>() {
         return get(key) != null
     }
 
-    val nodes: Iterable<N> get() = Iterable {
-        object : AbstractIterator<N>() {
+    override fun iterator(): Iterator<N> = object : AbstractIterator<N>() {
 
-            private var index = 0
+        private var index = 0
 
-            private lateinit var curr: N
+        private lateinit var curr: N
 
-            @Suppress("UNCHECKED_CAST")
-            override fun computeNext() {
-                if (index > 0 && curr != accessor.buckets[index - 1]) {
-                    setNext(curr)
-                    curr = curr.previous as N
-                    return
-                }
-                while (index < accessor.size) {
-                    val p = accessor.buckets[index++].previous as N
-                    if (p != accessor.buckets[index - 1]) {
-                        curr = p.previous as N
-                        return setNext(p)
-                    }
-                }
-                done()
+        @Suppress("UNCHECKED_CAST")
+        override fun computeNext() {
+            if (index > 0 && curr != accessor.buckets[index - 1]) {
+                setNext(curr)
+                curr = curr.previous as N
+                return
             }
+            while (index < accessor.size) {
+                val p = accessor.buckets[index++].previous as N
+                if (p != accessor.buckets[index - 1]) {
+                    curr = p.previous as N
+                    return setNext(p)
+                }
+            }
+            done()
         }
     }
 
     override val entries: Set<Map.Entry<K, V>> = object : AbstractSet<Map.Entry<K, V>>() {
 
-        override val size get() = nodes.count()
+        override val size get() = (this@NodeHashTable as Iterable<N>).count()
 
-        override fun iterator() = Iterators.transform(nodes.iterator()) { makeEntry(checkNotNull(it)) }
+        override fun iterator() = Iterators.transform(this@NodeHashTable.iterator()) { makeEntry(checkNotNull(it)) }
 
         private fun makeEntry(node: N): Map.Entry<K, V> {
             return java.util.AbstractMap.SimpleImmutableEntry(wrapKey(node), wrapValue(node))
