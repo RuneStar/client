@@ -12,6 +12,9 @@ import java.awt.image.*
 
 abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
+    /**
+     * A copy using [ColorModel.getRGBdefault]
+     */
     abstract fun toBufferedImage(): BufferedImage
 
     abstract val width: Int
@@ -21,43 +24,61 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
     class Direct(override val accessor: XSprite) : Sprite(accessor) {
 
         override fun toBufferedImage(): BufferedImage {
-            val copy = accessor.copyNormalized()
-            copy.pixels.replaceEach {
-                if (it == 0) 0 else it or -16777216
-            }
-            return wrapSprite(copy)
+            val s = Direct(accessor.copyNormalized())
+            s.addAlpha()
+            return s.wrap()
+        }
+
+        private fun wrap(): BufferedImage {
+            val buf = DataBufferInt(accessor.pixels, accessor.pixels.size)
+            val cm = ColorModel.getRGBdefault()
+            val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
+            val wr = Raster.createWritableRaster(sm, buf, null)
+            return BufferedImage(cm, wr)
         }
 
         override val width: Int get() = accessor.width
 
         override val height: Int get() = accessor.height
 
+        private fun addAlpha() {
+            accessor.pixels.replaceEach {
+                if (it == 0) 0 else it or -16777216
+            }
+        }
+
+        private fun removeAlpha() {
+            accessor.pixels.replaceEach {
+                if (it and -16777216 != -16777216) 0 else it and 0xFFFFFF
+            }
+        }
+
         companion object {
 
-            private fun wrapSprite(accessor: XSprite): BufferedImage {
-                val buf = DataBufferInt(accessor.pixels, accessor.pixels.size)
-                val cm = ColorModel.getRGBdefault()
-                val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
-                val wr = Raster.createWritableRaster(sm, buf, null)
-                return BufferedImage(cm, wr)
-            }
-
             fun copy(bufferedImage: BufferedImage): Sprite {
-                val xs = CLIENT._Sprite_(bufferedImage.width, bufferedImage.height)
-                wrapSprite(xs).draw(bufferedImage)
-                xs.pixels.replaceEach {
-                    it and 0xFFFFFF
-                }
-                return Direct(xs)
+                val s = Direct(CLIENT._Sprite_(bufferedImage.width, bufferedImage.height))
+                s.wrap().draw(bufferedImage)
+                s.removeAlpha()
+                return s
             }
         }
     }
 
     class Indexed(override val accessor: XIndexedSprite) : Sprite(accessor) {
 
+        val colorModel: IndexColorModel get() = IndexColorModel(8, accessor.palette.size, accessor.palette, 0, false, 0, DataBuffer.TYPE_BYTE)
+
         override fun toBufferedImage(): BufferedImage {
+            return BufferedImage(wrap(), ImageTypeSpecifier(ColorModel.getRGBdefault()))
+        }
+
+        fun wrap(): BufferedImage {
             accessor.normalize()
-            return BufferedImage(wrapSprite(accessor), ImageTypeSpecifier(ColorModel.getRGBdefault()))
+            val buf = DataBufferByte(accessor.pixels, accessor.pixels.size)
+            val cm = colorModel
+            val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
+            val wr = Raster.createWritableRaster(sm, buf, null)
+            return BufferedImage(cm, wr)
         }
 
         override val width: Int get() = accessor.width
@@ -66,26 +87,20 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         companion object {
 
-            private fun wrapSprite(accessor: XIndexedSprite): BufferedImage {
-                val buf = DataBufferByte(accessor.pixels, accessor.pixels.size)
-                val cm = IndexColorModel(8, accessor.palette.size, accessor.palette, 0, false, 0, DataBuffer.TYPE_BYTE)
-                val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
-                val wr = Raster.createWritableRaster(sm, buf, null)
-                return BufferedImage(cm, wr)
-            }
-
             fun copy(bufferedImage: BufferedImage): Indexed {
                 val w = bufferedImage.width
                 val h = bufferedImage.height
-                val x = CLIENT._IndexedSprite_()
-                x.width = w
-                x.height = h
-                x.subWidth = w
-                x.subHeight = h
-                x.pixels = ByteArray(w * h)
-                x.palette = getPalette(bufferedImage)
-                wrapSprite(x).draw(bufferedImage)
-                return Indexed(x)
+                val x = CLIENT._IndexedSprite_().apply {
+                    width = w
+                    height = h
+                    subWidth = w
+                    subHeight = h
+                    pixels = ByteArray(w * h)
+                    palette = getPalette(bufferedImage)
+                }
+                val s = Indexed(x)
+                s.wrap().draw(bufferedImage)
+                return s
             }
 
             private fun getPalette(bufferedImage: BufferedImage): IntArray {
