@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.fpsthrottle
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XRasterProvider
 import org.runestar.client.plugins.spi.PluginSettings
 
 class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
@@ -13,18 +13,11 @@ class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
 
     override fun start() {
         if (settings.sleepTimeMs <= 0) return
-        val sleepTimeMs = settings.sleepTimeMs
-        if (settings.onlyWhenUnfocused) {
-            add(XRasterProvider.drawFull0.exit.subscribe {
-                if (!CLIENT.canvas.isFocusOwner) {
-                    Thread.sleep(sleepTimeMs)
-                }
-            })
-        } else {
-            add(XRasterProvider.drawFull0.exit.subscribe {
-                Thread.sleep(sleepTimeMs)
-            })
-        }
+        add(XRasterProvider.drawFull0.exit.subscribe {
+            if (!CLIENT.canvas.isFocusOwner || !settings.onlyWhenUnfocused) {
+                Thread.sleep(settings.sleepTimeMs)
+            }
+        })
     }
 
     data class Settings(

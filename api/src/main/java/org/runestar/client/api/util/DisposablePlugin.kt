@@ -5,6 +5,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.internal.disposables.ListCompositeDisposable
 import org.runestar.client.plugins.spi.AbstractPlugin
+import org.runestar.client.plugins.spi.Plugin
 import org.runestar.client.plugins.spi.PluginSettings
 
 /**
