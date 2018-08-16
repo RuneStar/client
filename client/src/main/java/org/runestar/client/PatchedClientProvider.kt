@@ -6,7 +6,6 @@ import org.runestar.client.common.JavConfig
 import org.runestar.client.common.REVISION
 import org.runestar.client.game.raw.ClientProvider
 import org.runestar.client.game.raw.access.XClient
-import java.lang.invoke.MethodHandles
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -36,8 +35,7 @@ class PatchedClientProvider : ClientProvider {
     }
 
     private fun patch(gamepack: Path, patchedGamepack: Path) {
-        val classLoader = MethodHandles.lookup().lookupClass().classLoader
-        val patchBytes = classLoader.getResource("gamepack.diff.gz").readBytes()
+        val patchBytes = javaClass.classLoader.getResource("gamepack.diff.gz").readBytes()
         Files.newOutputStream(patchedGamepack).use { output ->
             Patch.patch(Files.readAllBytes(gamepack), patchBytes, output)
         }
