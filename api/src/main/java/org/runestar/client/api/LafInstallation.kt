@@ -15,11 +15,12 @@ class LafInstallation : Runnable {
         JPopupMenu.setDefaultLightWeightPopupEnabled(false)
         ToolTipManager.sharedInstance().isLightWeightPopupEnabled = false
 
-        val chatFont = FontUIResource(Fonts.PLAIN_12)
-        UIManager.getDefaults().entries.forEach { e ->
-            val k = e.key as? String ?: return@forEach
-            if (k.endsWith(".font")) {
-                e.setValue(chatFont)
+        val plain12Resource = FontUIResource(Fonts.PLAIN_12)
+        val uiDefaults = UIManager.getDefaults()
+        for (key in uiDefaults.keys()) {
+            val prevFont = uiDefaults.getFont(key)
+            if (prevFont != null) {
+                uiDefaults[key] = plain12Resource
             }
         }
 
