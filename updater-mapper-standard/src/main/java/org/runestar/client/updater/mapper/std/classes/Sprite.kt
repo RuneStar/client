@@ -3,6 +3,7 @@ package org.runestar.client.updater.mapper.std.classes
 import org.objectweb.asm.Opcodes.ISUB
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -66,5 +67,13 @@ class Sprite : IdentityMapper.Class() {
     class copyNormalized : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
                 .and { it.instructions.none { it.opcode == ISUB } }
+    }
+
+    @MethodParameters()
+    @DependsOn(subWidth::class)
+    class normalize : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<subWidth>().id } }
     }
 }

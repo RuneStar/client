@@ -1,5 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -11,9 +14,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.VOID_TYPE
 
 // https://en.wikipedia.org/wiki/Indexed_color
 @DependsOn(Rasterizer2D::class)
@@ -48,12 +48,12 @@ class IndexedSprite : IdentityMapper.Class() {
     }
 
     @DependsOn(normalize::class)
-    class offsetX : OrderMapper.InMethod.Field(normalize::class, -2) {
+    class xOffset : OrderMapper.InMethod.Field(normalize::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<IndexedSprite>() }
     }
 
     @DependsOn(normalize::class)
-    class offsetY : OrderMapper.InMethod.Field(normalize::class, -1) {
+    class yOffset : OrderMapper.InMethod.Field(normalize::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<IndexedSprite>() }
     }
 

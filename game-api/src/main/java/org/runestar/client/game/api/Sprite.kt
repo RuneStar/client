@@ -21,7 +21,19 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
     abstract val height: Int
 
+    abstract val subWidth: Int
+
+    abstract val subHeight: Int
+
+    abstract val xOffset: Int
+
+    abstract val yOffset: Int
+
+    abstract fun normalize()
+
     class Direct(override val accessor: XSprite) : Sprite(accessor) {
+
+        val pixels: IntArray get() = accessor.pixels
 
         override fun toBufferedImage(): BufferedImage {
             val s = Direct(accessor.copyNormalized())
@@ -30,9 +42,10 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
         }
 
         private fun wrap(): BufferedImage {
-            val buf = DataBufferInt(accessor.pixels, accessor.pixels.size)
+            normalize()
+            val buf = DataBufferInt(pixels, pixels.size)
             val cm = ColorModel.getRGBdefault()
-            val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
+            val sm = cm.createCompatibleSampleModel(width, height)
             val wr = Raster.createWritableRaster(sm, buf, null)
             return BufferedImage(cm, wr)
         }
@@ -41,14 +54,24 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         override val height: Int get() = accessor.height
 
+        override val subWidth: Int get() = accessor.subWidth
+
+        override val subHeight: Int get() = accessor.subHeight
+
+        override val xOffset: Int get() = accessor.xOffset
+
+        override val yOffset: Int get() = accessor.yOffset
+
+        override fun normalize() = accessor.normalize()
+
         private fun addAlpha() {
-            accessor.pixels.replaceEach {
+            pixels.replaceEach {
                 if (it == 0) 0 else it or -16777216
             }
         }
 
         private fun removeAlpha() {
-            accessor.pixels.replaceEach {
+            pixels.replaceEach {
                 if (it and -16777216 != -16777216) 0 else it and 0xFFFFFF
             }
         }
@@ -66,17 +89,23 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
     class Indexed(override val accessor: XIndexedSprite) : Sprite(accessor) {
 
-        val colorModel: IndexColorModel get() = IndexColorModel(8, accessor.palette.size, accessor.palette, 0, false, 0, DataBuffer.TYPE_BYTE)
+        val pixels: ByteArray get() = accessor.pixels
+
+        val palette: IntArray get() = accessor.palette
+
+        val colorModel: IndexColorModel get() {
+            return IndexColorModel(8, palette.size, palette, 0, false, 0, DataBuffer.TYPE_BYTE)
+        }
 
         override fun toBufferedImage(): BufferedImage {
             return BufferedImage(wrap(), ImageTypeSpecifier(ColorModel.getRGBdefault()))
         }
 
         fun wrap(): BufferedImage {
-            accessor.normalize()
-            val buf = DataBufferByte(accessor.pixels, accessor.pixels.size)
+            normalize()
+            val buf = DataBufferByte(pixels, pixels.size)
             val cm = colorModel
-            val sm = cm.createCompatibleSampleModel(accessor.width, accessor.height)
+            val sm = cm.createCompatibleSampleModel(width, height)
             val wr = Raster.createWritableRaster(sm, buf, null)
             return BufferedImage(cm, wr)
         }
@@ -84,6 +113,16 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
         override val width: Int get() = accessor.width
 
         override val height: Int get() = accessor.height
+
+        override val subWidth: Int get() = accessor.subWidth
+
+        override val subHeight: Int get() = accessor.subHeight
+
+        override val xOffset: Int get() = accessor.xOffset
+
+        override val yOffset: Int get() = accessor.yOffset
+
+        override fun normalize() = accessor.normalize()
 
         companion object {
 
