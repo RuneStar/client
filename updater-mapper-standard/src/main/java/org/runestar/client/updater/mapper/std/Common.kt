@@ -12,6 +12,7 @@ import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.std.classes.*
 import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 import kotlin.reflect.KClass
@@ -82,10 +83,10 @@ abstract class ByteArrayPoolCount(index: Int) : OrderMapper.InClassInitializer.F
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }
 
-@DependsOn(PlatformInfo.length::class)
-abstract class PlatformInfoString(index: Int) : OrderMapper.InMethod.Field(PlatformInfo.length::class, index) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type }
-}
+//@DependsOn(DesktopPlatformInfoProvider.length::class)
+//abstract class PlatformInfoString(index: Int) : OrderMapper.InMethod.Field(DesktopPlatformInfoProvider.length::class, index) {
+//    override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type }
+//}
 
 @DependsOn(Client.friendSystem::class)
 @SinceVersion(164)
@@ -166,4 +167,15 @@ abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Widget.de
 abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Widget.decodeActive::class, index) {
     override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.readListenerTriggers>().id }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+}
+
+@DependsOn(SpriteSet::class)
+abstract class SpriteSetSprite(index: Int) : OrderMapper.InConstructor.Field(SpriteSet::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+}
+
+//@DependsOn(Sprite::class)
+abstract class SpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
+            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
 }

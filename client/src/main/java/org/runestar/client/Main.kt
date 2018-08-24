@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     setupLogging()
     SwingUtilities.invokeLater(LafInstallation())
 
-    if (isOutOfDate()) throw Exception("Client is out of date")
+    if (!isUpToDate()) throw Exception("Client is out of date")
 
     Application.start()
 }
@@ -36,12 +36,15 @@ private fun setupLogging() {
 }
 
 @Throws(IOException::class)
-private fun isOutOfDate(): Boolean {
-    val rev = REVISION
+private fun isUpToDate(): Boolean {
     val address = InetAddress.getByName(JAV_CONFIG.codebase.host)
+    return checkServerRevision(address, REVISION) && !checkServerRevision(address, REVISION + 1)
+}
+
+private fun checkServerRevision(address: InetAddress, revision: Int): Boolean {
     Socket(address, 43594).use { socket ->
-        socket.outputStream.write(ByteBuffer.allocate(5).put(15).putInt(rev).array())
+        socket.outputStream.write(ByteBuffer.allocate(5).put(15).putInt(revision).array())
         socket.outputStream.flush()
-        return socket.inputStream.read() != 0
+        return socket.inputStream.read() == 0
     }
 }

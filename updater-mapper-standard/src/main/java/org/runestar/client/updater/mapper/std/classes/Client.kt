@@ -622,9 +622,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<GzipDecompressor>() }
     }
 
-    @DependsOn(PlatformInfo::class)
-    class platformInfo : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<PlatformInfo>() }
+    @SinceVersion(173)
+    @DependsOn(PlatformInfoProvider::class)
+    class platformInfoProvider : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PlatformInfoProvider>() }
     }
 
 //    class clanChatOwner : StaticUniqueMapper.Field() {
@@ -2330,27 +2331,33 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
     }
 
-    @DependsOn(Sprite::class, AbstractIndexCache::class)
-    class getSprites : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>().withDimensions(1) }
-                .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
-    }
-
-    class mapSceneSprites : IndexedSpritesFieldMapper("mapscene")
-    class modIconSprites : IndexedSpritesFieldMapper("mod_icons")
-    class scrollbarSprites : IndexedSpritesFieldMapper("scrollbar")
+//    class mapSceneSprites : IndexedSpritesFieldMapper("mapscene")
+//    class modIconSprites : IndexedSpritesFieldMapper("mod_icons")
+//    class scrollbarSprites : IndexedSpritesFieldMapper("scrollbar")
     class runeSprites : IndexedSpritesFieldMapper("runes")
     class titleMuteSprites : IndexedSpritesFieldMapper("title_mute")
     class slFlagSprites : IndexedSpritesFieldMapper("sl_flags")
     class slArrowSprites : IndexedSpritesFieldMapper("sl_arrows")
     class slStarSprites : IndexedSpritesFieldMapper("sl_stars")
 
-    class headIconPrayerSprites : SpritesFieldMapper("headicons_prayer")
-    class headIconPkSprites : SpritesFieldMapper("headicons_pk")
-    class headIconHintSprites : SpritesFieldMapper("headicons_hint")
-    class mapMarkerSprites : SpritesFieldMapper("mapmarker")
-    class crossSprites : SpritesFieldMapper("cross")
-    class mapDotSprites : SpritesFieldMapper("mapdots")
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.headIconsPrayer::class)
+    class headIconPrayerSprites : SpriteArrayField(SpriteSet.headIconsPrayer::class)
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.headIconsPk::class)
+    class headIconPkSprites : SpriteArrayField(SpriteSet.headIconsPk::class)
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.headIconsHint::class)
+    class headIconHintSprites : SpriteArrayField(SpriteSet.headIconsHint::class)
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.mapMarkers::class)
+    class mapMarkerSprites : SpriteArrayField(SpriteSet.mapMarkers::class)
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.crosses::class)
+    class crossSprites : SpriteArrayField(SpriteSet.crosses::class)
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, SpriteSet.mapDots::class)
+    class mapDotSprites : SpriteArrayField(SpriteSet.mapDots::class)
 
     @DependsOn(GrandExchangeEvents::class)
     class grandExchangeEvents : IdentityMapper.StaticField() {
@@ -3181,9 +3188,9 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Widget::class, isMenuOpen::class)
     class clickWidget : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.size in 3..4 }
-                .and { it.arguments.startsWith(type<Widget>(), INT_TYPE, INT_TYPE) }
+                .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<isMenuOpen>().id } }
+                .and { it.instructions.none { it.opcode == ISHR } }
     }
 
     @DependsOn(clickWidget::class, Widget::class)
@@ -3331,6 +3338,7 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(mapMarkerSprites::class, players::class)
     class hintArrowType : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3339,6 +3347,7 @@ class Client : IdentityMapper.Class() {
                 .nextWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(mapMarkerSprites::class, players::class)
     class hintArrowPlayerIndex : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3346,6 +3355,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(mapMarkerSprites::class, npcs::class)
     class hintArrowNpcIndex : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3353,6 +3363,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(mapMarkerSprites::class, baseY::class)
     class hintArrowY : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3360,6 +3371,7 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(mapMarkerSprites::class, baseX::class)
     class hintArrowX : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<mapMarkerSprites>().id }
@@ -3367,6 +3379,7 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(4) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(hintArrowType::class)
     class hintArrowSubX : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowType>().id }
@@ -3374,6 +3387,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(hintArrowType::class)
     class hintArrowSubY : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowType>().id }
@@ -3382,6 +3396,7 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
+    @SinceVersion(173)
     @DependsOn(hintArrowY::class, baseY::class)
     class hintArrowHeight : AllUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<hintArrowY>().id }
@@ -3477,10 +3492,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == ScheduledExecutorService::class.type }
     }
 
-    @SinceVersion(172)
-    class newSecureRandom : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == SecureRandom::class.type }
-    }
+//    @SinceVersion(172)
+//    class newSecureRandom : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == SecureRandom::class.type }
+//    }
 
     @SinceVersion(172)
     @DependsOn(SecureRandomFuture::class)
@@ -3491,5 +3506,19 @@ class Client : IdentityMapper.Class() {
     @SinceVersion(172)
     class secureRandom : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == SecureRandom::class.type }
+    }
+
+    @MethodParameters("index", "archive", "record")
+    @SinceVersion(173)
+    @DependsOn(Sprite::class, AbstractIndexCache::class)
+    class readSprites : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>().withDimensions(1) }
+                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(SpriteSet::class)
+    @SinceVersion(173)
+    class spriteSet : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SpriteSet>() }
     }
 }
