@@ -41,6 +41,7 @@ private fun isUpToDate(): Boolean {
     return checkServerRevision(address, REVISION) && !checkServerRevision(address, REVISION + 1)
 }
 
+@Throws(IOException::class)
 private fun checkServerRevision(address: InetAddress, revision: Int): Boolean {
     Socket(address, 43594).use { socket ->
         socket.outputStream.write(ByteBuffer.allocate(5).put(15).putInt(revision).array())
