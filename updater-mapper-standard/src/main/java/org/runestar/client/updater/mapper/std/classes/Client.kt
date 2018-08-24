@@ -2331,9 +2331,16 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
     }
 
-//    class mapSceneSprites : IndexedSpritesFieldMapper("mapscene")
-//    class modIconSprites : IndexedSpritesFieldMapper("mod_icons")
-//    class scrollbarSprites : IndexedSpritesFieldMapper("scrollbar")
+    @SinceVersion(173)
+    @DependsOn(IndexedSprite::class, SpriteIds.mapScenes::class)
+    class mapSceneSprites : IndexedSpriteArrayField(SpriteIds.mapScenes::class)
+    @SinceVersion(173)
+    @DependsOn(IndexedSprite::class, SpriteIds.modIcons::class)
+    class modIconSprites : IndexedSpriteArrayField(SpriteIds.modIcons::class)
+    @SinceVersion(173)
+    @DependsOn(IndexedSprite::class, SpriteIds.scrollBars::class)
+    class scrollBarSprites : IndexedSpriteArrayField(SpriteIds.scrollBars::class)
+
     class runeSprites : IndexedSpritesFieldMapper("runes")
     class titleMuteSprites : IndexedSpritesFieldMapper("title_mute")
     class slFlagSprites : IndexedSpritesFieldMapper("sl_flags")
@@ -2341,23 +2348,23 @@ class Client : IdentityMapper.Class() {
     class slStarSprites : IndexedSpritesFieldMapper("sl_stars")
 
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.headIconsPrayer::class)
-    class headIconPrayerSprites : SpriteArrayField(SpriteSet.headIconsPrayer::class)
+    @DependsOn(Sprite::class, SpriteIds.headIconsPrayer::class)
+    class headIconPrayerSprites : SpriteArrayField(SpriteIds.headIconsPrayer::class)
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.headIconsPk::class)
-    class headIconPkSprites : SpriteArrayField(SpriteSet.headIconsPk::class)
+    @DependsOn(Sprite::class, SpriteIds.headIconsPk::class)
+    class headIconPkSprites : SpriteArrayField(SpriteIds.headIconsPk::class)
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.headIconsHint::class)
-    class headIconHintSprites : SpriteArrayField(SpriteSet.headIconsHint::class)
+    @DependsOn(Sprite::class, SpriteIds.headIconsHint::class)
+    class headIconHintSprites : SpriteArrayField(SpriteIds.headIconsHint::class)
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.mapMarkers::class)
-    class mapMarkerSprites : SpriteArrayField(SpriteSet.mapMarkers::class)
+    @DependsOn(Sprite::class, SpriteIds.mapMarkers::class)
+    class mapMarkerSprites : SpriteArrayField(SpriteIds.mapMarkers::class)
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.crosses::class)
-    class crossSprites : SpriteArrayField(SpriteSet.crosses::class)
+    @DependsOn(Sprite::class, SpriteIds.crosses::class)
+    class crossSprites : SpriteArrayField(SpriteIds.crosses::class)
     @SinceVersion(173)
-    @DependsOn(Sprite::class, SpriteSet.mapDots::class)
-    class mapDotSprites : SpriteArrayField(SpriteSet.mapDots::class)
+    @DependsOn(Sprite::class, SpriteIds.mapDots::class)
+    class mapDotSprites : SpriteArrayField(SpriteIds.mapDots::class)
 
     @DependsOn(GrandExchangeEvents::class)
     class grandExchangeEvents : IdentityMapper.StaticField() {
@@ -3516,9 +3523,25 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
     }
 
-    @DependsOn(SpriteSet::class)
+    @DependsOn(SpriteIds::class)
     @SinceVersion(173)
-    class spriteSet : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<SpriteSet>() }
+    class spriteIds : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SpriteIds>() }
+    }
+
+    @MethodParameters("index", "archive", "record")
+    @SinceVersion(173)
+    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
+    class readIndexedSprites : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
+                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("index", "archive", "record")
+    @SinceVersion(173)
+    @DependsOn(AbstractIndexCache::class)
+    class loadSprites : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
     }
 }

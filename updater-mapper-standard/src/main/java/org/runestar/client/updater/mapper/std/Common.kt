@@ -41,12 +41,6 @@ abstract class CachedDefinitionMapper(classMapper: KClass<out Mapper<Class2>>) :
             .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
 }
 
-@DependsOn(Sprite::class)
-abstract class SpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
-    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == s }
-            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
-}
-
 @DependsOn(IndexedSprite::class)
 abstract class IndexedSpritesFieldMapper(s: String) : AllUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == s }
@@ -169,8 +163,8 @@ abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(W
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(SpriteSet::class)
-abstract class SpriteSetSprite(index: Int) : OrderMapper.InConstructor.Field(SpriteSet::class, index) {
+@DependsOn(SpriteIds::class)
+abstract class SpriteIdsField(index: Int) : OrderMapper.InConstructor.Field(SpriteIds::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
 }
 
@@ -178,4 +172,9 @@ abstract class SpriteSetSprite(index: Int) : OrderMapper.InConstructor.Field(Spr
 abstract class SpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
             .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
+}
+//@DependsOn(IndexedSprite::class)
+abstract class IndexedSpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
+    override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
+            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
 }
