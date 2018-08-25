@@ -3544,4 +3544,10 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
     }
+
+    @MethodParameters()
+    @DependsOn(GameShell.kill0::class)
+    class kill0 : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<GameShell.kill0>().mark }
+    }
 }

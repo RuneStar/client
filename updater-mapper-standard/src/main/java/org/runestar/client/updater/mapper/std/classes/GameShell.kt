@@ -215,4 +215,31 @@ class GameShell : IdentityMapper.Class() {
     class stopTimeMs : UniqueMapper.InMethod.Field(run::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == LONG_TYPE }
     }
+
+    @MethodParameters()
+    class clearBackground : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.isMethod && it.methodId == Graphics::fillRect.id } }
+    }
+
+    @DependsOn(clearBackground::class)
+    class canvasX : OrderMapper.InMethod.Field(clearBackground::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clearBackground::class)
+    class canvasY : OrderMapper.InMethod.Field(clearBackground::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clearBackground::class)
+    class contentWidth : OrderMapper.InMethod.Field(clearBackground::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clearBackground::class)
+    class contentHeight : OrderMapper.InMethod.Field(clearBackground::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
 }
