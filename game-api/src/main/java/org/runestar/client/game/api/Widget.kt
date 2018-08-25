@@ -52,12 +52,8 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
         var x = 0
         var y = 0
         while(anc != null) {
-            x += cur.x
-            y += cur.y
-            if (cur.scrollHeight == 0) {
-                x -= cur.scrollX
-                y -= cur.scrollY
-            }
+            x += cur.x - anc.scrollX
+            y += cur.y - anc.scrollY
             cur = anc
             anc = parent(anc)
         }
