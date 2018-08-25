@@ -49,15 +49,10 @@ object Application : AutoCloseable {
         check(!started)
         started = true
 
-        @Suppress("DEPRECATION")
-        val applet = CLIENT as java.applet.Applet
-
         SwingUtilities.invokeAndWait {
-            buildApplet(applet)
-            frame = GameFrame(applet)
+            @Suppress("DEPRECATION")
+            frame = GameFrame(CLIENT as java.applet.Applet)
         }
-        applet.init()
-        applet.start()
 
         modifyClient()
         waitForTitle()
@@ -181,7 +176,6 @@ object Application : AutoCloseable {
 
     override fun close() {
         check(started)
-        frame.dispose()
         pluginLoader?.close()
         systemTray?.remove(trayIcon)
     }

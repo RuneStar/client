@@ -1,15 +1,20 @@
+@file:Suppress("DEPRECATION")
+
 package org.runestar.client.api
 
+import org.runestar.client.common.JAV_CONFIG
+import org.runestar.client.common.JavConfig
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.raw.CLIENT
-import java.awt.Container
+import java.applet.Applet
+import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.*
 
 class GameFrame internal constructor(
-        val applet: Container
+        val applet: Applet
 ) : JFrame(TITLE) {
 
     val sidePanel = SidePanel()
@@ -17,6 +22,7 @@ class GameFrame internal constructor(
     val topBar = TopBar()
 
     init {
+        buildApplet(applet)
         layout = BoxLayout(contentPane, BoxLayout.X_AXIS)
         add(
                 Box.createVerticalBox().apply {
@@ -32,6 +38,24 @@ class GameFrame internal constructor(
         minimumSize = layout.minimumLayoutSize(this)
         setLocationRelativeTo(owner)
         isVisible = true
+
+        applet.init()
+        applet.start()
+    }
+
+    private fun buildApplet(
+            applet: Applet
+    ) {
+        applet.apply {
+            layout = null
+            setStub(JavConfig.AppletStub(JAV_CONFIG))
+            maximumSize = JAV_CONFIG.appletMaxSize
+            preferredSize = JAV_CONFIG.appletMinSize
+            minimumSize = preferredSize
+            background = Color.BLACK
+            foreground = Color.BLACK
+            size = preferredSize
+        }
     }
 
     fun refit() {
@@ -60,7 +84,9 @@ class GameFrame internal constructor(
 
         override fun windowClosing(e: WindowEvent) {
             if (CLIENT.gameState <= GameState.TITLE.id || confirmExit()) {
+                isVisible = false
                 Application.close()
+                dispose()
                 defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             }
         }
