@@ -4,7 +4,7 @@ public final class VarbitId {
 
     private VarbitId() {}
 
-    public static final int EQUIPPED_WEAPON_TYPE = 357;
+    public static final int WEAPON_TYPE = 357;
 
     public static final int DEFENSIVE_CASTING_MODE = 2668;
 
