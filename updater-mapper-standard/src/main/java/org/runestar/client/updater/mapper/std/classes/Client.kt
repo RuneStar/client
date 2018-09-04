@@ -3550,4 +3550,52 @@ class Client : IdentityMapper.Class() {
     class kill0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == method<GameShell.kill0>().mark }
     }
+
+    class Interpreter_stringStack : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1000 }
+                .next { it.opcode == ANEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == Array<String>::class.type }
+    }
+
+    @DependsOn(Interpreter::class)
+    class Interpreter_intStack : UniqueMapper.InClassInitializer.Field(Interpreter::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 1000 }
+                .next { it.opcode == NEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(ScriptFrame::class)
+    class Interpreter_frames : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<ScriptFrame>().withDimensions(1) }
+    }
+
+    @DependsOn(Interpreter_frames::class)
+    class Interpreter_frameDepth : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Interpreter_frames>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Interpreter_intStack::class)
+    class Interpreter_intStackSize : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Interpreter_intStack>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Interpreter_stringStack::class)
+    class Interpreter_stringStackSize : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Interpreter_stringStack>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(ScriptFrame.stringLocals::class)
+    class Interpreter_stringLocals : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<ScriptFrame.stringLocals>().id }
+                .next { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(ScriptFrame.intLocals::class)
+    class Interpreter_intLocals : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<ScriptFrame.intLocals>().id }
+                .next { it.opcode == PUTSTATIC }
+    }
 }

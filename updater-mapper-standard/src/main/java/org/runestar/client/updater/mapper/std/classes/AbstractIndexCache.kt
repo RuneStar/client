@@ -209,4 +209,24 @@ class AbstractIndexCache : IdentityMapper.Class() {
     class loadArchive : UniqueMapper.InMethod.Method(tryLoadArchive::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
+
+    @DependsOn(setIndexReference::class)
+    class hash : OrderMapper.InMethod.Field(setIndexReference::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(setIndexReference::class)
+    class archiveCount : OrderMapper.InMethod.Field(setIndexReference::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(setIndexReference::class)
+    class archiveIds : OrderMapper.InMethod.Field(setIndexReference::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(setIndexReference::class)
+    class recordIds : OrderMapper.InMethod.Field(setIndexReference::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == Array<IntArray>::class.type }
+    }
 }
