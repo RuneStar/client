@@ -3564,6 +3564,20 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
 
+    @DependsOn(Interpreter::class)
+    class Interpreter_arrays : UniqueMapper.InClassInitializer.Field(Interpreter::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 5000 }
+                .next { it.opcode == MULTIANEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == Array<IntArray>::class.type }
+    }
+
+    @DependsOn(Interpreter::class)
+    class Interpreter_arrayLengths : UniqueMapper.InClassInitializer.Field(Interpreter::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_5 }
+                .next { it.opcode == NEWARRAY }
+                .next { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
+    }
+
     @DependsOn(ScriptFrame::class)
     class Interpreter_frames : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<ScriptFrame>().withDimensions(1) }

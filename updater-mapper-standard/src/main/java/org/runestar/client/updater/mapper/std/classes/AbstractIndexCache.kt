@@ -135,6 +135,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.size in 3..4 }
     }
 
+    @MethodParameters("archiveName", "recordName")
     class takeRecordByNames : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
                 .and { it.arguments.startsWith(String::class.type, String::class.type) }
@@ -163,6 +164,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 100 } }
     }
 
+    @MethodParameters("archiveName")
     @SinceVersion(141)
     @DependsOn(tryLoadArchive::class)
     class tryLoadArchiveByName : IdentityMapper.InstanceMethod() {
@@ -172,6 +174,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<tryLoadArchive>().id } }
     }
 
+    @MethodParameters("archiveName", "recordName")
     @SinceVersion(141)
     @DependsOn(tryLoadRecord::class)
     class tryLoadRecordByNames : IdentityMapper.InstanceMethod() {
@@ -181,6 +184,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<tryLoadRecord>().id } }
     }
 
+    @MethodParameters("archiveName")
     @SinceVersion(141)
     @DependsOn(archiveLoadPercent::class)
     class archiveLoadPercentByName : IdentityMapper.InstanceMethod() {
@@ -190,6 +194,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<archiveLoadPercent>().id } }
     }
 
+    @MethodParameters("archiveName")
     @SinceVersion(141)
     @DependsOn(archiveLoadPercent::class)
     class getArchiveId : IdentityMapper.InstanceMethod() {
@@ -199,6 +204,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.none { it.isMethod && it.methodId == method<archiveLoadPercent>().id } }
     }
 
+    @MethodParameters("archiveId", "recordName")
     class getRecordId : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size in 2..3 }
