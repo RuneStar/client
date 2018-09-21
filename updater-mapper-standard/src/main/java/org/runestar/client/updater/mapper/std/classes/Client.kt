@@ -1748,10 +1748,10 @@ class Client : IdentityMapper.Class() {
     }
 
     // "Cast"
-    @DependsOn(menuAction::class)
+    @DependsOn(menuAction::class, Widget.dataText::class)
     class selectedSpellActionName : UniqueMapper.InMethod.Field(menuAction::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "Null" }
-                .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.dataText>().id }
+                .prevWithin(15) { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
     }
 
     @MethodParameters("descriptor")
