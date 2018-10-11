@@ -57,11 +57,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<NpcDefinition>() }
     }
 
-    @SinceVersion(141)
-    @DependsOn(OverlayDefinition::class)
-    class getOverlayDefinition : StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<OverlayDefinition>() }
-    }
+//    @SinceVersion(141)
+//    @DependsOn(OverlayDefinition::class)
+//    class getOverlayDefinition : StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<OverlayDefinition>() }
+//    }
 
     @DependsOn(UnderlayDefinition::class)
     class getUnderlayDefinition : StaticMethod() {
@@ -1808,11 +1808,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
     }
 
-    @SinceVersion(141)
-    @DependsOn(getOverlayDefinition::class, AbstractIndexCache::class)
-    class OverlayDefinition_indexCache : UniqueMapper.InMethod.Field(getOverlayDefinition::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
-    }
+//    @SinceVersion(141)
+//    @DependsOn(getOverlayDefinition::class, AbstractIndexCache::class)
+//    class OverlayDefinition_indexCache : UniqueMapper.InMethod.Field(getOverlayDefinition::class) {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+//    }
 
     @DependsOn(getSpotAnimationDefinition::class, AbstractIndexCache::class)
     class SpotAnimationDefinition_indexCache : UniqueMapper.InMethod.Field(getSpotAnimationDefinition::class) {
@@ -2325,11 +2325,11 @@ class Client : IdentityMapper.Class() {
                 .nextIn(2) { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
-    class getIndexedSprites : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
-                .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
-    }
+//    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
+//    class getIndexedSprites : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
+//                .and { it.arguments.startsWith(type<AbstractIndexCache>(), String::class.type) }
+//    }
 
     @SinceVersion(173)
     @DependsOn(IndexedSprite::class, SpriteIds.mapScenes::class)
@@ -2341,11 +2341,11 @@ class Client : IdentityMapper.Class() {
     @DependsOn(IndexedSprite::class, SpriteIds.scrollBars::class)
     class scrollBarSprites : IndexedSpriteArrayField(SpriteIds.scrollBars::class)
 
-    class runeSprites : IndexedSpritesFieldMapper("runes")
-    class titleMuteSprites : IndexedSpritesFieldMapper("title_mute")
-    class slFlagSprites : IndexedSpritesFieldMapper("sl_flags")
-    class slArrowSprites : IndexedSpritesFieldMapper("sl_arrows")
-    class slStarSprites : IndexedSpritesFieldMapper("sl_stars")
+//    class runeSprites : IndexedSpritesFieldMapper("runes")
+//    class titleMuteSprites : IndexedSpritesFieldMapper("title_mute")
+//    class slFlagSprites : IndexedSpritesFieldMapper("sl_flags")
+//    class slArrowSprites : IndexedSpritesFieldMapper("sl_arrows")
+//    class slStarSprites : IndexedSpritesFieldMapper("sl_stars")
 
     @SinceVersion(173)
     @DependsOn(Sprite::class, SpriteIds.headIconsPrayer::class)
@@ -3192,12 +3192,12 @@ class Client : IdentityMapper.Class() {
 //    }
 
     @MethodParameters("widget", "x", "y")
-    @DependsOn(Widget::class, isMenuOpen::class)
+    @DependsOn(Widget::class, isMenuOpen::class, Widget.parent::class)
     class clickWidget : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<isMenuOpen>().id } }
-                .and { it.instructions.none { it.opcode == ISHR } }
+                .and { it.instructions.any { it.isField && it.fieldId == field<Widget.parent>().id } }
     }
 
     @DependsOn(clickWidget::class, Widget::class)
@@ -3537,13 +3537,13 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
     }
 
-    @MethodParameters("index", "archive", "record")
-    @SinceVersion(173)
-    @DependsOn(AbstractIndexCache::class)
-    class loadSprites : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
-    }
+//    @MethodParameters("index", "archive", "record")
+//    @SinceVersion(173)
+//    @DependsOn(AbstractIndexCache::class)
+//    class loadSprites : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+//                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+//    }
 
     @MethodParameters()
     @DependsOn(GameShell.kill0::class)
