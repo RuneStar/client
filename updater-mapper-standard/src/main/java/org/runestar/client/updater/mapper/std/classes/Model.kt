@@ -250,4 +250,19 @@ class Model : IdentityMapper.Class() {
                 .and { it.instructions.count { it.opcode == INEG } == 1 }
                 .and { it != method<rotateY90Ccw>() }
     }
+
+    @DependsOn(ModelData.toModel::class)
+    class faceColors1 : OrderMapper.InMethod.Field(ModelData.toModel::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(ModelData.toModel::class)
+    class faceColors2 : OrderMapper.InMethod.Field(ModelData.toModel::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(ModelData.toModel::class)
+    class faceColors3 : OrderMapper.InMethod.Field(ModelData.toModel::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
+    }
 }

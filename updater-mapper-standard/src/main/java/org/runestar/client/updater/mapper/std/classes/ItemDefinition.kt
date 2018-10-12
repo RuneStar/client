@@ -155,7 +155,7 @@ class ItemDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
-    class notedTemplate : OrderMapper.InConstructor.Field(ItemDefinition::class, 22) {
+    class noteTemplate : OrderMapper.InConstructor.Field(ItemDefinition::class, 22) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
@@ -191,11 +191,11 @@ class ItemDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
-    class int2 : OrderMapper.InConstructor.Field(ItemDefinition::class, 31) {
+    class placeholder : OrderMapper.InConstructor.Field(ItemDefinition::class, 31) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 
-    class int3 : OrderMapper.InConstructor.Field(ItemDefinition::class, 32) {
+    class placeholderTemplate : OrderMapper.InConstructor.Field(ItemDefinition::class, 32) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == INT_TYPE }
     }
 

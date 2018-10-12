@@ -140,25 +140,25 @@ abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<Script>() }
 }
 
-@DependsOn(Widget.decode::class)
-abstract class WidgetInvArray(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
+@DependsOn(Widget.decodeLegacy::class)
+abstract class WidgetInvArray(index: Int) : OrderMapper.InMethod.Field(Widget.decodeLegacy::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 20 }
             .nextIn(2) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(Widget.decode::class)
-abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
+@DependsOn(Widget.decodeLegacy::class)
+abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Widget.decodeLegacy::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == NEWARRAY && it.intOperand == 10 }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(Widget.decodeActive::class)
-abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Widget.decodeActive::class, index) {
+@DependsOn(Widget.decode::class)
+abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == Array<Any?>::class.type }
 }
 
-@DependsOn(Widget.decodeActive::class, Widget.readListenerTriggers::class)
-abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Widget.decodeActive::class, index) {
+@DependsOn(Widget.decode::class, Widget.readListenerTriggers::class)
+abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
     override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.readListenerTriggers>().id }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
@@ -177,4 +177,10 @@ abstract class SpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : Stat
 abstract class IndexedSpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
             .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+}
+
+@DependsOn(Client.runScript0::class, ScriptEvent::class)
+abstract class ScriptEventFieldConst(ldc: Int) : UniqueMapper.InMethod.Field(Client.runScript0::class) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ldc }
+            .nextWithin(6) { it.opcode == GETFIELD && it.fieldOwner == type<ScriptEvent>() }
 }

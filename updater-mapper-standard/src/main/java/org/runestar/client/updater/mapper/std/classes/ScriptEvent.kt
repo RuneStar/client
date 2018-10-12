@@ -7,6 +7,7 @@ import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.std.ScriptEventFieldConst
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 
@@ -25,7 +26,15 @@ class ScriptEvent : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
     }
 
-    class objs : IdentityMapper.InstanceField() {
+    class args : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Any::class.type.withDimensions(1) }
     }
+
+    class widget : ScriptEventFieldConst(-2147483645)
+    class dragTarget : ScriptEventFieldConst(-2147483642)
+    class opIndex : ScriptEventFieldConst(-2147483644)
+    class keyTyped : ScriptEventFieldConst(-2147483640)
+    class keyPressed : ScriptEventFieldConst(-2147483639)
+    class mouseX : ScriptEventFieldConst(-2147483647)
+    class mouseY : ScriptEventFieldConst(-2147483646)
 }

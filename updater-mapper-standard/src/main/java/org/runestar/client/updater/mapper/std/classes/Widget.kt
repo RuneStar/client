@@ -31,7 +31,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Widget>().withDimensions(1) }
     }
 
-    class hasScript : OrderMapper.InConstructor.Field(Widget::class, 0) {
+    class isIf3 : OrderMapper.InConstructor.Field(Widget::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -277,7 +277,7 @@ class Widget : IdentityMapper.Class() {
     }
 
     @DependsOn(Buffer::class, Client.Strings_continue::class)
-    class decode : IdentityMapper.InstanceMethod() {
+    class decodeLegacy : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(type<Buffer>()) }
@@ -285,7 +285,7 @@ class Widget : IdentityMapper.Class() {
     }
 
     @DependsOn(Buffer::class, Client.Strings_continue::class)
-    class decodeActive : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
                 .and { it.arguments.startsWith(type<Buffer>()) }
@@ -309,8 +309,8 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(decode::class)
-    class type : OrderMapper.InMethod.Field(decode::class, 0) {
+    @DependsOn(decodeLegacy::class)
+    class type : OrderMapper.InMethod.Field(decodeLegacy::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 

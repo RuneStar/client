@@ -3612,4 +3612,40 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<ScriptFrame.intLocals>().id }
                 .next { it.opcode == PUTSTATIC }
     }
+
+    @DependsOn(ScriptEvent::class)
+    class runScript0 : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<ScriptEvent>(), INT_TYPE) }
+    }
+
+    @DependsOn(ScriptEvent::class)
+    class runScript : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<ScriptEvent>()) }
+    }
+
+    @DependsOn(alignWidgetSize::class, NodeDeque::class)
+    class scriptEvents : UniqueMapper.InMethod.Field(alignWidgetSize::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<NodeDeque>() }
+    }
+
+    @MethodParameters("brightness")
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_setBrightness : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.returnType == VOID_TYPE && it.arguments == listOf(DOUBLE_TYPE) }
+    }
+
+    @MethodParameters("brightness", "a", "b")
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_setBrightness0 : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.returnType == VOID_TYPE && it.arguments == listOf(DOUBLE_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(Rasterizer3D_setBrightness0::class)
+    class Rasterizer3D_colorPalette : UniqueMapper.InMethod.Field(Rasterizer3D_setBrightness0::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
 }

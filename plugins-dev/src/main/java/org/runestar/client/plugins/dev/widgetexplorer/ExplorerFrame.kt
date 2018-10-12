@@ -119,7 +119,6 @@ itemQuantity: ${x.itemQuantity}
 itemIds: ${x.itemIds?.contentToString()}
 itemQuantities: ${x.itemQuantities?.contentToString()}
 
-hasScript: ${x.hasScript}
 noClickThrough: ${x.noClickThrough}
 spriteId: ${x.spriteId}
 spriteId2: ${x.spriteId2}

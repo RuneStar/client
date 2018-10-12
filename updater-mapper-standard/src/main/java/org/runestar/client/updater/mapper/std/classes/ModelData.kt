@@ -55,4 +55,9 @@ class ModelData : IdentityMapper.Class() {
     class faceTextures : UniqueMapper.InMethod.Field(retexture::class) {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == ShortArray::class.type }
     }
+
+    @DependsOn(Model::class)
+    class toModel : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
+    }
 }
