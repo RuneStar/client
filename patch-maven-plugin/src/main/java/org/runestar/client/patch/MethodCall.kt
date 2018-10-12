@@ -3,15 +3,17 @@ package org.runestar.client.patch
 import net.bytebuddy.description.method.MethodDescription
 import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.scaffold.InstrumentedType
+import net.bytebuddy.implementation.Implementation
 import net.bytebuddy.implementation.MethodCall
 import net.bytebuddy.implementation.bytecode.constant.DefaultValue
 
 internal fun MethodCall.withAllArgumentsThenDefaultValues(): MethodCall {
-    return with(listOf(object : MethodCall.ArgumentLoader.Factory {
+    return with(object : MethodCall.ArgumentLoader.Factory {
 
         override fun prepare(instrumentedType: InstrumentedType): InstrumentedType = instrumentedType
 
         override fun make(
+                implementationTarget: Implementation.Target,
                 instrumentedType: TypeDescription,
                 instrumentedMethod: MethodDescription,
                 invokedMethod: MethodDescription
@@ -25,5 +27,5 @@ internal fun MethodCall.withAllArgumentsThenDefaultValues(): MethodCall {
             }
             return argumentLoaders
         }
-    }))
+    })
 }

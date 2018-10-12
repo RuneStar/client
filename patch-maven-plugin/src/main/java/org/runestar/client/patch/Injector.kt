@@ -24,7 +24,7 @@ private val ACCESS_PKG = XClient::class.java.`package`.name
 fun inject(sourceJar: Path, destinationJar: Path) {
     val tempDir = Files.createTempDir().toPath()
     val classFileLocator = ClassFileLocator.Compound(
-            ClassFileLocator.ForClassLoader.ofClassPath(),
+            ClassFileLocator.ForClassLoader.ofSystemLoader(),
             ClassFileLocator.ForJarFile.of(sourceJar.toFile())
     )
     val typePool = TypePool.Default.of(classFileLocator)
