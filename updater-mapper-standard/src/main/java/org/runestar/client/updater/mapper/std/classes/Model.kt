@@ -265,4 +265,9 @@ class Model : IdentityMapper.Class() {
     class faceColors3 : OrderMapper.InMethod.Field(ModelData.toModel::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
     }
+
+    @DependsOn(ModelData.toModel::class)
+    class faceTextures : OrderMapper.InMethod.Field(ModelData.toModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == ShortArray::class.type }
+    }
 }

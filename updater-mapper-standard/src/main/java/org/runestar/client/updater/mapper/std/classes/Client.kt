@@ -3639,13 +3639,13 @@ class Client : IdentityMapper.Class() {
 
     @MethodParameters("brightness", "a", "b")
     @DependsOn(Rasterizer3D::class)
-    class Rasterizer3D_setBrightness0 : IdentityMapper.StaticMethod() {
+    class Rasterizer3D_buildPalette : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
                 .and { it.returnType == VOID_TYPE && it.arguments == listOf(DOUBLE_TYPE, INT_TYPE, INT_TYPE) }
     }
 
-    @DependsOn(Rasterizer3D_setBrightness0::class)
-    class Rasterizer3D_colorPalette : UniqueMapper.InMethod.Field(Rasterizer3D_setBrightness0::class) {
+    @DependsOn(Rasterizer3D_buildPalette::class)
+    class Rasterizer3D_colorPalette : UniqueMapper.InMethod.Field(Rasterizer3D_buildPalette::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
@@ -3657,5 +3657,10 @@ class Client : IdentityMapper.Class() {
     @DependsOn(ObjectDefinition.getModel::class, EvictingDualNodeHashTable::class)
     class ObjectDefinition_cachedModels : UniqueMapper.InMethod.Field(ObjectDefinition.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
+    }
+
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_alpha : OrderMapper.InClassInitializer.Field(Rasterizer3D::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 }

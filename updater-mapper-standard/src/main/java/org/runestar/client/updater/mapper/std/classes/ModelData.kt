@@ -1,6 +1,7 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
+import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
@@ -11,7 +12,9 @@ import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 
@@ -60,5 +63,59 @@ class ModelData : IdentityMapper.Class() {
     @DependsOn(Model::class)
     class toModel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }
+    }
+
+    @DependsOn(toModel::class)
+    class faceLabelsAlpha : OrderMapper.InMethod.Field(toModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == Array<IntArray>::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class vertexLabels : OrderMapper.InMethod.Field(toModel::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == Array<IntArray>::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class faceAlphas : OrderMapper.InMethod.Field(toModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == ByteArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class indices3 : OrderMapper.InMethod.Field(toModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class indices2 : OrderMapper.InMethod.Field(toModel::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class indices1 : OrderMapper.InMethod.Field(toModel::class, -3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class verticesZ : OrderMapper.InMethod.Field(toModel::class, -4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class verticesY : OrderMapper.InMethod.Field(toModel::class, -5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(toModel::class)
+    class verticesX : OrderMapper.InMethod.Field(toModel::class, -6) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class isBoundsCalculated : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(FaceNormal::class)
+    class faceNormals : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<FaceNormal>().withDimensions(1) }
     }
 }
