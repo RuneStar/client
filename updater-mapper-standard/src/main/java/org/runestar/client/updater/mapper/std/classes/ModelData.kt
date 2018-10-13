@@ -56,6 +56,7 @@ class ModelData : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isField && it.fieldType == ShortArray::class.type }
     }
 
+    @MethodParameters("a", "b", "c", "d", "e")
     @DependsOn(Model::class)
     class toModel : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Model>() }

@@ -3648,4 +3648,14 @@ class Client : IdentityMapper.Class() {
     class Rasterizer3D_colorPalette : UniqueMapper.InMethod.Field(Rasterizer3D_setBrightness0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    @DependsOn(PlayerAppearance.getModel::class, EvictingDualNodeHashTable::class)
+    class PlayerAppearance_cachedModels : UniqueMapper.InMethod.Field(PlayerAppearance.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
+    }
+
+    @DependsOn(ObjectDefinition.getModel::class, EvictingDualNodeHashTable::class)
+    class ObjectDefinition_cachedModels : UniqueMapper.InMethod.Field(ObjectDefinition.getModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
+    }
 }
