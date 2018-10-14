@@ -17,7 +17,6 @@ import org.runestar.client.updater.readHooks
 import org.zeroturnaround.zip.ZipUtil
 import java.lang.reflect.Modifier
 import java.nio.file.Path
-import java.util.zip.Deflater
 
 private val ACCESS_PKG = XClient::class.java.`package`.name
 
@@ -81,7 +80,7 @@ fun inject(sourceJar: Path, destinationJar: Path) {
         }
         typeBuilder.make().saveIn(tempDir.toFile())
     }
-    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile(), Deflater.NO_COMPRESSION)
+    ZipUtil.pack(tempDir.toFile(), destinationJar.toFile())
 }
 
 // todo

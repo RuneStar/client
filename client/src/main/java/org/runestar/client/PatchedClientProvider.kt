@@ -1,9 +1,9 @@
 package org.runestar.client
 
-import io.sigpipe.jbsdiff.Patch
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.JavConfig
 import org.runestar.client.common.REVISION
+import org.runestar.client.common.xorAssign
 import org.runestar.client.game.raw.ClientProvider
 import org.runestar.client.game.raw.access.XClient
 import java.net.URL
@@ -35,10 +35,10 @@ class PatchedClientProvider : ClientProvider {
     }
 
     private fun patch(gamepack: Path, patchedGamepack: Path) {
-        val patchBytes = javaClass.classLoader.getResource("gamepack.diff.gz").readBytes()
-        Files.newOutputStream(patchedGamepack).use { output ->
-            Patch.patch(Files.readAllBytes(gamepack), patchBytes, output)
-        }
+        val original = Files.readAllBytes(gamepack)
+        val bytes = javaClass.classLoader.getResource("gamepack.diff").readBytes()
+        bytes.xorAssign(original)
+        Files.write(patchedGamepack, bytes)
     }
 
     private fun verifyJar(jar: Path): Boolean {

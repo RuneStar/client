@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>client-updater</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -59,10 +64,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.sigpipe</groupId>
-            <artifactId>jbsdiff</artifactId>
         </dependency>
     </dependencies>
 

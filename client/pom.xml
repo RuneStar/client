@@ -63,10 +63,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.sigpipe</groupId>
-            <artifactId>jbsdiff</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

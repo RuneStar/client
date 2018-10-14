@@ -227,11 +227,6 @@
                 <artifactId>weblaf-ui</artifactId>
                 <version>1.2.9-SNAPSHOT</version>
             </dependency>
-            <dependency>
-                <groupId>io.sigpipe</groupId>
-                <artifactId>jbsdiff</artifactId>
-                <version>1.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

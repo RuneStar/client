@@ -1,12 +1,12 @@
 package org.runestar.client.patch
 
-import io.sigpipe.jbsdiff.Diff
 import org.apache.maven.model.Resource
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import org.runestar.client.common.xorAssign
 import org.runestar.client.updater.cleanGamepackUrl
 import org.runestar.client.updater.gamepackUrl
 import java.nio.file.Files
@@ -33,14 +33,13 @@ class PatchMojo : AbstractMojo() {
         val injectedJar = dir.resolve("gamepack.inject.jar")
         inject(cleanJar, injectedJar)
 
-        val diffFile = dir.resolve("gamepack.diff.gz")
-        Files.newOutputStream(diffFile).use { output ->
-            Diff.diff(gamepackUrl.readBytes(), Files.readAllBytes(injectedJar), output)
-        }
-
         val generatedResourcesDir = dir.resolve("generated-resources")
         Files.createDirectories(generatedResourcesDir)
-        Files.copy(diffFile, generatedResourcesDir.resolve(diffFile.fileName), StandardCopyOption.REPLACE_EXISTING)
+        val diffFile = generatedResourcesDir.resolve("gamepack.diff")
+        val bytes = Files.readAllBytes(injectedJar)
+        val original = gamepackUrl.readBytes()
+        bytes.xorAssign(original)
+        Files.write(diffFile, bytes)
         project.addResource(Resource().apply {
             directory = generatedResourcesDir.toString()
         })
