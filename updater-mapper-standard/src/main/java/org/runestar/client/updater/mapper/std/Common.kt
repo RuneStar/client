@@ -184,3 +184,8 @@ abstract class ScriptEventFieldConst(ldc: Int) : UniqueMapper.InMethod.Field(Cli
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ldc }
             .nextWithin(6) { it.opcode == GETFIELD && it.fieldOwner == type<ScriptEvent>() }
 }
+
+@DependsOn(Occluder::class, Client.Scene_addOccluder::class)
+abstract class OccluderField(index: Int) : OrderMapper.InMethod.Field(Client.Scene_addOccluder::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Occluder>() }
+}

@@ -3663,4 +3663,60 @@ class Client : IdentityMapper.Class() {
     class Rasterizer3D_alpha : OrderMapper.InClassInitializer.Field(Rasterizer3D::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @DependsOn(ObjectSound::class, NodeDeque::class)
+    class objectSounds : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == CHECKCAST && it.typeType == type<ObjectSound>() }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<NodeDeque>() }
+    }
+
+    @MethodParameters("textureLoader")
+    @DependsOn(Rasterizer3D::class, TextureLoader::class)
+    class Rasterizer3D_setTextureLoader : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.arguments == listOf(type<TextureLoader>()) }
+    }
+
+    @DependsOn(TextureProvider::class)
+    class textureProvider : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<TextureProvider>() }
+    }
+
+    @DependsOn(PlatformInfo::class)
+    class platformInfo : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PlatformInfo>() }
+    }
+
+    @DependsOn(Scene.draw::class)
+    class Scene_drawnCount : OrderMapper.InMethod.Field(Scene.draw::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene::class, Occluder::class)
+    class Scene_addOccluder : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Scene>() }
+                .and { it.arguments.size == 8 }
+                .and { it.instructions.any { it.opcode == NEW && it.typeType == type<Occluder>() } }
+    }
+
+    @DependsOn(Occluder::class)
+    class Scene_planeOccluders : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Occluder>().withDimensions(2) }
+    }
+
+    @DependsOn(Occluder::class)
+    class Scene_currentOccluders : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Occluder>().withDimensions(1) }
+    }
+
+    @DependsOn(Scene_addOccluder::class)
+    class Scene_planeOccluderCounts : UniqueMapper.InMethod.Field(Scene_addOccluder::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(Scene::class)
+    class Scene_currentOccludersCount : UniqueMapper.InClassInitializer.Field(Scene::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 500 }
+                .prev { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }

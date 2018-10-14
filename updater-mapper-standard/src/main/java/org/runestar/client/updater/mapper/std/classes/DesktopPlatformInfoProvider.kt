@@ -2,9 +2,11 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Method2
 
 @SinceVersion(173)
 @DependsOn(PlatformInfoProvider::class)
@@ -58,4 +60,9 @@ class DesktopPlatformInfoProvider : IdentityMapper.Class() {
 //    class string3 : PlatformInfoString(3)
 //    class string4 : PlatformInfoString(4)
 //    class string5 : PlatformInfoString(5)
+
+    @MethodParameters()
+    class get : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { true }
+    }
 }

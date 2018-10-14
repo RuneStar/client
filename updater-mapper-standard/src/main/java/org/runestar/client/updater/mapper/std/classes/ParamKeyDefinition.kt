@@ -31,7 +31,7 @@ class ParamKeyDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 
-    class b : IdentityMapper.InstanceField() {
+    class isMembersOnly : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
     }
 

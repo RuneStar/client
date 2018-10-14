@@ -17,6 +17,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
+import java.math.BigInteger
 
 @DependsOn(Node::class)
 class Buffer : IdentityMapper.Class() {
@@ -259,5 +260,10 @@ class Buffer : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.isEmpty() }
                 .and { it.instructions.none { it.opcode == ISUB } }
+    }
+
+    class encryptRsa : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.size == 2 }
+                .and { it.arguments.all { it == BigInteger::class.type } }
     }
 }

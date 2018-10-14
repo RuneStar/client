@@ -1,8 +1,11 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -10,10 +13,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GETFIELD
-import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 
 class PlayerAppearance : IdentityMapper.Class() {
 
@@ -50,5 +49,11 @@ class PlayerAppearance : IdentityMapper.Class() {
     class getChatHeadId : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size in 0..1 }
+    }
+
+    @MethodParameters()
+    @DependsOn(ModelData::class)
+    class getModelData : InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<ModelData>() }
     }
 }

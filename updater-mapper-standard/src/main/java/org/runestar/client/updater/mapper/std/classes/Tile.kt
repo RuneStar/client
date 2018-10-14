@@ -2,6 +2,7 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
@@ -82,5 +83,34 @@ class Tile : IdentityMapper.Class() {
 
     class linkedBelowTile : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Tile>() }
+    }
+
+    @DependsOn(Scene.setTileMinPlane::class)
+    class minPlane : UniqueMapper.InMethod.Field(Scene.setTileMinPlane::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    @DependsOn(Scene.draw::class)
+    class drawPrimary : OrderMapper.InMethod.Field(Scene.draw::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    @DependsOn(Scene.draw::class)
+    class drawSecondary : OrderMapper.InMethod.Field(Scene.draw::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    @DependsOn(Scene.draw::class)
+    class drawGameObjects : OrderMapper.InMethod.Field(Scene.draw::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<Tile>() }
+    }
+
+    class originalPlane : OrderMapper.InConstructor.Field(Tile::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.draw::class)
+    class drawGameObjectEdges : UniqueMapper.InMethod.Field(Scene.draw::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 }

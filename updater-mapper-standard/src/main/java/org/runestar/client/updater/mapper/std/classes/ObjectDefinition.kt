@@ -237,4 +237,19 @@ class ObjectDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
+
+    @DependsOn(IterableNodeHashTable::class)
+    class params : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IterableNodeHashTable>() }
+    }
+
+    class getIntParam : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE) }
+    }
+
+    class getStringParam : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments == listOf(INT_TYPE, String::class.type) }
+    }
 }

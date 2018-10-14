@@ -229,4 +229,27 @@ class Scene : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size == 20 && it.arguments.all { it == INT_TYPE } }
     }
+
+    @MethodParameters("tile", "b")
+    @DependsOn(Tile::class)
+    class drawTile : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Tile>(), BOOLEAN_TYPE) }
+    }
+
+    @MethodParameters("plane", "x", "y", "minPlane")
+    @DependsOn(Tile::class)
+    class setTileMinPlane : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldOwner == type<Tile>() && it.fieldType == INT_TYPE } }
+    }
+
+    @MethodParameters()
+    @DependsOn(Client.Scene_currentOccludersCount::class)
+    class occlude : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<Client.Scene_currentOccludersCount>().id } }
+    }
 }

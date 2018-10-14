@@ -63,7 +63,7 @@ class Model : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() }
     }
 
-    class method0 : IdentityMapper.InstanceMethod() {
+    class draw0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(BOOLEAN_TYPE, BOOLEAN_TYPE, BOOLEAN_TYPE) }
     }

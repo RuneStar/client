@@ -2,6 +2,7 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
@@ -65,5 +66,12 @@ class IndexedSprite : IdentityMapper.Class() {
     @DependsOn(normalize::class)
     class subHeight : OrderMapper.InMethod.Field(normalize::class, -3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<IndexedSprite>() }
+    }
+
+    @MethodParameters("r", "g", "b")
+    class shiftColors : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size == 3 }
+                .and { it.arguments.all { it == INT_TYPE } }
     }
 }

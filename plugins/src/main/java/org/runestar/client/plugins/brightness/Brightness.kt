@@ -6,7 +6,6 @@ import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XTextureProvider
 import org.runestar.client.plugins.spi.AbstractPlugin
 import org.runestar.client.plugins.spi.PluginSettings
 
@@ -26,7 +25,7 @@ class Brightness : AbstractPlugin<Brightness.Settings>() {
         XClient.doCycle.enter.any { Game.state == GameState.LOGGED_IN }.subscribeBy {
             CLIENT.sprite_cached.clear()
             CLIENT.Rasterizer3D_setBrightness(brightness)
-            (CLIENT.rasterizer3D_textureLoader as XTextureProvider).setBrightness(brightness)
+            CLIENT.textureProvider.setBrightness(brightness)
         }
     }
 

@@ -173,4 +173,25 @@ class NpcDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.isEmpty() }
     }
+
+    @DependsOn(IterableNodeHashTable::class)
+    class params : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<IterableNodeHashTable>() }
+    }
+
+    class getIntParam : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE) }
+    }
+
+    class getStringParam : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.arguments == listOf(INT_TYPE, String::class.type) }
+    }
+
+    @MethodParameters()
+    @DependsOn(ModelData::class)
+    class getModelData : InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<ModelData>() }
+    }
 }

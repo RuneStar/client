@@ -68,4 +68,10 @@ class TextureProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 64 } }
     }
+
+    @MethodParameters()
+    class clear : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+    }
 }
