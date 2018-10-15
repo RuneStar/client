@@ -13,8 +13,8 @@ public final class TabId {
     public static final int PRAYER = 5;
     public static final int MAGIC = 6;
     public static final int CLAN_CHAT = 7;
-    public static final int FRIENDS_LIST = 8;
-    public static final int IGNORE_LIST = 9;
+    public static final int ACCOUNT_MANAGEMENT = 8;
+    public static final int FRIENDS_LIST = 9; // Ignore List
     public static final int LOGOUT = 10;
     public static final int OPTIONS = 11;
     public static final int EMOTES = 12;
