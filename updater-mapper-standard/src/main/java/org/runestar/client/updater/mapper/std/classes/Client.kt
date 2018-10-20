@@ -3719,4 +3719,23 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 500 }
                 .prev { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
+
+    @MethodParameters("widget")
+    @DependsOn(Widget::class, Widget.cs1Comparisons::class)
+    class runCs1 : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments == listOf(type<Widget>()) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<Widget.cs1Comparisons>().id } }
+    }
+
+    @DependsOn(loadWidgetGroup::class, AbstractIndexCache::class)
+    class Widget_indexCache : UniqueMapper.InMethod.Field(loadWidgetGroup::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+    }
+
+    @DependsOn(drawWidgetGroup::class, Widget.color2::class, Widget::class)
+    class mousedOverWidgetIf1 : UniqueMapper.InMethod.Field(drawWidgetGroup::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.color2>().id }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
+    }
 }

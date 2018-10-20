@@ -28,8 +28,8 @@ class Script : IdentityMapper.Class() {
 
     class localIntCount : ScriptField(0, INT_TYPE)
     class localStringCount : ScriptField(1, INT_TYPE)
-    class stackIntCount : ScriptField(2, INT_TYPE)
-    class stackStringCount : ScriptField(3, INT_TYPE)
+    class intArgumentCount : ScriptField(2, INT_TYPE)
+    class stringArgumentCount : ScriptField(3, INT_TYPE)
 
     class opcodes : ScriptField( 0, IntArray::class.type)
     class intOperands : ScriptField( 1, IntArray::class.type)

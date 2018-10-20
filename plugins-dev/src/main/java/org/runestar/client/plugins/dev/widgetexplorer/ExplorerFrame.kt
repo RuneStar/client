@@ -102,7 +102,6 @@ isHidden: ${x.isHidden}
 text: ${x.text}
 color: ${x.color}
 dataText: ${x.dataText}
-string1: ${x.string1}
 actions: ${x.actions?.contentToString()}
 buttonText: ${x.buttonText}
 spellActionName: ${x.spellActionName}

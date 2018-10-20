@@ -141,6 +141,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(String::class.type, String::class.type) }
     }
 
+    @MethodParameters("archive", "record")
     class tryLoadRecord : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 2..3 }
@@ -149,6 +150,7 @@ class AbstractIndexCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == IFNULL || it.opcode == IFNONNULL || it.opcode == ACONST_NULL } }
     }
 
+    @MethodParameters("archive")
     class tryLoadArchive : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.size in 1..2 }

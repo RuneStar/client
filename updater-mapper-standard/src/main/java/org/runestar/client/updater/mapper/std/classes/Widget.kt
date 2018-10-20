@@ -35,7 +35,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class textShadowed : OrderMapper.InConstructor.Field(Widget::class, -7) {
+    class textShadowed : OrderMapper.InConstructor.Field(Widget::class, -8) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -103,7 +103,39 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
+    class fill : OrderMapper.InConstructor.Field(Widget::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class spriteTiling : OrderMapper.InConstructor.Field(Widget::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class modelOrthog : OrderMapper.InConstructor.Field(Widget::class, 5) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
     class color : OrderMapper.InConstructor.Field(Widget::class, 23) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class color2 : OrderMapper.InConstructor.Field(Widget::class, 24) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class mouseOverColor : OrderMapper.InConstructor.Field(Widget::class, 25) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class mouseOverColor2 : OrderMapper.InConstructor.Field(Widget::class, 26) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class transparency : OrderMapper.InConstructor.Field(Widget::class, 27) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class lineWid : OrderMapper.InConstructor.Field(Widget::class, 29) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -115,11 +147,63 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class spriteAngle : OrderMapper.InConstructor.Field(Widget::class, 32) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class outline : OrderMapper.InConstructor.Field(Widget::class, 33) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class spriteShadow : OrderMapper.InConstructor.Field(Widget::class, 34) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     class modelType : OrderMapper.InConstructor.Field(Widget::class, 35) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     class modelId : OrderMapper.InConstructor.Field(Widget::class, 36) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelType2 : OrderMapper.InConstructor.Field(Widget::class, 37) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelId2 : OrderMapper.InConstructor.Field(Widget::class, 38) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sequenceId : OrderMapper.InConstructor.Field(Widget::class, 39) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sequenceId2 : OrderMapper.InConstructor.Field(Widget::class, 40) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelOffsetX : OrderMapper.InConstructor.Field(Widget::class, 41) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelOffsetY : OrderMapper.InConstructor.Field(Widget::class, 42) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelAngleX : OrderMapper.InConstructor.Field(Widget::class, 43) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelAngleY : OrderMapper.InConstructor.Field(Widget::class, 44) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelAngleZ : OrderMapper.InConstructor.Field(Widget::class, 45) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class modelZoom : OrderMapper.InConstructor.Field(Widget::class, 46) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -207,6 +291,10 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
+    class mouseOverRedirect : OrderMapper.InConstructor.Field(Widget::class, -11) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
     // ok, select, continue
     class buttonText : OrderMapper.InConstructor.Field(Widget::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
@@ -234,7 +322,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class string1 : OrderMapper.InConstructor.Field(Widget::class, -5) {
+    class text2 : OrderMapper.InConstructor.Field(Widget::class, -5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
@@ -276,6 +364,7 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type.withDimensions(1) }
     }
 
+    @MethodParameters("buffer")
     @DependsOn(Buffer::class, Client.Strings_continue::class)
     class decodeLegacy : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -284,6 +373,7 @@ class Widget : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
     }
 
+    @MethodParameters("buffer")
     @DependsOn(Buffer::class, Client.Strings_continue::class)
     class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -352,9 +442,8 @@ class Widget : IdentityMapper.Class() {
                 .and { it.arguments == listOf(BOOLEAN_TYPE) }
     }
 
-    // always null?
-    class ints0 : Widget10Array(0)
-    class ints1 : Widget10Array(1)
+    class cs1Comparisons : Widget10Array(0)
+    class cs1ComparisonValues : Widget10Array(1)
 
     class rectangleMode : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type.arrayDimensions == 0 }
@@ -388,5 +477,24 @@ class Widget : IdentityMapper.Class() {
     @DependsOn(readListener::class)
     class hasListener : UniqueMapper.InMethod.Field(readListener::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class cs1Instructions : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == INT_TYPE.withDimensions(2) }
+    }
+
+    @DependsOn(decodeLegacy::class)
+    class itemActions : UniqueMapper.InMethod.Field(decodeLegacy::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == Array<String>::class.type }
+    }
+
+    @DependsOn(getSprite::class)
+    class spriteFlipV : OrderMapper.InMethod.Field(getSprite::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(getSprite::class)
+    class spriteFlipH : OrderMapper.InMethod.Field(getSprite::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 }
