@@ -29,5 +29,7 @@ abstract class AbstractPlugin<T : PluginSettings> : Plugin<T> {
         start()
     }
 
-    protected abstract fun start()
+    protected open fun start() {}
+
+    override fun stop() {}
 }
