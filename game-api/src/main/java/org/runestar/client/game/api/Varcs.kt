@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XVarcs
 
-class Varcs(val accessor: XVarcs) {
+inline class Varcs(val accessor: XVarcs) {
 
     val ints: IntArray get() = accessor.ints
 

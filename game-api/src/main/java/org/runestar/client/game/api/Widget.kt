@@ -20,11 +20,7 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     val id get() = WidgetId(accessor.id)
 
-    val index: Int get() = WidgetId.getIndex(accessor.id)
-
-    val group get() = checkNotNull(WidgetGroups[groupId])
-
-    val groupId: Int get() = WidgetId.getGroup(accessor.id)
+    val group get() = checkNotNull(WidgetGroups[id.group])
 
     val hasStaticParent: Boolean get() = accessor.parentId != -1
 
@@ -66,9 +62,9 @@ sealed class Widget(override val accessor: XWidget) : Wrapper(accessor) {
 
     fun idString(): String {
         return if (isDynamicChild) {
-            "$groupId:$index:$dynamicChildIndex"
+            "${id.group}:${id.index}:$dynamicChildIndex"
         } else {
-            "$groupId:$index"
+            "${id.group}:${id.index}"
         }
     }
 

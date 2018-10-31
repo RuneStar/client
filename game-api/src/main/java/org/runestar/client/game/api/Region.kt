@@ -1,16 +1,15 @@
 package org.runestar.client.game.api
 
-data class Region(val x: Int, val y: Int) {
+inline class Region(val id: Int) {
 
-    init {
-        require(x in 0..0xFF && y in 0..0xFF)
-    }
+    val x: Int get() = id shr 8
 
-    constructor(id: Int) : this(id shr 8, id and 0xFF)
-
-    val id get() = x shl 8 or y
+    val y: Int get() = id and 0xFF
 
     companion object {
+
         const val SIZE = 64
+
+        fun of(x: Int, y: Int) = Region((x shl 8) or y)
     }
 }

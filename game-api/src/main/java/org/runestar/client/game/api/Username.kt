@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XUsername
 
-class Username(val accessor: XUsername) : Comparable<Username> {
+inline class Username(val accessor: XUsername) : Comparable<Username> {
 
     val name: String get() = accessor.name0
 

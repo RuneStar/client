@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XNpcDefinition
 
-class NpcDefinition(val accessor: XNpcDefinition) {
+inline class NpcDefinition(val accessor: XNpcDefinition) {
 
     val id get() = accessor.id
 

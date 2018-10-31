@@ -13,8 +13,8 @@ import java.awt.RenderingHints
 class Barrows : DisposablePlugin<Barrows.Settings>() {
 
     private companion object {
-        val REGION_ID_ABOVE_GROUND = Region(55, 51).id
-        val REGION_ID_UNDER_GROUND = Region(55, 151).id
+        val REGION_ID_ABOVE_GROUND = Region.of(55, 51).id
+        val REGION_ID_UNDER_GROUND = Region.of(55, 151).id
         val DIG_AREA_COLOR = Color.WHITE
         val DIG_AREA_STROKE = BasicStroke(0.4f)
     }
