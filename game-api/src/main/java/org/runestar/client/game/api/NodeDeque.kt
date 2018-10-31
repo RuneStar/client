@@ -7,16 +7,12 @@ abstract class NodeDeque<T, N : XNode>(val accessor: XNodeDeque) : Iterable<T> {
 
     abstract fun wrap(n: N): T
 
-    override fun iterator() = object : AbstractIterator<T>() {
-
-        private var cur: XNode? = accessor.sentinel.previous
-
-        override fun computeNext() {
-            val n = cur
-            if (n == null || n == accessor.sentinel) return done()
+    override fun iterator() = iterator {
+        var cur: XNode? = accessor.sentinel.previous
+        while (cur != null && cur != accessor.sentinel) {
             @Suppress("UNCHECKED_CAST")
-            setNext(wrap(n as N))
-            cur = n.previous
+            yield(wrap(cur as N))
+            cur = cur.previous
         }
     }
 }

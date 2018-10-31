@@ -7,14 +7,11 @@ object Players : AbstractCollection<Player>() {
 
     val local: Player? get() = CLIENT.localPlayer?.let { Player(it) }
 
-    override fun iterator() = object : AbstractIterator<Player>() {
-
-        private var i = 0
-
-        override fun computeNext() {
-            if (i >= size) return done()
-            val player = get(CLIENT.players_indices[i++]) ?: return done()
-            setNext(player)
+    override fun iterator() = iterator {
+        var i = 0
+        while (i < size) {
+            val player = get(CLIENT.players_indices[i++]) ?: break
+            yield(player)
         }
     }
 

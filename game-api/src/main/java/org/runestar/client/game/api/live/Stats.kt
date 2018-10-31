@@ -10,14 +10,10 @@ object Stats : AbstractMap<Skill, SkillLevel>() {
 
         override val size = Skill.VALUES.size
 
-        override fun iterator() = object : AbstractIterator<Map.Entry<Skill, SkillLevel>>() {
-
-            private var i = 0
-
-            override fun computeNext() {
-                if (i >= size) return done()
-                val skill = Skill.of(i++)
-                setNext(java.util.AbstractMap.SimpleImmutableEntry(skill, get(skill)))
+        override fun iterator() = iterator {
+            repeat(size) {
+                val skill = Skill.of(it)
+                yield(java.util.AbstractMap.SimpleImmutableEntry(skill, get(skill)))
             }
         }
     }

@@ -5,14 +5,11 @@ import org.runestar.client.game.raw.CLIENT
 
 object Npcs : AbstractCollection<Npc>() {
 
-    override fun iterator() = object : AbstractIterator<Npc>() {
-
-        private var i = 0
-
-        override fun computeNext() {
-            if (i >= size) return done()
-            val npc = get(CLIENT.npcIndices[i++]) ?: return done()
-            setNext(npc)
+    override fun iterator() = iterator {
+        var i = 0
+        while (i < size) {
+            val npc = get(CLIENT.npcIndices[i++]) ?: break
+            yield(npc)
         }
     }
 
