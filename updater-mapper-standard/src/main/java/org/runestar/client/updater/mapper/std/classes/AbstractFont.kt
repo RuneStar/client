@@ -183,7 +183,7 @@ class AbstractFont : IdentityMapper.Class() {
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, IntArray::class.type, IntArray::class.type) }
     }
 
-//    @MethodParameters
+    @MethodParameters("s", "x", "y", "width", "height", "color", "shadow", "xAlignment", "yAlignment", "lineHeight")
     class drawLines : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
