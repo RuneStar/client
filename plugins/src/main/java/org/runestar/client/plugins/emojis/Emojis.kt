@@ -1,12 +1,13 @@
 package org.runestar.client.plugins.emojis
 
+import io.reactivex.Observable
+import org.runestar.client.api.util.CyclicCache
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Sprite
 import org.runestar.client.game.api.TextSymbol
-import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XAbstractFont
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -22,27 +23,33 @@ class Emojis : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    private var shortCodes: List<String> = emptyList()
+    private var shortCodes: Map<String, Int> = emptyMap()
+
+    private val cache = CyclicCache<String, String>()
 
     private var spritesStartIndex = -1
 
     override fun start() {
         val ids = readEmojiIds()
-        shortCodes = ids.map { it.shortCode }
+        shortCodes = ids.withIndex().associate { it.value.shortCode to it.index }
         if (spritesStartIndex == -1) {
             expandModIcons()
         }
         addSprites(ids)
-
-        add(Chat.messageAdditions.startWith(Chat).subscribe { msg ->
-            msg.text = replaceEmojis(msg.text)
-        })
-        add(Game.ticks.subscribe {
-            Players.forEach { p ->
-                val text = p.overheadText ?: return@forEach
-                p.overheadText = replaceEmojis(text)
-            }
-        })
+        val drawings = Observable.mergeArray(
+                XAbstractFont.lineWidth.enter,
+                XAbstractFont.draw.enter,
+                XAbstractFont.drawAlpha.enter,
+                XAbstractFont.drawCentered.enter,
+                XAbstractFont.drawRightAligned.enter,
+                XAbstractFont.drawLines.enter,
+                XAbstractFont.drawCenteredShake.enter,
+                XAbstractFont.drawCenteredWave.enter,
+                XAbstractFont.drawCenteredWave2.enter,
+                XAbstractFont.drawRandomAlphaAndSpacing.enter
+        )
+        add(drawings.subscribe { it.arguments[0] = cache.get(it.arguments[0] as String) { replaceEmojis(it) } })
+        add(Game.ticks.subscribe { cache.cycle() })
     }
 
     override fun stop() {
@@ -52,7 +59,8 @@ class Emojis : DisposablePlugin<PluginSettings>() {
                 spritesStartIndex,
                 spritesStartIndex + shortCodes.size
         )
-        shortCodes = emptyList()
+        shortCodes = emptyMap()
+        cache.clear()
     }
 
     private fun readEmojiIds(): List<EmojiId> {
@@ -61,9 +69,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
         }
     }
 
-    private fun readSpriteSheet(): BufferedImage {
-        return ImageIO.read(javaClass.getResource(SPRITE_SHEET_NAME))
-    }
+    private fun readSpriteSheet(): BufferedImage = ImageIO.read(javaClass.getResource(SPRITE_SHEET_NAME))
 
     private fun addSprites(ids: List<EmojiId>) {
         val sheet = readSpriteSheet()
@@ -96,9 +102,9 @@ class Emojis : DisposablePlugin<PluginSettings>() {
                 val colon2 = matcher.end() - 1
                 sb.append(s.substring(i, colon1))
                 val potentialShortCode = matcher.group(1).toLowerCase()
-                val shortCodeIndex = shortCodes.indexOf(potentialShortCode)
+                val shortCodeIndex = shortCodes[potentialShortCode]
                 i = colon2
-                if (shortCodeIndex == -1) {
+                if (shortCodeIndex == null) {
                     sb.append(s.substring(colon1, colon2))
                 } else {
                     sb.append(TextSymbol.Image(shortCodeIndex + spritesStartIndex).tag)
