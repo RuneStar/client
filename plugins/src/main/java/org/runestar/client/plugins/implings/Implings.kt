@@ -16,7 +16,7 @@ import java.awt.Graphics2D
 class Implings : DisposablePlugin<Implings.Settings>() {
 
     private companion object {
-        val PURO_PURO_REGION_ID = Region.of(40, 67).id
+        val PURO_PURO_REGION_ID = Region(40, 67).id
         val DRAW_COLOR = Color(255, 255, 255, 140)
         val TEXT_COLOR = Color.WHITE
     }

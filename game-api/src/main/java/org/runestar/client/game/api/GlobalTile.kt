@@ -4,7 +4,7 @@ import org.runestar.client.game.api.live.LiveScene
 
 data class GlobalTile(val x: Int, val y: Int, val plane: Int) {
 
-    val region get() = Region.of(x / Region.SIZE, y / Region.SIZE)
+    val region get() = Region(x / Region.SIZE, y / Region.SIZE)
 
     fun toSceneTile(scene: Scene = LiveScene): SceneTile {
         val base = scene.base
