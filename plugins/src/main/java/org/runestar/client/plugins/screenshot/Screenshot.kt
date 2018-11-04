@@ -2,7 +2,7 @@ package org.runestar.client.plugins.screenshot
 
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import org.kxtra.swing.bufferedimage.BufferedImage
+import org.kxtra.swing.image.BufferedImage
 import org.runestar.client.api.Application
 import org.runestar.client.api.BarButton
 import org.runestar.client.api.forms.KeyStrokeForm

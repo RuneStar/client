@@ -3,7 +3,7 @@ package org.runestar.client.api
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.blockingSubscribeBy
 import io.reactivex.rxkotlin.subscribeBy
-import org.kxtra.swing.mouseevent.isLeftButton
+import org.kxtra.swing.input.isLeftButton
 import org.runestar.client.api.util.AwtTaskbar
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.game.api.GameState

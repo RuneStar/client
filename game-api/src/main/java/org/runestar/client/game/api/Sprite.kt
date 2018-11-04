@@ -1,10 +1,6 @@
 package org.runestar.client.game.api
 
-import org.kxtra.swing.bufferedimage.BufferedImage
-import org.kxtra.swing.image.draw
-import org.kxtra.swing.image.height
-import org.kxtra.swing.image.width
-import org.kxtra.swing.imagetypespecifier.ImageTypeSpecifier
+import org.kxtra.swing.image.*
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite
@@ -19,7 +15,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
     /**
      * A copy using [ColorModel.getRGBdefault]
      */
-    fun toArgbImage() = BufferedImage(asImage(), ImageTypeSpecifier(ColorModel.getRGBdefault()))
+    fun toArgbImage() = BufferedImage(asImage(), BufferedImage.TYPE_INT_ARGB)
 
     abstract val dataBuffer: DataBuffer
 
@@ -29,15 +25,14 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
     fun asImage(): BufferedImage {
         normalize()
         val cm = colorModel
-        val sm = cm.createCompatibleSampleModel(width, height)
-        val wr = Raster.createWritableRaster(sm, dataBuffer, null)
+        val wr = cm.createCompatibleWritableRaster(width, height, dataBuffer)
         return BufferedImage(cm, wr)
     }
 
     /**
      * Draws [image] onto this
      */
-    fun draw(image: Image) = asImage().draw(image)
+    fun draw(image: Image) = asImage().fill(image)
 
     abstract val width: Int
 
@@ -61,7 +56,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         override val colorModel get() = COLOR_MODEL
 
-        override val dataBuffer get() = DataBufferInt(pixels, pixels.size)
+        override val dataBuffer get() = DataBufferInt(pixels)
 
         override val width: Int get() = accessor.width
 
@@ -79,7 +74,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         companion object {
 
-             @JvmField val COLOR_MODEL = RgbFlaggedColorModel(0)
+            @JvmField val COLOR_MODEL = RgbFlaggedColorModel(0)
 
             fun copy(image: Image): Direct {
                 return Direct(image.width, image.height).apply {
@@ -108,7 +103,7 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 
         override val colorModel get() = IndexColorModel(8, palette.size, palette, 0, false, 0, DataBuffer.TYPE_BYTE)
 
-        override val dataBuffer get() = DataBufferByte(pixels, pixels.size)
+        override val dataBuffer get() = DataBufferByte(pixels)
 
         override val width: Int get() = accessor.width
 
@@ -132,17 +127,9 @@ abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
                 }
             }
 
-            private fun getRgb(image: Image): IntArray {
-                return if (image is BufferedImage) {
-                    image.getRGB(0, 0, image.width, image.height, null, 0, image.width)
-                } else {
-                    val pg = PixelGrabber(image, 0, 0, -1, -1, true)
-                    check(pg.grabPixels())
-                    pg.pixels as IntArray
-                }
+            private fun getPalette(image: Image): IntArray {
+                return image.getArgb().toCollection(LinkedHashSet(listOf(0))).toIntArray()
             }
-
-            private fun getPalette(image: Image): IntArray = getRgb(image).toCollection(LinkedHashSet(listOf(0))).toIntArray()
         }
     }
 }

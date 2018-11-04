@@ -2,7 +2,7 @@ package org.runestar.client.game.api.live
 
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
-import org.kxtra.swing.keyevent.keyStroke
+import org.kxtra.swing.input.keyStroke
 import org.runestar.client.game.raw.CLIENT
 import java.awt.event.KeyEvent
 import javax.swing.KeyStroke
