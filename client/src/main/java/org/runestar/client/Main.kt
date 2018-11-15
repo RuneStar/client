@@ -11,8 +11,9 @@ import org.runestar.client.api.LafInstallation
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.REVISION
 import java.io.IOException
-import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.Socket
+import java.net.SocketAddress
 import java.nio.ByteBuffer
 import javax.swing.SwingUtilities
 
@@ -37,13 +38,14 @@ private fun setupLogging() {
 
 @Throws(IOException::class)
 private fun isUpToDate(): Boolean {
-    val address = InetAddress.getByName(JAV_CONFIG.codebase.host)
-    return checkServerRevision(address, REVISION) && !checkServerRevision(address, REVISION + 1)
+    val address = InetSocketAddress(JAV_CONFIG.codebase.host, 43594)
+    return checkServerRevision(address, REVISION)
 }
 
 @Throws(IOException::class)
-private fun checkServerRevision(address: InetAddress, revision: Int): Boolean {
-    Socket(address, 43594).use { socket ->
+private fun checkServerRevision(address: SocketAddress, revision: Int): Boolean {
+    Socket().use { socket ->
+        socket.connect(address)
         socket.outputStream.write(ByteBuffer.allocate(5).put(15).putInt(revision).array())
         socket.outputStream.flush()
         return socket.inputStream.read() == 0
