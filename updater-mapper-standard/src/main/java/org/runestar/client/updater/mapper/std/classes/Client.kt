@@ -3738,4 +3738,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.color2>().id }
                 .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
     }
+
+    @DependsOn(Texture.animate::class)
+    class Texture_animatedPixels : UniqueMapper.InMethod.Field(Texture.animate::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
 }
