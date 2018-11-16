@@ -6,53 +6,55 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.MalformedURLException
 import java.net.URL
-import java.security.InvalidParameterException
 
 data class JavConfig(
-        val default: Map<String, String>,
-        val parameters: Map<String, String>,
-        val messages: Map<String, String>
+        val properties: Map<String, String>,
+        val parameters: Map<Int, String>
 ) {
 
-    operator fun get(key: Key.Default): String = default.getValue(key.keyString)
-
-    operator fun get(key: Key.Message): String = messages.getValue(key.keyString)
-
-    operator fun get(key: Key.Parameter): String = parameters.getValue(key.keyString)
+    operator fun get(key: String): String = properties.getValue(key)
 
     /**
      * Example: `http://oldschool7.runescape.com/`
-     *
-     * @see[Key.Default.CODEBASE]
      */
-    val codebase get() = URL(get(Key.Default.CODEBASE))
+    val codebase get() = URL(get(CODEBASE))
 
     /**
      * Example: `http://oldschool7.runescape.com/gamepack_1583061.jar`
      */
-    val gamepackUrl get() = URL(get(Key.Default.CODEBASE) + get(Key.Default.INITIAL_JAR))
+    val gamepackUrl get() = URL(get(CODEBASE) + get(INITIAL_JAR))
 
     val appletMinSize get() = Dimension(
-            get(Key.Default.APPLET_MINWIDTH).toInt(),
-            get(Key.Default.APPLET_MINHEIGHT).toInt()
+            get(APPLET_MINWIDTH).toInt(),
+            get(APPLET_MINHEIGHT).toInt()
     )
 
     val appletMaxSize get() = Dimension(
-            get(Key.Default.APPLET_MAXWIDTH).toInt(),
-            get(Key.Default.APPLET_MAXHEIGHT).toInt()
+            get(APPLET_MAXWIDTH).toInt(),
+            get(APPLET_MAXHEIGHT).toInt()
     )
 
     val windowPreferredSize get() = Dimension(
-            get(Key.Default.WINDOW_PREFERREDWIDTH).toInt(),
-            get(Key.Default.WINDOW_PREFERREDHEIGHT).toInt()
+            get(WINDOW_PREFERREDWIDTH).toInt(),
+            get(WINDOW_PREFERREDHEIGHT).toInt()
     )
 
     /**
      * Example: `"client"`
      */
-    val initialClass get() = get(Key.Default.INITIAL_CLASS).removeSuffix(".class")
+    val initialClass get() = get(INITIAL_CLASS).removeSuffix(".class")
 
     companion object {
+
+        private const val CODEBASE = "codebase"
+        private const val INITIAL_JAR = "initial_jar"
+        private const val INITIAL_CLASS = "initial_class"
+        private const val WINDOW_PREFERREDWIDTH = "window_preferredwidth"
+        private const val WINDOW_PREFERREDHEIGHT = "window_preferredheight"
+        private const val APPLET_MAXWIDTH = "applet_maxwidth"
+        private const val APPLET_MAXHEIGHT = "applet_maxheight"
+        private const val APPLET_MINWIDTH = "applet_minwidth"
+        private const val APPLET_MINHEIGHT = "applet_minheight"
 
         /**
          * @param[world] world component of the url: oldschool{world}.runescape.com, examples: `"2"`, `"6b"`, `""` for
@@ -63,125 +65,40 @@ data class JavConfig(
         }
 
         /**
-         * Request from <http://oldschool.runescape.com/jav_config.ws>.
-         *
          * @param[world] world component of the url: oldschool{world}.runescape.com, examples: `"2"`, `"6b"`, `""` for
          *               the default world
          */
         @Throws(IOException::class)
         fun load(world: String = ""): JavConfig {
-            val default = LinkedHashMap<String, String>()
-            val parameters = LinkedHashMap<String, String>()
-            val messages = LinkedHashMap<String, String>()
+            val properties = HashMap<String, String>()
+            val parameters = HashMap<Int, String>()
             getUrl(world).openStream().bufferedReader(Charsets.ISO_8859_1).useLines { lines ->
                 lines.forEach { line ->
                     val split1 = line.split('=', limit = 2)
                     when(split1[0]) {
-                        Key.Parameter.BASE -> {
+                        "param" -> {
                             val split2 = split1[1].split('=', limit = 2)
-                            parameters[split2[0]] = split2[1]
+                            parameters[split2[0].toInt()] = split2[1]
                         }
-                        Key.Message.BASE -> {
-                            val split2 = split1[1].split('=', limit = 2)
-                            messages[split2[0]] = split2[1]
-                        }
-                        else -> default[split1[0]] = split1[1]
+                        "msg" -> {}
+                        else -> properties[split1[0]] = split1[1]
                     }
                 }
             }
-            return JavConfig(default, parameters, messages)
-        }
-    }
-
-    interface Key {
-
-        val keyString: String
-
-        enum class Parameter : Key {
-            _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18;
-
-            override val keyString get() = name.removePrefix("_")
-
-            companion object {
-                const val BASE = "param"
-            }
-        }
-
-        enum class Message : Key {
-            LANG0,
-            TANDC,
-            LANGUAGE,
-            ERR_CREATE_ADVERTISING,
-            ERR_CREATE_TARGET,
-            ERR_VERIFY_BC,
-            ERR_SAVE_FILE,
-            ERR_LOAD_BC,
-            ERR_DOWNLOADING,
-            OK,
-            LOADING_APP,
-            COPY_PASTE_URL,
-            ERR_VERIFY_BC64,
-            CANCEL,
-            NEW_VERSION_LINK,
-            NEW_VERSION,
-            MESSAGE,
-            ERR_GET_FILE,
-            INFORMATION,
-            OPTIONS,
-            NEW_VERSION_LINKTEXT,
-            LOADING_APP_RESOURCES,
-            CHANGES_ON_RESTART;
-
-            override val keyString get() = name.toLowerCase()
-
-            companion object {
-                const val BASE = "msg"
-            }
-        }
-
-        enum class Default : Key {
-            WINDOW_PREFERREDWIDTH,
-            OTHER_SUB_VERSION,
-            DOWNLOAD,
-            TERMSURL,
-            BROWSERCONTROL_WIN_AMD64_JAR,
-            PRIVACYURL,
-            BROWSERCONTROL_WIN_X86_JAR,
-            INITIAL_JAR,
-            ADVERTURL,
-            APPLET_MAXHEIGHT,
-            WIN_SUB_VERSION,
-            TITLE,
-            INITIAL_CLASS,
-            APPLET_MAXWIDTH,
-            VIEWERVERSION,
-            WINDOW_PREFERREDHEIGHT,
-            APPLET_MINWIDTH,
-            CACHEDIR,
-            ADVERT_HEIGHT,
-            STOREBASE,
-            CODEBASE,
-            MAC_SUB_VERSION,
-            APPLET_MINHEIGHT;
-
-            override val keyString get() = name.toLowerCase()
+            return JavConfig(properties, parameters)
         }
     }
 
     @Suppress("DEPRECATION")
-    class AppletStub(val javConfig: JavConfig) : java.applet.AppletStub, java.applet.AppletContext {
+    data class AppletStub(val javConfig: JavConfig) : java.applet.AppletStub, java.applet.AppletContext {
 
         override fun getDocumentBase(): URL = codeBase
 
         override fun appletResize(width: Int, height: Int) {}
 
-        override fun getParameter(name: String): String? = javConfig.parameters[name]
+        override fun getParameter(name: String): String? = javConfig.parameters[name.toInt()]
 
-        override fun getCodeBase(): URL = try {
-            javConfig.codebase
-        } catch (e: MalformedURLException) {
-            throw InvalidParameterException()
-        }
+        override fun getCodeBase(): URL = javConfig.codebase
 
         override fun getAppletContext() = this
 
