@@ -4,7 +4,6 @@ import java.awt.Desktop
 import java.awt.Dimension
 import java.io.IOException
 import java.io.InputStream
-import java.net.URI
 import java.net.URL
 
 data class JavConfig(
@@ -38,13 +37,6 @@ data class JavConfig(
             get(WINDOW_PREFERREDWIDTH).toInt(),
             get(WINDOW_PREFERREDHEIGHT).toInt()
     )
-
-    val revision: Int get() {
-        val parameterValue = parameters.values.first { "slr.ws" in it }
-        val url = URI(parameterValue)
-        val query = url.rawQuery.split('&').associate { it.split('=', limit = 2).let { it[0] to it[1] } }
-        return query.getValue("ep").toInt()
-    }
 
     /**
      * Example: `"client"`
