@@ -171,12 +171,12 @@ abstract class SpriteIdsField(index: Int) : OrderMapper.InConstructor.Field(Spri
 //@DependsOn(Sprite::class)
 abstract class SpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
-            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
+            .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == type<Sprite>().withDimensions(1) }
 }
 //@DependsOn(IndexedSprite::class)
 abstract class IndexedSpriteArrayField(archiveField: KClass<out Mapper<Field2>>) : StaticUniqueMapper.Field() {
     override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && context.fields[archiveField]!!.id == it.fieldId }
-            .nextWithin(5) { it.opcode == PUTSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
+            .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
 }
 
 @DependsOn(Client.runScript0::class, ScriptEvent::class)

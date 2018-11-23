@@ -2243,13 +2243,13 @@ class Client : IdentityMapper.Class() {
 
     @DependsOn(Varps::class)
     class Varps_temp : OrderMapper.InClassInitializer.Field(Varps::class, 0, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand >= 2000 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 
     @DependsOn(Varps::class)
     class Varps_main : OrderMapper.InClassInitializer.Field(Varps::class, 1, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 2000 }
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand >= 2000 }
                 .nextWithin(3) { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE.withDimensions(1) }
     }
 
@@ -3039,13 +3039,13 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<Player>(), BOOLEAN_TYPE) }
     }
 
-    @DependsOn(Sprite::class, AbstractIndexCache::class)
-    @MethodParameters("indexCache", "index", "record")
-    class readSprite : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
-                .and { it.arguments.size in 3..4 }
-                .and { it.arguments.startsWith(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
-    }
+//    @DependsOn(Sprite::class, AbstractIndexCache::class)
+//    @MethodParameters("indexCache", "index", "record")
+//    class readSprite : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+//                .and { it.arguments.size in 3..4 }
+//                .and { it.arguments.startsWith(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+//    }
 
     @MethodParameters("player", "menuArg0", "menuArg1", "menuArg2")
     @DependsOn(Player::class, Client.playerMenuOpcodes::class)
@@ -3515,13 +3515,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == SecureRandom::class.type }
     }
 
-    @MethodParameters("index", "archive", "record")
-    @SinceVersion(173)
-    @DependsOn(Sprite::class, AbstractIndexCache::class)
-    class readSprites : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>().withDimensions(1) }
-                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
-    }
+//    @MethodParameters("index", "archive", "record")
+//    @SinceVersion(173)
+//    @DependsOn(Sprite::class, AbstractIndexCache::class)
+//    class readSprites : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>().withDimensions(1) }
+//                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+//    }
 
     @DependsOn(SpriteIds::class)
     @SinceVersion(173)
@@ -3529,13 +3529,13 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<SpriteIds>() }
     }
 
-    @MethodParameters("index", "archive", "record")
-    @SinceVersion(173)
-    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
-    class readIndexedSprites : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
-                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
-    }
+//    @MethodParameters("index", "archive", "record")
+//    @SinceVersion(173)
+//    @DependsOn(IndexedSprite::class, AbstractIndexCache::class)
+//    class readIndexedSprites : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<IndexedSprite>().withDimensions(1) }
+//                .and { it.arguments == listOf(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+//    }
 
 //    @MethodParameters("index", "archive", "record")
 //    @SinceVersion(173)
@@ -3736,7 +3736,7 @@ class Client : IdentityMapper.Class() {
     @DependsOn(drawWidgetGroup::class, Widget.color2::class, Widget::class)
     class mousedOverWidgetIf1 : UniqueMapper.InMethod.Field(drawWidgetGroup::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<Widget.color2>().id }
-                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
+                .nextWithin(3) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
     }
 
     @DependsOn(Texture.animate::class)
