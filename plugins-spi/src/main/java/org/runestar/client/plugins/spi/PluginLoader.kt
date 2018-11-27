@@ -143,8 +143,10 @@ class PluginLoader(
                 settings = settingsReadWriter.read(settingsFile, plugin.defaultSettings.javaClass)
                 logger.debug("Read successful.")
             } catch (e: IOException) {
-                logger.warn("Read failed. Reverting to default settings.", e)
+                val settingsFileCopy = directory.resolve("settings-${System.currentTimeMillis()}.${settingsReadWriter.fileExtension}")
                 settings = plugin.defaultSettings
+                Files.move(settingsFile, settingsFileCopy, StandardCopyOption.REPLACE_EXISTING)
+                logger.warn("Read failed. Moving old settings to ${settingsFileCopy.fileName}. Reverting to default settings.", e)
                 writeSettings()
             }
         }
