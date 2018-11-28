@@ -57,7 +57,7 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     }
 
     private fun colorString(s: String, color: Color): String {
-        return TextEffect.Simple(TextEffect.Type.COLOR, color).openTag + s
+        return TextEffect(TextEffect.Type.COLOR, color).openTag + s
     }
 
     private fun decolorString(s: String): String {
