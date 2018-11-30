@@ -3743,4 +3743,19 @@ class Client : IdentityMapper.Class() {
     class Texture_animatedPixels : UniqueMapper.InMethod.Field(Texture.animate::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
+
+    @SinceVersion(172)
+    @DependsOn(secureRandom::class)
+    @MethodParameters()
+    class onLogin : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.isEmpty() }
+                .and { it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<secureRandom>().id } }
+    }
+
+    @SinceVersion(172)
+    @DependsOn(onLogin::class)
+    class loginState : OrderMapper.InMethod.Field(onLogin::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
 }

@@ -1,15 +1,16 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.GOTO
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
+import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.objectweb.asm.Opcodes.GOTO
-import org.objectweb.asm.Type.VOID_TYPE
 import java.lang.reflect.Modifier
 
 @DependsOn(DualNode::class)
@@ -23,6 +24,11 @@ class IterableDualNodeQueue : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { Modifier.isPublic(it.access) }
     }
 
+    class head : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { !Modifier.isPublic(it.access) }
+    }
+
+    @MethodParameters()
     class clear : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == GOTO } }
