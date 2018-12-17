@@ -6,7 +6,5 @@ inline infix fun <T> Predicate<T>.and(crossinline other: Predicate<T>): Predicat
 
 typealias Predicate<T> = (T) -> Boolean
 
-fun <T> predicateOf(predicate: Predicate<T>): Predicate<T> {
-    return predicate
-}
+fun <T> predicateOf(predicate: Predicate<T>): Predicate<T> = predicate
 

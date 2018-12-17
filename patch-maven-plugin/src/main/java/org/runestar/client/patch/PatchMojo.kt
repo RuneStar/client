@@ -7,8 +7,8 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.runestar.client.common.xorAssign
-import org.runestar.client.updater.cleanGamepackUrl
-import org.runestar.client.updater.gamepackUrl
+import org.runestar.client.updater.cleanGamepackFile
+import org.runestar.client.updater.gamepackFile
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
@@ -26,7 +26,7 @@ class PatchMojo : AbstractMojo() {
         val dir = Paths.get(project.build.directory)
 
         val cleanJar = dir.resolve("gamepack.clean.jar")
-        cleanGamepackUrl.openStream().use { input ->
+        cleanGamepackFile.openStream().use { input ->
             Files.copy(input, cleanJar, StandardCopyOption.REPLACE_EXISTING)
         }
 
@@ -37,7 +37,7 @@ class PatchMojo : AbstractMojo() {
         Files.createDirectories(generatedResourcesDir)
         val diffFile = generatedResourcesDir.resolve("gamepack.diff")
         val bytes = Files.readAllBytes(injectedJar)
-        val original = gamepackUrl.readBytes()
+        val original = gamepackFile.readBytes()
         bytes.xorAssign(original)
         Files.write(diffFile, bytes)
         project.addResource(Resource().apply {

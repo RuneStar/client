@@ -50,14 +50,7 @@ data class MethodHook(
         val parameters: List<String>?,
         val descriptor: String,
         val finalArgument: Int?
-) {
-    val finalArgumentNarrowed: Number? get() = when(finalArgument) {
-        null -> null
-        in Byte.MIN_VALUE..Byte.MAX_VALUE -> finalArgument.toByte()
-        in Short.MIN_VALUE..Short.MAX_VALUE -> finalArgument.toShort()
-        else -> finalArgument
-    }
-}
+)
 
 data class ConstructorHook(
         val access: Int,

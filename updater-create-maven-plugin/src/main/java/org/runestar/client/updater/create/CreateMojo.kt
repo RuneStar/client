@@ -47,7 +47,7 @@ class CreateMojo : AbstractMojo() {
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
             .enable(SerializationFeature.INDENT_OUTPUT)
 
-    private val targetDir: Path get() =  Paths.get(project.build.directory)
+    private val targetDir: Path get() = Paths.get(project.build.directory)
 
     private val generatedResourcesDir: Path get() = targetDir.resolve("generated-resources")
 

@@ -12,10 +12,8 @@ private val classLoader: ClassLoader get() = MethodHandles.lookup().lookupClass(
 
 val hooksFile: URL get() = classLoader.getResource("hooks.json")
 
-fun readHooks(): List<ClassHook> {
-    return jacksonObjectMapper().readValue(hooksFile)
-}
+fun readHooks(): List<ClassHook> = jacksonObjectMapper().readValue(hooksFile)
 
-val gamepackUrl: URL get() = classLoader.getResource("gamepack.jar")
+val gamepackFile: URL get() = classLoader.getResource("gamepack.jar")
 
-val cleanGamepackUrl: URL get() = classLoader.getResource("gamepack.clean.jar")
+val cleanGamepackFile: URL get() = classLoader.getResource("gamepack.clean.jar")
