@@ -1,6 +1,8 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
@@ -50,5 +52,23 @@ class WorldMapManager : IdentityMapper.Class() {
     @DependsOn(buildIcons::class)
     class icons : UniqueMapper.InMethod.Field(buildIcons::class) {
         override val predicate = predicateOf<Instruction2> { it.isField }
+    }
+
+    class drawOverview : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.size == 7 }
+    }
+
+    @MethodParameters("indexCache", "cacheName", "isMembersWorld")
+    @DependsOn(AbstractIndexCache::class)
+    class load : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(type<AbstractIndexCache>()) }
+    }
+
+    @MethodParameters()
+    class clearIcons : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.none { it.isLabel } }
     }
 }

@@ -2,6 +2,8 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
 import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -14,6 +16,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
+import java.lang.reflect.Modifier
 
 @SinceVersion(164)
 @DependsOn(UserList::class, ClanMate::class)
@@ -50,5 +53,28 @@ class ClanChat : IdentityMapper.Class() {
     class readUpdate : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == IINC } }
+    }
+
+    @DependsOn(Usernamed::class)
+    class localUser : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Usernamed>() }
+    }
+
+    class rank : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == INT_TYPE && Modifier.isPublic(it.access) }
+    }
+
+    @MethodParameters()
+    @DependsOn(ClanMate.clearIsFriend::class)
+    class clearFriends : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<ClanMate.clearIsFriend>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(ClanMate.clearIsIgnored::class)
+    class clearIgnoreds : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<ClanMate.clearIsIgnored>().id } }
     }
 }

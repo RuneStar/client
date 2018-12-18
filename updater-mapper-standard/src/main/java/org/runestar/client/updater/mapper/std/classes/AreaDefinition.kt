@@ -27,6 +27,7 @@ class AreaDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Array<String>::class.type }
     }
 
+    @MethodParameters("buffer")
     @DependsOn(Buffer::class)
     class read : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -34,6 +35,7 @@ class AreaDefinition : IdentityMapper.Class() {
                 .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 16 } }
     }
 
+    @MethodParameters("buffer", "opcode")
     @DependsOn(Buffer::class)
     class readNext : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

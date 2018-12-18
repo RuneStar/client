@@ -15,7 +15,7 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(DualNode::class, IterableNodeHashTable::class)
-class ParamsDefinition : IdentityMapper.Class() {
+class StructDefinition : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.instanceFields.size == 1 }
@@ -46,11 +46,11 @@ class ParamsDefinition : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == PUTFIELD } }
     }
 
-    class getInt : IdentityMapper.InstanceMethod() {
+    class getIntParam : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
     }
 
-    class getString : IdentityMapper.InstanceMethod() {
+    class getStringParam : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
     }
 }

@@ -3758,4 +3758,46 @@ class Client : IdentityMapper.Class() {
     class loginState : OrderMapper.InMethod.Field(onLogin::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
+
+    class Interpreter_calendar : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> {
+            it.opcode == INVOKESTATIC &&
+                    it.methodName == "getInstance" &&
+                    it.methodOwner == Calendar::class.type &&
+                    it.methodType.argumentTypes.isEmpty()
+        }.next { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(onLogin::class, TaskHandler.newSocketTask::class)
+    class socketTask : UniqueMapper.InMethod.Field(onLogin::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<TaskHandler.newSocketTask>().id }
+                .next { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(init::class)
+    class useBufferedSocket : UniqueMapper.InMethod.Field(init::class) {
+        override val predicate = predicateOf<Instruction2> { it.isLabel }
+                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class clientType : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 6519 }
+                .nextWithin(20) { it.isLabel }
+                .prevWithin(8) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class language : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == "/l=" }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleLoggedIn::class)
+    class rebootTimer : OrderMapper.InMethod.Field(doCycleLoggedIn::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(WorldMapEvent::class)
+    class worldMapEvent : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMapEvent>() }
+    }
 }

@@ -5,7 +5,7 @@ import org.runestar.client.game.raw.access.XBuddy
 
 abstract class Buddy(override val accessor: XBuddy) : User(accessor) {
 
-    val worldId get() = accessor.world
+    val worldId get() = accessor.world0
 
     val world get() = Worlds[worldId]
 

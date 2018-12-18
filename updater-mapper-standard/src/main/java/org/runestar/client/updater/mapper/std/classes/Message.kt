@@ -1,11 +1,11 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.VOID_TYPE
+import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
+import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.annotations.SinceVersion
@@ -50,13 +50,13 @@ class Message : IdentityMapper.Class() {
 
     @SinceVersion(162)
     @DependsOn(TriBool::class)
-    class isFromFriend : OrderMapper.InConstructor.Field(Message::class, 0, 2) {
+    class isFromFriend0 : OrderMapper.InConstructor.Field(Message::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
     }
 
     @SinceVersion(162)
     @DependsOn(TriBool::class)
-    class isFromIgnored : OrderMapper.InConstructor.Field(Message::class, 1, 2) {
+    class isFromIgnored0 : OrderMapper.InConstructor.Field(Message::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
     }
 
@@ -70,5 +70,54 @@ class Message : IdentityMapper.Class() {
     @DependsOn(Username::class)
     class senderUsername : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Username>() }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromFriend0::class)
+    class isFromFriend : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<isFromFriend0>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromIgnored0::class)
+    class isFromIgnored : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<isFromIgnored0>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromFriend::class)
+    class fillIsFromFriend : UniqueMapper.InMethod.Method(isFromFriend::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromIgnored::class)
+    class fillIsFromIgnored : UniqueMapper.InMethod.Method(isFromIgnored::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @MethodParameters()
+    @DependsOn(senderUsername::class)
+    class fillSenderUsername : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<senderUsername>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromFriend0::class, Client.TriBool_unknown::class)
+    class clearIsFromFriend : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<isFromFriend0>().id } }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.TriBool_unknown>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(isFromIgnored0::class, Client.TriBool_unknown::class)
+    class clearIsFromIgnored : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<isFromIgnored0>().id } }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.TriBool_unknown>().id } }
     }
 }

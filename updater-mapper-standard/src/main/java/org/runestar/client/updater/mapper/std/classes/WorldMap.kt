@@ -112,4 +112,17 @@ class WorldMap : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapIndexCacheLoader.isLoaded>().id } }
     }
+
+    @MethodParameters("a", "b", "c", "d")
+    @DependsOn(TileLocation::class)
+    class menuAction : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<TileLocation>(), type<TileLocation>()) }
+    }
+
+    @MethodParameters("a", "b", "c", "d", "e", "f", "g")
+    class onCycle : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, BOOLEAN_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
 }
