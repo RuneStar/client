@@ -3,7 +3,7 @@ package org.runestar.client.updater.deob.rs
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.getLogger
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.INT_TYPE

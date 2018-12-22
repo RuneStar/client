@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.dev
 
 import com.google.common.base.Splitter
-import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.info
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.CLIENT

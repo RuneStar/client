@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.dev
 
-import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.info
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.raw.access.XEvictingDualNodeHashTable
 import org.runestar.client.plugins.spi.PluginSettings

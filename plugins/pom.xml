@@ -21,6 +21,10 @@
             <artifactId>client-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.kxtra</groupId>
+            <artifactId>kxtra-slf4j</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

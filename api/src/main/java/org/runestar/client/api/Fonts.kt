@@ -1,6 +1,6 @@
 package org.runestar.client.api
 
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.getLogger
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 

@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.spi
 
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.getLogger
 import org.slf4j.Logger
 
 abstract class AbstractPlugin<T : PluginSettings> : Plugin<T> {

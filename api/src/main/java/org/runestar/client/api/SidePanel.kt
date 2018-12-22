@@ -1,8 +1,8 @@
 package org.runestar.client.api
 
 import com.alee.managers.style.StyleId
-import org.kxtra.slf4j.logger.info
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.info
+import org.kxtra.slf4j.getLogger
 import org.kxtra.swing.component.window
 import java.awt.BorderLayout
 import java.awt.Component

@@ -3,9 +3,9 @@
 package org.runestar.client
 
 import io.reactivex.plugins.RxJavaPlugins
-import org.kxtra.slf4j.logger.error
-import org.kxtra.slf4j.logger.warn
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.error
+import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.warn
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
 import javax.swing.SwingUtilities

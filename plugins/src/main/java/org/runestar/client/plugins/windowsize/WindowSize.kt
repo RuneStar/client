@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.windowsize
 
-import org.kxtra.slf4j.logger.info
+import org.kxtra.slf4j.info
 import org.runestar.client.api.Application
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.AbstractPlugin

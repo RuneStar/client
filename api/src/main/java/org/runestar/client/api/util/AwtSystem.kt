@@ -2,9 +2,9 @@
 
 package org.runestar.client.api.util
 
-import org.kxtra.slf4j.logger.info
-import org.kxtra.slf4j.logger.warn
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.info
+import org.kxtra.slf4j.warn
+import org.kxtra.slf4j.getLogger
 import java.awt.Desktop
 import java.awt.SystemTray
 import java.nio.file.Files

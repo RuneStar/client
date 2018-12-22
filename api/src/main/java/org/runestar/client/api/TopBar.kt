@@ -3,8 +3,8 @@ package org.runestar.client.api
 import com.alee.managers.style.StyleId
 import com.alee.managers.tooltip.TooltipManager
 import com.alee.managers.tooltip.TooltipWay
-import org.kxtra.slf4j.logger.info
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.info
+import org.kxtra.slf4j.getLogger
 import java.awt.Dimension
 import java.util.*
 import javax.swing.Box

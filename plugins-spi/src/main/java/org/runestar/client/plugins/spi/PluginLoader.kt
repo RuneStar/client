@@ -2,7 +2,7 @@ package org.runestar.client.plugins.spi
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.getLogger
 import java.io.Closeable
 import java.io.IOException
 import java.nio.file.*

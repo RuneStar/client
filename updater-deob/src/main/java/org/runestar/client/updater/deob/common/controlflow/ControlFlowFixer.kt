@@ -1,7 +1,7 @@
 package org.runestar.client.updater.deob.common.controlflow
 
-import org.kxtra.slf4j.logger.info
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.info
+import org.kxtra.slf4j.getLogger
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
 import org.runestar.client.updater.deob.Transformer

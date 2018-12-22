@@ -1,7 +1,7 @@
 package org.runestar.client.updater.deob.common
 
-import org.kxtra.slf4j.logger.info
-import org.kxtra.slf4j.loggerfactory.getLogger
+import org.kxtra.slf4j.info
+import org.kxtra.slf4j.getLogger
 import org.objectweb.asm.Opcodes.GETSTATIC
 import org.objectweb.asm.Opcodes.PUTSTATIC
 import org.objectweb.asm.tree.ClassNode

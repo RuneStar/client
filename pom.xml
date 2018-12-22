@@ -134,7 +134,8 @@
             <dependency>
                 <groupId>org.kxtra</groupId>
                 <artifactId>kxtra-slf4j</artifactId>
-                <version>1.0.1</version>
+                <version>2.0.0</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.akarnokd</groupId>
