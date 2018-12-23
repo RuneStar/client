@@ -57,7 +57,7 @@ interface Transformer {
                 RemoveErrorConstructors,
                 UnusedMethodFinder,
                 UnusedMethodReplacer,
-//                UnnecessaryGotoRemover,
+                UnnecessaryGotoRemover,
                 SortFieldsByModifiers,
                 SortMethodsByLineNumber,
                 DebugRemover,
