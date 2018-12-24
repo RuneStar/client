@@ -10,7 +10,7 @@ import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
 import javax.swing.SwingUtilities
 
-fun main(args: Array<String>) {
+fun main() {
     setupLogging()
     SwingUtilities.invokeLater(LafInstallation())
 
