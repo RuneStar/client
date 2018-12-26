@@ -1,5 +1,5 @@
-/*
- * Copyright 2016 Netflix, Inc.
+/**
+ * Copyright (c) 2016-present, RxJava Contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,6 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Consumer;
@@ -28,21 +29,22 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
 
     /** An empty subscribers array to avoid allocating it all the time. */
     @SuppressWarnings("rawtypes")
-    private static final PublishDisposable[] EMPTY = new PublishDisposable[0];
+    static final PublishDisposable[] EMPTY = new PublishDisposable[0];
 
     /** The array of currently subscribed subscribers. */
-    private volatile PublishDisposable<T>[] subscribers;
+    volatile PublishDisposable<T>[] subscribers;
 
     /**
      * Constructs a PublishRelay.
      */
-    @SuppressWarnings("unchecked") PublishRelay() {
+    @SuppressWarnings("unchecked")
+    PublishRelay() {
         subscribers = EMPTY;
     }
 
     @Override
-    public void subscribeActual(Observer<? super T> t) {
-        PublishDisposable<T> ps = new PublishDisposable<>(t, this);
+    protected void subscribeActual(Observer<? super T> t) {
+        PublishDisposable<T> ps = new PublishDisposable<T>(t, this);
         t.onSubscribe(ps);
         add(ps);
         // if cancellation happened while a successful add, the remove() didn't work
@@ -53,11 +55,10 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
     }
 
     /**
-     * Tries to add the given subscriber to the subscribers array atomically
-     * or returns false if the subject has terminated.
+     * Adds the given subscriber to the subscribers array atomically.
      * @param ps the subscriber to add
      */
-    private void add(PublishDisposable<T> ps) {
+    void add(PublishDisposable<T> ps) {
         for (;;) {
             PublishDisposable<T>[] a = subscribers;
             int n = a.length;
@@ -76,7 +77,7 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
      * Atomically removes the given subscriber if it is subscribed to the subject.
      * @param ps the subject to remove
      */
-    @SuppressWarnings({"unchecked", "WeakerAccess"})
+    @SuppressWarnings("unchecked")
     void remove(PublishDisposable<T> ps) {
         for (;;) {
             PublishDisposable<T>[] a = subscribers;
@@ -114,14 +115,14 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
 
     @Override
     public void accept(T value) {
-        if (value == null) throw new NullPointerException("value == null");
+        Objects.requireNonNull(value);
         for (PublishDisposable<T> s : subscribers) {
             s.onNext(value);
         }
     }
 
     public boolean hasObservers() {
-        return subscribers.length != 0;
+        return subscribers != EMPTY;
     }
 
     /**
@@ -133,7 +134,8 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
     static final class PublishDisposable<T> extends AtomicBoolean implements Disposable {
 
         /** The actual subscriber. */
-        final Observer<? super T> actual;
+        final Observer<? super T> downstream;
+
         /** The subject state. */
         final PublishRelay<T> parent;
 
@@ -143,13 +145,13 @@ public final class PublishRelay<T> extends Observable<T> implements Consumer<T> 
          * @param parent the parent PublishProcessor
          */
         PublishDisposable(Observer<? super T> actual, PublishRelay<T> parent) {
-            this.actual = actual;
+            this.downstream = actual;
             this.parent = parent;
         }
 
-        void onNext(T t) {
+        public void onNext(T t) {
             if (!get()) {
-                actual.onNext(t);
+                downstream.onNext(t);
             }
         }
 
