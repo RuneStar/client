@@ -45,7 +45,7 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
         }
         return Box.createHorizontalBox().apply {
             add(Box.createHorizontalStrut(3))
-            add(JLabel(this@createComponent.toString()).apply {
+            add(JLabel(this@createComponent.name).apply {
                 putClientProperty(StyleId.STYLE_PROPERTY, StyleId.labelShadow)
             })
             add(Box.createGlue())

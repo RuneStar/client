@@ -2,6 +2,7 @@ package org.runestar.client.plugins.spi
 
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import org.kxtra.slf4j.debug
 import org.kxtra.slf4j.getLogger
 import java.io.Closeable
 import java.io.IOException
@@ -13,11 +14,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /**
- * @param pluginsClassloader ClassLoader used to find [Plugin]s with [ServiceLoader.load].
  * @param lifeCycleExecutor Used to execute all methods in [Plugin].
  */
 class PluginLoader(
-        pluginsClassloader: ClassLoader,
         private val pluginsDir: Path,
         private val settingsReadWriter: FileReadWriter,
         private val lifeCycleExecutor: Executor
@@ -25,23 +24,22 @@ class PluginLoader(
 
     private val logger = getLogger()
 
-    private val pluginNames: Map<String, Holder<*>>
+    private val pluginsMap: SortedMap<String, Holder<*>>
 
-    val plugins: SortedSet<Holder<*>>
+    val plugins: Collection<Holder<*>> get() = pluginsMap.values
 
-    private val pluginsExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val loaderThread: ExecutorService = Executors.newSingleThreadExecutor()
 
     private val watchService = FileSystems.getDefault().newWatchService()
 
     private val settingsFileName = "settings.${settingsReadWriter.fileExtension}"
 
     init {
-        val holders = findPlugins(pluginsClassloader).map { Holder(it) }
-        plugins = holders.mapTo(TreeSet()) { it }
-        pluginNames = holders.associateBy { it.name }
+        pluginsMap = findPlugins().associateTo(TreeMap()) { it.name to Holder(it) }
+        logger.debug { "Plugins found: ${pluginsMap.keys}" }
 
-        pluginsExecutor.submit {
-            holders.forEach { it.init() }
+        loaderThread.submit {
+            plugins.forEach { it.init() }
             Thread {
                 while (true) {
                     val key: WatchKey
@@ -52,14 +50,13 @@ class PluginLoader(
                         return@Thread
                     }
                     val dir = key.watchable() as Path
-                    key.pollEvents().forEach { weRaw ->
-                        @Suppress("UNCHECKED_CAST")
-                        val we = weRaw as WatchEvent<Path>
-                        val ctx = we.context() ?: return@forEach
-                        if (ctx.fileName.toString() == settingsFileName) {
-                            pluginsExecutor.submit {
-                                pluginNames[dir.fileName.toString()]?.settingsFileChanged()
+                    for (event in key.pollEvents()) {
+                        val file = event.context() as Path? ?: continue
+                        if (file.fileName.toString() == settingsFileName) {
+                            loaderThread.submit {
+                                pluginsMap[dir.fileName.toString()]?.settingsFileChanged()
                             }
+                            break
                         }
                     }
                     key.reset()
@@ -68,27 +65,22 @@ class PluginLoader(
         }
     }
 
-    private fun findPlugins(classLoader: ClassLoader): Collection<Plugin<*>> {
-        val sl = ServiceLoader.load(Plugin::class.java, classLoader)
-        val ps = sl.toList()
-        logger.debug("Plugins found: ${ps.joinToString { it.name }}")
-        return ps
+    private fun findPlugins(): Collection<Plugin<*>> {
+        return ServiceLoader.load(Plugin::class.java, javaClass.classLoader).toList()
     }
 
     override fun close() {
         logger.debug("Closing...")
         watchService.close()
-        pluginsExecutor.submit {
-            pluginNames.values.forEach { it.destroy() }
+        loaderThread.submit {
+            plugins.forEach { it.destroy() }
         }
-        pluginsExecutor.shutdown()
-        pluginsExecutor.awaitTermination(5L, TimeUnit.SECONDS)
+        loaderThread.shutdown()
+        loaderThread.awaitTermination(5L, TimeUnit.SECONDS)
         logger.debug("Closed")
     }
 
-    inner class Holder<T : PluginSettings>(
-            private val plugin: Plugin<T>
-    ) : Comparable<Holder<T>> {
+    inner class Holder<T : PluginSettings>(private val plugin: Plugin<T>) {
 
         private val logger = getLogger("Holder($name)")
 
@@ -102,6 +94,8 @@ class PluginLoader(
 
         private lateinit var settings: T
 
+        val name: String get() = plugin.name
+
         val ctx = PluginContext(directory, settingsFile)
 
         init {
@@ -112,8 +106,6 @@ class PluginLoader(
                     StandardWatchEventKinds.ENTRY_DELETE
             )
         }
-
-        val name: String get() = plugin.name
 
         internal fun init() {
             createSettings()
@@ -234,7 +226,7 @@ class PluginLoader(
         private var isRunning = false
 
         fun setIsRunning(value: Boolean) {
-            pluginsExecutor.submit {
+            loaderThread.submit {
                 if (value == isRunning) return@submit
                 settings.enabled = value
                 if (value) {
@@ -250,13 +242,5 @@ class PluginLoader(
         private val _isRunningChanged = BehaviorSubject.createDefault(false)
 
         val isRunningChanged: Observable<Boolean> = _isRunningChanged
-
-        override fun compareTo(other: Holder<T>): Int {
-            return name.compareTo(other.name)
-        }
-
-        override fun toString(): String {
-            return name
-        }
     }
 }

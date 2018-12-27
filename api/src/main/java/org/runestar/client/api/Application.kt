@@ -135,7 +135,7 @@ object Application : AutoCloseable {
         val profileDir = PROFILES_DIR_PATH.resolve(profile)
         Files.createDirectories(profileDir)
 
-        val pl = PluginLoader(javaClass.classLoader, profileDir, PropertiesFileReadWriter, Game.executor)
+        val pl = PluginLoader(profileDir, PropertiesFileReadWriter, Game.executor)
         pluginLoader = pl
         frame.sidePanel.clear()
         frame.topBar.clear()
