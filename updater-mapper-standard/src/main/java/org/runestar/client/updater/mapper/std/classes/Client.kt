@@ -177,7 +177,7 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(150)
     @DependsOn(insertMenuItem::class)
-    class menuBooleanArray : OrderMapper.InMethod.Field(insertMenuItem::class, 0) {
+    class menuShiftClick : OrderMapper.InMethod.Field(insertMenuItem::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BooleanArray::class.type }
     }
 
@@ -3454,6 +3454,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.fieldId != field<clickedWidget>().id && it.fieldId != field<clickedWidgetParent>().id }
     }
 
+    @MethodParameters("widgets", "parentId", "a", "b", "c", "d", "x", "y")
     @DependsOn(Widget::class)
     class updateWidgetGroup : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

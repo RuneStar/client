@@ -13,6 +13,7 @@ interface MenuOption {
     val argument2: Int
     val targetName: String
     val action: String
+    val shiftClick: Boolean
 
     private data class Base(
             override val opcode: Int,
@@ -20,13 +21,14 @@ interface MenuOption {
             override val argument1: Int,
             override val argument2: Int,
             override val targetName: String,
-            override val action: String
+            override val action: String,
+            override val shiftClick: Boolean
     ) : MenuOption
 
     companion object {
 
-        fun of(opcode: Int, argument0: Int, argument1: Int, argument2: Int, targetName: String, action: String): MenuOption {
-            val base = MenuOption.Base(opcode, argument0, argument1, argument2, targetName, action)
+        fun of(opcode: Int, argument0: Int, argument1: Int, argument2: Int, targetName: String, action: String, shiftClick: Boolean): MenuOption {
+            val base = MenuOption.Base(opcode, argument0, argument1, argument2, targetName, action, shiftClick)
             return when(opcode) {
                 // todo: subclasses
                 OBJECT_ACTION_0, OBJECT_ACTION_1, OBJECT_ACTION_2, OBJECT_ACTION_3, OBJECT_ACTION_4 ->

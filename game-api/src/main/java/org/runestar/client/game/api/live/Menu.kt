@@ -23,12 +23,15 @@ object Menu {
 
     val shape get() = Rectangle(x, y, width, height)
 
-    val optionsCount get() = CLIENT.menuOptionsCount
+    var optionsCount: Int
+        get() = CLIENT.menuOptionsCount
+        set(value) { CLIENT.menuOptionsCount = value }
 
     val actions: Observable<MenuOption> = XClient.menuAction.exit.map {
         MenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
-                it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String
+                it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String,
+                false
         )
     }
 
@@ -46,22 +49,31 @@ object Menu {
     val options: List<MenuOption> get() = List(optionsCount) { getOption(it) }
 
     fun getOption(index: Int): MenuOption {
-        val i = optionsCount - index - 1
-        require(i >= 0)
         return MenuOption.of(
-                CLIENT.menuOpcodes[i],
-                CLIENT.menuArguments0[i],
-                CLIENT.menuArguments1[i],
-                CLIENT.menuArguments2[i],
-                checkNotNull(CLIENT.menuTargetNames[i]),
-                checkNotNull(CLIENT.menuActions[i])
+                CLIENT.menuOpcodes[index],
+                CLIENT.menuArguments0[index],
+                CLIENT.menuArguments1[index],
+                CLIENT.menuArguments2[index],
+                checkNotNull(CLIENT.menuTargetNames[index]),
+                checkNotNull(CLIENT.menuActions[index]),
+                CLIENT.menuShiftClick[index]
         )
+    }
+
+    fun setOption(index: Int, menuOption: MenuOption) {
+        CLIENT.menuActions[index] = menuOption.action
+        CLIENT.menuArguments0[index] = menuOption.argument0
+        CLIENT.menuArguments1[index] = menuOption.argument1
+        CLIENT.menuArguments2[index] = menuOption.argument2
+        CLIENT.menuOpcodes[index] = menuOption.opcode
+        CLIENT.menuShiftClick[index] = menuOption.shiftClick
+        CLIENT.menuTargetNames[index] = menuOption.targetName
     }
 
     val optionAdditions: Observable<MenuOption> = XClient.insertMenuItem.exit.map {
         MenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[4] as Int, it.arguments[5] as Int,
-                it.arguments[1] as String, it.arguments[0] as String
+                it.arguments[1] as String, it.arguments[0] as String, it.arguments[6] as Boolean
         )
     }
 
