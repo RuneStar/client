@@ -33,7 +33,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
 
     private val loginTimer: Stopwatch = Stopwatch.createUnstarted()
 
-    override fun start() {
+    override fun onStart() {
         add(XClient.drawWidgetsLoggedIn.enter.subscribe {
             val w = getReportWidget() ?: return@subscribe
             w.text = when (settings.style) {
@@ -48,8 +48,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
         }
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         loginTimer.reset()
         val w = getReportWidget() ?: return
         w.text = DEFAULT_TEXT

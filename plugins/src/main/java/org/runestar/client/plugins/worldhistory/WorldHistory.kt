@@ -15,7 +15,7 @@ class WorldHistory : DisposablePlugin<PluginSettings>() {
 
     private val history: Queue<Int> = EvictingQueue.create(14)
 
-    override fun start() {
+    override fun onStart() {
         add(Worlds.enter.subscribe {
             history.add(it.id - 300)
             val msg = "World History: ${history.reversed().joinToString()}"
@@ -23,8 +23,7 @@ class WorldHistory : DisposablePlugin<PluginSettings>() {
         })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         history.clear()
     }
 }

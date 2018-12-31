@@ -27,7 +27,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     private var loadedFrozenActors: List<Pair<Actor, FreezeState>> = ArrayList()
 
-    override fun start() {
+    override fun onStart() {
         add(Game.ticks.subscribe { onTick() })
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }

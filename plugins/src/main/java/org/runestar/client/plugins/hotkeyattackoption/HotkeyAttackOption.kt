@@ -14,7 +14,7 @@ class HotkeyAttackOption : DisposablePlugin<HotkeyAttackOption.Settings>() {
 
     override val name = "Hotkey Attack Option"
 
-    override fun start() {
+    override fun onStart() {
         Keyboard.strokes
                 .filter(settings.keyStroke.get()::equals)
                 .delay { XClient.doCycle.enter }

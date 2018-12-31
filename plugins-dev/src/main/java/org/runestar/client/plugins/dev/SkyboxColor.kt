@@ -11,7 +11,7 @@ class SkyboxColor : DisposablePlugin<SkyboxColor.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(XScene.draw.enter.subscribe {
             CLIENT.Rasterizer2D_fillRectangle(
                     CLIENT.viewportOffsetX, CLIENT.viewportOffsetY,

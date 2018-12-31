@@ -11,7 +11,7 @@ class PinOverheadText : DisposablePlugin<PinOverheadText.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(XClient.doCycle.exit.subscribe {
             Players.forEach { player ->
                 if (!settings.autoChatOnly || player.accessor.isAutoChatting) {

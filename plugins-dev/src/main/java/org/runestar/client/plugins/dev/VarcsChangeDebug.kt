@@ -9,7 +9,7 @@ class VarcsChangeDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(XVarcs.setInt.enter.subscribe {
             val index = it.arguments[0] as Int
             val newValue = it.arguments[1] as Int

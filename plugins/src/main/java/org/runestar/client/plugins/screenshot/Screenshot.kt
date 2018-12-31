@@ -40,7 +40,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     private val button = Button()
 
-    override fun start() {
+    override fun onStart() {
         timeFormatter = createTimeFormatter()
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
@@ -55,8 +55,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         Application.frame.topBar.add(button)
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         Application.frame.topBar.remove(button)
     }
 

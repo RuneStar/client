@@ -27,7 +27,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     val unblockedIds = HashSet<Int>()
     val blockRegexes = ArrayList<Regex>()
 
-    override fun start() {
+    override fun onStart() {
         settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
 
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
@@ -100,8 +100,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         }
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         piles.clear()
         blockedIds.clear()
         unblockedIds.clear()

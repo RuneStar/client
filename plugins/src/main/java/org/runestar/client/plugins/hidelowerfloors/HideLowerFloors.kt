@@ -11,12 +11,11 @@ class HideLowerFloors : DisposablePlugin<PluginSettings>() {
 
     override val name = "Hide Lower Floors"
 
-    override fun start() {
+    override fun onStart() {
         add(Game.ticks.subscribe { CLIENT.scene.minPlane = Game.plane })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         CLIENT.scene.minPlane = 0
     }
 }

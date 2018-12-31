@@ -28,7 +28,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
 
     private val veins: MutableSet<SceneElement.Boundary> = LinkedHashSet()
 
-    override fun start() {
+    override fun onStart() {
         add(SceneElements.clears.subscribe { veins.clear() })
         add(SceneElements.Boundary.additions.filter(::isVein).subscribe { veins.add(it) })
         add(SceneElements.Boundary.removals.filter(::isVein).subscribe { veins.remove(it) })
@@ -37,8 +37,7 @@ class MotherlodeMine : DisposablePlugin<PluginSettings>() {
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         veins.clear()
     }
 

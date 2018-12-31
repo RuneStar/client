@@ -12,7 +12,7 @@ class ChatTimestamps : DisposablePlugin<ChatTimestamps.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(Chat.messageAdditions.subscribe { msg ->
             msg.text = stamp(msg.text)
         })

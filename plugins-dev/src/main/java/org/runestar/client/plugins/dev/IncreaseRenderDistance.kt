@@ -9,7 +9,7 @@ class IncreaseRenderDistance : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(XScene.draw.enter.subscribe {
             it.skipBody = true
             val scene = it.instance

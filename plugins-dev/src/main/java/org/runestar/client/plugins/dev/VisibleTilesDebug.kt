@@ -13,7 +13,7 @@ class VisibleTilesDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         val stroke2 = BasicStroke(2f)
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.RED

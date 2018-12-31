@@ -23,7 +23,7 @@ class Wintertodt : DisposablePlugin<PluginSettings>() {
 
     private var fallingSnow: MutableMap<Projectile, SceneTile> = LinkedHashMap()
 
-    override fun start() {
+    override fun onStart() {
         add(
                 Projectiles.destinationChanges
                         .filter { (proj, _) -> proj.isFallingSnow() }

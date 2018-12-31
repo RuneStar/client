@@ -13,7 +13,7 @@ class HotkeyRenderSelf : DisposablePlugin<HotkeyRenderSelf.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         Keyboard.strokes
                 .filter(settings.keyStroke.get()::equals)
                 .delay { XClient.doCycle.enter }

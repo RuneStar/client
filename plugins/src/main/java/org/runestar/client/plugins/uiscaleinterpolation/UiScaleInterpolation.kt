@@ -12,7 +12,7 @@ class UiScaleInterpolation : DisposablePlugin<UiScaleInterpolation.Settings>() {
 
     override val name = "UI Scale Interpolation"
 
-    override fun start() {
+    override fun onStart() {
         val interpolationValue = settings.interpolation.renderingHintValue
         add(XRasterProvider.drawFull0.enter.subscribe { e ->
             val g = e.arguments[0] as Graphics2D

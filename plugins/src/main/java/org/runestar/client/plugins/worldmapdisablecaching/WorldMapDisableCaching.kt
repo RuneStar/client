@@ -13,7 +13,7 @@ class WorldMapDisableCaching : DisposablePlugin<PluginSettings>() {
 
     override val name = "World Map Disable Caching"
 
-    override fun start() {
+    override fun onStart() {
         add(XClient.closeWidgetGroup.exit.subscribe {
             val wgp = it.arguments[0] as XWidgetGroupParent
             if (wgp.group == WidgetGroupId.WORLD_MAP) {

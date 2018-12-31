@@ -22,7 +22,7 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
 
     private var spritesStartIndex = -1
 
-    override fun start() {
+    override fun onStart() {
         if (spritesStartIndex == -1) {
             expandModIcons()
             addSprites()

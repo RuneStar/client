@@ -18,7 +18,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
 
     private val objs: MutableSet<SceneElement> = LinkedHashSet()
 
-    override fun start() {
+    override fun onStart() {
         add(SceneElements.clears.subscribe { objs.clear() })
         add(SceneElements.removals.subscribe { objs.remove(it) })
         add(SceneElements.additions.filter(SceneElement::isInteractable).subscribe { objs.add(it) })
@@ -36,8 +36,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
         })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         objs.clear()
     }
 

@@ -27,7 +27,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
 
     // todo : color tags
 
-    override fun start() {
+    override fun onStart() {
         val outlineColor = settings.outlineColor.get()
         val fillColor = settings.fillColor.get()
         val fontColor = settings.fontColor.get()

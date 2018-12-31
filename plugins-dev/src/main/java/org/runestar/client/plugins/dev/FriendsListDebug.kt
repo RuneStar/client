@@ -11,7 +11,7 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.WHITE
             g.font = Fonts.PLAIN_11

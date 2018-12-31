@@ -14,7 +14,7 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             val mousePt = Mouse.location
             val fromViewportPos = Projections.viewport.toGame(mousePt)

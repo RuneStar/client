@@ -8,7 +8,7 @@ class HitSplatsX10 : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(XHitSplatDefinition.getString.exit.subscribe {
             if (it.returned != "0") {
                 it.returned += '0'

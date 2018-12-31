@@ -11,7 +11,7 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
 
     override val name = "Flat Shading"
 
-    override fun start() {
+    override fun onStart() {
         add(XModelData.toModel.exit.subscribe {
             val model = it.returned
             model.faceColors3.fill(-1)
@@ -19,8 +19,7 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
         clearModelCache()
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         clearModelCache()
     }
 

@@ -15,12 +15,11 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
 
     override val name = "Chat Colors"
 
-    override fun start() {
+    override fun onStart() {
         add(Chat.messageAdditions.startWith(Chat).subscribe { colorMessage(it) })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         Chat.forEach { decolorMessage(it) }
     }
 

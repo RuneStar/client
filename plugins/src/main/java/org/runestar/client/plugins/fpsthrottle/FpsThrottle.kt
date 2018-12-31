@@ -11,7 +11,7 @@ class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
 
     override val name = "FPS Throttle"
 
-    override fun start() {
+    override fun onStart() {
         if (settings.sleepTimeMs <= 0) return
         add(XRasterProvider.drawFull0.exit.subscribe {
             if (!CLIENT.canvas.isFocusOwner || !settings.onlyWhenUnfocused) {

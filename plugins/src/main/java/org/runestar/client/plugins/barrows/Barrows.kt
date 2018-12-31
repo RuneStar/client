@@ -21,15 +21,14 @@ class Barrows : DisposablePlugin<Barrows.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.filter { inBarrowsAboveGround() }.subscribe(::onRepaintAboveGround))
         if (settings.drawMinimap) {
             add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { LiveMinimap.isDrawn = true })
         }
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         if (settings.drawMinimap && inBarrowsUnderground() && LiveMinimap.isDrawn) {
             LiveMinimap.isDrawn = false
         }

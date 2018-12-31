@@ -15,7 +15,7 @@ class WalkMovementTest : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         val stroke = BasicStroke(2.0f)
         add(LiveCanvas.repaints.subscribe { g ->
             val mousePt = Mouse.location

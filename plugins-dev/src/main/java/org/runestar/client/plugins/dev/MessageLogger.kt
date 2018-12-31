@@ -8,7 +8,7 @@ class MessageLogger : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(Chat.messageAdditions.subscribe { m ->
             logger.info(m.toString())
         })

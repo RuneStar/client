@@ -13,7 +13,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
 
             g.font = Fonts.PLAIN_11

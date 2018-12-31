@@ -14,7 +14,7 @@ class CollapseMenuEntries : DisposablePlugin<CollapseMenuEntries.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         XClient.updateWidgetGroup.exit
                 .filter { it.arguments[1] == -1 && it.arguments[0] == CLIENT.widgets[CLIENT.rootWidgetGroup] }
                 .subscribe { collapse() }

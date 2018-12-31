@@ -15,7 +15,7 @@ class MinimapDots : DisposablePlugin<MinimapDots.Settings>() {
 
     private var originalDots: Array<XSprite>? = null
 
-    override fun start() {
+    override fun onStart() {
         originalDots = CLIENT.mapDotSprites.clone()
         val dots = CLIENT.mapDotSprites
         if (settings.items.enabled) {
@@ -38,9 +38,7 @@ class MinimapDots : DisposablePlugin<MinimapDots.Settings>() {
         }
     }
 
-    override fun stop() {
-        super.stop()
-
+    override fun onStop() {
         CLIENT.mapDotSprites = originalDots
     }
 

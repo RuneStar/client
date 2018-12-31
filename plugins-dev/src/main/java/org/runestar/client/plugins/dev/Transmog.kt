@@ -11,15 +11,13 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         add(Game.ticks.subscribe {
             Players.local?.accessor?.let { transmog(it, settings.npcId) }
         })
     }
 
-    override fun stop() {
-        super.stop()
-
+    override fun onStop() {
         Players.local?.appearance?.accessor?.npcTransformId = -1
     }
 

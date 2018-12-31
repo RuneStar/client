@@ -14,7 +14,7 @@ class ColorFilter : DisposablePlugin<ColorFilter.Settings>() {
 
     override val name = "Color Filter"
 
-    override fun start() {
+    override fun onStart() {
         add(XRasterProvider.drawFull0.enter.filter { Game.state == GameState.LOGGED_IN }.subscribe {
             val rl = settings.redBrightness
             val gl = settings.greenBrightness

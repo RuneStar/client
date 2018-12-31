@@ -13,7 +13,7 @@ class ChatHistory : DisposablePlugin<PluginSettings>() {
 
     override val name = "Chat History"
 
-    override fun start() {
+    override fun onStart() {
         add(XIterableNodeHashTable.clear.enter.subscribe {
             if (it.instance == CLIENT.messages_hashTable) it.skipBody = true
         })

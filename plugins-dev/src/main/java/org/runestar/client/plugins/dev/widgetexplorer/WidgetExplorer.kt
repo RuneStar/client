@@ -20,7 +20,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
     @Volatile
     private var frame: ExplorerFrame? = null
 
-    override fun start() {
+    override fun onStart() {
         SwingUtilities.invokeAndWait {
             frame = ExplorerFrame()
         }
@@ -53,8 +53,7 @@ class WidgetExplorer : DisposablePlugin<PluginSettings>() {
         })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         SwingUtilities.invokeLater {
             frame?.dispose()
         }

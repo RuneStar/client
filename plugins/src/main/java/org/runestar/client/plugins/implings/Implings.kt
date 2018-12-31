@@ -27,7 +27,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     private var implings: List<Npc> = emptyList()
 
-    override fun start() {
+    override fun onStart() {
         implingIds = settings.ids()
         add(Game.ticks.filter { isLoggedIn() }.subscribe { onTick() })
         add(LiveCanvas.repaints.filter { isLoggedIn() }.subscribe(::onRepaint))
@@ -36,8 +36,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
         }
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         implings = emptyList()
         if (settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
             LiveMinimap.isDrawn = false

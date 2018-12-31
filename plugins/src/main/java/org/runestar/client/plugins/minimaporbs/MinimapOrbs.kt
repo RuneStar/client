@@ -30,7 +30,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     private var specTicks = -1
     private var hpTickLimit = HP_TICKS
 
-    override fun start() {
+    override fun onStart() {
         add(Game.stateChanges.subscribe { state ->
             if (state == GameState.LOGGING_IN || state == GameState.CHANGING_WORLD) {
                 specTicks = -1

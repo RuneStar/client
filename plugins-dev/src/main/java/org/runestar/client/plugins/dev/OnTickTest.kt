@@ -16,7 +16,7 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
     var tiles = ArrayList<SceneTile>()
     var tick = 0
 
-    override fun start() {
+    override fun onStart() {
         add(Game.ticks.subscribe {
             tiles = ArrayList()
             Players.mapTo(tiles) { it.location }

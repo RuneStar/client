@@ -13,7 +13,7 @@ class ProjectilePathTest : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             val me = Players.local?.location ?: return@subscribe
             g.color = Color.GREEN

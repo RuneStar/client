@@ -15,7 +15,7 @@ class SmoothAnimations : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
 
         add(Observable.merge(XPlayer.getModel.exit, XNpc.getModel.exit).subscribe(::actorGetModelExit))
         add(Observable.merge(XPlayer.getModel.enter, XNpc.getModel.enter).subscribe(::actorGetModelEnter))

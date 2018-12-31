@@ -14,7 +14,7 @@ class TileHeightDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = Fonts.PLAIN_12
             g.color = Color.WHITE

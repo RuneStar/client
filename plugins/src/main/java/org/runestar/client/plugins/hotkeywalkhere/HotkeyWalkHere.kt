@@ -14,7 +14,7 @@ class HotkeyWalkHere : DisposablePlugin<HotkeyWalkHere.Settings>() {
 
     override val name = "Hotkey Walk-Here"
 
-    override fun start() {
+    override fun onStart() {
         add(Menu.optionAdditions.filter { Keyboard.isKeyPressed(settings.keyCode) }.subscribe(::onMenuOptionAdded))
     }
 

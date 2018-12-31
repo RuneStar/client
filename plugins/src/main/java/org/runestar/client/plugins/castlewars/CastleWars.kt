@@ -34,7 +34,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
 
     private val gameTimerSeconds: Stopwatch = Stopwatch.createUnstarted()
 
-    override fun start() {
+    override fun onStart() {
         add(XNpcDefinition.init.exit.subscribe { onNpcDefinitionInit(it.instance) })
         resetNpcDefinitions()
 
@@ -91,8 +91,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         w.text = "%d:%02d".format(minutes, seconds)
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         resetNpcDefinitions()
     }
 

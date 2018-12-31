@@ -9,7 +9,7 @@ class ReduceVisibility : DisposablePlugin<ReduceVisibility.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         adjustVisibilityMap()
         add(XClient.Scene_buildVisiblityMap.exit.subscribe { adjustVisibilityMap() })
     }

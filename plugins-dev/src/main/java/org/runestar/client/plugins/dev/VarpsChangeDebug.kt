@@ -16,7 +16,7 @@ class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
     @Volatile
     var old = varps.copyOf()
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             val curr = varps.copyOf()
             for (i in old.indices) {

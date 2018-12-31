@@ -1,6 +1,5 @@
 package org.runestar.client.api.util
 
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
 import io.reactivex.internal.disposables.ListCompositeDisposable
@@ -18,10 +17,18 @@ abstract class DisposablePlugin<T : PluginSettings>(
 
     constructor() : this(ListCompositeDisposable())
 
-    @OverridingMethodsMustInvokeSuper
-    override fun stop() {
-        listCompositeDisposable.clear()
+    final override fun start() {
+        onStart()
     }
+
+    final override fun stop() {
+        listCompositeDisposable.clear()
+        onStop()
+    }
+
+    protected open fun onStart() {}
+
+    protected open fun onStop() {}
 
     protected fun Disposable.add() {
         add(this)

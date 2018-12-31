@@ -16,7 +16,7 @@ class CensorText : DisposablePlugin<CensorText.Settings>() {
 
     private val cache = CyclicCache<String, String>()
 
-    override fun start() {
+    override fun onStart() {
         val drawings = Observable.mergeArray(
                 XAbstractFont.lineWidth.enter,
                 XAbstractFont.draw.enter,
@@ -33,8 +33,7 @@ class CensorText : DisposablePlugin<CensorText.Settings>() {
         add(Game.ticks.subscribe { cache.cycle() })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         cache.clear()
     }
 

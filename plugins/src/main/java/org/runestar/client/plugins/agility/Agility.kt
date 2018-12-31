@@ -19,7 +19,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
 
     private val obstacles: MutableSet<SceneElement> = LinkedHashSet()
 
-    override fun start() {
+    override fun onStart() {
         add(XScene.clear.exit.subscribe { obstacles.clear() })
         add(SceneElements.Object.additions.filter(::isObstacle).subscribe { obstacles.add(it) })
         add(SceneElements.Object.removals.filter(::isObstacle).subscribe { obstacles.remove(it) })
@@ -28,8 +28,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         obstacles.clear()
     }
 

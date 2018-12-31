@@ -15,7 +15,7 @@ class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
 
     private var dragDurationBuffer = 0
 
-    override fun start() {
+    override fun onStart() {
         add(XClient.doCycle.enter.filter { Keyboard.isKeyPressed(settings.keyCode) }.subscribe { onCycle() })
     }
 

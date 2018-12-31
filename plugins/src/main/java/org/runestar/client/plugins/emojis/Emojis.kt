@@ -29,7 +29,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
 
     private var spritesStartIndex = -1
 
-    override fun start() {
+    override fun onStart() {
         val ids = readEmojiIds()
         shortCodes = ids.withIndex().associate { it.value.shortCode to it.index }
         if (spritesStartIndex == -1) {
@@ -52,8 +52,7 @@ class Emojis : DisposablePlugin<PluginSettings>() {
         add(Game.ticks.subscribe { cache.cycle() })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         CLIENT.abstractFont_modIconSprites.fill(
                 null,
                 spritesStartIndex,

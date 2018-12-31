@@ -11,15 +11,14 @@ class GroundColor : DisposablePlugin<GroundColor.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         CLIENT.underlayDefinition_cached.clear()
         add(XUnderlayDefinition.init.enter.subscribe {
             it.instance.rgb = settings.color.get().rgb
         })
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         CLIENT.underlayDefinition_cached.clear()
     }
 

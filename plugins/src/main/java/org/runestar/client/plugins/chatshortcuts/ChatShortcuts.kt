@@ -13,7 +13,7 @@ class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
 
     override val defaultSettings = Settings()
 
-    override fun start() {
+    override fun onStart() {
         Keyboard.strokes
                 .filter(settings.clearAll.get()::equals)
                 .delay { XClient.doCycle.enter }

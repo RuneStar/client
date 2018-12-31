@@ -9,7 +9,7 @@ class EvictingHashTableDebug : DisposablePlugin<PluginSettings>() {
 
     override val defaultSettings = PluginSettings()
 
-    override fun start() {
+    override fun onStart() {
         add(XEvictingDualNodeHashTable.get.exit.filter { it.returned == null && it.instance.remainingCapacity == 0 }.subscribe {
             val stack = Throwable().stackTrace.asList()
                     .drop(7)

@@ -14,7 +14,7 @@ class Fps : DisposablePlugin<PluginSettings>() {
 
     override val name = "FPS"
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = Color.YELLOW
             g.font = Fonts.PLAIN_12

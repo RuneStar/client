@@ -13,7 +13,7 @@ class SelectionDebug : DisposablePlugin<PluginSettings>() {
 
     val font = Font(Font.SANS_SERIF, Font.BOLD, 15)
 
-    override fun start() {
+    override fun onStart() {
         add(LiveCanvas.repaints.subscribe { g ->
             val x = 5
             var y = 40

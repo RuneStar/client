@@ -17,7 +17,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
 
     override val name = "Chat Highlight"
 
-    override fun start() {
+    override fun onStart() {
         add(Chat.messageAdditions.subscribe { highlight(it) })
     }
 
