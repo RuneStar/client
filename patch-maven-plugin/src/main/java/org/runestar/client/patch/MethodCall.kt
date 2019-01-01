@@ -1,20 +1,23 @@
 package org.runestar.client.patch
 
 import net.bytebuddy.description.method.MethodDescription
-import net.bytebuddy.description.type.TypeDescription
 import net.bytebuddy.dynamic.scaffold.InstrumentedType
 import net.bytebuddy.implementation.Implementation
 import net.bytebuddy.implementation.MethodCall
 import net.bytebuddy.implementation.bytecode.constant.DefaultValue
 
 internal fun MethodCall.withAllArgumentsThenDefaultValues(): MethodCall {
-    return with(object : MethodCall.ArgumentLoader.Factory {
+    return with(object : MethodCall.ArgumentLoader.Factory, MethodCall.ArgumentLoader.ArgumentProvider {
 
-        override fun prepare(instrumentedType: InstrumentedType): InstrumentedType = instrumentedType
+        override fun make(implementationTarget: Implementation.Target): MethodCall.ArgumentLoader.ArgumentProvider {
+            return this
+        }
 
-        override fun make(
-                implementationTarget: Implementation.Target,
-                instrumentedType: TypeDescription,
+        override fun prepare(instrumentedType: InstrumentedType): InstrumentedType {
+            return instrumentedType
+        }
+
+        override fun resolve(
                 instrumentedMethod: MethodDescription,
                 invokedMethod: MethodDescription
         ): MutableList<MethodCall.ArgumentLoader> {
