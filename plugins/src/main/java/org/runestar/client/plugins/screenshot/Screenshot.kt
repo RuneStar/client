@@ -80,7 +80,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
             Files.createDirectories(path)
             ImageIO.write(img, IMAGE_FILE_EXTENSION, path.toFile())
             if (settings.trayNotify) {
-                Application.trayIcon.displayMessage(
+                Application.trayIcon?.displayMessage(
                         "Screenshot Taken",
                         fileName,
                         TrayIcon.MessageType.NONE

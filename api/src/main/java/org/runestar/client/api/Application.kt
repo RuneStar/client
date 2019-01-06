@@ -25,8 +25,8 @@ object Application : AutoCloseable {
 
     private val VALID_PROFILE_REGEX = "[a-zA-Z0-9 _-]+".toRegex()
 
-    val trayIcon: TrayIcon = TrayIcon(ICON, TITLE).apply {
-        isImageAutoSize = true
+    val trayIcon: TrayIcon? = safeTrayIcon(ICON, TITLE).apply {
+        this?.isImageAutoSize = true
     }
 
     @Volatile
@@ -144,11 +144,11 @@ object Application : AutoCloseable {
     private fun setTitle() {
         val title = rsn?.let { "$TITLE - $it" } ?: TITLE
         frame.title = title
-        trayIcon.toolTip = title
+        trayIcon?.toolTip = title
     }
 
     private fun buildTray() {
-        trayIcon.apply {
+        trayIcon?.apply {
             popupMenu = PopupMenu(TITLE).apply {
                 add(MenuItem("Change profile").apply {
                     addActionListener { changeProfile() }
@@ -167,12 +167,12 @@ object Application : AutoCloseable {
             })
         }
 
-        systemTray?.add(trayIcon)
+        trayIcon?.let { systemTray?.add(it) }
     }
 
     override fun close() {
         check(started)
         pluginLoader?.close()
-        systemTray?.remove(trayIcon)
+        trayIcon?.let { systemTray?.remove(it) }
     }
 }

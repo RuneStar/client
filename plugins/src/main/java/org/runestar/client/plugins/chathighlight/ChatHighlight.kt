@@ -26,7 +26,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
         settings.highlights.forEach { highlight ->
             txt = txt.replace(highlight.regex.get()) { matchResult ->
                 if (highlight.trayNotify) {
-                    Application.trayIcon.displayMessage(
+                    Application.trayIcon?.displayMessage(
                             msg.sender,
                             msg.text,
                             TrayIcon.MessageType.NONE

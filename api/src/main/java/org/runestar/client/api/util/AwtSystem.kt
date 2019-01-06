@@ -5,10 +5,7 @@ package org.runestar.client.api.util
 import org.kxtra.slf4j.getLogger
 import org.kxtra.slf4j.info
 import org.kxtra.slf4j.warn
-import java.awt.Desktop
-import java.awt.SystemTray
-import java.awt.Taskbar
-import java.awt.Window
+import java.awt.*
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -22,6 +19,8 @@ private inline fun <T> safe(f: () -> T): T? {
         null
     }
 }
+
+fun safeTrayIcon(image: Image, tooltip: String) = safe { TrayIcon(image, tooltip) }
 
 val taskbar: Taskbar? get() = safe { Taskbar.getTaskbar() }
 
