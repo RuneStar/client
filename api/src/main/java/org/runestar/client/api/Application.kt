@@ -67,14 +67,15 @@ object Application : AutoCloseable {
     }
 
     private fun waitForTitle() {
+        val tb = taskbar
         XClient.doCycle.exit
                 .map { ((CLIENT.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
                 .blockingSubscribeBy(
-                        onNext = { taskbar?.safeSetWindowProgressValue(frame, it) },
+                        onNext = { tb?.safeSetWindowProgressValue(frame, it) },
                         onComplete = {
-                            taskbar?.safeSetWindowProgressState(frame, Taskbar.State.OFF)
-                            taskbar?.safeRequestWindowUserAttention(frame)
+                            tb?.safeSetWindowProgressState(frame, Taskbar.State.OFF)
+                            tb?.safeRequestWindowUserAttention(frame)
                         }
                 )
     }
