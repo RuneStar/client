@@ -2,29 +2,42 @@
 
 package org.runestar.client.api.util
 
+import org.kxtra.slf4j.getLogger
 import org.kxtra.slf4j.info
 import org.kxtra.slf4j.warn
-import org.kxtra.slf4j.getLogger
 import java.awt.Desktop
 import java.awt.SystemTray
+import java.awt.Taskbar
+import java.awt.Window
 import java.nio.file.Files
 import java.nio.file.Path
 
 private val logger = getLogger()
 
-val desktop: Desktop? get() {
-    return if (Desktop.isDesktopSupported()) {
-        try {
-            Desktop.getDesktop()
-        } catch (e: Exception) {
-            logger.warn(e) { "Error getting desktop" }
-            null
-        }
-    } else {
-        logger.warn { "Desktop is unsupported" }
+private inline fun <T> safe(f: () -> T): T? {
+    return try {
+        f()
+    } catch (e: Exception) {
+        logger.warn(e) { "" }
         null
     }
 }
+
+val taskbar: Taskbar? get() = safe { Taskbar.getTaskbar() }
+
+fun Taskbar.safeSetWindowProgressValue(w: Window, value: Int) {
+    safe { setWindowProgressValue(w, value) }
+}
+
+fun Taskbar.safeSetWindowProgressState(w: Window, state: Taskbar.State) {
+    safe { setWindowProgressState(w, state) }
+}
+
+fun Taskbar.safeRequestWindowUserAttention(w: Window) {
+    safe { requestWindowUserAttention(w) }
+}
+
+val desktop: Desktop? get() = safe { Desktop.getDesktop() }
 
 fun Desktop.safeOpen(path: Path) {
     if (isSupported(Desktop.Action.OPEN)) {
@@ -43,16 +56,4 @@ fun Desktop.safeOpen(path: Path) {
     }
 }
 
-val systemTray: SystemTray? get() {
-    return if (SystemTray.isSupported()) {
-        try {
-            SystemTray.getSystemTray()
-        } catch (e: Exception) {
-            logger.warn(e) { "Error getting system tray" }
-            null
-        }
-    } else {
-        logger.warn { "System tray is not supported" }
-        null
-    }
-}
+val systemTray: SystemTray? get() = safe { SystemTray.getSystemTray() }

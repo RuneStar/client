@@ -4,17 +4,13 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.blockingSubscribeBy
 import io.reactivex.rxkotlin.subscribeBy
 import org.kxtra.swing.input.isLeftButton
-import org.runestar.client.api.util.AwtTaskbar
-import org.runestar.client.api.util.systemTray
+import org.runestar.client.api.util.*
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginLoader
-import java.awt.Frame
-import java.awt.MenuItem
-import java.awt.PopupMenu
-import java.awt.TrayIcon
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.nio.file.Files
@@ -75,10 +71,10 @@ object Application : AutoCloseable {
                 .map { ((CLIENT.titleLoadingStage.toDouble() / 150) * 100).toInt() }
                 .takeUntil { it >= 100 }
                 .blockingSubscribeBy(
-                        onNext = { AwtTaskbar.setWindowProgressValue(frame, it) },
+                        onNext = { taskbar?.safeSetWindowProgressValue(frame, it) },
                         onComplete = {
-                            AwtTaskbar.setWindowProgressState(frame, AwtTaskbar.State.OFF)
-                            AwtTaskbar.requestWindowUserAttention(frame)
+                            taskbar?.safeSetWindowProgressState(frame, Taskbar.State.OFF)
+                            taskbar?.safeRequestWindowUserAttention(frame)
                         }
                 )
     }
