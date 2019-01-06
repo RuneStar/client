@@ -36,6 +36,14 @@ fun Taskbar.safeRequestWindowUserAttention(w: Window) {
     safe { requestWindowUserAttention(w) }
 }
 
+var Taskbar.safeMenu: PopupMenu?
+    get() = safe { menu }
+    set(value) { safe { menu = value } }
+
+var Taskbar.safeIconImage: Image?
+    get() = safe { iconImage }
+    set(value) { safe { iconImage = value } }
+
 val desktop: Desktop? get() = safe { Desktop.getDesktop() }
 
 fun Desktop.safeOpen(path: Path) {

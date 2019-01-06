@@ -148,26 +148,32 @@ object Application : AutoCloseable {
     }
 
     private fun buildTray() {
+        val popMenu = PopupMenu(TITLE).apply {
+            add(MenuItem("Change profile").apply {
+                addActionListener { changeProfile() }
+            })
+            add(MenuItem("Toggle side panel").apply {
+                addActionListener {
+                    frame.sidePanel.isVisible = !frame.sidePanel.isVisible
+                    frame.refit()
+                }
+            })
+        }
+
         trayIcon?.apply {
-            popupMenu = PopupMenu(TITLE).apply {
-                add(MenuItem("Change profile").apply {
-                    addActionListener { changeProfile() }
-                })
-                add(MenuItem("Toggle side panel").apply {
-                    addActionListener {
-                        frame.sidePanel.isVisible = !frame.sidePanel.isVisible
-                        frame.refit()
-                    }
-                })
-            }
+            popupMenu = popMenu
             addMouseListener(object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent) {
                     if (e.isLeftButton) frame.state = Frame.NORMAL
                 }
             })
+            systemTray?.add(this)
         }
 
-        trayIcon?.let { systemTray?.add(it) }
+        taskbar?.apply {
+            safeMenu = popMenu
+            safeIconImage = ICON
+        }
     }
 
     override fun close() {
