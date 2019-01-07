@@ -17,15 +17,22 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Consumer;
 
 public final class PublishRelay<T> extends Observable<T> implements Consumer<T> {
 
-    private static final AtomicReferenceFieldUpdater<PublishRelay, PublishDisposable[]> SUBSCRIBERS =
-            AtomicReferenceFieldUpdater.newUpdater(PublishRelay.class, PublishDisposable[].class, "subscribers");
+    private static final VarHandle SUBSCRIBERS;
+    static {
+        try {
+            SUBSCRIBERS = MethodHandles.lookup().findVarHandle(PublishRelay.class, "subscribers", PublishDisposable[].class);
+        } catch (ReflectiveOperationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     /** An empty subscribers array to avoid allocating it all the time. */
     @SuppressWarnings("rawtypes")
