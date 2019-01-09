@@ -11,7 +11,7 @@ import java.nio.file.Path
 object ComputeFrames : Transformer {
 
     override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source, 0)
+        val classNodes = readJar(source)
         val classNames = classNodes.associateBy { it.name }
         writeJar(classNodes, destination) { Writer(classNames) }
     }
