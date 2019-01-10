@@ -1,7 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.kxtra.lang.list.startsWith
-import org.objectweb.asm.Opcodes
+import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -14,7 +13,6 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.extensions.Predicate
 
 @DependsOn(Buffer::class)
 class PacketBuffer : IdentityMapper.Class() {

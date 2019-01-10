@@ -1,6 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.kxtra.lang.list.startsWith
+import org.runestar.client.common.startsWith
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.extensions.and
@@ -11,7 +11,6 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.tree.Instruction2
 
 @DependsOn(HealthBar.definition::class)

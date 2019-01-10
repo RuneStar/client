@@ -1,10 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.kxtra.lang.list.startsWith
+import org.runestar.client.common.startsWith
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.tree.Class2

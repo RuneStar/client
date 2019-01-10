@@ -1,6 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.kxtra.lang.list.startsWith
+import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper

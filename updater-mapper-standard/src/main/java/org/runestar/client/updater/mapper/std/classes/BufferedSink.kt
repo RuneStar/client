@@ -11,7 +11,7 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
-import org.kxtra.lang.list.startsWith
+import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import java.io.IOException

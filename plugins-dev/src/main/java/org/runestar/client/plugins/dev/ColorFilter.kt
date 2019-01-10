@@ -1,6 +1,5 @@
 package org.runestar.client.plugins.dev
 
-import org.kxtra.lang.intarray.replaceEach
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.live.Game
@@ -26,6 +25,10 @@ class ColorFilter : DisposablePlugin<ColorFilter.Settings>() {
                 (r shl 16) + (g shl 8) + b
             }
         })
+    }
+
+    inline fun IntArray.replaceEach(function: (Int) -> Int): IntArray {
+        return apply { for (i in indices) set(i, function(get(i))) }
     }
 
     class Settings(

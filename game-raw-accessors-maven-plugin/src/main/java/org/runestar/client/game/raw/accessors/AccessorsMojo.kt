@@ -7,7 +7,6 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.jetbrains.annotations.NotNull
-import org.kxtra.lang.classloader.loadClassFromDescriptor
 import org.objectweb.asm.Type
 import org.runestar.client.game.raw.base.Accessor
 import org.runestar.client.game.raw.base.MethodExecution

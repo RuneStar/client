@@ -26,8 +26,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kxtra</groupId>
-            <artifactId>kxtra-lang</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
