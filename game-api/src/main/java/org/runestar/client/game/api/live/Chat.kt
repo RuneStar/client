@@ -17,7 +17,7 @@ object Chat : Iterable<Message> {
 
     val messageAdditions: Observable<Message> = XChatChannel.addMessage.exit.map { Message(it.returned) }
 
-    val publicMode get() = PublicChatMode.of(CLIENT.publicChatMode)
+    val publicMode: Int get() = CLIENT.publicChatMode
 
     var typedText: String?
         get() = Game.varcs.getString(VarcStringId.TYPED_TEXT)

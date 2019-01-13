@@ -21,6 +21,7 @@ object LiveMinimap : Minimap {
     override val center: Point get() = when(Game.windowMode) {
         WindowMode.RESIZABLE -> Point(LiveCanvas.shape.width - (RADIUS + PADDING), (RADIUS + PADDING))
         WindowMode.FIXED -> FIXED_CENTER
+        else -> error(Game.windowMode)
     }
 
     override val zoom get() = 0

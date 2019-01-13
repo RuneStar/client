@@ -11,7 +11,11 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.*
+import javax.swing.Box
+import javax.swing.BoxLayout
+import javax.swing.JFrame
+import javax.swing.JOptionPane
+import javax.swing.WindowConstants
 
 class GameFrame internal constructor(
         val applet: Applet
@@ -83,7 +87,7 @@ class GameFrame internal constructor(
     private inner class WindowListener : WindowAdapter() {
 
         override fun windowClosing(e: WindowEvent) {
-            if (CLIENT.gameState <= GameState.TITLE.id || confirmExit()) {
+            if (CLIENT.gameState <= GameState.TITLE || confirmExit()) {
                 isVisible = false
                 Application.close()
                 dispose()
