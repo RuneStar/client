@@ -1,2 +1,3 @@
 -Xmx512m
 -Xms128m
+-XX:TieredStopAtLevel=1
