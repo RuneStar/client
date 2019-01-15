@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.chattimestamps
 
+import org.runestar.client.api.forms.DateTimeFormatterForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.plugins.spi.PluginSettings
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import java.time.Instant
 
 class ChatTimestamps : DisposablePlugin<ChatTimestamps.Settings>() {
 
@@ -19,13 +19,10 @@ class ChatTimestamps : DisposablePlugin<ChatTimestamps.Settings>() {
     }
 
     private fun stamp(msg: String): String {
-        return settings.timeFormatter.format(LocalTime.now()) + msg
+        return settings.dateTimeFormatter.get().format(Instant.now()) + msg
     }
 
     class Settings(
-            val dateTimeFormatterPattern: String = "'['hh:mm']' "
-    ) : PluginSettings() {
-
-        @Transient val timeFormatter = DateTimeFormatter.ofPattern(dateTimeFormatterPattern)
-    }
+            val dateTimeFormatter: DateTimeFormatterForm = DateTimeFormatterForm("'['hh:mm']' ", null)
+    ) : PluginSettings()
 }

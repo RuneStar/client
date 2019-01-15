@@ -5,6 +5,7 @@ import io.reactivex.schedulers.Schedulers
 import org.kxtra.swing.image.BufferedImage
 import org.runestar.client.api.Application
 import org.runestar.client.api.BarButton
+import org.runestar.client.api.forms.DateTimeFormatterForm
 import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
@@ -35,13 +36,11 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     override val defaultSettings = Settings()
 
-    private lateinit var timeFormatter: DateTimeFormatter
     private lateinit var screenshotDirectory: Path
 
     private val button = Button()
 
     override fun onStart() {
-        timeFormatter = createTimeFormatter()
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
         Keyboard.strokes
@@ -59,12 +58,6 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         Application.frame.topBar.remove(button)
     }
 
-    private fun createTimeFormatter(): DateTimeFormatter {
-        val zoneId = if (settings.localizeTimeZone) ZoneId.systemDefault() else ZoneOffset.UTC
-        return DateTimeFormatter.ofPattern(settings.dateTimeFormatterPattern)
-                .withZone(zoneId)
-    }
-
     private fun copyCanvas(): BufferedImage {
         val rp = CLIENT.rasterProvider as XRasterProvider
         val img = rp.image as BufferedImage
@@ -73,7 +66,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     private fun saveImage(img: RenderedImage) {
         val rsn = CLIENT.localPlayerName
-        val timeString = timeFormatter.format(Instant.now())
+        val timeString = settings.dateTimeFormatter.get().format(Instant.now())
         val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
         val path = screenshotDirectory.resolve(fileName)
         try {
@@ -93,8 +86,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     data class Settings(
             val keyStroke: KeyStrokeForm = KeyStrokeForm("released PRINTSCREEN"),
-            val dateTimeFormatterPattern: String = "yyyy-MM-dd_kk-mm-ss,SSS",
-            val localizeTimeZone: Boolean = true,
+            val dateTimeFormatter: DateTimeFormatterForm = DateTimeFormatterForm("yyyy-MM-dd_HH-mm-ss,SSS", null),
             val trayNotify: Boolean = true
     ) : PluginSettings()
 
