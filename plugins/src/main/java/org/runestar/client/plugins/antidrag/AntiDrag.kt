@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.antidrag
 
+import org.runestar.client.api.forms.KeyCodeForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.event.KeyEvent
 
 class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
 
@@ -16,7 +16,7 @@ class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
     private var dragDurationBuffer = 0
 
     override fun onStart() {
-        add(XClient.doCycle.enter.filter { Keyboard.isKeyPressed(settings.keyCode) }.subscribe { onCycle() })
+        add(XClient.doCycle.enter.filter { Keyboard.isKeyPressed(settings.keyCode.get()) }.subscribe { onCycle() })
     }
 
     private fun onCycle() {
@@ -31,7 +31,7 @@ class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
     }
 
     class Settings(
-            val keyCode: Int = KeyEvent.VK_CONTROL,
+            val keyCode: KeyCodeForm = KeyCodeForm("CONTROL"),
             val delay: Int = 25
     ) : PluginSettings()
 }
