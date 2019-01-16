@@ -8,6 +8,8 @@ inline class WidgetId(val packed: Int) {
 
     val index: Int get() = getIndex(packed)
 
+    override fun toString(): String = "WidgetId($group:$index)"
+
     companion object {
 
         fun getGroup(packed: Int) = packed shr 16
