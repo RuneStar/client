@@ -4,6 +4,7 @@ import org.runestar.client.api.Application
 import org.runestar.client.plugins.spi.AbstractPlugin
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Component
+import java.awt.Window
 import javax.swing.SwingUtilities
 
 /**
@@ -15,18 +16,24 @@ import javax.swing.SwingUtilities
 class WindowTransparency : AbstractPlugin<WindowTransparency.Settings>() {
 
     /**
-     * Use reflection to bypass [java.awt.Window.setOpacity] checks for [java.awt.Frame.isUndecorated]
+     * Use reflection to bypass [java.awt.Frame.setOpacity] checks for [java.awt.Frame.isUndecorated]
      */
 
     private companion object {
 
         // public peer method removed in Java 9
-        val componentPeerField by lazy { Component::class.java.getDeclaredField("peer").apply { isAccessible = true } }
+        val peerField by lazy {
+            Component::class.java.getDeclaredField("peer").apply { isAccessible = true }
+        }
+
+        val opacityField by lazy {
+            Window::class.java.getDeclaredField("opacity").apply { isAccessible = true }
+        }
 
         // public in Java 8 but not exported in 9+
-        val windowPeerClass by lazy { Class.forName("java.awt.peer.WindowPeer") }
-
-        val setOpacityMethod by lazy { windowPeerClass.getDeclaredMethod("setOpacity", java.lang.Float.TYPE) }
+        val setOpacityMethod by lazy {
+            Class.forName("java.awt.peer.WindowPeer").getDeclaredMethod("setOpacity", java.lang.Float.TYPE)
+        }
     }
 
     override val defaultSettings = Settings()
@@ -44,12 +51,12 @@ class WindowTransparency : AbstractPlugin<WindowTransparency.Settings>() {
     private fun setOpacity(opacity: Float) {
         SwingUtilities.invokeLater {
             val frame = Application.frame
-            synchronized(frame.treeLock) {
-                val peer = componentPeerField.get(frame)
-                setOpacityMethod.invoke(peer, opacity)
-            }
+            opacityField.setFloat(frame, opacity)
+            setOpacityMethod.invoke(peerField.get(frame), opacity)
         }
     }
 
-    class Settings(val opacity: Float = 0.3f) : PluginSettings()
+    class Settings(
+            val opacity: Float = 0.3f
+    ) : PluginSettings()
 }
