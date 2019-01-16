@@ -1,7 +1,6 @@
 package org.runestar.client.plugins.brightness
 
 import io.reactivex.rxkotlin.subscribeBy
-import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
@@ -22,7 +21,7 @@ class Brightness : AbstractPlugin<Brightness.Settings>() {
     }
 
     private fun setBrightness(brightness: Double) {
-        XClient.doCycle.enter.any { Game.state == GameState.LOGGED_IN }.subscribeBy {
+        XClient.doCycleLoggedIn.enter.firstOrError().subscribeBy {
             CLIENT.sprite_cached.clear()
             CLIENT.Rasterizer3D_setBrightness(brightness)
             CLIENT.textureProvider.setBrightness(brightness)
