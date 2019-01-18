@@ -3039,13 +3039,13 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(type<Player>(), BOOLEAN_TYPE) }
     }
 
-//    @DependsOn(Sprite::class, AbstractIndexCache::class)
-//    @MethodParameters("indexCache", "index", "record")
-//    class readSprite : IdentityMapper.StaticMethod() {
-//        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
-//                .and { it.arguments.size in 3..4 }
-//                .and { it.arguments.startsWith(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
-//    }
+    @DependsOn(Sprite::class, AbstractIndexCache::class)
+    @MethodParameters("indexCache", "index", "record")
+    class readSprite : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Sprite>() }
+                .and { it.arguments.size in 3..4 }
+                .and { it.arguments.startsWith(type<AbstractIndexCache>(), INT_TYPE, INT_TYPE) }
+    }
 
     @MethodParameters("player", "menuArg0", "menuArg1", "menuArg2")
     @DependsOn(Player::class, Client.playerMenuOpcodes::class)
