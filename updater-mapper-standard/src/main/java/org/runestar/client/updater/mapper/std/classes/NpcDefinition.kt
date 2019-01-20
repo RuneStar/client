@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.JumpInsnNode
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -193,5 +194,9 @@ class NpcDefinition : IdentityMapper.Class() {
     @DependsOn(ModelData::class)
     class getModelData : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<ModelData>() }
+    }
+
+    class isFollower : OrderMapper.InConstructor.Field(NpcDefinition::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 }

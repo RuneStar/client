@@ -489,13 +489,15 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportTempX : OrderMapper.InMethod.Field(worldToScreen::class, -2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    class viewportTempX : OrderMapper.InMethod.Field(worldToScreen::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_M1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(worldToScreen::class)
-    class viewportTempY : OrderMapper.InMethod.Field(worldToScreen::class, -1) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    class viewportTempY : OrderMapper.InMethod.Field(worldToScreen::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_M1 }
+                .next { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @DependsOn(viewportHeight::class, viewportWidth::class)
@@ -768,13 +770,13 @@ class Client : IdentityMapper.Class() {
 
     @SinceVersion(141)
     @DependsOn(AbstractRasterProvider.draw::class)
-    class methodDraw : IdentityMapper.InstanceMethod() {
+    class draw : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.isMethod && it.methodId == method<AbstractRasterProvider.draw>().id } }
     }
 
     @SinceVersion(141)
-    @DependsOn(methodDraw::class, gameState::class)
-    class gameDrawingMode : UniqueMapper.InMethod.Field(methodDraw::class) {
+    @DependsOn(draw::class, gameState::class)
+    class gameDrawingMode : UniqueMapper.InMethod.Field(draw::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 30 }
                 .nextWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE && it.fieldId != field<gameState>().id }
     }
@@ -3087,8 +3089,13 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(WorldMap::class)
-    class worldMap : IdentityMapper.StaticField() {
+    class worldMap0 : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMap>() }
+    }
+
+    @DependsOn(WorldMap::class)
+    class worldMap : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<WorldMap>() }
     }
 
     class WorldMapLabelSize_small : WorldMapLabelSizeConstant(0)
@@ -3169,8 +3176,8 @@ class Client : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(methodDraw::class)
-    class drawWidgetsLoggedIn : UniqueMapper.InMethod.Method(methodDraw::class) {
+    @DependsOn(draw::class)
+    class drawLoggedIn : UniqueMapper.InMethod.Method(draw::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 30 }
                 .nextWithin(10) { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<Client>() }
     }
@@ -3748,15 +3755,15 @@ class Client : IdentityMapper.Class() {
     @SinceVersion(172)
     @DependsOn(secureRandom::class)
     @MethodParameters()
-    class onLogin : IdentityMapper.InstanceMethod() {
+    class doCycleLoggedOut : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.isEmpty() }
                 .and { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<secureRandom>().id } }
     }
 
     @SinceVersion(172)
-    @DependsOn(onLogin::class)
-    class loginState : OrderMapper.InMethod.Field(onLogin::class, 0) {
+    @DependsOn(doCycleLoggedOut::class)
+    class loginState : OrderMapper.InMethod.Field(doCycleLoggedOut::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -3769,8 +3776,8 @@ class Client : IdentityMapper.Class() {
         }.next { it.opcode == PUTSTATIC }
     }
 
-    @DependsOn(onLogin::class, TaskHandler.newSocketTask::class)
-    class socketTask : UniqueMapper.InMethod.Field(onLogin::class) {
+    @DependsOn(doCycleLoggedOut::class, TaskHandler.newSocketTask::class)
+    class socketTask : UniqueMapper.InMethod.Field(doCycleLoggedOut::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<TaskHandler.newSocketTask>().id }
                 .next { it.opcode == PUTSTATIC }
     }
@@ -3800,5 +3807,141 @@ class Client : IdentityMapper.Class() {
     @DependsOn(WorldMapEvent::class)
     class worldMapEvent : IdentityMapper.StaticField() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMapEvent>() }
+    }
+
+    @DependsOn(Client.addNpcToMenu::class, NpcDefinition.isFollower::class)
+    class followerOpsLowPriority : OrderMapper.InMethod.Field(Client.addNpcToMenu::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldId == field<NpcDefinition.isFollower>().id }
+                .next { it.opcode == IFEQ }
+                .next { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(Client.addNpcToMenu::class)
+    class followerIndex : OrderMapper.InMethod.Field(Client.addNpcToMenu::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    class shiftClickDrop : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3117 }
+                .nextWithin(18) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(KeyHandler_pressedKeys::class)
+    class tapToDrop : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 81 }
+                .prev { it.opcode == GETSTATIC && it.fieldId == field<KeyHandler_pressedKeys>().id }
+                .prevIn(2) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class showMouseCross : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3125 }
+                .nextWithin(18) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class showLoadingMessages : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 3126 }
+                .nextWithin(18) { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(currentTimeMs::class, doCycleJs5Connect::class)
+    class js5StartTimeMs : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<currentTimeMs>().id }
+                .next { it.opcode == PUTSTATIC }
+    }
+
+    @MethodParameters()
+    class doCycleJs5Connect : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.isEmpty() && it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "js5crc" } }
+    }
+
+    @DependsOn(doCycleJs5Connect::class)
+    class js5ConnectState : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
+                .nextWithin(2) { it.opcode == IF_ICMPNE }
+                .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleJs5Connect::class, TaskHandler.newSocketTask::class)
+    class js5SocketTask : UniqueMapper.InMethod.Field(doCycleJs5Connect::class) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<TaskHandler.newSocketTask>().id }
+                .next { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(doCycleJs5Connect::class, TaskHandler.newSocketTask::class)
+    class NetCache_crcMismatches : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleJs5Connect::class, TaskHandler.newSocketTask::class)
+    class NetCache_ioExceptions : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleJs5Connect::class, AbstractSocket::class)
+    class js5Socket : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSocket>() }
+    }
+
+    @MethodParameters("code")
+    class js5Error : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments == listOf(INT_TYPE) }
+                .and { it.returnType == VOID_TYPE }
+    }
+
+    @DependsOn(js5Error::class)
+    class js5Errors : OrderMapper.InMethod.Field(js5Error::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == IADD }
+                .next { it.opcode == PUTSTATIC }
+    }
+
+    @DependsOn(overheadText::class, viewportTempY::class)
+    class chatEffects : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<viewportTempY>().id }
+                .next { it.opcode == GETSTATIC && it.fieldId == field<overheadText>().id }
+                .nextWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Strings_loadingPleaseWait::class, Rasterizer2D_fillRectangle::class)
+    class isLoading : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<Strings_loadingPleaseWait>().id }
+                .prev { it.isMethod && it.methodId == method<Rasterizer2D_fillRectangle>().id }
+                .prevWithin(9) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters()
+    @DependsOn(doCycle::class)
+    class doCycleJs5 : OrderMapper.InMethod.Method(doCycle::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL }
+    }
+
+    @DependsOn(showLoadingMessages::class)
+    class drawLoadingMessage : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(String::class.type, BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<showLoadingMessages>().id } }
+    }
+
+    @DependsOn(Font::class)
+    class drawTitle : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Font>(), type<Font>(), type<Font>(), BOOLEAN_TYPE) }
+    }
+
+    class isCameraLocked : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == 5504 }
+                .nextWithin(18) { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(AbstractFont.drawCenteredWave::class)
+    class viewportDrawCount : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodMark == method<AbstractFont.drawCenteredWave>().mark }
+                .prev { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(viewportDrawCount::class)
+    class tileLastDrawnActor : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<viewportDrawCount>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == Array<IntArray>::class.type }
     }
 }

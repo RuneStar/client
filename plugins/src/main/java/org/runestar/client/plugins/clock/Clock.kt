@@ -23,7 +23,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
     private val loginTimer: Stopwatch = Stopwatch.createUnstarted()
 
     override fun onStart() {
-        add(XClient.drawWidgetsLoggedIn.enter.subscribe {
+        add(XClient.drawLoggedIn.enter.subscribe {
             getReportWidget()?.text = if (settings.loginTime) {
                 loginElapsedTime() ?: DEFAULT_TEXT
             } else {

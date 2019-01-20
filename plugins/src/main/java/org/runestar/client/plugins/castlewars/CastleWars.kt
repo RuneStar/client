@@ -39,7 +39,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         resetNpcDefinitions()
 
         if (settings.showTimerSeconds) {
-            add(XClient.drawWidgetsLoggedIn.enter.subscribe { onDrawWidgets() })
+            add(XClient.drawLoggedIn.enter.subscribe { onDrawWidgets() })
         }
     }
 

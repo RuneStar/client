@@ -1,13 +1,16 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.common.startsWith
-import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -35,7 +38,7 @@ class WorldMapManager : IdentityMapper.Class() {
     }
 
     class fonts : OrderMapper.InConstructor.Field(WorldMapManager::class, -1) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.PUTFIELD && it.fieldType == HashMap::class.type }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashMap::class.type }
     }
 
     @MethodParameters()
@@ -70,5 +73,35 @@ class WorldMapManager : IdentityMapper.Class() {
     class clearIcons : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
                 .and { it.instructions.none { it.isLabel } }
+    }
+
+    @DependsOn(Sprite::class)
+    class overviewSprite : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Sprite>() }
+    }
+
+    @DependsOn(WorldMapAreaData::class)
+    class mapAreaData : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMapAreaData>() }
+    }
+
+    class isLoaded0 : OrderMapper.InConstructor.Field(WorldMapManager::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters()
+    class isLoaded : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+    }
+
+    class loadStarted : OrderMapper.InConstructor.Field(WorldMapManager::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @MethodParameters("x", "y", "dst")
+    @DependsOn(WorldMapRegion::class)
+    class getNeighboringRegions : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<WorldMapRegion>().withDimensions(1)) }
     }
 }

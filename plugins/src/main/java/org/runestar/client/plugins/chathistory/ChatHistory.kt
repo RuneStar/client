@@ -24,11 +24,11 @@ class ChatHistory : DisposablePlugin<PluginSettings>() {
 
         lateinit var channels: Map<*, *>
         var messageCount = 0
-        add(XClient.onLogin.enter.subscribe {
+        add(XClient.doCycleLoggedOut.enter.subscribe {
             channels = HashMap(CLIENT.messages_channels)
             messageCount = CLIENT.messages_count
         })
-        add(XClient.onLogin.exit.subscribe {
+        add(XClient.doCycleLoggedOut.exit.subscribe {
             CLIENT.messages_channels.putAll(channels)
             CLIENT.messages_count = messageCount
         })

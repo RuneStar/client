@@ -242,4 +242,9 @@ class GameShell : IdentityMapper.Class() {
     class contentHeight : OrderMapper.InMethod.Field(clearBackground::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
+
+    class drawInitial : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, String::class.type, BOOLEAN_TYPE) }
+    }
 }

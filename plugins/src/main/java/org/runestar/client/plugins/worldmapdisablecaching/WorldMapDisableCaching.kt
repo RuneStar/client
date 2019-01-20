@@ -17,8 +17,8 @@ class WorldMapDisableCaching : DisposablePlugin<PluginSettings>() {
         add(XClient.closeWidgetGroup.exit.subscribe {
             val wgp = it.arguments[0] as XWidgetGroupParent
             if (wgp.group == WidgetGroupId.WORLD_MAP) {
-                val wm = CLIENT.worldMap
-                wm.initializeWorldMapManager(wm.worldMapData)
+                val wm = CLIENT.worldMap0
+                wm.initializeWorldMapManager(wm.currentMapArea0)
                 System.gc()
             }
         })
