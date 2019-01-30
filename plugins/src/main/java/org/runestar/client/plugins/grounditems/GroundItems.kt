@@ -2,6 +2,7 @@ package org.runestar.client.plugins.grounditems
 
 import org.runestar.client.api.Fonts
 import org.runestar.client.api.forms.FontForm
+import org.runestar.client.api.forms.RegexForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
@@ -28,7 +29,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     val blockRegexes = ArrayList<Regex>()
 
     override fun onStart() {
-        settings.blockedNames.mapTo(blockRegexes) { it.toRegex() }
+        settings.blockedNames.mapTo(blockRegexes) { it.get() }
 
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
         SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
@@ -112,6 +113,6 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             val font: FontForm = FontForm(Fonts.PLAIN_11),
             val spacing: Int = 0,
             val initialOffset: Int = 9,
-            val blockedNames: List<String> = emptyList()
+            val blockedNames: List<RegexForm> = listOf(RegexForm("Vial", emptySet()))
     ) : PluginSettings()
 }
