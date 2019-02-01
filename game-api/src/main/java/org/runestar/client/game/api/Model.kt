@@ -97,13 +97,13 @@ class Model internal constructor(
     ) {
         val tempPoint = Point()
         for (i in 0 until accessor.indicesCount) {
-            if (!vertexToScreen(accessor.indices1[i], projection, tempPoint)) continue
+            if (i < accessor.indices1.size && !vertexToScreen(accessor.indices1[i], projection, tempPoint)) continue
             val x0 = tempPoint.x
             val y0 = tempPoint.y
-            if (!vertexToScreen(accessor.indices2[i], projection, tempPoint)) continue
+            if (i < accessor.indices2.size && !vertexToScreen(accessor.indices2[i], projection, tempPoint)) continue
             val x1 = tempPoint.x
             val y1 = tempPoint.y
-            if (!vertexToScreen(accessor.indices3[i], projection, tempPoint)) continue
+            if (i < accessor.indices3.size && !vertexToScreen(accessor.indices3[i], projection, tempPoint)) continue
             val x2 = tempPoint.x
             val y2 = tempPoint.y
             consumer(x0, y0, x1, y1, x2, y2)
