@@ -113,6 +113,6 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
             val font: FontForm = FontForm(Fonts.PLAIN_11),
             val spacing: Int = 0,
             val initialOffset: Int = 9,
-            val blockedNames: List<RegexForm> = listOf(RegexForm("Vial", emptySet()))
+            val blockedNames: List<RegexForm> = listOf(RegexForm("Vial"))
     ) : PluginSettings()
 }
