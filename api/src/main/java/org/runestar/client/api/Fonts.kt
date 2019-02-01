@@ -12,7 +12,7 @@ object Fonts {
 
     @JvmField val BOLD_12 = createFont("RuneScape-Bold-12", 16)
 
-    @JvmField val QUILL_8 = createFont("RuneScape-Quill-8", 32)
+    @JvmField val QUILL_8 = createFont("RuneScape-Quill-8", 16)
 
     @JvmField val QUILL = createFont("RuneScape-Quill", 32)
 
