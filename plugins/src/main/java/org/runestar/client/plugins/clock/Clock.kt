@@ -40,7 +40,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
         getReportWidget()?.text = DEFAULT_TEXT
     }
 
-    private fun getReportWidget(): Widget.Text? = Widgets[WidgetId.CHAT_REPORT_TEXT] as Widget.Text?
+    private fun getReportWidget(): Widget.Text? = Widgets.getAs(WidgetId.CHAT_REPORT_TEXT)
 
     private fun loginElapsedTime(): String? {
         val duration = loginTimer.elapsed()

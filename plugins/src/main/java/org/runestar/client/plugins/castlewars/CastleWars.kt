@@ -67,11 +67,10 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     }
 
     private fun onDrawWidgets() {
-        var w = Widgets[WidgetId.CASTLE_WARS_ZAMORAK_TIME_LEFT]
+        var w = Widgets.getAs<Widget.Text>(WidgetId.CASTLE_WARS_ZAMORAK_TIME_LEFT)
         if (w == null || w.accessor.cycle == -1) {
-            w = Widgets[WidgetId.CASTLE_WARS_SARADOMIN_TIME_LEFT] ?: return
+            w = Widgets.getAs(WidgetId.CASTLE_WARS_SARADOMIN_TIME_LEFT) ?: return
         }
-        w as Widget.Text
         val s = w.text ?: return
         if (s.endsWith(" Min")) {
             val m = s.removeSuffix(" Min").toInt()

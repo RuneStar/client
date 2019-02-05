@@ -11,6 +11,8 @@ object Widgets {
 
     operator fun get(id: WidgetId): Widget? = get(id.group, id.index)
 
+    inline fun <reified T : Widget> getAs(id: WidgetId): T? = Widgets[id] as? T?
+
     operator fun get(group: Int, index: Int): Widget? = CLIENT.widgets.getOrNull(group)?.getOrNull(index)?.let { Widget.of(it) }
 
     val roots: Sequence<Widget> get() = WidgetGroups.root?.roots ?: emptySequence()
