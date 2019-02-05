@@ -2,6 +2,7 @@ package org.runestar.client.plugins.castlewars
 
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.NpcDefinition
 import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetId
@@ -35,7 +36,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     private val gameTimerSeconds: Stopwatch = Stopwatch.createUnstarted()
 
     override fun onStart() {
-        add(XNpcDefinition.init.exit.subscribe { onNpcDefinitionInit(it.instance) })
+        add(XNpcDefinition.init.exit.subscribe { onNpcDefinitionInit(NpcDefinition(it.instance)) })
         resetNpcDefinitions()
 
         if (settings.showTimerSeconds) {
@@ -43,26 +44,13 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         }
     }
 
-    private fun onNpcDefinitionInit(def: XNpcDefinition) {
-        val id = def.id
-        if (!isBarricade(id)) return
+    private fun onNpcDefinitionInit(def: NpcDefinition) {
+        if (!isBarricade(def.id)) return
         if (settings.showBarricadesOnMinimap) {
             def.drawMapDot = true
         }
         if (settings.showBarricadeTeamColors) {
-            val newTieColor = barricadeTieColor(id)
-            if (def.recolorFrom == null) {
-                def.recolorFrom = shortArrayOf(CADE_TIE_COLOR)
-                def.recolorTo = shortArrayOf(newTieColor)
-            } else {
-                val i = def.recolorFrom.indexOf(CADE_TIE_COLOR)
-                if (i == -1) {
-                    def.recolorFrom = def.recolorFrom.plus(CADE_TIE_COLOR)
-                    def.recolorTo = def.recolorTo.plus(newTieColor)
-                } else {
-                    def.recolorTo[i] = newTieColor
-                }
-            }
+            def.recolor(CADE_TIE_COLOR, barricadeTieColor(def.id))
         }
     }
 
