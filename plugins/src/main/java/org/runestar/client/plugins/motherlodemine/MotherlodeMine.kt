@@ -1,69 +1,53 @@
 package org.runestar.client.plugins.motherlodemine
 
-import com.google.common.collect.ImmutableSet
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.ObjectDefinition
 import org.runestar.client.game.api.ObjectId
-import org.runestar.client.game.api.SceneElement
-import org.runestar.client.game.api.SceneTile
-import org.runestar.client.game.api.live.*
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XObjectDefinition
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.Color
-import java.awt.Graphics2D
 
-class MotherlodeMine : DisposablePlugin<PluginSettings>() {
+class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
 
-    private companion object {
-
-        val VEIN_IDS = ImmutableSet.of(
-                ObjectId.ORE_VEIN_26661,
-                ObjectId.ORE_VEIN_26662,
-                ObjectId.ORE_VEIN_26663,
-                ObjectId.ORE_VEIN_26664
-        )
-    }
-
-    override val defaultSettings = PluginSettings()
+    override val defaultSettings = Settings()
 
     override val name = "Motherlode Mine"
 
-    private val veins: MutableSet<SceneElement.Boundary> = LinkedHashSet()
-
     override fun onStart() {
-        add(SceneElements.clears.subscribe { veins.clear() })
-        add(SceneElements.Boundary.additions.filter(::isVein).subscribe { veins.add(it) })
-        add(SceneElements.Boundary.removals.filter(::isVein).subscribe { veins.remove(it) })
-        SceneElements.Boundary.all().filterTo(veins, ::isVein)
+        add(XObjectDefinition.init.exit.subscribe { objectInit(ObjectDefinition(it.instance)) })
+        resetObjectDefinitions()
+    }
 
-        add(LiveCanvas.repaints.subscribe(::onRepaint))
+    private fun objectInit(def: ObjectDefinition) {
+        if (!isVein(def.id)) return
+        val replaceColor = settings.veinColor
+        def.recolor(6550, replaceColor)
+        def.recolor(5524, replaceColor)
+        def.recolor(6930, replaceColor)
+        def.recolor(7952, replaceColor)
+        def.recolor(6674, replaceColor)
     }
 
     override fun onStop() {
-        veins.clear()
+        resetObjectDefinitions()
     }
 
-    private fun isVein(o: SceneElement.Boundary): Boolean {
-        return VEIN_IDS.contains(o.id)
+    private fun resetObjectDefinitions() {
+        CLIENT.objectDefinition_cached.clear()
+        CLIENT.objectDefinition_cachedModels.clear()
     }
 
-    private fun onRepaint(g: Graphics2D) {
-
-        g.clip(LiveViewport.shape)
-        g.color = Color.LIGHT_GRAY
-
-        val myLoc = Players.local?.location ?: return
-
-        veins.forEach { vein ->
-            val veinLoc = vein.location
-            if (!Game.visibilityMap.isVisible(veinLoc)) return@forEach
-            if (!areOnSameFloor(myLoc, veinLoc)) return@forEach
-            val pt = veinLoc.center.copy(height = 200).toScreen() ?: return@forEach
-            if (!g.clip.contains(pt)) return@forEach
-            val model = vein.model ?: return@forEach
-            model.drawWireFrame(g.color)
+    private fun isVein(id: Int): Boolean {
+        return when (id) {
+            ObjectId.ORE_VEIN_26661,
+            ObjectId.ORE_VEIN_26662,
+            ObjectId.ORE_VEIN_26663,
+            ObjectId.ORE_VEIN_26664 -> true
+            else -> false
         }
     }
 
-    private fun areOnSameFloor(a: SceneTile, b: SceneTile): Boolean {
-        return LiveScene.isLinkBelow(a) == LiveScene.isLinkBelow(b)
-    }
+    class Settings(
+            val veinColor: Short = 127
+    ) : PluginSettings()
 }
