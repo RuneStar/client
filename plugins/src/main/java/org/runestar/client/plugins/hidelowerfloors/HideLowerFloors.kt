@@ -3,6 +3,7 @@ package org.runestar.client.plugins.hidelowerfloors
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
 
 class HideLowerFloors : DisposablePlugin<PluginSettings>() {
@@ -12,7 +13,7 @@ class HideLowerFloors : DisposablePlugin<PluginSettings>() {
     override val name = "Hide Lower Floors"
 
     override fun onStart() {
-        add(Game.ticks.subscribe { CLIENT.scene.minPlane = Game.plane })
+        add(XClient.drawLoggedIn.enter.subscribe { CLIENT.scene.minPlane = Game.plane })
     }
 
     override fun onStop() {
