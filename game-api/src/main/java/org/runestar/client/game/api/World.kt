@@ -1,5 +1,3 @@
-@file:JvmName("World")
-
 package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XWorld
