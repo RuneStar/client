@@ -34,7 +34,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
     val isInteractable: Boolean get() = SceneElementTag.isInteractable(tagPacked)
 
-    val kind: SceneElementKind get() = SceneElementTag.getKind(tagPacked)
+    val kind: Int get() = SceneElementTag.getKind(tagPacked)
 
     val isObject: Boolean get() = kind == SceneElementKind.OBJECT
 

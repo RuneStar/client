@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
 data class SceneElementTag(
-        val kind: SceneElementKind,
+        val kind: Int,
         val id: Int,
         val location: SceneTile,
         val isInteractable: Boolean
@@ -19,7 +19,7 @@ data class SceneElementTag(
 
     internal val packed: Long get() {
         var uid = id.toLong() shl 17 +
-                kind.id shl 14 +
+                kind shl 14 +
                 location.y shl 7 +
                 location.x
         if (!isInteractable) uid = uid or 65536L
@@ -32,7 +32,7 @@ data class SceneElementTag(
 
     companion object {
 
-        fun getKind(tag: Long): SceneElementKind = SceneElementKind.of((tag shr 14 and 0x3).toInt())
+        fun getKind(tag: Long): Int = (tag shr 14 and 0x3).toInt()
 
         fun getId(tag: Long): Int = (tag ushr 17).toInt()
 

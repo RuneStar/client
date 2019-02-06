@@ -23,7 +23,6 @@ class MouseDebug : DisposablePlugin<PluginSettings>() {
                 add("mouse")
                 add("location: ${Mouse.location}")
                 add("viewportLocation: ${Mouse.viewportLocation}")
-                add("cross: ${Mouse.cross}")
                 add("isInViewport: ${Mouse.isInViewport}")
                 add("entityCount: ${Mouse.entityCount}")
                 add("tags:")

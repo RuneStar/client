@@ -52,6 +52,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
                 is SceneElement.Wall -> Color.ORANGE
                 else -> throw IllegalStateException()
             }
+            else -> error(obj.kind)
         }
     }
 

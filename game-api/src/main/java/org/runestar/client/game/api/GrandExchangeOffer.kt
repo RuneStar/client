@@ -22,9 +22,9 @@ class GrandExchangeOffer(val accessor: XGrandExchangeOffer) {
 
     val isFilled get() = totalQuantity == currentQuantity
 
-    val type get() = GrandExchangeOfferType.of(accessor.type())
+    val type: Int get() = accessor.type()
 
-    val status get() = GrandExchangeOfferStatus.of(accessor.status())
+    val status: Int get() = accessor.status()
 
     val isAborted get() = when(status) {
         GrandExchangeOfferStatus.ABORTING -> true
