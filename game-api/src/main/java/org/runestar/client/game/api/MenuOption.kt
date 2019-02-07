@@ -197,7 +197,7 @@ interface MenuOption {
 
     interface OnNpc : MenuOption, ActorTargeting {
 
-        override val playerTargetIndex: Int? get() = null
+        override val playerTargetIndex: Int get() = -1
 
         override val npcTargetIndex: Int get() = argument0
 
@@ -208,7 +208,7 @@ interface MenuOption {
 
         override val playerTargetIndex: Int get() = argument0
 
-        override val npcTargetIndex: Int? get() = null
+        override val npcTargetIndex: Int get() = -1
 
         override val target: Player? get() = super.target as Player?
     }

@@ -19,11 +19,11 @@ class Projectile(override val accessor: XProjectile) : Entity(accessor), ActorTa
         get() = Position(accessor.x.toInt(), accessor.y.toInt(), 0, plane)
                 .let { it.copy(height = LiveScene.getTileHeight(it) - accessor.z.toInt()) }
 
-    override val npcTargetIndex: Int?
-        get() = accessor.targetIndex.let { if (it > 0) it - 1 else null }
+    override val npcTargetIndex: Int
+        get() = accessor.targetIndex.let { if (it > 0) it - 1 else -1 }
 
-    override val playerTargetIndex: Int?
-        get() = accessor.targetIndex.let { if (it < 0) -1 * it - 1 else null }
+    override val playerTargetIndex: Int
+        get() = accessor.targetIndex.let { if (it < 0) -1 * it - 1 else -1 }
 
     val speed get() = accessor.speed
 

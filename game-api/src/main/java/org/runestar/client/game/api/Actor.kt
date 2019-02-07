@@ -8,11 +8,11 @@ abstract class Actor(override val accessor: XActor) : Entity(accessor), ActorTar
 
     abstract val plane: Int
 
-    override val npcTargetIndex: Int?
-        get() = accessor.targetIndex.let { if (it in 0..32767) it else null }
+    override val npcTargetIndex: Int
+        get() = accessor.targetIndex.let { if (it in 0..32767) it else -1 }
 
-    override val playerTargetIndex: Int?
-        get() = accessor.targetIndex.let { if (it > 32768) it - 32768 else null }
+    override val playerTargetIndex: Int
+        get() = accessor.targetIndex.let { if (it > 32768) it - 32768 else -1 }
 
     override val modelPosition get() = Position(accessor.x, accessor.y, 0, plane)
 
