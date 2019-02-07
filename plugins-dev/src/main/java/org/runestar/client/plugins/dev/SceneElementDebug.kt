@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawString
-import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
+import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.SceneElements

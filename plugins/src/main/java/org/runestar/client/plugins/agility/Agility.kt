@@ -33,7 +33,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
     }
 
     private fun isObstacle(o: SceneElement): Boolean {
-        return o.id in OBSTACLE_IDS
+        return o.tag.id in OBSTACLE_IDS
     }
 
     private fun onRepaint(g: Graphics2D) {

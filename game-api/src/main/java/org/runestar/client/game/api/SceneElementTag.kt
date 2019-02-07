@@ -1,47 +1,18 @@
 package org.runestar.client.game.api
 
-data class SceneElementTag(
-        val kind: Int,
-        val id: Int,
-        val location: SceneTile,
-        val isInteractable: Boolean
-) {
+inline class SceneElementTag(val packed: Long) {
 
-    internal constructor(
-            tag: Long,
-            plane: Int
-    ) : this(
-            getKind(tag),
-            getId(tag),
-            getLocation(tag, plane),
-            isInteractable(tag)
-    )
+    val kind: Int get() = (packed shr 14 and 0x3).toInt()
 
-    internal val packed: Long get() {
-        var uid = id.toLong() shl 17 +
-                kind shl 14 +
-                location.y shl 7 +
-                location.x
-        if (!isInteractable) uid = uid or 65536L
-        return uid
-    }
+    val id: Int get() = (packed ushr 17).toInt()
+
+    val x: Int get() = (packed and 0x7F).toInt()
+
+    val y: Int get() = (packed shr 7 and 0x7F).toInt()
+
+    val isInteractable: Boolean get() = packed and 65536L == 0L
 
     override fun toString(): String {
-        return "SceneElementTag(kind=$kind, id=$id, location=$location, isInteractable=$isInteractable)"
-    }
-
-    companion object {
-
-        fun getKind(tag: Long): Int = (tag shr 14 and 0x3).toInt()
-
-        fun getId(tag: Long): Int = (tag ushr 17).toInt()
-
-        fun getX(tag: Long): Int = (tag and 0x7F).toInt()
-
-        fun getY(tag: Long): Int = (tag shr 7 and 0x7F).toInt()
-
-        fun getLocation(tag: Long, plane: Int): SceneTile = SceneTile(getX(tag), getY(tag), plane)
-
-        fun isInteractable(tag: Long): Boolean = tag and 65536L == 0L
+        return "SceneElementTag(kind=$kind, id=$id, x=$x, y=$y, isInteractable=$isInteractable)"
     }
 }

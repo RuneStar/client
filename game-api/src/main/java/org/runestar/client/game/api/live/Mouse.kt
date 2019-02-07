@@ -25,7 +25,7 @@ object Mouse {
 
     val entityCount get() = CLIENT.viewportMouse_entityCount
 
-    val tags get() = List(entityCount) { SceneElementTag(CLIENT.viewportMouse_entityTags[it], Game.plane) }
+    val tags: LongArray get() = CLIENT.viewportMouse_entityTags
 
     val crossColor: Int get() = CLIENT.mouseCrossColor
 

@@ -18,25 +18,17 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
         }
     }
 
-    protected abstract val tagPacked: Long
-
     abstract val plane: Int
 
-    val tag: SceneElementTag get() = SceneElementTag(tagPacked, plane)
+    abstract val tag: SceneElementTag
 
-    val id: Int get() = SceneElementTag.getId(tagPacked)
+    val x: Int get() = tag.x
 
-    val x: Int get() = SceneElementTag.getX(tagPacked)
+    val y: Int get() = tag.y
 
-    val y: Int get() = SceneElementTag.getY(tagPacked)
+    val location: SceneTile get() = SceneTile(x, y, plane)
 
-    val location: SceneTile get() = SceneElementTag.getLocation(tagPacked, plane)
-
-    val isInteractable: Boolean get() = SceneElementTag.isInteractable(tagPacked)
-
-    val kind: Int get() = SceneElementTag.getKind(tagPacked)
-
-    val isObject: Boolean get() = kind == SceneElementKind.OBJECT
+    val isObject: Boolean get() = tag.kind == SceneElementKind.OBJECT
 
     // todo
 //    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
@@ -93,7 +85,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val plane: Int get() = accessor.plane
 
-        override val tagPacked get() = accessor.tag
+        override val tag get() = SceneElementTag(accessor.tag)
 
         override fun toString(): String = "SceneElement.Game(tag=$tag)"
     }
@@ -109,7 +101,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val entity: XEntity? get() = accessor.entity
 
-        override val tagPacked get() = accessor.tag
+        override val tag get() = SceneElementTag(accessor.tag)
 
         override fun toString(): String = "SceneElement.Floor(tag=$tag)"
     }
@@ -134,7 +126,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val entity2: XEntity? get() = accessor.entity2
 
-        override val tagPacked get() = accessor.tag
+        override val tag get() = SceneElementTag(accessor.tag)
 
         override fun toString(): String = "SceneElement.Wall(tag=$tag)"
     }
@@ -154,7 +146,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val entity2: XEntity? get() = accessor.entity2
 
-        override val tagPacked get() = accessor.tag
+        override val tag get() = SceneElementTag(accessor.tag)
 
         override fun toString(): String = "SceneElement.Boundary(tag=$tag)"
     }
@@ -164,7 +156,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
             override val plane: Int
     ) : ThreeModels(accessor), Iterable<GroundItem> {
 
-        override val tagPacked get() = accessor.tag
+        override val tag get() = SceneElementTag(accessor.tag)
 
         override val dynamicOrientation: Angle get() = Angle.ZERO
 

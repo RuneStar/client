@@ -37,7 +37,7 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
     }
 
     private fun colorFor(obj: SceneElement): Color {
-        return when (obj.kind) {
+        return when (obj.tag.kind) {
             SceneElementKind.GROUND_ITEM -> Color.RED
             SceneElementKind.NPC -> Color.YELLOW
             SceneElementKind.PLAYER -> Color.WHITE
@@ -48,7 +48,7 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
                 is SceneElement.Wall -> Color.ORANGE
                 else -> throw IllegalStateException()
             }
-            else -> error(obj.kind)
+            else -> error(obj)
         }
     }
 

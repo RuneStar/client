@@ -21,8 +21,8 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
     override fun onStart() {
         add(SceneElements.clears.subscribe { objs.clear() })
         add(SceneElements.removals.subscribe { objs.remove(it) })
-        add(SceneElements.additions.filter(SceneElement::isInteractable).subscribe { objs.add(it) })
-        SceneElements.all().filterTo(objs, SceneElement::isInteractable)
+        add(SceneElements.additions.filter { it.tag.isInteractable }.subscribe { objs.add(it) })
+        SceneElements.all().filterTo(objs) { it.tag.isInteractable }
 
         add(LiveCanvas.repaints.subscribe { g ->
             objs.forEach {
@@ -41,7 +41,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
     }
 
     private fun colorFor(obj: SceneElement): Color {
-        return when (obj.kind) {
+        return when (obj.tag.kind) {
             SceneElementKind.GROUND_ITEM -> Color.RED
             SceneElementKind.NPC -> Color.YELLOW
             SceneElementKind.PLAYER -> Color.WHITE
@@ -52,7 +52,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
                 is SceneElement.Wall -> Color.ORANGE
                 else -> throw IllegalStateException()
             }
-            else -> error(obj.kind)
+            else -> error(obj)
         }
     }
 

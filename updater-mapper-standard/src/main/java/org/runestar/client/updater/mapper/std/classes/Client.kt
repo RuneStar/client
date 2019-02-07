@@ -1906,12 +1906,12 @@ class Client : IdentityMapper.Class() {
     }
 
     @DependsOn(Model.draw::class)
-    class modelViewportXs : OrderMapper.InMethod.Field(Model.draw::class, -5) {
+    class modelViewportXs : OrderMapper.InMethod.Field(Model.draw::class, -6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
     @DependsOn(Model.draw::class)
-    class modelViewportYs : OrderMapper.InMethod.Field(Model.draw::class, -6) {
+    class modelViewportYs : OrderMapper.InMethod.Field(Model.draw::class, -5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
     }
 
