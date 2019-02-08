@@ -1,6 +1,7 @@
 package org.runestar.client.plugins.motherlodemine
 
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.ObjectDefinition
 import org.runestar.client.game.api.ObjectId
 import org.runestar.client.game.raw.CLIENT
@@ -20,12 +21,12 @@ class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
 
     private fun objectInit(def: ObjectDefinition) {
         if (!isVein(def.id)) return
-        val replaceColor = settings.veinColor
-        def.recolor(6550, replaceColor)
-        def.recolor(5524, replaceColor)
-        def.recolor(6930, replaceColor)
-        def.recolor(7952, replaceColor)
-        def.recolor(6674, replaceColor)
+        val replaceColor = HslColor(settings.veinColor)
+        def.recolor(HslColor(6550), replaceColor)
+        def.recolor(HslColor(5524), replaceColor)
+        def.recolor(HslColor(6930), replaceColor)
+        def.recolor(HslColor(7952), replaceColor)
+        def.recolor(HslColor(6674), replaceColor)
     }
 
     override fun onStop() {

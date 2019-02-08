@@ -2,6 +2,7 @@ package org.runestar.client.plugins.castlewars
 
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.NpcDefinition
 import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.Widget
@@ -22,7 +23,9 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         const val SARA_CADE = NpcId.BARRICADE_5722
         const val SARA_CADE_BURNING = NpcId.BARRICADE_5723
 
-        const val CADE_TIE_COLOR = 2396.toShort()
+        val DEFAULT_CADE_TIE_COLOR = HslColor(2396)
+        val ZAM_CADE_TIE_COLOR = HslColor.fromRgb(1.0, 0.0, 0.0)
+        val SARA_CADE_TIE_COLOR = HslColor.fromRgb(0.1, 0.5, 1.0)
 
         val ONE_MINUTE: Duration = Duration.ofMinutes(1L)
     }
@@ -50,7 +53,7 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
             def.drawMapDot = true
         }
         if (settings.showBarricadeTeamColors) {
-            def.recolor(CADE_TIE_COLOR, barricadeTieColor(def.id))
+            def.recolor(DEFAULT_CADE_TIE_COLOR, barricadeTieColor(def.id))
         }
     }
 
@@ -89,11 +92,11 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
         }
     }
 
-    private fun barricadeTieColor(npcId: Int): Short {
+    private fun barricadeTieColor(npcId: Int): HslColor {
         return when (npcId) {
-            ZAM_CADE, ZAM_CADE_BURNING -> ((254 shl 8) + 200).toShort()
-            SARA_CADE, SARA_CADE_BURNING -> ((150 shl 8) + 200).toShort()
-            else -> throw IllegalArgumentException(npcId.toString())
+            ZAM_CADE, ZAM_CADE_BURNING -> ZAM_CADE_TIE_COLOR
+            SARA_CADE, SARA_CADE_BURNING -> SARA_CADE_TIE_COLOR
+            else -> error(npcId)
         }
     }
 
