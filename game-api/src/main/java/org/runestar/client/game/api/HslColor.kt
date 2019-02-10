@@ -9,25 +9,23 @@ inline class HslColor(val packed: Short) {
 
     val hue: Int get() = (packed.toInt() ushr 10) and HUE_MAX
 
-    val huePercent: Double get() = hue.toDouble() / HUE_MODULUS
+    val huePercent: Double get() = (hue + 0.5) / (HUE_MAX + 1.0)
 
     val saturation: Int get() = (packed.toInt() ushr 7) and SATURATION_MAX
 
-    val saturationPercent: Double get() = saturation.toDouble() / SATURATION_MAX
+    val saturationPercent: Double get() = (saturation + 0.5) / (SATURATION_MAX + 1.0)
 
     val lightness: Int get() = packed.toInt() and LIGHTNESS_MAX
 
-    val lightnessPercent: Double get() = lightness.toDouble() / LIGHTNESS_MAX
+    val lightnessPercent: Double get() = lightness / (LIGHTNESS_MAX + 1.0)
 
     override fun toString(): String {
-        return "HslColor($hue/$HUE_MODULUS, $saturation/$SATURATION_MAX, $lightness/$LIGHTNESS_MAX)"
+        return "HslColor($hue, $saturation, $lightness)"
     }
 
     companion object {
 
         const val HUE_MAX = 0x3F
-
-        const val HUE_MODULUS = HUE_MAX + 1
 
         const val SATURATION_MAX = 0x7
 
@@ -45,9 +43,9 @@ inline class HslColor(val packed: Short) {
             requirePercentage(saturation)
             requirePercentage(lightness)
             return of(
-                    (HUE_MODULUS * hue).roundToInt() % HUE_MODULUS,
-                    (SATURATION_MAX * saturation).roundToInt(),
-                    (LIGHTNESS_MAX * lightness).roundToInt()
+                    (hue * (HUE_MAX + 1.0)).toInt().coerceAtMost(HUE_MAX),
+                    (saturation * (SATURATION_MAX + 1.0)).toInt().coerceAtMost(SATURATION_MAX),
+                    (lightness * (LIGHTNESS_MAX + 1.0)).roundToInt().coerceAtMost(LIGHTNESS_MAX)
             )
         }
 
