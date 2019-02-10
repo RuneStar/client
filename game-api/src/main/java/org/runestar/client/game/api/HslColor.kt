@@ -2,8 +2,7 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.utils.requireIn
 import org.runestar.client.game.api.utils.requirePercentage
-import kotlin.math.max
-import kotlin.math.min
+import org.runestar.client.game.api.utils.rgbToHsl
 import kotlin.math.roundToInt
 
 inline class HslColor(val packed: Short) {
@@ -53,24 +52,9 @@ inline class HslColor(val packed: Short) {
         }
 
         fun fromRgb(red: Double, green: Double, blue: Double): HslColor {
-            requirePercentage(red)
-            requirePercentage(green)
-            requirePercentage(blue)
-            val min = min(red, min(green, blue))
-            val max = max(red, max(green, blue))
-            var hue = 0.0
-            var saturation = 0.0
-            val lightness = (min + max) / 2.0
-            val chroma = max - min
-            if (chroma != 0.0) {
-                saturation = chroma / (if (lightness < 0.5) (min + max) else (2.0 - chroma))
-                hue = when (max) {
-                    red -> ((green - blue) / chroma + 6.0) % 6.0
-                    green -> (blue - red) / chroma + 2.0
-                    else -> (red - green) / chroma + 4.0
-                } / 6.0
+            rgbToHsl(red, green, blue) { h, s, l ->
+                return of(h, s, l)
             }
-            return of(hue, saturation, lightness)
         }
     }
 }
