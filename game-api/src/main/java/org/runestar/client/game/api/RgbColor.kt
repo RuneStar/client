@@ -6,15 +6,15 @@ import kotlin.math.roundToInt
 
 inline class RgbColor(val packed: Int) {
 
-    val red: Int get() = (packed ushr 16) and 0xFF
+    val red: Int get() = (packed ushr 16) and MAX
 
     val redPercent: Double get() = red.toDouble() / MAX
 
-    val green: Int get() = (packed ushr 8) and 0xFF
+    val green: Int get() = (packed ushr 8) and MAX
 
     val greenPercent: Double get() = green.toDouble() / MAX
 
-    val blue: Int get() = packed and 0xFF
+    val blue: Int get() = packed and MAX
 
     val bluePercent: Double get() = blue.toDouble() / MAX
 
