@@ -3645,7 +3645,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.returnType == VOID_TYPE && it.arguments == listOf(DOUBLE_TYPE) }
     }
 
-    @MethodParameters("brightness", "a", "b")
+    @MethodParameters("brightness", "hsMin", "hsMax")
     @DependsOn(Rasterizer3D::class)
     class Rasterizer3D_buildPalette : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
@@ -3943,5 +3943,13 @@ class Client : IdentityMapper.Class() {
     class tileLastDrawnActor : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<viewportDrawCount>().id }
                 .next { it.opcode == GETSTATIC && it.fieldType == Array<IntArray>::class.type }
+    }
+
+    @MethodParameters("rgb", "brightness")
+    @DependsOn(Rasterizer3D::class)
+    class Rasterizer3D_brighten : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.klass == klass<Rasterizer3D>() }
+                .and { it.returnType == INT_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, DOUBLE_TYPE) }
     }
 }

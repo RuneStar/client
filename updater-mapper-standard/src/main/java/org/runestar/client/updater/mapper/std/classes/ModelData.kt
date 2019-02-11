@@ -2,6 +2,8 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Opcodes.IADD
+import org.objectweb.asm.Opcodes.LDC
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
@@ -9,6 +11,7 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -117,5 +120,11 @@ class ModelData : IdentityMapper.Class() {
     @DependsOn(FaceNormal::class)
     class faceNormals : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<FaceNormal>().withDimensions(1) }
+    }
+
+    @MethodParameters()
+    class invalidate : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments.isEmpty() }
+                .and { it.instructions.none { it.isMethod || it.opcode == LDC || it.opcode == IADD } }
     }
 }
