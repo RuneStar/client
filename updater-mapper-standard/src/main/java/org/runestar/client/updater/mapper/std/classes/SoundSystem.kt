@@ -56,11 +56,11 @@ class SoundSystem : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodName == SourceDataLine::start.name } }
     }
 
-    class bytes : IdentityMapper.InstanceField() {
+    class lineBuffer : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
-    class bufferSize : IdentityMapper.InstanceField() {
+    class capacity2 : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 

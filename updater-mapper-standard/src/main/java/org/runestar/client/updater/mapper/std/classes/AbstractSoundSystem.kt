@@ -69,4 +69,26 @@ class AbstractSoundSystem : IdentityMapper.Class() {
     class timeMs : OrderMapper.InConstructor.Field(AbstractSoundSystem::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
     }
+
+    @MethodParameters()
+    class run : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.arguments.isEmpty() && it.returnType == VOID_TYPE }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == 256000 } }
+    }
+
+    @MethodParameters()
+    @DependsOn(SoundSystem.init::class)
+    class init : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<SoundSystem.init>().mark }
+    }
+
+    @DependsOn(Client.newSoundSystem::class)
+    class size : OrderMapper.InMethod.Field(Client.newSoundSystem::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Client.newSoundSystem::class)
+    class capacity : OrderMapper.InMethod.Field(Client.newSoundSystem::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

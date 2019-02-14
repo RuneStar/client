@@ -3952,4 +3952,52 @@ class Client : IdentityMapper.Class() {
                 .and { it.returnType == INT_TYPE }
                 .and { it.arguments == listOf(INT_TYPE, DOUBLE_TYPE) }
     }
+
+    @DependsOn(MusicSample::class)
+    class readMusicSample : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<MusicSample>() }
+    }
+
+    @DependsOn(Track::class)
+    class readTrack : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Track>() }
+    }
+
+    @DependsOn(SoundSystem.init::class)
+    class SoundSystem_sampleRate : UniqueMapper.InMethod.Field(SoundSystem.init::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(newSoundSystem::class, SoundSystems::class)
+    class soundSystemCount : UniqueMapper.InMethod.Field(newSoundSystem::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<SoundSystems>() }
+                .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Resampler::class)
+    class resampler : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Resampler>() }
+    }
+
+    @DependsOn(soundEffects::class)
+    class soundEffectCount : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<soundEffects>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(soundEffects::class)
+    class soundEffectIds : AllUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<soundEffects>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(soundEffects::class)
+    class queueSoundEffect : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<soundEffects>().id } }
+    }
 }

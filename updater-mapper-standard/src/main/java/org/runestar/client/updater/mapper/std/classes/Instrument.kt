@@ -13,6 +13,7 @@ import org.runestar.client.updater.mapper.tree.Method2
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.tree.Field2
 
 @DependsOn(SoundEnvelope::class)
 class Instrument : IdentityMapper.Class() {
@@ -60,5 +61,10 @@ class Instrument : IdentityMapper.Class() {
 
     class evaluateWave : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+    }
+
+    @DependsOn(AudioFilter::class)
+    class filter : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AudioFilter>() }
     }
 }
