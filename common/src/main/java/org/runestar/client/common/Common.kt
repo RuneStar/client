@@ -2,12 +2,12 @@
 
 package org.runestar.client.common
 
-import java.lang.invoke.MethodHandles
-
 @JvmField
 val JAV_CONFIG: JavConfig = JavConfig.load(System.getProperty("runestar.world", ""))
 
 @JvmField
-val REVISION: Int = MethodHandles.lookup().lookupClass().classLoader
-        .getResource("revision.txt")
-        .readText(Charsets.UTF_8).toInt()
+val REVISION: Int = lookupClassLoader.getResource("revision.txt").readText().toInt()
+
+const val MANIFEST_NAME = "gamepack.MANIFEST.MF"
+
+const val DIFF_NAME = "gamepack.diff"

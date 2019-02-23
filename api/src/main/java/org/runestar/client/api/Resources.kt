@@ -2,8 +2,8 @@
 
 package org.runestar.client.api
 
+import org.runestar.client.common.lookupClass
 import java.awt.image.BufferedImage
-import java.lang.invoke.MethodHandles
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.imageio.ImageIO
@@ -12,7 +12,7 @@ import javax.imageio.ImageIO
  * 16x16 RuneStar star icon
  */
 @JvmField
-val ICON: BufferedImage = ImageIO.read(MethodHandles.lookup().lookupClass().getResource("icon.png"))
+val ICON: BufferedImage = ImageIO.read(lookupClass.getResource("icon.png"))
 
 const val TITLE = "RuneStar"
 

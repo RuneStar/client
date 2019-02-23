@@ -1,64 +1,69 @@
 package org.runestar.client
 
+import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.warn
+import org.runestar.client.api.ROOT_DIR_PATH
+import org.runestar.client.common.DIFF_NAME
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.JavConfig
 import org.runestar.client.common.REVISION
 import org.runestar.client.common.xorAssign
 import org.runestar.client.game.raw.ClientProvider
 import org.runestar.client.game.raw.access.XClient
+import java.io.IOException
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.jar.JarFile
 
 class PatchedClientProvider : ClientProvider {
 
     override fun get(): XClient {
-        val jc = JAV_CONFIG
-        return patchGamePack(jc).loadClass(jc.initialClass).getDeclaredConstructor().newInstance() as XClient
+        return patchGamePack(JAV_CONFIG).loadClass(JAV_CONFIG.initialClass).getDeclaredConstructor().newInstance() as XClient
     }
 
     private fun patchGamePack(javConfig: JavConfig): ClassLoader {
-        val tmpdir = Paths.get(System.getProperty("java.io.tmpdir"))
-        val patchedGamepackPath = tmpdir.resolve("${codeSourceLastModifiedMillis()}.zip")
-        if (!verifyJar(patchedGamepackPath)) {
-            val gamepackPath = tmpdir.resolve("runescape-gamepack.$REVISION.jar")
-            if (!verifyJar(gamepackPath)) {
-                downloadFile(javConfig.gamepackUrl, gamepackPath)
-            }
-            patch(gamepackPath, patchedGamepackPath)
+        val tempDir = ROOT_DIR_PATH.resolve(".temp")
+        tempDir.toFile().deleteRecursively()
+        Files.createDirectories(tempDir)
+        val patchedGamepackPath = tempDir.resolve(".patched-gamepack" + System.currentTimeMillis())
+        val gamepacksDir = ROOT_DIR_PATH.resolve(".gamepacks")
+        Files.createDirectories(gamepacksDir)
+        val gamepackPath = gamepacksDir.resolve(REVISION.toString())
+        if (!Files.exists(gamepackPath)) {
+            downloadFile(javConfig.gamepackUrl, gamepackPath)
         }
-        return URLClassLoader(arrayOf(patchedGamepackPath.toUri().toURL()))
+        patch(gamepackPath, patchedGamepackPath)
+        val cl = URLClassLoader(arrayOf(patchedGamepackPath.toUri().toURL()))
+        Runtime.getRuntime().addShutdownHook(Thread {
+            try {
+                cl.close()
+                Files.deleteIfExists(patchedGamepackPath)
+            } catch (e: Exception) {
+                getLogger().warn(e) { "Exception while cleaning up patched-gamepack" }
+            }
+        })
+        return cl
     }
 
     private fun patch(gamepack: Path, patchedGamepack: Path) {
         val original = Files.readAllBytes(gamepack)
-        val bytes = javaClass.classLoader.getResource("gamepack.diff").readBytes()
+        val bytes = javaClass.classLoader.getResource(DIFF_NAME).readBytes()
         bytes.xorAssign(original)
         Files.write(patchedGamepack, bytes)
     }
 
-    private fun verifyJar(jar: Path): Boolean {
-        return try {
-            JarFile(jar.toFile(), true).close()
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
-
     private fun downloadFile(url: URL, destination: Path) {
-        url.openStream().use { input ->
-            Files.copy(input, destination, StandardCopyOption.REPLACE_EXISTING)
+        try {
+            url.openStream().use { Files.copy(it, destination, StandardCopyOption.REPLACE_EXISTING) }
+        } catch (e: IOException) {
+            try {
+                Files.deleteIfExists(destination)
+            } catch (e2: Exception) {
+                e.addSuppressed(e2)
+            }
+            throw e
         }
-    }
-
-    private fun codeSourceLastModifiedMillis(): Long {
-        val codeSource = javaClass.protectionDomain.codeSource ?: return System.currentTimeMillis()
-        val file = Paths.get(codeSource.location.toURI())
-        return Files.getLastModifiedTime(file).toMillis()
     }
 }

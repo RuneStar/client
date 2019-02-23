@@ -6,12 +6,15 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import org.runestar.client.common.DIFF_NAME
+import org.runestar.client.common.MANIFEST_NAME
 import org.runestar.client.common.xorAssign
 import org.runestar.client.updater.cleanGamepackFile
 import org.runestar.client.updater.gamepackFile
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.util.jar.JarInputStream
 
 @Mojo(
         name = "patch",
@@ -35,11 +38,16 @@ class PatchMojo : AbstractMojo() {
 
         val generatedResourcesDir = dir.resolve("generated-resources")
         Files.createDirectories(generatedResourcesDir)
-        val diffFile = generatedResourcesDir.resolve("gamepack.diff")
+        val diffFile = generatedResourcesDir.resolve(DIFF_NAME)
         val bytes = Files.readAllBytes(injectedJar)
         val original = gamepackFile.readBytes()
         bytes.xorAssign(original)
         Files.write(diffFile, bytes)
+
+        val manifest = JarInputStream(gamepackFile.openStream()).use { checkNotNull(it.manifest) }
+        val manifestFile = generatedResourcesDir.resolve(MANIFEST_NAME)
+        Files.newOutputStream(manifestFile).use { manifest.write(it) }
+
         project.addResource(Resource().apply {
             directory = generatedResourcesDir.toString()
         })
