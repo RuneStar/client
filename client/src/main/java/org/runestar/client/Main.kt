@@ -4,10 +4,8 @@ package org.runestar.client
 
 import com.alee.managers.style.StyleId
 import com.google.common.base.Throwables
-import io.reactivex.plugins.RxJavaPlugins
 import org.kxtra.slf4j.error
 import org.kxtra.slf4j.getLogger
-import org.kxtra.slf4j.warn
 import org.runestar.client.api.Application
 import org.runestar.client.api.LafInstallation
 import org.runestar.client.common.JAV_CONFIG
@@ -21,7 +19,7 @@ import javax.swing.JTextArea
 import javax.swing.SwingUtilities
 
 fun main() {
-    setupLogging()
+    setupExceptionHandler()
     SwingUtilities.invokeLater(LafInstallation())
 
     checkUpToDate()
@@ -38,11 +36,8 @@ private fun checkUpToDate() {
     }
 }
 
-private fun setupLogging() {
+private fun setupExceptionHandler() {
     val logger = getLogger()
-    RxJavaPlugins.setErrorHandler { e ->
-        logger.warn(e) { "RxJavaPlugins error handler" }
-    }
     Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
         logger.error(exception) { "Uncaught exception" }
         showErrorDialog(Throwables.getStackTraceAsString(exception))
