@@ -8,7 +8,9 @@ import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.extensions.withDimensions
 import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Node::class)
@@ -21,5 +23,10 @@ class MusicPatch : IdentityMapper.Class() {
     @MethodParameters()
     class clear : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.isEmpty() && it.returnType == Type.VOID_TYPE }
+    }
+
+    @DependsOn(RawSound::class)
+    class rawSounds : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<RawSound>().withDimensions(1) }
     }
 }

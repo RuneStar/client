@@ -10,13 +10,13 @@ import org.runestar.client.updater.mapper.tree.Method2
 import java.lang.reflect.Modifier
 
 @SinceVersion(141)
-@DependsOn(AbstractSoundSystem::class)
-class AbstractSoundSystemProvider : IdentityMapper.Class() {
+@DependsOn(PcmPlayer::class)
+class PcmPlayerProvider : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { Modifier.isInterface(it.access) }
-            .and { it.instanceMethods.any { it.returnType == type<AbstractSoundSystem>() } }
+            .and { it.instanceMethods.any { it.returnType == type<PcmPlayer>() } }
 
-    @DependsOn(AbstractSoundSystem::class)
-    class soundSystem : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractSoundSystem>() }
+    @DependsOn(PcmPlayer::class)
+    class player : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<PcmPlayer>() }
     }
 }

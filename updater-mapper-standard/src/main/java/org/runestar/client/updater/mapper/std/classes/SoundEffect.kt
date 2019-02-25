@@ -39,4 +39,10 @@ class SoundEffect : IdentityMapper.Class() {
     class mix : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.isEmpty() && it.returnType == ByteArray::class.type }
     }
+
+    @MethodParameters()
+    @DependsOn(RawSound::class)
+    class toRawSound : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<RawSound>() }
+    }
 }

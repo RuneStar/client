@@ -1176,14 +1176,14 @@ class Client : IdentityMapper.Class() {
     }
 
     @SinceVersion(141)
-    @DependsOn(AbstractSoundSystemProvider::class)
-    class soundSystemProvider : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AbstractSoundSystemProvider>() }
+    @DependsOn(PcmPlayerProvider::class)
+    class pcmPlayerProvider : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PcmPlayerProvider>() }
     }
 
-    @DependsOn(SoundSystems::class)
-    class soundSystems : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<SoundSystems>() }
+    @DependsOn(SoundSystem::class)
+    class soundSystem : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SoundSystem>() }
     }
 
     class isLowDetail : AllUniqueMapper.Field() {
@@ -1192,8 +1192,8 @@ class Client : IdentityMapper.Class() {
     }
 
     // else mono
-    @DependsOn(SoundSystem.remaining::class)
-    class isStereo : UniqueMapper.InMethod.Field(SoundSystem.remaining::class) {
+    @DependsOn(DevicePcmPlayer.position::class)
+    class isStereo : UniqueMapper.InMethod.Field(DevicePcmPlayer.position::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -2490,19 +2490,19 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(AbstractSoundSystem::class)
-    class newSoundSystem : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractSoundSystem>() }
+    @DependsOn(PcmPlayer::class)
+    class newPcmPlayer : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<PcmPlayer>() }
     }
 
-    @DependsOn(AbstractSoundSystem::class)
-    class soundSystem0 : StaticOrderMapper.Field(0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSoundSystem>() }
+    @DependsOn(PcmPlayer::class)
+    class pcmPlayer0 : StaticOrderMapper.Field(0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<PcmPlayer>() }
     }
 
-    @DependsOn(AbstractSoundSystem::class)
-    class soundSystem1 : StaticOrderMapper.Field(1) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<AbstractSoundSystem>() }
+    @DependsOn(PcmPlayer::class)
+    class pcmPlayer1 : StaticOrderMapper.Field(1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<PcmPlayer>() }
     }
 
     class WorldMapCacheName_details : WorldMapCacheNameInstance(0)
@@ -3502,8 +3502,8 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isField && it.fieldId == field<Widget.widthAlignment>().id } }
     }
 
-    @DependsOn(newSoundSystem::class)
-    class soundSystemExecutor : UniqueMapper.InMethod.Field(newSoundSystem::class) {
+    @DependsOn(newPcmPlayer::class)
+    class soundSystemExecutor : UniqueMapper.InMethod.Field(newPcmPlayer::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == ScheduledExecutorService::class.type }
     }
 
@@ -3958,25 +3958,26 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<MusicSample>() }
     }
 
-    @DependsOn(Track::class)
+    @DependsOn(MusicTrack::class)
     class readTrack : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<Track>() }
+        override val predicate = predicateOf<Method2> { it.returnType == type<MusicTrack>() }
     }
 
-    @DependsOn(SoundSystem.init::class)
-    class SoundSystem_sampleRate : UniqueMapper.InMethod.Field(SoundSystem.init::class) {
+    // 22050
+    @DependsOn(DevicePcmPlayer.init::class)
+    class PcmPlayer_sampleRate : UniqueMapper.InMethod.Field(DevicePcmPlayer.init::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(newSoundSystem::class, SoundSystems::class)
-    class soundSystemCount : UniqueMapper.InMethod.Field(newSoundSystem::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<SoundSystems>() }
+    @DependsOn(newPcmPlayer::class, SoundSystem::class)
+    class pcmPlayerCount : UniqueMapper.InMethod.Field(newPcmPlayer::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<SoundSystem>() }
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Resampler::class)
-    class resampler : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Resampler>() }
+    @DependsOn(Decimator::class)
+    class decimator : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Decimator>() }
     }
 
     @DependsOn(soundEffects::class)
@@ -4000,4 +4001,62 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<soundEffects>().id } }
     }
+
+    @DependsOn(PcmStreamMixer::class)
+    class pcmStreamMixer : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PcmStreamMixer>() }
+    }
+
+    @MethodParameters("stream")
+    @DependsOn(PcmStream::class)
+    class PcmStream_disable : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<PcmStream>()) }
+    }
+
+    class clearIntArray : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(IntArray::class.type, INT_TYPE, INT_TYPE) }
+                .and { it.instructions.count { it.opcode == ICONST_0 } == 9 }
+    }
+
+    @DependsOn(SoundCache::class)
+    class soundCache : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SoundCache>() }
+    }
+
+    @DependsOn(MusicTrack::class)
+    class musicTrack : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<MusicTrack>() }
+    }
+
+    @DependsOn(MidiPcmStream::class)
+    class midiPcmStream : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<MidiPcmStream>() }
+    }
+
+    @DependsOn(musicTrack::class, AbstractIndexCache::class)
+    class musicTrackArchiveId : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<musicTrack>().id }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(musicTrack::class, AbstractIndexCache::class)
+    class musicTrackFileId : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<musicTrack>().id }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<AbstractIndexCache>() }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(musicTrack::class)
+    class musicTrackBoolean : StaticUniqueMapper.Field() {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<musicTrack>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
+
+//    @DependsOn(MusicPatch::class)
+//    class readMusicPatch : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<MusicPatch>() }
+//    }
 }

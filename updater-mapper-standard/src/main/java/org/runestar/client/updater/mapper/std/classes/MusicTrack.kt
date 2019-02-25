@@ -13,13 +13,13 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(Node::class, NodeHashTable::class)
-class Track : IdentityMapper.Class() {
+class MusicTrack : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
             .and { it.instanceFields.count { it.type == ByteArray::class.type } == 1 }
             .and { it.instanceFields.count { it.type == type<NodeHashTable>() } == 1 }
 
-    class bytes : IdentityMapper.InstanceField() {
+    class midi : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == ByteArray::class.type }
     }
 
