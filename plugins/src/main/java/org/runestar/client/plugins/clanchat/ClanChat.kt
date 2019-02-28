@@ -30,7 +30,7 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
         add(clanChatMessageAdded.subscribe(::onClanChatMessage))
     }
 
-    private val clanChatMessageAdded get() = Chat.messageAdditions.filter { it.type == MessageType.CLAN_CHAT }
+    private val clanChatMessageAdded get() = Chat.messageAdditions.filter { it.type == ChatType.FRIENDSCHAT }
 
     private fun onClanChatMessage(msg: Message) {
         val username = msg.senderUsername ?: return

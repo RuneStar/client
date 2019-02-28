@@ -2,8 +2,8 @@ package org.runestar.client.plugins.chatcolors
 
 import org.runestar.client.api.forms.RgbForm
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.ChatType
 import org.runestar.client.game.api.Message
-import org.runestar.client.game.api.MessageType
 import org.runestar.client.game.api.TextEffect
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.plugins.spi.PluginSettings
@@ -25,8 +25,8 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
 
     private fun decolorMessage(msg: Message) {
         when (msg.type) {
-            MessageType.CLAN_CHAT, MessageType.AUTO_CHAT, MessageType.PUBLIC, MessageType.PUBLIC_MOD,
-            MessageType.TRADE_RECEIVED-> {
+            ChatType.FRIENDSCHAT, ChatType.AUTOTYPER, ChatType.PUBLICCHAT, ChatType.MODCHAT,
+            ChatType.TRADEREQ-> {
                 msg.prefix?.let { msg.prefix = decolorString(it) }
                 msg.sender = decolorString(msg.sender)
                 msg.text = decolorString(msg.text)
@@ -36,20 +36,20 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
 
     private fun colorMessage(msg: Message) {
         when (msg.type) {
-            MessageType.CLAN_CHAT -> {
+            ChatType.FRIENDSCHAT -> {
                 msg.prefix = colorString(checkNotNull(msg.prefix), settings.clanChatName.get())
                 msg.sender = colorString(msg.sender, settings.clanChatSender.get())
                 msg.text = colorString(msg.text, settings.clanChatText.get())
             }
-            MessageType.AUTO_CHAT -> {
+            ChatType.AUTOTYPER -> {
                 msg.sender = colorString(msg.sender, settings.publicSender.get())
                 msg.text = colorString(msg.text, settings.publicAutoText.get())
             }
-            MessageType.PUBLIC, MessageType.PUBLIC_MOD -> {
+            ChatType.PUBLICCHAT, ChatType.MODCHAT -> {
                 msg.sender = colorString(msg.sender, settings.publicSender.get())
                 msg.text = colorString(msg.text, settings.publicText.get())
             }
-            MessageType.TRADE_RECEIVED -> {
+            ChatType.TRADEREQ -> {
                 msg.text = colorString(msg.text, settings.tradeReceived.get())
             }
         }
