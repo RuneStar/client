@@ -154,26 +154,26 @@ class WorldMapArea : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<zoom0>().id } }
     }
 
-    @MethodParameters()
-    @DependsOn(TileLocation.x::class)
-    class originX : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
-                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.x>().id } }
-    }
-
-    @MethodParameters()
-    @DependsOn(TileLocation.y::class)
-    class originY : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
-                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.y>().id } }
-    }
-
-    @MethodParameters()
-    @DependsOn(TileLocation.plane::class)
-    class originPlane : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
-                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.plane>().id } }
-    }
+//    @MethodParameters()
+//    @DependsOn(TileLocation.x::class)
+//    class originX : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+//                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.x>().id } }
+//    }
+//
+//    @MethodParameters()
+//    @DependsOn(TileLocation.y::class)
+//    class originY : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+//                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.y>().id } }
+//    }
+//
+//    @MethodParameters()
+//    @DependsOn(TileLocation.plane::class)
+//    class originPlane : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
+//                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<TileLocation.plane>().id } }
+//    }
 
     @MethodParameters()
     class setBounds : IdentityMapper.InstanceMethod() {

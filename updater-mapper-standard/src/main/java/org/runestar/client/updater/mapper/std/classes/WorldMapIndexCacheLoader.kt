@@ -39,13 +39,13 @@ class WorldMapIndexCacheLoader : IdentityMapper.Class() {
     @MethodParameters()
     class load : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
-                .and { it.instructions.any { it.opcode == Opcodes.IADD } }
+                .and { it.instructions.count() > 10 }
     }
 
     @MethodParameters()
     class percentLoaded : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
-                .and { it.instructions.none { it.opcode == Opcodes.IADD } }
+                .and { it.instructions.count() < 10 }
     }
 
     @MethodParameters()

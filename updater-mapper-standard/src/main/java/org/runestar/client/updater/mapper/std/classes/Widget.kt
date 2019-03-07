@@ -35,15 +35,15 @@ class Widget : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class textShadowed : OrderMapper.InConstructor.Field(Widget::class, -8) {
+    class textShadowed : OrderMapper.InConstructor.Field(Widget::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class isScrollBar : OrderMapper.InConstructor.Field(Widget::class, -6) {
+    class isScrollBar : OrderMapper.InConstructor.Field(Widget::class, 9) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class noClickThrough : OrderMapper.InConstructor.Field(Widget::class, -2) {
+    class noClickThrough : OrderMapper.InConstructor.Field(Widget::class, 13) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 

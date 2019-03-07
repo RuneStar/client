@@ -4,8 +4,6 @@ import org.runestar.client.game.raw.access.XVarcs
 
 inline class Varcs(val accessor: XVarcs) {
 
-    val ints: IntArray get() = accessor.ints
-
     val strings: Array<String?> get() = accessor.strings
 
     fun getInt(index: Int): Int = accessor.getInt(index)

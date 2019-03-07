@@ -30,10 +30,10 @@ class WorldMap : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMapManager>() }
     }
 
-    @DependsOn(AbstractIndexCache::class)
-    class indexCache : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AbstractIndexCache>() }
-    }
+//    @DependsOn(AbstractIndexCache::class)
+//    class indexCache : IdentityMapper.InstanceField() {
+//        override val predicate = predicateOf<Field2> { it.type == type<AbstractIndexCache>() }
+//    }
 
     @DependsOn(Font::class)
     class font : IdentityMapper.InstanceField() {

@@ -25,7 +25,7 @@ class WorldMapManager : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.constructors.isNotEmpty() }
-            .and { it.constructors.first().arguments == listOf(type<IndexedSprite>().withDimensions(1), HashMap::class.type) }
+            .and { it.constructors.first().arguments.startsWith(listOf(type<IndexedSprite>().withDimensions(1), HashMap::class.type)) }
 
     @DependsOn(IndexedSprite::class)
     class mapSceneSprites : IdentityMapper.InstanceField() {
@@ -98,10 +98,10 @@ class WorldMapManager : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    @MethodParameters("x", "y", "dst")
-    @DependsOn(WorldMapRegion::class)
-    class getNeighboringRegions : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<WorldMapRegion>().withDimensions(1)) }
-    }
+//    @MethodParameters("x", "y", "dst")
+//    @DependsOn(WorldMapRegion::class)
+//    class getNeighboringRegions : IdentityMapper.InstanceMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<WorldMapRegion>().withDimensions(1)) }
+//    }
 }

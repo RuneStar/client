@@ -18,13 +18,9 @@ import org.runestar.client.updater.mapper.tree.Method2
 class Varcs : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
-            .and { it.instanceFields.count { it.type == BooleanArray::class.type } == 2 }
-            .and { it.instanceFields.count { it.type == IntArray::class.type } == 1 }
+            .and { it.instanceFields.count { it.type == BooleanArray::class.type } >= 1 }
+            .and { it.instanceFields.count { it.type == IntArray::class.type } <= 1 }
             .and { it.instanceFields.count { it.type == Array<String>::class.type } == 1 }
-
-    class ints : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == IntArray::class.type }
-    }
 
     class strings : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Array<String>::class.type }
@@ -49,10 +45,6 @@ class Varcs : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BooleanArray::class.type }
     }
 
-    class stringsPersistence : OrderMapper.InConstructor.Field(Varcs::class, 1, 2) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BooleanArray::class.type }
-    }
-
     class unwrittenChanges : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
     }
@@ -64,6 +56,7 @@ class Varcs : IdentityMapper.Class() {
     @MethodParameters("index")
     class getString : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.instructions.any { it.opcode == AALOAD } }
     }
 
     @MethodParameters("index")
@@ -80,6 +73,7 @@ class Varcs : IdentityMapper.Class() {
     class setString : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
+                .and { it.instructions.any { it.opcode == AASTORE } }
     }
 
     @MethodParameters("index", "n")
