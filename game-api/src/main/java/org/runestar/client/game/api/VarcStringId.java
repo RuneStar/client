@@ -4,5 +4,5 @@ public final class VarcStringId {
 
     private VarcStringId() {}
 
-    public static final int TYPED_TEXT = 1;
+    public static final int TYPED_TEXT = 335;
 }

@@ -1,8 +1,13 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.AALOAD
+import org.objectweb.asm.Opcodes.AASTORE
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.LONG_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.common.startsWith
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -24,6 +29,10 @@ class Varcs : IdentityMapper.Class() {
 
     class strings : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Array<String>::class.type }
+    }
+
+    class map : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == Map::class.type }
     }
 
     @DependsOn(AccessFile::class)
@@ -54,9 +63,15 @@ class Varcs : IdentityMapper.Class() {
     }
 
     @MethodParameters("index")
-    class getString : IdentityMapper.InstanceMethod() {
+    class getStringOld : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
                 .and { it.instructions.any { it.opcode == AALOAD } }
+    }
+
+    @MethodParameters("index")
+    class getString : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
+                .and { it.instructions.none { it.opcode == AALOAD } }
     }
 
     @MethodParameters("index")
@@ -70,10 +85,17 @@ class Varcs : IdentityMapper.Class() {
     }
 
     @MethodParameters("index", "s")
-    class setString : IdentityMapper.InstanceMethod() {
+    class setStringOld : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
                 .and { it.instructions.any { it.opcode == AASTORE } }
+    }
+
+    @MethodParameters("index", "s")
+    class setString : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(INT_TYPE, String::class.type) }
+                .and { it.instructions.none { it.opcode == AASTORE } }
     }
 
     @MethodParameters("index", "n")

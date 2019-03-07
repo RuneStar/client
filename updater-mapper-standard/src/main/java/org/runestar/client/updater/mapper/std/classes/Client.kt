@@ -3144,25 +3144,25 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 
-//    @DependsOn(clickWidget::class)
-//    class widgetClickX : OrderMapper.InMethod.Field(clickWidget::class, 0) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
-//    }
-//
-//    @DependsOn(clickWidget::class)
-//    class widgetClickY : OrderMapper.InMethod.Field(clickWidget::class, 1) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
-//    }
-//
-//    @DependsOn(clickWidget::class)
-//    class widgetDragDuration : OrderMapper.InMethod.Field(clickWidget::class, 2) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
-//    }
-//
-//    @DependsOn(clickWidget::class)
-//    class isDraggingWidget : OrderMapper.InMethod.Field(clickWidget::class, 0) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
-//    }
+    @DependsOn(clickWidget::class)
+    class widgetClickX : OrderMapper.InMethod.Field(clickWidget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class widgetClickY : OrderMapper.InMethod.Field(clickWidget::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class widgetDragDuration : OrderMapper.InMethod.Field(clickWidget::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(clickWidget::class)
+    class isDraggingWidget : OrderMapper.InMethod.Field(clickWidget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+    }
 
     @DependsOn(ChatChannel::class)
     class Messages_channels : AllUniqueMapper.Field() {
@@ -3198,24 +3198,24 @@ class Client : IdentityMapper.Class() {
 //                .and { it.instructions.any { it.opcode == INVOKESTATIC && it.methodId == method<drawWidgetGroup0>().id } }
 //    }
 
-//    @MethodParameters("widget", "x", "y")
-//    @DependsOn(Widget::class, isMenuOpen::class, Widget.parent::class)
-//    class clickWidget : IdentityMapper.StaticMethod() {
-//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-//                .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE) }
-//                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<isMenuOpen>().id } }
-//                .and { it.instructions.any { it.isField && it.fieldId == field<Widget.parent>().id } }
-//    }
-//
-//    @DependsOn(clickWidget::class, Widget::class)
-//    class clickedWidget : OrderMapper.InMethod.Field(clickWidget::class, 0) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Widget>() }
-//    }
-//
-//    @DependsOn(clickWidget::class, Widget::class)
-//    class clickedWidgetParent : OrderMapper.InMethod.Field(clickWidget::class, 1) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Widget>() }
-//    }
+    @MethodParameters("widget", "x", "y")
+    @DependsOn(Widget::class, isMenuOpen::class, minimapState::class)
+    class clickWidget : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(type<Widget>(), INT_TYPE, INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<isMenuOpen>().id } }
+                .and { it.instructions.none { it.opcode == GETSTATIC && it.fieldId == field<minimapState>().id } }
+    }
+
+    @DependsOn(clickWidget::class, Widget::class)
+    class clickedWidget : OrderMapper.InMethod.Field(clickWidget::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Widget>() }
+    }
+
+    @DependsOn(clickWidget::class, Widget::class)
+    class clickedWidgetParent : OrderMapper.InMethod.Field(clickWidget::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<Widget>() }
+    }
 
     @MethodParameters()
     @DependsOn(doCycle::class)

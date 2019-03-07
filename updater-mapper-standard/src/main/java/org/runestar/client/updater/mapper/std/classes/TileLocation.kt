@@ -1,9 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.runestar.client.common.startsWith
+import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.IOR
-import org.objectweb.asm.Opcodes.PUTFIELD
-import org.objectweb.asm.Type.*
+import org.objectweb.asm.Type.BOOLEAN_TYPE
+import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -30,20 +30,20 @@ class TileLocation : IdentityMapper.Class() {
 //                .and { it.arguments.size in 3..4 }
 //    }
 
-//    @DependsOn(set::class)
-//    class plane : OrderMapper.InMethod.Field(set::class, 0, 3) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
-//    }
-//
-//    @DependsOn(set::class)
-//    class x : OrderMapper.InMethod.Field(set::class, 1, 3) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
-//    }
-//
-//    @DependsOn(set::class)
-//    class y : OrderMapper.InMethod.Field(set::class, 2, 3) {
-//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
-//    }
+    @DependsOn(toString0::class)
+    class plane : OrderMapper.InMethod.Field(toString0::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(toString0::class)
+    class x : OrderMapper.InMethod.Field(toString0::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(toString0::class)
+    class y : OrderMapper.InMethod.Field(toString0::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
 
     @MethodParameters("separator")
     class toString0 : IdentityMapper.InstanceMethod() {
