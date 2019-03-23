@@ -31,5 +31,6 @@ public final class ChatType {
             CHALREQ_FRIENDSCHAT = 104,
             SPAM = 105,
             PLAYERRELATED = 106,
-            _10SECTIMEOUT = 107;
+            _10SECTIMEOUT = 107,
+            _108 = 108;
 }
