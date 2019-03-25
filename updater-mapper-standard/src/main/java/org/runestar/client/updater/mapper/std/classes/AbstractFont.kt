@@ -1,8 +1,15 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes.GETFIELD
+import org.objectweb.asm.Opcodes.IDIV
+import org.objectweb.asm.Opcodes.IINC
+import org.objectweb.asm.Opcodes.ISUB
+import org.objectweb.asm.Opcodes.LDC
+import org.objectweb.asm.Opcodes.PUTFIELD
+import org.objectweb.asm.Type.CHAR_TYPE
+import org.objectweb.asm.Type.INT_TYPE
+import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.common.startsWith
-import org.objectweb.asm.Opcodes.*
-import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
@@ -221,5 +228,10 @@ class AbstractFont : IdentityMapper.Class() {
     class drawCenteredShake : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
+    }
+
+    @MethodParameters("bytes")
+    class readMetrics : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE && it.arguments == listOf(ByteArray::class.type) }
     }
 }
