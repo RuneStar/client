@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.raw.access.XPlayerAppearance
-import java.util.*
+import java.util.EnumMap
 
 inline class PlayerAppearance(val accessor: XPlayerAppearance) {
 
@@ -31,27 +31,7 @@ inline class PlayerAppearance(val accessor: XPlayerAppearance) {
         }
     }
 
-    val bodyColors: Map<BodyPart, Int> get() {
-        return EnumMap<BodyPart, Int>(BodyPart::class.java).apply {
-            val bcs = accessor.bodyColors
-            for (v in BodyPart.VALUES) {
-                put(v, bcs[v.id])
-            }
-        }
-    }
+    val bodyColors: IntArray get() = accessor.bodyColors
 
     val sex get() = if (accessor.isFemale) Sex.FEMALE else Sex.MALE
-
-    enum class BodyPart(val id: Int) {
-
-        HAIR(0),
-        BODY(1),
-        LEGS(2),
-        FEET(3),
-        SKIN(4);
-
-        companion object {
-            @JvmField val VALUES = values().asList()
-        }
-    }
 }
