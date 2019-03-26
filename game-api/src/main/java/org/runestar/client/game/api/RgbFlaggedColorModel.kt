@@ -1,7 +1,12 @@
 package org.runestar.client.game.api
 
 import java.awt.Transparency
-import java.awt.image.*
+import java.awt.image.ColorModel
+import java.awt.image.DataBuffer
+import java.awt.image.DirectColorModel
+import java.awt.image.Raster
+import java.awt.image.SampleModel
+import java.awt.image.WritableRaster
 
 /**
  * A 24 bit RGB [ColorModel] which treats all pixel values as opaque except for [transparentFlag] which is fully

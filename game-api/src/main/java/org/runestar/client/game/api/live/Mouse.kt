@@ -2,7 +2,6 @@ package org.runestar.client.game.api.live
 
 import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
-import org.runestar.client.game.api.SceneElementTag
 import org.runestar.client.game.raw.CLIENT
 import java.awt.Point
 import java.awt.event.MouseEvent

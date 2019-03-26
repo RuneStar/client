@@ -1,6 +1,8 @@
 package org.runestar.client.game.api
 
-import java.util.*
+import java.util.Collections
+import java.util.NavigableMap
+import java.util.TreeMap
 
 object Xp {
 

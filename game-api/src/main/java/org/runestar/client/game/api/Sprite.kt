@@ -1,12 +1,22 @@
 package org.runestar.client.game.api
 
-import org.kxtra.swing.image.*
+import org.kxtra.swing.image.BufferedImage
+import org.kxtra.swing.image.DataBufferByte
+import org.kxtra.swing.image.DataBufferInt
+import org.kxtra.swing.image.createCompatibleWritableRaster
+import org.kxtra.swing.image.fill
+import org.kxtra.swing.image.getArgb
+import org.kxtra.swing.image.height
+import org.kxtra.swing.image.width
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite
 import org.runestar.client.game.raw.base.Accessor
 import java.awt.Image
-import java.awt.image.*
+import java.awt.image.BufferedImage
+import java.awt.image.ColorModel
+import java.awt.image.DataBuffer
+import java.awt.image.IndexColorModel
 
 abstract class Sprite(accessor: Accessor) : Wrapper(accessor) {
 

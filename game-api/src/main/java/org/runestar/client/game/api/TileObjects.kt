@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import org.runestar.client.game.api.utils.cascadingListOf
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
-import java.util.*
+import java.util.Collections
 
 sealed class TileObjects<T>(val accessor: XScene) {
 

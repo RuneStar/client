@@ -3,7 +3,6 @@ package org.runestar.client.game.api.live
 import com.google.common.collect.Iterators
 import io.reactivex.Observable
 import org.runestar.client.game.api.Message
-import org.runestar.client.game.api.PublicChatMode
 import org.runestar.client.game.api.VarcStringId
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XChatChannel

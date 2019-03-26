@@ -3,7 +3,7 @@
 package org.runestar.client.game.raw
 
 import org.runestar.client.game.raw.access.XClient
-import java.util.*
+import java.util.ServiceLoader
 import java.util.function.Supplier
 
 /**

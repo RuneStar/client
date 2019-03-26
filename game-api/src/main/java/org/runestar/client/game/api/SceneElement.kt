@@ -2,8 +2,16 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.utils.cascadingListOf
+import org.runestar.client.game.raw.access.XBoundaryObject
+import org.runestar.client.game.raw.access.XEntity
+import org.runestar.client.game.raw.access.XFloorDecoration
+import org.runestar.client.game.raw.access.XGameObject
+import org.runestar.client.game.raw.access.XGroundItem
+import org.runestar.client.game.raw.access.XGroundItemPile
+import org.runestar.client.game.raw.access.XModel
+import org.runestar.client.game.raw.access.XNode
+import org.runestar.client.game.raw.access.XWallDecoration
 import org.runestar.client.game.raw.base.Accessor
-import org.runestar.client.game.raw.access.*
 
 abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
