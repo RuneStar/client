@@ -65,9 +65,12 @@ class CustomFonts : DisposablePlugin<CustomFonts.Settings>() {
 
     private fun fontName(fontId: Int): XFontName? {
         return when (fontId) {
-            FontId.PLAIN_11 -> CLIENT.fontName_plain11
-            FontId.PLAIN_12 -> CLIENT.fontName_plain12
-            FontId.BOLD_12 -> CLIENT.fontName_bold12
+            FontId.P11_FULL -> CLIENT.fontName_plain11
+            FontId.P12_FULL -> CLIENT.fontName_plain12
+            FontId.B12_FULL -> CLIENT.fontName_bold12
+            FontId.VERDANA_11PT_REGULAR -> CLIENT.fontName_verdana11
+            FontId.VERDANA_13PT_REGULAR -> CLIENT.fontName_verdana13
+            FontId.VERDANA_15PT_REGULAR -> CLIENT.fontName_verdana15
             else -> null
         }
     }
@@ -133,7 +136,7 @@ class CustomFonts : DisposablePlugin<CustomFonts.Settings>() {
     }
 
     class Settings(
-            val fonts: List<FontReplace> = listOf(FontReplace(FontId.PLAIN_12, FontForm(Font.SANS_SERIF, FontForm.Style.PLAIN, 12f)))
+            val fonts: List<FontReplace> = listOf(FontReplace(FontId.P12_FULL, FontForm(Font.SANS_SERIF, FontForm.Style.PLAIN, 12f)))
     ) : PluginSettings() {
 
         class FontReplace(val id: Int, val font: FontForm)
