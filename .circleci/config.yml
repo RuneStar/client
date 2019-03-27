@@ -5,6 +5,9 @@ jobs:
       - image: circleci/openjdk:11-jdk
 
     working_directory: ~/repo
+
+    environment:
+      - MAVEN_OPTS: -Xmx3072m
     
     steps:
       - checkout
