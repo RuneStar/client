@@ -16,4 +16,6 @@ object Widgets {
     operator fun get(group: Int, index: Int): Widget? = CLIENT.widgets.getOrNull(group)?.getOrNull(index)?.let { Widget.of(it) }
 
     val roots: Sequence<Widget> get() = WidgetGroups.root?.roots ?: emptySequence()
+
+    val dragInventory: Widget.Inventory? get() = CLIENT.dragInventoryWidget?.let { Widget.of(it) as Widget.Inventory }
 }
