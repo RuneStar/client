@@ -4059,4 +4059,22 @@ class Client : IdentityMapper.Class() {
 //    class readMusicPatch : IdentityMapper.StaticMethod() {
 //        override val predicate = predicateOf<Method2> { it.returnType == type<MusicPatch>() }
 //    }
+
+    @DependsOn(drawWidgetGroup::class, isItemSelected::class)
+    class dragItemSlotSource : UniqueMapper.InMethod.Field(drawWidgetGroup::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<isItemSelected>().id }
+                .prevWithin(5) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleLoggedIn::class, dragItemSlotSource::class)
+    class dragItemSlotDestination : UniqueMapper.InMethod.Field(doCycleLoggedIn::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<dragItemSlotSource>().id }
+                .next { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(doCycleLoggedIn::class, dragItemSlotDestination::class, Widget::class)
+    class dragInventoryWidget : UniqueMapper.InMethod.Field(doCycleLoggedIn::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<dragItemSlotDestination>().id }
+                .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
+    }
 }
