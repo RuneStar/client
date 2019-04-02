@@ -4077,4 +4077,29 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<dragItemSlotDestination>().id }
                 .nextIn(2) { it.opcode == GETSTATIC && it.fieldType == type<Widget>() }
     }
+
+    @DependsOn(Scene.menuOpen::class)
+    class Scene_selectedPlane : OrderMapper.InMethod.Field(Scene.menuOpen::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.menuOpen::class)
+    class Scene_selectedScreenX : OrderMapper.InMethod.Field(Scene.menuOpen::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.menuOpen::class)
+    class Scene_selectedScreenY : OrderMapper.InMethod.Field(Scene.menuOpen::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.menuOpen::class)
+    class Scene_selectedX : OrderMapper.InMethod.Field(Scene.menuOpen::class, 3) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(Scene.menuOpen::class)
+    class Scene_selectedY : OrderMapper.InMethod.Field(Scene.menuOpen::class, 4) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
 }

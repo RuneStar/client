@@ -80,6 +80,12 @@ object Game {
         return SceneTile(x, y, plane)
     }
 
+    val selectedTile: SceneTile? get() {
+        val x = CLIENT.scene_selectedX
+        if (x == -1) return null
+        return SceneTile(x, CLIENT.scene_selectedY, plane)
+    }
+
     val executor = ObservableExecutor(XClient.doCycle.exit)
 
     val scheduler = Schedulers.from(executor)

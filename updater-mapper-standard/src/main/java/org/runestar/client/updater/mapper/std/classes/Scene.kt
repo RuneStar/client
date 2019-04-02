@@ -252,4 +252,10 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.isEmpty() }
                 .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<Client.Scene_currentOccludersCount>().id } }
     }
+
+    @MethodParameters("plane", "screenX", "screenY", "b")
+    class menuOpen : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE, BOOLEAN_TYPE) }
+    }
 }
