@@ -68,10 +68,10 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
             if (settings.hpRegen.enabled && hpTicks > 0) {
                 Widgets[WidgetId.MINIMAP_ORBS_HP_CIRCLE]?.shape?.let { hpRect ->
-                    val lvl = Stats[Skill.HITPOINTS]
+                    val boost = Stats.boost(Skill.HITPOINTS)
                     val hpPercent = when {
-                        lvl.currentLevel < lvl.level -> hpTicks.toDouble() / hpTickLimit
-                        lvl.currentLevel > lvl.level -> 1 - (hpTicks.toDouble() / hpTickLimit)
+                        boost < 0 -> hpTicks.toDouble() / hpTickLimit
+                        boost > 0 -> 1 - (hpTicks.toDouble() / hpTickLimit)
                         else -> return@let
                     }
                     g.color = settings.hpRegen.color.get()

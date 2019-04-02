@@ -1,33 +1,21 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Skill
-import org.runestar.client.game.api.SkillLevel
 import org.runestar.client.game.raw.CLIENT
 
-object Stats : AbstractMap<Skill, SkillLevel>() {
+object Stats {
 
-    override val entries: Set<Map.Entry<Skill, SkillLevel>> = object : AbstractSet<Map.Entry<Skill, SkillLevel>>() {
+    val ids: IntRange get() = 0..Skill.CONSTRUCTION
 
-        override val size = Skill.VALUES.size
+    fun currentLevel(skill: Int): Int = CLIENT.currentLevels[skill]
 
-        override fun iterator() = iterator {
-            repeat(size) {
-                val skill = Skill.of(it)
-                yield(java.util.AbstractMap.SimpleImmutableEntry(skill, get(skill)))
-            }
-        }
-    }
+    fun level(skill: Int): Int = CLIENT.levels[skill]
 
-    override fun get(key: Skill) : SkillLevel {
-        val id = key.id
-        return SkillLevel(
-                CLIENT.currentLevels[id],
-                CLIENT.levels[id],
-                CLIENT.experience[id]
-        )
-    }
+    fun experience(skill: Int): Int = CLIENT.experience[skill]
 
-    val totalLevel: Int get() = values.sumBy { it.level }
+    fun boost(skill: Int): Int = currentLevel(skill) - level(skill)
 
-    val totalExperience: Long get() = values.fold(0L) { acc, sl -> acc + sl.experience.toLong() }
+    val totalExperience: Long get() = ids.fold(0L) { acc, skill -> acc + experience(skill) }
+
+    val totalLevel: Int get() = ids.sumBy { level(it) }
 }

@@ -19,7 +19,6 @@ class PrayerDebug : DisposablePlugin<PluginSettings>() {
             g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
             val strings = ArrayList<String>()
-            strings.add(Prayers.level.toString())
             Prayer.values().filter { Prayers.isEnabled(it) }.mapTo(strings) { it.toString() }
             strings.forEach { s ->
                 g.drawString(s, x, y)
