@@ -1,5 +1,6 @@
 package org.runestar.client.plugins.groundmarkers
 
+import org.runestar.client.api.forms.BasicStrokeForm
 import org.runestar.client.api.forms.KeyCodeForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
@@ -11,7 +12,6 @@ import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Menu
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.RenderingHints
 
@@ -26,11 +26,9 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
     private val markers = LinkedHashSet<GlobalTile>()
 
     override fun onStart() {
-        val stroke = BasicStroke(settings.stroke)
-
         add(LiveCanvas.repaints.subscribe { g ->
             g.color = settings.color.value
-            g.stroke = stroke
+            g.stroke = settings.stroke.value
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             for (marker in markers) {
                 if (!marker.isLoaded()) return@subscribe
@@ -59,7 +57,7 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
     }
 
     class Settings(
-            val stroke: Float = 1.0f,
+            val stroke: BasicStrokeForm = BasicStrokeForm(1f),
             val color: RgbaForm = RgbaForm(Color.YELLOW),
             val keyCode: KeyCodeForm = KeyCodeForm("SHIFT")
     ) : PluginSettings()

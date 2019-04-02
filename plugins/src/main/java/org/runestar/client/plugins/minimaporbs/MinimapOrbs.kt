@@ -1,5 +1,6 @@
 package org.runestar.client.plugins.minimaporbs
 
+import org.runestar.client.api.forms.BasicStrokeForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.GameState
@@ -12,7 +13,6 @@ import org.runestar.client.game.api.live.Prayers
 import org.runestar.client.game.api.live.Stats
 import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.BasicStroke
 import java.awt.RenderingHints
 import java.awt.Shape
 import java.awt.geom.Arc2D
@@ -51,8 +51,6 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             hpTicks = (hpTicks + 1) % hpTickLimit
         })
 
-        val stroke = BasicStroke(settings.stroke)
-
         add(LiveCanvas.repaints.subscribe { g ->
 
             val rh = Prayers.isEnabled(Prayer.RAPID_HEAL)
@@ -66,7 +64,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             }
             rapidHeal = rh
 
-            g.stroke = stroke
+            g.stroke = settings.stroke.value
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE)
 
@@ -114,7 +112,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
     }
 
     data class Settings(
-            val stroke: Float = 2f,
+            val stroke: BasicStrokeForm = BasicStrokeForm(2f),
             val hpRegen: Element = Element(RgbaForm(220, 0, 0)),
             val specRegen: Element = Element(RgbaForm(0, 200, 200)),
             val specFill: Element = Element(RgbaForm(255, 255, 255, 120))
