@@ -70,6 +70,10 @@ object Menu {
         CLIENT.menuTargetNames[index] = menuOption.targetName
     }
 
+    fun addOption(menuOption: MenuOption) {
+        setOption(optionsCount++, menuOption)
+    }
+
     val optionAdditions: Observable<MenuOption> = XClient.insertMenuItem.exit.map {
         MenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[4] as Int, it.arguments[5] as Int,
