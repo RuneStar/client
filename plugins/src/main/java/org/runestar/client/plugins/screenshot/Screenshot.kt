@@ -20,9 +20,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import javax.imageio.ImageIO
 import javax.swing.Icon
 import javax.swing.ImageIcon
@@ -44,7 +41,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
         screenshotDirectory = ctx.directory.resolve(SCREENSHOTS_DIRECTORY_NAME)
 
         Keyboard.strokes
-                .filter(settings.keyStroke.get()::equals)
+                .filter(settings.keyStroke.value::equals)
                 .delay { XRasterProvider.drawFull0.exit }
                 .map { copyCanvas() }
                 .observeOn(Schedulers.io())
@@ -66,7 +63,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
     private fun saveImage(img: RenderedImage) {
         val rsn = CLIENT.localPlayerName
-        val timeString = settings.dateTimeFormatter.get().format(Instant.now())
+        val timeString = settings.dateTimeFormatter.value.format(Instant.now())
         val fileName = "$rsn.$timeString.$IMAGE_FILE_EXTENSION"
         val path = screenshotDirectory.resolve(fileName)
         try {

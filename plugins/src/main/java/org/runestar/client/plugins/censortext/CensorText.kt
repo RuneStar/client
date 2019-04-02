@@ -39,7 +39,7 @@ class CensorText : DisposablePlugin<CensorText.Settings>() {
 
     private fun censor(text: String): String {
         return settings.replacements.fold(text) { s, (match, replacement) ->
-            s.replace(match.get(), replacement)
+            s.replace(match.value, replacement)
         }
     }
 

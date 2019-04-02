@@ -2,8 +2,8 @@ package org.runestar.client.plugins.minimapdots
 
 import org.runestar.client.api.forms.RgbForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.XSprite
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XSprite
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 
@@ -19,22 +19,22 @@ class MinimapDots : DisposablePlugin<MinimapDots.Settings>() {
         originalDots = CLIENT.mapDotSprites.clone()
         val dots = CLIENT.mapDotSprites
         if (settings.items.enabled) {
-            recolorDot(dots, 0, settings.items.color.get())
+            recolorDot(dots, 0, settings.items.color.value)
         }
         if (settings.npcs.enabled) {
-            recolorDot(dots, 1, settings.npcs.color.get())
+            recolorDot(dots, 1, settings.npcs.color.value)
         }
         if (settings.players.enabled) {
-            recolorDot(dots, 2, settings.players.color.get())
+            recolorDot(dots, 2, settings.players.color.value)
         }
         if (settings.friends.enabled) {
-            recolorDot(dots, 3, settings.friends.color.get())
+            recolorDot(dots, 3, settings.friends.color.value)
         }
         if (settings.team.enabled) {
-            recolorDot(dots, 4, settings.team.color.get())
+            recolorDot(dots, 4, settings.team.color.value)
         }
         if (settings.clan.enabled) {
-            recolorDot(dots, 5, settings.clan.color.get())
+            recolorDot(dots, 5, settings.clan.color.value)
         }
     }
 

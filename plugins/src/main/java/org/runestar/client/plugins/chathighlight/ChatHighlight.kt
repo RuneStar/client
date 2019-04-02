@@ -24,7 +24,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
     private fun highlight(msg: Message) {
         var txt = msg.text
         settings.highlights.forEach { highlight ->
-            txt = txt.replace(highlight.regex.get()) { matchResult ->
+            txt = txt.replace(highlight.regex.value) { matchResult ->
                 if (highlight.trayNotify) {
                     Application.trayIcon?.displayMessage(
                             msg.sender,
@@ -49,7 +49,7 @@ class ChatHighlight : DisposablePlugin<ChatHighlight.Settings>() {
     ) : PluginSettings() {
 
         @Transient
-        val effect = TextEffect(TextEffect.Type.UNDERLINE, underlineColor.get())
+        val effect = TextEffect(TextEffect.Type.UNDERLINE, underlineColor.value)
     }
 
     data class Highlight(

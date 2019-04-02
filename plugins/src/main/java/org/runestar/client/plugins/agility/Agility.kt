@@ -54,12 +54,12 @@ class Agility : DisposablePlugin<Agility.Settings>() {
         val shape = model.objectClickBox()
 
         if (settings.fill) {
-            g.color = settings.fillColor.get()
+            g.color = settings.fillColor.value
             g.fill(shape)
         }
 
         if (settings.outline) {
-            g.color = settings.outlineColor.get()
+            g.color = settings.outlineColor.value
             g.draw(shape)
         }
     }

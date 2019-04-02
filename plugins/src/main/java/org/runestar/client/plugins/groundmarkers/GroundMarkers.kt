@@ -29,7 +29,7 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
         val stroke = BasicStroke(settings.stroke)
 
         add(LiveCanvas.repaints.subscribe { g ->
-            g.color = settings.color.get()
+            g.color = settings.color.value
             g.stroke = stroke
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             for (marker in markers) {
@@ -41,7 +41,7 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
         })
 
         add(Menu.optionAdditions.subscribe { mo ->
-            if (mo.opcode != MenuOptionOpcode.WALK_HERE || !Keyboard.isKeyPressed(settings.keyCode.get())) return@subscribe
+            if (mo.opcode != MenuOptionOpcode.WALK_HERE || !Keyboard.isKeyPressed(settings.keyCode.value)) return@subscribe
             Menu.addOption(MenuOption.of(MenuOptionOpcode.CANCEL, 0, 0, 0, "", MARK_ACTION, false))
         })
 

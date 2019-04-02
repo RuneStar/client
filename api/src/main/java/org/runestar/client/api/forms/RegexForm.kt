@@ -1,14 +1,9 @@
 package org.runestar.client.api.forms
 
-import java.util.function.Supplier
-
 data class RegexForm(
         val regex: String,
         val options: Set<RegexOption> = emptySet()
-) : Supplier<Regex> {
+) {
 
-    @Transient
-    private val value: Regex = regex.toRegex(options)
-
-    override fun get() = value
+    @Transient val value: Regex = regex.toRegex(options)
 }

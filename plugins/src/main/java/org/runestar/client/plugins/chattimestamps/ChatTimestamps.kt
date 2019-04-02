@@ -19,7 +19,7 @@ class ChatTimestamps : DisposablePlugin<ChatTimestamps.Settings>() {
     }
 
     private fun stamp(msg: String): String {
-        return settings.dateTimeFormatter.get().format(Instant.now()) + msg
+        return settings.dateTimeFormatter.value.format(Instant.now()) + msg
     }
 
     class Settings(

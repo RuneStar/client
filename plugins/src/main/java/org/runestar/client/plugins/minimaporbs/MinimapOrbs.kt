@@ -6,7 +6,11 @@ import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.Skill
 import org.runestar.client.game.api.WidgetId
-import org.runestar.client.game.api.live.*
+import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Prayers
+import org.runestar.client.game.api.live.Stats
+import org.runestar.client.game.api.live.Widgets
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.BasicStroke
 import java.awt.RenderingHints
@@ -74,7 +78,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                         boost > 0 -> 1 - (hpTicks.toDouble() / hpTickLimit)
                         else -> return@let
                     }
-                    g.color = settings.hpRegen.color.get()
+                    g.color = settings.hpRegen.color.value
                     g.draw(orbArc(hpRect, hpPercent))
                 }
             }
@@ -82,7 +86,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             Widgets[WidgetId.MINIMAP_ORBS_SPEC_CIRCLE]?.shape?.let { specRect ->
 
                 if (settings.specFill.enabled && Game.specialAttackEnabled) {
-                    g.color = settings.specFill.color.get()
+                    g.color = settings.specFill.color.value
                     g.fillOval(
                             specRect.x,
                             specRect.y,
@@ -93,7 +97,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
                 if (settings.specRegen.enabled && specTicks > 0) {
                     val specPercent = specTicks.toDouble() / SPEC_TICKS
-                    g.color = settings.specRegen.color.get()
+                    g.color = settings.specRegen.color.value
                     g.draw(orbArc(specRect, specPercent))
                 }
             }

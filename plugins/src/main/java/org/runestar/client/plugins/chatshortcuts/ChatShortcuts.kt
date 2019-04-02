@@ -15,13 +15,13 @@ class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
 
     override fun onStart() {
         Keyboard.strokes
-                .filter(settings.clearAll.get()::equals)
+                .filter(settings.clearAll.value::equals)
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearAll() }
                 .add()
 
         Keyboard.strokes
-                .filter(settings.clearWord.get()::equals)
+                .filter(settings.clearWord.value::equals)
                 .delay { XClient.doCycle.enter }
                 .subscribe { clearWord() }
                 .add()

@@ -2,13 +2,12 @@ package org.runestar.client.api.forms
 
 import org.kxtra.swing.font.Font
 import java.awt.Font
-import java.util.function.Supplier
 
 data class FontForm(
         val name: String,
         val style: Style,
         val size: Float
-) : Supplier<Font> {
+) {
 
     constructor(font: Font) : this(font.name, Style.of(font.style), font.size2D)
 
@@ -26,8 +25,5 @@ data class FontForm(
         }
     }
 
-    @Transient
-    private val value = Font(name, style.asInt, size)
-
-    override fun get() = value
+    @Transient val value = Font(name, style.asInt, size)
 }

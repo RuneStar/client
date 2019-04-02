@@ -35,7 +35,7 @@ class CustomFonts : DisposablePlugin<CustomFonts.Settings>() {
         val fonts = HashMap<Int, XFont>()
         val metrics = HashMap<Int, ByteArray>()
         for (fr in settings.fonts) {
-            val f = fr.font.get()
+            val f = fr.font.value
             val fm = CLIENT.canvas.getFontMetrics(f)
             val bm = binaryMetrics(fm)
             metrics[fr.id] = bm

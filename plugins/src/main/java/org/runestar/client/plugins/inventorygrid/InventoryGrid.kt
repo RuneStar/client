@@ -13,7 +13,7 @@ class InventoryGrid : DisposablePlugin<InventoryGrid.Settings>() {
     override val name = "Inventory Grid"
 
     override fun onStart() {
-        val color = settings.color.get()
+        val color = settings.color.value
         add(LiveCanvas.repaints.subscribe { g ->
             val inv = Widgets.dragInventory ?: return@subscribe
             if (!inv.isActive) return@subscribe

@@ -29,15 +29,15 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     val blockRegexes = ArrayList<Regex>()
 
     override fun onStart() {
-        settings.blockedNames.mapTo(blockRegexes) { it.get() }
+        settings.blockedNames.mapTo(blockRegexes) { it.value }
 
         SceneElements.ItemPile.additions.subscribe { piles.add(it) }
         SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
         SceneElements.clears.subscribe { piles.clear() }
         piles.addAll(SceneElements.ItemPile.all())
 
-        val defaultColor = settings.color.get()
-        val font = settings.font.get()
+        val defaultColor = settings.color.value
+        val font = settings.font.value
 
         add(LiveCanvas.repaints.subscribe { g ->
             g.font = font

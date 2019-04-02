@@ -37,20 +37,20 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     private fun colorMessage(msg: Message) {
         when (msg.type) {
             ChatType.FRIENDSCHAT -> {
-                msg.prefix = colorString(checkNotNull(msg.prefix), settings.clanChatName.get())
-                msg.sender = colorString(msg.sender, settings.clanChatSender.get())
-                msg.text = colorString(msg.text, settings.clanChatText.get())
+                msg.prefix = colorString(checkNotNull(msg.prefix), settings.clanChatName.value)
+                msg.sender = colorString(msg.sender, settings.clanChatSender.value)
+                msg.text = colorString(msg.text, settings.clanChatText.value)
             }
             ChatType.AUTOTYPER -> {
-                msg.sender = colorString(msg.sender, settings.publicSender.get())
-                msg.text = colorString(msg.text, settings.publicAutoText.get())
+                msg.sender = colorString(msg.sender, settings.publicSender.value)
+                msg.text = colorString(msg.text, settings.publicAutoText.value)
             }
             ChatType.PUBLICCHAT, ChatType.MODCHAT -> {
-                msg.sender = colorString(msg.sender, settings.publicSender.get())
-                msg.text = colorString(msg.text, settings.publicText.get())
+                msg.sender = colorString(msg.sender, settings.publicSender.value)
+                msg.text = colorString(msg.text, settings.publicText.value)
             }
             ChatType.TRADEREQ -> {
-                msg.text = colorString(msg.text, settings.tradeReceived.get())
+                msg.text = colorString(msg.text, settings.tradeReceived.value)
             }
         }
     }

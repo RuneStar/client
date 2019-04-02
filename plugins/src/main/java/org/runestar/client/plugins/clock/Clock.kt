@@ -27,7 +27,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
             getReportWidget()?.text = if (settings.loginTime) {
                 loginElapsedTime() ?: DEFAULT_TEXT
             } else {
-                settings.dateTimeFormatter.get().format(Instant.now())
+                settings.dateTimeFormatter.value.format(Instant.now())
             }
         })
         if (settings.loginTime) {

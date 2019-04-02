@@ -16,7 +16,7 @@ class SkyboxColor : DisposablePlugin<SkyboxColor.Settings>() {
             CLIENT.Rasterizer2D_fillRectangle(
                     CLIENT.viewportOffsetX, CLIENT.viewportOffsetY,
                     CLIENT.viewportWidth, CLIENT.viewportHeight,
-                    settings.color.get().rgb
+                    settings.color.value.rgb
             )
         })
     }

@@ -15,7 +15,7 @@ class HotkeyRenderSelf : DisposablePlugin<HotkeyRenderSelf.Settings>() {
 
     override fun onStart() {
         Keyboard.strokes
-                .filter(settings.keyStroke.get()::equals)
+                .filter(settings.keyStroke.value::equals)
                 .delay { XClient.doCycle.enter }
                 .subscribe { CLIENT.renderSelf = !CLIENT.renderSelf }
                 .add()

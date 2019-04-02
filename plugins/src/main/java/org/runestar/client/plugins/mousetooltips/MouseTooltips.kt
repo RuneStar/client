@@ -28,9 +28,9 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
     // todo : color tags
 
     override fun onStart() {
-        val outlineColor = settings.outlineColor.get()
-        val fillColor = settings.fillColor.get()
-        val fontColor = settings.fontColor.get()
+        val outlineColor = settings.outlineColor.value
+        val fillColor = settings.fillColor.value
+        val fontColor = settings.fontColor.value
         add(LiveCanvas.repaints.subscribe { g ->
             if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
             val option = Menu.getOption(0)
