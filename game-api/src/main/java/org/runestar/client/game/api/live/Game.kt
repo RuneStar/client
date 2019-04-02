@@ -4,8 +4,10 @@ import hu.akarnokd.rxjava2.swing.SwingObservable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.kxtra.swing.component.window
+import org.runestar.client.game.api.ChunkTemplate
 import org.runestar.client.game.api.ClanChat
 import org.runestar.client.game.api.FriendsSystem
+import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.HintArrow
 import org.runestar.client.game.api.ObservableExecutor
 import org.runestar.client.game.api.Position
@@ -102,5 +104,47 @@ object Game {
         )
         10 -> Players[CLIENT.hintArrowPlayerIndex]?.let { HintArrow.OnPlayer(it) }
         else -> null
+    }
+
+    private fun instanceChunkTemplate(tile: SceneTile): ChunkTemplate {
+        return ChunkTemplate(CLIENT.instanceChunkTemplates[tile.plane][tile.x / ChunkTemplate.CHUNK_SIZE][tile.y / ChunkTemplate.CHUNK_SIZE])
+    }
+
+    fun toTemplate(sceneTile: SceneTile): GlobalTile {
+        if (!CLIENT.isInInstance) return sceneTile.toGlobalTile()
+        val template = instanceChunkTemplate(sceneTile)
+        val chunkX = sceneTile.x and (ChunkTemplate.CHUNK_SIZE - 1)
+        val chunkY = sceneTile.y and (ChunkTemplate.CHUNK_SIZE - 1)
+        val rotation = (4 - template.rotation) % 4
+        return GlobalTile(
+                template.x * ChunkTemplate.CHUNK_SIZE + ChunkTemplate.rotateX(chunkX, chunkY, rotation),
+                template.y * ChunkTemplate.CHUNK_SIZE + ChunkTemplate.rotateY(chunkX, chunkY, rotation),
+                template.plane
+        )
+    }
+
+    fun fromTemplate(globalTile: GlobalTile): List<SceneTile> {
+        if (!CLIENT.isInInstance) return listOf(globalTile.toSceneTile())
+        val tiles = ArrayList<SceneTile>()
+        CLIENT.instanceChunkTemplates.forEachIndexed { plane, xs ->
+            xs.forEachIndexed { x, ys ->
+                ys.forEachIndexed t@{ y, t ->
+                    val template = ChunkTemplate(t)
+                    if (template.plane != globalTile.plane) return@t
+                    val dx = (template.x * ChunkTemplate.CHUNK_SIZE) - globalTile.x
+                    if (dx !in 0..(ChunkTemplate.CHUNK_SIZE - 1)) return@t
+                    val dy = (template.y * ChunkTemplate.CHUNK_SIZE) - globalTile.y
+                    if (dy !in 0..(ChunkTemplate.CHUNK_SIZE - 1)) return@t
+                    val rotation = template.rotation
+                    val tile = SceneTile(
+                            x * ChunkTemplate.CHUNK_SIZE + ChunkTemplate.rotateX(dx, dy, rotation),
+                            y * ChunkTemplate.CHUNK_SIZE + ChunkTemplate.rotateY(dx, dy, rotation),
+                            plane
+                    )
+                    tiles.add(tile)
+                }
+            }
+        }
+        return tiles
     }
 }
