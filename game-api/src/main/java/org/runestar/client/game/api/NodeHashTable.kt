@@ -14,13 +14,13 @@ abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>(), Iterable<N>
 
     protected abstract fun wrapValue(node: N): V
 
-    @Suppress("UNCHECKED_CAST")
     override fun get(key: K): V? {
         val longKey = unwrapKey(key)
         val bucketSentinel = accessor.buckets[longKey.toInt() and (accessor.size - 1)]
         var cur = bucketSentinel.previous
         while (cur != null && cur != bucketSentinel) {
             if (cur.key == longKey) {
+                @Suppress("UNCHECKED_CAST")
                 return wrapValue(cur as N)
             }
             cur = cur.previous
@@ -28,9 +28,7 @@ abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>(), Iterable<N>
         return null
     }
 
-    override fun containsKey(key: K): Boolean {
-        return get(key) != null
-    }
+    override fun containsKey(key: K): Boolean = get(key) != null
 
     override fun iterator(): Iterator<N> = object : AbstractIterator<N>() {
 
@@ -62,8 +60,6 @@ abstract class NodeHashTable<K, V, N : XNode> : AbstractMap<K, V>(), Iterable<N>
 
         override fun iterator() = Iterators.transform(this@NodeHashTable.iterator()) { makeEntry(checkNotNull(it)) }
 
-        private fun makeEntry(node: N): Map.Entry<K, V> {
-            return java.util.AbstractMap.SimpleImmutableEntry(wrapKey(node), wrapValue(node))
-        }
+        private fun makeEntry(node: N): Map.Entry<K, V> = java.util.Map.entry(wrapKey(node), wrapValue(node))
     }
 }
