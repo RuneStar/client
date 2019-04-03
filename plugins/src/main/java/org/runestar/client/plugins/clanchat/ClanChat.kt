@@ -1,7 +1,11 @@
 package org.runestar.client.plugins.clanchat
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.*
+import org.runestar.client.game.api.ChatType
+import org.runestar.client.game.api.ClanRank
+import org.runestar.client.game.api.Message
+import org.runestar.client.game.api.Sprite
+import org.runestar.client.game.api.TextSymbol
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
@@ -36,21 +40,21 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
         val username = msg.senderUsername ?: return
         val cc = Game.clanChat ?: return
         val clanMate = cc[username] ?: return
-        val rank = clanMate.rank ?: return
-        msg.prefix += ' ' + TextSymbol.Image(rank.id + spritesStartIndex).tag
+        val rank = clanMate.rank
+        if (rank !in ClanRank.FRIEND..ClanRank.OWNER) return
+        msg.prefix += ' ' + TextSymbol.Image(rank + spritesStartIndex).tag
     }
 
     private fun addSprites() {
         val sheet = readSpriteSheet()
-        ClanRank.VALUES.forEach { rank ->
-            val index = rank.id
+        for (rank in ClanRank.FRIEND..ClanRank.OWNER) {
             val subImage = sheet.getSubimage(
-                    index * SPRITE_SIZE,
+                    rank * SPRITE_SIZE,
                     0,
                     SPRITE_SIZE, SPRITE_SIZE
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
-            CLIENT.abstractFont_modIconSprites[index + spritesStartIndex] = sprite
+            CLIENT.abstractFont_modIconSprites[rank + spritesStartIndex] = sprite
         }
     }
 
@@ -61,6 +65,6 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
     private fun expandModIcons() {
         val originalArray = CLIENT.abstractFont_modIconSprites
         spritesStartIndex = originalArray.size
-        CLIENT.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.VALUES.size)
+        CLIENT.abstractFont_modIconSprites = originalArray.copyOf(originalArray.size + ClanRank.OWNER + 1)
     }
 }

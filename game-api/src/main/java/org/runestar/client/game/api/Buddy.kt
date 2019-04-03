@@ -9,5 +9,5 @@ abstract class Buddy(override val accessor: XBuddy) : User(accessor) {
 
     val world get() = Worlds[worldId]
 
-    val rank: ClanRank? get() = ClanRank.of(accessor.rank)
+    val rank: Int get() = accessor.rank
 }
