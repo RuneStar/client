@@ -22,9 +22,9 @@ object WidgetGroupParents : NodeHashTable<WidgetId, Int, XWidgetGroupParent>() {
         return node.key.toInt()
     }
 
-    fun parent(group: Int): Widget.Layer? {
+    fun parent(group: Int): Widget? {
         val pid = parentId(group)
         if (pid == -1) return null
-        return Widgets[WidgetId.getGroup(pid), WidgetId.getIndex(pid)] as Widget.Layer?
+        return Widgets[WidgetId.getGroup(pid), WidgetId.getIndex(pid)]
     }
 }

@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.dev.widgetexplorer
 
-import org.runestar.client.game.api.Widget
+import org.runestar.client.game.api.WidgetType
 import org.runestar.client.game.api.live.WidgetGroups
 import org.runestar.client.game.api.live.Widgets
 import javax.swing.tree.DefaultMutableTreeNode
@@ -17,7 +17,7 @@ enum class WidgetOrder {
                 val groupNode = DefaultMutableTreeNode(wg.id)
                 wg.forEach { wp ->
                     val parentNode = DefaultMutableTreeNode(WidgetWrapper(wp))
-                    if (wp is Widget.Layer) {
+                    if (wp.type == WidgetType.LAYER) {
                         wp.dynamicChildren.asSequence().filterNotNull().forEach { wc ->
                             val childNode = DefaultMutableTreeNode(WidgetWrapper(wc))
                             parentNode.add(childNode)
@@ -46,7 +46,7 @@ enum class WidgetOrder {
 
         private fun addChildren(node: DefaultMutableTreeNode) {
             val widget = (node.userObject as WidgetWrapper).widget
-            if (widget is Widget.Layer) {
+            if (widget.type == WidgetType.LAYER) {
                 widget.children.forEach {
                     val c = DefaultMutableTreeNode(WidgetWrapper(it))
                     addChildren(c)

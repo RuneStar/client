@@ -13,7 +13,7 @@ class WidgetGroup(
 
     val flat: Sequence<Widget> get() = asSequence().flatMap(Widget::flat)
 
-    override fun get(index: Int): Widget = Widget.of(accessor[index])
+    override fun get(index: Int): Widget = Widget(accessor[index])
 
     override fun hashCode(): Int = id.hashCode()
 

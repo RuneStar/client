@@ -5,7 +5,6 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.NpcDefinition
 import org.runestar.client.game.api.NpcId
-import org.runestar.client.game.api.Widget
 import org.runestar.client.game.api.WidgetId
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Widgets
@@ -58,9 +57,9 @@ class CastleWars : DisposablePlugin<CastleWars.Settings>() {
     }
 
     private fun onDrawWidgets() {
-        var w = Widgets.getAs<Widget.Text>(WidgetId.CASTLE_WARS_ZAMORAK_TIME_LEFT)
+        var w = Widgets[WidgetId.CASTLE_WARS_ZAMORAK_TIME_LEFT]
         if (w == null || w.accessor.cycle == -1) {
-            w = Widgets.getAs(WidgetId.CASTLE_WARS_SARADOMIN_TIME_LEFT) ?: return
+            w = Widgets[WidgetId.CASTLE_WARS_SARADOMIN_TIME_LEFT] ?: return
         }
         val s = w.text ?: return
         if (s.endsWith(" Min")) {

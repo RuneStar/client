@@ -84,6 +84,15 @@ $w
 hierarchy:
 ${w.hierarchyString()}
 
+rawX: ${x.rawX}
+rawY: ${x.rawY}
+rawWidth: ${x.rawWidth}
+rawHeight: ${x.rawHeight}
+xAlignment: ${x.xAlignment}
+yAlignment: ${x.yAlignment}
+widthAlignment: ${x.widthAlignment}
+heightAlignment: ${x.heightAlignment}
+
 x: ${x.x}
 y: ${x.y}
 width: ${x.width}

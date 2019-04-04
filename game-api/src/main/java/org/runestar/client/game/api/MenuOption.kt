@@ -115,7 +115,7 @@ interface MenuOption {
 
         val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
 
-        val widgetChild: Widget? get() = widget.let { p -> widgetChildId?.let { c -> (p as Widget.Layer).dynamicChildren[c] } ?: p }
+        val widgetChild: Widget? get() = widget.let { p -> widgetChildId?.let { c -> p.dynamicChildren[c] } ?: p }
     }
 
     data class OnWidgetSimple internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, OnWidget {

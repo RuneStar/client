@@ -11,11 +11,11 @@ object Widgets {
 
     operator fun get(id: WidgetId): Widget? = get(id.group, id.index)
 
-    inline fun <reified T : Widget> getAs(id: WidgetId): T? = Widgets[id] as? T?
-
-    operator fun get(group: Int, index: Int): Widget? = CLIENT.widgets.getOrNull(group)?.getOrNull(index)?.let { Widget.of(it) }
+    operator fun get(group: Int, index: Int): Widget? = CLIENT.widgets.getOrNull(group)?.getOrNull(index)?.let { Widget(it) }
 
     val roots: Sequence<Widget> get() = WidgetGroups.root?.roots ?: emptySequence()
 
-    val dragInventory: Widget.Inventory? get() = CLIENT.dragInventoryWidget?.let { Widget.of(it) as Widget.Inventory }
+    val dragInventory: Widget? get() = CLIENT.dragInventoryWidget?.let { Widget(it) }
+
+    fun align(w: Widget) = CLIENT.alignWidget(w.accessor)
 }
