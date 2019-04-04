@@ -13,6 +13,7 @@ class WorldMapIcon1 : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<AbstractWorldMapIcon>() }
             .and { it.instanceFields.size == 4 }
 
+    @DependsOn(WorldMapLabel::class)
     class label : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<WorldMapLabel>() }
     }
