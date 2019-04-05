@@ -6,8 +6,16 @@ import org.kxtra.slf4j.debug
 import org.kxtra.slf4j.getLogger
 import java.io.Closeable
 import java.io.IOException
-import java.nio.file.*
-import java.util.*
+import java.nio.file.ClosedWatchServiceException
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardCopyOption
+import java.nio.file.StandardWatchEventKinds
+import java.nio.file.WatchKey
+import java.util.ServiceLoader
+import java.util.SortedMap
+import java.util.TreeMap
 import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -197,6 +205,13 @@ class PluginLoader(
             isRunning = true
             _isRunningChanged.onNext(true)
             lifeCycleExecutor.execute {
+                settings.write = {
+                    loaderThread.submit {
+                        synchronized(settings) {
+                            writeSettings()
+                        }
+                    }
+                }
                 logger.debug("Starting...")
                 try {
                     plugin.start(settings)
