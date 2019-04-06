@@ -129,11 +129,12 @@ object Game {
         CLIENT.instanceChunkTemplates.forEachIndexed { plane, xs ->
             xs.forEachIndexed { x, ys ->
                 ys.forEachIndexed t@{ y, t ->
+                    if (t == -1) return@t
                     val template = ChunkTemplate(t)
                     if (template.plane != globalTile.plane) return@t
-                    val dx = (template.x * ChunkTemplate.CHUNK_SIZE) - globalTile.x
+                    val dx = globalTile.x - (template.x * ChunkTemplate.CHUNK_SIZE)
                     if (dx !in 0..(ChunkTemplate.CHUNK_SIZE - 1)) return@t
-                    val dy = (template.y * ChunkTemplate.CHUNK_SIZE) - globalTile.y
+                    val dy = globalTile.y - (template.y * ChunkTemplate.CHUNK_SIZE)
                     if (dy !in 0..(ChunkTemplate.CHUNK_SIZE - 1)) return@t
                     val rotation = template.rotation
                     val tile = SceneTile(

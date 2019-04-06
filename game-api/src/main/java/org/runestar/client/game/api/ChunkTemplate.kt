@@ -10,6 +10,8 @@ inline class ChunkTemplate(val packed: Int) {
 
     val plane: Int get() = (packed shr 24) and 0x3
 
+    override fun toString() = "ChunkTemplate(x=$x, y=$y, plane=$plane, rotation=$rotation)"
+
     companion object {
 
         const val CHUNK_SIZE = 8
