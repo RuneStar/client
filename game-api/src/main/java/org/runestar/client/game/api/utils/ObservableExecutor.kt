@@ -1,4 +1,4 @@
-package org.runestar.client.game.api
+package org.runestar.client.game.api.utils
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy

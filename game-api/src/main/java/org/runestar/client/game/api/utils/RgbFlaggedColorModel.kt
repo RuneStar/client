@@ -1,4 +1,4 @@
-package org.runestar.client.game.api
+package org.runestar.client.game.api.utils
 
 import java.awt.Transparency
 import java.awt.image.ColorModel

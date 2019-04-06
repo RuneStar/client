@@ -8,6 +8,7 @@ import org.kxtra.swing.image.fill
 import org.kxtra.swing.image.getArgb
 import org.kxtra.swing.image.height
 import org.kxtra.swing.image.width
+import org.runestar.client.game.api.utils.RgbFlaggedColorModel
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XIndexedSprite
 import org.runestar.client.game.raw.access.XSprite

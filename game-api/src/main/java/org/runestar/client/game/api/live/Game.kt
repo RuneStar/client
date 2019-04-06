@@ -9,7 +9,7 @@ import org.runestar.client.game.api.ClanChat
 import org.runestar.client.game.api.FriendsSystem
 import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.HintArrow
-import org.runestar.client.game.api.ObservableExecutor
+import org.runestar.client.game.api.utils.ObservableExecutor
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.Varcs

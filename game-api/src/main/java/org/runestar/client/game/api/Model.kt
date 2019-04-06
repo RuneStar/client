@@ -1,6 +1,7 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.utils.Jarvis
 import org.runestar.client.game.api.utils.addNotNull
 import org.runestar.client.game.raw.access.XModel
 import org.runestar.client.game.raw.CLIENT
