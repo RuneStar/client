@@ -122,8 +122,8 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
         override val dynamicOrientation: Angle get() = Angle.ZERO
 
         override val modelPosition: Position get() = Position(
-                Position.toLocal(x, Position.MID_SUB) + accessor.xOffset,
-                Position.toLocal(y, Position.MID_SUB) + accessor.yOffset,
+                LocalValue(x, LocalValue.MID_SUB).value + accessor.xOffset,
+                LocalValue(y, LocalValue.MID_SUB).value + accessor.yOffset,
                 0,
                 plane
         )

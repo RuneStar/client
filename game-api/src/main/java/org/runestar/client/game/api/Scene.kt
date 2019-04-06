@@ -46,11 +46,11 @@ interface Scene {
     }
 
     fun getTileHeight(localX: Int, localY: Int, plane: Int): Int {
-        val x = Position.toScene(localX)
-        val y = Position.toScene(localY)
+        val x = LocalValue(localX).scene
+        val y = LocalValue(localY).scene
         require(SceneTile.isLoaded(x, y, plane))
-        val subX = Position.toSub(localX)
-        val subY = Position.toSub(localY)
+        val subX = LocalValue(localX).sub
+        val subY = LocalValue(localY).sub
         val p = if (isLinkBelow(x, y, plane)) {
             plane + 1
         } else {

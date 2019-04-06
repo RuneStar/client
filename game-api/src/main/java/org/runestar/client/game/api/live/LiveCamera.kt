@@ -2,14 +2,14 @@ package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Angle
 import org.runestar.client.game.api.Camera
-import org.runestar.client.game.api.Position
+import org.runestar.client.game.api.LocalValue
 import org.runestar.client.game.raw.CLIENT
 
 object LiveCamera : Camera {
 
-    override val localX: Int get() = CLIENT.cameraX.coerceIn(0, Position.MAX_LOCAL)
+    override val localX: Int get() = CLIENT.cameraX.coerceIn(0, LocalValue.MAX.value)
 
-    override val localY: Int get() = CLIENT.cameraZ.coerceIn(0, Position.MAX_LOCAL)
+    override val localY: Int get() = CLIENT.cameraZ.coerceIn(0, LocalValue.MAX.value)
 
     override val absoluteHeight: Int get() = CLIENT.cameraY
 

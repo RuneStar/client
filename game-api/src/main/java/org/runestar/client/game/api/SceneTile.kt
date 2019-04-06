@@ -50,9 +50,9 @@ data class SceneTile(
     val corners: List<Position>
         get() = listOf(
                 Position(x, 0, y, 0, 0, plane),
-                Position(x, Position.MAX_SUB, y, 0, 0, plane),
-                Position(x, Position.MAX_SUB, y, Position.MAX_SUB, 0, plane),
-                Position(x, 0, y, Position.MAX_SUB, 0, plane)
+                Position(x, LocalValue.MAX_SUB, y, 0, 0, plane),
+                Position(x, LocalValue.MAX_SUB, y, LocalValue.MAX_SUB, 0, plane),
+                Position(x, 0, y, LocalValue.MAX_SUB, 0, plane)
         )
 
     fun outline(projection: Projection = Projections.viewport): Shape {
@@ -60,10 +60,10 @@ data class SceneTile(
 
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, 6)
 
-        val xMin = Position.toLocal(x, 0)
-        val yMin = Position.toLocal(y, 0)
-        val xMax = Position.toLocal(x, Position.MAX_SUB)
-        val yMax = Position.toLocal(y, Position.MAX_SUB)
+        val xMin = LocalValue(x, 0).value
+        val yMin = LocalValue(y, 0).value
+        val xMax = LocalValue(x, LocalValue.MAX_SUB).value
+        val yMax = LocalValue(y, LocalValue.MAX_SUB).value
 
         if (!projection.toScreen(xMin, yMin, 0, plane, tempPoint)) return path
         val x0 = tempPoint.x.toFloat()

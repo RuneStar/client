@@ -23,39 +23,37 @@ data class SceneRectangle(
         val tempPoint = Point()
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, width * 2 + height * 2 + 2)
 
-        val baseX = Position.toLocal(x, 0)
-        val baseY = Position.toLocal(y, 0)
-        var x = baseX
-        var y = baseY
-        if (!projection.toScreen(baseX, baseY, 0, plane, tempPoint)) return path
+        var x = LocalValue(x, 0).value
+        var y = LocalValue(y, 0).value
+        if (!projection.toScreen(x, y, 0, plane, tempPoint)) return path
         path.moveTo(tempPoint.x.toFloat(), tempPoint.y.toFloat())
 
-        x += Position.MAX_SUB
+        x += LocalValue.MAX_SUB
         lineTo(path, x, y, projection, tempPoint)
         repeat(width - 1) {
-            x += Position.MAX_SUB + 1
+            x += LocalValue.MAX_SUB + 1
             lineTo(path, x, y, projection, tempPoint)
         }
 
-        y += Position.MAX_SUB
+        y += LocalValue.MAX_SUB
         lineTo(path, x, y, projection, tempPoint)
         repeat(height - 1) {
-            y += Position.MAX_SUB + 1
+            y += LocalValue.MAX_SUB + 1
             lineTo(path, x, y, projection, tempPoint)
         }
 
         repeat(width - 1) {
-            x -= Position.MAX_SUB + 1
+            x -= LocalValue.MAX_SUB + 1
             lineTo(path, x, y, projection, tempPoint)
         }
-        x -= Position.MAX_SUB
+        x -= LocalValue.MAX_SUB
         lineTo(path, x, y, projection, tempPoint)
 
         repeat(height - 1) {
-            y -= Position.MAX_SUB + 1
+            y -= LocalValue.MAX_SUB + 1
             lineTo(path, x, y, projection, tempPoint)
         }
-        y -= Position.MAX_SUB
+        y -= LocalValue.MAX_SUB
         lineTo(path, x, y, projection, tempPoint)
 
         path.closePath()

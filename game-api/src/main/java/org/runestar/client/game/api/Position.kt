@@ -10,15 +10,15 @@ data class Position(
         val plane: Int
 ) {
     constructor(x: Int, subX: Int, y: Int, subY: Int, height: Int, plane: Int) :
-            this(toLocal(x, subX), toLocal(y, subY), height, plane)
+            this(LocalValue(x, subX).value, LocalValue(y, subY).value, height, plane)
 
-    val x get() = toScene(localX)
+    val x get() = LocalValue(localX).scene
 
-    val y get() = toScene(localY)
+    val y get() = LocalValue(localY).scene
 
-    val subX get() = toSub(localX)
+    val subX get() = LocalValue(localX).sub
 
-    val subY get() = toSub(localY)
+    val subY get() = LocalValue(localY).sub
 
     val sceneTile get() = SceneTile(x, y, plane)
 
@@ -37,30 +37,12 @@ data class Position(
 
     companion object {
 
-        const val MAX_SUB = 127
-        const val MID_SUB = 64
-        const val MIN_SUB = 0
-
-        val MAX_LOCAL = toLocal(Scene.SIZE - 1, MAX_SUB)
-
-        fun toScene(local: Int): Int {
-            return local shr 7
-        }
-
-        fun toSub(local: Int): Int {
-            return local and MAX_SUB
-        }
-
-        fun toLocal(scene: Int, sub: Int): Int {
-            return (scene shl 7) + sub
-        }
-
         fun isLoaded(localX: Int, localY: Int, plane: Int): Boolean {
-            return SceneTile.isLoaded(toScene(localX), toScene(localY), plane)
+            return SceneTile.isLoaded(LocalValue(localX).scene, LocalValue(localY).scene, plane)
         }
 
         fun centerOfTile(x: Int, y: Int, height: Int, plane: Int): Position {
-            return Position(x, Position.MID_SUB, y, Position.MID_SUB, height, plane)
+            return Position(x, LocalValue.MID_SUB, y, LocalValue.MID_SUB, height, plane)
         }
     }
 }

@@ -9,6 +9,7 @@ import org.runestar.client.game.api.ClanChat
 import org.runestar.client.game.api.FriendsSystem
 import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.HintArrow
+import org.runestar.client.game.api.LocalValue
 import org.runestar.client.game.api.utils.ObservableExecutor
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.SceneTile
@@ -96,8 +97,8 @@ object Game {
         1 -> Npcs[CLIENT.hintArrowNpcIndex]?.let { HintArrow.OnNpc(it) }
         2 -> HintArrow.Static(
                 Position(
-                        Position.toLocal(CLIENT.hintArrowX - CLIENT.baseX, CLIENT.hintArrowSubX),
-                        Position.toLocal(CLIENT.hintArrowY - CLIENT.baseY, CLIENT.hintArrowSubY),
+                        LocalValue(CLIENT.hintArrowX - CLIENT.baseX, CLIENT.hintArrowSubX).value,
+                        LocalValue(CLIENT.hintArrowY - CLIENT.baseY, CLIENT.hintArrowSubY).value,
                         CLIENT.hintArrowHeight * 2,
                         CLIENT.plane
                 )
