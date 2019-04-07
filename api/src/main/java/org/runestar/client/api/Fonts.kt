@@ -12,10 +12,6 @@ object Fonts {
 
     @JvmField val BOLD_12 = createFont("RuneScape-Bold-12", 16)
 
-    @JvmField val QUILL_8 = createFont("RuneScape-Quill-8", 16)
-
-    @JvmField val QUILL = createFont("RuneScape-Quill", 32)
-
     private fun createFont(name: String, size: Int): Font {
         javaClass.getResourceAsStream("$name.ttf").use { input ->
             val font = Font.createFont(Font.TRUETYPE_FONT, input).deriveFont(size.toFloat())

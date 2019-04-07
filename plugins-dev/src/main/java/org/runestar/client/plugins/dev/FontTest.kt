@@ -13,9 +13,7 @@ class FontTest : DisposablePlugin<PluginSettings>() {
     private val fonts = listOf(
             Fonts.BOLD_12,
             Fonts.PLAIN_12,
-            Fonts.QUILL,
-            Fonts.PLAIN_11,
-            Fonts.QUILL_8
+            Fonts.PLAIN_11
     )
 
     val s = "1234567890 abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_/:><"
