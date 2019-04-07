@@ -1,12 +1,9 @@
 package org.runestar.client.api
 
-import com.alee.managers.style.StyleId
-import com.alee.managers.tooltip.TooltipManager
-import com.alee.managers.tooltip.TooltipWay
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import java.awt.Dimension
-import java.util.*
+import java.util.TreeSet
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -64,9 +61,8 @@ class TopBar internal constructor(): JPanel() {
 
     private fun BarButton.makeButton(): JButton {
         return JButton(icon).apply {
-            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
+            isContentAreaFilled = false
             addActionListener(this@makeButton)
-            TooltipManager.addTooltip(this, this@makeButton.name, TooltipWay.right) // todo
         }
     }
 }

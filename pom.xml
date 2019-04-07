@@ -213,11 +213,6 @@
                 <artifactId>byte-buddy</artifactId>
                 <version>1.9.12</version>
             </dependency>
-            <dependency>
-                <groupId>com.weblookandfeel</groupId>
-                <artifactId>weblaf-ui</artifactId>
-                <version>1.2.9-SNAPSHOT</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

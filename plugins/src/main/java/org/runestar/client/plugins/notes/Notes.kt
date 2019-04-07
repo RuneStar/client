@@ -1,6 +1,5 @@
 package org.runestar.client.plugins.notes
 
-import com.alee.managers.style.StyleId
 import org.runestar.client.api.Application
 import org.runestar.client.api.TabButton
 import org.runestar.client.api.TopBar
@@ -12,7 +11,11 @@ import java.awt.event.FocusAdapter
 import java.awt.event.FocusEvent
 import java.io.File
 import javax.imageio.ImageIO
-import javax.swing.*
+import javax.swing.Box
+import javax.swing.ImageIcon
+import javax.swing.JLabel
+import javax.swing.JScrollPane
+import javax.swing.JTextArea
 
 class Notes : AbstractPlugin<PluginSettings>() {
 
@@ -65,10 +68,6 @@ class Notes : AbstractPlugin<PluginSettings>() {
                         JLabel("Notes").apply {
                             alignmentX = Component.CENTER_ALIGNMENT
                             preferredSize = Dimension(0, TopBar.HEIGHT)
-                            putClientProperty(
-                                    StyleId.STYLE_PROPERTY,
-                                    StyleId.labelShadow
-                            )
                         }
                 )
                 add(
@@ -80,20 +79,7 @@ class Notes : AbstractPlugin<PluginSettings>() {
                                         }
                                     })
                                 }
-                        ).apply {
-                            verticalScrollBar.apply {
-                                putClientProperty(
-                                        StyleId.STYLE_PROPERTY,
-                                        StyleId.scrollbarUndecoratedButtonless
-                                )
-                            }
-                            horizontalScrollBar.apply {
-                                putClientProperty(
-                                        StyleId.STYLE_PROPERTY,
-                                        StyleId.scrollbarUndecoratedButtonless
-                                )
-                            }
-                        }
+                        )
                 )
             }
         }

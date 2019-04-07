@@ -1,14 +1,18 @@
 package org.runestar.client.api
 
-import com.alee.managers.style.StyleId
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.kxtra.swing.component.window
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
-import java.util.*
-import javax.swing.*
+import java.util.SortedSet
+import java.util.TreeSet
+import javax.swing.Box
+import javax.swing.BoxLayout
+import javax.swing.JButton
+import javax.swing.JComponent
+import javax.swing.JPanel
 
 class SidePanel internal constructor() : JPanel() {
 
@@ -135,10 +139,8 @@ class SidePanel internal constructor() : JPanel() {
 
     private fun TabButton.makeButton(): Component {
         return JButton(icon).apply {
-            alignmentY = JComponent.TOP_ALIGNMENT
+            isContentAreaFilled = false
             alignmentX = JComponent.CENTER_ALIGNMENT
-            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
-//            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener {
                 if (selectedTab != this@makeButton || !panel.isVisible) {
                     selectedTab = this@makeButton
@@ -161,10 +163,9 @@ class SidePanel internal constructor() : JPanel() {
 
     private fun BarButton.makeButton(): Component {
         return JButton(icon).apply {
+            isContentAreaFilled = false
             alignmentY = JComponent.BOTTOM_ALIGNMENT
             alignmentX = JComponent.CENTER_ALIGNMENT
-            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonIconHover)
-//            TooltipManager.addTooltip(this, this@makeButton.name) // todo
             addActionListener(this@makeButton)
         }
     }

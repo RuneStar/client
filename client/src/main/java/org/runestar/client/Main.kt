@@ -2,12 +2,11 @@
 
 package org.runestar.client
 
-import com.alee.managers.style.StyleId
 import com.google.common.base.Throwables
 import org.kxtra.slf4j.error
 import org.kxtra.slf4j.getLogger
 import org.runestar.client.api.Application
-import org.runestar.client.api.LafInstallation
+import org.runestar.client.api.StarTheme
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.MANIFEST_NAME
 import org.runestar.client.common.lookupClassLoader
@@ -17,10 +16,15 @@ import javax.swing.JOptionPane
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 import javax.swing.SwingUtilities
+import javax.swing.UIManager
+import javax.swing.plaf.metal.MetalLookAndFeel
 
 fun main() {
     setupExceptionHandler()
-    SwingUtilities.invokeLater(LafInstallation())
+    SwingUtilities.invokeLater {
+        MetalLookAndFeel.setCurrentTheme(StarTheme())
+        UIManager.setLookAndFeel(MetalLookAndFeel())
+    }
 
     checkUpToDate()
 
@@ -50,7 +54,6 @@ private fun showErrorDialog(s: String) {
             setViewportView(JTextArea(s, 5, 40).apply {
                 isEditable = false
             })
-            putClientProperty(StyleId.STYLE_PROPERTY, StyleId.scrollpaneUndecoratedButtonless)
         }
         JOptionPane.showMessageDialog(null, component, "Error", JOptionPane.ERROR_MESSAGE)
     }

@@ -72,10 +72,6 @@
             <groupId>org.kxtra</groupId>
             <artifactId>kxtra-slf4j</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.weblookandfeel</groupId>
-            <artifactId>weblaf-ui</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

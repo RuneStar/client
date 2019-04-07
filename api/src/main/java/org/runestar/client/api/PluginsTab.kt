@@ -1,13 +1,21 @@
 package org.runestar.client.api
 
-import com.alee.managers.style.StyleId
 import hu.akarnokd.rxjava2.swing.SwingSchedulers
 import org.runestar.client.api.util.desktop
 import org.runestar.client.api.util.safeOpen
 import org.runestar.client.plugins.spi.PluginLoader
 import java.awt.Component
 import javax.imageio.ImageIO
-import javax.swing.*
+import javax.swing.Box
+import javax.swing.BoxLayout
+import javax.swing.ImageIcon
+import javax.swing.JButton
+import javax.swing.JCheckBox
+import javax.swing.JLabel
+import javax.swing.JMenuItem
+import javax.swing.JPanel
+import javax.swing.JPopupMenu
+import javax.swing.JScrollPane
 
 class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() {
 
@@ -24,7 +32,6 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
             setViewportView(pluginsBox)
             verticalScrollBar.apply {
                 unitIncrement = 16
-                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.scrollbarUndecoratedButtonless)
             }
             verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
             horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
@@ -45,9 +52,7 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
         }
         return Box.createHorizontalBox().apply {
             add(Box.createHorizontalStrut(3))
-            add(JLabel(this@createComponent.name).apply {
-                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.labelShadow)
-            })
+            add(JLabel(this@createComponent.name))
             add(Box.createGlue())
             add(JCheckBox().apply {
                 isSelected = false
@@ -59,7 +64,7 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
                 }
             })
             add(JButton("...").apply {
-                putClientProperty(StyleId.STYLE_PROPERTY, StyleId.buttonHover)
+                border = null
                 addActionListener {
                     popup.show(this, 0, bounds.height)
                 }

@@ -7,7 +7,6 @@ import org.runestar.client.common.JavConfig
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.raw.CLIENT
 import java.applet.Applet
-import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -56,8 +55,6 @@ class GameFrame internal constructor(
             maximumSize = JAV_CONFIG.appletMaxSize
             preferredSize = JAV_CONFIG.appletMinSize
             minimumSize = preferredSize
-            background = Color.BLACK
-            foreground = Color.BLACK
             size = preferredSize
         }
     }
