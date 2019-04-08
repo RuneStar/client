@@ -36,8 +36,10 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
             verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
             horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
         }
+        pluginsBox.add(Box.createVerticalStrut(7))
         plugins.forEach {
             pluginsBox.add(it.createComponent())
+            pluginsBox.add(Box.createVerticalStrut(7))
         }
     }
 
@@ -63,13 +65,14 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
                     setIsRunning(isSelected)
                 }
             })
+            add(Box.createHorizontalStrut(5))
             add(JButton("...").apply {
                 border = null
                 addActionListener {
                     popup.show(this, 0, bounds.height)
                 }
             })
-            add(Box.createHorizontalStrut(3))
+            add(Box.createHorizontalStrut(5))
         }
     }
 }

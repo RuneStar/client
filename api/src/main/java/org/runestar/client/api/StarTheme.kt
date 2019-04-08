@@ -16,10 +16,10 @@ class StarTheme : OceanTheme() {
 
     companion object {
         private val FONT = FontUIResource(Fonts.PLAIN_12)
-        private val BLACK = ColorUIResource(Color.BLACK)
-        private val DARK_GRAY = ColorUIResource(Color.DARK_GRAY)
-        private val GRAY = ColorUIResource(Color.GRAY)
-        private val LIGHT_GRAY = ColorUIResource(Color.LIGHT_GRAY)
+        private val BACKGROUND = ColorUIResource(Color(0x3c3f41))
+        private val FOREGROUND = ColorUIResource(Color(0xcccccc))
+        private val INTERIOR = ColorUIResource(Color(0x45494a))
+        private val HIGHLIGHT = ColorUIResource(Color(0x292b2d))
 
         fun install() {
             MetalLookAndFeel.setCurrentTheme(StarTheme())
@@ -29,16 +29,6 @@ class StarTheme : OceanTheme() {
 
     override fun getName() = "Star"
 
-    override fun getBlack() = BLACK
-
-    override fun getControlDarkShadow() = BLACK
-    override fun getPrimaryControlDarkShadow() = BLACK
-
-    override fun getControlShadow() = white
-    override fun getPrimaryControlShadow() = white
-
-    override fun getFocusColor() = white
-
     override fun getControlTextFont() = FONT
     override fun getUserTextFont() = FONT
     override fun getWindowTitleFont() = FONT
@@ -46,39 +36,42 @@ class StarTheme : OceanTheme() {
     override fun getSubTextFont() = FONT
     override fun getSystemTextFont() = FONT
 
-    override fun getControlTextColor() = white
-    override fun getHighlightedTextColor() = white
-    override fun getInactiveControlTextColor() = white
-    override fun getUserTextColor() = white
-    override fun getInactiveSystemTextColor() = white
-    override fun getSystemTextColor() = white
-
-    override fun getTextHighlightColor() = GRAY
-
-    override fun getMenuBackground() = DARK_GRAY
-    override fun getMenuSelectedBackground() = DARK_GRAY
-    override fun getSeparatorBackground() = DARK_GRAY
-    override fun getWindowBackground() = DARK_GRAY
-    override fun getWindowTitleBackground() = DARK_GRAY
-    override fun getWindowTitleInactiveBackground() = DARK_GRAY
-
-    override fun getAcceleratorForeground() = LIGHT_GRAY
-    override fun getAcceleratorSelectedForeground() = LIGHT_GRAY
-    override fun getMenuDisabledForeground() = LIGHT_GRAY
-    override fun getMenuForeground() = LIGHT_GRAY
-    override fun getMenuSelectedForeground() = LIGHT_GRAY
-    override fun getSeparatorForeground() = LIGHT_GRAY
-    override fun getWindowTitleForeground() = LIGHT_GRAY
-    override fun getWindowTitleInactiveForeground() = LIGHT_GRAY
-
-    override fun getControl() = DARK_GRAY
-    override fun getControlDisabled() = LIGHT_GRAY
-    override fun getControlHighlight() = white
-    override fun getPrimaryControlHighlight() = white
-    override fun getControlInfo() = white
-    override fun getDesktopColor() = LIGHT_GRAY
-    override fun getPrimaryControl() = white
-    override fun getPrimaryControlInfo() = white
+    override fun getBlack() = HIGHLIGHT
+    override fun getWhite() = FOREGROUND
+    override fun getControlDarkShadow() = HIGHLIGHT
+    override fun getPrimaryControlDarkShadow() = HIGHLIGHT
+    override fun getControlShadow() = INTERIOR
+    override fun getPrimaryControlShadow() = BACKGROUND
+    override fun getFocusColor() = HIGHLIGHT
+    override fun getControlTextColor() = FOREGROUND
+    override fun getHighlightedTextColor() = FOREGROUND
+    override fun getInactiveControlTextColor() = FOREGROUND
+    override fun getUserTextColor() = FOREGROUND
+    override fun getInactiveSystemTextColor() = FOREGROUND
+    override fun getSystemTextColor() = FOREGROUND
+    override fun getTextHighlightColor() = HIGHLIGHT
+    override fun getMenuBackground() = BACKGROUND
+    override fun getMenuSelectedBackground() = INTERIOR
+    override fun getSeparatorBackground() = BACKGROUND
+    override fun getWindowBackground() = INTERIOR
+    override fun getWindowTitleBackground() = BACKGROUND
+    override fun getWindowTitleInactiveBackground() = BACKGROUND
+    override fun getAcceleratorForeground() = FOREGROUND
+    override fun getAcceleratorSelectedForeground() = FOREGROUND
+    override fun getMenuDisabledForeground() = FOREGROUND
+    override fun getMenuForeground() = FOREGROUND
+    override fun getMenuSelectedForeground() = FOREGROUND
+    override fun getSeparatorForeground() = FOREGROUND
+    override fun getWindowTitleForeground() = FOREGROUND
+    override fun getWindowTitleInactiveForeground() = FOREGROUND
+    override fun getControl() = BACKGROUND
+    override fun getControlDisabled() = FOREGROUND
+    override fun getControlHighlight() = HIGHLIGHT
+    override fun getPrimaryControlHighlight() = HIGHLIGHT
+    override fun getControlInfo() = FOREGROUND
+    override fun getDesktopColor() = FOREGROUND
+    override fun getPrimaryControl() = FOREGROUND
+    override fun getPrimaryControlInfo() = HIGHLIGHT
 
     override fun addCustomEntriesToTable(table: UIDefaults) {
         System.setProperty("sun.awt.noerasebackground", "true")
@@ -92,8 +85,11 @@ class StarTheme : OceanTheme() {
 
         table["Button.gradient"] = null
         table["Button.margin"] = InsetsUIResource(2, 2, 2, 2)
+        table["CheckBox.background"] = INTERIOR
         table["CheckBox.gradient"] = null
+        table["CheckBox.border"] = null
         table["MenuItem.border"] = null
+        table["ScrollBar.background"] = INTERIOR
         table["ScrollBar.gradient"] = null
     }
 }
