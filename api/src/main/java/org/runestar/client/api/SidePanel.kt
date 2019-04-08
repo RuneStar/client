@@ -143,11 +143,13 @@ class SidePanel internal constructor() : JPanel() {
             alignmentX = JComponent.CENTER_ALIGNMENT
             addActionListener {
                 if (selectedTab != this@makeButton || !panel.isVisible) {
+                    val wasVisible = panel.isVisible
                     selectedTab = this@makeButton
+                    panel.isVisible = false
                     panel.removeAll()
                     panel.add(component, BorderLayout.CENTER)
-                    if (!panel.isVisible) {
-                        panel.isVisible = true
+                    panel.isVisible = true
+                    if (!wasVisible) {
                         (window as GameFrame).refit() // todo
                     } else {
                         panel.revalidate()
