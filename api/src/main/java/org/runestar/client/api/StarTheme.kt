@@ -5,19 +5,26 @@ import java.awt.RenderingHints
 import javax.swing.JPopupMenu
 import javax.swing.ToolTipManager
 import javax.swing.UIDefaults
+import javax.swing.UIManager
 import javax.swing.plaf.ColorUIResource
 import javax.swing.plaf.FontUIResource
 import javax.swing.plaf.InsetsUIResource
+import javax.swing.plaf.metal.MetalLookAndFeel
 import javax.swing.plaf.metal.OceanTheme
 
 class StarTheme : OceanTheme() {
 
-    private companion object {
-        val FONT = FontUIResource(Fonts.PLAIN_12)
-        val BLACK = ColorUIResource(Color.BLACK)
-        val DARK_GRAY = ColorUIResource(Color.DARK_GRAY)
-        val GRAY = ColorUIResource(Color.GRAY)
-        val LIGHT_GRAY = ColorUIResource(Color.LIGHT_GRAY)
+    companion object {
+        private val FONT = FontUIResource(Fonts.PLAIN_12)
+        private val BLACK = ColorUIResource(Color.BLACK)
+        private val DARK_GRAY = ColorUIResource(Color.DARK_GRAY)
+        private val GRAY = ColorUIResource(Color.GRAY)
+        private val LIGHT_GRAY = ColorUIResource(Color.LIGHT_GRAY)
+
+        fun install() {
+            MetalLookAndFeel.setCurrentTheme(StarTheme())
+            UIManager.setLookAndFeel(MetalLookAndFeel())
+        }
     }
 
     override fun getName() = "Star"

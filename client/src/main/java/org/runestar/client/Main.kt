@@ -16,15 +16,10 @@ import javax.swing.JOptionPane
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 import javax.swing.SwingUtilities
-import javax.swing.UIManager
-import javax.swing.plaf.metal.MetalLookAndFeel
 
 fun main() {
     setupExceptionHandler()
-    SwingUtilities.invokeLater {
-        MetalLookAndFeel.setCurrentTheme(StarTheme())
-        UIManager.setLookAndFeel(MetalLookAndFeel())
-    }
+    SwingUtilities.invokeLater((StarTheme)::install)
 
     checkUpToDate()
 
