@@ -62,6 +62,7 @@ class TopBar internal constructor(): JPanel() {
     private fun BarButton.makeButton(): JButton {
         return JButton(icon).apply {
             isContentAreaFilled = false
+            toolTipText = this@makeButton.name
             addActionListener(this@makeButton)
         }
     }
