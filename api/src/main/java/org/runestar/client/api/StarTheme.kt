@@ -1,14 +1,21 @@
 package org.runestar.client.api
 
 import java.awt.Color
+import java.awt.Component
+import java.awt.Graphics
+import java.awt.Insets
 import java.awt.RenderingHints
+import javax.swing.AbstractButton
 import javax.swing.JPopupMenu
 import javax.swing.ToolTipManager
 import javax.swing.UIDefaults
 import javax.swing.UIManager
+import javax.swing.border.AbstractBorder
+import javax.swing.plaf.BorderUIResource
 import javax.swing.plaf.ColorUIResource
 import javax.swing.plaf.FontUIResource
 import javax.swing.plaf.InsetsUIResource
+import javax.swing.plaf.basic.BasicBorders
 import javax.swing.plaf.metal.MetalLookAndFeel
 import javax.swing.plaf.metal.OceanTheme
 
@@ -83,13 +90,33 @@ class StarTheme : OceanTheme() {
         table[RenderingHints.KEY_TEXT_ANTIALIASING] = null
         table[RenderingHints.KEY_TEXT_LCD_CONTRAST] = null
 
+        table["Button.border"] = BorderUIResource.CompoundBorderUIResource(ButtonBorder(), BasicBorders.MarginBorder())
         table["Button.gradient"] = null
         table["Button.margin"] = InsetsUIResource(2, 2, 2, 2)
         table["CheckBox.background"] = INTERIOR
-        table["CheckBox.gradient"] = null
         table["CheckBox.border"] = null
+        table["CheckBox.gradient"] = null
         table["MenuItem.border"] = null
         table["ScrollBar.background"] = INTERIOR
         table["ScrollBar.gradient"] = null
+    }
+
+    private class ButtonBorder : AbstractBorder() {
+
+        override fun paintBorder(c: Component, g: Graphics, x: Int, y: Int, w: Int, h: Int) {
+            val button = c as AbstractButton
+            if (button.model.isRollover || button.model.isPressed) {
+                g.translate(x, y)
+                g.color = MetalLookAndFeel.getControlDarkShadow()
+                g.drawRect(0, 0, w - 1, h - 1)
+                g.drawRect(1, 1, w - 3, h - 3)
+            } else  {
+                g.translate(x, y)
+                g.color = MetalLookAndFeel.getControlDarkShadow()
+                g.drawRect(0, 0, w - 1, h - 1)
+            }
+        }
+
+        override fun getBorderInsets(c: Component, insets: Insets) = insets.apply { set(3, 3, 3, 3) }
     }
 }
