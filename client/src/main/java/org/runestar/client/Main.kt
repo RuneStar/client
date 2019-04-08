@@ -36,9 +36,8 @@ private fun checkUpToDate() {
 }
 
 private fun setupExceptionHandler() {
-    val logger = getLogger()
-    Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
-        logger.error(exception) { "Uncaught exception" }
+    Thread.setDefaultUncaughtExceptionHandler { _, exception ->
+        getLogger().error(exception) { "Uncaught exception" }
         showErrorDialog(Throwables.getStackTraceAsString(exception))
     }
 }
