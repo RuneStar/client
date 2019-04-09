@@ -4,6 +4,7 @@ import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.Insets
+import java.awt.Rectangle
 import java.awt.RenderingHints
 import javax.swing.AbstractButton
 import javax.swing.JComponent
@@ -117,7 +118,7 @@ class StarTheme : OceanTheme() {
 
         override fun paintBorder(c: Component, g: Graphics, x: Int, y: Int, w: Int, h: Int) {
             val button = c as AbstractButton
-            if (button.model.isRollover || button.model.isPressed) {
+            if (button.model.isRollover || button.model.isPressed || button.hasFocus()) {
                 g.translate(x, y)
                 g.color = MetalLookAndFeel.getControlDarkShadow()
                 g.drawRect(0, 0, w - 1, h - 1)
@@ -138,12 +139,14 @@ class StarTheme : OceanTheme() {
 
         override fun paint(g: Graphics, c: JComponent) {
             val button = c as AbstractButton
-            if (button.isEnabled && button.isContentAreaFilled && button.model.isRollover && !button.isBorderPainted) {
+            if (button.isEnabled && button.isContentAreaFilled && !button.isBorderPainted && (button.model.isRollover || (button.isFocusPainted && button.hasFocus()))) {
                 val size = button.size
                 g.color = MetalLookAndFeel.getControlShadow()
                 g.fillRect(0, 0, size.width, size.height)
             }
             super.paint(g, c)
         }
+
+        override fun paintFocus(g: Graphics, b: AbstractButton, viewRect: Rectangle?, textRect: Rectangle?, iconRect: Rectangle?) {}
     }
 }

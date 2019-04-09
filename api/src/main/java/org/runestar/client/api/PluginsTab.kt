@@ -65,6 +65,7 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
             })
             add(Box.createHorizontalStrut(5))
             add(JButton("...").apply {
+                isFocusable = false
                 isBorderPainted = false
                 addActionListener {
                     popup.show(this, 0, bounds.height)

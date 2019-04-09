@@ -61,6 +61,7 @@ class TopBar internal constructor(): JPanel() {
 
     private fun BarButton.makeButton(): JButton {
         return JButton(icon).apply {
+            isFocusable = false
             isBorderPainted = false
             toolTipText = this@makeButton.name
             addActionListener(this@makeButton)
