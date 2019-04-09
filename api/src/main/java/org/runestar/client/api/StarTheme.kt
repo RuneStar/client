@@ -6,6 +6,7 @@ import java.awt.Graphics
 import java.awt.Insets
 import java.awt.RenderingHints
 import javax.swing.AbstractButton
+import javax.swing.JComponent
 import javax.swing.JPopupMenu
 import javax.swing.ToolTipManager
 import javax.swing.UIDefaults
@@ -16,6 +17,7 @@ import javax.swing.plaf.ColorUIResource
 import javax.swing.plaf.FontUIResource
 import javax.swing.plaf.InsetsUIResource
 import javax.swing.plaf.basic.BasicBorders
+import javax.swing.plaf.metal.MetalButtonUI
 import javax.swing.plaf.metal.MetalLookAndFeel
 import javax.swing.plaf.metal.OceanTheme
 
@@ -26,6 +28,7 @@ class StarTheme : OceanTheme() {
         private val BACKGROUND = ColorUIResource(Color(0x3c3f41))
         private val FOREGROUND = ColorUIResource(Color(0xcccccc))
         private val INTERIOR = ColorUIResource(Color(0x45494a))
+        private val INTERIOR2 = ColorUIResource(Color(0x535759))
         private val HIGHLIGHT = ColorUIResource(Color(0x292b2d))
 
         fun install() {
@@ -98,6 +101,7 @@ class StarTheme : OceanTheme() {
         table["Button.border"] = BorderUIResource.CompoundBorderUIResource(ButtonBorder(), BasicBorders.MarginBorder())
         table["Button.gradient"] = null
         table["Button.margin"] = InsetsUIResource(2, 2, 2, 2)
+        table["Button.select"] = INTERIOR2
         table["CheckBox.background"] = INTERIOR
         table["CheckBox.border"] = null
         table["CheckBox.gradient"] = null
@@ -105,6 +109,8 @@ class StarTheme : OceanTheme() {
         table["ScrollBar.background"] = INTERIOR
         table["ScrollBar.gradient"] = null
         table["ScrollBar.thumb"] = BACKGROUND
+
+        table["ButtonUI"] = ButtonUI::class.java.name
     }
 
     private class ButtonBorder : AbstractBorder() {
@@ -124,5 +130,20 @@ class StarTheme : OceanTheme() {
         }
 
         override fun getBorderInsets(c: Component, insets: Insets) = insets.apply { set(3, 3, 3, 3) }
+    }
+
+    object ButtonUI : MetalButtonUI() {
+
+        @JvmStatic fun createUI(c: JComponent) = this
+
+        override fun paint(g: Graphics, c: JComponent) {
+            val button = c as AbstractButton
+            if (button.isEnabled && button.isContentAreaFilled && button.model.isRollover && !button.isBorderPainted) {
+                val size = button.size
+                g.color = MetalLookAndFeel.getControlShadow()
+                g.fillRect(0, 0, size.width, size.height)
+            }
+            super.paint(g, c)
+        }
     }
 }

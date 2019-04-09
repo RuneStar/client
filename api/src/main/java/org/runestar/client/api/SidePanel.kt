@@ -139,6 +139,7 @@ class SidePanel internal constructor() : JPanel() {
 
     private fun TabButton.makeButton(): Component {
         return JButton(icon).apply {
+            isBorderPainted = false
             toolTipText = this@makeButton.name
             alignmentX = JComponent.CENTER_ALIGNMENT
             addActionListener {
@@ -165,6 +166,7 @@ class SidePanel internal constructor() : JPanel() {
 
     private fun BarButton.makeButton(): Component {
         return JButton(icon).apply {
+            isBorderPainted = false
             toolTipText = this@makeButton.name
             alignmentY = JComponent.BOTTOM_ALIGNMENT
             alignmentX = JComponent.CENTER_ALIGNMENT
