@@ -1,7 +1,5 @@
 package org.runestar.client.api
 
-import org.kxtra.slf4j.getLogger
-import org.kxtra.slf4j.info
 import org.kxtra.swing.component.window
 import java.awt.BorderLayout
 import java.awt.Component
@@ -14,25 +12,22 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class SidePanel internal constructor() : JPanel() {
+internal class SidePanel : JPanel() {
 
     companion object {
         const val PANEL_WIDTH = 225
         const val BAR_WIDTH = 24
-        const val WIDTH = PANEL_WIDTH + BAR_WIDTH
     }
 
     private val tabs: SortedSet<TabButton> = TreeSet()
 
-    private val buttons: SortedSet<BarButton> = TreeSet()
+    private val buttons: SortedSet<ActionButton> = TreeSet()
 
     private var firstTabs: SortedSet<TabButton> = TreeSet()
 
     internal val panel: JPanel
 
     private val buttonsBox: Box
-
-    private val logger = getLogger()
 
     private var selectedTab: TabButton? = null
 
@@ -60,30 +55,21 @@ class SidePanel internal constructor() : JPanel() {
     }
 
     fun add(tab: TabButton) {
-        if (!tabs.add(tab)) {
-            logger.info { "Cannot add $tab, it is already present" }
-            return
-        }
+        require(tabs.add(tab))
         rebuild()
     }
 
-    internal fun addFirst(tab: TabButton) {
-        if (!firstTabs.add(tab)) {
-            logger.info { "Cannot add $tab, it is already present" }
-            return
-        }
+    fun addFirst(tab: TabButton) {
+        require(firstTabs.add(tab))
         rebuild()
     }
 
-    internal fun add(button: BarButton) {
-        if (!buttons.add(button)) {
-            logger.info { "Cannot add $button, it is already present" }
-            return
-        }
+    fun add(button: ActionButton) {
+        require(buttons.add(button))
         rebuild()
     }
 
-    internal fun clear() {
+    fun clear() {
         firstTabs.clear()
         tabs.clear()
         buttons.clear()
@@ -91,26 +77,17 @@ class SidePanel internal constructor() : JPanel() {
     }
 
     fun remove(tab: TabButton) {
-        if (!tabs.remove(tab)) {
-            logger.info { "Cannot remove $tab, it is not present" }
-            return
-        }
+        require(tabs.remove(tab))
         rebuild()
     }
 
     internal fun removeFirst(tab: TabButton) {
-        if (!firstTabs.remove(tab)) {
-            logger.info { "Cannot remove $tab, it is not present" }
-            return
-        }
+        require(firstTabs.remove(tab))
         rebuild()
     }
 
-    internal fun remove(button: BarButton) {
-        if (!buttons.remove(button)) {
-            logger.info { "Cannot remove $button, it is not present" }
-            return
-        }
+    internal fun remove(button: ActionButton) {
+        require(buttons.remove(button))
         rebuild()
     }
 
@@ -127,11 +104,11 @@ class SidePanel internal constructor() : JPanel() {
         buttons.forEach {
             buttonsBox.add(it.makeButton())
         }
-        if (selectedTab == null) {
+        if (selectedTab != null && selectedTab !in tabs && selectedTab !in firstTabs) {
             selectedTab = firstTabs.firstOrNull() ?: tabs.firstOrNull()
         }
-        selectedTab?.component?.let {
-            panel.add(it, BorderLayout.CENTER)
+        selectedTab?.let {
+            panel.add(it.component, BorderLayout.CENTER)
         }
         revalidate()
         repaint()
@@ -165,7 +142,7 @@ class SidePanel internal constructor() : JPanel() {
         }
     }
 
-    private fun BarButton.makeButton(): Component {
+    private fun ActionButton.makeButton(): Component {
         return JButton(icon).apply {
             isFocusable = false
             isBorderPainted = false

@@ -11,7 +11,5 @@ abstract class TabButton : Comparable<TabButton> {
 
     abstract val component: Component
 
-    override fun compareTo(other: TabButton): Int {
-        return name.compareTo(other.name)
-    }
+    override fun compareTo(other: TabButton) = name.compareTo(other.name)
 }

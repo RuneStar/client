@@ -2,6 +2,8 @@
 
 package org.runestar.client.api
 
+import io.reactivex.disposables.Disposable
+import org.runestar.client.api.util.Disposable
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.JavConfig
 import org.runestar.client.game.api.GameState
@@ -10,29 +12,22 @@ import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JFrame
 import javax.swing.JOptionPane
+import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
 
 class GameFrame internal constructor(
         val applet: Applet
 ) : JFrame(TITLE) {
 
-    val sidePanel = SidePanel()
-
-    val topBar = TopBar()
+    internal val sidePanel = SidePanel()
 
     init {
         buildApplet(applet)
         layout = BoxLayout(contentPane, BoxLayout.X_AXIS)
-        add(
-                Box.createVerticalBox().apply {
-                    add(topBar)
-                    add(applet)
-                }
-        )
+        add(applet)
         add(sidePanel)
         addWindowListener(WindowListener())
         defaultCloseOperation = WindowConstants.DO_NOTHING_ON_CLOSE
@@ -69,16 +64,27 @@ class GameFrame internal constructor(
         val insets = insets.let {
             Dimension(it.left + it.right, it.top + it.bottom)
         }
-        val top = topBar.size
         val side = sidePanel.size
 
         minimumSize = layout.minimumLayoutSize(this)
         size = Dimension(
                 app.width + insets.width + side.width,
-                app.height + insets.height + top.height
+                app.height + insets.height
         )
 
         repaint()
+    }
+
+    fun register(tabButton: TabButton): Disposable {
+        check(SwingUtilities.isEventDispatchThread())
+        sidePanel.add(tabButton)
+        return Disposable { SwingUtilities.invokeLater { sidePanel.remove(tabButton) } }
+    }
+
+    fun register(actionButton: ActionButton): Disposable {
+        check(SwingUtilities.isEventDispatchThread())
+        sidePanel.add(actionButton)
+        return Disposable { SwingUtilities.invokeLater { sidePanel.remove(actionButton) } }
     }
 
     private inner class WindowListener : WindowAdapter() {

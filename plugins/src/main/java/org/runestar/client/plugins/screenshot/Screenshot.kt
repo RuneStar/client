@@ -3,8 +3,8 @@ package org.runestar.client.plugins.screenshot
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import org.kxtra.swing.image.BufferedImage
+import org.runestar.client.api.ActionButton
 import org.runestar.client.api.Application
-import org.runestar.client.api.BarButton
 import org.runestar.client.api.forms.DateTimeFormatterForm
 import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
@@ -23,6 +23,7 @@ import java.time.Instant
 import javax.imageio.ImageIO
 import javax.swing.Icon
 import javax.swing.ImageIcon
+import javax.swing.SwingUtilities
 
 class Screenshot : DisposablePlugin<Screenshot.Settings>() {
 
@@ -48,11 +49,7 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
                 .subscribe { saveImage(it) }
                 .add()
 
-        Application.frame.topBar.add(button)
-    }
-
-    override fun onStop() {
-        Application.frame.topBar.remove(button)
+        SwingUtilities.invokeLater { add(Application.frame.register(Button())) }
     }
 
     private fun copyCanvas(): BufferedImage {
@@ -87,9 +84,9 @@ class Screenshot : DisposablePlugin<Screenshot.Settings>() {
             val trayNotify: Boolean = true
     ) : PluginSettings()
 
-    inner class Button : BarButton() {
+    inner class Button : ActionButton() {
 
-        override val name: String = "Screenshot"
+        override val name: String = this@Screenshot.name
 
         override val icon: Icon = ImageIcon(ImageIO.read(javaClass.getResource("camera.png")))
 
