@@ -26,6 +26,10 @@ abstract class DisposablePlugin<T : PluginSettings>(
         onStop()
     }
 
+    protected fun add(runnable: () -> Unit) {
+        add(Disposable(runnable))
+    }
+
     protected open fun onStart() {}
 
     protected open fun onStop() {}
