@@ -99,7 +99,7 @@ class StarTheme : OceanTheme() {
         table[RenderingHints.KEY_TEXT_ANTIALIASING] = null
         table[RenderingHints.KEY_TEXT_LCD_CONTRAST] = null
 
-        table["Button.border"] = BorderUIResource.CompoundBorderUIResource(ButtonBorder(), BasicBorders.MarginBorder())
+        table["Button.border"] = BorderUIResource.CompoundBorderUIResource(ButtonBorder, BasicBorders.MarginBorder())
         table["Button.gradient"] = null
         table["Button.margin"] = InsetsUIResource(2, 2, 2, 2)
         table["Button.select"] = INTERIOR2
@@ -114,19 +114,15 @@ class StarTheme : OceanTheme() {
         table["ButtonUI"] = ButtonUI::class.java.name
     }
 
-    private class ButtonBorder : AbstractBorder() {
+    private object ButtonBorder : AbstractBorder() {
 
         override fun paintBorder(c: Component, g: Graphics, x: Int, y: Int, w: Int, h: Int) {
             val button = c as AbstractButton
+            g.translate(x, y)
+            g.color = MetalLookAndFeel.getControlDarkShadow()
+            g.drawRect(0, 0, w - 1, h - 1)
             if (button.model.isRollover || button.model.isPressed || button.hasFocus()) {
-                g.translate(x, y)
-                g.color = MetalLookAndFeel.getControlDarkShadow()
-                g.drawRect(0, 0, w - 1, h - 1)
                 g.drawRect(1, 1, w - 3, h - 3)
-            } else  {
-                g.translate(x, y)
-                g.color = MetalLookAndFeel.getControlDarkShadow()
-                g.drawRect(0, 0, w - 1, h - 1)
             }
         }
 
