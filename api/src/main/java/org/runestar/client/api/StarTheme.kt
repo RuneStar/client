@@ -45,17 +45,24 @@ class StarTheme : OceanTheme() {
 
     override fun getBlack() = HIGHLIGHT
     override fun getWhite() = FOREGROUND
+
     override fun getControlDarkShadow() = HIGHLIGHT
     override fun getPrimaryControlDarkShadow() = HIGHLIGHT
+
     override fun getControlShadow() = INTERIOR
     override fun getPrimaryControlShadow() = INTERIOR
-    override fun getFocusColor() = HIGHLIGHT
+
+    override fun getControlHighlight() = HIGHLIGHT
+    override fun getPrimaryControlHighlight() = HIGHLIGHT
+
     override fun getControlTextColor() = FOREGROUND
     override fun getHighlightedTextColor() = FOREGROUND
     override fun getInactiveControlTextColor() = FOREGROUND
     override fun getUserTextColor() = FOREGROUND
     override fun getInactiveSystemTextColor() = FOREGROUND
     override fun getSystemTextColor() = FOREGROUND
+
+    override fun getFocusColor() = HIGHLIGHT
     override fun getTextHighlightColor() = HIGHLIGHT
     override fun getMenuBackground() = BACKGROUND
     override fun getMenuSelectedBackground() = INTERIOR
@@ -73,8 +80,6 @@ class StarTheme : OceanTheme() {
     override fun getWindowTitleInactiveForeground() = FOREGROUND
     override fun getControl() = BACKGROUND
     override fun getControlDisabled() = FOREGROUND
-    override fun getControlHighlight() = HIGHLIGHT
-    override fun getPrimaryControlHighlight() = HIGHLIGHT
     override fun getControlInfo() = FOREGROUND
     override fun getDesktopColor() = FOREGROUND
     override fun getPrimaryControl() = FOREGROUND
