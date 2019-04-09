@@ -48,7 +48,7 @@ class StarTheme : OceanTheme() {
     override fun getControlDarkShadow() = HIGHLIGHT
     override fun getPrimaryControlDarkShadow() = HIGHLIGHT
     override fun getControlShadow() = INTERIOR
-    override fun getPrimaryControlShadow() = BACKGROUND
+    override fun getPrimaryControlShadow() = INTERIOR
     override fun getFocusColor() = HIGHLIGHT
     override fun getControlTextColor() = FOREGROUND
     override fun getHighlightedTextColor() = FOREGROUND
@@ -99,6 +99,7 @@ class StarTheme : OceanTheme() {
         table["MenuItem.border"] = null
         table["ScrollBar.background"] = INTERIOR
         table["ScrollBar.gradient"] = null
+        table["ScrollBar.thumb"] = BACKGROUND
     }
 
     private class ButtonBorder : AbstractBorder() {
