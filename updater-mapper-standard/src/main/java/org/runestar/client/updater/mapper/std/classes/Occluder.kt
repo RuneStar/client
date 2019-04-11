@@ -10,8 +10,8 @@ import org.runestar.client.updater.mapper.tree.Class2
 class Occluder : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.instanceMethods.isEmpty() }
-            .and { it.fields.size == 18 }
-            .and { it.fields.all { it.type == Type.INT_TYPE } }
+            .and { it.instanceFields.size == 18 }
+            .and { it.instanceFields.all { it.type == Type.INT_TYPE } }
 
     class minTileX : OccluderField(0)
     class maxTileX : OccluderField(1)

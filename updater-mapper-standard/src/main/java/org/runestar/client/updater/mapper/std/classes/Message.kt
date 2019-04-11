@@ -24,27 +24,33 @@ class Message : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == INT_TYPE } == 3 }
             .and { it.instanceFields.count { it.type == String::class.type } == 3 }
 
-    class sender : OrderMapper.InConstructor.Field(Message::class, 0) {
+    @DependsOn(set::class)
+    class sender : OrderMapper.InMethod.Field(set::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class prefix : OrderMapper.InConstructor.Field(Message::class, 1) {
+    @DependsOn(set::class)
+    class prefix : OrderMapper.InMethod.Field(set::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class text : OrderMapper.InConstructor.Field(Message::class, 2) {
+    @DependsOn(set::class)
+    class text : OrderMapper.InMethod.Field(set::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    class type : OrderMapper.InConstructor.Field(Message::class, 2, 3) {
+    @DependsOn(set::class)
+    class type : OrderMapper.InMethod.Field(set::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class cycle : OrderMapper.InConstructor.Field(Message::class, 1, 3) {
+    @DependsOn(set::class)
+    class cycle : OrderMapper.InMethod.Field(set::class, 1, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class count : OrderMapper.InConstructor.Field(Message::class, 0, 3) {
+    @DependsOn(set::class)
+    class count : OrderMapper.InMethod.Field(set::class, 0, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
