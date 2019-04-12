@@ -5,7 +5,7 @@ import org.runestar.client.game.api.ChatType
 import org.runestar.client.game.api.ClanRank
 import org.runestar.client.game.api.Message
 import org.runestar.client.game.api.Sprite
-import org.runestar.client.game.api.TextSymbol
+import org.runestar.client.game.api.imageTag
 import org.runestar.client.game.api.live.Chat
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
@@ -42,7 +42,7 @@ class ClanChat : DisposablePlugin<PluginSettings>() {
         val clanMate = cc[username] ?: return
         val rank = clanMate.rank
         if (rank !in ClanRank.FRIEND..ClanRank.OWNER) return
-        msg.prefix += ' ' + TextSymbol.Image(rank + spritesStartIndex).tag
+        msg.prefix += ' ' + imageTag(rank + spritesStartIndex)
     }
 
     private fun addSprites() {

@@ -4,38 +4,33 @@ import io.reactivex.Observable
 import org.runestar.client.api.util.CyclicCache
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Sprite
-import org.runestar.client.game.api.TextSymbol
+import org.runestar.client.game.api.appendImageTag
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XAbstractFont
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
 class Emojis : DisposablePlugin<PluginSettings>() {
 
     private companion object {
-        const val SPRITE_SHEET_NAME = "sheet_twitter_16.png"
+        const val SPRITE_SHEET_NAME = "emojis.png"
         const val NAMES_CSV_NAME = "names.csv"
         const val SPRITE_SIZE = 16
-        val SHORT_CODE_PATTERN = ":([^:]+?):".toPattern()
     }
 
     override val defaultSettings = PluginSettings()
 
-    private var shortCodes: Map<String, Int> = emptyMap()
+    private val shortCodes = HashMap<String, Int>()
 
     private val cache = CyclicCache<String, String>()
 
     private var spritesStartIndex = -1
 
     override fun onStart() {
-        val ids = readEmojiIds()
-        shortCodes = ids.withIndex().associate { it.value.shortCode to it.index }
-        if (spritesStartIndex == -1) {
-            expandModIcons()
-        }
-        addSprites(ids)
+        addNames()
+        if (spritesStartIndex == -1) expandModIcons()
+        addSprites()
         val drawings = Observable.mergeArray(
                 XAbstractFont.lineWidth.enter,
                 XAbstractFont.draw.enter,
@@ -58,24 +53,23 @@ class Emojis : DisposablePlugin<PluginSettings>() {
                 spritesStartIndex,
                 spritesStartIndex + shortCodes.size
         )
-        shortCodes = emptyMap()
+        shortCodes.clear()
         cache.clear()
     }
 
-    private fun readEmojiIds(): List<EmojiId> {
+    private fun addNames() {
         javaClass.getResource(NAMES_CSV_NAME).openStream().bufferedReader().useLines {
-            return it.map { it.split(',').let { EmojiId(it[0], it[1].toInt(), it[2].toInt()) } }.toList()
+            it.associateTo(shortCodes) { it.split(',').let { it[0] to it[1].toInt() } }
         }
     }
 
-    private fun readSpriteSheet(): BufferedImage = ImageIO.read(javaClass.getResource(SPRITE_SHEET_NAME))
-
-    private fun addSprites(ids: List<EmojiId>) {
-        val sheet = readSpriteSheet()
-        ids.forEachIndexed { i, id ->
+    private fun addSprites() {
+        val sheet = ImageIO.read(javaClass.getResource(SPRITE_SHEET_NAME))
+        val count = sheet.height / SPRITE_SIZE
+        for (i in 0 until count) {
             val subImage = sheet.getSubimage(
-                    id.x * (SPRITE_SIZE + 2) + 1,
-                    id.y * (SPRITE_SIZE + 2) + 1,
+                    0,
+                    i * SPRITE_SIZE,
                     SPRITE_SIZE, SPRITE_SIZE
             )
             val sprite = Sprite.Indexed.copy(subImage).accessor
@@ -91,35 +85,34 @@ class Emojis : DisposablePlugin<PluginSettings>() {
     }
 
     private fun replaceEmojis(s: String): String {
-        if (s.length < 3 || s.count { it == ':' } < 2) return s
-        val matcher = SHORT_CODE_PATTERN.matcher(s)
+        if (s.length < 3) return s
+        var colon1 = s.indexOf(':')
+        if (colon1 == -1) return s
+        var colon2 = s.indexOf(':', colon1 + 1)
+        if (colon2 == -1) return s
         val sb = StringBuilder(s.length)
-        var i = 0
-        while (i < s.length) {
-            if (matcher.find(i)) {
-                val colon1 = matcher.start()
-                val colon2 = matcher.end() - 1
-                sb.append(s.substring(i, colon1))
-                val potentialShortCode = matcher.group(1).toLowerCase()
-                val shortCodeIndex = shortCodes[potentialShortCode]
-                i = colon2
-                if (shortCodeIndex == null) {
-                    sb.append(s.substring(colon1, colon2))
-                } else {
-                    sb.append(TextSymbol.Image(shortCodeIndex + spritesStartIndex).tag)
-                    i++
-                }
-            } else {
-                sb.append(s.substring(i))
-                break
+        var next = 0
+        do {
+            sb.append(s.substring(next, colon1))
+            var code = ""
+            var id: Int? = null
+            if (colon1 + 1 != colon2) {
+                code = s.substring(colon1 + 1, colon2)
+                id = shortCodes[code]
             }
-        }
+            if (id == null) {
+                sb.append(':').append(code)
+                colon1 = colon2
+                next = colon2
+            } else {
+                appendImageTag(spritesStartIndex + id, sb)
+                next = colon2 + 1
+                colon1 = s.indexOf(':', next)
+                if (colon1 == -1) break
+            }
+            colon2 = s.indexOf(':', colon1 + 1)
+        } while (colon2 != -1)
+        if (next < s.length) sb.append(s.substring(next))
         return sb.toString()
     }
-
-    private data class EmojiId(
-            val shortCode: String,
-            val x: Int,
-            val y: Int
-    )
 }
