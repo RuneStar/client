@@ -1,5 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package org.runestar.client.common
 
+import java.applet.AppletContext
+import java.applet.AppletStub
 import java.awt.Desktop
 import java.awt.Dimension
 import java.io.IOException
@@ -9,14 +13,9 @@ import java.net.URL
 data class JavConfig(
         val properties: Map<String, String>,
         val parameters: Map<Int, String>
-) {
+) : AppletStub, AppletContext {
 
     operator fun get(key: String): String = properties.getValue(key)
-
-    /**
-     * Example: `http://oldschool7.runescape.com/`
-     */
-    val codebase get() = URL(get(CODEBASE))
 
     /**
      * Example: `http://oldschool7.runescape.com/gamepack_1583061.jar`
@@ -59,68 +58,55 @@ data class JavConfig(
          * @param[world] world component of the url: oldschool{world}.runescape.com, examples: `"2"`, `"6b"`, `""` for
          *               the default world
          */
-        fun getUrl(world: String = ""): URL {
-            return URL("http://oldschool$world.runescape.com/jav_config.ws")
-        }
-
-        /**
-         * @param[world] world component of the url: oldschool{world}.runescape.com, examples: `"2"`, `"6b"`, `""` for
-         *               the default world
-         */
         @Throws(IOException::class)
         fun load(world: String = ""): JavConfig {
             val properties = HashMap<String, String>()
             val parameters = HashMap<Int, String>()
-            getUrl(world).openStream().bufferedReader(Charsets.ISO_8859_1).useLines { lines ->
-                lines.forEach { line ->
-                    val split1 = line.split('=', limit = 2)
-                    when(split1[0]) {
-                        "param" -> {
-                            val split2 = split1[1].split('=', limit = 2)
-                            parameters[split2[0].toInt()] = split2[1]
-                        }
-                        "msg" -> {}
-                        else -> properties[split1[0]] = split1[1]
+            val url = URL("http://oldschool$world.runescape.com/jav_config.ws")
+            url.openStream().bufferedReader(Charsets.ISO_8859_1).forEachLine { line ->
+                val split1 = line.split('=', limit = 2)
+                when(split1[0]) {
+                    "param" -> {
+                        val split2 = split1[1].split('=', limit = 2)
+                        parameters[split2[0].toInt()] = split2[1]
                     }
+                    "msg" -> {}
+                    else -> properties[split1[0]] = split1[1]
                 }
             }
             return JavConfig(properties, parameters)
         }
     }
 
-    @Suppress("DEPRECATION")
-    data class AppletStub(val javConfig: JavConfig) : java.applet.AppletStub, java.applet.AppletContext {
+    override fun getDocumentBase(): URL = codeBase
 
-        override fun getDocumentBase(): URL = codeBase
+    override fun appletResize(width: Int, height: Int) {}
 
-        override fun appletResize(width: Int, height: Int) {}
+    override fun getParameter(name: String): String? = parameters[name.toInt()]
 
-        override fun getParameter(name: String): String? = javConfig.parameters[name.toInt()]
+    override fun getCodeBase() = URL(get(CODEBASE))
 
-        override fun getCodeBase(): URL = javConfig.codebase
+    override fun getAppletContext(): AppletContext = this
 
-        override fun getAppletContext() = this
+    override fun isActive() = true
 
-        override fun isActive(): Boolean = true
+    override fun getApplet(name: String?) = throw UnsupportedOperationException()
 
-        override fun getApplet(name: String?) = throw UnsupportedOperationException()
+    override fun getApplets() = throw UnsupportedOperationException()
 
-        override fun getApplets() = throw UnsupportedOperationException()
+    override fun getAudioClip(url: URL) = throw UnsupportedOperationException()
 
-        override fun getAudioClip(url: URL) = throw UnsupportedOperationException()
+    override fun getImage(url: URL) = throw UnsupportedOperationException()
 
-        override fun getImage(url: URL) = throw UnsupportedOperationException()
+    override fun getStream(key: String) = throw UnsupportedOperationException()
 
-        override fun getStream(key: String) = throw UnsupportedOperationException()
+    override fun getStreamKeys() = throw UnsupportedOperationException()
 
-        override fun getStreamKeys() = throw UnsupportedOperationException()
+    override fun setStream(key: String, stream: InputStream?) = throw UnsupportedOperationException()
 
-        override fun setStream(key: String, stream: InputStream?) = throw UnsupportedOperationException()
+    override fun showDocument(url: URL) { Desktop.getDesktop().browse(url.toURI()) }
 
-        override fun showDocument(url: URL) { Desktop.getDesktop().browse(url.toURI()) }
+    override fun showDocument(url: URL, target: String) = showDocument(url)
 
-        override fun showDocument(url: URL, target: String) = showDocument(url)
-
-        override fun showStatus(status: String) = throw UnsupportedOperationException()
-    }
+    override fun showStatus(status: String) = throw UnsupportedOperationException()
 }

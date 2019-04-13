@@ -5,7 +5,6 @@ package org.runestar.client.api
 import io.reactivex.disposables.Disposable
 import org.runestar.client.api.util.Disposable
 import org.runestar.client.common.JAV_CONFIG
-import org.runestar.client.common.JavConfig
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.raw.CLIENT
 import java.applet.Applet
@@ -46,7 +45,7 @@ class GameFrame internal constructor(
     ) {
         applet.apply {
             layout = null
-            setStub(JavConfig.AppletStub(JAV_CONFIG))
+            setStub(JAV_CONFIG)
             maximumSize = JAV_CONFIG.appletMaxSize
             preferredSize = JAV_CONFIG.appletMinSize
             minimumSize = preferredSize
