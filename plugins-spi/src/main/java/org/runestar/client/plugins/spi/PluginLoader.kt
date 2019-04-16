@@ -1,7 +1,5 @@
 package org.runestar.client.plugins.spi
 
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import org.kxtra.slf4j.debug
 import org.kxtra.slf4j.getLogger
 import java.io.Closeable
@@ -183,7 +181,6 @@ class PluginLoader(
         internal fun destroy() {
             watchKey.cancel()
             stopPlugin()
-            _isRunningChanged.onComplete()
         }
 
         private fun initPlugin() {
@@ -203,7 +200,7 @@ class PluginLoader(
             if (isRunning) return
             logger.debug("Requesting start")
             isRunning = true
-            _isRunningChanged.onNext(true)
+            subscribers.forEach { it(true) }
             lifeCycleExecutor.execute {
                 settings.write = {
                     loaderThread.submit {
@@ -226,7 +223,7 @@ class PluginLoader(
             if (!isRunning) return
             logger.debug("Requesting stop")
             isRunning = false
-            _isRunningChanged.onNext(false)
+            subscribers.forEach { it(false) }
             lifeCycleExecutor.execute {
                 logger.debug("Stopping...")
                 try {
@@ -254,8 +251,10 @@ class PluginLoader(
             }
         }
 
-        private val _isRunningChanged = BehaviorSubject.createDefault(false)
+        fun subscribeOnRunningChanged(f: (Boolean) -> Unit) {
+            subscribers.add(f)
+        }
 
-        val isRunningChanged: Observable<Boolean> = _isRunningChanged
+        private val subscribers = ArrayList<(Boolean) -> Unit>()
     }
 }

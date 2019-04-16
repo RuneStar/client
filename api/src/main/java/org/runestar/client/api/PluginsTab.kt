@@ -1,6 +1,5 @@
 package org.runestar.client.api
 
-import hu.akarnokd.rxjava2.swing.SwingSchedulers
 import org.runestar.client.api.util.desktop
 import org.runestar.client.api.util.safeOpen
 import org.runestar.client.plugins.spi.PluginLoader
@@ -16,6 +15,7 @@ import javax.swing.JMenuItem
 import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
+import javax.swing.SwingUtilities
 
 class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() {
 
@@ -56,8 +56,8 @@ class PluginsTab(val plugins: Collection<PluginLoader.Holder<*>>) : TabButton() 
             add(Box.createGlue())
             add(JCheckBox().apply {
                 isSelected = false
-                isRunningChanged.subscribeOn(SwingSchedulers.edt()).subscribe {
-                    isSelected = it
+                subscribeOnRunningChanged {
+                    SwingUtilities.invokeLater { isSelected = it }
                 }
                 addActionListener {
                     setIsRunning(isSelected)
