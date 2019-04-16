@@ -6,7 +6,6 @@ import com.google.common.base.Throwables
 import org.kxtra.slf4j.error
 import org.kxtra.slf4j.getLogger
 import org.runestar.client.api.Application
-import org.runestar.client.api.StarTheme
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.MANIFEST_NAME
 import org.runestar.client.common.lookupClassLoader

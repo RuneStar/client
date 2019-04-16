@@ -1,5 +1,6 @@
-package org.runestar.client.api
+package org.runestar.client
 
+import org.runestar.client.api.Fonts
 import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics
