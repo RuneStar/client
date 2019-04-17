@@ -33,7 +33,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
         val fontColor = settings.fontColor.value
         add(LiveCanvas.repaints.subscribe { g ->
             if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
-            val option = Menu.getOption(0)
+            val option = Menu.getOption(Menu.optionsCount - 1)
             val action = option.action
             val target = option.targetName
             if (action in settings.ignoredActions) return@subscribe
