@@ -92,9 +92,9 @@ class PluginLoader(
 
         private var ignoreNextEvent = false
 
-        private val watchKey: WatchKey
+        private val directory: Path = pluginsDir.resolve(name).also { Files.createDirectories(it) }
 
-        private val directory: Path = pluginsDir.resolve(name)
+        private val watchKey: WatchKey = directory.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE)
 
         private val settingsFile: Path = directory.resolve("settings.${settingsReadWriter.fileExtension}")
 
@@ -104,14 +104,7 @@ class PluginLoader(
 
         val ctx = PluginContext(directory, settingsFile)
 
-        init {
-            Files.createDirectories(directory)
-            watchKey = directory.register(
-                    watchService,
-                    StandardWatchEventKinds.ENTRY_MODIFY,
-                    StandardWatchEventKinds.ENTRY_DELETE
-            )
-        }
+        private var isRunning = false
 
         internal fun init() {
             createSettings()
@@ -196,19 +189,21 @@ class PluginLoader(
             }
         }
 
+        private fun writeSettingsCallback() {
+            loaderThread.submit {
+                synchronized(settings) {
+                    writeSettings()
+                }
+            }
+        }
+
         private fun startPlugin() {
             if (isRunning) return
             logger.debug("Requesting start")
             isRunning = true
             subscribers.forEach { it(true) }
             lifeCycleExecutor.execute {
-                settings.write = {
-                    loaderThread.submit {
-                        synchronized(settings) {
-                            writeSettings()
-                        }
-                    }
-                }
+                settings.write = ::writeSettingsCallback
                 logger.debug("Starting...")
                 try {
                     plugin.start(settings)
@@ -234,8 +229,6 @@ class PluginLoader(
                 }
             }
         }
-
-        private var isRunning = false
 
         fun setIsRunning(value: Boolean) {
             loaderThread.submit {
