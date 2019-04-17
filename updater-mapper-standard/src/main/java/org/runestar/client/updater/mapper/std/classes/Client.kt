@@ -3621,12 +3621,14 @@ class Client : IdentityMapper.Class() {
                 .next { it.opcode == PUTSTATIC }
     }
 
+    @MethodParameters("scriptEvent", "n")
     @DependsOn(ScriptEvent::class)
     class runScript0 : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(type<ScriptEvent>(), INT_TYPE) }
     }
 
+    @MethodParameters("scriptEvent")
     @DependsOn(ScriptEvent::class)
     class runScript : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
