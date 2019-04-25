@@ -123,6 +123,12 @@ class Client : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(String::class.type, String::class.type, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.instructions.any { it.opcode == GETSTATIC } }
     }
+    
+    class sendStackTrace : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.startsWith(String::class.type, Throwable::class.type) }
+                .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "clienterror.ws?c=" } }
+    }
 
     @DependsOn(World::class)
     class worlds : StaticField() {
