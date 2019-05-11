@@ -5,9 +5,11 @@ import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
+import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
+import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -18,7 +20,7 @@ import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 
 @DependsOn(DualNode::class)
-class AreaDefinition : IdentityMapper.Class() {
+class WorldMapElement : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
             .and { it.instanceFields.count { it.type == String::class.type } == 2 }
@@ -68,4 +70,20 @@ class AreaDefinition : IdentityMapper.Class() {
 //        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_3 }
 //                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
 //    }
+
+    class sprite1 : OrderMapper.InConstructor.Field(WorldMapElement::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class sprite2 : OrderMapper.InConstructor.Field(WorldMapElement::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class textSize : OrderMapper.InConstructor.Field(WorldMapElement::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
+
+    class category : OrderMapper.InConstructor.Field(WorldMapElement::class, 7) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
+    }
 }

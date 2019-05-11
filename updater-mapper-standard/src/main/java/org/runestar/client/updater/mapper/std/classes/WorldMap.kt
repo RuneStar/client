@@ -220,4 +220,115 @@ class WorldMap : IdentityMapper.Class() {
                 .and { it.arguments == listOf(INT_TYPE) }
                 .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<zoomTarget>().id } }
     }
+
+    class perpetualFlash0 : OrderMapper.InConstructor.Field(WorldMap::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    class elementsDisabled : OrderMapper.InConstructor.Field(WorldMap::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
+    }
+
+    @DependsOn(perpetualFlash0::class)
+    class perpetualFlash : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<perpetualFlash0>().id } }
+    }
+
+    class flashingElements : OrderMapper.InConstructor.Field(WorldMap::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashSet::class.type }
+    }
+
+    class enabledElements : OrderMapper.InConstructor.Field(WorldMap::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashSet::class.type }
+    }
+
+    class enabledCategories : OrderMapper.InConstructor.Field(WorldMap::class, 2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == HashSet::class.type }
+    }
+
+    @DependsOn(flashingElements::class)
+    class stopCurrentFlashes : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<flashingElements>().id } }
+    }
+
+    @MethodParameters()
+    @DependsOn(elementsDisabled::class)
+    class getElementsEnabled : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<elementsDisabled>().id } }
+    }
+
+    @DependsOn(elementsDisabled::class)
+    class setElementsEnabled : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<elementsDisabled>().id } }
+    }
+
+    @DependsOn(enabledElements::class)
+    class disableElement : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<enabledElements>().id } }
+    }
+
+    @DependsOn(enabledElements::class)
+    class isElementDisabled : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments == listOf(INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<enabledElements>().id } }
+    }
+
+    @DependsOn(enabledCategories::class)
+    class disableCategory : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE, BOOLEAN_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<enabledCategories>().id } }
+    }
+
+    @DependsOn(enabledCategories::class)
+    class isCategoryDisabled : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
+                .and { it.arguments == listOf(INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<enabledCategories>().id } }
+    }
+
+    @DependsOn(flashingElements::class)
+    class flashElement : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<flashingElements>().id } }
+                .and { it.instructions.none { it.opcode == IINC } }
+    }
+
+    @DependsOn(flashingElements::class)
+    class flashCategory : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(INT_TYPE) }
+                .and { it.instructions.any { it.opcode == GETFIELD && it.fieldId == field<flashingElements>().id } }
+                .and { it.instructions.any { it.opcode == IINC } }
+    }
+
+    class iconIterator : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == Iterator::class.type }
+    }
+
+    @DependsOn(iconIterator::class)
+    class iconStart : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractWorldMapIcon>() }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<iconIterator>().id } }
+    }
+
+    @DependsOn(iconIterator::class)
+    class iconNext : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<AbstractWorldMapIcon>() }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.none { it.opcode == PUTFIELD && it.fieldId == field<iconIterator>().id } }
+    }
 }

@@ -2522,14 +2522,14 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
     }
 
-    @DependsOn(AreaDefinition::class)
-    class AreaDefinition_areas : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AreaDefinition>().withDimensions(1) }
+    @DependsOn(WorldMapElement::class)
+    class WorldMapElement_cached : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMapElement>().withDimensions(1) }
     }
 
-    @DependsOn(AreaDefinition::class, EvictingDualNodeHashTable::class)
-    class AreaDefinition_cachedSprites : IdentityMapper.StaticField() {
-        override val predicate = predicateOf<Field2> { it.klass == klass<AreaDefinition>() }
+    @DependsOn(WorldMapElement::class, EvictingDualNodeHashTable::class)
+    class WorldMapElement_cachedSprites : IdentityMapper.StaticField() {
+        override val predicate = predicateOf<Field2> { it.klass == klass<WorldMapElement>() }
                 .and { it.type == type<EvictingDualNodeHashTable>() }
     }
 
@@ -4103,5 +4103,17 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Scene.menuOpen::class)
     class Scene_selectedY : OrderMapper.InMethod.Field(Scene.menuOpen::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
+    }
+
+    @MethodParameters("id")
+    @DependsOn(WorldMapElement::class)
+    class getWorldMapElement : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<WorldMapElement>() }
+                .and { it.arguments == listOf(INT_TYPE) }
+    }
+
+    @DependsOn(WorldMap.flashCategory::class)
+    class WorldMapElement_count : UniqueMapper.InMethod.Field(WorldMap.flashCategory::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 }
