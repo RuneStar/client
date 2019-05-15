@@ -60,7 +60,7 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
     }
 
     private fun onRunScript(scriptEvent: XScriptEvent) {
-        val scriptId = scriptEvent.args0[0] as Int
+        val scriptId = scriptEvent.args0[0] as? Int ?: return
         if (scriptId != ScriptId.COMBAT_INTERFACE_SETUP) return
         weaponType = CLIENT.getVarbit(VarbitId.WEAPON_TYPE)
         val style = Game.varps[VarpId.ATTACK_STYLE]
