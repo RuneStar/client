@@ -318,37 +318,37 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<isMenuOpen>().id } }
     }
 
-    @MethodParameters("x", "y")
-    @SinceVersion(169)
-    @DependsOn(menuOptionsCount::class)
-    class openMenu0 : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
-                .and { it.arguments.size in 2..3 }
-                .and { it.instructions.count { it.opcode == GETSTATIC && it.fieldId == field<menuOptionsCount>().id } == 3 }
-    }
+//    @MethodParameters("x", "y")
+//    @SinceVersion(169)
+//    @DependsOn(menuOptionsCount::class)
+//    class openMenu0 : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+//                .and { it.arguments.size in 2..3 }
+//                .and { it.instructions.count { it.opcode == GETSTATIC && it.fieldId == field<menuOptionsCount>().id } == 3 }
+//    }
 
     @SinceVersion(169)
-    @DependsOn(openMenu0::class)
-    class menuX : OrderMapper.InMethod.Field(openMenu0::class, 0) {
+    @DependsOn(openMenu::class)
+    class menuX : OrderMapper.InMethod.Field(openMenu::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @SinceVersion(169)
-    @DependsOn(openMenu0::class)
-    class menuY : OrderMapper.InMethod.Field(openMenu0::class, 1) {
+    @DependsOn(openMenu::class)
+    class menuY : OrderMapper.InMethod.Field(openMenu::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @SinceVersion(169)
-    @DependsOn(openMenu0::class)
-    class menuWidth : OrderMapper.InMethod.Field(openMenu0::class, 2) {
+    @DependsOn(openMenu::class)
+    class menuWidth : OrderMapper.InMethod.Field(openMenu::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
     @SinceVersion(169)
-    @DependsOn(openMenu0::class)
-    class menuHeight : OrderMapper.InMethod.Field(openMenu0::class, 3) {
+    @DependsOn(openMenu::class)
+    class menuHeight : OrderMapper.InMethod.Field(openMenu::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
@@ -594,9 +594,9 @@ class Client : IdentityMapper.Class() {
     @DependsOn(KitDefinition::class, EvictingDualNodeHashTable::class)
     class KitDefinition_cached : CachedDefinitionMapper(KitDefinition::class)
 
-    @SinceVersion(141)
-    @DependsOn(OverlayDefinition::class, EvictingDualNodeHashTable::class)
-    class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
+//    @SinceVersion(141)
+//    @DependsOn(OverlayDefinition::class, EvictingDualNodeHashTable::class)
+//    class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
 
     @DependsOn(UnderlayDefinition::class, EvictingDualNodeHashTable::class)
     class UnderlayDefinition_cached : CachedDefinitionMapper(UnderlayDefinition::class)
@@ -3927,7 +3927,7 @@ class Client : IdentityMapper.Class() {
     @DependsOn(Font::class)
     class drawTitle : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments == listOf(type<Font>(), type<Font>(), type<Font>(), BOOLEAN_TYPE) }
+                .and { it.arguments == listOf(type<Font>(), type<Font>(), type<Font>()) }
     }
 
     class isCameraLocked : StaticUniqueMapper.Field() {

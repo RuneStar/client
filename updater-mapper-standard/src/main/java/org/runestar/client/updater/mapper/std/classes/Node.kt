@@ -1,5 +1,6 @@
 package org.runestar.client.updater.mapper.std.classes
 
+import org.objectweb.asm.Opcodes
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.MethodParameters
 import org.runestar.client.updater.mapper.extensions.and
@@ -8,7 +9,10 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.UniqueMapper
+import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.tree.Instruction2
 import java.lang.reflect.Modifier
 
 class Node : IdentityMapper.Class() {
@@ -21,14 +25,15 @@ class Node : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == LONG_TYPE }
     }
 
+    @DependsOn(next::class)
     class previous : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Node>() }
-                .and { Modifier.isPublic(it.access) }
+                .and { it != field<next>() }
     }
 
-    class next : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Node>() }
-                .and { !Modifier.isPublic(it.access) }
+    @DependsOn(hasNext::class)
+    class next : UniqueMapper.InMethod.Field(hasNext::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD }
     }
 
     @MethodParameters()
