@@ -6,11 +6,10 @@ import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.std.ActorHitSplatField
+import org.runestar.client.updater.mapper.std.ActorHitmarkField
 import org.runestar.client.updater.mapper.std.ConstructorPutField
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
@@ -85,7 +84,7 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class idleSequence : OrderMapper.InConstructor.Field(Actor::class, 1) {
+    class readySequence : OrderMapper.InConstructor.Field(Actor::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -101,15 +100,15 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class walkTurnSequence : OrderMapper.InConstructor.Field(Actor::class, 5) {
+    class walkBackSequence : OrderMapper.InConstructor.Field(Actor::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class walkTurnLeftSequence : OrderMapper.InConstructor.Field(Actor::class, 6) {
+    class walkLeftSequence : OrderMapper.InConstructor.Field(Actor::class, 6) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class walkTurnRightSequence : OrderMapper.InConstructor.Field(Actor::class, 7) {
+    class walkRightSequence : OrderMapper.InConstructor.Field(Actor::class, 7) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -175,7 +174,6 @@ class Actor : IdentityMapper.Class() {
 
     // spotAnimationStartCycle
 
-    @SinceVersion(165)
     @DependsOn(Client.addPlayerToScene::class)
     class playerCycle : OrderMapper.InMethod.Field(Client.addPlayerToScene::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Actor>() && it.fieldType == INT_TYPE }
@@ -197,20 +195,20 @@ class Actor : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == CHECKCAST && it.typeType == type<HealthBar>() } }
     }
 
-    class hitSplatTypes : ActorHitSplatField(0)
-    class hitSplatValues : ActorHitSplatField(1)
-    class hitSplatCycles : ActorHitSplatField(2)
-    class hitSplatTypes2 : ActorHitSplatField(3)
-    class hitSplatValues2 : ActorHitSplatField(4)
+    class hitmarkTypes : ActorHitmarkField(0)
+    class hitmarkValues : ActorHitmarkField(1)
+    class hitmarkCycles : ActorHitmarkField(2)
+    class hitmarkTypes2 : ActorHitmarkField(3)
+    class hitmarkValues2 : ActorHitmarkField(4)
 
     @MethodParameters("type", "value", "type2", "value2", "cycle", "cycle2")
-    class addHitSplat : IdentityMapper.InstanceMethod() {
+    class addHitmark : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 6..7 }
                 .and { it.instructions.any { it.opcode == IALOAD }  }
     }
 
-    class hitSplatCount : ConstructorPutField(Actor::class, 0, BYTE_TYPE)
+    class hitmarkCount : ConstructorPutField(Actor::class, 0, BYTE_TYPE)
 
     @DependsOn(Actor.overheadTextCyclesRemaining::class)
     class isAutoChatting : AllUniqueMapper.Field() {

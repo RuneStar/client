@@ -12,7 +12,6 @@ import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 
 @DependsOn(Node::class)
 class DualNode : IdentityMapper.Class() {
@@ -36,7 +35,6 @@ class DualNode : IdentityMapper.Class() {
                 .and { it.type == type<DualNode>() }
     }
 
-    @SinceVersion(165)
     class keyDual : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == LONG_TYPE }
     }

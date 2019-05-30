@@ -27,7 +27,7 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
         CLIENT.itemDefinition_cachedModels.clear()
         CLIENT.npcDefinition_cachedModels.clear()
         CLIENT.spotAnimationDefinition_cachedModels.clear()
-        CLIENT.widget_cachedModels.clear()
+        CLIENT.component_cachedModels.clear()
         CLIENT.playerAppearance_cachedModels.clear()
         CLIENT.objectDefinition_cachedModels.clear()
     }

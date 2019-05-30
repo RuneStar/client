@@ -3,8 +3,8 @@ package org.runestar.client.plugins.clock
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.forms.DateTimeFormatterForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.WidgetId
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.ComponentId
+import org.runestar.client.game.api.live.Components
 import org.runestar.client.game.api.live.Worlds
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
@@ -23,7 +23,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
 
     override fun onStart() {
         add(XClient.drawLoggedIn.enter.subscribe {
-            Widgets[WidgetId.CHAT_REPORT_TEXT]?.text = if (settings.loginTime) {
+            Components[ComponentId.CHAT_REPORT_TEXT]?.text = if (settings.loginTime) {
                 loginElapsedTime() ?: DEFAULT_TEXT
             } else {
                 settings.dateTimeFormatter.value.format(Instant.now())
@@ -36,7 +36,7 @@ class Clock : DisposablePlugin<Clock.Settings>() {
 
     override fun onStop() {
         loginTimer.reset()
-        Widgets[WidgetId.CHAT_REPORT_TEXT]?.text = DEFAULT_TEXT
+        Components[ComponentId.CHAT_REPORT_TEXT]?.text = DEFAULT_TEXT
     }
 
     private fun loginElapsedTime(): String? {

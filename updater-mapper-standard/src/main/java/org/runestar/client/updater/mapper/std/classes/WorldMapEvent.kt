@@ -11,25 +11,25 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 
-@DependsOn(TileLocation::class)
+@DependsOn(Coord::class)
 class WorldMapEvent : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.instanceMethods.isEmpty() }
             .and { it.instanceFields.size == 3 }
-            .and { it.instanceFields.count { it.type == type<TileLocation>() } == 2 }
+            .and { it.instanceFields.count { it.type == type<Coord>() } == 2 }
             .and { it.instanceFields.count { it.type == INT_TYPE } == 1 }
 
     class mapElement : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == INT_TYPE }
     }
 
-    @DependsOn(TileLocation::class)
+    @DependsOn(Coord::class)
     class coord1 : OrderMapper.InConstructor.Field(WorldMapEvent::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TileLocation>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Coord>() }
     }
 
-    @DependsOn(TileLocation::class)
+    @DependsOn(Coord::class)
     class coord2 : OrderMapper.InConstructor.Field(WorldMapEvent::class, 1) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TileLocation>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<Coord>() }
     }
 }

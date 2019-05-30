@@ -8,10 +8,12 @@ import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Opcodes.*
+import org.objectweb.asm.Type
 import org.objectweb.asm.Type.*
 import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.extensions.Predicate
+import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 
 @DependsOn(DualNode::class)
@@ -22,42 +24,52 @@ class KitDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 2 }
             .and { it.instanceFields.count { it.type == BOOLEAN_TYPE } == 1 }
 
-    class archives : UniqueMapper.InConstructor.Field(KitDefinition::class) {
+    class models : UniqueMapper.InConstructor.Field(KitDefinition::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 41 } }
     }
 
-    @DependsOn(readNext::class)
-    class read : IdentityMapper.InstanceMethod() {
+    @DependsOn(decode0::class)
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it != method<readNext>() }
+                .and { it != method<decode0>() }
     }
 
-    @DependsOn(readNext::class)
-    class recolorFrom : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class recol_s : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SASTORE }
-                .prevWithin(7) { it.opcode == Opcodes.GETFIELD && it.fieldType == ShortArray::class.type }
+                .prevWithin(7) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class recolorTo : OrderMapper.InMethod.Field(readNext::class, 1) {
+    @DependsOn(decode0::class)
+    class recol_d : OrderMapper.InMethod.Field(decode0::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SASTORE }
-                .prevWithin(7) { it.opcode == Opcodes.GETFIELD && it.fieldType == ShortArray::class.type }
+                .prevWithin(7) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class retextureFrom : OrderMapper.InMethod.Field(readNext::class, 2) {
+    @DependsOn(decode0::class)
+    class retex_s : OrderMapper.InMethod.Field(decode0::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SASTORE }
-                .prevWithin(7) { it.opcode == Opcodes.GETFIELD && it.fieldType == ShortArray::class.type }
+                .prevWithin(7) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class retextureTo : OrderMapper.InMethod.Field(readNext::class, 3) {
+    @DependsOn(decode0::class)
+    class retex_d : OrderMapper.InMethod.Field(decode0::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SASTORE }
-                .prevWithin(7) { it.opcode == Opcodes.GETFIELD && it.fieldType == ShortArray::class.type }
+                .prevWithin(7) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
+    }
+
+    @DependsOn(decode0::class)
+    class models2 : OrderMapper.InMethod.Field(decode0::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == ISTORE }
+                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class bodyPart : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == Type.INT_TYPE }
     }
 }

@@ -3,7 +3,7 @@ package org.runestar.client.plugins.inventorygrid
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.Components
 import org.runestar.client.plugins.spi.PluginSettings
 
 class InventoryGrid : DisposablePlugin<InventoryGrid.Settings>() {
@@ -15,7 +15,7 @@ class InventoryGrid : DisposablePlugin<InventoryGrid.Settings>() {
     override fun onStart() {
         val color = settings.color.value
         add(LiveCanvas.repaints.subscribe { g ->
-            val inv = Widgets.dragInventory ?: return@subscribe
+            val inv = Components.dragInventory ?: return@subscribe
             if (!inv.isActive) return@subscribe
             g.color = color
             for ((item, shape) in inv.items) {

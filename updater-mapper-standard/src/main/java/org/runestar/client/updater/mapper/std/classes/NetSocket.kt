@@ -4,7 +4,6 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
@@ -68,7 +67,6 @@ class NetSocket : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == NEWARRAY } }
     }
 
-    @SinceVersion(160)
     @MethodParameters("src", "srcIndex", "length")
     @DependsOn(write0::class)
     class write : IdentityMapper.InstanceMethod() {
@@ -100,7 +98,6 @@ class NetSocket : IdentityMapper.Class() {
     }
 
     @MethodParameters("length")
-    @SinceVersion(160)
     class isAvailable : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
     }

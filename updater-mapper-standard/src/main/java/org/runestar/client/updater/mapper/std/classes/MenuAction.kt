@@ -4,7 +4,6 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.StaticOrderMapper
 import org.runestar.client.updater.mapper.StaticUniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
@@ -23,7 +22,6 @@ class MenuAction : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == INT_TYPE } == 4 }
             .and { it.instanceFields.size == 5 }
 
-    @SinceVersion(134)
     @DependsOn(Client.menuArguments1::class)
     class argument1 : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<MenuAction>() }
@@ -31,7 +29,6 @@ class MenuAction : IdentityMapper.Class() {
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldOwner == type<MenuAction>() && it.fieldType == INT_TYPE }
     }
 
-    @SinceVersion(134)
     @DependsOn(Client.menuArguments2::class)
     class argument2 : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<MenuAction>() }
@@ -39,7 +36,6 @@ class MenuAction : IdentityMapper.Class() {
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldOwner == type<MenuAction>() && it.fieldType == INT_TYPE }
     }
 
-    @SinceVersion(134)
     @DependsOn(Client.menuOpcodes::class)
     class opcode : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<MenuAction>() }
@@ -47,7 +43,6 @@ class MenuAction : IdentityMapper.Class() {
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldOwner == type<MenuAction>() && it.fieldType == INT_TYPE }
     }
 
-    @SinceVersion(134)
     @DependsOn(Client.menuArguments0::class)
     class argument0 : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<MenuAction>() }
@@ -55,7 +50,6 @@ class MenuAction : IdentityMapper.Class() {
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldOwner == type<MenuAction>() && it.fieldType == INT_TYPE }
     }
 
-    @SinceVersion(134)
     @DependsOn(Client.menuActions::class)
     class action : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == NEW && it.typeType == type<MenuAction>() }

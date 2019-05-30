@@ -22,16 +22,16 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.all { it.type == INT_TYPE || it.type == ShortArray::class.type } }
 
     @MethodParameters("buffer", "n")
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 40 } }
     }
 
     @MethodParameters("buffer")
-    @DependsOn(readNext::class)
-    class read : IdentityMapper.InstanceMethod() {
+    @DependsOn(decode0::class)
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it != method<readNext>() }
+                .and { it != method<decode0>() }
     }
 
     @DependsOn(Client.getSpotAnimationDefinition::class)
@@ -50,14 +50,14 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class widthScale : UniqueMapper.InMethod.Field(readNext::class) {
+    @DependsOn(decode0::class)
+    class resizeh : UniqueMapper.InMethod.Field(decode0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_4 }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class heightScale : UniqueMapper.InMethod.Field(readNext::class) {
+    @DependsOn(decode0::class)
+    class resizev : UniqueMapper.InMethod.Field(decode0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_5 }
                 .nextWithin(10) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
@@ -67,31 +67,31 @@ class SpotAnimationDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(getModel::class)
-    class recolorFrom : OrderMapper.InMethod.Field(getModel::class, 0) {
+    class recol_s : OrderMapper.InMethod.Field(getModel::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModel::class)
-    class recolorTo : OrderMapper.InMethod.Field(getModel::class, 1) {
+    class recol_d : OrderMapper.InMethod.Field(getModel::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModel::class)
-    class retextureFrom : OrderMapper.InMethod.Field(getModel::class, 2) {
+    class retex_s : OrderMapper.InMethod.Field(getModel::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModel::class)
-    class retextureTo : OrderMapper.InMethod.Field(getModel::class, 3) {
+    class retex_d : OrderMapper.InMethod.Field(getModel::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class archive : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class model : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

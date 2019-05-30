@@ -8,10 +8,10 @@ import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.FontId
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XArchive
 import org.runestar.client.game.raw.access.XFont
 import org.runestar.client.game.raw.access.XFontName
-import org.runestar.client.game.raw.access.XIndexCache
-import org.runestar.client.game.raw.access.XWidget
+import org.runestar.client.game.raw.access.XComponent
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Font
 import java.awt.FontMetrics
@@ -47,13 +47,13 @@ class CustomFonts : DisposablePlugin<CustomFonts.Settings>() {
         }
         reloadPrimaryFonts()
 
-        add(XWidget.getFont.enter.subscribe {
+        add(XComponent.getFont.enter.subscribe {
             it.returned = fonts[it.instance.fontId] ?: return@subscribe
             it.skipBody = true
         })
 
-        add(XIndexCache.takeRecord.exit.subscribe {
-            if (it.instance != CLIENT.indexCache13) return@subscribe
+        add(XArchive.takeFile.exit.subscribe {
+            if (it.instance != CLIENT.archive13) return@subscribe
             it.returned = metrics[it.arguments[0] as Int] ?: return@subscribe
         })
     }

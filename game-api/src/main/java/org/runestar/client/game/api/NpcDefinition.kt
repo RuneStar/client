@@ -6,7 +6,7 @@ inline class NpcDefinition(val accessor: XNpcDefinition) {
 
     val id get() = accessor.id
 
-    val actions: Array<String?> get() = accessor.actions
+    val actions: Array<String?> get() = accessor.op
 
     val name: String? get() = accessor.name.takeUnless { it == "null" }
 
@@ -17,16 +17,16 @@ inline class NpcDefinition(val accessor: XNpcDefinition) {
         set(value) { accessor.drawMapDot = value }
 
     fun recolor(from: HslColor, to: HslColor) {
-        if (accessor.recolorFrom == null) {
-            accessor.recolorFrom = shortArrayOf(from.packed)
-            accessor.recolorTo = shortArrayOf(to.packed)
+        if (accessor.recol_s == null) {
+            accessor.recol_s = shortArrayOf(from.packed)
+            accessor.recol_d = shortArrayOf(to.packed)
         } else {
-            val i = accessor.recolorFrom.indexOf(from.packed)
+            val i = accessor.recol_s.indexOf(from.packed)
             if (i == -1) {
-                accessor.recolorFrom = accessor.recolorFrom.plus(from.packed)
-                accessor.recolorTo = accessor.recolorTo.plus(to.packed)
+                accessor.recol_s = accessor.recol_s.plus(from.packed)
+                accessor.recol_d = accessor.recol_d.plus(to.packed)
             } else {
-                accessor.recolorTo[i] = to.packed
+                accessor.recol_d[i] = to.packed
             }
         }
     }

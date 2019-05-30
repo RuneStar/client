@@ -26,9 +26,9 @@ class TextureProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<NodeDeque>() }
     }
 
-    @DependsOn(AbstractIndexCache::class)
-    class indexCache : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<AbstractIndexCache>() }
+    @DependsOn(AbstractArchive::class)
+    class archive : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<AbstractArchive>() }
     }
 
     @DependsOn(Texture::class)

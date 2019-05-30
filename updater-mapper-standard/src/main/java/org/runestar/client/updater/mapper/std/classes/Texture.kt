@@ -19,7 +19,7 @@ class Texture : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 5 }
 
-    class records : OrderMapper.InConstructor.Field(Texture::class, 0) {
+    class files : OrderMapper.InConstructor.Field(Texture::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 

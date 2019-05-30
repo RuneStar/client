@@ -9,9 +9,7 @@ import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.objectweb.asm.Type.*
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 
-@SinceVersion(162)
 @DependsOn(Link::class)
 class FriendLoginUpdate : IdentityMapper.Class() {
 

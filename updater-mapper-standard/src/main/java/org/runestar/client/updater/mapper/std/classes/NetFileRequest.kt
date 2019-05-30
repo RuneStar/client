@@ -8,14 +8,14 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.objectweb.asm.Type
 
-@DependsOn(DualNode::class, IndexCache::class)
+@DependsOn(DualNode::class, Archive::class)
 class NetFileRequest : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<DualNode>() }
-            .and { it.instanceFields.count { it.type == type<IndexCache>() } == 1 }
+            .and { it.instanceFields.count { it.type == type<Archive>() } == 1 }
 
-    @DependsOn(IndexCache::class)
-    class indexCache : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<IndexCache>() }
+    @DependsOn(Archive::class)
+    class archive : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Archive>() }
     }
 
     class crc : IdentityMapper.InstanceField() {

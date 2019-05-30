@@ -20,7 +20,7 @@ class HotkeyWalkHere : DisposablePlugin<HotkeyWalkHere.Settings>() {
 
     private fun onMenuOptionAdded(option: MenuOption) {
         when (option) {
-            is MenuOption.WalkHere, is MenuOption.Cancel, is MenuOption.InWidget -> return
+            is MenuOption.WalkHere, is MenuOption.Cancel, is MenuOption.InComponent -> return
             else -> CLIENT.menuOptionsCount--
         }
     }

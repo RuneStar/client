@@ -49,9 +49,9 @@ class MidiPcmStream : IdentityMapper.Class() {
     }
 
     @MethodParameters("musicTrack", "i", "s", "frequency")
-    @DependsOn(MusicTrack::class, AbstractIndexCache::class)
+    @DependsOn(MusicTrack::class, AbstractArchive::class)
     class loadMusicTrack : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<MusicTrack>(), type<AbstractIndexCache>()) }
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<MusicTrack>(), type<AbstractArchive>()) }
     }
 
     @MethodParameters("musicTrack", "b")

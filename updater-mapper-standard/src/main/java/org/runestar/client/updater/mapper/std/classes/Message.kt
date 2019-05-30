@@ -8,7 +8,6 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -54,13 +53,11 @@ class Message : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @SinceVersion(162)
     @DependsOn(TriBool::class)
     class isFromFriend0 : OrderMapper.InConstructor.Field(Message::class, 0, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
     }
 
-    @SinceVersion(162)
     @DependsOn(TriBool::class)
     class isFromIgnored0 : OrderMapper.InConstructor.Field(Message::class, 1, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<TriBool>() }
@@ -72,7 +69,6 @@ class Message : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, String::class.type, String::class.type, String::class.type) }
     }
 
-    @SinceVersion(162)
     @DependsOn(Username::class)
     class senderUsername : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Username>() }

@@ -3,7 +3,6 @@ package org.runestar.client.updater.mapper.std.classes
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -17,7 +16,6 @@ import org.objectweb.asm.Type.*
 import java.io.IOException
 import java.io.OutputStream
 
-@SinceVersion(160)
 class BufferedSink : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.interfaces.contains(Runnable::class.type) }

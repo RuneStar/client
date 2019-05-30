@@ -26,12 +26,12 @@ class InvDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.none { it.opcode == PUTFIELD } }
     }
 
     @DependsOn(Buffer::class)
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.instructions.any { it.opcode == PUTFIELD } }
     }
 }

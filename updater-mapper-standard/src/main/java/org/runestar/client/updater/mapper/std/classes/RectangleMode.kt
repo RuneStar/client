@@ -7,10 +7,10 @@ import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import java.lang.reflect.Modifier
 
-@DependsOn(Widget.rectangleMode::class)
+@DependsOn(Component.rectangleMode::class)
 class RectangleMode : IdentityMapper.Class() {
 
-    override val predicate = predicateOf<Class2> { it.type == field<Widget.rectangleMode>().type }
+    override val predicate = predicateOf<Class2> { it.type == field<Component.rectangleMode>().type }
 
     class id : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { Modifier.isPublic(it.access) }

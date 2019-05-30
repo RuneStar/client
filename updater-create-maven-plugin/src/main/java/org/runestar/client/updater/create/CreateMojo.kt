@@ -109,7 +109,7 @@ class CreateMojo : AbstractMojo() {
     private fun map() {
         val ctx = Mapper.Context()
         val clientClass = Client::class.java
-        JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx, REVISION)
+        JarMapper(clientClass.`package`.name, clientClass.classLoader).map(deobJar, ctx)
         val idClasses = if (project.properties.getProperty("runestar.placeholderhooks") == "true") {
             ctx.buildIdHierarchyAll()
         } else {

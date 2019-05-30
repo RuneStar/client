@@ -8,7 +8,6 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -204,7 +203,6 @@ class Buffer : IdentityMapper.Class() {
                 .and { it.instructions.count { it.opcode == ICONST_1 } == 4 }
     }
 
-    @SinceVersion(154)
     @MethodParameters("value")
     class writeBoolean : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -236,8 +234,8 @@ class Buffer : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(UnderlayDefinition.readNext::class)
-    class readMedium : UniqueMapper.InMethod.Method(UnderlayDefinition.readNext::class) {
+    @DependsOn(FloorUnderlayDefinition.decode0::class)
+    class readMedium : UniqueMapper.InMethod.Method(FloorUnderlayDefinition.decode0::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 

@@ -5,7 +5,6 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.id
 import org.runestar.client.updater.mapper.extensions.predicateOf
@@ -34,14 +33,12 @@ class AccessFile : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == LONG_TYPE }
     }
 
-    @SinceVersion(154)
     @MethodParameters("sync")
     class closeSync : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodId == RandomAccessFile::close.id } }
     }
 
-    @SinceVersion(154)
     @MethodParameters()
     @DependsOn(closeSync::class)
     class close : IdentityMapper.InstanceMethod() {

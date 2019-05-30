@@ -5,9 +5,6 @@ import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import kotlin.reflect.KClass
 
-/**
- * Matches one or more instructions in a method that all resolve to the same element.
- */
 abstract class UniqueMapper<T> : Mapper<T>(), InstructionResolver<T> {
 
     abstract val method: Method2

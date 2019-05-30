@@ -7,10 +7,10 @@ import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.ScriptId
 import org.runestar.client.game.api.VarbitId
 import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.WidgetId
+import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.Components
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XScriptEvent
@@ -82,7 +82,7 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
         if (!settings.alwaysShow && !warn) return
         if (Game.state != GameState.LOGGED_IN) return
         val s = attackStyleName ?: return
-        val chatBoxRect = Widgets[WidgetId.CHAT_BOX]?.shape ?: return
+        val chatBoxRect = Components[ComponentId.CHAT_BOX]?.shape ?: return
         g.font = Fonts.PLAIN_12
         val height = g.fontMetrics.height + PADDING_TOP + PADDING_BOTTOM
         val width = g.fontMetrics.stringWidth(s) + PADDING_X * 2
@@ -98,36 +98,36 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
 
     private fun hide() {
         if (isHidden(CLIENT.interpreter_stringLocals[4 + 0])) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_1]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_1]?.isHidden = true
         }
         if (isHidden(CLIENT.interpreter_stringLocals[4 + 1])) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_2]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_2]?.isHidden = true
         }
         if (isHidden(CLIENT.interpreter_stringLocals[4 + 2])) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_3]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_3]?.isHidden = true
         }
         if (isHidden(CLIENT.interpreter_stringLocals[4 + 3])) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_4]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_4]?.isHidden = true
         }
         if (settings.hideMagic) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_SPELL]?.isHidden = true
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_SPELL_2]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_SPELL]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_SPELL_2]?.isHidden = true
         }
         if (settings.hideMagic || settings.hideDefence) {
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL]?.isHidden = true
-            Widgets[WidgetId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL]?.isHidden = true
+            Components[ComponentId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2]?.isHidden = true
         }
     }
 
     private fun unhide() {
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_1]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_2]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_3]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_4]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_SPELL]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_SPELL_2]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL]?.isHidden = false
-        Widgets[WidgetId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_1]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_2]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_3]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_4]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_SPELL]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_SPELL_2]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL]?.isHidden = false
+        Components[ComponentId.COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2]?.isHidden = false
     }
 
     private fun isHidden(desc: String): Boolean {

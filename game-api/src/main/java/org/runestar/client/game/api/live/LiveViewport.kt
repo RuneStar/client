@@ -1,7 +1,7 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.game.api.Viewport
-import org.runestar.client.game.api.Widget
+import org.runestar.client.game.api.Component
 import org.runestar.client.game.raw.CLIENT
 
 object LiveViewport : Viewport {
@@ -16,7 +16,7 @@ object LiveViewport : Viewport {
 
     override val zoom: Int get() = CLIENT.viewportZoom
 
-    val widget: Widget? get() = CLIENT.viewportWidget?.let { Widget(it) }
+    val component: Component? get() = CLIENT.viewportComponent?.let { Component(it) }
 
     override fun toString(): String {
         return "LiveViewport(zoom=$zoom, shape=$shape)"

@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.WidgetId
+import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
@@ -28,13 +28,13 @@ class SelectionDebug : DisposablePlugin<PluginSettings>() {
                     "isItemSelected: ${CLIENT.isItemSelected}",
                     "selectedItemId: ${CLIENT.selectedItemId}",
                     "selectedItemSlot: ${CLIENT.selectedItemSlot}",
-                    "selectedItemWidget: ${CLIENT.selectedItemWidget}",
+                    "selectedItemComponent: ${CLIENT.selectedItemComponent}",
                     "itemDragDuration: ${CLIENT.itemDragDuration}",
-                    "isDraggingWidget: ${CLIENT.isDraggingWidget}",
-                    "widgetDragDuration: ${CLIENT.widgetDragDuration}",
+                    "isDraggingComponent: ${CLIENT.isDraggingComponent}",
+                    "componentDragDuration: ${CLIENT.componentDragDuration}",
                     "dragItemSlotSource: ${CLIENT.dragItemSlotSource}",
                     "dragItemSlotDestination: ${CLIENT.dragItemSlotDestination}",
-                    "dragInventoryWidget: ${CLIENT.dragInventoryWidget?.let { WidgetId(it.id) }}"
+                    "dragInventoryComponent: ${CLIENT.dragInventoryComponent?.let { ComponentId(it.id) }}"
             )
             strings.forEach { s ->
                 g.drawString(s, x, y)

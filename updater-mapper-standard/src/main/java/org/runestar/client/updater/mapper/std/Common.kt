@@ -6,7 +6,6 @@ import org.objectweb.asm.Type.BYTE_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
 import org.runestar.client.updater.mapper.extensions.withDimensions
@@ -29,10 +28,10 @@ abstract class FormattingUniqueMapper(string: String) : UniqueMapper.InClassInit
             .next { it.opcode == PUTSTATIC && it.fieldType == String::class.type }
 }
 
-@DependsOn(Client.newIndexCache::class, IndexCache::class)
-abstract class IndexCacheFieldMapper(order: Int) : StaticOrderMapper.Field(order) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.newIndexCache>().id }
-            .next { it.opcode == PUTSTATIC && it.fieldType == type<IndexCache>() }
+@DependsOn(Client.newArchive::class, Archive::class)
+abstract class ArchiveFieldMapper(order: Int) : StaticOrderMapper.Field(order) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC && it.methodId == method<Client.newArchive>().id }
+            .next { it.opcode == PUTSTATIC && it.fieldType == type<Archive>() }
 }
 
 //@DependsOn(EvictingDualNodeHashTable::class)
@@ -83,7 +82,6 @@ abstract class ByteArrayPoolCount(index: Int) : OrderMapper.InClassInitializer.F
 //}
 
 @DependsOn(Client.friendSystem::class)
-@SinceVersion(164)
 abstract class UserComparatorClass(opcode: Int) : AllUniqueMapper.Class() {
     override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand == opcode }
             .nextWithin(30) { it.isField && it.fieldId == field<Client.friendSystem>().id }
@@ -106,7 +104,7 @@ abstract class SpriteMaskConstructorField(type: Type, index: Int) : OrderMapper.
 }
 
 @DependsOn(Actor::class)
-abstract class ActorHitSplatField(index: Int) : OrderMapper.InConstructor.Field(Actor::class, index, 5) {
+abstract class ActorHitmarkField(index: Int) : OrderMapper.InConstructor.Field(Actor::class, index, 5) {
     override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_4 }
             .nextIn(2) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
@@ -124,7 +122,6 @@ abstract class WorldMapLabelSizeConstant(val index: Int) : OrderMapper.InClassIn
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<WorldMapLabelSize>() }
 }
 
-@SinceVersion(162)
 @DependsOn(TriBool::class)
 abstract class TriBoolConst(index: Int) : OrderMapper.InClassInitializer.Field(TriBool::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == type<TriBool>() }
@@ -140,31 +137,39 @@ abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<Script>() }
 }
 
-@DependsOn(Widget.decodeLegacy::class)
-abstract class WidgetInvArray(index: Int) : OrderMapper.InMethod.Field(Widget.decodeLegacy::class, index) {
+@DependsOn(Component.decodeLegacy::class)
+abstract class WidgetInvArray(index: Int) : OrderMapper.InMethod.Field(Component.decodeLegacy::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 20 }
             .nextIn(2) { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(Widget.decodeLegacy::class)
-abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Widget.decodeLegacy::class, index) {
+@DependsOn(Component.decodeLegacy::class)
+abstract class Widget10Array(index: Int) : OrderMapper.InMethod.Field(Component.decodeLegacy::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == NEWARRAY && it.intOperand == 10 }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(Widget.decode::class)
-abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
+@DependsOn(Component.decode::class)
+abstract class WidgetListener(index: Int) : OrderMapper.InMethod.Field(Component.decode::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == Array<Any?>::class.type }
 }
 
-@DependsOn(Widget.decode::class, Widget.readListenerTriggers::class)
-abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Widget.decode::class, index) {
-    override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Widget.readListenerTriggers>().id }
+@DependsOn(Component.decode::class)
+abstract class WidgetListener2(index: Int) : StaticOrderMapper.Field(index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == SIPUSH && it.intOperand in 1400..1430 }
+            .nextWithin(3) { it.opcode == ALOAD }
+            .next { it.opcode == ALOAD }
+            .next { it.opcode == PUTFIELD && it.fieldType == Array<Any>::class.type && it.fieldOwner == type<Component>() }
+}
+
+@DependsOn(Component.decode::class, Component.readListenerTriggers::class)
+abstract class WidgetListenerTriggers(index: Int) : OrderMapper.InMethod.Field(Component.decode::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Component.readListenerTriggers>().id }
             .next { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
 }
 
-@DependsOn(SpriteIds::class)
-abstract class SpriteIdsField(index: Int) : OrderMapper.InConstructor.Field(SpriteIds::class, index) {
+@DependsOn(GraphicsDefaults::class)
+abstract class SpriteIdsField(index: Int) : OrderMapper.InConstructor.Field(GraphicsDefaults::class, index) {
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
 }
 

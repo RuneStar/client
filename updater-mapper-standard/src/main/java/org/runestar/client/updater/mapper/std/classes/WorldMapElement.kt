@@ -31,7 +31,7 @@ class WorldMapElement : IdentityMapper.Class() {
 
     @MethodParameters("buffer")
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 16 } }
@@ -39,7 +39,7 @@ class WorldMapElement : IdentityMapper.Class() {
 
     @MethodParameters("buffer", "opcode")
     @DependsOn(Buffer::class)
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 16 } }
@@ -59,14 +59,14 @@ class WorldMapElement : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(BOOLEAN_TYPE) }
     }
 
-    @DependsOn(readNext::class)
-    class string1 : UniqueMapper.InMethod.Field(readNext::class) {
+    @DependsOn(decode0::class)
+    class string1 : UniqueMapper.InMethod.Field(decode0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 17 }
                 .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-//    @DependsOn(readNext::class)
-//    class name : UniqueMapper.InMethod.Field(readNext::class) {
+//    @DependsOn(decode0::class)
+//    class name : UniqueMapper.InMethod.Field(decode0::class) {
 //        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_3 }
 //                .nextWithin(7) { it.opcode == PUTFIELD && it.fieldType == String::class.type }
 //    }

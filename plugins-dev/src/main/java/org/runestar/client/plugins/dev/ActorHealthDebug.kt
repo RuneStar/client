@@ -28,7 +28,7 @@ class ActorHealthDebug : DisposablePlugin<PluginSettings>() {
                 val loc = actor.location
                 if (!loc.isLoaded) return@forEach
                 val pt = loc.center.toScreen() ?: return@forEach
-//                val hs = actor.hitSplat ?: return@forEach
+//                val hs = actor.hitmark ?: return@forEach
 //                val hb = actor.healthBar ?: return@forEach
 //                val def = hb.definition ?: return@forEach
                 val health = actor.health ?: return@forEach

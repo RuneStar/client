@@ -3,10 +3,10 @@ package org.runestar.client.plugins.smoothanimations
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XModel
 import org.runestar.client.game.raw.access.XSequenceDefinition
-import org.runestar.client.game.raw.access.XWidget
+import org.runestar.client.game.raw.access.XComponent
 import org.runestar.client.game.raw.base.MethodEvent
 
-internal fun widgetGetModelEnter(event: MethodEvent<XWidget, XModel>) {
+internal fun widgetGetModelEnter(event: MethodEvent<XComponent, XModel>) {
     val widget = event.instance
     event.arguments[1] = packFrame(widget.modelFrame, widget.modelFrameCycle)
 }

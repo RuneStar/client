@@ -5,7 +5,6 @@ import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -31,7 +30,6 @@ class MouseRecorder : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == BOOLEAN_TYPE }
     }
 
-    @SinceVersion(172)
     class millis : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == LongArray::class.type }
     }

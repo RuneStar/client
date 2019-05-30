@@ -18,14 +18,14 @@ class HealthBarDefinition : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.type == field<HealthBar.definition>().type }
 
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 6 } }
     }
 
     @DependsOn(Buffer::class)
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 6 } }

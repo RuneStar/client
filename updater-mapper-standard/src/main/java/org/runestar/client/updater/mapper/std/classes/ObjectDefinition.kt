@@ -31,19 +31,19 @@ class ObjectDefinition : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 
-    class actions : IdentityMapper.InstanceField() {
+    class op : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type.withDimensions(1) }
     }
 
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 23 } }
     }
 
     @DependsOn(Buffer::class)
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 23 } }
@@ -70,7 +70,7 @@ class ObjectDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(transform::class)
-    class transformConfigId : OrderMapper.InMethod.Field(transform::class, 2) {
+    class transformVarp : OrderMapper.InMethod.Field(transform::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -192,7 +192,7 @@ class ObjectDefinition : IdentityMapper.Class() {
 
     @MethodParameters()
     @DependsOn(Client.getObjectDefinition::class)
-    class init : OrderMapper.InMethod.Method(Client.getObjectDefinition::class, -1) {
+    class postDecode : OrderMapper.InMethod.Method(Client.getObjectDefinition::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<ObjectDefinition>() }
     }
 
@@ -215,25 +215,25 @@ class ObjectDefinition : IdentityMapper.Class() {
     }
 
     @DependsOn(getModelData::class)
-    class recolorFrom : OrderMapper.InMethod.Field(getModelData::class, 0) {
+    class recol_s : OrderMapper.InMethod.Field(getModelData::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModelData::class)
-    class recolorTo : OrderMapper.InMethod.Field(getModelData::class, 1) {
+    class recol_d : OrderMapper.InMethod.Field(getModelData::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModelData::class)
-    class retextureFrom : OrderMapper.InMethod.Field(getModelData::class, 2) {
+    class retex_s : OrderMapper.InMethod.Field(getModelData::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }
 
     @DependsOn(getModelData::class)
-    class retextureTo : OrderMapper.InMethod.Field(getModelData::class, 3) {
+    class retex_d : OrderMapper.InMethod.Field(getModelData::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == SALOAD }
                 .prevIn(2) { it.opcode == GETFIELD && it.fieldType == ShortArray::class.type }
     }

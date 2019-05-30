@@ -55,8 +55,8 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
         return "m=${p.movementSequence} ${p.movementFrame.pad()}:${p.movementFrameCycle.pad()}," +
         "sa=${p.spotAnimation} ${p.spotAnimationFrame.pad()}:${p.spotAnimationFrameCycle.pad()}," +
         "sq=${p.sequence} ${p.sequenceFrame.pad()}:${p.sequenceFrameCycle.pad()}," +
-        "i=${p.idleSequence} w=${p.walkSequence} r=${p.runSequence}," +
-        "wt=${p.walkTurnSequence} wtl=${p.walkTurnLeftSequence} wtr=${p.walkTurnRightSequence}," +
+        "y=${p.readySequence} w=${p.walkSequence} r=${p.runSequence}," +
+        "wb=${p.walkBackSequence} wl=${p.walkLeftSequence} wr=${p.walkRightSequence}," +
         "tl=${p.turnLeftSequence} tr=${p.turnRightSequence}"
     }
 

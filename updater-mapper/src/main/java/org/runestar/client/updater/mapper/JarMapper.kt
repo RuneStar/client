@@ -2,7 +2,6 @@ package org.runestar.client.updater.mapper
 
 import com.google.common.reflect.ClassPath
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Jar2
 import java.nio.file.Path
@@ -23,15 +22,13 @@ open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
                     .toTypedArray()
     )
 
-    fun map(jar: Path, context: Mapper.Context, version: Int = 0) {
+    fun map(jar: Path, context: Mapper.Context) {
         val jar2 = Jar2(jar)
         @Suppress("UNCHECKED_CAST")
         val unordered = classMappers.asSequence()
-                .filter { it.findJavaAnnotation<SinceVersion>()?.version ?: 0 <= version }
                 .flatMap { it.nestedClasses.asSequence().plus(it) }
                 .filter { it.isSubclassOf(Mapper::class) }
                 .map { it as KClass<out Mapper<*>> }
-                .filter { it.findJavaAnnotation<SinceVersion>()?.version ?: 0 <= version }
         val ordered = orderDependencies(unordered)
         ordered.map { it.createInstance() }.forEach {
             it.context = context

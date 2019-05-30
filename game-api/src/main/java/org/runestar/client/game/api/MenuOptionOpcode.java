@@ -42,11 +42,11 @@ public final class MenuOptionOpcode {
     public static final int ITEM_ACTION_3 = 36; //
     public static final int ITEM_ACTION_4 = 37; //
     public static final int USE_ITEM = 38; //
-    public static final int WIDGET_ITEM_ACTION_0 = 39;
-    public static final int WIDGET_ITEM_ACTION_1 = 40;
-    public static final int WIDGET_ITEM_ACTION_2 = 41;
-    public static final int WIDGET_ITEM_ACTION_3 = 42;
-    public static final int WIDGET_ITEM_ACTION_4 = 43;
+    public static final int COMPONENT_ITEM_ACTION_0 = 39;
+    public static final int COMPONENT_ITEM_ACTION_1 = 40;
+    public static final int COMPONENT_ITEM_ACTION_2 = 41;
+    public static final int COMPONENT_ITEM_ACTION_3 = 42;
+    public static final int COMPONENT_ITEM_ACTION_4 = 43;
     public static final int PLAYER_ACTION_0 = 44; //
     public static final int PLAYER_ACTION_1 = 45; //
     public static final int PLAYER_ACTION_2 = 46; //
@@ -56,8 +56,8 @@ public final class MenuOptionOpcode {
     public static final int PLAYER_ACTION_6 = 50; //
     public static final int PLAYER_ACTION_7 = 51; //
     // 52 - 56
-    public static final int WIDGET_ACTION_0 = 57; //
-    public static final int SPELL_ON_WIDGET = 58;
+    public static final int COMPONENT_ACTION_0 = 57; //
+    public static final int SPELL_ON_COMPONENT = 58;
     // 59 - 1000
     public static final int OBJECT_ACTION_4 = 1001; //
     public static final int OBJECT_EXAMINE = 1002; //
@@ -65,7 +65,7 @@ public final class MenuOptionOpcode {
     public static final int GROUND_ITEM_EXAMINE = 1004; //
     public static final int ITEM_EXAMINE = 1005; //
     public static final int CANCEL = 1006; //
-    public static final int WIDGET_ACTION_1 = 1007; //
+    public static final int COMPONENT_ACTION_1 = 1007; //
 
     public static final int PLAYER_ACTION_0_LOW_PRIORITY = 2044; //
     public static final int PLAYER_ACTION_1_LOW_PRIORITY = 2045; //

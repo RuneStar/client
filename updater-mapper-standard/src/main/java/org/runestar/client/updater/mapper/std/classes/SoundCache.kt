@@ -1,11 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -44,14 +42,14 @@ class SoundCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<getMusicSample0>().id } }
     }
 
-    @DependsOn(AbstractIndexCache::class, getSoundEffect0::class)
+    @DependsOn(AbstractArchive::class, getSoundEffect0::class)
     class soundEffectIndex : UniqueMapper.InMethod.Field(getSoundEffect0::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractIndexCache>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractArchive>() }
     }
 
-    @DependsOn(AbstractIndexCache::class, getMusicSample0::class)
+    @DependsOn(AbstractArchive::class, getMusicSample0::class)
     class musicSampleIndex : UniqueMapper.InMethod.Field(getMusicSample0::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractIndexCache>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractArchive>() }
     }
 
     @DependsOn(getSoundEffect0::class, NodeHashTable::class)

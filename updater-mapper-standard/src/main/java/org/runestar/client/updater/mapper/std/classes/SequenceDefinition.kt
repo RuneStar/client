@@ -23,14 +23,14 @@ class SequenceDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 5 }
 
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == GOTO } }
                 .and { it.instructions.none { it.opcode == BIPUSH && it.intOperand == 13 } }
                 .and { it.arguments.startsWith(type<Buffer>()) }
     }
 
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == GOTO } }
                 .and { it.instructions.any { it.opcode == BIPUSH && it.intOperand == 13 } }
@@ -45,19 +45,19 @@ class SequenceDefinition : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class init : IdentityMapper.InstanceMethod() {
+    class postDecode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.none { it.isMethod } }
     }
 
-    @DependsOn(readNext::class)
-    class frameLengths : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class frameLengths : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class frameIds : OrderMapper.InMethod.Field(readNext::class, 1) {
+    @DependsOn(decode0::class)
+    class frameIds : OrderMapper.InMethod.Field(decode0::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == IntArray::class.type }
     }
 
@@ -88,13 +88,13 @@ class SequenceDefinition : IdentityMapper.Class() {
     }
 
     @MethodParameters("model", "frame")
-    @DependsOn(Widget.getModel::class)
-    class animateWidget : UniqueMapper.InMethod.Method(Widget.getModel::class) {
+    @DependsOn(Component.getModel::class)
+    class animateComponent : UniqueMapper.InMethod.Method(Component.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<SequenceDefinition>() }
     }
 
-    @DependsOn(animateWidget::class)
-    class frameIds2 : OrderMapper.InMethod.Field(animateWidget::class, 1) {
+    @DependsOn(animateComponent::class)
+    class frameIds2 : OrderMapper.InMethod.Field(animateComponent::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 

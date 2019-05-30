@@ -8,7 +8,6 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
@@ -23,46 +22,38 @@ import java.awt.datatransfer.Clipboard
 class GameShell : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { klass<Client>().superType == it.type }
 
-    @SinceVersion(141)
     class canvas : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Canvas::class.type }
     }
 
-    @SinceVersion(141)
     class frame : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Frame::class.type }
     }
 
-    @SinceVersion(141)
     class eventQueue : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == EventQueue::class.type }
     }
 
-    @SinceVersion(141)
     class clipboard : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == Clipboard::class.type }
     }
 
-    @SinceVersion(141)
     @DependsOn(MouseWheelHandler::class)
     class mouseWheelHandler : InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<MouseWheelHandler>() }
     }
 
     @MethodParameters("g")
-    @SinceVersion(141)
     class paint : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == Applet::paint.mark }
     }
 
     @MethodParameters("g")
-    @SinceVersion(141)
     class update : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.mark == Applet::update.mark }
     }
 
     @MethodParameters()
-    @SinceVersion(141)
     @DependsOn(canvas::class)
     class addCanvas : InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -70,14 +61,12 @@ class GameShell : IdentityMapper.Class() {
     }
 
     @MethodParameters("s")
-    @SinceVersion(141)
     class clipboardSetString : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(String::class.type) }
                 .and { it.instructions.any { it.isMethod && it.methodName == "setContents" } }
     }
 
-    @SinceVersion(141)
     @MethodParameters()
     @DependsOn(MouseWheel::class)
     class mouseWheel : IdentityMapper.InstanceMethod() {
@@ -109,7 +98,6 @@ class GameShell : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @SinceVersion(141)
     class setUpClipboard : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }
@@ -123,7 +111,6 @@ class GameShell : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @SinceVersion(141)
     @DependsOn(Client.setUp::class)
     class setUpKeyboard : OrderMapper.InMethod.Method(Client.setUp::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL }
@@ -133,7 +120,6 @@ class GameShell : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @SinceVersion(141)
     @DependsOn(Client.setUp::class)
     class setUpMouse : OrderMapper.InMethod.Method(Client.setUp::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL }
@@ -144,7 +130,6 @@ class GameShell : IdentityMapper.Class() {
 
     @MethodParameters()
     @DependsOn(Bounds::class)
-    @SinceVersion(165)
     class getFrameContentBounds : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Bounds>() }
     }

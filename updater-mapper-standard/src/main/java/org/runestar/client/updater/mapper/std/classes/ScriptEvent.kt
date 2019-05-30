@@ -16,12 +16,12 @@ import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 import org.runestar.client.updater.mapper.tree.Method2
 
-@DependsOn(Widget::class, Node::class)
+@DependsOn(Component::class, Node::class)
 class ScriptEvent : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.interfaces.isEmpty() }
             .and { it.superType == type<Node>() }
-            .and { it.instanceFields.count { it.type == type<Widget>() } == 2 }
+            .and { it.instanceFields.count { it.type == type<Component>() } == 2 }
 
     class targetName : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
@@ -35,11 +35,11 @@ class ScriptEvent : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == Any::class.type.withDimensions(1) }
     }
 
-    class widget : ScriptEventFieldConst(-2147483645)
+    class component : ScriptEventFieldConst(-2147483645)
     class dragTarget : ScriptEventFieldConst(-2147483642)
     class opIndex : ScriptEventFieldConst(-2147483644)
-    class keyTyped : ScriptEventFieldConst(-2147483640)
-    class keyPressed : ScriptEventFieldConst(-2147483639)
+    class keyPressed : ScriptEventFieldConst(-2147483640)
+    class keyTyped : ScriptEventFieldConst(-2147483639)
     class mouseX : ScriptEventFieldConst(-2147483647)
     class mouseY : ScriptEventFieldConst(-2147483646)
 

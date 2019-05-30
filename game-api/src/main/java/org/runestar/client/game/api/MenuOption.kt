@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.MenuOptionOpcode.*
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.Components
 import org.runestar.client.game.raw.CLIENT
 import java.awt.Point
 
@@ -60,8 +60,8 @@ interface MenuOption {
                     MenuOption.OnItemIndexed(base)
                 ITEM_EXAMINE, SPELL_ON_ITEM, ITEM_ON_ITEM, USE_ITEM ->
                     MenuOption.OnItemSimple(base)
-                WIDGET_ACTION_0, WIDGET_ACTION_1, BUTTON_SPELL ->
-                    MenuOption.OnWidgetSimple(base)
+                COMPONENT_ACTION_0, COMPONENT_ACTION_1, BUTTON_SPELL ->
+                    MenuOption.OnComponentSimple(base)
                 BUTTON_DIALOG ->
                     MenuOption.ButtonDialog(base)
                 else ->
@@ -97,40 +97,40 @@ interface MenuOption {
         val id get() = argument0
     }
 
-    interface OnItem: MenuOption, InWidget {
+    interface OnItem: MenuOption, InComponent {
 
         val id get() = argument0
 
         val slot get() = argument1
     }
 
-    interface InWidget: MenuOption {
+    interface InComponent: MenuOption {
 
-        val widgetId get() = WidgetId(argument2)
+        val componentId get() = ComponentId(argument2)
 
-        val widget: Widget get() = checkNotNull(Widgets[widgetId])
+        val component: Component get() = checkNotNull(Components[componentId])
     }
 
-    interface OnWidget: MenuOption, InWidget {
+    interface OnComponent: MenuOption, InComponent {
 
-        val widgetChildId: Int? get() = argument1.let { if (it == -1) null else it }
+        val componentChildId: Int? get() = argument1.let { if (it == -1) null else it }
 
-        val widgetChild: Widget? get() = widget.let { p -> widgetChildId?.let { c -> p.dynamicChildren[c] } ?: p }
+        val componentChild: Component? get() = component.let { p -> componentChildId?.let { c -> p.dynamicChildren[c] } ?: p }
     }
 
-    data class OnWidgetSimple internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, OnWidget {
+    data class OnComponentSimple internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, OnComponent {
 
         override fun toString(): String {
-            return "OnWidgetSimple(opcode=$opcode, widgetId=$widgetId, widgetChildId=$widgetChildId, targetName=$targetName, action=$action)"
+            return "OnComponentSimple(opcode=$opcode, componentId=$componentId, componentChildId=$componentChildId, targetName=$targetName, action=$action)"
         }
     }
 
-    data class ButtonDialog internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, InWidget, Indexed {
+    data class ButtonDialog internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, InComponent, Indexed {
 
         override val index get() = argument1
 
         override fun toString(): String {
-            return "ButtonDialog(opcode=$opcode, index=$index, widgetId=$widgetId, targetName=$targetName, action=$action)"
+            return "ButtonDialog(opcode=$opcode, index=$index, componentId=$componentId, targetName=$targetName, action=$action)"
         }
     }
 
@@ -139,14 +139,14 @@ interface MenuOption {
         override val index get() = opcode - ITEM_ACTION_0
 
         override fun toString(): String {
-            return "OnItemIndexed(opcode=$opcode, index=$index, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
+            return "OnItemIndexed(opcode=$opcode, index=$index, id=$id, slot=$slot, componentId=$componentId, targetName=$targetName, action=$action)"
         }
     }
 
     data class OnItemSimple internal constructor(private val menuOption: MenuOption) : MenuOption by menuOption, OnItem {
 
         override fun toString(): String {
-            return "OnItemSimple(opcode=$opcode, id=$id, slot=$slot, widgetId=$widgetId, targetName=$targetName, action=$action)"
+            return "OnItemSimple(opcode=$opcode, id=$id, slot=$slot, componentId=$componentId, targetName=$targetName, action=$action)"
         }
     }
 

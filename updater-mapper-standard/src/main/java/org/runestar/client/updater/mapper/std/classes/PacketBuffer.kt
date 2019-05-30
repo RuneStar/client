@@ -5,7 +5,6 @@ import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -32,7 +31,6 @@ class PacketBuffer : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(IntArray::class.type) }
     }
 
-    @SinceVersion(157)
     @MethodParameters("isaacCipher")
     @DependsOn(IsaacCipher::class)
     class setIsaacCipher : IdentityMapper.InstanceMethod() {
@@ -90,7 +88,6 @@ class PacketBuffer : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @SinceVersion(157)
     class readSmartByteShortIsaac : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
                 .and { it.arguments.size in 0..1 }

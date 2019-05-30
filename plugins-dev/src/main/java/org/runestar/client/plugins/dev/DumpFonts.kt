@@ -13,11 +13,11 @@ class DumpFonts : AbstractPlugin<PluginSettings>() {
 
     override fun start() {
         val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-        val widget = CLIENT._Widget_()
-        val fontIds = CLIENT.indexCache13.archiveIds ?: throw Exception()
+        val component = CLIENT._Component_()
+        val fontIds = CLIENT.archive13.groupIds ?: throw Exception()
         for (fontId in fontIds) {
-            widget.fontId = fontId
-            val xfont = widget.font ?: error(fontId)
+            component.fontId = fontId
+            val xfont = component.font ?: error(fontId)
             val font = font(xfont)
             val file = ctx.directory.resolve("$fontId.json")
             mapper.writeValue(file.toFile(), font)

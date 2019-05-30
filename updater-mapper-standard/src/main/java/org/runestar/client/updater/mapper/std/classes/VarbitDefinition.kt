@@ -20,28 +20,28 @@ class VarbitDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.size == 3 }
             .and { it.instanceFields.all { it.type == INT_TYPE } }
 
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.opcode == GOTO } }
     }
 
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.none { it.opcode == GOTO } }
     }
 
-    @DependsOn(readNext::class)
-    class varp : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class baseVar : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class lowBit : OrderMapper.InMethod.Field(readNext::class, 1) {
+    @DependsOn(decode0::class)
+    class startBit : OrderMapper.InMethod.Field(decode0::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class highBit : OrderMapper.InMethod.Field(readNext::class, 2) {
+    @DependsOn(decode0::class)
+    class endBit : OrderMapper.InMethod.Field(decode0::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

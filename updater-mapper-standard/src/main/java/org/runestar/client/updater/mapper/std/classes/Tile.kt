@@ -8,13 +8,11 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Class2
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
 
-@SinceVersion(170)
 @DependsOn(Node::class, Scene.tiles::class)
 class Tile : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }

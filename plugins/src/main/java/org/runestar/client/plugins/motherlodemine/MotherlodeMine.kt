@@ -15,7 +15,7 @@ class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
     override val name = "Motherlode Mine"
 
     override fun onStart() {
-        add(XObjectDefinition.init.exit.subscribe { objectInit(ObjectDefinition(it.instance)) })
+        add(XObjectDefinition.postDecode.exit.subscribe { objectInit(ObjectDefinition(it.instance)) })
         resetObjectDefinitions()
     }
 

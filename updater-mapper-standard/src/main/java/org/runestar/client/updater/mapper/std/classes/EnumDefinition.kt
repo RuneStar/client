@@ -11,7 +11,6 @@ import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.*
 import org.runestar.client.updater.mapper.tree.Field2
 import org.runestar.client.updater.mapper.tree.Instruction2
@@ -25,59 +24,58 @@ class EnumDefinition : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 2 }
 
     @DependsOn(Buffer::class)
-    class read : IdentityMapper.InstanceMethod() {
+    class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.none { it.opcode == Opcodes.BIPUSH && it.intOperand == 6 } }
     }
 
     @DependsOn(Buffer::class)
-    class readNext : IdentityMapper.InstanceMethod() {
+    class decode0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(type<Buffer>()) }
                 .and { it.instructions.any { it.opcode == Opcodes.BIPUSH && it.intOperand == 6 } }
     }
 
-    class defaultString : IdentityMapper.InstanceField() {
+    class defaultstr : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }
 
-    class stringVals : IdentityMapper.InstanceField() {
+    class strvals : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type.withDimensions(1) }
     }
 
-    class size0 : UniqueMapper.InConstructor.Field(EnumDefinition::class) {
+    class outputcount : UniqueMapper.InConstructor.Field(EnumDefinition::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
     @MethodParameters()
-    @SinceVersion(161)
     class size : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == INT_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class intVals : OrderMapper.InMethod.Field(readNext::class, -1) {
+    @DependsOn(decode0::class)
+    class intvals : OrderMapper.InMethod.Field(decode0::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class keys : OrderMapper.InMethod.Field(readNext::class, -2) {
+    @DependsOn(decode0::class)
+    class keys : OrderMapper.InMethod.Field(decode0::class, -2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(readNext::class)
-    class keyType : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class inputtype : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == CHAR_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class valType : OrderMapper.InMethod.Field(readNext::class, 1) {
+    @DependsOn(decode0::class)
+    class outputtype : OrderMapper.InMethod.Field(decode0::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == CHAR_TYPE }
     }
 
-    @DependsOn(readNext::class)
-    class defaultInt : OrderMapper.InMethod.Field(readNext::class, 0) {
+    @DependsOn(decode0::class)
+    class defaultint : OrderMapper.InMethod.Field(decode0::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 }

@@ -5,7 +5,6 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -24,14 +23,12 @@ class AbstractRasterProvider : IdentityMapper.Class() {
             .and { it.interfaces.isEmpty() }
             .and { it.instanceFields.count { it.type == IntArray::class.type } == 1 }
 
-    @SinceVersion(141)
     @MethodParameters("x", "y", "width", "height")
     class draw : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 
-    @SinceVersion(141)
     @MethodParameters("x", "y")
     class drawFull : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }

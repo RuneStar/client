@@ -6,12 +6,12 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.Skill
-import org.runestar.client.game.api.WidgetId
+import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Prayers
 import org.runestar.client.game.api.live.Stats
-import org.runestar.client.game.api.live.Widgets
+import org.runestar.client.game.api.live.Components
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.RenderingHints
 import java.awt.Shape
@@ -69,7 +69,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE)
 
             if (settings.hpRegen.enabled && hpTicks > 0) {
-                Widgets[WidgetId.MINIMAP_ORBS_HP_CIRCLE]?.shape?.let { hpRect ->
+                Components[ComponentId.MINIMAP_ORBS_HP_CIRCLE]?.shape?.let { hpRect ->
                     val boost = Stats.boost(Skill.HITPOINTS)
                     val hpPercent = when {
                         boost < 0 -> hpTicks.toDouble() / hpTickLimit
@@ -81,7 +81,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
                 }
             }
 
-            Widgets[WidgetId.MINIMAP_ORBS_SPEC_CIRCLE]?.shape?.let { specRect ->
+            Components[ComponentId.MINIMAP_ORBS_SPEC_CIRCLE]?.shape?.let { specRect ->
 
                 if (settings.specFill.enabled && Game.specialAttackEnabled) {
                     g.color = settings.specFill.color.value

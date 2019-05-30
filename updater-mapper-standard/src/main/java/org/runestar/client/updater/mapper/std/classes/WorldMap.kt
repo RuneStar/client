@@ -8,8 +8,6 @@ import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -40,9 +38,9 @@ class WorldMap : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Font>() }
     }
 
-    @DependsOn(AbstractIndexCache::class)
+    @DependsOn(AbstractArchive::class)
     class init : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<AbstractIndexCache>()) }
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<AbstractArchive>()) }
     }
 
     @MethodParameters("mapArea")
@@ -71,7 +69,6 @@ class WorldMap : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 
-    @SinceVersion(165)
     @DependsOn(Sprite::class)
     class sprite : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<Sprite>() }
@@ -108,30 +105,30 @@ class WorldMap : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.isMembersWorld>().id } }
     }
 
-    @DependsOn(WorldMapIndexCacheLoader::class)
+    @DependsOn(WorldMapArchiveLoader::class)
     class cacheLoader : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<WorldMapIndexCacheLoader>() }
+        override val predicate = predicateOf<Field2> { it.type == type<WorldMapArchiveLoader>() }
     }
 
     @MethodParameters()
-    @DependsOn(WorldMapIndexCacheLoader.load::class)
+    @DependsOn(WorldMapArchiveLoader.load::class)
     class loadCache : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapIndexCacheLoader.load>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapArchiveLoader.load>().id } }
     }
 
     @MethodParameters()
-    @DependsOn(WorldMapIndexCacheLoader.isLoaded::class)
+    @DependsOn(WorldMapArchiveLoader.isLoaded::class)
     class isCacheLoaded : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapIndexCacheLoader.isLoaded>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<WorldMapArchiveLoader.isLoaded>().id } }
     }
 
     @MethodParameters("a", "b", "c", "d")
-    @DependsOn(TileLocation::class)
+    @DependsOn(Coord::class)
     class menuAction : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<TileLocation>(), type<TileLocation>()) }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE, type<Coord>(), type<Coord>()) }
     }
 
     @MethodParameters("a", "b", "c", "d", "e", "f", "g")
@@ -164,9 +161,9 @@ class WorldMap : IdentityMapper.Class() {
                 .and { it.arguments == listOf(INT_TYPE, INT_TYPE, INT_TYPE) }
     }
 
-    @DependsOn(TileLocation::class)
+    @DependsOn(Coord::class)
     class mouseCoord : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<TileLocation>() }
+        override val predicate = predicateOf<Field2> { it.type == type<Coord>() }
     }
 
     @MethodParameters("plane", "x", "y")

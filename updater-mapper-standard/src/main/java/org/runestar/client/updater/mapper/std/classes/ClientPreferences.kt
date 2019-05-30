@@ -4,7 +4,6 @@ import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.annotations.SinceVersion
 import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
@@ -36,25 +35,21 @@ class ClientPreferences : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<Buffer>() }
     }
 
-    @SinceVersion(154)
     @DependsOn(toBuffer::class)
     class roofsHidden : OrderMapper.InMethod.Field(toBuffer::class, 0, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
     }
 
-    @SinceVersion(154)
     @DependsOn(toBuffer::class)
     class titleMusicDisabled : OrderMapper.InMethod.Field(toBuffer::class, 1, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
     }
 
-    @SinceVersion(154)
     @DependsOn(toBuffer::class)
     class hideUsername : OrderMapper.InMethod.Field(toBuffer::class, 2, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<ClientPreferences>() }
     }
 
-    @SinceVersion(154)
     class rememberedUsername : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == String::class.type }
     }

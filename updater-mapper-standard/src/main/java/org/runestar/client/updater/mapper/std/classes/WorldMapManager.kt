@@ -3,14 +3,12 @@ package org.runestar.client.updater.mapper.std.classes
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.BOOLEAN_TYPE
-import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
 import org.runestar.client.updater.mapper.annotations.DependsOn
 import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.Predicate
 import org.runestar.client.updater.mapper.extensions.and
 import org.runestar.client.updater.mapper.extensions.predicateOf
 import org.runestar.client.updater.mapper.extensions.type
@@ -63,10 +61,10 @@ class WorldMapManager : IdentityMapper.Class() {
     }
 
     @MethodParameters("indexCache", "cacheName", "isMembersWorld")
-    @DependsOn(AbstractIndexCache::class)
+    @DependsOn(AbstractArchive::class)
     class load : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.startsWith(type<AbstractIndexCache>()) }
+                .and { it.arguments.startsWith(type<AbstractArchive>()) }
     }
 
     @MethodParameters()

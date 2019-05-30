@@ -22,8 +22,8 @@ class SmoothAnimations : DisposablePlugin<PluginSettings>() {
         add(XSequenceDefinition.animateSequence.enter.subscribe(::animateSequenceEnter))
         add(XSequenceDefinition.animateSequence2.enter.subscribe(::animateSequence2Enter))
 
-        add(XWidget.getModel.enter.subscribe(::widgetGetModelEnter))
-        add(XSequenceDefinition.animateWidget.enter.subscribe(::animateWidgetEnter))
+        add(XComponent.getModel.enter.subscribe(::widgetGetModelEnter))
+        add(XSequenceDefinition.animateComponent.enter.subscribe(::animateWidgetEnter))
 
         add(XSequenceDefinition.animateSpotAnimation.enter.subscribe(::animateSpotAnimationEnter))
 
