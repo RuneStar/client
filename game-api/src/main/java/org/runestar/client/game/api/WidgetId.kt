@@ -28,13 +28,13 @@ inline class WidgetId(val packed: Int) {
         val MINIMAP_ORBS_HP_CIRCLE = WidgetId(WidgetGroupId.MINIMAP_ORBS, 6)
         val MINIMAP_ORBS_SPEC_CIRCLE = WidgetId(WidgetGroupId.MINIMAP_ORBS, 31)
 
-        val COMBAT_OPTIONS_STYLE_1 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 3)
-        val COMBAT_OPTIONS_STYLE_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 7)
-        val COMBAT_OPTIONS_STYLE_3 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 11)
-        val COMBAT_OPTIONS_STYLE_4 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 15)
-        val COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 20)
-        val COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 21)
-        val COMBAT_OPTIONS_STYLE_SPELL = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 25)
-        val COMBAT_OPTIONS_STYLE_SPELL_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 26)
+        val COMBAT_OPTIONS_STYLE_1 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 4)
+        val COMBAT_OPTIONS_STYLE_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 8)
+        val COMBAT_OPTIONS_STYLE_3 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 12)
+        val COMBAT_OPTIONS_STYLE_4 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 16)
+        val COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 21)
+        val COMBAT_OPTIONS_STYLE_DEFENSIVE_SPELL_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 22)
+        val COMBAT_OPTIONS_STYLE_SPELL = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 26)
+        val COMBAT_OPTIONS_STYLE_SPELL_2 = WidgetId(WidgetGroupId.COMBAT_OPTIONS, 27)
     }
 }
