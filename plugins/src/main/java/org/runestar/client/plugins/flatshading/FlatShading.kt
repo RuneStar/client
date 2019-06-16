@@ -2,7 +2,7 @@ package org.runestar.client.plugins.flatshading
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XModelData
+import org.runestar.client.game.raw.access.XUnlitModel
 import org.runestar.client.plugins.spi.PluginSettings
 
 class FlatShading : DisposablePlugin<PluginSettings>() {
@@ -12,7 +12,7 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
     override val name = "Flat Shading"
 
     override fun onStart() {
-        add(XModelData.toModel.exit.subscribe {
+        add(XUnlitModel.light.exit.subscribe {
             val model = it.returned
             model.faceColors3.fill(-1)
         })
@@ -24,11 +24,11 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
     }
 
     private fun clearModelCache() {
-        CLIENT.itemDefinition_cachedModels.clear()
-        CLIENT.npcDefinition_cachedModels.clear()
-        CLIENT.spotAnimationDefinition_cachedModels.clear()
+        CLIENT.objType_cachedModels.clear()
+        CLIENT.npcType_cachedModels.clear()
+        CLIENT.spotType_cachedModels.clear()
         CLIENT.component_cachedModels.clear()
         CLIENT.playerAppearance_cachedModels.clear()
-        CLIENT.objectDefinition_cachedModels.clear()
+        CLIENT.locType_cachedModels.clear()
     }
 }

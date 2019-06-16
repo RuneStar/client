@@ -7,11 +7,15 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.*
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.baseType
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
 
 @DependsOn(Node::class, Scene.tiles::class)
 class Tile : IdentityMapper.Class() {
@@ -50,9 +54,9 @@ class Tile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<BoundaryObject>() }
     }
 
-    @DependsOn(GroundItemPile::class)
-    class groundItemPile : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<GroundItemPile>() }
+    @DependsOn(ObjStack::class)
+    class objStack : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<ObjStack>() }
     }
 
     @DependsOn(TileModel::class)
@@ -65,8 +69,8 @@ class Tile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<TilePaint>() }
     }
 
-    @DependsOn(Scene.newGroundItemPile::class)
-    class gameObjectsCount : UniqueMapper.InMethod.Field(Scene.newGroundItemPile::class) {
+    @DependsOn(Scene.newObjStack::class)
+    class gameObjectsCount : UniqueMapper.InMethod.Field(Scene.newObjStack::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 

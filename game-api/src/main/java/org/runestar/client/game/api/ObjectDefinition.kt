@@ -1,8 +1,8 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.access.XObjectDefinition
+import org.runestar.client.game.raw.access.XLocType
 
-inline class ObjectDefinition(val accessor: XObjectDefinition) {
+inline class ObjectDefinition(val accessor: XLocType) {
 
     val id get() = accessor.id
 

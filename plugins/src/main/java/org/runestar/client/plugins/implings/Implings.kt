@@ -70,7 +70,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             g.color = TEXT_COLOR
             val pos = npc.modelPosition.copy(height = npc.accessor.defaultHeight / 3)
             if (!pos.isLoaded) return@forEach
-            val name = npc.definition?.name?.substringBefore(' ') ?: "Impling"
+            val name = npc.type?.name?.substringBefore(' ') ?: "Impling"
 
             val minimapPt = pos.toScreen(Projections.minimap)
             if (minimapPt != null) {
@@ -86,7 +86,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     }
 
     private fun isImpling(npc: Npc): Boolean {
-        val def = npc.definition ?: return false
+        val def = npc.type ?: return false
         return settings.ids.contains(def.id)
     }
 

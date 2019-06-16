@@ -1,8 +1,5 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Method2
 import kotlin.reflect.KClass
 import kotlin.reflect.full.findAnnotation
 

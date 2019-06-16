@@ -1,10 +1,9 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.updater.mapper.AllUniqueMapper
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.predicateOf
 import org.runestar.client.updater.mapper.prevWithin
-import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.Instruction2
 import org.objectweb.asm.Opcodes
 
 class Huffman : AllUniqueMapper.Class() {

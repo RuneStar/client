@@ -1,9 +1,5 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.extensions.and
-
 fun Predicate<Instruction2>.skip(n: Int): Predicate<Instruction2> {
     return { insn ->
         if (this(insn)) {

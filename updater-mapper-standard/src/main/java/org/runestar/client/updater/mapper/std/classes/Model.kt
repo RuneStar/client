@@ -1,21 +1,20 @@
 package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.common.startsWith
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.extensions.withDimensions
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 
 @DependsOn(Entity.getModel::class)
 class Model : IdentityMapper.Class() {
@@ -81,7 +80,7 @@ class Model : IdentityMapper.Class() {
     // either xz or xyz
     @DependsOn(Model.draw::class)
     class xzRadius : OrderMapper.InMethod.Field(Model.draw::class, 1) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE }
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
     @MethodParameters("x", "y", "z")
@@ -203,29 +202,29 @@ class Model : IdentityMapper.Class() {
     }
 
     @MethodParameters("frames", "frame")
-    @DependsOn(Frames::class)
+    @DependsOn(AnimFrameset::class)
     class animate : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 2..3 }
-                .and { it.arguments.startsWith(type<Frames>(), INT_TYPE) }
+                .and { it.arguments.startsWith(type<AnimFrameset>(), INT_TYPE) }
     }
 
-    @DependsOn(Frames::class)
+    @DependsOn(AnimFrameset::class)
     class animate2 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 5..6 }
-                .and { it.arguments.startsWith(type<Frames>(), INT_TYPE, type<Frames>(), INT_TYPE, IntArray::class.type) }
+                .and { it.arguments.startsWith(type<AnimFrameset>(), INT_TYPE, type<AnimFrameset>(), INT_TYPE, IntArray::class.type) }
     }
 
     @MethodParameters("b")
-    @DependsOn(SpotAnimationDefinition.getModel::class)
-    class toSharedSpotAnimationModel : UniqueMapper.InMethod.Method(SpotAnimationDefinition.getModel::class) {
+    @DependsOn(SpotType.getModel::class)
+    class toSharedSpotAnimationModel : UniqueMapper.InMethod.Method(SpotType.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
     }
 
     @MethodParameters("b")
-    @DependsOn(NpcDefinition.getModel::class)
-    class toSharedSequenceModel : UniqueMapper.InMethod.Method(NpcDefinition.getModel::class) {
+    @DependsOn(NPCType.getModel::class)
+    class toSharedSequenceModel : UniqueMapper.InMethod.Method(NPCType.getModel::class) {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<Model>() && it.methodType.returnType == type<Model>() }
     }
 
@@ -251,23 +250,23 @@ class Model : IdentityMapper.Class() {
                 .and { it != method<rotateY90Ccw>() }
     }
 
-    @DependsOn(ModelData.toModel::class)
-    class faceColors1 : OrderMapper.InMethod.Field(ModelData.toModel::class, 0) {
+    @DependsOn(UnlitModel.light::class)
+    class faceColors1 : OrderMapper.InMethod.Field(UnlitModel.light::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(ModelData.toModel::class)
-    class faceColors2 : OrderMapper.InMethod.Field(ModelData.toModel::class, 1) {
+    @DependsOn(UnlitModel.light::class)
+    class faceColors2 : OrderMapper.InMethod.Field(UnlitModel.light::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(ModelData.toModel::class)
-    class faceColors3 : OrderMapper.InMethod.Field(ModelData.toModel::class, 2) {
+    @DependsOn(UnlitModel.light::class)
+    class faceColors3 : OrderMapper.InMethod.Field(UnlitModel.light::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(ModelData.toModel::class)
-    class faceTextures : OrderMapper.InMethod.Field(ModelData.toModel::class, -1) {
+    @DependsOn(UnlitModel.light::class)
+    class faceTextures : OrderMapper.InMethod.Field(UnlitModel.light::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldOwner == type<Model>() && it.fieldType == ShortArray::class.type }
     }
 }

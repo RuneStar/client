@@ -2,23 +2,27 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.NEWARRAY
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.id
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
 import java.io.InputStream
 import java.io.OutputStream
+import java.net.Socket
 
 class NetSocket : IdentityMapper.Class() {
 
-    override val predicate = predicateOf<Class2> { it.instanceFields.count { it.type == java.net.Socket::class.type } == 1 }
+    override val predicate = predicateOf<Class2> { it.instanceFields.count { it.type == Socket::class.type } == 1 }
             .and { it.instanceFields.count { it.type == InputStream::class.type } == 1 }
 
     class finalize : IdentityMapper.InstanceMethod() {
@@ -26,7 +30,7 @@ class NetSocket : IdentityMapper.Class() {
     }
 
     class socket : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == java.net.Socket::class.type }
+        override val predicate = predicateOf<Field2> { it.type == Socket::class.type }
     }
 
     class inputStream : IdentityMapper.InstanceField() {

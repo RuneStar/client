@@ -1,21 +1,14 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.*
-import org.runestar.client.updater.mapper.extensions.Predicate
-import java.lang.reflect.Modifier
-
-abstract class AllUniqueMapper<T>() : Mapper<T>(), InstructionResolver<T> {
+abstract class AllUniqueMapper<T> : Mapper<T>(), InstructionResolver<T> {
 
     override fun match(jar: Jar2): T {
-        val matches = jar.classes.asSequence()
+        return jar.classes.asSequence()
                 .flatMap { it.methods.asSequence() }
                 .flatMap { it.instructions }
                 .filter(predicate)
-                .map { resolve(it) }
-                .toSet()
-        check(matches.isNotEmpty()) { "$this: No matches" }
-        check(matches.size == 1) { "$this: Multiple matches: $matches" }
-        return matches.first()
+                .mapTo(HashSet()) { resolve(it) }
+                .single()
     }
 
     abstract val predicate: Predicate<Instruction2>

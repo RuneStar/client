@@ -1,20 +1,12 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Jar2
-import org.runestar.client.updater.mapper.tree.Method2
-import org.runestar.client.updater.mapper.extensions.Predicate
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
 abstract class IdentityMapper<T> : Mapper<T>() {
 
     override fun match(jar: Jar2): T {
-        val matches = options(jar).filter { predicate(it) }.toList()
-        check(matches.isNotEmpty()) { "$this: No matches" }
-        check(matches.size == 1) { "$this: Multiple matches: $matches" }
-        return matches.first()
+        return options(jar).filter { predicate(it) }.single()
     }
 
     protected abstract fun options(jar: Jar2): Sequence<T>

@@ -1,18 +1,18 @@
 package org.runestar.client.plugins.smoothanimations
 
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XAnimation
+import org.runestar.client.game.raw.access.XAnimFrame
 import org.runestar.client.game.raw.access.XModel
 
 internal fun XModel.animateInterpolated(
-        animation: XAnimation,
-        nextAnimation: XAnimation,
+        animation: XAnimFrame,
+        nextAnimation: XAnimFrame,
         frameCycle: Int,
         frameLength: Int
 ) {
     if (vertexLabels == null) return
-    val skeleton = animation.skeleton
-    check(skeleton == nextAnimation.skeleton)
+    val base = animation.base
+    check(base == nextAnimation.base)
 
     CLIENT.model_transformTempX = 0
     CLIENT.model_transformTempY = 0
@@ -21,14 +21,14 @@ internal fun XModel.animateInterpolated(
     var transformIndex = 0
     var nextTransformIndex = 0
 
-    repeat(skeleton.count) { i ->
+    repeat(base.transformCount) { i ->
 
-        val frameValid = transformIndex < animation.transformCount && animation.transformSkeletonLabels[transformIndex] == i
-        val nextFrameValid = nextTransformIndex < nextAnimation.transformCount && nextAnimation.transformSkeletonLabels[nextTransformIndex] == i
+        val frameValid = transformIndex < animation.transformCount && animation.transforms[transformIndex] == i
+        val nextFrameValid = nextTransformIndex < nextAnimation.transformCount && nextAnimation.transforms[nextTransformIndex] == i
 
         if (!frameValid && !nextFrameValid) return@repeat
 
-        val type = skeleton.transformTypes[i]
+        val type = base.transformTypes[i]
 
         val defaultTransformValue = if (type == 3) 128 else 0
 
@@ -36,9 +36,9 @@ internal fun XModel.animateInterpolated(
         val currentTransformY: Int
         val currentTransformZ: Int
         if (frameValid) {
-            currentTransformX = animation.transformXs[transformIndex]
-            currentTransformY = animation.transformYs[transformIndex]
-            currentTransformZ = animation.transformZs[transformIndex]
+            currentTransformX = animation.xs[transformIndex]
+            currentTransformY = animation.ys[transformIndex]
+            currentTransformZ = animation.zs[transformIndex]
             transformIndex++
         } else {
             currentTransformX = defaultTransformValue
@@ -50,9 +50,9 @@ internal fun XModel.animateInterpolated(
         val nextTransformY: Int
         val nextTransformZ: Int
         if (nextFrameValid) {
-            nextTransformX = nextAnimation.transformXs[nextTransformIndex]
-            nextTransformY = nextAnimation.transformYs[nextTransformIndex]
-            nextTransformZ = nextAnimation.transformZs[nextTransformIndex]
+            nextTransformX = nextAnimation.xs[nextTransformIndex]
+            nextTransformY = nextAnimation.ys[nextTransformIndex]
+            nextTransformZ = nextAnimation.zs[nextTransformIndex]
             nextTransformIndex++
         } else {
             nextTransformX = defaultTransformValue
@@ -80,7 +80,7 @@ internal fun XModel.animateInterpolated(
                 transformZ = lerp(currentTransformZ, nextTransformZ, frameCycle, frameLength)
             }
         }
-        transform(type, skeleton.labels[i], transformX, transformY, transformZ)
+        transform(type, base.transformLabels[i], transformX, transformY, transformZ)
     }
     resetBounds()
 }

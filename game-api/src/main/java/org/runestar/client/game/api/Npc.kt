@@ -8,5 +8,5 @@ class Npc(
         override val plane: Int
 ) : Actor(accessor) {
 
-    val definition: NpcDefinition? get() = accessor.definition?.let { NpcDefinition(it) }
+    val type: NpcDefinition? get() = accessor.type?.let { NpcDefinition(it) }
 }

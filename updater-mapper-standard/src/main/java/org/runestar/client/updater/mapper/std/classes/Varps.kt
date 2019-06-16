@@ -3,10 +3,10 @@ package org.runestar.client.updater.mapper.std.classes
 import org.objectweb.asm.Opcodes.BIPUSH
 import org.objectweb.asm.Opcodes.SIPUSH
 import org.runestar.client.updater.mapper.IdentityMapper
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
 
 class Varps : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }

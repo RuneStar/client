@@ -18,7 +18,7 @@ import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.VisibilityMap
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XPacketBuffer
+import org.runestar.client.game.raw.access.XPacketBit
 import java.awt.Component
 import java.awt.Container
 
@@ -28,7 +28,7 @@ object Game {
 
     val stateChanges: Observable<Int> = XClient.updateGameState.exit.map { it.arguments[0] as Int }
 
-    val ticks: Observable<Unit> = XPacketBuffer.readSmartByteShortIsaac.exit
+    val ticks: Observable<Unit> = XPacketBit.gIsaacSmart1or2.exit
             .filter { it.returned == 33 } // update npcs
             .map { Unit }
             .delay { XClient.doCycle.enter }

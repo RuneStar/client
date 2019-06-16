@@ -23,7 +23,7 @@ class DumpCs1 : AbstractPlugin<PluginSettings>() {
                 val bytes = cache.takeFile(a, r)
                 if (bytes.first().toInt() != -1) {
                     val w = CLIENT._Component_()
-                    w.decodeLegacy(CLIENT._Buffer_(bytes))
+                    w.decodeLegacy(CLIENT._Packet_(bytes))
                     if (w.cs1Comparisons != null && w.cs1Comparisons.isNotEmpty()) {
                         for (i in 0 until w.cs1Comparisons.size) {
                             s.append("$a\t$r\t$i\t")

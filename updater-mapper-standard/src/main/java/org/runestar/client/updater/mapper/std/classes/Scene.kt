@@ -6,13 +6,18 @@ import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.arrayDimensions
+import org.runestar.client.updater.mapper.baseType
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
 
 @DependsOn(GameObject::class)
 class Scene : IdentityMapper.Class() {
@@ -63,7 +68,7 @@ class Scene : IdentityMapper.Class() {
 
     @MethodParameters("plane", "x", "y", "tileHeight", "first", "tag", "second", "third")
     @DependsOn(Entity::class)
-    class newGroundItemPile : IdentityMapper.InstanceMethod() {
+    class newObjStack : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), LONG_TYPE, type<Entity>(), type<Entity>()) }
@@ -71,12 +76,12 @@ class Scene : IdentityMapper.Class() {
     }
 
     @MethodParameters("plane", "x", "y")
-    @DependsOn(Tile.groundItemPile::class)
-    class removeGroundItemPile : IdentityMapper.InstanceMethod() {
+    @DependsOn(Tile.objStack::class)
+    class removeObjStack : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 3..4 }
-                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.groundItemPile>().id } }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.objStack>().id } }
     }
 
     @MethodParameters("plane", "x", "y")

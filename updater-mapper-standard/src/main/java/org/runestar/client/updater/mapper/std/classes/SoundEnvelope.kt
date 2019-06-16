@@ -2,15 +2,18 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type.*
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
 
 class SoundEnvelope : IdentityMapper.Class() {
 
@@ -33,11 +36,11 @@ class SoundEnvelope : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(Buffer::class)
+    @DependsOn(Packet::class)
     class reset : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size in 0..1 }
                 .and { it.returnType == VOID_TYPE }
-                .and { !it.arguments.startsWith(type<Buffer>()) }
+                .and { !it.arguments.startsWith(type<Packet>()) }
     }
 
     @MethodParameters("n")
@@ -45,17 +48,17 @@ class SoundEnvelope : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.arguments.startsWith(INT_TYPE) }
     }
 
-    @DependsOn(Buffer::class)
-    @MethodParameters("buffer")
+    @DependsOn(Packet::class)
+    @MethodParameters("packet")
     class decode : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Buffer>()) }
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Packet>()) }
                 .and { it.instructions.none { it.opcode == NEWARRAY } }
     }
 
-    @DependsOn(Buffer::class)
-    @MethodParameters("buffer")
+    @DependsOn(Packet::class)
+    @MethodParameters("packet")
     class decodeSegments : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Buffer>()) }
+        override val predicate = predicateOf<Method2> { it.arguments.startsWith(type<Packet>()) }
                 .and { it.instructions.any { it.opcode == NEWARRAY } }
     }
 

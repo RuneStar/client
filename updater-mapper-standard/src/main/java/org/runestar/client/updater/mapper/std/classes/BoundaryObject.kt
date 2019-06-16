@@ -5,13 +5,13 @@ import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.LONG_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
 import org.runestar.client.updater.mapper.std.MethodPutField
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Instruction2
 
 @DependsOn(Entity::class)
 class BoundaryObject : IdentityMapper.Class() {

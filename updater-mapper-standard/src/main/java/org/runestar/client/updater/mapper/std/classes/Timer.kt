@@ -2,13 +2,13 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Type
 import org.runestar.client.updater.mapper.IdentityMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Method2
 
 class Timer : IdentityMapper.Class() {
 
@@ -16,9 +16,9 @@ class Timer : IdentityMapper.Class() {
             .and { it.instanceFields.count { it.type == Type.LONG_TYPE } == 5 }
             .and { it.instanceFields.count { it.type == Type.BOOLEAN_TYPE } == 1 }
 
-    @MethodParameters("buffer")
-    @DependsOn(Buffer::class)
+    @MethodParameters("packet")
+    @DependsOn(Packet::class)
     class write : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.arguments == listOf(type<Buffer>()) }
+        override val predicate = predicateOf<Method2> { it.arguments == listOf(type<Packet>()) }
     }
 }

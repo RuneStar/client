@@ -8,15 +8,15 @@ import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 
 @DependsOn(AbstractSocket::class)
 class PacketWriter : IdentityMapper.Class() {
@@ -52,24 +52,24 @@ class PacketWriter : IdentityMapper.Class() {
                 .and { it.instructions.none { it.isMethod } }
     }
 
-    @DependsOn(Buffer::class)
-    class buffer : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<Buffer>() }
+    @DependsOn(Packet::class)
+    class packet : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Packet>() }
     }
 
-    @DependsOn(PacketBuffer::class)
-    class packetBuffer : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<PacketBuffer>() }
+    @DependsOn(PacketBit::class)
+    class bit : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<PacketBit>() }
     }
 
     @DependsOn(IterableNodeDeque::class)
-    class packetBufferNodes : IdentityMapper.InstanceField() {
+    class bitNodes : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == type<IterableNodeDeque>() }
     }
 
-    @DependsOn(IsaacCipher::class)
-    class isaacCipher : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<IsaacCipher>() }
+    @DependsOn(Isaac::class)
+    class isaac : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Isaac>() }
     }
 
     @MethodParameters()
@@ -79,9 +79,9 @@ class PacketWriter : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<AbstractSocket.close>().id } }
     }
 
-    @DependsOn(ServerPacket::class)
+    @DependsOn(ServerProt::class)
     class serverPacket0 : UniqueMapper.InConstructor.Field(PacketWriter::class) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<ServerPacket>() }
+        override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type<ServerProt>() }
     }
 
     class serverPacket0Length : OrderMapper.InConstructor.Field(PacketWriter::class, 1) {

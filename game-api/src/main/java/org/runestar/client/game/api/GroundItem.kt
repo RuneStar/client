@@ -1,10 +1,10 @@
 package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.Mouse.location
-import org.runestar.client.game.raw.access.XGroundItem
+import org.runestar.client.game.raw.access.XObj
 
 class GroundItem(
-        override val accessor: XGroundItem,
+        override val accessor: XObj,
         override val modelPosition: Position
 ) : Entity(accessor) {
 

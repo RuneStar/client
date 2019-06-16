@@ -5,7 +5,7 @@ import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.ObjectDefinition
 import org.runestar.client.game.api.ObjectId
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XObjectDefinition
+import org.runestar.client.game.raw.access.XLocType
 import org.runestar.client.plugins.spi.PluginSettings
 
 class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
@@ -15,8 +15,8 @@ class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
     override val name = "Motherlode Mine"
 
     override fun onStart() {
-        add(XObjectDefinition.postDecode.exit.subscribe { objectInit(ObjectDefinition(it.instance)) })
-        resetObjectDefinitions()
+        add(XLocType.postDecode.exit.subscribe { objectInit(ObjectDefinition(it.instance)) })
+        resetLocTypes()
     }
 
     private fun objectInit(def: ObjectDefinition) {
@@ -30,12 +30,12 @@ class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
     }
 
     override fun onStop() {
-        resetObjectDefinitions()
+        resetLocTypes()
     }
 
-    private fun resetObjectDefinitions() {
-        CLIENT.objectDefinition_cached.clear()
-        CLIENT.objectDefinition_cachedModels.clear()
+    private fun resetLocTypes() {
+        CLIENT.locType_cached.clear()
+        CLIENT.locType_cachedModels.clear()
     }
 
     private fun isVein(id: Int): Boolean {

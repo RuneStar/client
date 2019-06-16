@@ -23,7 +23,7 @@ class Transmog : DisposablePlugin<Transmog.Settings>() {
 
     private fun transmog(player: XPlayer, npcId: Int) {
         val appearance = player.appearance ?: return
-        val def = CLIENT.getNpcDefinition(npcId) ?: return
+        val def = CLIENT.getNPCType(npcId) ?: return
         appearance.npcTransformId = npcId
         player.walkSequence = def.walkanim
         player.walkBackSequence = def.walkbackanim

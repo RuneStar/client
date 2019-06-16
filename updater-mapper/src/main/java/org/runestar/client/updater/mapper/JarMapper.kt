@@ -1,16 +1,13 @@
 package org.runestar.client.updater.mapper
 
 import com.google.common.reflect.ClassPath
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Jar2
 import java.nio.file.Path
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.isSubclassOf
 
-open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
+class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
 
     @Suppress("UNCHECKED_CAST")
     constructor(pkg: String, classLoader: ClassLoader) : this(
@@ -29,14 +26,9 @@ open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
                 .flatMap { it.nestedClasses.asSequence().plus(it) }
                 .filter { it.isSubclassOf(Mapper::class) }
                 .map { it as KClass<out Mapper<*>> }
-        val ordered = orderDependencies(unordered)
-        ordered.map { it.createInstance() }.forEach {
+        orderDependencies(unordered).map { it.createInstance() }.forEach {
             it.context = context
-            try {
-                it.map(jar2)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            it.map(jar2)
         }
     }
 
@@ -51,22 +43,15 @@ open class JarMapper(vararg val classMappers: KClass<out Mapper<Class2>>) {
                 @Suppress("UNCHECKED_CAST")
                 val enclosing = o.java.enclosingClass?.kotlin as KClass<out Mapper<*>>?
                 val enclosingFound = enclosing == null || enclosing in ordered
-                val dependencies = o.findJavaAnnotation<DependsOn>()?.mappers ?: emptyArray()
+                val dependencies = o.java.getAnnotation(DependsOn::class.java)?.mappers ?: emptyArray()
                 val dependenciesFound = dependencies.all { it in ordered }
                 if (enclosingFound && dependenciesFound) {
                     itr.remove()
                     ordered.add(o)
                 }
             }
-            val endSize = unorderedCollection.size
-            check(startSize != endSize) {
-                "Unable to resolve dependencies\nUnordered: $unorderedCollection\nOrdered: $ordered"
-            }
+            check(startSize != unorderedCollection.size)
         }
         return ordered.asSequence()
-    }
-
-    private inline fun <reified T: Annotation> KClass<*>.findJavaAnnotation(): T? {
-        return this.java.getAnnotation(T::class.java)
     }
 }

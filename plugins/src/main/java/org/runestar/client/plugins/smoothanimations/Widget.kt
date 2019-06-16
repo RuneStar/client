@@ -2,7 +2,7 @@ package org.runestar.client.plugins.smoothanimations
 
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XModel
-import org.runestar.client.game.raw.access.XSequenceDefinition
+import org.runestar.client.game.raw.access.XSeqType
 import org.runestar.client.game.raw.access.XComponent
 import org.runestar.client.game.raw.base.MethodEvent
 
@@ -11,7 +11,7 @@ internal fun widgetGetModelEnter(event: MethodEvent<XComponent, XModel>) {
     event.arguments[1] = packFrame(widget.modelFrame, widget.modelFrameCycle)
 }
 
-internal fun animateWidgetEnter(event: MethodEvent<XSequenceDefinition, XModel>) {
+internal fun animateWidgetEnter(event: MethodEvent<XSeqType, XModel>) {
     val frameArg = event.arguments[1] as Int
     val frame = frameArg and 0xFFFF
     event.arguments[1] = frame
@@ -21,9 +21,9 @@ internal fun animateWidgetEnter(event: MethodEvent<XSequenceDefinition, XModel>)
 
     if (seq == null || frameArg >= -1 || nextFrame > seq.frameIds.lastIndex || frameCycle == 0) return
     val frameId1 = seq.frameIds[frame]
-    val frames1 = CLIENT.getFrames(frameId1 shr 16) ?: return
+    val frames1 = CLIENT.getAnimFrameset(frameId1 shr 16) ?: return
     val nextFrameId1 = seq.frameIds[nextFrame]
-    val nextFrames1 = CLIENT.getFrames(nextFrameId1 shr 16) ?: return
+    val nextFrames1 = CLIENT.getAnimFrameset(nextFrameId1 shr 16) ?: return
 
     val model = event.arguments[0] as XModel
     val frameIdx1 = frameId1 and 0xFFFF
@@ -34,12 +34,12 @@ internal fun animateWidgetEnter(event: MethodEvent<XSequenceDefinition, XModel>)
     val frameIds2 = seq.frameIds2
     if (frameIds2 != null && frame <= frameIds2.lastIndex) {
         val frameId2 = seq.frameIds2[frame]
-        val frames2 = CLIENT.getFrames(frameId1 shr 16)
+        val frames2 = CLIENT.getAnimFrameset(frameId1 shr 16)
         val frameIdx2 = frameId2 and 0xFFFF
 
         if (frames2 != null && nextFrame <= seq.frameIds2.lastIndex) {
             val nextFrameId2 = seq.frameIds2[nextFrame]
-            val nextFrames2 = CLIENT.getFrames(nextFrameId2 shr 16)
+            val nextFrames2 = CLIENT.getAnimFrameset(nextFrameId2 shr 16)
             val nextFrameIdx2 = nextFrameId2 and 0xFFFF
 
             if (nextFrames2 != null && nextFrameIdx2 != 0xFFFF) {

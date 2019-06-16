@@ -6,15 +6,15 @@ import org.objectweb.asm.Type.BOOLEAN_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 
 @DependsOn(Node::class)
 class IterableNodeDeque : IdentityMapper.Class() {
@@ -22,10 +22,6 @@ class IterableNodeDeque : IdentityMapper.Class() {
             .and { it.interfaces.contains(Iterable::class.type) }
             .and { it.instanceFields.size == 2 }
             .and { it.instanceFields.all { it.type == type<Node>() } }
-
-    class isEmpty : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
-    }
 
     @DependsOn(Node::class)
     class sentinel : OrderMapper.InConstructor.Field(IterableNodeDeque::class, 0) {
@@ -77,7 +73,7 @@ class IterableNodeDeque : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class clear : IdentityMapper.InstanceMethod() {
+    class clear0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }
                 .and { it.instructions.any { it.opcode == IF_ACMPEQ } }

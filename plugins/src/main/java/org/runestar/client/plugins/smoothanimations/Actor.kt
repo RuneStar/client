@@ -3,7 +3,7 @@ package org.runestar.client.plugins.smoothanimations
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XActor
 import org.runestar.client.game.raw.access.XModel
-import org.runestar.client.game.raw.access.XSequenceDefinition
+import org.runestar.client.game.raw.access.XSeqType
 import org.runestar.client.game.raw.base.MethodEvent
 
 internal fun actorGetModelEnter(event: MethodEvent<out XActor, XModel>) {
@@ -20,7 +20,7 @@ internal fun actorGetModelExit(event: MethodEvent<out XActor, XModel>) {
     actor.spotAnimationFrame = unpackFrame(actor.spotAnimationFrame)
 }
 
-internal fun animateSequenceEnter(event: MethodEvent<XSequenceDefinition, XModel>) {
+internal fun animateSequenceEnter(event: MethodEvent<XSeqType, XModel>) {
     val frameArg = event.arguments[1] as Int
     val frame = frameArg and 0xFFFF
     event.arguments[1] = frame
@@ -31,9 +31,9 @@ internal fun animateSequenceEnter(event: MethodEvent<XSequenceDefinition, XModel
     if (frameArg >= -1 || nextFrame > seq.frameIds.lastIndex || frameCycle == 0) return
 
     val frameId = seq.frameIds[frame]
-    val frames = CLIENT.getFrames(frameId shr 16) ?: return
+    val frames = CLIENT.getAnimFrameset(frameId shr 16) ?: return
     val nextFrameId = seq.frameIds[nextFrame]
-    val nextFrames = CLIENT.getFrames(nextFrameId shr 16) ?: return
+    val nextFrames = CLIENT.getAnimFrameset(nextFrameId shr 16) ?: return
 
     event.skipBody = true
 
@@ -46,7 +46,7 @@ internal fun animateSequenceEnter(event: MethodEvent<XSequenceDefinition, XModel
     event.returned = animatedModel
 }
 
-internal fun animateSequence2Enter(event: MethodEvent<XSequenceDefinition, XModel>) {
+internal fun animateSequence2Enter(event: MethodEvent<XSeqType, XModel>) {
     event.arguments[1] = (event.arguments[1] as Int) and 0xFFFF
     event.arguments[3] = (event.arguments[3] as Int) and 0xFFFF
 }

@@ -4,25 +4,25 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 
-@DependsOn(Entity::class, SequenceDefinition::class)
+@DependsOn(Entity::class, SeqType::class)
 class DynamicObject : IdentityMapper.Class() {
 
     override val predicate = predicateOf<Class2> { it.superType == type<Entity>() }
             .and { it.instanceMethods.size == 1 }
-            .and { it.instanceFields.count { it.type == type<SequenceDefinition>() } == 1 }
+            .and { it.instanceFields.count { it.type == type<SeqType>() } == 1 }
 
-    @DependsOn(SequenceDefinition::class)
-    class sequenceDefinition : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<SequenceDefinition>() }
+    @DependsOn(SeqType::class)
+    class seqType : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<SeqType>() }
     }
 
     class id : OrderMapper.InConstructor.Field(DynamicObject::class, 0) {

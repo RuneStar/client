@@ -3,7 +3,6 @@ package org.runestar.client.updater.create
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.PropertyAccessor
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.common.collect.Multimap
@@ -16,7 +15,6 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.objectweb.asm.Type
 import org.runestar.client.common.JAV_CONFIG
-import org.runestar.client.common.REVISION
 import org.runestar.client.updater.common.ClassHook
 import org.runestar.client.updater.common.ConstructorHook
 import org.runestar.client.updater.common.FieldHook
@@ -24,14 +22,13 @@ import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
 import org.runestar.client.updater.deob.util.readJar
 import org.runestar.client.updater.mapper.*
-import org.runestar.client.updater.mapper.extensions.isPrimitive
+import org.runestar.client.updater.mapper.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
-import org.runestar.client.updater.mapper.tree.Class2
+import org.runestar.client.updater.mapper.Class2
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.jar.JarFile
 
 @Mojo(
         name = "create",
@@ -45,7 +42,6 @@ class CreateMojo : AbstractMojo() {
     private val jsonMapper = jacksonObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-            .enable(SerializationFeature.INDENT_OUTPUT)
 
     private val targetDir: Path get() = Paths.get(project.build.directory)
 
@@ -68,7 +64,7 @@ class CreateMojo : AbstractMojo() {
     private val hooksJson: Path get() = targetDir.resolve("hooks.json")
 
     override fun execute() {
-        if (Files.notExists(gamepackJar) || !verifyJar(gamepackJar)) {
+        if (Files.notExists(gamepackJar)) {
             dl()
         }
         deob()
@@ -77,15 +73,6 @@ class CreateMojo : AbstractMojo() {
         mergeHooks()
 
         addResources()
-    }
-
-    private fun verifyJar(jar: Path): Boolean {
-        return try {
-            JarFile(jar.toFile(), true).close()
-            true
-        } catch (e: Exception) {
-            false
-        }
     }
 
     private fun Path.appendFileName(string: String): Path {

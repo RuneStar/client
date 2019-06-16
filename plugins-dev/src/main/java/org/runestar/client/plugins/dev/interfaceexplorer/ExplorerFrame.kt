@@ -110,10 +110,10 @@ isHidden: ${x.isHidden}
 
 text: ${x.text}
 color: ${x.color}
-dataText: ${x.dataText}
-actions: ${x.actions?.contentToString()}
+targetVerb: ${x.targetVerb}
+ops: ${x.ops?.contentToString()}
 buttonText: ${x.buttonText}
-spellActionName: ${x.spellActionName}
+opbase: ${x.opbase}
 spellName: ${x.spellName}
 
 fontId: ${x.fontId}

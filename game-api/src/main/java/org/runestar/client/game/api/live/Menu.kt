@@ -11,7 +11,7 @@ object Menu {
 
     const val OPTION_HEIGHT = 15
 
-    val isOpen get() = CLIENT.isMenuOpen
+    val isOpen get() = CLIENT.isMiniMenuOpen
 
     val x get() = CLIENT.menuX
 
@@ -27,7 +27,7 @@ object Menu {
         get() = CLIENT.menuOptionsCount
         set(value) { CLIENT.menuOptionsCount = value }
 
-    val actions: Observable<MenuOption> = XClient.menuAction.exit.map {
+    val actions: Observable<MenuOption> = XClient.doAction.exit.map {
         MenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
                 it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String,
@@ -35,7 +35,7 @@ object Menu {
         )
     }
 
-    val openings: Observable<Point> = XClient.openMenu.exit.map {
+    val openings: Observable<Point> = XClient.openMiniMenu.exit.map {
         Point(it.arguments[0] as Int, it.arguments[1] as Int)
     }
 
@@ -74,7 +74,7 @@ object Menu {
         setOption(optionsCount++, menuOption)
     }
 
-    val optionAdditions: Observable<MenuOption> = XClient.insertMenuItem.exit.map {
+    val optionAdditions: Observable<MenuOption> = XClient.addMiniMenuEntry.exit.map {
         MenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[4] as Int, it.arguments[5] as Int,
                 it.arguments[1] as String, it.arguments[0] as String, it.arguments[6] as Boolean

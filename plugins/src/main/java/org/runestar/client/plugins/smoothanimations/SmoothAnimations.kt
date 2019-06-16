@@ -19,19 +19,19 @@ class SmoothAnimations : DisposablePlugin<PluginSettings>() {
 
         add(Observable.merge(XPlayer.getModel.exit, XNpc.getModel.exit).subscribe(::actorGetModelExit))
         add(Observable.merge(XPlayer.getModel.enter, XNpc.getModel.enter).subscribe(::actorGetModelEnter))
-        add(XSequenceDefinition.animateSequence.enter.subscribe(::animateSequenceEnter))
-        add(XSequenceDefinition.animateSequence2.enter.subscribe(::animateSequence2Enter))
+        add(XSeqType.animateSequence.enter.subscribe(::animateSequenceEnter))
+        add(XSeqType.animateSequence2.enter.subscribe(::animateSequence2Enter))
 
         add(XComponent.getModel.enter.subscribe(::widgetGetModelEnter))
-        add(XSequenceDefinition.animateComponent.enter.subscribe(::animateWidgetEnter))
+        add(XSeqType.animateComponent.enter.subscribe(::animateWidgetEnter))
 
-        add(XSequenceDefinition.animateSpotAnimation.enter.subscribe(::animateSpotAnimationEnter))
+        add(XSeqType.animateSpotAnimation.enter.subscribe(::animateSpotAnimationEnter))
 
         add(XGraphicsObject.getModel.exit.subscribe(::graphicsObjectGetModelExit))
         add(XGraphicsObject.getModel.enter.subscribe(::graphicsObjectGetModelEnter))
 
         add(XDynamicObject.getModel.enter.subscribe(::dynamicObjectGetModelEnter))
-        add(XSequenceDefinition.animateObject.enter.subscribe(::animateObjectEnter))
+        add(XSeqType.animateObject.enter.subscribe(::animateObjectEnter))
     }
 }
 

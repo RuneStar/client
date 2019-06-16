@@ -3,13 +3,13 @@ package org.runestar.client.updater.mapper.std.classes
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 
 @DependsOn(NodeHashTable::class)
 class SoundCache : IdentityMapper.Class() {
@@ -24,10 +24,10 @@ class SoundCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<Client.readSoundEffect>().id } }
     }
 
-    @DependsOn(Client.readMusicSample::class)
-    class getMusicSample0 : IdentityMapper.InstanceMethod() {
+    @DependsOn(Client.readVorbisSample::class)
+    class getVorbisSample0 : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size == 3 }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<Client.readMusicSample>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<Client.readVorbisSample>().id } }
     }
 
     @DependsOn(getSoundEffect0::class)
@@ -36,10 +36,10 @@ class SoundCache : IdentityMapper.Class() {
                 .and { it.instructions.any { it.isMethod && it.methodId == method<getSoundEffect0>().id } }
     }
 
-    @DependsOn(getMusicSample0::class)
-    class getMusicSample : IdentityMapper.InstanceMethod() {
+    @DependsOn(getVorbisSample0::class)
+    class getVorbisSample : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.arguments.size == 2 }
-                .and { it.instructions.any { it.isMethod && it.methodId == method<getMusicSample0>().id } }
+                .and { it.instructions.any { it.isMethod && it.methodId == method<getVorbisSample0>().id } }
     }
 
     @DependsOn(AbstractArchive::class, getSoundEffect0::class)
@@ -47,8 +47,8 @@ class SoundCache : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractArchive>() }
     }
 
-    @DependsOn(AbstractArchive::class, getMusicSample0::class)
-    class musicSampleIndex : UniqueMapper.InMethod.Field(getMusicSample0::class) {
+    @DependsOn(AbstractArchive::class, getVorbisSample0::class)
+    class vorbisSampleIndex : UniqueMapper.InMethod.Field(getVorbisSample0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<AbstractArchive>() }
     }
 
@@ -57,8 +57,8 @@ class SoundCache : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<NodeHashTable>() }
     }
 
-    @DependsOn(getMusicSample0::class, NodeHashTable::class, rawSounds::class)
-    class musicSamples : UniqueMapper.InMethod.Field(getMusicSample0::class) {
+    @DependsOn(getVorbisSample0::class, NodeHashTable::class, rawSounds::class)
+    class vorbisSamples : UniqueMapper.InMethod.Field(getVorbisSample0::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == type<NodeHashTable>() && it.fieldId != field<rawSounds>().id }
     }
 }

@@ -13,7 +13,7 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveViewport
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XItemDefinition
+import org.runestar.client.game.raw.access.XObjType
 import org.runestar.client.plugins.spi.PluginSettings
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
@@ -54,7 +54,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
                 val x = pt.x
                 var y = pt.y - settings.initialOffset
                 items.forEach { item ->
-                    val def = CLIENT.getItemDefinition(item.id)
+                    val def = CLIENT.getObjType(item.id)
                     val count = item.quantity
 
                     if (isBlocked(def, count)) {
@@ -73,7 +73,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         })
     }
 
-    fun itemToString(def: XItemDefinition, count: Int): String {
+    fun itemToString(def: XObjType, count: Int): String {
         val name = def.name
         return when {
             count == 1 -> name
@@ -82,7 +82,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         }
     }
 
-    fun isBlocked(def: XItemDefinition, count: Int): Boolean {
+    fun isBlocked(def: XObjType, count: Int): Boolean {
         val id = def.id
         val name = def.name
         return if (id in blockedIds) {

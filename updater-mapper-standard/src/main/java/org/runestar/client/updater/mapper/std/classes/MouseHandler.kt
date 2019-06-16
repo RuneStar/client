@@ -2,12 +2,12 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.mark
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.mark
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Method2
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
 

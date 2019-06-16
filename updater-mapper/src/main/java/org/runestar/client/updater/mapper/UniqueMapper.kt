@@ -1,8 +1,5 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.*
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.extensions.predicateOf
 import kotlin.reflect.KClass
 
 abstract class UniqueMapper<T> : Mapper<T>(), InstructionResolver<T> {
@@ -10,10 +7,7 @@ abstract class UniqueMapper<T> : Mapper<T>(), InstructionResolver<T> {
     abstract val method: Method2
 
     override fun match(jar: Jar2): T {
-        val matches = method.instructions.filter(predicate).map { resolve(it) }.toSet()
-        check(matches.isNotEmpty()) { "$this: No matches" }
-        check(matches.size == 1) { "$this: Multiple matches: $matches" }
-        return matches.first()
+        return method.instructions.filter(predicate).mapTo(HashSet()) { resolve(it) }.single()
     }
 
     abstract val predicate: Predicate<Instruction2>
@@ -38,10 +32,7 @@ abstract class UniqueMapper<T> : Mapper<T>(), InstructionResolver<T> {
     abstract class InConstructor<T>(val classMapper: KClass<out Mapper<Class2>>) : UniqueMapper<T>() {
 
         override val method: Method2 get() {
-            val matches = context.classes.getValue(classMapper).constructors.filter(constructorPredicate).toList()
-            check(matches.isNotEmpty()) { "$this: No matcher" }
-            check(matches.size == 1) { "$this: multiple matches: $matches" }
-            return matches.first()
+            return context.classes.getValue(classMapper).constructors.single(constructorPredicate)
         }
 
         open val constructorPredicate = predicateOf<Method2> { true }

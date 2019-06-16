@@ -1,8 +1,5 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.*
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.extensions.predicateOf
 import kotlin.reflect.KClass
 
 abstract class OrderMapper<T>(val position: Int, val maxMatches: Int = Int.MAX_VALUE) : Mapper<T>(), InstructionResolver<T> {
@@ -13,10 +10,8 @@ abstract class OrderMapper<T>(val position: Int, val maxMatches: Int = Int.MAX_V
         val n = position.takeUnless { it < 0 } ?: position * -1 - 1
         val insns = if (position >= 0) method.instructions else method.instructions.toList().asReversed().asSequence()
         val matches = insns.filter(predicate).toList()
-        check(matches.isNotEmpty()) { "$this: No matches" }
-        check(matches.size <= maxMatches) { "$this: Exceeds max matches ($maxMatches): $matches" }
-        val match = checkNotNull(matches.getOrNull(n)) { "$this: Invalid position: $position {$n}: $matches" }
-        return resolve(match)
+        check(matches.size <= maxMatches)
+        return resolve(matches[n])
     }
 
     abstract val predicate: Predicate<Instruction2>
@@ -41,10 +36,7 @@ abstract class OrderMapper<T>(val position: Int, val maxMatches: Int = Int.MAX_V
     abstract class InConstructor<T>(val classMapper: KClass<out Mapper<Class2>>, position: Int, maxMatches: Int = Int.MAX_VALUE) : OrderMapper<T>(position, maxMatches) {
 
         override val method: Method2 get() {
-            val matches = context.classes.getValue(classMapper).constructors.filter(constructorPredicate).toList()
-            check(matches.isNotEmpty()) { "$this: No matcher" }
-            check(matches.size == 1) { "$this: multiple matches: $matches" }
-            return matches.first()
+            return context.classes.getValue(classMapper).constructors.single(constructorPredicate)
         }
 
         open val constructorPredicate = predicateOf<Method2> { true }

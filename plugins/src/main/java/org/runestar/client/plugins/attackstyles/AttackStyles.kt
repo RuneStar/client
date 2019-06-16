@@ -13,7 +13,7 @@ import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Components
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XScriptEvent
+import org.runestar.client.game.raw.access.XClientScriptEvent
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -42,7 +42,7 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
 
     override fun onStart() {
         add(XClient.doCycleLoggedIn.exit.subscribe { onCycle() })
-        add(XClient.runScript0.exit.map { it.arguments[0] as XScriptEvent }.subscribe(::onRunScript))
+        add(XClient.runClientScript0.exit.map { it.arguments[0] as XClientScriptEvent }.subscribe(::onRunScript))
         add(LiveCanvas.repaints.subscribe(::onDraw))
     }
 
@@ -54,12 +54,12 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
 
     private fun onCycle() {
         if (CLIENT.getVarbit(VarbitId.WEAPON_TYPE) == weaponType) return
-        val scriptEvent = CLIENT._ScriptEvent_()
+        val scriptEvent = CLIENT._ClientScriptEvent_()
         scriptEvent.setArgs(arrayOf<Any>(ScriptId.COMBAT_INTERFACE_SETUP))
-        CLIENT.runScript(scriptEvent)
+        CLIENT.runClientScript(scriptEvent)
     }
 
-    private fun onRunScript(scriptEvent: XScriptEvent) {
+    private fun onRunScript(scriptEvent: XClientScriptEvent) {
         val scriptId = scriptEvent.args0[0] as? Int ?: return
         if (scriptId != ScriptId.COMBAT_INTERFACE_SETUP) return
         weaponType = CLIENT.getVarbit(VarbitId.WEAPON_TYPE)

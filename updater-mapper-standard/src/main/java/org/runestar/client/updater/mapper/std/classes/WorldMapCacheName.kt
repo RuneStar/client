@@ -2,12 +2,11 @@ package org.runestar.client.updater.mapper.std.classes
 
 import org.objectweb.asm.Opcodes.*
 import org.runestar.client.updater.mapper.IdentityMapper
-import org.runestar.client.updater.mapper.extensions.Predicate
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
 
 class WorldMapCacheName : IdentityMapper.Class() {
 

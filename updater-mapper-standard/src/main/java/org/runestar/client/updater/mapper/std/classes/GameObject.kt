@@ -7,14 +7,14 @@ import org.objectweb.asm.Type.LONG_TYPE
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.and
-import org.runestar.client.updater.mapper.extensions.predicateOf
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.predicateOf
 import org.runestar.client.updater.mapper.next
 import org.runestar.client.updater.mapper.std.ConstructorPutField
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
 
 @DependsOn(Entity::class)
 class GameObject : IdentityMapper.Class() {

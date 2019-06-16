@@ -5,15 +5,15 @@ import org.objectweb.asm.Type
 import org.objectweb.asm.Type.BYTE_TYPE
 import org.objectweb.asm.Type.INT_TYPE
 import org.runestar.client.updater.mapper.*
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.extensions.predicateOf
-import org.runestar.client.updater.mapper.extensions.type
-import org.runestar.client.updater.mapper.extensions.withDimensions
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.predicateOf
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
 import org.runestar.client.updater.mapper.std.classes.*
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
 import kotlin.reflect.KClass
 
 @DependsOn(Strings::class)
@@ -132,9 +132,9 @@ abstract class ModelTransformTempInt(index: Int) : OrderMapper.InMethod.Field(Mo
     override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
 }
 
-@DependsOn(Client.newScript::class, Script::class)
-abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(Client.newScript::class, index) {
-    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<Script>() }
+@DependsOn(Client.loadClientScript::class, ClientScript::class)
+abstract class ScriptField(index: Int, type: Type) : OrderMapper.InMethod.Field(Client.loadClientScript::class, index) {
+    override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == type && it.fieldOwner == type<ClientScript>() }
 }
 
 @DependsOn(Component.decodeLegacy::class)
@@ -184,10 +184,10 @@ abstract class IndexedSpriteArrayField(archiveField: KClass<out Mapper<Field2>>)
             .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == type<IndexedSprite>().withDimensions(1) }
 }
 
-@DependsOn(Client.runScript0::class, ScriptEvent::class)
-abstract class ScriptEventFieldConst(ldc: Int) : UniqueMapper.InMethod.Field(Client.runScript0::class) {
+@DependsOn(Client.runClientScript0::class, ClientScriptEvent::class)
+abstract class ScriptEventFieldConst(ldc: Int) : UniqueMapper.InMethod.Field(Client.runClientScript0::class) {
     override val predicate = predicateOf<Instruction2> { it.opcode == LDC && it.ldcCst == ldc }
-            .nextWithin(6) { it.opcode == GETFIELD && it.fieldOwner == type<ScriptEvent>() }
+            .nextWithin(6) { it.opcode == GETFIELD && it.fieldOwner == type<ClientScriptEvent>() }
 }
 
 @DependsOn(Occluder::class, Client.Scene_addOccluder::class)

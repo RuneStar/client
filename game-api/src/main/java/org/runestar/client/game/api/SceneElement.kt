@@ -6,10 +6,10 @@ import org.runestar.client.game.raw.access.XBoundaryObject
 import org.runestar.client.game.raw.access.XEntity
 import org.runestar.client.game.raw.access.XFloorDecoration
 import org.runestar.client.game.raw.access.XGameObject
-import org.runestar.client.game.raw.access.XGroundItem
-import org.runestar.client.game.raw.access.XGroundItemPile
 import org.runestar.client.game.raw.access.XModel
 import org.runestar.client.game.raw.access.XNode
+import org.runestar.client.game.raw.access.XObj
+import org.runestar.client.game.raw.access.XObjStack
 import org.runestar.client.game.raw.access.XWallDecoration
 import org.runestar.client.game.raw.base.Accessor
 
@@ -160,7 +160,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
     }
 
     class ItemPile(
-            override val accessor: XGroundItemPile,
+            override val accessor: XObjStack,
             override val plane: Int
     ) : ThreeModels(accessor), Iterable<GroundItem> {
 
@@ -180,11 +180,11 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val modelPosition3: Position get() = modelPosition
 
-        val first: GroundItem? get() = accessor.first?.let { GroundItem(it as XGroundItem, modelPosition) }
+        val first: GroundItem? get() = accessor.first?.let { GroundItem(it as XObj, modelPosition) }
 
-        val second: GroundItem? get() = accessor.second?.let { GroundItem(it as XGroundItem, modelPosition) }
+        val second: GroundItem? get() = accessor.second?.let { GroundItem(it as XObj, modelPosition) }
 
-        val third: GroundItem? get() = accessor.third?.let { GroundItem(it as XGroundItem, modelPosition) }
+        val third: GroundItem? get() = accessor.third?.let { GroundItem(it as XObj, modelPosition) }
 
         override fun iterator(): Iterator<GroundItem> = object : AbstractIterator<GroundItem>() {
 
@@ -193,7 +193,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
             private var cur: XNode? = accessor.first
 
             override fun computeNext() {
-                val gi = cur as? XGroundItem ?: return done()
+                val gi = cur as? XObj ?: return done()
                 setNext(GroundItem(gi, position))
                 cur = gi.previous
             }

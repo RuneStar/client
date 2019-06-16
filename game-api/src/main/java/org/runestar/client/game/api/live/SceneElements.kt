@@ -122,20 +122,20 @@ object SceneElements : TileObjects.Many<SceneElement>(CLIENT.scene) {
 
     object ItemPile : TileObjects.Single<SceneElement.ItemPile>(CLIENT.scene) {
 
-        override val additions: Observable<SceneElement.ItemPile> = XScene.newGroundItemPile.exit.map {
+        override val additions: Observable<SceneElement.ItemPile> = XScene.newObjStack.exit.map {
             val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-            SceneElement.ItemPile(tile.groundItemPile, tile.plane)
+            SceneElement.ItemPile(tile.objStack, tile.plane)
         }
 
         override val removals: Observable<SceneElement.ItemPile> =
-                Observable.merge(XScene.removeGroundItemPile.enter, XScene.newGroundItemPile.enter)
+                Observable.merge(XScene.removeObjStack.enter, XScene.newObjStack.enter)
                 .filter { getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int) != null }
                 .map { checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int)) }
-                .filter { it.groundItemPile != null }
-                .map { SceneElement.ItemPile(it.groundItemPile, it.plane) }
+                .filter { it.objStack != null }
+                .map { SceneElement.ItemPile(it.objStack, it.plane) }
 
         override fun fromTile(tile: XTile): SceneElement.ItemPile? {
-            val v = tile.groundItemPile ?: return null
+            val v = tile.objStack ?: return null
             return SceneElement.ItemPile(v, tile.plane)
         }
     }

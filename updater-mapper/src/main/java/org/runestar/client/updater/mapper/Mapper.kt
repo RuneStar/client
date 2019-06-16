@@ -2,10 +2,6 @@ package org.runestar.client.updater.mapper
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Jar2
-import org.runestar.client.updater.mapper.tree.Method2
 import org.objectweb.asm.Type
 import kotlin.reflect.KClass
 
@@ -37,33 +33,23 @@ abstract class Mapper<T> : ElementMatcher<T> {
             is ElementMatcher.Class -> {
                 klass as KClass<out Mapper<Class2>>
                 t as Class2
-                context.classes.inverse()[t]?.let {
-                    duplicateError(t, it)
-                }
+                check(!context.classes.inverse().containsKey(t))
                 context.classes[klass] = t
             }
             is ElementMatcher.Field -> {
                 klass as KClass<out Mapper<Field2>>
                 t as Field2
-                context.fields.inverse()[t]?.let {
-                    duplicateError(t, it)
-                }
+                check(!context.fields.inverse().containsKey(t))
                 context.fields[klass] = t
             }
             is ElementMatcher.Method -> {
                 klass as KClass<out Mapper<Method2>>
                 t as Method2
-                context.methods.inverse()[t]?.let {
-                    duplicateError(t, it)
-                }
+                check(!context.methods.inverse().containsKey(t))
                 context.methods[klass] = t
             }
             else -> error(this)
         }
-    }
-
-    private fun duplicateError(element: Any, mapper: KClass<*>) {
-        error("Duplicate mappers (${this::class.simpleName}, ${mapper.simpleName}) for element ($element) in Context")
     }
 
     class Context {

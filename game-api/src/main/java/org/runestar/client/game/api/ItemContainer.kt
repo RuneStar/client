@@ -1,8 +1,8 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.raw.access.XItemContainer
+import org.runestar.client.game.raw.access.XInventory
 
-class ItemContainer(val accessor: XItemContainer) : AbstractList<Item?>(), RandomAccess {
+class ItemContainer(val accessor: XInventory) : AbstractList<Item?>(), RandomAccess {
 
     val ids: IntArray get() = accessor.ids
 

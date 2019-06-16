@@ -1,7 +1,5 @@
 package org.runestar.client.updater.mapper
 
-import org.runestar.client.updater.mapper.tree.*
-import org.runestar.client.updater.mapper.extensions.Predicate
 import java.lang.reflect.Modifier
 
 abstract class StaticOrderMapper<T>(val position: Int) : Mapper<T>(), InstructionResolver<T> {
@@ -18,11 +16,8 @@ abstract class StaticOrderMapper<T>(val position: Int) : Mapper<T>(), Instructio
             instructions.toList().asReversed().asSequence()
         }
         val instructionMatches = relativeInstructions.filter(predicate).toList()
-        check(instructionMatches.isNotEmpty()) { "$this: No matches" }
-        val inMethods = instructionMatches.map { it.method }.toSet()
-        check (inMethods.size == 1) { "$this: Matches in multiple methods: $inMethods" }
-        val instructionMatch = checkNotNull(instructionMatches.getOrNull(n)) { "$this: Invalid position: $position {$n}: $instructionMatches" }
-        return resolve(instructionMatch)
+        instructionMatches.mapTo(HashSet()) { it.method }.single()
+        return resolve(instructionMatches[n])
     }
 
     abstract val predicate: Predicate<Instruction2>

@@ -6,18 +6,22 @@ import org.objectweb.asm.Type.*
 import org.runestar.client.updater.mapper.IdentityMapper
 import org.runestar.client.updater.mapper.OrderMapper
 import org.runestar.client.updater.mapper.UniqueMapper
-import org.runestar.client.updater.mapper.annotations.DependsOn
-import org.runestar.client.updater.mapper.annotations.MethodParameters
-import org.runestar.client.updater.mapper.extensions.*
+import org.runestar.client.updater.mapper.DependsOn
+import org.runestar.client.updater.mapper.MethodParameters
+import org.runestar.client.updater.mapper.and
+import org.runestar.client.updater.mapper.arrayDimensions
+import org.runestar.client.updater.mapper.predicateOf
 import org.runestar.client.updater.mapper.std.Widget10Array
 import org.runestar.client.updater.mapper.std.WidgetInvArray
 import org.runestar.client.updater.mapper.std.WidgetListener
 import org.runestar.client.updater.mapper.std.WidgetListener2
 import org.runestar.client.updater.mapper.std.WidgetListenerTriggers
-import org.runestar.client.updater.mapper.tree.Class2
-import org.runestar.client.updater.mapper.tree.Field2
-import org.runestar.client.updater.mapper.tree.Instruction2
-import org.runestar.client.updater.mapper.tree.Method2
+import org.runestar.client.updater.mapper.Class2
+import org.runestar.client.updater.mapper.Field2
+import org.runestar.client.updater.mapper.Instruction2
+import org.runestar.client.updater.mapper.Method2
+import org.runestar.client.updater.mapper.type
+import org.runestar.client.updater.mapper.withDimensions
 
 @DependsOn(Node::class)
 class Component : IdentityMapper.Class() {
@@ -40,7 +44,7 @@ class Component : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class isScrollBar : OrderMapper.InConstructor.Field(Component::class, 9) {
+    class isDraggable : OrderMapper.InConstructor.Field(Component::class, 9) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -288,11 +292,11 @@ class Component : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class dragZoneSize : OrderMapper.InConstructor.Field(Component::class, -13) {
+    class dragDeadZone : OrderMapper.InConstructor.Field(Component::class, -13) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class dragThreshold : OrderMapper.InConstructor.Field(Component::class, -12) {
+    class dragDeadTime : OrderMapper.InConstructor.Field(Component::class, -12) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -317,13 +321,11 @@ class Component : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    // "Cast"
-    class spellActionName : OrderMapper.InConstructor.Field(Component::class, -3) {
+    class targetVerb : OrderMapper.InConstructor.Field(Component::class, -3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
-    // not always displayed, includes color tags, bank item names, spell names, quest list names
-    class dataText : OrderMapper.InConstructor.Field(Component::class, -4) {
+    class opbase : OrderMapper.InConstructor.Field(Component::class, -4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == String::class.type }
     }
 
@@ -365,25 +367,25 @@ class Component : IdentityMapper.Class() {
     }
 
     @DependsOn(setAction::class)
-    class actions : UniqueMapper.InMethod.Field(setAction::class) {
+    class ops : UniqueMapper.InMethod.Field(setAction::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == String::class.type.withDimensions(1) }
     }
 
-    @MethodParameters("buffer")
-    @DependsOn(Buffer::class, Client.Strings_continue::class)
+    @MethodParameters("packet")
+    @DependsOn(Packet::class, Client.Strings_continue::class)
     class decodeLegacy : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
-                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.arguments.startsWith(type<Packet>()) }
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
     }
 
-    @MethodParameters("buffer")
-    @DependsOn(Buffer::class, Client.Strings_continue::class)
+    @MethodParameters("packet")
+    @DependsOn(Packet::class, Client.Strings_continue::class)
     class decode : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 1..2 }
-                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.arguments.startsWith(type<Packet>()) }
                 .and { it.instructions.none { it.opcode == GETSTATIC && it.fieldId == field<Client.Strings_continue>().id } }
     }
 
@@ -409,18 +411,18 @@ class Component : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @MethodParameters("buffer")
-    @DependsOn(Buffer::class)
+    @MethodParameters("packet")
+    @DependsOn(Packet::class)
     class readListenerTriggers : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == IntArray::class.type }
-                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.arguments.startsWith(type<Packet>()) }
     }
 
-    @MethodParameters("buffer")
-    @DependsOn(Buffer::class)
+    @MethodParameters("packet")
+    @DependsOn(Packet::class)
     class readListener : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Array<Any?>::class.type }
-                .and { it.arguments.startsWith(type<Buffer>()) }
+                .and { it.arguments.startsWith(type<Packet>()) }
     }
 
     @MethodParameters("b")
