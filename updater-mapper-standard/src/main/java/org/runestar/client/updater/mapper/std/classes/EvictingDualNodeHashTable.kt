@@ -16,7 +16,7 @@ import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
 
-@DependsOn(DualNodeDeque::class, DualNode::class, NodeHashTable::class)
+@DependsOn(IterableDualNodeQueue::class, DualNode::class, IterableNodeHashTable::class)
 class EvictingDualNodeHashTable : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.instanceFields.count { it.type == type<DualNode>() } == 1 }
