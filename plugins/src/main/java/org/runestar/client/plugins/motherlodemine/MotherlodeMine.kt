@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.motherlodemine
 
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.cacheids.LocId
 import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.ObjectDefinition
-import org.runestar.client.game.api.ObjectId
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XLocType
 import org.runestar.client.plugins.spi.PluginSettings
@@ -40,10 +40,10 @@ class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
 
     private fun isVein(id: Int): Boolean {
         return when (id) {
-            ObjectId.ORE_VEIN_26661,
-            ObjectId.ORE_VEIN_26662,
-            ObjectId.ORE_VEIN_26663,
-            ObjectId.ORE_VEIN_26664 -> true
+            LocId.ORE_VEIN_26661,
+            LocId.ORE_VEIN_26662,
+            LocId.ORE_VEIN_26663,
+            LocId.ORE_VEIN_26664 -> true
             else -> false
         }
     }

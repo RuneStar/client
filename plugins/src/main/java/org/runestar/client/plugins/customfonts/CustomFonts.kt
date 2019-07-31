@@ -6,7 +6,7 @@ import org.kxtra.swing.image.DataBufferByte
 import org.kxtra.swing.image.createCompatibleWritableRaster
 import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.FontId
+import org.runestar.client.cacheids.FontId
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XArchive
 import org.runestar.client.game.raw.access.XFont

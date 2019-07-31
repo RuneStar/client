@@ -2,9 +2,9 @@ package org.runestar.client.plugins.castlewars
 
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.cacheids.NpcId
 import org.runestar.client.game.api.HslColor
 import org.runestar.client.game.api.NpcDefinition
-import org.runestar.client.game.api.NpcId
 import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Components

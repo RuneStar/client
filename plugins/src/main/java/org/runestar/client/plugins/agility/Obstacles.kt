@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.agility
 
 import com.google.common.collect.ImmutableSet
-import org.runestar.client.game.api.ObjectId.*
+import org.runestar.client.cacheids.LocId.*
 
 /*
  * Copyright (c) 2018, SomeoneWithAnInternetConnection

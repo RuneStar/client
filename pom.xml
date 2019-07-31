@@ -30,6 +30,8 @@
         <module>updater-create-maven-plugin</module>
         <module>updater-mapper</module>
         <module>updater-mapper-standard</module>
+        <module>cache-ids</module>
+        <module>cache-ids-generate-maven-plugin</module>
     </modules>
 
     <repositories>

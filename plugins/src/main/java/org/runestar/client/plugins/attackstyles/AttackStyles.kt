@@ -2,9 +2,9 @@ package org.runestar.client.plugins.attackstyles
 
 import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.cacheids.ScriptId
 import org.runestar.client.game.api.BR_TAG
 import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.ScriptId
 import org.runestar.client.game.api.VarbitId
 import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.ComponentId
@@ -55,13 +55,13 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
     private fun onCycle() {
         if (CLIENT.getVarbit(VarbitId.WEAPON_TYPE) == weaponType) return
         val scriptEvent = CLIENT._ClientScriptEvent_()
-        scriptEvent.setArgs(arrayOf<Any>(ScriptId.COMBAT_INTERFACE_SETUP))
+        scriptEvent.setArgs(arrayOf<Any>(ScriptId.CLIENTSCRIPT_COMBAT_INTERFACE_SETUP))
         CLIENT.runClientScript(scriptEvent)
     }
 
     private fun onRunScript(scriptEvent: XClientScriptEvent) {
         val scriptId = scriptEvent.args0[0] as? Int ?: return
-        if (scriptId != ScriptId.COMBAT_INTERFACE_SETUP) return
+        if (scriptId != ScriptId.CLIENTSCRIPT_COMBAT_INTERFACE_SETUP) return
         weaponType = CLIENT.getVarbit(VarbitId.WEAPON_TYPE)
         val style = Game.varps[VarpId.ATTACK_STYLE]
         val desc = if (style == 4) {
