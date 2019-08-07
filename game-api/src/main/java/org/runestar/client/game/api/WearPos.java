@@ -1,16 +1,16 @@
 package org.runestar.client.game.api;
 
-public final class EquipmentSlot {
+public final class WearPos {
     
-    private EquipmentSlot() {}
+    private WearPos() {}
     
     public static final int
             HEAD=0,
-            CAPE=1,
+            BACK=1,
             NECK=2,
-            WEAPON=3,
+            RIGHTHAND=3,
             BODY=4,
-            SHIELD=5,
+            LEFTHAND=5,
             ARMS=6,
             LEGS=7,
             HAIR=8,

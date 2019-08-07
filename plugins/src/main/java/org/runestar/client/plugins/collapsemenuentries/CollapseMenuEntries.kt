@@ -2,8 +2,8 @@ package org.runestar.client.plugins.collapsemenuentries
 
 import com.google.common.collect.Maps
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.MenuOption
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.MiniMenuOption
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.PluginSettings
@@ -22,18 +22,18 @@ class CollapseMenuEntries : DisposablePlugin<CollapseMenuEntries.Settings>() {
     }
 
     private fun collapse() {
-        val oldCount = Menu.optionsCount
+        val oldCount = MiniMenu.optionsCount
         if (oldCount <= 2) return
-        val counts = Maps.newLinkedHashMapWithExpectedSize<MenuOption, Int>(oldCount)
+        val counts = Maps.newLinkedHashMapWithExpectedSize<MiniMenuOption, Int>(oldCount)
         for (i in (oldCount - 1).downTo(0)) {
-            counts.compute(Menu.getOption(i)) { _, count -> (count ?: 0) + 1 }
+            counts.compute(MiniMenu.getOption(i)) { _, count -> (count ?: 0) + 1 }
         }
         val newCount = counts.size
         if (oldCount == newCount) return
-        Menu.optionsCount = newCount
+        MiniMenu.optionsCount = newCount
         var i = newCount - 1
         for ((menuOption, count) in counts) {
-            Menu.setOption(i, menuOption)
+            MiniMenu.setOption(i, menuOption)
             if (count > 1) {
                 CLIENT.menuTargetNames[i] += settings.prefix + count + settings.suffix
             }

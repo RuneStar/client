@@ -3,6 +3,7 @@ package org.runestar.client.updater.mapper.std.classes
 import org.runestar.client.common.startsWith
 import org.objectweb.asm.Opcodes.GETFIELD
 import org.objectweb.asm.Opcodes.IADD
+import org.objectweb.asm.Opcodes.INVOKEVIRTUAL
 import org.objectweb.asm.Opcodes.LDC
 import org.objectweb.asm.Opcodes.PUTFIELD
 import org.objectweb.asm.Type.*
@@ -19,6 +20,7 @@ import org.runestar.client.updater.mapper.Class2
 import org.runestar.client.updater.mapper.Field2
 import org.runestar.client.updater.mapper.Instruction2
 import org.runestar.client.updater.mapper.Method2
+import org.runestar.client.updater.mapper.Predicate
 
 @DependsOn(Entity::class)
 class UnlitModel : IdentityMapper.Class() {
@@ -130,5 +132,15 @@ class UnlitModel : IdentityMapper.Class() {
     @DependsOn(light::class)
     class computeNormals : OrderMapper.InMethod.Method(light::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.isMethod }
+    }
+
+    @DependsOn(LocType.getUnlitModel::class, UnlitModel::class)
+    class resize : OrderMapper.InMethod.Method(LocType.getUnlitModel::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<UnlitModel>() && it.methodType.argumentTypes.size == 3 }
+    }
+
+    @DependsOn(LocType.getUnlitModel::class, UnlitModel::class)
+    class offset : OrderMapper.InMethod.Method(LocType.getUnlitModel::class, -1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<UnlitModel>() && it.methodType.argumentTypes.size == 3 }
     }
 }

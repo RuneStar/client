@@ -90,9 +90,9 @@ class Player : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD }
     }
 
-    @DependsOn(Model.offsetBy::class, Player.getModel::class)
+    @DependsOn(Model.offset::class, Player.getModel::class)
     class tileHeight : OrderMapper.InMethod.Field(getModel::class, -1) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offset>().id }
                 .prevWithin(6) { it.opcode == ISUB }
                 .prevWithin(10) { it.opcode == ISUB }
                 .prevWithin(10) { it.opcode == ISUB }
@@ -113,9 +113,9 @@ class Player : IdentityMapper.Class() {
                 .prevWithin(5) { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Model.offsetBy::class, getModel::class)
+    @DependsOn(Model.offset::class, getModel::class)
     class tileHeight2 : OrderMapper.InMethod.Field(getModel::class, -1) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offset>().id }
                 .prevWithin(6) { it.opcode == ISUB }
                 .prevWithin(10) { it.opcode == ISUB }
                 .prevWithin(5) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }

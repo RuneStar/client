@@ -12,7 +12,7 @@ class EntityHider : DisposablePlugin<EntityHider.Settings>() {
     override val defaultSettings = Settings()
 
     override fun onStart() {
-        add(XScene.newGameObject.enter.subscribe {
+        add(XScene.newScenery.enter.subscribe {
             val actor = it.arguments[8] as? XActor? ?: return@subscribe
             if (shouldHide(actor)) {
                 it.returned = false

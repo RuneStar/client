@@ -42,9 +42,9 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<Npc>().withDimensions(1) }
     }
 
-    @DependsOn(GameObject::class)
-    class gameObjects : StaticField() {
-        override val predicate = predicateOf<Field2> { it.type == type<GameObject>().withDimensions(1) }
+    @DependsOn(Scenery::class)
+    class scenery : StaticField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Scenery>().withDimensions(1) }
     }
 
     @MethodParameters("id")
@@ -2008,8 +2008,8 @@ class Client : IdentityMapper.Class() {
     }
 
     @MethodParameters("id")
-    @DependsOn(LocType.transform::class)
-    class getVarbit : OrderMapper.InMethod.Method(LocType.transform::class, 0) {
+    @DependsOn(LocType.multiLoc::class)
+    class getVarbit : OrderMapper.InMethod.Method(LocType.multiLoc::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
     }
 
@@ -3839,6 +3839,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<VorbisSample>() }
     }
 
+    @MethodParameters("archive", "group", "file")
     @DependsOn(MusicTrack::class)
     class readTrack : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<MusicTrack>() }
@@ -4091,5 +4092,15 @@ class Client : IdentityMapper.Class() {
     @DependsOn(VorbisSample.decodeAudio::class)
     class VorbisSample_readBits : OrderMapper.InMethod.Method(VorbisSample.decodeAudio::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESTATIC }
+    }
+
+    @DependsOn(LocType.loadModelType::class, AbstractArchive::class)
+    class LocType_modelArchive : UniqueMapper.InMethod.Field(LocType.loadModelType::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractArchive>() }
+    }
+
+    @DependsOn(LocType.loadModelType::class, EvictingDualNodeHashTable::class)
+    class LocType_cachedUnlitModels : UniqueMapper.InMethod.Field(LocType.getUnlitModel::class) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 }

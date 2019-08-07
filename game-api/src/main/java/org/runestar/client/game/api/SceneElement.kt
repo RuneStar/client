@@ -2,14 +2,14 @@ package org.runestar.client.game.api
 
 import org.runestar.client.game.api.live.LiveScene
 import org.runestar.client.game.api.utils.cascadingListOf
-import org.runestar.client.game.raw.access.XBoundaryObject
+import org.runestar.client.game.raw.access.XWall
 import org.runestar.client.game.raw.access.XEntity
 import org.runestar.client.game.raw.access.XFloorDecoration
-import org.runestar.client.game.raw.access.XGameObject
 import org.runestar.client.game.raw.access.XModel
 import org.runestar.client.game.raw.access.XNode
 import org.runestar.client.game.raw.access.XObj
 import org.runestar.client.game.raw.access.XObjStack
+import org.runestar.client.game.raw.access.XScenery
 import org.runestar.client.game.raw.access.XWallDecoration
 import org.runestar.client.game.raw.base.Accessor
 
@@ -36,7 +36,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
     val location: SceneTile get() = SceneTile(x, y, plane)
 
-    val isObject: Boolean get() = tag.kind == SceneElementKind.OBJECT
+    val isLoc: Boolean get() = tag.kind == SceneElementKind.LOC
 
     // todo
 //    val baseOrientation: Angle get() = Angle.of(((flags shr 6) and 3) * 512)
@@ -79,8 +79,8 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
         override val models: List<Model> get() = cascadingListOf(model, model2, model3)
     }
 
-    class Game(
-            override val accessor: XGameObject
+    class Scenery(
+            override val accessor: XScenery
     ) : SceneElement(accessor) {
 
         override val dynamicOrientation: Angle get() = Angle.of(accessor.orientation)
@@ -95,10 +95,10 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val tag get() = SceneElementTag(accessor.tag)
 
-        override fun toString(): String = "SceneElement.Game(tag=$tag)"
+        override fun toString(): String = "SceneElement.Scenery($tag)"
     }
 
-    class Floor(
+    class FloorDecoration(
             override val accessor: XFloorDecoration,
             override val plane: Int
     ) : SceneElement(accessor) {
@@ -111,10 +111,10 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val tag get() = SceneElementTag(accessor.tag)
 
-        override fun toString(): String = "SceneElement.Floor(tag=$tag)"
+        override fun toString(): String = "SceneElement.FloorDecoration($tag)"
     }
 
-    class Wall(
+    class WallDecoration(
             override val accessor: XWallDecoration,
             override val plane: Int
     ) : TwoModels(accessor) {
@@ -136,11 +136,11 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val tag get() = SceneElementTag(accessor.tag)
 
-        override fun toString(): String = "SceneElement.Wall(tag=$tag)"
+        override fun toString(): String = "SceneElement.WallDecoration($tag)"
     }
 
-    class Boundary(
-            override val accessor: XBoundaryObject,
+    class Wall(
+            override val accessor: XWall,
             override val plane: Int
     ) : TwoModels(accessor) {
 
@@ -156,10 +156,10 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val tag get() = SceneElementTag(accessor.tag)
 
-        override fun toString(): String = "SceneElement.Boundary(tag=$tag)"
+        override fun toString(): String = "SceneElement.Wall($tag)"
     }
 
-    class ItemPile(
+    class ObjStack(
             override val accessor: XObjStack,
             override val plane: Int
     ) : ThreeModels(accessor), Iterable<GroundItem> {
@@ -199,6 +199,6 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
             }
         }
 
-        override fun toString(): String = "SceneElement.ItemPile(tag=$tag)"
+        override fun toString(): String = "SceneElement.ObjStack($tag)"
     }
 }

@@ -22,7 +22,7 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 
     override val name = "Ground Items"
 
-    val piles = LinkedHashSet<SceneElement.ItemPile>()
+    val piles = LinkedHashSet<SceneElement.ObjStack>()
 
     val blockedIds = HashSet<Int>()
     val unblockedIds = HashSet<Int>()
@@ -31,10 +31,10 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun onStart() {
         settings.blockedNames.mapTo(blockRegexes) { it.value }
 
-        SceneElements.ItemPile.additions.subscribe { piles.add(it) }
-        SceneElements.ItemPile.removals.subscribe { piles.remove(it) }
+        SceneElements.ObjStack.additions.subscribe { piles.add(it) }
+        SceneElements.ObjStack.removals.subscribe { piles.remove(it) }
         SceneElements.clears.subscribe { piles.clear() }
-        piles.addAll(SceneElements.ItemPile.all())
+        piles.addAll(SceneElements.ObjStack.all())
 
         val defaultColor = settings.color.value
         val font = settings.font.value

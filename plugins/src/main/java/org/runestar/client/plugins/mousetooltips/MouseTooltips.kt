@@ -5,7 +5,7 @@ import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Rectangle
@@ -32,8 +32,8 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
         val fillColor = settings.fillColor.value
         val fontColor = settings.fontColor.value
         add(LiveCanvas.repaints.subscribe { g ->
-            if (Menu.optionsCount <= 0 || Menu.isOpen) return@subscribe
-            val option = Menu.getOption(Menu.optionsCount - 1)
+            if (MiniMenu.optionsCount <= 0 || MiniMenu.isOpen) return@subscribe
+            val option = MiniMenu.getOption(MiniMenu.optionsCount - 1)
             val action = option.action
             val target = option.targetName
             if (action in settings.ignoredActions) return@subscribe

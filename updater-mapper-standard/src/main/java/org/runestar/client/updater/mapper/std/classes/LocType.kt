@@ -17,6 +17,8 @@ import org.runestar.client.updater.mapper.Class2
 import org.runestar.client.updater.mapper.Field2
 import org.runestar.client.updater.mapper.Instruction2
 import org.runestar.client.updater.mapper.Method2
+import org.runestar.client.updater.mapper.Predicate
+import java.lang.reflect.Modifier
 
 @DependsOn(DualNode::class, NPCType::class)
 class LocType : IdentityMapper.Class() {
@@ -55,30 +57,30 @@ class LocType : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    class transform : IdentityMapper.InstanceMethod() {
+    class multiLoc : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == type<LocType>() }
     }
 
-    @DependsOn(transform::class)
-    class transforms : UniqueMapper.InMethod.Field(transform::class) {
+    @DependsOn(multiLoc::class)
+    class multi : UniqueMapper.InMethod.Field(multiLoc::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
     }
 
-    @DependsOn(transform::class)
-    class transformVarbit : OrderMapper.InMethod.Field(transform::class, 0) {
+    @DependsOn(multiLoc::class)
+    class multiVarbit : OrderMapper.InMethod.Field(multiLoc::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(transform::class)
-    class transformVarp : OrderMapper.InMethod.Field(transform::class, 2) {
+    @DependsOn(multiLoc::class)
+    class multiVar : OrderMapper.InMethod.Field(multiLoc::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 
-    class sizeX : OrderMapper.InConstructor.Field(LocType::class, 0) {
+    class width : OrderMapper.InConstructor.Field(LocType::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class sizeY : OrderMapper.InConstructor.Field(LocType::class, 1) {
+    class length : OrderMapper.InConstructor.Field(LocType::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -90,11 +92,11 @@ class LocType : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class int1 : OrderMapper.InConstructor.Field(LocType::class, 3) {
+    class interactable : OrderMapper.InConstructor.Field(LocType::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class hillskew : OrderMapper.InConstructor.Field(LocType::class, 4) {
+    class hillChange : OrderMapper.InConstructor.Field(LocType::class, 4) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -138,15 +140,15 @@ class LocType : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
-    class modelSizeX : OrderMapper.InConstructor.Field(LocType::class, 11) {
+    class resizeX : OrderMapper.InConstructor.Field(LocType::class, 11) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class modelHeight : OrderMapper.InConstructor.Field(LocType::class, 12) {
+    class resizeY : OrderMapper.InConstructor.Field(LocType::class, 12) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class modelSizeY : OrderMapper.InConstructor.Field(LocType::class, 13) {
+    class resizeZ : OrderMapper.InConstructor.Field(LocType::class, 13) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -154,15 +156,15 @@ class LocType : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class offsetHeight : OrderMapper.InConstructor.Field(LocType::class, 15) {
+    class offsetY : OrderMapper.InConstructor.Field(LocType::class, 15) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class offsetY : OrderMapper.InConstructor.Field(LocType::class, 16) {
+    class offsetZ : OrderMapper.InConstructor.Field(LocType::class, 16) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    class boolean2 : OrderMapper.InConstructor.Field(LocType::class, 5) {
+    class lowDetailVisible : OrderMapper.InConstructor.Field(LocType::class, 5) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE }
     }
 
@@ -251,5 +253,23 @@ class LocType : IdentityMapper.Class() {
     class getStringParam : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == String::class.type }
                 .and { it.arguments == listOf(INT_TYPE, String::class.type) }
+    }
+
+    @DependsOn(postDecode::class)
+    class models : OrderMapper.InMethod.Field(postDecode::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    @DependsOn(postDecode::class)
+    class modelTypes : OrderMapper.InMethod.Field(postDecode::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == IntArray::class.type }
+    }
+
+    class loadModels : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE && it.arguments.isEmpty() && Modifier.isFinal(it.access) }
+    }
+
+    class loadModelType : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE && it.arguments.size == 1 }
     }
 }

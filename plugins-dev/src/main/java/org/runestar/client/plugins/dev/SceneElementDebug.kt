@@ -18,9 +18,27 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
 
             g.font = Fonts.PLAIN_11
 
-            if (settings.game) {
+            if (settings.scenery) {
                 g.color = Color.CYAN
-                SceneElements.Game.onPlane(Game.plane).forEach { i ->
+                SceneElements.Scenery.onPlane(Game.plane).forEach { i ->
+                    val pt = i.location.center.toScreen() ?: return@forEach
+                    g.drawString(i.tag.id.toString(), pt)
+                    g.draw(i.location.outline())
+                }
+            }
+
+            if (settings.wallDecoration) {
+                g.color = Color.ORANGE
+                SceneElements.WallDecoration.onPlane(Game.plane).forEach { i ->
+                    val pt = i.location.center.toScreen() ?: return@forEach
+                    g.drawString(i.tag.id.toString(), pt)
+                    g.draw(i.location.outline())
+                }
+            }
+
+            if (settings.floorDecoration) {
+                g.color = Color.GREEN
+                SceneElements.FloorDecoration.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -28,26 +46,8 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
             }
 
             if (settings.wall) {
-                g.color = Color.ORANGE
-                SceneElements.Wall.onPlane(Game.plane).forEach { i ->
-                    val pt = i.location.center.toScreen() ?: return@forEach
-                    g.drawString(i.tag.id.toString(), pt)
-                    g.draw(i.location.outline())
-                }
-            }
-
-            if (settings.floor) {
-                g.color = Color.GREEN
-                SceneElements.Floor.onPlane(Game.plane).forEach { i ->
-                    val pt = i.location.center.toScreen() ?: return@forEach
-                    g.drawString(i.tag.id.toString(), pt)
-                    g.draw(i.location.outline())
-                }
-            }
-
-            if (settings.boundary) {
                 g.color = Color.WHITE
-                SceneElements.Boundary.onPlane(Game.plane).forEach { i ->
+                SceneElements.Wall.onPlane(Game.plane).forEach { i ->
                     val pt = i.location.center.toScreen() ?: return@forEach
                     g.drawString(i.tag.id.toString(), pt)
                     g.draw(i.location.outline())
@@ -57,9 +57,9 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
     }
 
     data class Settings(
-            val floor: Boolean = false,
+            val floorDecoration: Boolean = false,
+            val wallDecoration: Boolean = true,
             val wall: Boolean = true,
-            val boundary: Boolean = true,
-            val game: Boolean = true
+            val scenery: Boolean = true
     ) : PluginSettings()
 }

@@ -85,7 +85,7 @@ class Model : IdentityMapper.Class() {
 
     @MethodParameters("x", "y", "z")
     @DependsOn(Npc.getModel::class)
-    class offsetBy : OrderMapper.InMethod.Method(Npc.getModel::class, 1) {
+    class offset : OrderMapper.InMethod.Method(Npc.getModel::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == INVOKEVIRTUAL && it.methodOwner == type<Model>() }
     }
 
@@ -104,7 +104,7 @@ class Model : IdentityMapper.Class() {
 
     // new = old * scale / 128
     @MethodParameters("x", "y", "z")
-    class scale : IdentityMapper.InstanceMethod() {
+    class resize : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 3..4 }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }

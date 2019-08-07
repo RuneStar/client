@@ -19,19 +19,19 @@ import org.runestar.client.updater.mapper.Method2
 import org.runestar.client.updater.mapper.type
 import org.runestar.client.updater.mapper.withDimensions
 
-@DependsOn(GameObject::class)
+@DependsOn(Scenery::class)
 class Scene : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == Any::class.type }
             .and { it.interfaces.isEmpty() }
-            .and { it.instanceFields.any { it.type == type<GameObject>().withDimensions(1) } }
+            .and { it.instanceFields.any { it.type == type<Scenery>().withDimensions(1) } }
 
-    @DependsOn(GameObject::class)
-    class tempGameObjects : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<GameObject>().withDimensions(1) }
+    @DependsOn(Scenery::class)
+    class tempScenery : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Scenery>().withDimensions(1) }
     }
 
     @DependsOn(clear::class)
-    class tempGameObjectsCount : OrderMapper.InMethod.Field(clear::class, -1) {
+    class tempSceneryCount : OrderMapper.InMethod.Field(clear::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
@@ -41,7 +41,7 @@ class Scene : IdentityMapper.Class() {
 
     @MethodParameters("plane", "startX", "startY", "sizeX", "sizeY", "centerX", "centerY", "height", "entity", "orientation", "isTemp", "tag", "flags")
     @DependsOn(Entity::class)
-    class newGameObject : IdentityMapper.InstanceMethod() {
+    class newScenery : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == BOOLEAN_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         INT_TYPE, INT_TYPE, INT_TYPE, type<Entity>(), INT_TYPE, BOOLEAN_TYPE, LONG_TYPE, INT_TYPE) }
@@ -103,17 +103,17 @@ class Scene : IdentityMapper.Class() {
     }
 
     @MethodParameters("plane", "x", "y")
-    @DependsOn(Tile.boundaryObject::class)
-    class removeBoundaryObject : IdentityMapper.InstanceMethod() {
+    @DependsOn(Tile.wall::class)
+    class removeWall : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE) }
                 .and { it.arguments.size in 3..4 }
-                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.boundaryObject>().id } }
+                .and { it.instructions.any { it.opcode == PUTFIELD && it.fieldId == field<Tile.wall>().id } }
     }
 
     @MethodParameters("plane", "x", "y", "tileHeight", "entity1", "entity2", "orientationA", "orientationB", "tag", "flags")
     @DependsOn(Entity::class)
-    class newBoundaryObject : IdentityMapper.InstanceMethod() {
+    class newWall : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, INT_TYPE,
                         type<Entity>(), type<Entity>(), INT_TYPE, INT_TYPE, LONG_TYPE, INT_TYPE) }
@@ -121,9 +121,9 @@ class Scene : IdentityMapper.Class() {
     }
 
     @MethodParameters("plane", "x", "y")
-    @DependsOn(BoundaryObject::class)
-    class getBoundaryObject : IdentityMapper.InstanceMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<BoundaryObject>() }
+    @DependsOn(Wall::class)
+    class getWall : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<Wall>() }
     }
 
     @MethodParameters("plane", "x", "y")
@@ -168,11 +168,11 @@ class Scene : IdentityMapper.Class() {
                 .and { it.arguments.startsWith(INT_TYPE, INT_TYPE, INT_TYPE, LONG_TYPE) }
     }
 
-    @MethodParameters("gameObject")
-    @DependsOn(GameObject::class)
-    class removeGameObject : IdentityMapper.InstanceMethod() {
+    @MethodParameters("scenery")
+    @DependsOn(Scenery::class)
+    class removeScenery : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.startsWith(type<GameObject>()) }
+                .and { it.arguments.startsWith(type<Scenery>()) }
     }
 
     @MethodParameters()
@@ -196,11 +196,11 @@ class Scene : IdentityMapper.Class() {
     }
 
     @MethodParameters()
-    @DependsOn(tempGameObjects::class)
-    class clearTempGameObjects : IdentityMapper.InstanceMethod() {
+    @DependsOn(tempScenery::class)
+    class clearTempScenery : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments.size in 0..1 }
-                .and { it.instructions.count { it.opcode == GETFIELD && it.fieldId == field<tempGameObjects>().id } == 2 }
+                .and { it.instructions.count { it.opcode == GETFIELD && it.fieldId == field<tempScenery>().id } == 2 }
     }
 
     @MethodParameters("pixels", "index", "width", "plane", "x", "y")

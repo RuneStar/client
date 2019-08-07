@@ -21,13 +21,13 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
     override fun onStart() {
         add(SceneElements.clears.subscribe { objs.clear() })
         add(SceneElements.removals.subscribe { objs.remove(it) })
-        add(SceneElements.additions.filter { it.tag.isInteractable }.subscribe { objs.add(it) })
-        SceneElements.all().filterTo(objs) { it.tag.isInteractable }
+        add(SceneElements.additions.filter { it.tag.interactable }.subscribe { objs.add(it) })
+        SceneElements.all().filterTo(objs) { it.tag.interactable }
 
         add(LiveCanvas.repaints.subscribe { g ->
             objs.forEach {
                 g.color = colorFor(it)
-                if (it.isObject) {
+                if (it.isLoc) {
                     it.models.forEach { drawObject(g, it) }
                 } else {
                     it.models.forEach { drawOther(g, it) }
@@ -42,14 +42,14 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
 
     private fun colorFor(obj: SceneElement): Color {
         return when (obj.tag.kind) {
-            SceneElementKind.GROUND_ITEM -> Color.RED
+            SceneElementKind.OBJ -> Color.RED
             SceneElementKind.NPC -> Color.YELLOW
             SceneElementKind.PLAYER -> Color.WHITE
-            SceneElementKind.OBJECT -> when (obj) {
-                is SceneElement.Boundary -> Color.MAGENTA
-                is SceneElement.Game -> Color.BLUE
-                is SceneElement.Floor -> Color.CYAN
-                is SceneElement.Wall -> Color.ORANGE
+            SceneElementKind.LOC -> when (obj) {
+                is SceneElement.Wall -> Color.MAGENTA
+                is SceneElement.Scenery -> Color.BLUE
+                is SceneElement.FloorDecoration -> Color.CYAN
+                is SceneElement.WallDecoration -> Color.ORANGE
                 else -> throw IllegalStateException()
             }
             else -> error(obj)

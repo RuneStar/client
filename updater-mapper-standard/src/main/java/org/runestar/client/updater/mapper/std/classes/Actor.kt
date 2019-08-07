@@ -151,9 +151,9 @@ class Actor : IdentityMapper.Class() {
                 .nextWithin(25) { it.opcode == Opcodes.GETFIELD && it.fieldType == INT_TYPE && it.fieldName != field<x>().name }
     }
 
-    @DependsOn(Player.getModel::class, Model.offsetBy::class)
+    @DependsOn(Player.getModel::class, Model.offset::class)
     class orientation : UniqueMapper.InMethod.Field(Player.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offset>().id }
                 .nextWithin(5) { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Actor>() }
     }
 
@@ -161,9 +161,9 @@ class Actor : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(Npc.getModel::class, Model.offsetBy::class)
+    @DependsOn(Npc.getModel::class, Model.offset::class)
     class heightOffset : UniqueMapper.InMethod.Field(Npc.getModel::class) {
-        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offsetBy>().id }
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodId == method<Model.offset>().id }
                 .prevWithin(8) { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
     }
 

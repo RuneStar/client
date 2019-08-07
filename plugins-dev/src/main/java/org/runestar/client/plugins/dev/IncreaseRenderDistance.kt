@@ -59,11 +59,11 @@ class IncreaseRenderDistance : DisposablePlugin<PluginSettings>() {
                         if (tile.minPlane > plane || var12 >= 3500) {
                             tile.drawPrimary = false
                             tile.drawSecondary = false
-                            tile.drawGameObjectEdges = 0
+                            tile.drawSceneryEdges = 0
                         } else {
                             tile.drawPrimary = true
                             tile.drawSecondary = true
-                            tile.drawGameObjects = tile.gameObjectsCount > 0
+                            tile.drawScenery = tile.sceneryCount > 0
                         }
                     }
                 }

@@ -3,7 +3,7 @@ package org.runestar.client.plugins.dev
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 
@@ -21,11 +21,11 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
 
             strings.apply {
                 add("menu")
-                add("isOpen: ${Menu.isOpen}")
-                add("shape: ${Menu.shape}")
-                add("optionsCount: ${Menu.optionsCount}")
+                add("isOpen: ${MiniMenu.isOpen}")
+                add("shape: ${MiniMenu.shape}")
+                add("optionsCount: ${MiniMenu.optionsCount}")
                 add("options:")
-                Menu.options.mapTo(this) { it.toString() }
+                MiniMenu.options.mapTo(this) { it.toString() }
             }
 
             strings.forEach { s ->
@@ -33,14 +33,14 @@ class MenuDebug : DisposablePlugin<PluginSettings>() {
                 y += g.font.size + 5
             }
 
-            Menu.optionShapes.forEach { g.draw(it) }
+            MiniMenu.optionShapes.forEach { g.draw(it) }
         })
 
-        add(Menu.openings.subscribe { pt ->
+        add(MiniMenu.openings.subscribe { pt ->
             logger.info("Menu opened at $pt")
         })
 
-        add(Menu.actions.subscribe { a ->
+        add(MiniMenu.actions.subscribe { a ->
             logger.info(a.toString())
         })
     }

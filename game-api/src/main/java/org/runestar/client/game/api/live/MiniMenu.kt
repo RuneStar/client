@@ -1,13 +1,13 @@
 package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
-import org.runestar.client.game.api.MenuOption
+import org.runestar.client.game.api.MiniMenuOption
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import java.awt.Point
 import java.awt.Rectangle
 
-object Menu {
+object MiniMenu {
 
     const val OPTION_HEIGHT = 15
 
@@ -27,8 +27,8 @@ object Menu {
         get() = CLIENT.menuOptionsCount
         set(value) { CLIENT.menuOptionsCount = value }
 
-    val actions: Observable<MenuOption> = XClient.doAction.exit.map {
-        MenuOption.of(
+    val actions: Observable<MiniMenuOption> = XClient.doAction.exit.map {
+        MiniMenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[0] as Int,
                 it.arguments[1] as Int, it.arguments[5] as String, it.arguments[4] as String,
                 false
@@ -46,10 +46,10 @@ object Menu {
 
     fun getOptionShape(index: Int): Rectangle =  Rectangle(x, y + (index + 1) * OPTION_HEIGHT + 3, width, OPTION_HEIGHT)
 
-    val options: List<MenuOption> get() = List(optionsCount) { getOption(it) }
+    val options: List<MiniMenuOption> get() = List(optionsCount) { getOption(it) }
 
-    fun getOption(index: Int): MenuOption {
-        return MenuOption.of(
+    fun getOption(index: Int): MiniMenuOption {
+        return MiniMenuOption.of(
                 CLIENT.menuOpcodes[index],
                 CLIENT.menuArguments0[index],
                 CLIENT.menuArguments1[index],
@@ -60,7 +60,7 @@ object Menu {
         )
     }
 
-    fun setOption(index: Int, menuOption: MenuOption) {
+    fun setOption(index: Int, menuOption: MiniMenuOption) {
         CLIENT.menuActions[index] = menuOption.action
         CLIENT.menuArguments0[index] = menuOption.argument0
         CLIENT.menuArguments1[index] = menuOption.argument1
@@ -70,18 +70,18 @@ object Menu {
         CLIENT.menuTargetNames[index] = menuOption.targetName
     }
 
-    fun addOption(menuOption: MenuOption) {
+    fun addOption(menuOption: MiniMenuOption) {
         setOption(optionsCount++, menuOption)
     }
 
-    val optionAdditions: Observable<MenuOption> = XClient.addMiniMenuEntry.exit.map {
-        MenuOption.of(
+    val optionAdditions: Observable<MiniMenuOption> = XClient.addMiniMenuEntry.exit.map {
+        MiniMenuOption.of(
                 it.arguments[2] as Int, it.arguments[3] as Int, it.arguments[4] as Int, it.arguments[5] as Int,
                 it.arguments[1] as String, it.arguments[0] as String, it.arguments[6] as Boolean
         )
     }
 
     override fun toString(): String {
-        return "Menu(isOpen=$isOpen, optionsCount=$optionsCount, shape=$shape)"
+        return "MiniMenu(isOpen=$isOpen, optionsCount=$optionsCount, shape=$shape)"
     }
 }

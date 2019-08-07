@@ -6,14 +6,14 @@ import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.GlobalTile
-import org.runestar.client.game.api.MenuOption
-import org.runestar.client.game.api.MenuOptionOpcode
+import org.runestar.client.game.api.MiniMenuOption
+import org.runestar.client.game.api.MiniMenuOpcode
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.LiveScene
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -31,8 +31,8 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
 
     override fun onStart() {
         add(LiveCanvas.repaints.subscribe(::onDraw))
-        add(Menu.optionAdditions.subscribe(::onMenuOptionAdded))
-        add(Menu.actions.subscribe(::onMenuAction))
+        add(MiniMenu.optionAdditions.subscribe(::onMenuOptionAdded))
+        add(MiniMenu.actions.subscribe(::onMenuAction))
         add(LiveScene.reloads.subscribe { reloadSceneMarkers() })
         reloadSceneMarkers()
     }
@@ -59,13 +59,13 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
         }
     }
 
-    private fun onMenuOptionAdded(menuOption: MenuOption) {
-        if (menuOption.opcode != MenuOptionOpcode.WALK_HERE || !Keyboard.isKeyPressed(settings.keyCode.value)) return
-        Menu.addOption(MenuOption.of(MenuOptionOpcode.CANCEL, 0, 0, 0, "", MARK_ACTION, false))
+    private fun onMenuOptionAdded(menuOption: MiniMenuOption) {
+        if (menuOption.opcode != MiniMenuOpcode.WALK || !Keyboard.isKeyPressed(settings.keyCode.value)) return
+        MiniMenu.addOption(MiniMenuOption.of(MiniMenuOpcode.CANCEL, 0, 0, 0, "", MARK_ACTION, false))
     }
 
-    private fun onMenuAction(menuOption: MenuOption) {
-        if (menuOption.opcode != MenuOptionOpcode.CANCEL || menuOption.action != MARK_ACTION) return
+    private fun onMenuAction(menuOption: MiniMenuOption) {
+        if (menuOption.opcode != MiniMenuOpcode.CANCEL || menuOption.action != MARK_ACTION) return
         val selectedTile = Game.selectedTile ?: return
         val gt = Game.toTemplate(selectedTile)
         val sts = Game.fromTemplate(gt)

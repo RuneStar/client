@@ -22,9 +22,9 @@ class Tile : IdentityMapper.Class() {
     override val predicate = predicateOf<Class2> { it.superType == type<Node>() }
             .and { it.type == field<Scene.tiles>().type.baseType }
 
-    @DependsOn(GameObject::class)
-    class gameObjects : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<GameObject>().withDimensions(1) }
+    @DependsOn(Scenery::class)
+    class scenery : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Scenery>().withDimensions(1) }
     }
 
     class plane : OrderMapper.InConstructor.Field(Tile::class, 1) {
@@ -49,9 +49,9 @@ class Tile : IdentityMapper.Class() {
         override val predicate = predicateOf<Field2> { it.type == type<WallDecoration>() }
     }
 
-    @DependsOn(BoundaryObject::class)
-    class boundaryObject : IdentityMapper.InstanceField() {
-        override val predicate = predicateOf<Field2> { it.type == type<BoundaryObject>() }
+    @DependsOn(Wall::class)
+    class wall : IdentityMapper.InstanceField() {
+        override val predicate = predicateOf<Field2> { it.type == type<Wall>() }
     }
 
     @DependsOn(ObjStack::class)
@@ -70,16 +70,16 @@ class Tile : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.newObjStack::class)
-    class gameObjectsCount : UniqueMapper.InMethod.Field(Scene.newObjStack::class) {
+    class sceneryCount : UniqueMapper.InMethod.Field(Scene.newObjStack::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 
-    class gameObjectEdgeMasks : IdentityMapper.InstanceField() {
+    class sceneryEdgeMasks : IdentityMapper.InstanceField() {
         override val predicate = predicateOf<Field2> { it.type == IntArray::class.type }
     }
 
-    @DependsOn(Scene.removeGameObject::class)
-    class gameObjectsEdgeMask : OrderMapper.InMethod.Field(Scene.removeGameObject::class, -1) {
+    @DependsOn(Scene.removeScenery::class)
+    class sceneryEdgeMask : OrderMapper.InMethod.Field(Scene.removeScenery::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 
@@ -103,7 +103,7 @@ class Tile : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.draw::class)
-    class drawGameObjects : OrderMapper.InMethod.Field(Scene.draw::class, -1) {
+    class drawScenery : OrderMapper.InMethod.Field(Scene.draw::class, -1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == BOOLEAN_TYPE && it.fieldOwner == type<Tile>() }
     }
 
@@ -112,7 +112,7 @@ class Tile : IdentityMapper.Class() {
     }
 
     @DependsOn(Scene.draw::class)
-    class drawGameObjectEdges : UniqueMapper.InMethod.Field(Scene.draw::class) {
+    class drawSceneryEdges : UniqueMapper.InMethod.Field(Scene.draw::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTFIELD && it.fieldType == INT_TYPE && it.fieldOwner == type<Tile>() }
     }
 }

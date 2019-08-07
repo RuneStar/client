@@ -21,9 +21,9 @@ class Agility : DisposablePlugin<Agility.Settings>() {
 
     override fun onStart() {
         add(XScene.clear.exit.subscribe { obstacles.clear() })
-        add(SceneElements.Object.additions.filter(::isObstacle).subscribe { obstacles.add(it) })
-        add(SceneElements.Object.removals.filter(::isObstacle).subscribe { obstacles.remove(it) })
-        SceneElements.Object.all().filterTo(obstacles, ::isObstacle)
+        add(SceneElements.Loc.additions.filter(::isObstacle).subscribe { obstacles.add(it) })
+        add(SceneElements.Loc.removals.filter(::isObstacle).subscribe { obstacles.remove(it) })
+        SceneElements.Loc.all().filterTo(obstacles, ::isObstacle)
 
         add(LiveCanvas.repaints.subscribe(::onRepaint))
     }

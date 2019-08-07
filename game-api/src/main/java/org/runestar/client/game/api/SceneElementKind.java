@@ -6,6 +6,6 @@ public final class SceneElementKind {
 
     public static final int PLAYER = 0;
     public static final int NPC = 1;
-    public static final int OBJECT = 2;
-    public static final int GROUND_ITEM = 3;
+    public static final int LOC = 2;
+    public static final int OBJ = 3;
 }

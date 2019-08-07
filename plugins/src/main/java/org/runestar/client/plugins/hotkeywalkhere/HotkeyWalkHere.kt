@@ -2,9 +2,9 @@ package org.runestar.client.plugins.hotkeywalkhere
 
 import org.runestar.client.api.forms.KeyCodeForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.MenuOption
+import org.runestar.client.game.api.MiniMenuOption
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 
@@ -15,12 +15,12 @@ class HotkeyWalkHere : DisposablePlugin<HotkeyWalkHere.Settings>() {
     override val name = "Hotkey Walk-Here"
 
     override fun onStart() {
-        add(Menu.optionAdditions.filter { Keyboard.isKeyPressed(settings.keyCode.value) }.subscribe(::onMenuOptionAdded))
+        add(MiniMenu.optionAdditions.filter { Keyboard.isKeyPressed(settings.keyCode.value) }.subscribe(::onMenuOptionAdded))
     }
 
-    private fun onMenuOptionAdded(option: MenuOption) {
+    private fun onMenuOptionAdded(option: MiniMenuOption) {
         when (option) {
-            is MenuOption.WalkHere, is MenuOption.Cancel, is MenuOption.InComponent -> return
+            is MiniMenuOption.WalkHere, is MiniMenuOption.Cancel, is MiniMenuOption.InComponent -> return
             else -> CLIENT.menuOptionsCount--
         }
     }

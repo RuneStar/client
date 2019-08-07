@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.hidetrade
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.MenuOptionOpcode
-import org.runestar.client.game.api.live.Menu
+import org.runestar.client.game.api.MiniMenuOpcode
+import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.plugins.spi.PluginSettings
 
 class HideTrade : DisposablePlugin<PluginSettings>() {
@@ -12,9 +12,9 @@ class HideTrade : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(Menu.optionAdditions.subscribe { op ->
-            if (op.opcode in MenuOptionOpcode.PLAYER_ACTION_0_LOW_PRIORITY..MenuOptionOpcode.PLAYER_ACTION_7_LOW_PRIORITY && op.action == "Trade with") {
-                Menu.optionsCount--
+        add(MiniMenu.optionAdditions.subscribe { op ->
+            if (op.opcode in MiniMenuOpcode.OP_PLAYER1_LOWPRIORITY..MiniMenuOpcode.OP_PLAYER8_LOWPRIORITY && op.action == "Trade with") {
+                MiniMenu.optionsCount--
             }
         })
     }

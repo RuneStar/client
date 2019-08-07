@@ -5,159 +5,159 @@ import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.TileObjects
 import org.runestar.client.game.api.utils.addNotNull
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XGameObject
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile
 import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XScenery
 
 object SceneElements : TileObjects.Many<SceneElement>(CLIENT.scene) {
 
     override fun fromTile(tile: XTile): List<SceneElement> {
         val list = ArrayList<SceneElement>()
-        list.addNotNull(Floor.fromTile(tile))
+        list.addNotNull(FloorDecoration.fromTile(tile))
+        list.addNotNull(WallDecoration.fromTile(tile))
         list.addNotNull(Wall.fromTile(tile))
-        list.addNotNull(Boundary.fromTile(tile))
-        list.addNotNull(ItemPile.fromTile(tile))
-        list.addAll(Game.fromTile(tile))
+        list.addNotNull(ObjStack.fromTile(tile))
+        list.addAll(Scenery.fromTile(tile))
         return list
     }
 
     val clears: Observable<Unit> = XScene.clear.exit.map { Unit }
 
     override val additions: Observable<SceneElement> = Observable.mergeArray(
+            WallDecoration.additions,
+            FloorDecoration.additions,
             Wall.additions,
-            Floor.additions,
-            Boundary.additions,
-            ItemPile.additions,
-            Game.additions
+            ObjStack.additions,
+            Scenery.additions
     )
 
     override val removals: Observable<SceneElement> = Observable.mergeArray(
+            WallDecoration.removals,
+            FloorDecoration.removals,
             Wall.removals,
-            Floor.removals,
-            Boundary.removals,
-            ItemPile.removals,
-            Game.removals
+            ObjStack.removals,
+            Scenery.removals
     )
 
-    object Object : TileObjects.Many<SceneElement>(CLIENT.scene) {
+    object Loc : TileObjects.Many<SceneElement>(CLIENT.scene) {
 
         override val additions: Observable<SceneElement> = Observable.mergeArray(
+                WallDecoration.additions,
+                FloorDecoration.additions,
                 Wall.additions,
-                Floor.additions,
-                Boundary.additions,
-                Game.additions.filter(SceneElement::isObject)
+                Scenery.additions.filter(SceneElement::isLoc)
         )
 
         override val removals: Observable<SceneElement> = Observable.mergeArray(
+                WallDecoration.removals,
+                FloorDecoration.removals,
                 Wall.removals,
-                Floor.removals,
-                Boundary.removals,
-                Game.removals.filter(SceneElement::isObject)
+                Scenery.removals.filter(SceneElement::isLoc)
         )
 
         override fun fromTile(tile: XTile): List<SceneElement> {
             val list = ArrayList<SceneElement>()
-            list.addNotNull(Floor.fromTile(tile))
+            list.addNotNull(FloorDecoration.fromTile(tile))
+            list.addNotNull(WallDecoration.fromTile(tile))
             list.addNotNull(Wall.fromTile(tile))
-            list.addNotNull(Boundary.fromTile(tile))
-            Game.fromTile(tile).filterTo(list, SceneElement::isObject)
+            Scenery.fromTile(tile).filterTo(list, SceneElement::isLoc)
             return list
+        }
+    }
+
+    object WallDecoration : TileObjects.Single<SceneElement.WallDecoration>(CLIENT.scene) {
+
+        override val additions: Observable<SceneElement.WallDecoration> = XScene.newWallDecoration.exit.map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneElement.WallDecoration(tile.wallDecoration, tile.plane)
+        }
+
+        override val removals: Observable<SceneElement.WallDecoration> = XScene.removeWallDecoration.enter.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneElement.WallDecoration(tile.wallDecoration, tile.plane)
+        }
+
+        override fun fromTile(tile: XTile): SceneElement.WallDecoration? {
+            val v = tile.wallDecoration ?: return null
+            return SceneElement.WallDecoration(v, tile.plane)
+        }
+    }
+
+    object FloorDecoration : TileObjects.Single<SceneElement.FloorDecoration>(CLIENT.scene) {
+
+        override val additions: Observable<SceneElement.FloorDecoration> = XScene.newFloorDecoration.exit.map {
+                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+                    SceneElement.FloorDecoration(tile.floorDecoration, tile.plane)
+        }
+
+        override val removals: Observable<SceneElement.FloorDecoration> = XScene.removeFloorDecoration.enter.map {
+            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
+            SceneElement.FloorDecoration(tile.floorDecoration, tile.plane)
+        }
+
+        override fun fromTile(tile: XTile): SceneElement.FloorDecoration? {
+            val v = tile.floorDecoration ?: return null
+            return SceneElement.FloorDecoration(v, tile.plane)
         }
     }
 
     object Wall : TileObjects.Single<SceneElement.Wall>(CLIENT.scene) {
 
-        override val additions: Observable<SceneElement.Wall> = XScene.newWallDecoration.exit.map {
+        override val additions: Observable<SceneElement.Wall> = XScene.newWall.exit.map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                    SceneElement.Wall(tile.wallDecoration, tile.plane)
+                    SceneElement.Wall(tile.wall, tile.plane)
         }
 
-        override val removals: Observable<SceneElement.Wall> = XScene.removeWallDecoration.enter.map {
+        override val removals: Observable<SceneElement.Wall> = XScene.removeWall.enter.map {
             val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-            SceneElement.Wall(tile.wallDecoration, tile.plane)
+            SceneElement.Wall(tile.wall, tile.plane)
         }
 
         override fun fromTile(tile: XTile): SceneElement.Wall? {
-            val v = tile.wallDecoration ?: return null
+            val v = tile.wall ?: return null
             return SceneElement.Wall(v, tile.plane)
         }
     }
 
-    object Floor : TileObjects.Single<SceneElement.Floor>(CLIENT.scene) {
+    object ObjStack : TileObjects.Single<SceneElement.ObjStack>(CLIENT.scene) {
 
-        override val additions: Observable<SceneElement.Floor> = XScene.newFloorDecoration.exit.map {
-                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                    SceneElement.Floor(tile.floorDecoration, tile.plane)
-        }
-
-        override val removals: Observable<SceneElement.Floor> = XScene.removeFloorDecoration.enter.map {
+        override val additions: Observable<SceneElement.ObjStack> = XScene.newObjStack.exit.map {
             val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-            SceneElement.Floor(tile.floorDecoration, tile.plane)
+            SceneElement.ObjStack(tile.objStack, tile.plane)
         }
 
-        override fun fromTile(tile: XTile): SceneElement.Floor? {
-            val v = tile.floorDecoration ?: return null
-            return SceneElement.Floor(v, tile.plane)
-        }
-    }
-
-    object Boundary : TileObjects.Single<SceneElement.Boundary>(CLIENT.scene) {
-
-        override val additions: Observable<SceneElement.Boundary> = XScene.newBoundaryObject.exit.map {
-                    val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                    SceneElement.Boundary(tile.boundaryObject, tile.plane)
-        }
-
-        override val removals: Observable<SceneElement.Boundary> = XScene.removeBoundaryObject.enter.map {
-            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-            SceneElement.Boundary(tile.boundaryObject, tile.plane)
-        }
-
-        override fun fromTile(tile: XTile): SceneElement.Boundary? {
-            val v = tile.boundaryObject ?: return null
-            return SceneElement.Boundary(v, tile.plane)
-        }
-    }
-
-    object ItemPile : TileObjects.Single<SceneElement.ItemPile>(CLIENT.scene) {
-
-        override val additions: Observable<SceneElement.ItemPile> = XScene.newObjStack.exit.map {
-            val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-            SceneElement.ItemPile(tile.objStack, tile.plane)
-        }
-
-        override val removals: Observable<SceneElement.ItemPile> =
+        override val removals: Observable<SceneElement.ObjStack> =
                 Observable.merge(XScene.removeObjStack.enter, XScene.newObjStack.enter)
                 .filter { getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int) != null }
                 .map { checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int)) }
                 .filter { it.objStack != null }
-                .map { SceneElement.ItemPile(it.objStack, it.plane) }
+                .map { SceneElement.ObjStack(it.objStack, it.plane) }
 
-        override fun fromTile(tile: XTile): SceneElement.ItemPile? {
+        override fun fromTile(tile: XTile): SceneElement.ObjStack? {
             val v = tile.objStack ?: return null
-            return SceneElement.ItemPile(v, tile.plane)
+            return SceneElement.ObjStack(v, tile.plane)
         }
     }
 
-    object Game : TileObjects.Many<SceneElement.Game>(CLIENT.scene) {
+    object Scenery : TileObjects.Many<SceneElement.Scenery>(CLIENT.scene) {
 
-        override val additions: Observable<SceneElement.Game> = XScene.newGameObject.exit
+        override val additions: Observable<SceneElement.Scenery> = XScene.newScenery.exit
                 .filter { it.returned }
                 .map {
                     val tile = checkNotNull(getTile(it.arguments[0] as Int, it.arguments[1] as Int, it.arguments[2] as Int))
-                    SceneElement.Game(tile.gameObjects[tile.gameObjectsCount - 1])
+                    SceneElement.Scenery(tile.scenery[tile.sceneryCount - 1])
                 }
 
-        override val removals: Observable<SceneElement.Game> = XScene.removeGameObject.enter
-                .map { SceneElement.Game(it.arguments[0] as XGameObject) }
+        override val removals: Observable<SceneElement.Scenery> = XScene.removeScenery.enter
+                .map { SceneElement.Scenery(it.arguments[0] as XScenery) }
                 .delay { XClient.doCycle.enter }
 
-        override fun fromTile(tile: XTile): List<SceneElement.Game> {
-            val gos = tile.gameObjects ?: return emptyList()
-            val list = ArrayList<SceneElement.Game>(tile.gameObjectsCount)
-            for (i in 0 until tile.gameObjectsCount) {
-                gos[i]?.let { list.add(SceneElement.Game(it)) }
+        override fun fromTile(tile: XTile): List<SceneElement.Scenery> {
+            val gos = tile.scenery ?: return emptyList()
+            val list = ArrayList<SceneElement.Scenery>(tile.sceneryCount)
+            for (i in 0 until tile.sceneryCount) {
+                gos[i]?.let { list.add(SceneElement.Scenery(it)) }
             }
             return list
         }
