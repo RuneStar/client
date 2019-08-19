@@ -1,34 +1,30 @@
 package org.runestar.client.plugins.attackstyles
 
 import org.runestar.client.api.Fonts
+import org.runestar.client.api.forms.FontForm
+import org.runestar.client.api.forms.InsetsForm
+import org.runestar.client.api.overlay.Anchor
+import org.runestar.client.api.overlay.HideableOverlay
+import org.runestar.client.api.overlay.TextOverlay
+import org.runestar.client.api.overlay.hideable
+import org.runestar.client.api.overlay.withBackground
+import org.runestar.client.api.overlay.withBorder
+import org.runestar.client.api.overlay.withPadding
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.cacheids.ScriptId
 import org.runestar.client.game.api.BR_TAG
-import org.runestar.client.game.api.GameState
+import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.VarbitId
 import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.Components
+import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XClientScriptEvent
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
-import java.awt.Graphics2D
 
 class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
-
-    private companion object {
-        const val PADDING_X = 3
-        const val PADDING_TOP = 2
-        const val PADDING_BOTTOM = 1
-        val OUTLINE_COLOR = Color(14, 13, 15)
-        val FILL_COLOR = Color(70, 61, 50, 156)
-        val TEXT_COLOR: Color = Color.WHITE
-        val TEXT_COLOR_WARN: Color = Color.RED
-    }
 
     override val name = "Attack Styles"
 
@@ -36,19 +32,25 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
 
     private var weaponType = -1
 
-    private var attackStyleName: String? = null
+    private lateinit var text: TextOverlay
 
-    private var warn = false
+    private lateinit var overlay: HideableOverlay
 
     override fun onStart() {
+        text = TextOverlay("Style", settings.font.value, Color.WHITE)
+        overlay = text
+                .withPadding(settings.padding)
+                .withBackground()
+                .withBorder()
+                .hideable()
+        overlay.show = settings.alwaysShow
         add(XClient.doCycleLoggedIn.exit.subscribe { onCycle() })
         add(XClient.runClientScript0.exit.map { it.arguments[0] as XClientScriptEvent }.subscribe(::onRunScript))
-        add(LiveCanvas.repaints.subscribe(::onDraw))
+        add(settings.anchor.add(overlay))
     }
 
     override fun onStop() {
         weaponType = -1
-        attackStyleName = null
         unhide()
     }
 
@@ -74,26 +76,10 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
             CLIENT.interpreter_stringLocals[4 + style]
         }
         hide()
-        warn = isHidden(desc)
-        attackStyleName = desc.split(BR_TAG, limit = 2)[0].removePrefix("(").removeSuffix(")")
-    }
-
-    private fun onDraw(g: Graphics2D) {
-        if (!settings.alwaysShow && !warn) return
-        if (Game.state != GameState.LOGGED_IN) return
-        val s = attackStyleName ?: return
-        val chatBoxRect = Components[ComponentId.CHAT_BOX]?.shape ?: return
-        g.font = Fonts.PLAIN_12
-        val height = g.fontMetrics.height + PADDING_TOP + PADDING_BOTTOM
-        val width = g.fontMetrics.stringWidth(s) + PADDING_X * 2
-        val x = chatBoxRect.maxX.toInt() - width - 9
-        val y = chatBoxRect.y - height - 6
-        g.color = FILL_COLOR
-        g.fillRect(x, y, width, height)
-        g.color = OUTLINE_COLOR
-        g.drawRect(x, y, width, height)
-        g.color = if (warn) TEXT_COLOR_WARN else TEXT_COLOR
-        g.drawString(s, x + PADDING_X, y + PADDING_TOP + g.fontMetrics.ascent)
+        val warn = isHidden(desc)
+        text.color = if (warn) Color.RED else Color.WHITE
+        overlay.show = warn || settings.alwaysShow
+        text.string = desc.split(BR_TAG, limit = 2)[0].removePrefix("(").removeSuffix(")")
     }
 
     private fun hide() {
@@ -145,6 +131,9 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
             val hideStrength: Boolean = false,
             val hideDefence: Boolean = false,
             val hideMagic: Boolean = false,
-            val hideRanged: Boolean = false
+            val hideRanged: Boolean = false,
+            val anchor: Anchor = Anchor.BOTTOM_RIGHT,
+            val font: FontForm = FontForm(Fonts.PLAIN_12),
+            val padding: InsetsForm = InsetsForm(1, 2, 1, 2)
     ) : PluginSettings()
 }
