@@ -16,6 +16,8 @@ inline class ComponentId(val packed: Int) {
 
         fun getComponent(packed: Int) = packed and 0xFFFF
 
+        const val TOP_LEVEL_CONTENT_AREA = 12
+
         val CASTLE_WARS_SARADOMIN_TIME_LEFT = ComponentId(InterfaceId.CASTLE_WARS_SARADOMIN, 25)
 
         val CASTLE_WARS_ZAMORAK_TIME_LEFT = ComponentId(InterfaceId.CASTLE_WARS_ZAMORAK, 25)
