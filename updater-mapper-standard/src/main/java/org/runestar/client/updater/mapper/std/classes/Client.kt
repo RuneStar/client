@@ -4099,7 +4099,7 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<AbstractArchive>() }
     }
 
-    @DependsOn(LocType.loadModelType::class, EvictingDualNodeHashTable::class)
+    @DependsOn(EvictingDualNodeHashTable::class, LocType.getUnlitModel::class)
     class LocType_cachedUnlitModels : UniqueMapper.InMethod.Field(LocType.getUnlitModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
