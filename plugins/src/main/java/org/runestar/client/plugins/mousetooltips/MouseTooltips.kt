@@ -1,14 +1,20 @@
 package org.runestar.client.plugins.mousetooltips
 
 import org.runestar.client.api.Fonts
-import org.runestar.client.api.forms.RgbaForm
+import org.runestar.client.api.forms.FontForm
+import org.runestar.client.api.forms.InsetsForm
+import org.runestar.client.api.overlay.TextOverlay
+import org.runestar.client.api.overlay.withBackground
+import org.runestar.client.api.overlay.withBorder
+import org.runestar.client.api.overlay.withPadding
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.live.LiveCanvas
 import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
-import java.awt.Rectangle
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Point
 import kotlin.math.min
 
 class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
@@ -17,10 +23,6 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
 
     companion object {
         val TAG_REGEX = "<.*?>".toRegex()
-
-        const val PADDING_X = 2
-        const val PADDING_TOP = 2
-        const val PADDING_BOTTOM = 1
     }
 
     override val name = "Mouse Tooltips"
@@ -28,9 +30,12 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
     // todo : color tags
 
     override fun onStart() {
-        val outlineColor = settings.outlineColor.value
-        val fillColor = settings.fillColor.value
-        val fontColor = settings.fontColor.value
+        val text = TextOverlay("-", settings.font.value, Color.WHITE)
+        val overlay = text
+                .withPadding(settings.padding)
+                .withBackground()
+                .withBorder()
+        val size = Dimension()
         add(LiveCanvas.repaints.subscribe { g ->
             if (MiniMenu.optionsCount <= 0 || MiniMenu.isOpen) return@subscribe
             val option = MiniMenu.getOption(MiniMenu.optionsCount - 1)
@@ -45,41 +50,26 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             } else {
                 "$action $target"
             }
-            val text = rawText.replace(TAG_REGEX, "")
-            g.font = Fonts.PLAIN_11
-            val textHeight = g.fontMetrics.height
-            val textWidth = g.fontMetrics.stringWidth(text)
-            val boxWidth = textWidth + 2 * PADDING_X
-            val boxHeight = textHeight + PADDING_TOP + PADDING_BOTTOM
+            text.string = rawText.replace(TAG_REGEX, "")
+            overlay.getSize(g, size)
 
-            val boxX = min(canvas.width - 1, mousePt.x + boxWidth + settings.offsetX) - boxWidth
-            val boxY = if (mousePt.y - boxHeight - settings.offsetY > 0) {
-                mousePt.y - settings.offsetY - boxHeight
+            val x = min(canvas.width - 1, mousePt.x + size.width + settings.offset.x) - size.width
+            val y = if (mousePt.y - size.height - settings.offset.y > 0) {
+                mousePt.y - settings.offset.y - size.height
             } else {
                 mousePt.y + settings.offsetYFlipped
             }
-            val box = Rectangle(boxX, boxY, boxWidth, boxHeight)
 
-            g.color = fillColor
-            g.fill(box)
-
-            g.color = outlineColor
-            g.draw(box)
-
-            val textX = boxX + PADDING_X
-            val textY = boxY + PADDING_TOP + g.fontMetrics.ascent
-            g.color = fontColor
-            g.drawStringShadowed(text, textX, textY)
+            g.translate(x, y)
+            overlay.draw(g, size)
         })
     }
 
     data class Settings(
             val ignoredActions: Set<String> = setOf("Cancel", "Walk here"),
-            val offsetX: Int = 3,
-            val offsetY: Int = 3,
-            val offsetYFlipped: Int = 22,
-            val outlineColor: RgbaForm = RgbaForm(14, 13, 15),
-            val fillColor: RgbaForm = RgbaForm(70, 61, 50, 156),
-            val fontColor: RgbaForm = RgbaForm(255, 255, 255)
+            val offset: Point = Point(3, 3),
+            val offsetYFlipped: Int = 32,
+            val font: FontForm = FontForm(Fonts.PLAIN_11),
+            val padding: InsetsForm = InsetsForm(1, 2, 1, 2)
     ) : PluginSettings()
 }
