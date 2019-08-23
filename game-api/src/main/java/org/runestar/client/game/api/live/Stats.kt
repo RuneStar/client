@@ -1,11 +1,11 @@
 package org.runestar.client.game.api.live
 
-import org.runestar.client.game.api.Skill
+import org.runestar.client.cacheids.StatId
 import org.runestar.client.game.raw.CLIENT
 
 object Stats {
 
-    val ids: IntRange get() = 0..Skill.CONSTRUCTION
+    val ids: IntRange get() = 0..StatId.CONSTRUCTION
 
     fun currentLevel(skill: Int): Int = CLIENT.currentLevels[skill]
 

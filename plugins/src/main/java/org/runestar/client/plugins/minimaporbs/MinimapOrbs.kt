@@ -3,9 +3,9 @@ package org.runestar.client.plugins.minimaporbs
 import org.runestar.client.api.forms.BasicStrokeForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.cacheids.StatId
 import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
-import org.runestar.client.game.api.Skill
 import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.LiveCanvas
@@ -70,7 +70,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
             if (settings.hpRegen.enabled && hpTicks > 0) {
                 Components[ComponentId.MINIMAP_ORBS_HP_CIRCLE]?.shape?.let { hpRect ->
-                    val boost = Stats.boost(Skill.HITPOINTS)
+                    val boost = Stats.boost(StatId.HITPOINTS)
                     val hpPercent = when {
                         boost < 0 -> hpTicks.toDouble() / hpTickLimit
                         boost > 0 -> 1 - (hpTicks.toDouble() / hpTickLimit)

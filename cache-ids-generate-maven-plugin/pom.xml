@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.runestar.cache</groupId>
             <artifactId>cache-tools</artifactId>
-            <version>c717096b</version>
+            <version>684e4ff235</version>
         </dependency>
     </dependencies>
 
