@@ -53,6 +53,12 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == type<NPCType>() }
     }
 
+    @MethodParameters("id")
+    @DependsOn(EnumType::class)
+    class getEnumType : StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == type<EnumType>() }
+    }
+
 //    //    @DependsOn(OverlayDefinition::class)
 //    class getOverlayDefinition : StaticMethod() {
 //        override val predicate = predicateOf<Method2> { it.returnType == type<OverlayDefinition>() }
