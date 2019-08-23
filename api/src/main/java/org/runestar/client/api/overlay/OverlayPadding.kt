@@ -14,6 +14,7 @@ class OverlayPadding(
 ) : Overlay {
 
     override fun draw(g: Graphics2D, size: Dimension) {
+        if (size.width == 0 && size.height == 0) return
         g.translate(left, top)
         size.setSize(size.width - left - right, size.height - top - bottom)
         overlay.draw(g, size)
@@ -22,6 +23,7 @@ class OverlayPadding(
 
     override fun getSize(g: Graphics2D, result: Dimension) {
         overlay.getSize(g, result)
+        if (result.width == 0 && result.height == 0) return
         result.setSize(result.width + left + right, result.height + top + bottom)
     }
 }

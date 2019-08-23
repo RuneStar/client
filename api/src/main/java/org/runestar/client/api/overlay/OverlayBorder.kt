@@ -14,6 +14,7 @@ class OverlayBorder(
     }
 
     override fun draw(g: Graphics2D, size: Dimension) {
+        if (size.width == 0 && size.height == 0) return
         g.color = color
         g.drawRect(0, 0, size.width - 1, size.height - 1)
         g.translate(1, 1)
@@ -24,6 +25,7 @@ class OverlayBorder(
 
     override fun getSize(g: Graphics2D, result: Dimension) {
         overlay.getSize(g, result)
+        if (result.width == 0 && result.height == 0) return
         result.setSize(result.width + 2, result.height + 2)
     }
 }

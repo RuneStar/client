@@ -15,6 +15,7 @@ class OverlayBackground(
     }
 
     override fun draw(g: Graphics2D, size: Dimension) {
+        if (size.width == 0 && size.height == 0) return
         g.paint = paint
         g.fillRect(0, 0, size.width, size.height)
         overlay.draw(g, size)

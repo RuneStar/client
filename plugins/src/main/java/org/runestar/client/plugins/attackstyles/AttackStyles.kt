@@ -79,6 +79,7 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
         val warn = isHidden(desc)
         text.color = if (warn) Color.RED else Color.WHITE
         overlay.show = warn || settings.alwaysShow
+        text.modified = true
         text.string = desc.split(BR_TAG, limit = 2)[0].removePrefix("(").removeSuffix(")")
     }
 

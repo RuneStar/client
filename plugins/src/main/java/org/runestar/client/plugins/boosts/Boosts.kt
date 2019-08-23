@@ -24,7 +24,8 @@ class Boosts : DisposablePlugin<Boosts.Settings>() {
 
     override fun onStart() {
         val map = TreeMap<String, ColoredString>()
-        val overlay = TextTableOverlay(map, Color.WHITE, settings.font.value, settings.lineSpacing, settings.dividingWidth)
+        val table = TextTableOverlay(map, Color.WHITE, settings.font.value, settings.lineSpacing, settings.dividingWidth)
+        val overlay = table
                 .withPadding(settings.padding)
                 .withBackground()
                 .withBorder()
@@ -37,6 +38,7 @@ class Boosts : DisposablePlugin<Boosts.Settings>() {
                 if (boosts[i] == boost) return@forEachIndexed
                 boosts[i] = boost
                 val statName = Stats.name(stat)
+                table.modified = true
                 if (boost == 0) {
                     map.remove(statName)
                 } else {
