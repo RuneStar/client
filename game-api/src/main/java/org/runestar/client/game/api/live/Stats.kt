@@ -1,21 +1,24 @@
 package org.runestar.client.game.api.live
 
 import org.runestar.client.cacheids.StatId
+import org.runestar.client.game.api.EnumId
 import org.runestar.client.game.raw.CLIENT
 
 object Stats {
 
+    fun name(stat: Int): String = Enums[EnumId.STAT_NAMES].getString(stat)
+
     val ids: IntRange get() = 0..StatId.CONSTRUCTION
 
-    fun currentLevel(skill: Int): Int = CLIENT.currentLevels[skill]
+    fun currentLevel(stat: Int): Int = CLIENT.currentLevels[stat]
 
-    fun level(skill: Int): Int = CLIENT.levels[skill]
+    fun level(stat: Int): Int = CLIENT.levels[stat]
 
-    fun experience(skill: Int): Int = CLIENT.experience[skill]
+    fun experience(stat: Int): Int = CLIENT.experience[stat]
 
-    fun boost(skill: Int): Int = currentLevel(skill) - level(skill)
+    fun boost(stat: Int): Int = currentLevel(stat) - level(stat)
 
-    val totalExperience: Long get() = ids.fold(0L) { acc, skill -> acc + experience(skill) }
+    val totalExperience: Long get() = ids.fold(0L) { acc, stat -> acc + experience(stat) }
 
     val totalLevel: Int get() = ids.sumBy { level(it) }
 }
