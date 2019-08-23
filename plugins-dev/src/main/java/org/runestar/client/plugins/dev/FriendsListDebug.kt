@@ -3,7 +3,7 @@ package org.runestar.client.plugins.dev
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 
@@ -12,7 +12,7 @@ class FriendsListDebug : DisposablePlugin<FriendsListDebug.Settings>() {
     override val defaultSettings = Settings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.color = Color.WHITE
             g.font = Fonts.PLAIN_11
 

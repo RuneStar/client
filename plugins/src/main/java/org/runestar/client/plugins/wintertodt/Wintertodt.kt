@@ -3,10 +3,11 @@ package org.runestar.client.plugins.wintertodt
 import org.runestar.client.game.api.Projectile
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Projectiles
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.live.VisibilityMap
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
@@ -29,7 +30,7 @@ class Wintertodt : DisposablePlugin<PluginSettings>() {
                         .filter { (proj, _) -> proj.isFallingSnow() }
                         .subscribe { (proj, pos) -> fallingSnow[proj] = pos.sceneTile }
         )
-        add(LiveCanvas.repaints.subscribe(::onRepaint))
+        add(Canvas.repaints.subscribe(::onRepaint))
     }
 
     private fun Projectile.isFallingSnow(): Boolean {
@@ -45,7 +46,7 @@ class Wintertodt : DisposablePlugin<PluginSettings>() {
         while (itr.hasNext()) {
             val (proj, tile) = itr.next()
 
-            if (Game.visibilityMap.isVisible(tile)) {
+            if (VisibilityMap.isVisible(tile)) {
                 g.draw(tile.outline())
             }
 

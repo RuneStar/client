@@ -4,7 +4,7 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
@@ -24,7 +24,7 @@ class OnTickTest : DisposablePlugin<PluginSettings>() {
             tick++
         })
 
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.font = Fonts.BOLD_12
             tiles.forEach { t ->
                 val o = t.outline()

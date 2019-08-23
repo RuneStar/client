@@ -1,10 +1,11 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Mouse
-import org.runestar.client.game.api.live.Projections
 import org.runestar.client.plugins.spi.PluginSettings
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.game.api.live.Minimap
+import org.runestar.client.game.api.live.Viewport
 import java.awt.Color
 import java.awt.Point
 import java.awt.Shape
@@ -15,9 +16,9 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             val mousePt = Mouse.location
-            val fromViewportPos = Projections.viewport.toGame(mousePt)
+            val fromViewportPos = Viewport.toGame(mousePt)
             if (fromViewportPos != null && fromViewportPos.isLoaded) {
                 g.color = Color.RED
                 g.draw(fromViewportPos.sceneTile.outline())
@@ -26,11 +27,11 @@ class ProjectionDebug : DisposablePlugin<PluginSettings>() {
                     g.fill(shapeAt(fromViewportPt))
                 }
 
-                val toMinimapPt = Projections.minimap.toScreen(fromViewportPos) ?: return@subscribe
+                val toMinimapPt = Minimap.toScreen(fromViewportPos) ?: return@subscribe
                 g.color = Color.GREEN
                 g.fill(shapeAt(toMinimapPt))
             }
-            val fromMinimapPos = Projections.minimap.toGame(mousePt) ?: return@subscribe
+            val fromMinimapPos = Minimap.toGame(mousePt) ?: return@subscribe
             if (fromMinimapPos.isLoaded) {
                 g.color = Color.BLUE
                 g.draw(fromMinimapPos.sceneTile.outline())

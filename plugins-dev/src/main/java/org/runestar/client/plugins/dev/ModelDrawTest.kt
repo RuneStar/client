@@ -5,9 +5,10 @@ import org.runestar.client.game.api.Model
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.SceneElementKind
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
+import org.runestar.client.game.api.live.VisibilityMap
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -24,7 +25,7 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
         add(SceneElements.additions.subscribe { objs.add(it) })
         objs.addAll(SceneElements.all())
 
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             objs.forEach {
                 g.color = colorFor(it)
                 it.models.forEach { drawModel(g, it) }
@@ -55,9 +56,9 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
     private fun drawModel(g: Graphics2D, model: Model) {
         val pos = model.base
         val tile = pos.sceneTile
-        if (!tile.isLoaded || !Game.visibilityMap.isVisible(tile)) return
+        if (!tile.isLoaded || !VisibilityMap.isVisible(tile)) return
         val pt = pos.toScreen() ?: return
-        if (pt !in LiveViewport.shape) return
+        if (pt !in Viewport) return
         model.drawWireFrame(g.color)
     }
 }

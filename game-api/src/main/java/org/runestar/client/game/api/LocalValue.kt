@@ -1,5 +1,7 @@
 package org.runestar.client.game.api
 
+import org.runestar.client.game.api.live.Scene
+
 inline class LocalValue(val value: Int) {
 
     constructor(scene: Int, sub: Int) : this((scene shl 7) or sub)

@@ -2,7 +2,7 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 
@@ -19,7 +19,7 @@ class FontTest : DisposablePlugin<PluginSettings>() {
     val s = "1234567890 abcdefghijklmnopqrstuvwxyz-ABCDEFGHIJKLMNOPQRSTUVWXYZ_/:><"
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.color = Color.WHITE
             val x = 20
             var y = 20

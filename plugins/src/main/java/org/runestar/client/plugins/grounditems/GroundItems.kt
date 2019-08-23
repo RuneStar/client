@@ -9,8 +9,8 @@ import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XObjType
@@ -39,9 +39,9 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
         val defaultColor = settings.color.value
         val font = settings.font.value
 
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.font = font
-            g.clip(LiveViewport.shape)
+            g.clip(Viewport.shape)
             val height = g.fontMetrics.height
 
             val itr = piles.iterator()

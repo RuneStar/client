@@ -22,35 +22,35 @@ class Barrows : DisposablePlugin<Barrows.Settings>() {
     override val defaultSettings = Settings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.filter { inBarrowsAboveGround() }.subscribe(::onRepaintAboveGround))
+        add(Canvas.repaints.filter { inBarrowsAboveGround() }.subscribe(::onRepaintAboveGround))
         if (settings.drawMinimap) {
-            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { LiveMinimap.isDrawn = true })
+            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { Minimap.isDrawn = true })
         }
     }
 
     override fun onStop() {
-        if (settings.drawMinimap && inBarrowsUnderground() && LiveMinimap.isDrawn) {
-            LiveMinimap.isDrawn = false
+        if (settings.drawMinimap && inBarrowsUnderground() && Minimap.isDrawn) {
+            Minimap.isDrawn = false
         }
     }
 
     private fun inBarrowsUnderground(): Boolean {
-        return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(REGION_ID_UNDER_GROUND)
+        return Game.state == GameState.LOGGED_IN && Scene.regionIds.contains(REGION_ID_UNDER_GROUND)
     }
 
     private fun inBarrowsAboveGround(): Boolean {
-        return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(REGION_ID_ABOVE_GROUND)
+        return Game.state == GameState.LOGGED_IN && Scene.regionIds.contains(REGION_ID_ABOVE_GROUND)
     }
 
     private fun shouldDrawMinimap(): Boolean {
-        return !LiveMinimap.isDrawn && inBarrowsUnderground()
+        return !Minimap.isDrawn && inBarrowsUnderground()
     }
 
     private fun onRepaintAboveGround(g: Graphics2D) {
         g.color = DIG_AREA_COLOR
         g.stroke = DIG_AREA_STROKE
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g.clip(LiveViewport.shape)
+        g.clip(Viewport.shape)
         BarrowsBrother.VALUES.forEach { g.draw(it.digArea.toScene().outline()) }
     }
 

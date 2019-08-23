@@ -1,32 +1,52 @@
-package org.runestar.client.game.api
+package org.runestar.client.game.api.live
 
-/**
- * The loaded area that follows the local player.
- */
-interface Scene {
+import io.reactivex.Observable
+import org.runestar.client.game.api.GlobalTile
+import org.runestar.client.game.api.LocalValue
+import org.runestar.client.game.api.Position
+import org.runestar.client.game.api.Region
+import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.game.raw.access.XScene
 
-    companion object {
-        const val SIZE = 104
-        const val PLANE_SIZE = 4
-        val CENTER = SceneTile(SIZE / 2, SIZE / 2, 0)
-        val BASE = SceneTile(0, 0, 0)
-        val CORNERS = BASE.run {
-            listOf(
-                    this,
-                    copy(x = SIZE - 1),
-                    copy(x = SIZE - 1, y = SIZE - 1),
-                    copy(y = SIZE - 1)
-            )
-        }
+object Scene {
+
+    const val SIZE = 104
+
+    const val PLANE_SIZE = 4
+
+    val CENTER = SceneTile(SIZE / 2, SIZE / 2, 0)
+
+    val BASE = SceneTile(0, 0, 0)
+
+    val CORNERS = BASE.run {
+        listOf(
+                this,
+                copy(x = SIZE - 1),
+                copy(x = SIZE - 1, y = SIZE - 1),
+                copy(y = SIZE - 1)
+        )
     }
 
-    val base: GlobalTile
+    fun getHeight(x: Int, y: Int, plane: Int): Int {
+        return CLIENT.tiles_heights[plane][x][y]
+    }
 
-    fun getHeight(x: Int, y: Int, plane: Int): Int
+    fun getRenderFlags(x: Int, y: Int, plane: Int): Byte {
+        return CLIENT.tiles_renderFlags[plane][x][y]
+    }
 
-    fun getRenderFlags(x: Int, y: Int, plane: Int): Byte
+    fun getCollisionFlags(x: Int, y: Int, plane: Int): Int {
+        return CLIENT.collisionMaps[plane].flags[x][y]
+    }
 
-    fun getCollisionFlags(x: Int, y: Int, plane: Int): Int
+    val base get() = GlobalTile(CLIENT.baseX, CLIENT.baseY, 0)
+
+    val regionIds: IntArray get() = CLIENT.regions ?: IntArray(0)
+
+    val regions: List<Region> get() = regionIds.map { Region(it) }
+
+    val reloads: Observable<Unit> = XScene.init.exit.map { Unit }
 
     fun getHeight(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }
@@ -73,5 +93,9 @@ interface Scene {
     fun getCollisionFlags(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }
         return getCollisionFlags(sceneTile.x, sceneTile.y, sceneTile.plane)
+    }
+
+    override fun toString(): String {
+        return "Scene($base)"
     }
 }

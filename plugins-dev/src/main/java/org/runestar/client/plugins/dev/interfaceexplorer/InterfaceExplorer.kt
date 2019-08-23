@@ -4,7 +4,7 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.api.Fonts
 import org.runestar.client.game.api.Component
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.game.api.live.Components
 import org.runestar.client.plugins.spi.PluginSettings
@@ -24,13 +24,13 @@ class InterfaceExplorer : DisposablePlugin<PluginSettings>() {
         SwingUtilities.invokeAndWait {
             frame = ExplorerFrame()
         }
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             frame?.selectedComponent?.shape?.let {
                 g.color = Color.WHITE
                 g.draw(it)
             }
         })
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.color = Color.MAGENTA
             g.font = Fonts.PLAIN_12
             val mouse = Mouse.location

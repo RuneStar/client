@@ -5,9 +5,10 @@ import org.runestar.client.game.api.Model
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.SceneElementKind
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
+import org.runestar.client.game.api.live.VisibilityMap
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -24,7 +25,7 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
         add(SceneElements.additions.filter { it.tag.interactable }.subscribe { objs.add(it) })
         SceneElements.all().filterTo(objs) { it.tag.interactable }
 
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             objs.forEach {
                 g.color = colorFor(it)
                 if (it.isLoc) {
@@ -60,9 +61,9 @@ class ClickBoxDebug : DisposablePlugin<PluginSettings>() {
         val pos = model.base
         val tile = pos.sceneTile
         if (tile.plane != Game.plane) return false
-        if (!tile.isLoaded || !Game.visibilityMap.isVisible(tile)) return false
+        if (!tile.isLoaded || !VisibilityMap.isVisible(tile)) return false
         val pt = pos.toScreen() ?: return false
-        if (pt !in LiveViewport.shape) return false
+        if (pt !in Viewport) return false
         return true
     }
 

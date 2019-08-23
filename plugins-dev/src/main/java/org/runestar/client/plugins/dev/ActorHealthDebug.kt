@@ -4,7 +4,7 @@ import org.kxtra.swing.graphics.drawString
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Actor
 import org.runestar.client.api.Fonts
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
@@ -15,7 +15,7 @@ class ActorHealthDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
 
             g.font = Fonts.PLAIN_12
             g.color = Color.WHITE

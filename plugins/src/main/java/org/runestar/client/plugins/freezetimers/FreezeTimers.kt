@@ -8,7 +8,7 @@ import org.runestar.client.game.api.HeadIconPrayer
 import org.runestar.client.game.api.Player
 import org.runestar.client.game.api.SequenceId
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
@@ -29,7 +29,7 @@ class FreezeTimers : DisposablePlugin<PluginSettings>() {
 
     override fun onStart() {
         add(Game.ticks.subscribe { onTick() })
-        add(LiveCanvas.repaints.subscribe(::onRepaint))
+        add(Canvas.repaints.subscribe(::onRepaint))
     }
 
     private fun onTick() {

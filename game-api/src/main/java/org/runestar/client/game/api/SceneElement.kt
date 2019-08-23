@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.LiveScene
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.utils.cascadingListOf
 import org.runestar.client.game.raw.access.XWall
 import org.runestar.client.game.raw.access.XEntity
@@ -87,7 +87,7 @@ abstract class SceneElement(accessor: Accessor) : Wrapper(accessor) {
 
         override val modelPosition: Position get() = Position(accessor.centerX, accessor.centerY, heightOffset, plane)
 
-        val heightOffset: Int get() = LiveScene.getTileHeight(accessor.centerX, accessor.centerY, plane) - accessor.height
+        val heightOffset: Int get() = Scene.getTileHeight(accessor.centerX, accessor.centerY, plane) - accessor.height
 
         override val entity: XEntity? get() = accessor.entity
 

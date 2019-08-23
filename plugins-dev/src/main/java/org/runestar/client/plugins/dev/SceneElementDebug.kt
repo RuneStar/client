@@ -4,7 +4,7 @@ import org.kxtra.swing.graphics.drawString
 import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -14,7 +14,7 @@ class SceneElementDebug : DisposablePlugin<SceneElementDebug.Settings>() {
     override val defaultSettings = Settings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
 
             g.font = Fonts.PLAIN_11
 

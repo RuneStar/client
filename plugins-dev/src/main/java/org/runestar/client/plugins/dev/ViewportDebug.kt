@@ -2,9 +2,8 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
-import org.runestar.client.game.api.Viewport
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -14,11 +13,10 @@ class ViewportDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.color = Color.CYAN
-            g.draw(LiveViewport.shape)
+            g.draw(Viewport.shape)
             g.color = Color.BLUE
-            g.draw(Viewport.Fixed.DEFAULT.shape)
             val strings = listOf(
                     "viewportOffsetX/Y: ${CLIENT.viewportOffsetX}, ${CLIENT.viewportOffsetY}",
                     "viewportWidth/Height: ${CLIENT.viewportWidth}, ${CLIENT.viewportHeight}",

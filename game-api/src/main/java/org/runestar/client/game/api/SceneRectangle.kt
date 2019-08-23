@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.live.Viewport
 import java.awt.Point
 import java.awt.Shape
 import java.awt.geom.Path2D
@@ -19,7 +19,7 @@ data class SceneRectangle(
 
     val base: SceneTile get() = SceneTile(x, y, plane)
 
-    fun outline(projection: Projection = Projections.viewport): Shape {
+    fun outline(projection: Projection = Viewport): Shape {
         val tempPoint = Point()
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, width * 2 + height * 2 + 2)
 

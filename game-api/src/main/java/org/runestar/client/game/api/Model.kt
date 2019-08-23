@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.utils.Jarvis
 import org.runestar.client.game.api.utils.addNotNull
 import org.runestar.client.game.raw.access.XModel
@@ -31,7 +31,7 @@ class Model internal constructor(
 
     private val heightMax get() = base.height - (accessor.yMid - accessor.yMidOffset)
 
-    private fun boundingBoxCornerPoints(projection: Projection = Projections.viewport): List<Point> {
+    private fun boundingBoxCornerPoints(projection: Projection = Viewport): List<Point> {
         accessor.calculateBoundingBox(yaw.value) // todo
         val list = ArrayList<Point>(8)
         val xMin = localXMin
@@ -51,15 +51,15 @@ class Model internal constructor(
         return list
     }
 
-    fun boundingBox(projection: Projection = Projections.viewport): Shape {
+    fun boundingBox(projection: Projection = Viewport): Shape {
         return Jarvis.convexHull(boundingBoxCornerPoints(projection))
     }
 
-    fun objectClickBox(projection: Projection = Projections.viewport): Area {
+    fun objectClickBox(projection: Projection = Viewport): Area {
         return Area(boundingBox(projection)).apply { intersect(geometryArea(projection)) }
     }
 
-    fun geometryArea(projection: Projection = Projections.viewport): Area {
+    fun geometryArea(projection: Projection = Viewport): Area {
         val area = Area()
         val tempRectangle = Rectangle()
         trianglesForEach(projection) { x0, y0, x1, y1, x2, y2 ->
@@ -82,7 +82,7 @@ class Model internal constructor(
 
     fun drawWireFrame(
             color: Color,
-            projection: Projection = Projections.viewport
+            projection: Projection = Viewport
     ) {
         val rgb = color.rgb
         trianglesForEach(projection) { x0, y0, x1, y1, x2, y2 ->

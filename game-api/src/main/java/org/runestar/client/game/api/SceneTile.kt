@@ -1,7 +1,7 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.LiveScene
-import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.live.Scene
+import org.runestar.client.game.api.live.Viewport
 import java.awt.Point
 import java.awt.Shape
 import java.awt.geom.Path2D
@@ -35,12 +35,12 @@ data class SceneTile(
 
     val isLoaded get() = isLoaded(x, y, plane)
 
-    fun toGlobalTile(scene: Scene = LiveScene): GlobalTile {
-        return GlobalTile(x + scene.base.x, y + scene.base.y, plane)
+    fun toGlobalTile(): GlobalTile {
+        return GlobalTile(x + Scene.base.x, y + Scene.base.y, plane)
     }
 
-    fun height(scene: Scene = LiveScene): Int {
-        return scene.getHeight(this)
+    fun height(): Int {
+        return Scene.getHeight(this)
     }
 
     operator fun plus(sceneTile: SceneTile) : SceneTile {
@@ -55,7 +55,7 @@ data class SceneTile(
                 Position(x, 0, y, LocalValue.MAX_SUB, 0, plane)
         )
 
-    fun outline(projection: Projection = Projections.viewport): Shape {
+    fun outline(projection: Projection = Viewport): Shape {
         val tempPoint = Point()
 
         val path = Path2D.Float(Path2D.WIND_NON_ZERO, 6)

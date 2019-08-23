@@ -27,16 +27,16 @@ class Implings : DisposablePlugin<Implings.Settings>() {
 
     override fun onStart() {
         add(Game.ticks.filter { isLoggedIn() }.subscribe { onTick() })
-        add(LiveCanvas.repaints.filter { isLoggedIn() }.subscribe(::onRepaint))
+        add(Canvas.repaints.filter { isLoggedIn() }.subscribe(::onRepaint))
         if (settings.drawMinimapInPuroPuro) {
-            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { LiveMinimap.isDrawn = true })
+            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { Minimap.isDrawn = true })
         }
     }
 
     override fun onStop() {
         implings = emptyList()
-        if (settings.drawMinimapInPuroPuro && inPuroPuro() && LiveMinimap.isDrawn) {
-            LiveMinimap.isDrawn = false
+        if (settings.drawMinimapInPuroPuro && inPuroPuro() && Minimap.isDrawn) {
+            Minimap.isDrawn = false
         }
     }
 
@@ -45,7 +45,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     }
 
     private fun shouldDrawMinimap(): Boolean {
-        return !LiveMinimap.isDrawn && inPuroPuro()
+        return !Minimap.isDrawn && inPuroPuro()
     }
 
     private fun onRepaint(g: Graphics2D) {
@@ -72,12 +72,12 @@ class Implings : DisposablePlugin<Implings.Settings>() {
             if (!pos.isLoaded) return@forEach
             val name = npc.type?.name?.substringBefore(' ') ?: "Impling"
 
-            val minimapPt = pos.toScreen(Projections.minimap)
+            val minimapPt = pos.toScreen(Minimap)
             if (minimapPt != null) {
                 g.drawStringShadowed(name, minimapPt.x, minimapPt.y)
             }
 
-            val viewportPt = pos.toScreen(Projections.viewport)
+            val viewportPt = pos.toScreen(Viewport)
             if (viewportPt != null) {
                 val nameWidth = g.fontMetrics.stringWidth(name)
                 g.drawStringShadowed(name, viewportPt.x - nameWidth / 2, viewportPt.y)
@@ -91,7 +91,7 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     }
 
     private fun inPuroPuro(): Boolean {
-        return Game.state == GameState.LOGGED_IN && LiveScene.regionIds.contains(PURO_PURO_REGION_ID)
+        return Game.state == GameState.LOGGED_IN && Scene.regionIds.contains(PURO_PURO_REGION_ID)
     }
 
     private fun isLoggedIn(): Boolean {

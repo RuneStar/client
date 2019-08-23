@@ -11,9 +11,10 @@ import org.runestar.client.game.api.MiniMenuOpcode
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveScene
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.live.MiniMenu
+import org.runestar.client.game.api.live.VisibilityMap
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -30,10 +31,10 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
     private val sceneMarkers = ArrayList<SceneTile>()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe(::onDraw))
+        add(Canvas.repaints.subscribe(::onDraw))
         add(MiniMenu.optionAdditions.subscribe(::onMenuOptionAdded))
         add(MiniMenu.actions.subscribe(::onMenuAction))
-        add(LiveScene.reloads.subscribe { reloadSceneMarkers() })
+        add(Scene.reloads.subscribe { reloadSceneMarkers() })
         reloadSceneMarkers()
     }
 
@@ -54,7 +55,7 @@ class GroundMarkers : DisposablePlugin<GroundMarkers.Settings>() {
         g.stroke = settings.stroke.value
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         for (sceneMarker in sceneMarkers) {
-            if (!Game.visibilityMap.isVisible(sceneMarker)) continue
+            if (!VisibilityMap.isVisible(sceneMarker)) continue
             g.draw(sceneMarker.outline())
         }
     }

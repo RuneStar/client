@@ -8,7 +8,7 @@ import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Prayers
 import org.runestar.client.game.api.live.Stats
 import org.runestar.client.game.api.live.Components
@@ -51,7 +51,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
             hpTicks = (hpTicks + 1) % hpTickLimit
         })
 
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
 
             val rh = Prayers.isEnabled(Prayer.RAPID_HEAL)
             if (rh != rapidHeal) {

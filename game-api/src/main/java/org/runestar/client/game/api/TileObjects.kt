@@ -1,6 +1,7 @@
 package org.runestar.client.game.api
 
 import io.reactivex.Observable
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.utils.cascadingListOf
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.game.raw.access.XTile

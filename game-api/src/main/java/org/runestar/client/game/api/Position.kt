@@ -1,6 +1,6 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Projections
+import org.runestar.client.game.api.live.Viewport
 import java.awt.Point
 
 data class Position(
@@ -31,7 +31,7 @@ data class Position(
     operator fun plus(position: Position) =
             Position(position.localX + localX, position.localY + localY, position.height + height, position.plane + plane)
 
-    fun toScreen(projection: Projection = Projections.viewport): Point? {
+    fun toScreen(projection: Projection = Viewport): Point? {
         return projection.toScreen(this)
     }
 

@@ -1,8 +1,9 @@
 package org.runestar.client.game.api
 
+import org.runestar.client.game.api.live.Scene
 import kotlin.math.sign
 
-data class ProjectileCollision(val scene: Scene) {
+object ProjectileCollision {
 
     fun canReach(source: SceneTile, destination: SceneTile): Boolean {
         if (source == destination) return false
@@ -37,10 +38,10 @@ data class ProjectileCollision(val scene: Scene) {
             val xStep = dx.sign
             while (x != destination.x) {
                 x += xStep
-                if ((scene.getCollisionFlags(x, y, plane) and xFlags) != 0) return false
+                if ((Scene.getCollisionFlags(x, y, plane) and xFlags) != 0) return false
                 yExact += yStep
                 val nextY = yExact ushr 16
-                if (nextY != y && (scene.getCollisionFlags(x, nextY, plane) and yFlags) != 0) return false
+                if (nextY != y && (Scene.getCollisionFlags(x, nextY, plane) and yFlags) != 0) return false
                 y = nextY
             }
         } else {
@@ -52,10 +53,10 @@ data class ProjectileCollision(val scene: Scene) {
             val yStep = dy.sign
             while (y != destination.y) {
                 y += yStep
-                if ((scene.getCollisionFlags(x, y, plane) and yFlags) != 0) return false
+                if ((Scene.getCollisionFlags(x, y, plane) and yFlags) != 0) return false
                 xExact += xStep
                 val nextX = xExact ushr 16
-                if (nextX != x && (scene.getCollisionFlags(nextX, y, plane) and xFlags) != 0) return false
+                if (nextX != x && (Scene.getCollisionFlags(nextX, y, plane) and xFlags) != 0) return false
                 x = nextX
             }
         }

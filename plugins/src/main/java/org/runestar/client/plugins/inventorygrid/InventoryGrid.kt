@@ -2,7 +2,7 @@ package org.runestar.client.plugins.inventorygrid
 
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Components
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
@@ -15,7 +15,7 @@ class InventoryGrid : DisposablePlugin<InventoryGrid.Settings>() {
 
     override fun onStart() {
         val color = settings.color.value
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             val inv = Components.dragInventory ?: return@subscribe
             if (CLIENT.itemDragDuration <= 5) return@subscribe
             if (!inv.isActive) return@subscribe

@@ -4,9 +4,10 @@ import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveViewport
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
+import org.runestar.client.game.api.live.VisibilityMap
 import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -25,7 +26,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
         add(SceneElements.Loc.removals.filter(::isObstacle).subscribe { obstacles.remove(it) })
         SceneElements.Loc.all().filterTo(obstacles, ::isObstacle)
 
-        add(LiveCanvas.repaints.subscribe(::onRepaint))
+        add(Canvas.repaints.subscribe(::onRepaint))
     }
 
     override fun onStop() {
@@ -40,7 +41,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
         if (obstacles.isEmpty()) return
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g.clip(LiveViewport.shape)
+        g.clip(Viewport.shape)
 
         obstacles.forEach { obstacle ->
             drawObstacle(g, obstacle)
@@ -49,7 +50,7 @@ class Agility : DisposablePlugin<Agility.Settings>() {
 
     private fun drawObstacle(g: Graphics2D, obstacle: SceneElement) {
         val loc = obstacle.location
-        if (loc.plane != Game.plane || !Game.visibilityMap.isVisible(loc)) return
+        if (loc.plane != Game.plane || !VisibilityMap.isVisible(loc)) return
         val model = obstacle.model ?: return
         val shape = model.objectClickBox()
 

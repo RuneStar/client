@@ -12,7 +12,7 @@ object Keyboard {
     /**
      * @see[java.awt.event.KeyListener]
      */
-    val events: Observable<KeyEvent> get() = LiveCanvas.canvasReplacements.flatMap { SwingObservable.keyboard(it) }
+    val events: Observable<KeyEvent> get() = Canvas.canvasReplacements.flatMap { SwingObservable.keyboard(it) }
 
     val strokes: Observable<KeyStroke> get() = events.map { it.keyStroke }
 

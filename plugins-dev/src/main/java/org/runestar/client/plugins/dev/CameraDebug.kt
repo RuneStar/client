@@ -2,9 +2,9 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.Fonts
-import org.runestar.client.game.api.live.LiveCamera
-import org.runestar.client.game.api.live.LiveCanvas
-import org.runestar.client.game.api.live.LiveScene
+import org.runestar.client.game.api.live.Camera
+import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -17,7 +17,7 @@ class CameraDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             g.font = Fonts.PLAIN_12
             g.color = Color.WHITE
 
@@ -27,13 +27,13 @@ class CameraDebug : DisposablePlugin<PluginSettings>() {
             g.fill(shapeAt(playerPt))
 
             g.color = Color.YELLOW
-            val camAbsoluteHeight = LiveCamera.position.height - LiveScene.getTileHeight(LiveCamera.position)
+            val camAbsoluteHeight = Camera.position.height - Scene.getTileHeight(Camera.position)
             // position with x/y of player and height of camera
-            val fakeCamPosition = playerPosition.copy(height = camAbsoluteHeight + LiveScene.getTileHeight(playerPosition))
+            val fakeCamPosition = playerPosition.copy(height = camAbsoluteHeight + Scene.getTileHeight(playerPosition))
             val pt = fakeCamPosition.toScreen() ?: return@subscribe
             g.fill(shapeAt(pt))
 
-            g.drawString(LiveCamera.toString(), 5, 40)
+            g.drawString(Camera.toString(), 5, 40)
         })
     }
 

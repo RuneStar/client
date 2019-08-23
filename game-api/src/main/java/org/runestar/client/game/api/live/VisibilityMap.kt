@@ -1,27 +1,28 @@
-package org.runestar.client.game.api
+package org.runestar.client.game.api.live
 
-class VisibilityMap(
-        val map: Array<Array<Array<BooleanArray>>>,
-        val camera: Camera
-) {
+import org.runestar.client.game.api.LocalValue
+import org.runestar.client.game.api.SceneTile
+import org.runestar.client.game.raw.CLIENT
+
+object VisibilityMap {
 
     fun isVisible(sceneTile: SceneTile): Boolean {
-        val vpitch = (camera.pitch.value - 128) / 32
+        val vpitch = (Camera.pitch.value - 128) / 32
         if (vpitch !in 0..7) return false
-        val vx = sceneTile.x - LocalValue(camera.localX).scene + 25
+        val vx = sceneTile.x - LocalValue(Camera.localX).scene + 25
         if (vx !in 0..50) return false
-        val vy = sceneTile.y - LocalValue(camera.localY).scene + 25
+        val vy = sceneTile.y - LocalValue(Camera.localY).scene + 25
         if (vy !in 0..50) return false
-        val vyaw = camera.yaw.value / 64
-        return map[vpitch][vyaw][vx][vy]
+        val vyaw = Camera.yaw.value / 64
+        return CLIENT.visibilityMap[vpitch][vyaw][vx][vy]
     }
 
     fun visibleTiles(): Sequence<SceneTile> {
-        val vpitch = (camera.pitch.value - 128) / 32
+        val vpitch = (Camera.pitch.value - 128) / 32
         if (vpitch !in 0..7) return emptySequence()
-        val vyaw = camera.yaw.value / 64
-        val xymap = map[vpitch][vyaw]
-        val camTile = camera.position.sceneTile
+        val vyaw = Camera.yaw.value / 64
+        val xymap = CLIENT.visibilityMap[vpitch][vyaw]
+        val camTile = Camera.position.sceneTile
         return Sequence {
             object : AbstractIterator<SceneTile>() {
 

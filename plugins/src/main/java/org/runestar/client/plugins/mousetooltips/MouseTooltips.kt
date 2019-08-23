@@ -8,7 +8,7 @@ import org.runestar.client.api.overlay.withBackground
 import org.runestar.client.api.overlay.withBorder
 import org.runestar.client.api.overlay.withPadding
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.api.live.Mouse
 import org.runestar.client.plugins.spi.PluginSettings
@@ -36,13 +36,13 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
                 .withBackground()
                 .withBorder()
         val size = Dimension()
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             if (MiniMenu.optionsCount <= 0 || MiniMenu.isOpen) return@subscribe
             val option = MiniMenu.getOption(MiniMenu.optionsCount - 1)
             val action = option.action
             val target = option.targetName
             if (action in settings.ignoredActions) return@subscribe
-            val canvas = LiveCanvas.shape
+            val canvas = Canvas.shape
             val mousePt = Mouse.location
             if (mousePt !in canvas) return@subscribe
             val rawText = if (target.isEmpty()) {

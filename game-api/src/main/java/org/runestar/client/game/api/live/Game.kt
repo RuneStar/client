@@ -15,7 +15,6 @@ import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.SceneTile
 import org.runestar.client.game.api.Varcs
 import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.VisibilityMap
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XPacketBit
@@ -73,8 +72,6 @@ object Game {
      * 0 - 100
      */
     val specialAttackPercent get() = varps[VarpId.SPECIAL_ATTACK_PERCENT] / 10
-
-    val visibilityMap = VisibilityMap(CLIENT.visibilityMap, LiveCamera)
 
     val destination: SceneTile? get() {
         val x = CLIENT.destinationX

@@ -4,7 +4,7 @@ import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.game.api.Actor
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Npcs
 import org.runestar.client.game.api.live.Players
 import org.runestar.client.game.raw.access.XActor
@@ -17,7 +17,7 @@ class AnimationDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             val p = Players.local?.accessor ?: return@subscribe
 
             g.color = Color.WHITE

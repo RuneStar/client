@@ -2,7 +2,7 @@ package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.Fonts
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.LiveCanvas
+import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
@@ -12,7 +12,7 @@ class ClientPreferencesDebug : DisposablePlugin<PluginSettings>() {
     override val defaultSettings = PluginSettings()
 
     override fun onStart() {
-        add(LiveCanvas.repaints.subscribe { g ->
+        add(Canvas.repaints.subscribe { g ->
             val p = CLIENT.clientPreferences ?: return@subscribe
             val strings = listOf(
                     "titleMusicDisabled: ${p.titleMusicDisabled}",
