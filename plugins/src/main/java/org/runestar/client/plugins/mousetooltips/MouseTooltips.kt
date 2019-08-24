@@ -11,6 +11,7 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.MiniMenu
 import org.runestar.client.game.api.live.Mouse
+import org.runestar.client.game.api.removeTags
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Dimension
@@ -20,10 +21,6 @@ import kotlin.math.min
 class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
 
     override val defaultSettings = Settings()
-
-    companion object {
-        val TAG_REGEX = "<.*?>".toRegex()
-    }
 
     override val name = "Mouse Tooltips"
 
@@ -50,7 +47,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             } else {
                 "$action $target"
             }
-            val newString = rawText.replace(TAG_REGEX, "")
+            val newString = removeTags(rawText)
             if (text.string != newString) {
                 text.string = newString
                 text.modified = true

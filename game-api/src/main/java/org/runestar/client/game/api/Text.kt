@@ -25,3 +25,7 @@ fun escapeAngleBrackets(s: String): String {
 fun unescapeSpaces(s: String): String {
     return s.replace('\u00a0', ' ')
 }
+
+private val TAG_REGEX = "<.*?>".toRegex()
+
+fun removeTags(s: String): String = s.replace(TAG_REGEX, "")
