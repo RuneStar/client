@@ -17,7 +17,7 @@ import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.VarbitId
 import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.Vars
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XClientScriptEvent
@@ -65,9 +65,9 @@ class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {
         val scriptId = scriptEvent.args0[0] as? Int ?: return
         if (scriptId != ScriptId.CLIENTSCRIPT_COMBAT_INTERFACE_SETUP) return
         weaponType = CLIENT.getVarbit(VarbitId.WEAPON_TYPE)
-        val style = Game.varps[VarpId.ATTACK_STYLE]
+        val style = Vars.getVarp(VarpId.ATTACK_STYLE)
         val desc = if (style == 4) {
-            if (Game.getVarbit(VarbitId.DEFENSIVE_CASTING_MODE) == 1) {
+            if (Vars.getVarbit(VarbitId.DEFENSIVE_CASTING_MODE) == 1) {
                 "(Defensive Casting)$BR_TAG(Magic XP)$BR_TAG(Defence XP)"
             } else {
                 "(Casting)$BR_TAG(Magic XP)"

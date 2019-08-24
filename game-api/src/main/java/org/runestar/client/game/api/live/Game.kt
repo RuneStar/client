@@ -10,11 +10,10 @@ import org.runestar.client.game.api.FriendsSystem
 import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.HintArrow
 import org.runestar.client.game.api.LocalValue
-import org.runestar.client.game.api.utils.ObservableExecutor
 import org.runestar.client.game.api.Position
 import org.runestar.client.game.api.SceneTile
-import org.runestar.client.game.api.Varcs
 import org.runestar.client.game.api.VarpId
+import org.runestar.client.game.api.utils.ObservableExecutor
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.game.raw.access.XPacketBit
@@ -56,22 +55,16 @@ object Game {
      */
     val containerEvents = SwingObservable.container(CLIENT as Container)
 
-    fun getVarbit(varbitId: Int): Int = CLIENT.getVarbit(varbitId)
-
-    val varps: IntArray = CLIENT.varps_main
-
-    val varcs: Varcs = Varcs(CLIENT.varcs)
-
     val clanChat: ClanChat? get() = CLIENT.clanChat?.let { ClanChat(it) }
 
     val friendsSystem: FriendsSystem get() = FriendsSystem(CLIENT.friendSystem)
 
-    val specialAttackEnabled get() = varps[VarpId.SPECIAL_ATTACK_ENABLED] != 0
+    val specialAttackEnabled get() = Vars.getVarp(VarpId.SPECIAL_ATTACK_ENABLED) != 0
 
     /**
      * 0 - 100
      */
-    val specialAttackPercent get() = varps[VarpId.SPECIAL_ATTACK_PERCENT] / 10
+    val specialAttackPercent get() = Vars.getVarp(VarpId.SPECIAL_ATTACK_PERCENT) / 10
 
     val destination: SceneTile? get() {
         val x = CLIENT.destinationX

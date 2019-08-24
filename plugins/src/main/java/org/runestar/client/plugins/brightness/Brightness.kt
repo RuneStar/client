@@ -2,7 +2,7 @@ package org.runestar.client.plugins.brightness
 
 import io.reactivex.rxkotlin.subscribeBy
 import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.Vars
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
 import org.runestar.client.plugins.spi.AbstractPlugin
@@ -17,7 +17,7 @@ class Brightness : AbstractPlugin<Brightness.Settings>() {
     }
 
     override fun stop() {
-        setBrightness(1.0 - Game.varps[VarpId.BRIGHTNESS] * 0.1)
+        setBrightness(1.0 - Vars.getVarp(VarpId.BRIGHTNESS) * 0.1)
     }
 
     private fun setBrightness(brightness: Double) {
