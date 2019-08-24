@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Movement
+import org.runestar.client.game.api.live.Movement
 import org.runestar.client.game.api.OctantDirection
 import org.runestar.client.game.api.live.Canvas
 import org.runestar.client.game.api.live.Mouse
@@ -21,12 +21,11 @@ class WalkMovementTest : DisposablePlugin<PluginSettings>() {
             val mousePos = Viewport.toGame(mousePt) ?: return@subscribe
             g.stroke = stroke
             val mouseTile = mousePos.sceneTile
-            val mvmt = Movement.Walking
             for (dir in OctantDirection.VALUES) {
                 val destTile = mouseTile + dir
                 if (!destTile.isLoaded) continue
                 val destOutline = destTile.outline()
-                g.color = if (mvmt.canMove(mouseTile, dir)) {
+                g.color = if (Movement.canMove(mouseTile, dir)) {
                     Color.GREEN
                 } else {
                     Color.RED

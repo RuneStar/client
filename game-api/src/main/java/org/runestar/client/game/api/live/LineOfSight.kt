@@ -1,9 +1,11 @@
-package org.runestar.client.game.api
+package org.runestar.client.game.api.live
 
-import org.runestar.client.game.api.live.Scene
+import org.runestar.client.game.api.CollisionFlag
+import org.runestar.client.game.api.SceneTile
+import kotlin.math.abs
 import kotlin.math.sign
 
-object ProjectileCollision {
+object LineOfSight {
 
     fun canReach(source: SceneTile, destination: SceneTile): Boolean {
         if (source == destination) return false
@@ -11,8 +13,8 @@ object ProjectileCollision {
         val plane = source.plane
         val dx = destination.x - source.x
         val dy = destination.y - source.y
-        val dxAbs = Math.abs(dx)
-        val dyAbs = Math.abs(dy)
+        val dxAbs = abs(dx)
+        val dyAbs = abs(dy)
 
         val xFlags = CollisionFlag.PROJECTILE_OBJECT or if (dx < 0) {
             CollisionFlag.PROJECTILE_EAST
