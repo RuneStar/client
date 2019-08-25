@@ -2,7 +2,7 @@ package org.runestar.client.plugins.hotkeyattackoption
 
 import org.runestar.client.api.forms.KeyStrokeForm
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.AttackOption
+import org.runestar.client.game.api.AttackOptionId
 import org.runestar.client.game.api.live.AttackOptions
 import org.runestar.client.game.api.live.Keyboard
 import org.runestar.client.game.raw.access.XClient
@@ -29,8 +29,8 @@ class HotkeyAttackOption : DisposablePlugin<HotkeyAttackOption.Settings>() {
     }
 
     class Settings(
-            val playerAttackOption1: AttackOption = AttackOption.HIDDEN,
-            val playerAttackOption2: AttackOption = AttackOption.LEFT_CLICK_WHERE_AVAILABLE,
+            val playerAttackOption1: Int = AttackOptionId.HIDDEN,
+            val playerAttackOption2: Int = AttackOptionId.LEFT_CLICK_WHERE_AVAILABLE,
             val keyStroke: KeyStrokeForm = KeyStrokeForm("released CONTROL")
     ) : PluginSettings()
 }
