@@ -5,10 +5,10 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.api.live.VisibilityMap
-import org.runestar.client.game.raw.access.XScene
 import org.runestar.client.plugins.spi.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
@@ -21,10 +21,10 @@ class Agility : DisposablePlugin<Agility.Settings>() {
     private val obstacles: MutableSet<SceneElement> = LinkedHashSet()
 
     override fun onStart() {
-        add(XScene.clear.exit.subscribe { obstacles.clear() })
-        add(SceneElements.Loc.additions.filter(::isObstacle).subscribe { obstacles.add(it) })
-        add(SceneElements.Loc.removals.filter(::isObstacle).subscribe { obstacles.remove(it) })
-        SceneElements.Loc.all().filterTo(obstacles, ::isObstacle)
+        add(SceneElements.cleared.subscribe { obstacles.clear() })
+        add(SceneElements.Loc.added.filter(::isObstacle).subscribe { obstacles.add(it) })
+        add(SceneElements.Loc.removed.filter(::isObstacle).subscribe { obstacles.remove(it) })
+        Scene.reload()
 
         add(Canvas.repaints.subscribe(::onRepaint))
     }

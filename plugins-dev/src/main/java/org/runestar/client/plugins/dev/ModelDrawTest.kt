@@ -4,8 +4,8 @@ import org.runestar.client.api.util.DisposablePlugin
 import org.runestar.client.game.api.Model
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.SceneElementKind
-import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.api.live.VisibilityMap
@@ -20,10 +20,10 @@ class ModelDrawTest : DisposablePlugin<PluginSettings>() {
     private val objs: MutableSet<SceneElement> = LinkedHashSet()
 
     override fun onStart() {
-        add(SceneElements.clears.subscribe { objs.clear() })
-        add(SceneElements.removals.subscribe { objs.remove(it) })
-        add(SceneElements.additions.subscribe { objs.add(it) })
-        objs.addAll(SceneElements.all())
+        add(SceneElements.cleared.subscribe { objs.clear() })
+        add(SceneElements.removed.subscribe { objs.remove(it) })
+        add(SceneElements.added.subscribe { objs.add(it) })
+        Scene.reload()
 
         add(Canvas.repaints.subscribe { g ->
             objs.forEach {

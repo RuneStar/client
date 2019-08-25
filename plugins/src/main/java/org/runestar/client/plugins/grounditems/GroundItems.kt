@@ -10,6 +10,7 @@ import org.runestar.client.game.api.GroundItem
 import org.runestar.client.game.api.SceneElement
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Canvas
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.api.live.Viewport
 import org.runestar.client.game.api.live.SceneElements
 import org.runestar.client.game.raw.CLIENT
@@ -31,10 +32,10 @@ class GroundItems : DisposablePlugin<GroundItems.Settings>() {
     override fun onStart() {
         settings.blockedNames.mapTo(blockRegexes) { it.value }
 
-        SceneElements.ObjStack.additions.subscribe { piles.add(it) }
-        SceneElements.ObjStack.removals.subscribe { piles.remove(it) }
-        SceneElements.clears.subscribe { piles.clear() }
-        piles.addAll(SceneElements.ObjStack.all())
+        add(SceneElements.ObjStack.added.subscribe { piles.add(it) })
+        add(SceneElements.ObjStack.removed.subscribe { piles.remove(it) })
+        add(SceneElements.cleared.subscribe { piles.clear() })
+        Scene.reload()
 
         val defaultColor = settings.color.value
         val font = settings.font.value
