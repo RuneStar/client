@@ -1,6 +1,7 @@
 package org.runestar.client.game.api.live
 
 import io.reactivex.Observable
+import org.runestar.client.game.api.GameState
 import org.runestar.client.game.api.GlobalTile
 import org.runestar.client.game.api.LocalValue
 import org.runestar.client.game.api.Position
@@ -47,6 +48,10 @@ object Scene {
     val regions: List<Region> get() = regionIds.map { Region(it) }
 
     val reloads: Observable<Unit> = XScene.init.exit.map { Unit }
+
+    fun reload() {
+        if (Game.state == GameState.LOGGED_IN) CLIENT.updateGameState(GameState.LOADING)
+    }
 
     fun getHeight(sceneTile: SceneTile): Int {
         require(sceneTile.isLoaded) { sceneTile }

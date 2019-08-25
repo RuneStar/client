@@ -1,8 +1,7 @@
 package org.runestar.client.plugins.flatshading
 
 import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.live.Game
+import org.runestar.client.game.api.live.Scene
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XUnlitModel
 import org.runestar.client.plugins.spi.PluginSettings
@@ -32,6 +31,6 @@ class FlatShading : DisposablePlugin<PluginSettings>() {
         CLIENT.component_cachedModels.clear()
         CLIENT.playerAppearance_cachedModels.clear()
         CLIENT.locType_cachedModels.clear()
-        if (Game.state == GameState.LOGGED_IN) CLIENT.updateGameState(GameState.LOADING)
+        Scene.reload()
     }
 }
