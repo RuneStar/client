@@ -30,6 +30,7 @@ object Game {
             .filter { it.returned == 33 } // update npcs
             .map { Unit }
             .delay { XClient.doCycle.enter }
+            .share()
 
     val cycle get() = CLIENT.cycle
 
