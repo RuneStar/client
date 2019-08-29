@@ -3829,7 +3829,7 @@ class Client : IdentityMapper.Class() {
     @DependsOn(viewportDrawCount::class)
     class tileLastDrawnActor : StaticUniqueMapper.Field() {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldId == field<viewportDrawCount>().id }
-                .next { it.opcode == GETSTATIC && it.fieldType == Array<IntArray>::class.type }
+                .nextWithin(4) { it.opcode == GETSTATIC && it.fieldType == Array<IntArray>::class.type }
     }
 
     @MethodParameters("rgb", "brightness")
