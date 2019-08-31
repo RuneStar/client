@@ -16,5 +16,6 @@ data class HiscoreRequest private constructor(
         private fun canonicalPlayerName(playerName: String) = playerName.toLowerCase()
                 .replace(' ', '_')
                 .replace('-', '_')
+                .replace(160.toChar(), '_')
     }
 }

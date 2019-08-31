@@ -9,10 +9,7 @@ import java.util.concurrent.CompletableFuture
 internal class HiscoreClient(private val httpClient: HttpClient) {
 
     operator fun get(request: HiscoreRequest): CompletableFuture<HiscoreResult?> {
-        return httpClient.sendAsync(request.toHttpRequest(), bodyHandler).thenApply { it.body()?.let { HiscoreResult.of(it) } }
-    }
-
-    private companion object {
-        val bodyHandler = bodyHandler(HttpResponse.BodySubscribers.ofLines(StandardCharsets.US_ASCII))
+        return httpClient.sendAsync(request.toHttpRequest(), bodyHandler(HttpResponse.BodySubscribers.ofLines(StandardCharsets.US_ASCII)))
+                .thenApply { it.body()?.let { HiscoreResult.of(it) } }
     }
 }
