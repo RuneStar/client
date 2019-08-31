@@ -48,10 +48,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
                 "$action $target"
             }
             val newString = removeTags(rawText)
-            if (text.string != newString) {
-                text.string = newString
-                text.modified = true
-            }
+            text.string = newString
             overlay.getSize(g, size)
 
             val x = min(canvas.width - 1, mousePt.x + size.width + settings.offset.x) - size.width

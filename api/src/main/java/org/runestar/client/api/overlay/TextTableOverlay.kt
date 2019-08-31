@@ -12,7 +12,7 @@ class TextTableOverlay(
         val font: Font,
         val lineSpacing: Int,
         val dividingWidth: Int
-) : ModifiableOverlay() {
+) : Overlay {
 
     init {
         require(lineSpacing >= 0 && dividingWidth >= 0)
@@ -31,7 +31,7 @@ class TextTableOverlay(
         }
     }
 
-    override fun getSize0(g: Graphics2D, result: Dimension) {
+    override fun getSize(g: Graphics2D, result: Dimension) {
         if (map.isEmpty()) return result.setSize(0, 0)
         val fm = g.getFontMetrics(font)
         result.height = fm.height * map.size + (map.size - 1) * lineSpacing

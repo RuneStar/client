@@ -9,7 +9,7 @@ class TextOverlay(
         var string: String,
         var font: Font,
         var color: Color
-) : ModifiableOverlay() {
+) : Overlay {
 
     override fun draw(g: Graphics2D, size: Dimension) {
         g.color = color
@@ -17,7 +17,7 @@ class TextOverlay(
         g.drawString(string, 0, g.fontMetrics.ascent)
     }
 
-    override fun getSize0(g: Graphics2D, result: Dimension) {
+    override fun getSize(g: Graphics2D, result: Dimension) {
         val fm = g.getFontMetrics(font)
         result.setSize(fm.stringWidth(string), fm.height)
     }

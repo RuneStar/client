@@ -6,6 +6,7 @@ import org.runestar.client.api.forms.InsetsForm
 import org.runestar.client.api.overlay.Anchor
 import org.runestar.client.api.overlay.ColoredString
 import org.runestar.client.api.overlay.TextTableOverlay
+import org.runestar.client.api.overlay.cachingSize
 import org.runestar.client.api.overlay.withBackground
 import org.runestar.client.api.overlay.withBorder
 import org.runestar.client.api.overlay.withPadding
@@ -29,6 +30,7 @@ class Boosts : DisposablePlugin<Boosts.Settings>() {
                 .withPadding(settings.padding)
                 .withBackground()
                 .withBorder()
+                .cachingSize()
         add(settings.anchor.add(overlay))
         val stats = Stats.ids.filter { !ignoreStat(it) }.toIntArray()
         val boosts = IntArray(stats.size)
@@ -38,7 +40,7 @@ class Boosts : DisposablePlugin<Boosts.Settings>() {
                 if (boosts[i] == boost) return@forEachIndexed
                 boosts[i] = boost
                 val statName = Stats.name(stat)
-                table.modified = true
+                overlay.modified = true
                 if (boost == 0) {
                     map.remove(statName)
                 } else {

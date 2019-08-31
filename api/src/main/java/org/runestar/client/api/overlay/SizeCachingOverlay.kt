@@ -3,7 +3,9 @@ package org.runestar.client.api.overlay
 import java.awt.Dimension
 import java.awt.Graphics2D
 
-abstract class ModifiableOverlay : Overlay {
+class SizeCachingOverlay(
+        val overlay: Overlay
+) : Overlay {
 
     var modified = true
 
@@ -11,13 +13,15 @@ abstract class ModifiableOverlay : Overlay {
 
     private var height = -1
 
-    final override fun getSize(g: Graphics2D, result: Dimension) {
+    override fun draw(g: Graphics2D, size: Dimension) = overlay.draw(g, size)
+
+    override fun getSize(g: Graphics2D, result: Dimension) {
         if (!modified) return result.setSize(width, height)
         modified = false
-        getSize0(g, result)
+        overlay.getSize(g, result)
         width = result.width
         height = result.height
     }
-
-    abstract fun getSize0(g: Graphics2D, result: Dimension)
 }
+
+fun Overlay.cachingSize() = SizeCachingOverlay(this)
