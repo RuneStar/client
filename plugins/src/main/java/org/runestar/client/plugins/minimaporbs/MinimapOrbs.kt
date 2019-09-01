@@ -3,9 +3,9 @@ package org.runestar.client.plugins.minimaporbs
 import org.runestar.client.api.forms.BasicStrokeForm
 import org.runestar.client.api.forms.RgbaForm
 import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.cacheids.PrayerId
 import org.runestar.client.cacheids.StatId
 import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.Prayer
 import org.runestar.client.game.api.ComponentId
 import org.runestar.client.game.api.live.Game
 import org.runestar.client.game.api.live.Canvas
@@ -53,7 +53,7 @@ class MinimapOrbs : DisposablePlugin<MinimapOrbs.Settings>() {
 
         add(Canvas.repaints.subscribe { g ->
 
-            val rh = Prayers.isEnabled(Prayer.RAPID_HEAL)
+            val rh = Prayers.enabled[PrayerId.RAPID_HEAL]
             if (rh != rapidHeal) {
                 hpTicks = -1 // todo: sometimes 1 tick off
                 hpTickLimit = if (rh) {

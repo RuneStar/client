@@ -59,6 +59,7 @@ class GenerateMojo : AbstractMojo() {
         writeJavaFile(outputDir, "SeqId", extractor.seqs, false)
         writeJavaFile(outputDir, "StructId", extractor.structs, false)
         writeJavaFile(outputDir, "StatId", extractor.stats, true)
+        writeJavaFile(outputDir, "PrayerId", extractor.prayers, true)
     }
 
     private fun writeFromTsv(tsv: Path, outputDir: Path) {

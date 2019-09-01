@@ -10,7 +10,7 @@ inline class NpcDefinition(val accessor: XNPCType) {
 
     val name: String? get() = accessor.name.takeUnless { it == "null" }
 
-    val headIconPrayer get() = HeadIconPrayer.of(accessor.headIconPrayer)
+    val headIconPrayer: Int get() = accessor.headIconPrayer
 
     var drawMapDot: Boolean
         get() = accessor.drawMapDot
