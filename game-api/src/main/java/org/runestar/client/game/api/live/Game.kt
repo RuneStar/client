@@ -27,7 +27,7 @@ object Game {
     val stateChanges: Observable<Int> = XClient.updateGameState.exit.map { it.arguments[0] as Int }
 
     val ticks: Observable<Unit> = XPacketBit.gIsaacSmart1or2.exit
-            .filter { it.returned == 33 } // update npcs
+            .filter { it.returned == 27 } // update npcs
             .map { Unit }
             .delay { XClient.doCycle.enter }
             .share()
