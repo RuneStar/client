@@ -16,7 +16,6 @@ import org.runestar.client.game.api.VarpId
 import org.runestar.client.game.api.utils.ObservableExecutor
 import org.runestar.client.game.raw.CLIENT
 import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XPacketBit
 import java.awt.Component
 import java.awt.Container
 
@@ -26,8 +25,7 @@ object Game {
 
     val stateChanges: Observable<Int> = XClient.updateGameState.exit.map { it.arguments[0] as Int }
 
-    val ticks: Observable<Unit> = XPacketBit.gIsaacSmart1or2.exit
-            .filter { it.returned == 27 } // update npcs
+    val ticks: Observable<Unit> = XClient.updateNpcs.exit
             .map { Unit }
             .delay { XClient.doCycle.enter }
             .share()

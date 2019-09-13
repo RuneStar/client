@@ -4109,4 +4109,12 @@ class Client : IdentityMapper.Class() {
     class LocType_cachedUnlitModels : UniqueMapper.InMethod.Field(LocType.getUnlitModel::class) {
         override val predicate = predicateOf<Instruction2> { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
+
+    @MethodParameters("b", "packetBit")
+    @DependsOn(PacketBit::class, npcIndices::class)
+    class updateNpcs : IdentityMapper.StaticMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments == listOf(BOOLEAN_TYPE, type<PacketBit>()) }
+                .and { it.instructions.first().opcode == ICONST_0 }
+    }
 }
