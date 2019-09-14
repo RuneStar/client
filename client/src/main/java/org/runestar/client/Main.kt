@@ -9,6 +9,7 @@ import org.runestar.client.api.Application
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.MANIFEST_NAME
 import org.runestar.client.common.lookupClassLoader
+import java.util.Locale
 import java.util.jar.JarInputStream
 import java.util.jar.Manifest
 import javax.swing.JOptionPane
@@ -18,6 +19,7 @@ import javax.swing.SwingUtilities
 
 fun main() {
     setupExceptionHandler()
+    Locale.setDefault(Locale.ENGLISH)
     SwingUtilities.invokeLater((StarTheme)::install)
 
     checkUpToDate()
