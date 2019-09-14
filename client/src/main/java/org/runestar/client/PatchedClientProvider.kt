@@ -5,7 +5,6 @@ import org.kxtra.slf4j.warn
 import org.runestar.client.api.ROOT_DIR_PATH
 import org.runestar.client.common.DIFF_NAME
 import org.runestar.client.common.JAV_CONFIG
-import org.runestar.client.common.JavConfig
 import org.runestar.client.common.REVISION
 import org.runestar.client.common.xorAssign
 import org.runestar.client.game.raw.ClientProvider
@@ -20,10 +19,10 @@ import java.nio.file.StandardCopyOption
 class PatchedClientProvider : ClientProvider {
 
     override fun get(): XClient {
-        return patchGamePack(JAV_CONFIG).loadClass(JAV_CONFIG.initialClass).getDeclaredConstructor().newInstance() as XClient
+        return patchGamePack().loadClass(JAV_CONFIG.initialClass).getDeclaredConstructor().newInstance() as XClient
     }
 
-    private fun patchGamePack(javConfig: JavConfig): ClassLoader {
+    private fun patchGamePack(): ClassLoader {
         val tempDir = ROOT_DIR_PATH.resolve(".temp")
         tempDir.toFile().deleteRecursively()
         Files.createDirectories(tempDir)
@@ -32,7 +31,7 @@ class PatchedClientProvider : ClientProvider {
         Files.createDirectories(gamepacksDir)
         val gamepackPath = gamepacksDir.resolve(REVISION.toString())
         if (!Files.exists(gamepackPath)) {
-            downloadFile(javConfig.gamepackUrl, gamepackPath)
+            downloadFile(JAV_CONFIG.gamepackUrl, gamepackPath)
         }
         patch(gamepackPath, patchedGamepackPath)
         val cl = URLClassLoader(arrayOf(patchedGamepackPath.toUri().toURL()))

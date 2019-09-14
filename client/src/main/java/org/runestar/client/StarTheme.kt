@@ -23,7 +23,7 @@ import javax.swing.plaf.metal.MetalButtonUI
 import javax.swing.plaf.metal.MetalLookAndFeel
 import javax.swing.plaf.metal.OceanTheme
 
-class StarTheme : OceanTheme() {
+class StarTheme private constructor() : OceanTheme() {
 
     companion object {
         private val FONT = FontUIResource(Fonts.PLAIN_12)

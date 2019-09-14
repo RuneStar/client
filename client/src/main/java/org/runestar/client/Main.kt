@@ -3,7 +3,6 @@
 package org.runestar.client
 
 import com.google.common.base.Throwables
-import org.kxtra.slf4j.error
 import org.kxtra.slf4j.getLogger
 import org.runestar.client.api.Application
 import org.runestar.client.common.JAV_CONFIG
@@ -16,9 +15,10 @@ import javax.swing.JOptionPane
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 import javax.swing.SwingUtilities
+import kotlin.system.exitProcess
 
 fun main() {
-    setupExceptionHandler()
+    Thread.setDefaultUncaughtExceptionHandler(::handleUncaughtException)
     Locale.setDefault(Locale.ENGLISH)
     SwingUtilities.invokeLater((StarTheme)::install)
 
@@ -27,19 +27,17 @@ fun main() {
     Application.start()
 }
 
+private fun handleUncaughtException(t: Thread, e: Throwable) {
+    getLogger().error("Uncaught exception", e)
+    showErrorDialog(Throwables.getStackTraceAsString(e))
+}
+
 private fun checkUpToDate() {
     val serverManifest = JarInputStream(JAV_CONFIG.gamepackUrl.openStream()).use { it.manifest }
     val bundledManifest = lookupClassLoader.getResourceAsStream(MANIFEST_NAME).use { Manifest(it) }
     if (serverManifest != bundledManifest) {
         showErrorDialog("Client is out of date")
-        System.exit(1)
-    }
-}
-
-private fun setupExceptionHandler() {
-    Thread.setDefaultUncaughtExceptionHandler { _, exception ->
-        getLogger().error(exception) { "Uncaught exception" }
-        showErrorDialog(Throwables.getStackTraceAsString(exception))
+        exitProcess(1)
     }
 }
 
