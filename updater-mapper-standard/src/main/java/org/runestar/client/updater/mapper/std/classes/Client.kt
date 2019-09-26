@@ -2979,11 +2979,11 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(6) { it.opcode == GETSTATIC && it.fieldType == type<EvictingDualNodeHashTable>() }
     }
 
-    @MethodParameters("id")
-    @DependsOn(HitmarkType::class)
-    class getHitmarkType : StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == type<HitmarkType>() }
-    }
+//    @MethodParameters("id")
+//    @DependsOn(HitmarkType::class)
+//    class getHitmarkType : StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == type<HitmarkType>() }
+//    }
 
     @DependsOn(HitmarkType.getFont::class, EvictingDualNodeHashTable::class)
     class HitmarkType_cachedFonts : UniqueMapper.InMethod.Field(HitmarkType.getFont::class) {
