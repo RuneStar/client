@@ -1,6 +1,5 @@
 package org.runestar.client.game.api
 
-import org.runestar.client.game.api.live.Mouse.location
 import org.runestar.client.game.raw.access.XObj
 
 class GroundItem(
@@ -17,7 +16,7 @@ class GroundItem(
     val item get() = Item(id, quantity)
 
     override fun toString(): String {
-        return "GroundItem(item=$item, location=$location)"
+        return "GroundItem(item=$item)"
     }
 
     companion object {
