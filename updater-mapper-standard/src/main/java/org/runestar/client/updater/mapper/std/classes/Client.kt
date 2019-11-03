@@ -575,8 +575,8 @@ class Client : IdentityMapper.Class() {
 //    //    @DependsOn(OverlayDefinition::class, EvictingDualNodeHashTable::class)
 //    class OverlayDefinition_cached : CachedDefinitionMapper(OverlayDefinition::class)
 
-    @DependsOn(FloorUnderlayType::class, EvictingDualNodeHashTable::class)
-    class FloorUnderlayType_cached : CachedDefinitionMapper(FloorUnderlayType::class)
+//    @DependsOn(FloorUnderlayType::class, EvictingDualNodeHashTable::class)
+//    class FloorUnderlayType_cached : CachedDefinitionMapper(FloorUnderlayType::class)
 
     @DependsOn(SpotType::class, EvictingDualNodeHashTable::class)
     class SpotType_cached : CachedDefinitionMapper(SpotType::class)
@@ -1783,11 +1783,11 @@ class Client : IdentityMapper.Class() {
                 .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractArchive>() }
     }
 
-    @DependsOn(FloorUnderlayType::class, AbstractArchive::class)
-    class FloorUnderlayType_archive : StaticUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<FloorUnderlayType>() }
-                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractArchive>() }
-    }
+//    @DependsOn(FloorUnderlayType::class, AbstractArchive::class)
+//    class FloorUnderlayType_archive : StaticUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == INVOKESPECIAL && it.methodOwner == type<FloorUnderlayType>() }
+//                .prevWithin(15) { it.opcode == GETSTATIC && it.fieldType == type<AbstractArchive>() }
+//    }
 
     @DependsOn(LocType.decode0::class)
     class LocType_isLowDetail : UniqueMapper.InMethod.Field(LocType.decode0::class) {
