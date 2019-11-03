@@ -28,24 +28,14 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     override fun onStart() {
         add(Game.ticks.filter { isLoggedIn() }.subscribe { onTick() })
         add(Canvas.repaints.filter { isLoggedIn() }.subscribe(::onRepaint))
-        if (settings.drawMinimapInPuroPuro) {
-            add(Game.ticks.filter { shouldDrawMinimap() }.subscribe { Minimap.isDrawn = true })
-        }
     }
 
     override fun onStop() {
         implings = emptyList()
-        if (settings.drawMinimapInPuroPuro && inPuroPuro() && Minimap.isDrawn) {
-            Minimap.isDrawn = false
-        }
     }
 
     private fun onTick() {
         implings = Npcs.filter(::isImpling)
-    }
-
-    private fun shouldDrawMinimap(): Boolean {
-        return !Minimap.isDrawn && inPuroPuro()
     }
 
     private fun onRepaint(g: Graphics2D) {
@@ -99,7 +89,6 @@ class Implings : DisposablePlugin<Implings.Settings>() {
     }
 
     class Settings(
-            val drawMinimapInPuroPuro: Boolean = true,
             val baby: Boolean = false,
             val young: Boolean = false,
             val gourmet: Boolean = false,
