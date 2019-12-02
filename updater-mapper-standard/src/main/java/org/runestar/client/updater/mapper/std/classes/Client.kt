@@ -3742,12 +3742,12 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == LDC && it.ldcCst == "js5crc" } }
     }
 
-    @DependsOn(doCycleJs5Connect::class)
-    class js5ConnectState : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
-        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
-                .nextWithin(2) { it.opcode == IF_ICMPNE }
-                .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
-    }
+//    @DependsOn(doCycleJs5Connect::class)
+//    class js5ConnectState : OrderMapper.InMethod.Field(doCycleJs5Connect::class, 0) {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == ICONST_0 }
+//                .nextWithin(2) { it.opcode == IF_ICMPNE }
+//                .prevWithin(2) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
+//    }
 
     @DependsOn(doCycleJs5Connect::class, TaskHandler.newSocketTask::class)
     class js5SocketTask : UniqueMapper.InMethod.Field(doCycleJs5Connect::class) {
