@@ -306,32 +306,32 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == PUTSTATIC && it.fieldId == field<isMiniMenuOpen>().id } }
     }
 
-    @MethodParameters("x", "y")
-    @DependsOn(menuOptionsCount::class)
-    class openMenu0 : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
-                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
-                .and { it.arguments.size in 2..3 }
-                .and { it.instructions.count { it.opcode == GETSTATIC && it.fieldId == field<menuOptionsCount>().id } == 3 }
-    }
+//    @MethodParameters("x", "y")
+//    @DependsOn(menuOptionsCount::class)
+//    class openMenu0 : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+//                .and { it.arguments.startsWith(INT_TYPE, INT_TYPE) }
+//                .and { it.arguments.size in 2..3 }
+//                .and { it.instructions.count { it.opcode == GETSTATIC && it.fieldId == field<menuOptionsCount>().id } == 3 }
+//    }
 
-    @DependsOn(openMenu0::class)
-    class menuX : OrderMapper.InMethod.Field(openMenu0::class, 0) {
+    @DependsOn(openMiniMenu::class)
+    class menuX : OrderMapper.InMethod.Field(openMiniMenu::class, 0) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(openMenu0::class)
-    class menuY : OrderMapper.InMethod.Field(openMenu0::class, 1) {
+    @DependsOn(openMiniMenu::class)
+    class menuY : OrderMapper.InMethod.Field(openMiniMenu::class, 1) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(openMenu0::class)
-    class menuWidth : OrderMapper.InMethod.Field(openMenu0::class, 2) {
+    @DependsOn(openMiniMenu::class)
+    class menuWidth : OrderMapper.InMethod.Field(openMiniMenu::class, 2) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
-    @DependsOn(openMenu0::class)
-    class menuHeight : OrderMapper.InMethod.Field(openMenu0::class, 3) {
+    @DependsOn(openMiniMenu::class)
+    class menuHeight : OrderMapper.InMethod.Field(openMiniMenu::class, 3) {
         override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldType == INT_TYPE }
     }
 
