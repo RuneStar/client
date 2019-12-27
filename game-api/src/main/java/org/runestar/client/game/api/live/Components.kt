@@ -1,8 +1,10 @@
 package org.runestar.client.game.api.live
 
+import org.runestar.client.cacheids.ScriptId
 import org.runestar.client.game.api.Component
 import org.runestar.client.game.api.Interface
 import org.runestar.client.game.api.ComponentId
+import org.runestar.client.game.api.EnumType
 import org.runestar.client.game.raw.CLIENT
 
 object Components {
@@ -18,4 +20,13 @@ object Components {
     val dragInventory: Component? get() = CLIENT.dragInventoryComponent?.let { Component(it) }
 
     fun align(c: Component) = CLIENT.alignComponent(c.accessor)
+
+    val topLevelComponents: EnumType get() {
+        val e = CLIENT._ClientScriptEvent_()
+        e.setArgs(arrayOf(ScriptId.PROC_TOPLEVEL_GETCOMPONENTS))
+        CLIENT.runClientScript(e)
+        return EnumType(CLIENT.getEnumType(CLIENT.interpreter_intStack[0]))
+    }
+
+    fun topLevel(topLevelComponentId: ComponentId): Component? = get(ComponentId(topLevelComponents.getInt(topLevelComponentId.packed)))
 }

@@ -54,7 +54,7 @@ internal object Overlays {
     private val d = Dimension()
 
     private fun draw(g: Graphics2D) {
-        val area = Components[CLIENT.rootInterface, ComponentId.TOP_LEVEL_CONTENT_AREA]?.shape ?: return
+        val area = Components.topLevel(ComponentId.TOPLEVEL_MAIN_MODAL)?.shape ?: return
 
         topLeft.getSize(g, d)
         g.translate(area.x + PADDING, area.y + PADDING + TOP_LEFT_OFFSET)

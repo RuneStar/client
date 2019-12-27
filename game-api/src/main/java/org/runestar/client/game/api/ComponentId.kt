@@ -2,7 +2,7 @@ package org.runestar.client.game.api
 
 inline class ComponentId(val packed: Int) {
 
-    constructor(group: Int, index: Int) : this((group shl 16) or index)
+    constructor(itf: Int, component: Int) : this((itf shl 16) or component)
 
     val itf: Int get() = getItf(packed)
 
@@ -16,11 +16,11 @@ inline class ComponentId(val packed: Int) {
 
         fun getComponent(packed: Int) = packed and 0xFFFF
 
-        const val TOP_LEVEL_CONTENT_AREA = 12
-
         val CASTLE_WARS_SARADOMIN_TIME_LEFT = ComponentId(InterfaceId.CASTLE_WARS_SARADOMIN, 25)
 
         val CASTLE_WARS_ZAMORAK_TIME_LEFT = ComponentId(InterfaceId.CASTLE_WARS_ZAMORAK, 25)
+
+        val TOPLEVEL_MAIN_MODAL = ComponentId(InterfaceId.TOPLEVEL_RESIZABLE_OLD_SCHOOL_BOX, 14)
 
         val CHAT_BOX = ComponentId(InterfaceId.CHAT, 0)
         val CHAT_REPORT_TEXT = ComponentId(InterfaceId.CHAT, 36)
