@@ -1422,11 +1422,11 @@ class Client : IdentityMapper.Class() {
 //                .and { it.arguments.startsWith(ByteArray::class.type) }
 //    }
 
-    @MethodParameters("o", "copyArray")
-    class byteArrayFromObject : IdentityMapper.StaticMethod() {
-        override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
-                .and { it.arguments.startsWith(Any::class.type) }
-    }
+//    @MethodParameters("o", "copyArray")
+//    class byteArrayFromObject : IdentityMapper.StaticMethod() {
+//        override val predicate = predicateOf<Method2> { it.returnType == ByteArray::class.type }
+//                .and { it.arguments.startsWith(Any::class.type) }
+//    }
 
 //    @DependsOn(byteArrayToObject::class)
 //    class directBufferUnavailable : UniqueMapper.InMethod.Field(byteArrayToObject::class) {
@@ -1829,12 +1829,12 @@ class Client : IdentityMapper.Class() {
 //                .prevWithin(10) { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
 //    }
 
-    @DependsOn(Login_username::class)
-    class Login_isUsernameRemembered : AllUniqueMapper.Field() {
-        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Login_username>().id }
-                .next { it.opcode == ICONST_1 }
-                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
-    }
+//    @DependsOn(Login_username::class)
+//    class Login_isUsernameRemembered : AllUniqueMapper.Field() {
+//        override val predicate = predicateOf<Instruction2> { it.opcode == PUTSTATIC && it.fieldId == field<Login_username>().id }
+//                .next { it.opcode == ICONST_1 }
+//                .next { it.opcode == PUTSTATIC && it.fieldType == BOOLEAN_TYPE }
+//    }
 
     @DependsOn(garbageCollector::class)
     class garbageCollectorLastCheckTimeMs : AllUniqueMapper.Field() {
