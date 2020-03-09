@@ -58,9 +58,8 @@ class Emojis : DisposablePlugin<PluginSettings>() {
     }
 
     private fun addNames() {
-        javaClass.getResource(NAMES_CSV_NAME).openStream().bufferedReader().useLines {
-            it.associateTo(shortCodes) { it.split(',').let { it[0] to it[1].toInt() } }
-        }
+        val csv = javaClass.getResource(NAMES_CSV_NAME).openStream().use { it.reader().readText() }
+        csv.split(',').withIndex().associateTo(shortCodes) { it.value to it.index }
     }
 
     private fun addSprites() {
