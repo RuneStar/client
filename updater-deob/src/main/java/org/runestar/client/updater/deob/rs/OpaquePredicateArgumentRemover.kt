@@ -3,37 +3,34 @@ package org.runestar.client.updater.deob.rs
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.MultimapBuilder
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
 import org.objectweb.asm.tree.VarInsnNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.isConstantIntProducer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
+import org.runestar.client.updater.deob.util.isIntValue
 import java.lang.reflect.Modifier
 import java.nio.file.Path
-import java.util.*
+import java.util.HashSet
+import java.util.TreeMap
 
-object OpaquePredicateArgumentRemover : Transformer {
+object OpaquePredicateArgumentRemover : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-
-        val classNames = classNodes.associateBy { it.name }
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val classNames = klasses.associateBy { it.name }
 
         val methodDescriptorsChanged = TreeMap<String, String>()
         var changedInstructionCount = 0
 
         val topMethods = HashSet<String>()
-        for (c in classNodes) {
+        for (c in klasses) {
             val supers = supers(c, classNames)
             for (m in c.methods) {
                 if (supers.none { it.methods.any { it.name == m.name && it.desc == m.desc } }) {
@@ -44,7 +41,7 @@ object OpaquePredicateArgumentRemover : Transformer {
 
         val implementationsMulti = MultimapBuilder.hashKeys().arrayListValues().build<String, ClassMethod>()
         val implementations = implementationsMulti.asMap()
-        for (c in classNodes) {
+        for (c in klasses) {
             for (m in c.methods) {
                 val s = overrides(c.name, m.name + m.desc, topMethods, classNames) ?: continue
                 implementationsMulti.put(s, ClassMethod(c, m))
@@ -58,13 +55,13 @@ object OpaquePredicateArgumentRemover : Transformer {
             }
         }
 
-        for (c in classNodes) {
+        for (c in klasses) {
             for (m in c.methods) {
                 val insnList = m.instructions
                 for (insn in insnList) {
                     if (insn !is MethodInsnNode) continue
                     val s = overrides(insn.owner, insn.name + insn.desc, implementations.keys, classNames) ?: continue
-                    if (!insn.previous.isConstantIntProducer) {
+                    if (!insn.previous.isIntValue) {
                         implementations.remove(s)
                     }
                 }
@@ -78,7 +75,7 @@ object OpaquePredicateArgumentRemover : Transformer {
             methodDescriptorsChanged["${c.name}.${m.name}$newDesc"] = oldDesc
         }
 
-        for (c in classNodes) {
+        for (c in klasses) {
             for (m in c.methods) {
                 val insnList = m.instructions
                 for (insn in insnList) {
@@ -86,7 +83,7 @@ object OpaquePredicateArgumentRemover : Transformer {
                     if (overrides(insn.owner, insn.name + insn.desc, implementations.keys, classNames) != null) {
                         insn.desc = dropLastArg(insn.desc)
                         val prev = insn.previous
-                        check(prev.isConstantIntProducer)
+                        check(prev.isIntValue)
                         insnList.remove(prev)
                         changedInstructionCount++
                     }
@@ -96,10 +93,7 @@ object OpaquePredicateArgumentRemover : Transformer {
 
         logger.info { "Opaque predicate descriptors changed: methods ${methodDescriptorsChanged.size}, instructions: $changedInstructionCount" }
 
-        val opFile = destination.resolveSibling(destination.fileName.toString() + ".op-descs.json").toFile()
-        mapper.writeValue(opFile, methodDescriptorsChanged)
-
-        writeJar(classNodes, destination)
+        mapper.writeValue(dir.resolve("op-descs.json").toFile(), methodDescriptorsChanged)
     }
 
     private fun overrides(owner: String, nameDesc: String, methods: Set<String>, classNames: Map<String, ClassNode>): String? {

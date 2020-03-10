@@ -61,6 +61,10 @@
             <artifactId>client-updater-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-zip</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

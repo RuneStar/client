@@ -4,16 +4,16 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
+import org.runestar.client.updater.deob.util.ClassNode
+import org.runestar.client.updater.deob.util.toByteArray
 import java.nio.file.Path
 
 object ComputeFrames : Transformer {
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
+    override fun transform(dir: Path, klasses: List<ByteArray>): List<ByteArray> {
+        val classNodes = klasses.map { ClassNode(it) }
         val classNames = classNodes.associateBy { it.name }
-        writeJar(classNodes, destination) { Writer(classNames) }
+        return classNodes.map { it.toByteArray(Writer(classNames)) }
     }
 
     private class Writer(private val classNames: Map<String, ClassNode>) : ClassWriter(COMPUTE_FRAMES) {

@@ -1,31 +1,31 @@
 package org.runestar.client.updater.deob.rs
 
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
-import org.objectweb.asm.Opcodes.*
+import org.kxtra.slf4j.info
+import org.objectweb.asm.Opcodes.ALOAD
+import org.objectweb.asm.Opcodes.ATHROW
+import org.objectweb.asm.Opcodes.DUP
+import org.objectweb.asm.Opcodes.INVOKESPECIAL
+import org.objectweb.asm.Opcodes.NEW
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
 
 /**
  * Removes constructors that contain only `throw new Error();`
  */
-object RemoveErrorConstructors : Transformer {
+object RemoveErrorConstructors : Transformer.Tree() {
 
     private val EXCEPTIONS_LIST = listOf(Type.getType(Throwable::class.java).internalName)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes: Collection<ClassNode> = readJar(source)
-
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
         var removedCount = 0
 
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             val methods = c.methods.iterator()
             while (methods.hasNext()) {
                 val m = methods.next()
@@ -37,8 +37,6 @@ object RemoveErrorConstructors : Transformer {
         }
 
         logger.info { "Constructors removed: $removedCount" }
-
-        writeJar(classNodes, destination)
     }
 
     private fun isErrorConstructor(m: MethodNode): Boolean {

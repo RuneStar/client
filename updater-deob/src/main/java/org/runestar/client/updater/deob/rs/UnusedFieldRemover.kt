@@ -1,28 +1,26 @@
 package org.runestar.client.updater.deob.rs
 
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
+import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
+import org.runestar.client.updater.deob.Transformer
 import java.lang.reflect.Modifier
 import java.nio.file.Path
-import java.util.*
+import java.util.TreeSet
 
-object UnusedFieldRemover : Transformer {
+object UnusedFieldRemover : Transformer.Tree() {
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-        val usedFields = classNodes.flatMap { it.methods }
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val usedFields = klasses.flatMap { it.methods }
                 .flatMap { it.instructions.toArray().asIterable() }
                 .mapNotNull { it as? FieldInsnNode }
                 .map { it.owner + "." + it.name }
                 .toSet()
         val removedFields = TreeSet<String>()
-        for (cn in classNodes) {
+        for (cn in klasses) {
             val it = cn.fields.iterator()
             while (it.hasNext()) {
                 val fn = it.next()
@@ -34,6 +32,5 @@ object UnusedFieldRemover : Transformer {
             }
         }
         logger.info { "Fields removed: ${removedFields.size}" }
-        writeJar(classNodes, destination)
     }
 }

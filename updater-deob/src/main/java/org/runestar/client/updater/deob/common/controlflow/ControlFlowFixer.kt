@@ -1,36 +1,34 @@
 package org.runestar.client.updater.deob.common.controlflow
 
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
+import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.LabelNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
-import java.util.*
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
+import java.util.AbstractMap
+import java.util.ArrayDeque
+import java.util.Collections
+import java.util.Queue
 
-object ControlFlowFixer : Transformer {
+object ControlFlowFixer : Transformer.Tree() {
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
         var blockCount = 0
-        classNodes.forEach { c ->
-            c.methods.forEach { m ->
+        klasses.forEach { k ->
+            k.methods.forEach { m ->
                 if (m.tryCatchBlocks.isEmpty()) {
                     val analyzer = BlockAnalyzer()
-                    analyzer.analyze(c.name, m)
-                    blockCount += analyzer.blocks.size
+                    analyzer.analyze(k.name, m)
                     m.instructions = buildInsnList(m.instructions, analyzer.blocks)
+                    blockCount += analyzer.blocks.size
                 }
             }
         }
         logger.info { "Blocks reordered: $blockCount" }
-        writeJar(classNodes, destination)
     }
 
     private fun buildInsnList(originalInstructions: InsnList, blocks: List<Block>): InsnList {

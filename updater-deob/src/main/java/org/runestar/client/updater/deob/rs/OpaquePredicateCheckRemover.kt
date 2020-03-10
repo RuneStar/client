@@ -2,22 +2,26 @@ package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.JumpInsnNode
+import org.objectweb.asm.tree.LabelNode
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
+import org.objectweb.asm.tree.VarInsnNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.constantIntProduced
-import org.runestar.client.updater.deob.util.isConstantIntProducer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
+import org.runestar.client.updater.deob.util.intValue
+import org.runestar.client.updater.deob.util.isIntValue
 import java.lang.reflect.Modifier
 import java.nio.file.Path
-import java.util.*
+import java.util.TreeMap
 
-object OpaquePredicateCheckRemover : Transformer {
+object OpaquePredicateCheckRemover : Transformer.Tree() {
 
     private val ISE_INTERNAL_NAME = Type.getInternalName(IllegalStateException::class.java)
 
@@ -25,12 +29,11 @@ object OpaquePredicateCheckRemover : Transformer {
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
         val passingArgs = TreeMap<String, Int>()
         var returns = 0
         var exceptions = 0
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             c.methods.forEach { m ->
                 val instructions = m.instructions.iterator()
                 val lastParamIndex = m.lastParamIndex
@@ -45,7 +48,7 @@ object OpaquePredicateCheckRemover : Transformer {
                     } else {
                         continue
                     }
-                    val constantPushed = insn.next.constantIntProduced
+                    val constantPushed = insn.next.intValue
                     val ifOpcode = insn.next.next.opcode
                     val label = (insn.next.next as JumpInsnNode).label.label
                     instructions.remove()
@@ -59,9 +62,7 @@ object OpaquePredicateCheckRemover : Transformer {
             }
         }
         logger.info { "Opaque predicates checks removed: returns: $returns, exceptions: $exceptions" }
-        val opFile = destination.resolveSibling(destination.fileName.toString() + ".op.json").toFile()
-        mapper.writeValue(opFile, passingArgs)
-        writeJar(classNodes, destination)
+        mapper.writeValue(dir.resolve("op.json").toFile(), passingArgs)
     }
 
     private fun AbstractInsnNode.matchesReturn(lastParamIndex: Int): Boolean {
@@ -70,7 +71,7 @@ object OpaquePredicateCheckRemover : Transformer {
         i0 as VarInsnNode
         if (i0.`var` != lastParamIndex) return false
         val i1 = i0.next
-        if (!i1.isConstantIntProducer) return false
+        if (!i1.isIntValue) return false
         val i2 = i1.next
         if (!i2.isIf) return false
         val i3 = i2.next
@@ -84,7 +85,7 @@ object OpaquePredicateCheckRemover : Transformer {
         i0 as VarInsnNode
         if (i0.`var` != lastParamIndex) return false
         val i1 = i0.next
-        if (!i1.isConstantIntProducer) return false
+        if (!i1.isIntValue) return false
         val i2 = i1.next
         if (!i2.isIf) return false
         val i3 = i2.next

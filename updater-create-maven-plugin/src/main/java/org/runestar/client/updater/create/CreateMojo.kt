@@ -20,7 +20,9 @@ import org.runestar.client.updater.common.ConstructorHook
 import org.runestar.client.updater.common.FieldHook
 import org.runestar.client.updater.common.MethodHook
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
+import org.runestar.client.updater.deob.util.readClassNodes
+import org.runestar.client.updater.deob.util.readClasses
+import org.runestar.client.updater.deob.util.writeClasses
 import org.runestar.client.updater.mapper.*
 import org.runestar.client.updater.mapper.isPrimitive
 import org.runestar.client.updater.mapper.std.classes.Client
@@ -53,13 +55,13 @@ class CreateMojo : AbstractMojo() {
 
     private val cleanJar: Path get() = targetDir.resolve("gamepack.clean.jar")
 
-    private val namesJson: Path get() = deobJar.appendFileName(".names.json")
+    private val namesJson: Path get() = targetDir.resolve("names.json")
 
-    private val opJson: Path get() = deobJar.appendFileName(".op.json")
+    private val opJson: Path get() = targetDir.resolve("op.json")
 
-    private val opDescsJson: Path get() = deobJar.appendFileName(".op-descs.json")
+    private val opDescsJson: Path get() = targetDir.resolve("op-descs.json")
 
-    private val multJson: Path get() = deobJar.appendFileName(".mult.json")
+    private val multJson: Path get() = targetDir.resolve("mult.json")
 
     private val hooksJson: Path get() = targetDir.resolve("hooks.json")
 
@@ -75,10 +77,6 @@ class CreateMojo : AbstractMojo() {
         addResources()
     }
 
-    private fun Path.appendFileName(string: String): Path {
-        return resolveSibling(this.fileName.toString() + string)
-    }
-
     private fun dl() {
         JAV_CONFIG.gamepackUrl.openStream().use { input ->
             Files.copy(input, gamepackJar, StandardCopyOption.REPLACE_EXISTING)
@@ -86,11 +84,15 @@ class CreateMojo : AbstractMojo() {
     }
 
     private fun deob() {
-        Transformer.DEFAULT.transform(gamepackJar, deobJar)
+        val input = readClasses(gamepackJar)
+        val output = Transformer.DEFAULT.transform(targetDir, input)
+        writeClasses(output, deobJar)
     }
 
     private fun clean() {
-        Transformer.CLEAN.transform(gamepackJar, cleanJar)
+        val input = readClasses(gamepackJar)
+        val output = Transformer.CLEAN.transform(targetDir, input)
+        writeClasses(output, cleanJar)
     }
 
     private fun map() {
@@ -145,7 +147,7 @@ class CreateMojo : AbstractMojo() {
     }
 
     private fun findConstructors(): Multimap<String, ConstructorHook> {
-        val classNodes = readJar(deobJar)
+        val classNodes = readClassNodes(deobJar)
         val opDescs = jsonMapper.readValue<Map<String, String>>(opDescsJson.toFile())
         val constructors = MultimapBuilder.hashKeys().arrayListValues().build<String, ConstructorHook>()
         classNodes.forEach { c ->

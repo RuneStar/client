@@ -1,21 +1,18 @@
 package org.runestar.client.updater.deob.common
 
 import org.objectweb.asm.Type
+import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
 import java.nio.file.Path
 
-object SortFieldsByModifiers : Transformer {
+object SortFieldsByModifiers : Transformer.Tree() {
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-        classNodes.forEach { c ->
-            c.fields = c.fields.sortedWith(FIELD_COMPARATOR)
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        klasses.forEach { k ->
+            k.fields = k.fields.sortedWith(FIELD_COMPARATOR)
         }
-        writeJar(classNodes, destination)
     }
 
     private val FIELD_COMPARATOR: Comparator<FieldNode> = compareBy<FieldNode> { !Modifier.isStatic(it.access) }

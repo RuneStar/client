@@ -1,32 +1,28 @@
 package org.runestar.client.updater.deob.common
 
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Opcodes.GETSTATIC
 import org.objectweb.asm.Opcodes.PUTSTATIC
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
 import java.nio.file.Path
 
 /**
  * Resolves and replaces the owner of field instructions by JVMS 5.4.3.2
  */
-object FieldResolver : Transformer {
+object FieldResolver : Transformer.Tree() {
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-
-        val resolver = Resolver(classNodes)
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val resolver = Resolver(klasses)
 
         var changedCount = 0
 
-        classNodes.forEach { cn ->
+        klasses.forEach { cn ->
             cn.methods.forEach { mn ->
                 mn.instructions.iterator().forEach { insn ->
                     if (insn is FieldInsnNode) {
@@ -44,8 +40,6 @@ object FieldResolver : Transformer {
         }
 
         logger.info { "Field instruction owners narrowed: $changedCount" }
-
-        writeJar(classNodes, destination)
     }
 
     private class Resolver(classNodes: Collection<ClassNode>) {

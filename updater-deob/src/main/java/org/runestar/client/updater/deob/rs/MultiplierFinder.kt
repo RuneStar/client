@@ -4,42 +4,44 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
 import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.LONG_TYPE
 import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.LdcInsnNode
 import org.objectweb.asm.tree.MethodNode
-import org.objectweb.asm.tree.analysis.*
+import org.objectweb.asm.tree.analysis.Analyzer
+import org.objectweb.asm.tree.analysis.BasicInterpreter
+import org.objectweb.asm.tree.analysis.BasicValue
+import org.objectweb.asm.tree.analysis.Interpreter
+import org.objectweb.asm.tree.analysis.Value
 import org.runestar.client.updater.common.invert
 import org.runestar.client.updater.common.isInvertible
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
-import java.util.*
+import java.util.Collections
+import java.util.TreeMap
 
-object MultiplierFinder : Transformer {
+object MultiplierFinder : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
         val decoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Number>()
         val dependentDecoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Pair<String, Number>>()
         val dependentEncoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Pair<String, Number>>()
 
         val analyzer = Analyzer(Inter(decoders, dependentDecoders, dependentEncoders))
 
-        for (c in classNodes) {
+        for (c in klasses) {
             for (m in c.methods) {
                 findDupPutDecoders(m, decoders)
                 analyzer.analyze(c.name, m)
@@ -48,14 +50,8 @@ object MultiplierFinder : Transformer {
 
         val decodersFinal = unfoldToDecoders(decoders, dependentDecoders, dependentEncoders)
 
-        val multFile = destination.resolveSibling(destination.fileName.toString() + ".mult.json").toFile()
-        mapper.writeValue(multFile, decodersFinal)
-
+        mapper.writeValue(dir.resolve( "mult.json").toFile(), decodersFinal)
         logger.info { "Multipliers found: ${decodersFinal.size}" }
-
-        if (source != destination) {
-            writeJar(classNodes, destination)
-        }
     }
 
     private fun isMultiplier(n: Number): Boolean {

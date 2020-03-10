@@ -3,32 +3,25 @@ package org.runestar.client.updater.deob.rs
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
-import java.nio.file.Files
+import org.kxtra.slf4j.info
+import org.objectweb.asm.tree.ClassNode
+import org.runestar.client.updater.deob.Transformer
 import java.nio.file.Path
-import java.util.*
+import java.util.SortedSet
+import java.util.TreeMap
 
-
-object MethodOrigClassFinder : Transformer {
+object MethodOrigClassFinder : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-
-        val dupFile = source.resolveSibling(source.fileName.toString() + ".static-methods-dup.json")
-        check(Files.exists(dupFile))
-
-        val dupMethods = mapper.readValue<List<SortedSet<String>>>(dupFile.toFile())
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val dupMethods = mapper.readValue<List<SortedSet<String>>>(dir.resolve("static-methods-dup.json").toFile())
         val map = TreeMap<String, String>()
 
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             for (m in c.methods) {
                 val name = c.name + "." + m.name + m.desc
                 val set = dupMethods.firstOrNull { it.contains(name) } ?: continue
@@ -40,11 +33,8 @@ object MethodOrigClassFinder : Transformer {
             }
         }
 
-        val classFile = source.resolveSibling(source.fileName.toString() + ".methods-orig-class.json")
-        mapper.writeValue(classFile.toFile(), map)
+        mapper.writeValue(dir.resolve("methods-orig-class.json").toFile(), map)
 
         logger.info { "Static method original classes found: ${map.size}" }
-
-        writeJar(classNodes, destination)
     }
 }

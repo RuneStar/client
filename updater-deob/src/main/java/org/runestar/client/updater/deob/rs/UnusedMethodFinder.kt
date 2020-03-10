@@ -4,30 +4,28 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.nio.file.Path
-import java.util.*
+import java.util.ArrayList
+import java.util.TreeSet
 
-object UnusedMethodFinder : Transformer {
+object UnusedMethodFinder : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-        val classNodeNames = classNodes.associate { it.name to it }
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val classNodeNames = klasses.associateBy { it.name }
 
         val supers = MultimapBuilder.hashKeys().arrayListValues().build<ClassNode, String>()
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             c.interfaces.forEach { i ->
                 supers.put(c, i)
             }
@@ -41,14 +39,14 @@ object UnusedMethodFinder : Transformer {
             }
         }
 
-        val usedMethods = classNodes.asSequence().flatMap { it.methods.asSequence() }
+        val usedMethods = klasses.asSequence().flatMap { it.methods.asSequence() }
                 .flatMap { it.instructions.iterator().asSequence() }
                 .mapNotNull { it as? MethodInsnNode }
                 .map { it.owner + "." + it.name + it.desc }
                 .toSet()
 
         val removedMethods = TreeSet<String>()
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             for (m in c.methods) {
                 if (isMethodUsed(c, m, usedMethods, supers, subs, classNodeNames)) continue
                 val mName = c.name + "." + m.name + m.desc
@@ -58,10 +56,7 @@ object UnusedMethodFinder : Transformer {
 
         logger.info { "Unused methods found: ${removedMethods.size}" }
 
-        val outFile = source.resolveSibling(source.fileName.toString() + ".unused-methods.json")
-        mapper.writeValue(outFile.toFile(), removedMethods)
-
-        writeJar(classNodes, destination)
+        mapper.writeValue(dir.resolve("unused-methods.json").toFile(), removedMethods)
     }
 
     private fun isMethodUsed(

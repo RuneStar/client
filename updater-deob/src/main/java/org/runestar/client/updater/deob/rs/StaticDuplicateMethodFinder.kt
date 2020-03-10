@@ -4,27 +4,28 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.collect.Multimap
 import com.google.common.collect.TreeMultimap
-import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
 import org.kxtra.slf4j.getLogger
 import org.objectweb.asm.Type
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.FieldInsnNode
+import org.objectweb.asm.tree.InsnList
+import org.objectweb.asm.tree.InsnNode
+import org.objectweb.asm.tree.LineNumberNode
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
+import org.runestar.client.updater.deob.Transformer
 import java.lang.reflect.Modifier
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 
-object StaticDuplicateMethodFinder : Transformer {
+object StaticDuplicateMethodFinder : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes = readJar(source)
-
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
         val map: Multimap<String, String> = TreeMultimap.create()
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             c.methods.filter { Modifier.isStatic(it.access) && it.name != "<clinit>" }.forEach { m ->
                 map.put(m.id(), c.name + "." + m.name + m.desc)
             }
@@ -32,12 +33,7 @@ object StaticDuplicateMethodFinder : Transformer {
 
         map.asMap().entries.removeIf { it.value.size == 1 }
 
-        val dupFile = destination.resolveSibling(destination.fileName.toString() + ".static-methods-dup.json").toFile()
-        mapper.writeValue(dupFile, map.asMap().values.sortedBy { it.first() })
-
-        if (source != destination) {
-            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)
-        }
+        mapper.writeValue(dir.resolve("static-methods-dup.json").toFile(), map.asMap().values.sortedBy { it.first() })
     }
 
     private fun MethodNode.id(): String {

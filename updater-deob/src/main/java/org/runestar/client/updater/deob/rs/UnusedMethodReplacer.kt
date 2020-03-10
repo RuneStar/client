@@ -2,37 +2,29 @@ package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.kxtra.slf4j.info
 import org.kxtra.slf4j.getLogger
+import org.kxtra.slf4j.info
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.InsnNode
 import org.runestar.client.updater.deob.Transformer
-import org.runestar.client.updater.deob.util.readJar
-import org.runestar.client.updater.deob.util.writeJar
 import java.lang.reflect.Modifier
-import java.nio.file.Files
 import java.nio.file.Path
 
 /**
  * Replaces the bodies of methods found by [UnusedMethodFinder] with `throw null;`
  */
-object UnusedMethodReplacer : Transformer {
+object UnusedMethodReplacer : Transformer.Tree() {
 
     private val mapper = jacksonObjectMapper()
 
     private val logger = getLogger()
 
-    override fun transform(source: Path, destination: Path) {
-        val classNodes: Collection<ClassNode> = readJar(source)
+    override fun transform(dir: Path, klasses: List<ClassNode>) {
+        val unusedMethodNames: Set<String> = mapper.readValue(dir.resolve("unused-methods.json").toFile())
 
-        val unusedMethodsFile: Path = source.resolveSibling(source.fileName.toString() + ".unused-methods.json")
-        check(Files.exists(unusedMethodsFile))
-
-        val unusedMethodNames: Set<String> = mapper.readValue(unusedMethodsFile.toFile())
-
-        classNodes.forEach { c ->
+        klasses.forEach { c ->
             for (m in c.methods) {
                 if (Modifier.isAbstract(m.access)) continue
                 val mName: String = c.name + "." + m.name + m.desc
@@ -46,9 +38,6 @@ object UnusedMethodReplacer : Transformer {
                 m.maxStack = 1
             }
         }
-
         logger.info { "Unused methods replaced: ${unusedMethodNames.size}" }
-
-        writeJar(classNodes, destination)
     }
 }
