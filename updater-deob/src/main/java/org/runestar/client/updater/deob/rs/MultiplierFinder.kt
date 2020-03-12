@@ -2,31 +2,26 @@ package org.runestar.client.updater.deob.rs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.google.common.collect.Multimap
+import com.google.common.collect.HashMultiset
 import com.google.common.collect.MultimapBuilder
 import org.kxtra.slf4j.getLogger
 import org.kxtra.slf4j.info
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.Type
-import org.objectweb.asm.Type.INT_TYPE
-import org.objectweb.asm.Type.LONG_TYPE
 import org.objectweb.asm.tree.AbstractInsnNode
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.LdcInsnNode
-import org.objectweb.asm.tree.MethodNode
 import org.objectweb.asm.tree.analysis.Analyzer
-import org.objectweb.asm.tree.analysis.BasicInterpreter
-import org.objectweb.asm.tree.analysis.BasicValue
 import org.objectweb.asm.tree.analysis.Interpreter
+import org.objectweb.asm.tree.analysis.SourceInterpreter
+import org.objectweb.asm.tree.analysis.SourceValue
 import org.objectweb.asm.tree.analysis.Value
 import org.runestar.client.updater.common.invert
 import org.runestar.client.updater.common.isInvertible
 import org.runestar.client.updater.deob.Transformer
 import java.nio.file.Path
-import java.util.Collections
-import java.util.TreeMap
+import kotlin.math.absoluteValue
 
 object MultiplierFinder : Transformer.Tree() {
 
@@ -35,252 +30,240 @@ object MultiplierFinder : Transformer.Tree() {
     private val logger = getLogger()
 
     override fun transform(dir: Path, klasses: List<ClassNode>) {
-        val decoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Number>()
-        val dependentDecoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Pair<String, Number>>()
-        val dependentEncoders = MultimapBuilder.hashKeys().arrayListValues().build<String, Pair<String, Number>>()
-
-        val analyzer = Analyzer(Inter(decoders, dependentDecoders, dependentEncoders))
-
+        val multipliers = Multipliers()
+        val analyzer = Analyzer(Interpret(multipliers))
         for (c in klasses) {
             for (m in c.methods) {
-                findDupPutDecoders(m, decoders)
                 analyzer.analyze(c.name, m)
             }
         }
+        multipliers.solve()
 
-        val decodersFinal = unfoldToDecoders(decoders, dependentDecoders, dependentEncoders)
-
-        mapper.writeValue(dir.resolve( "mult.json").toFile(), decodersFinal)
-        logger.info { "Multipliers found: ${decodersFinal.size}" }
+        mapper.writeValue(dir.resolve( "mult.json").toFile(), multipliers.decoders.toSortedMap())
+        logger.info { "Multipliers found: ${multipliers.decoders.size}" }
     }
 
-    private fun isMultiplier(n: Number): Boolean {
-        return isInvertible(n) && invert(n) != n
+    private class Interpret(private val multipliers: Multipliers) : Interpreter<Valu>(ASM7) {
+
+        private val ldcs = HashSet<Valu>()
+
+        private val ldcs2 = HashSet<Valu>()
+
+        private val puts = HashMap<Valu, Valu>()
+
+        private val src = SourceInterpreter()
+
+        override fun newValue(type: Type?) = src.newValue(type)?.let { Valu(it) }
+
+        override fun copyOperation(insn: AbstractInsnNode, value: Valu) = when (insn.opcode) {
+            DUP, DUP2, DUP2_X1, DUP_X1 -> value
+            else -> Valu(src.copyOperation(insn, value.v))
+        }
+
+        override fun merge(value1: Valu, value2: Valu) = Valu(src.merge(value1.v, value2.v))
+
+        override fun returnOperation(insn: AbstractInsnNode, value: Valu, expected: Valu) {}
+
+        override fun ternaryOperation(insn: AbstractInsnNode, value1: Valu, value2: Valu, value3: Valu) = Valu(src.ternaryOperation(insn, value1.v, value2.v, value3.v))
+
+        override fun naryOperation(insn: AbstractInsnNode, values: MutableList<out Valu>) = Valu(src.naryOperation(insn, values.map { it.v }))
+
+        override fun newOperation(insn: AbstractInsnNode) = Valu(src.newOperation(insn))
+
+        override fun unaryOperation(insn: AbstractInsnNode, value: Valu) = Valu(src.unaryOperation(insn, value.v)).also {
+            if (insn.opcode == PUTSTATIC) setField(it, value)
+        }
+
+        override fun binaryOperation(insn: AbstractInsnNode, value1: Valu, value2: Valu) = Valu.Two(src.binaryOperation(insn, value1.v, value2.v), value1, value2).also {
+            when (insn.opcode) {
+                IMUL, LMUL -> {
+                    val fieldMul = asFieldMul(it) ?: return@also
+                    if (ldcs.add(fieldMul.ldc)) {
+                        multipliers.mulX.put(fieldMul.f.fieldName, Mul.dec(fieldMul.ldc.ldcNum))
+                    }
+                }
+                PUTFIELD -> setField(it, value2)
+            }
+        }
+
+        private fun setField(put: Valu, value: Valu) {
+            puts[value] = put
+            if (value.isLdcInt) {
+                //
+            } else if (value is Valu.Two) {
+                distribute(put.v.insn as FieldInsnNode, value)
+            }
+        }
+
+        private fun distribute(put: FieldInsnNode, value: Valu.Two) {
+            if (value.isMul) {
+                val fm = asFieldMul(value)
+                if (fm != null && ldcs2.add(fm.ldc)) {
+                    check(multipliers.mulX.remove(fm.f.fieldName, Mul.dec(fm.ldc.ldcNum)))
+                    multipliers.decEncX.add(FieldMulAssign(put.fieldName, fm.f.fieldName, fm.ldc.ldcNum))
+                    return
+                }
+            }
+            if (!value.isMul && !value.isAdd) return
+            val a = value.a
+            val b = value.b
+            var ldc: Valu? = null
+            var other: Valu? = null
+            if (a.isLdcInt) {
+                ldc = a
+                other = b
+            } else if (b.isLdcInt) {
+                ldc = b
+                other = a
+            }
+            if (ldc != null && other != null) {
+                val n = ldc.ldcNum
+                if (isMultiplier(n) && ldcs.add(ldc)) {
+                    val getField = puts[other]
+                    if (getField == null) {
+                        multipliers.mulX.put(put.fieldName, Mul.enc(n))
+                    } else {
+                        multipliers.decEncX.add(FieldMulAssign(put.fieldName, getField.fieldName, n))
+                    }
+                }
+                if (value.isMul) return
+            }
+            if (a is Valu.Two) distribute(put, a)
+            if (b is Valu.Two) distribute(put, b)
+        }
+
+        private fun asFieldMul(value: Valu.Two): FieldMul? {
+            var ldc: Valu? = null
+            var get: Valu? = null
+            if (value.a.isLdcInt && value.b.isGetField) {
+                ldc = value.a
+                get = value.b
+            } else if (value.b.isLdcInt && value.a.isGetField) {
+                ldc = value.b
+                get = value.a
+            }
+            if (ldc != null && get != null) {
+                if (isMultiplier(ldc.ldcNum)) return FieldMul(get, ldc)
+            }
+            return null
+        }
+
+        private val Valu.isLdcInt get() = v.insn.let { it != null && it is LdcInsnNode && (it.cst is Int || it.cst is Long) }
+
+        private val SourceValue.insn: AbstractInsnNode? get() = insns.singleOrNull()
+
+        private val Valu.isGetField get() = v.insn.let { it != null && (it.opcode == GETSTATIC || it.opcode == GETFIELD) }
+
+        private val Valu.ldcNum get() = v.insns.single().let { it as LdcInsnNode; it.cst as Number }
+
+        private val FieldInsnNode.fieldName get() = "${owner}.${name}"
+
+        private val Valu.fieldName get() = v.insns.single().let { it as FieldInsnNode; it.fieldName }
+
+        private val Valu.isMul get() = v.insn.let { it != null && (it.opcode == IMUL || it.opcode == LMUL) }
+
+        private val Valu.isAdd get() = v.insn.let { it != null && (it.opcode == IADD || it.opcode == LADD || it.opcode == ISUB || it.opcode == LSUB) }
+
+        private data class FieldMul(val f: Valu, val ldc: Valu)
+    }
+
+    private fun isMultiplier(n: Number) = isInvertible(n) && invert(n) != n
+
+    private open class Valu(val v: SourceValue) : Value {
+
+        override fun equals(other: Any?) = other is Valu && v == other.v
+
+        override fun hashCode() = v.hashCode()
+
+        override fun getSize() = v.size
+
+        class Two(value: SourceValue, val a: Valu, val b: Valu) : Valu(value)
+    }
+
+    private data class Mul(val dec: Boolean, val n: Number) {
+
+        val decoder = if (dec) n else invert(n)
+
+        companion object {
+
+            fun dec(n: Number) = Mul(true, n)
+
+            fun enc(n: Number) = Mul(false, n)
+        }
     }
     
-    private fun findDupPutDecoders(m: MethodNode, decoders: Multimap<String, Number>) {
-        for (insn in m.instructions) {
-            val ldc = insn as? LdcInsnNode ?: continue
-            val cst = ldc.cst
-            if (cst !is Int && cst !is Long) continue
-            val put = ldc.previous as? FieldInsnNode ?: continue
-            val dup = put.previous ?: continue
-            val mul = ldc.next ?: continue
-            if (mul.opcode != IMUL && mul.opcode != LMUL) continue
+    private data class FieldMulAssign(val put: String, val get: String, val mul: Number)
 
-            if (
-                    (put.opcode == PUTFIELD  && put.desc == INT_TYPE.descriptor  && dup.opcode == DUP_X1) ||
-                    (put.opcode == PUTFIELD  && put.desc == LONG_TYPE.descriptor && dup.opcode == DUP2_X1) ||
-                    (put.opcode == PUTSTATIC && put.desc == INT_TYPE.descriptor  && dup.opcode == DUP) ||
-                    (put.opcode == PUTSTATIC && put.desc == LONG_TYPE.descriptor && dup.opcode == DUP2)
-            ) {
-                val fieldString = "${put.owner}.${put.name}"
-                decoders.put(fieldString, cst as Number)
-            }
-        }
-    }
+    private class Multipliers {
 
-    private fun unfoldToDecoders(
-            decoders: Multimap<String, Number>,
-            dependentDecoders: Multimap<String, Pair<String, Number>>,
-            dependentEncoders: Multimap<String, Pair<String, Number>>
-    ): Map<String, Number> {
+        val decoders = HashMap<String, Number>()
 
-        val decodersFinal = TreeMap<String, Number>()
+        val mulX = MultimapBuilder.hashKeys().arrayListValues().build<String, Mul>()
 
-        decoders.asMap().mapValuesTo(decodersFinal) { e ->
-            checkNotNull(e.value.maxBy { n -> Collections.frequency(e.value, n) })
-        }
+        val decEncX = HashSet<FieldMulAssign>()
 
-        var startSize: Int
-        do {
-            startSize = decodersFinal.size
-
-            dependentDecoders.entries().forEach { (f, p) ->
-                if (f !in decodersFinal) {
-                    val otherF = p.first
-                    val value = p.second
-                    val otherDecoder = decodersFinal[otherF] ?: return@forEach
-                    val nUnfolded: Number = when (value) {
-                        is Int -> value.toInt() * otherDecoder.toInt()
-                        is Long -> value.toLong() * otherDecoder.toLong()
-                        else -> error(value)
-                    }
-                    if (isMultiplier(nUnfolded)) {
-                        decodersFinal[f] = nUnfolded
-                    }
-                }
-            }
-
-            dependentEncoders.entries().forEach { (f, p) ->
-                if (f !in decodersFinal) {
-                    val otherF = p.first
-                    val value = p.second
-                    val otherDecoder = decodersFinal[otherF] ?: return@forEach
-                    val nUnfolded: Number = when (value) {
-                        is Int -> value.toInt() * invert(otherDecoder.toInt())
-                        is Long -> value.toLong() * invert(otherDecoder.toLong())
-                        else -> error(value)
-                    }
-                    if (isMultiplier(nUnfolded)) {
-                        decodersFinal[f] = invert(nUnfolded)
-                    }
-                }
-            }
-
-        } while (startSize != decodersFinal.size)
-
-        return decodersFinal
-    }
-
-    private class Inter(
-            val decoders: Multimap<String, Number>,
-            val dependentDecoders: Multimap<String, Pair<String, Number>>,
-            val dependentEncoders: Multimap<String, Pair<String, Number>>
-    ) : Interpreter<Expr>(Opcodes.ASM6) {
-
-        /*
-            FIELD = LDC
-                FIELD = enc * X
-                enc == LDC / X
-            FIELD = LDC * X
-                FIELD = enc * X
-                enc == LDC
-            X = FIELD * LDC
-                X = FIELD * dec
-                dec == LDC
-            FIELD = FIELD2 * LDC
-                FIELD = FIELD2 * dec2 * enc
-                enc == LDC / dec2
-                enc == LDC * enc2
-            FIELD2 = FIELD * LDC
-                FIELD2 = FIELD * dec * enc2
-                dec == LDC / enc2
-                dec == LDC * dec2
-            FIELD = FIELD + LDC
-                FIELD = (FIELD * dec + X) * enc
-                FIELD = FIELD + X * enc
-                enc == LDC / X
-            FIELD = FIELD + FIELD2 * LDC
-                FIELD = (FIELD * dec + FIELD2 * dec2) * enc
-                FIELD = FIELD + FIELD2 * dec2 * enc
-                enc == LDC / dec2
-                enc == LDC * enc2
-         */
-
-        private val basicInterpreter = BasicInterpreter()
-
-        override fun binaryOperation(insn: AbstractInsnNode, value1: Expr, value2: Expr): Expr? {
-            val bv = basicInterpreter.binaryOperation(insn, value1.basicValue, value2.basicValue)
-            return when (insn.opcode) {
-                IMUL, LMUL -> {
-                    val ldc = value1 as? Expr.IntegerLdc ?: value2 as? Expr.IntegerLdc ?: return Expr.Var(bv)
-                    val gf = value1 as? Expr.GetField ?: value2 as? Expr.GetField ?: return Expr.LdcMult(bv, ldc.n)
-                    if (isMultiplier(ldc.n)) {
-                        decoders.put("${gf.insn.owner}.${gf.insn.name}", ldc.n)
-                    }
-                    Expr.GetFieldMult(bv, gf.insn, ldc.n)
-                }
-                PUTFIELD -> {
-                    putField(insn as FieldInsnNode, value2)
-                    null
-                }
-                else -> bv?.let { Expr.Var(it) }
+        fun solve() {
+            while (true) {
+                simplify()
+                if (mulX.isEmpty) return
+                solveOne()
             }
         }
 
-        override fun copyOperation(insn: AbstractInsnNode, value: Expr): Expr = value
+        private fun simplify() {
+            val itr = decEncX.iterator()
+            for (ma in itr) {
+                if (ma.put in decoders) {
+                    itr.remove()
+                    val dec = decoders.getValue(ma.put)
+                    val decx = mul(dec, ma.mul)
+                    if (isMultiplier(decx)) mulX.put(ma.get, Mul.dec(decx))
+                } else if (ma.get in decoders) {
+                    itr.remove()
+                    val enc = invert(decoders.getValue(ma.get))
+                    val encx = mul(enc, ma.mul)
+                    if (isMultiplier(encx)) mulX.put(ma.put, Mul.enc(encx))
+                }
+            }
+        }
 
-        override fun merge(value1: Expr, value2: Expr): Expr {
-            return if (value1.basicValue == value2.basicValue) {
-                value1
+        private fun solveOne() {
+            var e = mulX.asMap().entries.firstOrNull { e -> decEncX.none { it.get == e.key || it.put == e.key } }
+            if (e == null) e = mulX.asMap().entries.first()
+            val (f, ms) = e
+            decoders[f] = unfold(ms)
+            mulX.removeAll(f)
+        }
+
+        private fun unfold(ms: Collection<Mul>): Number {
+            val distinct = ms.distinct()
+            if (distinct.size == 1) return distinct.single().decoder
+            val pairs = distinct.filter { a -> a.dec && distinct.any { b -> !b.dec && a.decoder == b.decoder } }
+            if (pairs.isNotEmpty()) return pairs.single().decoder
+            val fs = distinct.filter { f -> distinct.all { isFactor(it, f) } }
+            if (fs.size == 1) return fs.single().decoder
+            check(fs.size == 2 && fs.size == distinct.size)
+            val counts = HashMultiset.create(ms)
+            val maxCount = counts.entrySet().maxBy { it.count }!!.count
+            val maxs = counts.entrySet().filter { it.count == maxCount }
+            if (maxs.size == 1) return maxs.single().element.decoder
+            return distinct.first { it.dec }.n
+        }
+
+        private fun isFactor(product: Mul, factor: Mul) = div(product, factor).toLong().absoluteValue <= 0xff
+
+        private fun div(a: Mul, b: Mul): Number {
+            return if (a.dec == b.dec) {
+                mul(invert(b.n), a.n)
             } else {
-                Expr.Var(basicInterpreter.merge(value1.basicValue, value2.basicValue))
+                mul(b.n, a.n)
             }
         }
 
-        override fun naryOperation(insn: AbstractInsnNode, values: MutableList<out Expr>): Expr? {
-            val bv = basicInterpreter.naryOperation(insn, emptyList()) ?: return null
-            return Expr.Var(bv)
+        private fun mul(a: Number, b: Number): Number = when (a) {
+            is Int -> a.toInt() * b.toInt()
+            is Long -> a.toLong() * b.toLong()
+            else -> error(a)
         }
-
-        override fun newOperation(insn: AbstractInsnNode): Expr {
-            val bv = basicInterpreter.newOperation(insn)
-            return when (insn.opcode) {
-                LDC ->  {
-                    insn as LdcInsnNode
-                    when (insn.cst) {
-                        is Int, is Long -> Expr.IntegerLdc(bv, insn.cst as Number)
-                        else -> Expr.Var(bv)
-                    }
-                }
-                GETSTATIC -> getField(bv, insn as FieldInsnNode)
-                else -> Expr.Var(bv)
-            }
-        }
-
-        private fun getField(bv: BasicValue, insn: FieldInsnNode): Expr {
-            return when (insn.desc) {
-                INT_TYPE.descriptor, LONG_TYPE.descriptor -> Expr.GetField(bv, insn)
-                else -> Expr.Var(bv)
-            }
-        }
-
-        private fun putField(insn: FieldInsnNode, value: Expr) {
-            val destName = "${insn.owner}.${insn.name}"
-            if (value is Expr.IntegerLdc) {
-//                val nf = unfold(value.n)
-//                if (nf != null && isMultiplier(nf)) {
-//                    decoders.put(destName, invert(nf))
-//                }
-            } else if (value is Expr.LdcMult) {
-                if (isMultiplier(value.n)) {
-                    decoders.put(destName, invert(value.n))
-                }
-            } else if (value is Expr.GetFieldMult) {
-                val srcName = "${value.insn.owner}.${value.insn.name}"
-                decoders.remove(srcName, value.n)
-                dependentDecoders.put(srcName, destName to value.n)
-                dependentEncoders.put(destName, srcName to value.n)
-            }
-        }
-
-        override fun newValue(type: Type?): Expr? {
-            val sv = basicInterpreter.newValue(type) ?: return null
-            return Expr.Var(sv)
-        }
-
-        override fun returnOperation(insn: AbstractInsnNode, value: Expr, expected: Expr) {}
-
-        override fun ternaryOperation(insn: AbstractInsnNode, value1: Expr, value2: Expr, value3: Expr): Expr? = null
-
-        override fun unaryOperation(insn: AbstractInsnNode, value: Expr): Expr? {
-            val bv = basicInterpreter.unaryOperation(insn, value.basicValue)
-            return when (insn.opcode) {
-                GETFIELD -> getField(bv, insn as FieldInsnNode)
-                PUTSTATIC -> {
-                    putField(insn as FieldInsnNode, value)
-                    null
-                }
-                else -> bv?.let { Expr.Var(it) }
-            }
-        }
-    }
-
-    private sealed class Expr : Value {
-
-        override fun getSize(): Int = basicValue.size
-
-        abstract val basicValue: BasicValue
-
-        data class Var(override val basicValue: BasicValue) : Expr()
-
-        data class IntegerLdc(override val basicValue: BasicValue, val n: Number) : Expr()
-
-        data class GetField(override val basicValue: BasicValue, val insn: FieldInsnNode) : Expr()
-
-        data class GetFieldMult(override val basicValue: BasicValue, val insn: FieldInsnNode, val n: Number) : Expr()
-
-        data class LdcMult(override val basicValue: BasicValue, val n: Number) : Expr()
     }
 }
