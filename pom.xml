@@ -6,7 +6,7 @@
 
     <groupId>org.runestar.client</groupId>
     <artifactId>client-parent</artifactId>
-    <version>0.188.0-SNAPSHOT</version>
+    <version>0.189.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -74,7 +74,7 @@
         <version.asm>7.3.1</version.asm>
         <version.slf4j>1.7.28</version.slf4j>
 
-        <runescape.gamepack.revision>188</runescape.gamepack.revision>
+        <runescape.gamepack.revision>189</runescape.gamepack.revision>
     </properties>
 
     <dependencyManagement>
