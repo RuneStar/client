@@ -4,7 +4,9 @@ import java.util.stream.Stream
 
 data class HiscoreResult private constructor(private val categories: List<Category>) {
 
-    operator fun get(category: Int) = categories[category + 1]
+    operator fun get(stat: Int) = categories[stat + 1]
+
+    operator fun get(category: HiscoreCategory) = categories[category.ordinal]
 
     data class Category(val rank: Int, val level: Int, val xp: Long) {
 
@@ -14,7 +16,7 @@ data class HiscoreResult private constructor(private val categories: List<Catego
     internal companion object {
 
         fun of(lines: Stream<String>): HiscoreResult {
-            val categories = ArrayList<Category>(HiscoreCategory.COUNT)
+            val categories = ArrayList<Category>()
             lines.forEach { line ->
                 val split = line.split(',')
                 when (split.size) {

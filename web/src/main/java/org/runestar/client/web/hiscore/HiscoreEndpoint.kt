@@ -9,8 +9,8 @@ enum class HiscoreEndpoint(private val m: String) {
     HARDCORE_IRONMAN("hiscore_oldschool_hardcore_ironman"),
     ULTIMATE_IRONMAN("hiscore_oldschool_ultimate"),
     DEADMAN("hiscore_oldschool_deadman"),
-    SEASONAL_DEADMAN("hiscore_oldschool_seasonal"),
-    DEADMAN_TOURNAMENT("hiscore_oldschool_tournament"),
+    SEASONAL("hiscore_oldschool_seasonal"),
+    TOURNAMENT("hiscore_oldschool_tournament"),
     ;
 
     internal fun query(player: String) = URI("https://services.runescape.com/m=$m/index_lite.ws?player=$player")

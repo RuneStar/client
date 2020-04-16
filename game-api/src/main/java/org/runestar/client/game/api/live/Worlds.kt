@@ -27,8 +27,8 @@ object Worlds : AbstractCollection<World>() {
             .map { local }
 
     fun hiscoreEndpoint(properties: BitVec): HiscoreEndpoint = when {
-        properties[WorldProperty.DEADMAN_TOURNAMENT] -> HiscoreEndpoint.DEADMAN_TOURNAMENT
-        properties[WorldProperty.SEASONAL] -> HiscoreEndpoint.SEASONAL_DEADMAN
+        properties[WorldProperty.TOURNAMENT] -> HiscoreEndpoint.TOURNAMENT
+        properties[WorldProperty.SEASONAL] -> HiscoreEndpoint.SEASONAL
         properties[WorldProperty.DEADMAN] -> HiscoreEndpoint.DEADMAN
         else -> HiscoreEndpoint.NORMAL
     }
