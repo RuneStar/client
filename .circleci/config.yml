@@ -16,12 +16,5 @@ jobs:
           name: Maven Install
           command: mvn install --show-version --batch-mode --errors --activate-profiles release
 
-      - run:
-          name: GitHub Release
-          command: |
-            if [[ "${CIRCLE_BRANCH}" == "master" && -z "${CIRCLE_PULL_REQUEST}" ]]; then
-              mvn --projects client github-release:release --settings .circleci/settings.xml
-            fi
-
       - store_artifacts:
           path: client/target

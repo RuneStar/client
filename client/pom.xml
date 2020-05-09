@@ -76,6 +76,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}-${git.commit.time}-${git.commit.id.describe-short}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -140,16 +141,21 @@
                 <groupId>net.nicoulaj.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
-                <groupId>de.jutzig</groupId>
-                <artifactId>github-release-plugin</artifactId>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <releaseName>Client ${project.version}-${env.CIRCLE_BUILD_NUM}</releaseName>
-                    <tag>${project.version}-${env.CIRCLE_BUILD_NUM}</tag>
-                    <repositoryId>runestar/client</repositoryId>
-                    <prerelease>true</prerelease>
-                    <description>${env.CIRCLE_COMPARE_URL}</description>
+                    <dateFormat>yyyy-MM-dd</dateFormat>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <generateGitPropertiesFile>false</generateGitPropertiesFile>
                 </configuration>
             </plugin>
         </plugins>
