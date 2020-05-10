@@ -6,8 +6,8 @@ $ErrorActionPreference = 'Stop';^
 [Net.ServicePointManager]::SecurityProtocol = [Enum]::ToObject([Net.SecurityProtocolType], 3072);^
 $LauncherUrl = 'https://dl.runestar.org/launcher.ps1';^
 $LauncherFile = 'launcher\launcher.ps1';^
-(New-Object System.Net.WebClient).DownloadFile($LauncherUrl, $LauncherFile);^
 New-Item -ItemType Directory -Path 'launcher' -Force ^| Out-Null;^
+(New-Object System.Net.WebClient).DownloadFile($LauncherUrl, $LauncherFile);^
 & $LauncherFile %*;^
 exit $LastExitCode;^
 }
