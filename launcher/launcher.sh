@@ -104,7 +104,7 @@ then
 		--add-modules java.desktop,java.management,java.naming,java.sql,java.net.http \
 		--output "$jre_dir"
 
-	echo "$jre_version" >"$jre_version_file"
+	printf "%s" "$jre_version" >"$jre_version_file"
 
 	rm -rf "$temp_dir"
 fi
@@ -123,7 +123,7 @@ then
 	mkdir -p "$client_dir"
 	new_client_jar_url="https://dl.runestar.org/client-$new_client_version.jar"
 	download_file "$client_jar" "$new_client_jar_url"
-	echo "$new_client_version" >"$client_version_file"
+	printf "%s" "$new_client_version" >"$client_version_file"
 fi
 
 "$jre_dir/bin/java$exe_extension" \

@@ -37,9 +37,8 @@ if (!(Test-Path $JreDir)) {
 	$JdkArchive = "$TempDir\jdk-$JavaVersion-windows-$Arch.zip"
 	if (!(Test-Path $JdkArchive)) {
 		$JdkArchiveUrl = "https://api.adoptopenjdk.net/v3/binary/latest/$JavaVersion/ga/windows/$Arch/jdk/hotspot/normal/adoptopenjdk"
-		Write-Host "Downloading '$JdkArchiveUrl' to '$JdkArchive' ... " -NoNewline
+		"Downloading '$JdkArchiveUrl' to '$JdkArchive'"
 		(New-Object System.Net.WebClient).DownloadFile($JdkArchiveUrl, $JdkArchive)
-		Write-Host 'Completed'
 	}
 	$JdkDir = "$TempDir\jdk-$JavaVersion-windows-$Arch"
 	Expand-Zip -Path $JdkArchive -DestinationPath $JdkDir
@@ -57,7 +56,7 @@ if (!(Test-Path $JreDir)) {
 
 	if ($LastExitCode) { exit $LastExitCode }
 
-	Set-Content -Path $JreVersionFile -Value $JreVersion
+	[System.IO.File]::WriteAllText($JreVersionFile, $JreVersion)
 
 	Remove-Item $TempDir -Recurse
 }
@@ -71,10 +70,9 @@ $NewClientVersion = (New-Object System.Net.WebClient).DownloadString($NewClientV
 if (!(Test-Path $ClientVersionFile -PathType Leaf) -or ((Get-Content $ClientVersionFile) -ne $NewClientVersion)) {
 	New-Item -ItemType Directory -Path $ClientDir -Force | Out-Null
 	$NewClientJarUrl = "https://dl.runestar.org/client-$NewClientVersion.jar"
-	Write-Host "Downloading '$NewClientJarUrl' to '$ClientJar' ... " -NoNewline
+	"Downloading '$NewClientJarUrl' to '$ClientJar'"
 	(New-Object System.Net.WebClient).DownloadFile($NewClientJarUrl, $ClientJar)
-	Write-Host 'Completed'
-	Set-Content -Path $ClientVersionFile -Value $NewClientVersion
+	[System.IO.File]::WriteAllText($ClientVersionFile, $NewClientVersion)
 }
 
 & "$JreDir\bin\javaw" `
