@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.brightness
 
 import io.reactivex.rxkotlin.subscribeBy
-import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.live.Vars
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.VarpId
+import org.runestar.client.api.game.live.Vars
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 
 class Brightness : AbstractPlugin<Brightness.Settings>() {
 

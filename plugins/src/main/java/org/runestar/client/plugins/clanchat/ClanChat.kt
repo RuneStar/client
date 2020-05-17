@@ -1,15 +1,15 @@
 package org.runestar.client.plugins.clanchat
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.ChatType
-import org.runestar.client.game.api.ClanRank
-import org.runestar.client.game.api.Message
-import org.runestar.client.game.api.Sprite
-import org.runestar.client.game.api.imageTag
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.ChatType
+import org.runestar.client.api.game.ClanRank
+import org.runestar.client.api.game.Message
+import org.runestar.client.api.game.Sprite
+import org.runestar.client.api.game.imageTag
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 

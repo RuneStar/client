@@ -1,17 +1,17 @@
 package org.runestar.client.plugins.castlewars
 
 import com.google.common.base.Stopwatch
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.cacheids.NpcId
-import org.runestar.client.game.api.HslColor
-import org.runestar.client.game.api.NpcDefinition
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.live.Npcs
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XNPCType
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.HslColor
+import org.runestar.client.api.game.NpcDefinition
+import org.runestar.client.api.game.ComponentId
+import org.runestar.client.api.game.live.Npcs
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.raw.access.XNPCType
+import org.runestar.client.api.plugins.PluginSettings
 import java.time.Duration
 
 class CastleWars : DisposablePlugin<CastleWars.Settings>() {

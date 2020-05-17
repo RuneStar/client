@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.chatcolors
 
 import org.runestar.client.api.forms.RgbForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.ChatType
-import org.runestar.client.game.api.Message
-import org.runestar.client.game.api.TextEffect
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.ChatType
+import org.runestar.client.api.game.Message
+import org.runestar.client.api.game.TextEffect
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class ChatColors : DisposablePlugin<ChatColors.Settings>() {

@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.barrows
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.Region
-import org.runestar.client.game.api.live.*
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.GameState
+import org.runestar.client.api.game.Region
+import org.runestar.client.api.game.live.*
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D

@@ -2,8 +2,8 @@ package org.runestar.client.patch;
 
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
-import org.runestar.client.game.raw.base.MethodEvent;
-import org.runestar.client.game.raw.base.MethodExecution;
+import org.runestar.client.raw.base.MethodEvent;
+import org.runestar.client.raw.base.MethodExecution;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

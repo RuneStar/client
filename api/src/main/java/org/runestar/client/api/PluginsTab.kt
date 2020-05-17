@@ -2,7 +2,7 @@ package org.runestar.client.api
 
 import org.runestar.client.api.util.desktop
 import org.runestar.client.api.util.safeOpen
-import org.runestar.client.plugins.spi.PluginLoader
+import org.runestar.client.api.plugins.PluginLoader
 import java.awt.Component
 import javax.imageio.ImageIO
 import javax.swing.Box

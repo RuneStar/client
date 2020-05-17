@@ -10,11 +10,11 @@ import org.runestar.client.api.overlay.cachingSize
 import org.runestar.client.api.overlay.withBackground
 import org.runestar.client.api.overlay.withBorder
 import org.runestar.client.api.overlay.withPadding
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.cacheids.StatId
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.Stats
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.api.game.live.Stats
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 import java.util.TreeMap
 import kotlin.math.absoluteValue

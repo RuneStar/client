@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.windowtransparency
 
 import org.runestar.client.api.Application
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Component
 import java.awt.Window
 import javax.swing.SwingUtilities

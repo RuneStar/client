@@ -4,11 +4,11 @@ import io.reactivex.disposables.Disposable
 import org.kxtra.swing.graphics.use
 import org.kxtra.swing.image.createGraphics
 import org.runestar.client.api.util.Disposable
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XRasterProvider
-import org.runestar.client.game.raw.access.XTextureProvider
+import org.runestar.client.api.game.ComponentId
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XRasterProvider
+import org.runestar.client.raw.access.XTextureProvider
 import java.awt.Dimension
 import java.awt.Graphics2D
 

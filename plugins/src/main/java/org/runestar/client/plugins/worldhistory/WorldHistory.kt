@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.worldhistory
 
 import com.google.common.collect.EvictingQueue
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Worlds
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Worlds
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 import java.util.*
 
 class WorldHistory : DisposablePlugin<PluginSettings>() {

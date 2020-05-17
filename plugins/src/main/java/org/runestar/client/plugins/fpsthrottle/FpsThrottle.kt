@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.fpsthrottle
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XRasterProvider
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XRasterProvider
+import org.runestar.client.api.plugins.PluginSettings
 
 class FpsThrottle : DisposablePlugin<FpsThrottle.Settings>() {
 

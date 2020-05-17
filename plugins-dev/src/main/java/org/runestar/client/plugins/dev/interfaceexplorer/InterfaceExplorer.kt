@@ -1,13 +1,13 @@
 package org.runestar.client.plugins.dev.interfaceexplorer
 
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
 import org.runestar.client.api.Fonts
-import org.runestar.client.game.api.Component
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Mouse
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.Component
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Mouse
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 import javax.swing.SwingUtilities
 

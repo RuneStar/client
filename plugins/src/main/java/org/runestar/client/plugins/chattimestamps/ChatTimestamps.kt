@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.chattimestamps
 
 import org.runestar.client.api.forms.DateTimeFormatterForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.plugins.PluginSettings
 import java.time.Instant
 
 class ChatTimestamps : DisposablePlugin<ChatTimestamps.Settings>() {

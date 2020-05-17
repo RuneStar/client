@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.windowalwaysontop
 
 import org.runestar.client.api.Application
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 import javax.swing.SwingUtilities
 
 class WindowAlwaysOnTop : AbstractPlugin<PluginSettings>() {

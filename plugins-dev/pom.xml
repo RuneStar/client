@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-plugins-dev</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/plugins/dev</name>
 
     <dependencies>
@@ -38,7 +36,7 @@
                 <artifactId>serviceloader-maven-plugin</artifactId>
                 <configuration>
                     <services>
-                        <param>org.runestar.client.plugins.spi.Plugin</param>
+                        <param>org.runestar.client.api.plugins.Plugin</param>
                     </services>
                 </configuration>
             </plugin>

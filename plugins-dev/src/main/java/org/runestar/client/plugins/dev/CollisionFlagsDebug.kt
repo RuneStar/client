@@ -2,12 +2,12 @@ package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawString
 import org.runestar.client.api.Fonts
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Scene
-import org.runestar.client.game.api.live.Mouse
-import org.runestar.client.game.api.live.Viewport
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Scene
+import org.runestar.client.api.game.live.Mouse
+import org.runestar.client.api.game.live.Viewport
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class CollisionFlagsDebug : DisposablePlugin<PluginSettings>() {

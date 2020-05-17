@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-common</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/common</name>
 
     <dependencies>

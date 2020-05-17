@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.hidelowerfloors
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 
 class HideLowerFloors : DisposablePlugin<PluginSettings>() {
 

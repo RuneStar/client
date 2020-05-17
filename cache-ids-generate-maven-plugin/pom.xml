@@ -11,9 +11,8 @@
     </parent>
 
     <artifactId>client-cache-ids-generate-maven-plugin</artifactId>
-    <packaging>maven-plugin</packaging>
-
     <name>client/cache-ids/generate-maven-plugin</name>
+    <packaging>maven-plugin</packaging>
 
     <dependencies>
         <dependency>

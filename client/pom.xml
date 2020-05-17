@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client</artifactId>
-    <packaging>jar</packaging>
-
     <name>client</name>
 
     <profiles>
@@ -46,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-game-raw</artifactId>
+            <artifactId>client-raw</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -72,6 +70,10 @@
             <artifactId>client-cache-ids</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
     </dependencies>
 
@@ -99,7 +101,7 @@
                 <artifactId>serviceloader-maven-plugin</artifactId>
                 <configuration>
                     <services>
-                        <param>org.runestar.client.game.raw.ClientProvider</param>
+                        <param>org.runestar.client.raw.ClientProvider</param>
                     </services>
                 </configuration>
             </plugin>

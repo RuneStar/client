@@ -10,18 +10,18 @@ import org.runestar.client.api.overlay.hideable
 import org.runestar.client.api.overlay.withBackground
 import org.runestar.client.api.overlay.withBorder
 import org.runestar.client.api.overlay.withPadding
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.cacheids.ScriptId
-import org.runestar.client.game.api.BR_TAG
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.VarbitId
-import org.runestar.client.game.api.VarpId
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.api.live.Vars
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XClientScriptEvent
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.BR_TAG
+import org.runestar.client.api.game.ComponentId
+import org.runestar.client.api.game.VarbitId
+import org.runestar.client.api.game.VarpId
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.api.game.live.Vars
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.raw.access.XClientScriptEvent
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class AttackStyles : DisposablePlugin<AttackStyles.Settings>() {

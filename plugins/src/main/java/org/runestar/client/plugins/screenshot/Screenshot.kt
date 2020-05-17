@@ -7,11 +7,11 @@ import org.runestar.client.api.ActionButton
 import org.runestar.client.api.Application
 import org.runestar.client.api.forms.DateTimeFormatterForm
 import org.runestar.client.api.forms.KeyStrokeForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XRasterProvider
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Keyboard
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XRasterProvider
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.TrayIcon
 import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage

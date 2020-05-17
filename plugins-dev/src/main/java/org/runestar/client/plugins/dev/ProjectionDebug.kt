@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Mouse
-import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Minimap
-import org.runestar.client.game.api.live.Viewport
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Mouse
+import org.runestar.client.api.plugins.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Minimap
+import org.runestar.client.api.game.live.Viewport
 import java.awt.Color
 import java.awt.Point
 import java.awt.Shape

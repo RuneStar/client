@@ -1,9 +1,13 @@
 package org.runestar.client.plugins.entityhider
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.*
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
+import org.runestar.client.raw.access.XActor
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.raw.access.XNpc
+import org.runestar.client.raw.access.XPlayer
+import org.runestar.client.raw.access.XScene
 
 class EntityHider : DisposablePlugin<EntityHider.Settings>() {
 

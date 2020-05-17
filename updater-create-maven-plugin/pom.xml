@@ -11,9 +11,8 @@
     </parent>
 
     <artifactId>client-updater-create-maven-plugin</artifactId>
-    <packaging>maven-plugin</packaging>
-
     <name>client/updater/create-maven-plugin</name>
+    <packaging>maven-plugin</packaging>
 
     <dependencies>
         <dependency>

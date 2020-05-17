@@ -12,7 +12,7 @@ import net.bytebuddy.implementation.MethodCall
 import net.bytebuddy.implementation.bytecode.assign.Assigner
 import net.bytebuddy.jar.asm.Type
 import net.bytebuddy.pool.TypePool
-import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.raw.access.XClient
 import org.runestar.client.updater.readHooks
 import org.zeroturnaround.zip.ZipUtil
 import java.lang.reflect.Modifier

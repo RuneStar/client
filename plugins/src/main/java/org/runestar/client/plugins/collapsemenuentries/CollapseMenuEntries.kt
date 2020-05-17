@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.collapsemenuentries
 
 import com.google.common.collect.Maps
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.MiniMenuOption
-import org.runestar.client.game.api.live.MiniMenu
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.MiniMenuOption
+import org.runestar.client.api.game.live.MiniMenu
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 
 class CollapseMenuEntries : DisposablePlugin<CollapseMenuEntries.Settings>() {
 

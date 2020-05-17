@@ -2,10 +2,10 @@ package org.runestar.client.plugins.dev
 
 import com.google.common.base.Splitter
 import org.kxtra.slf4j.info
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 
 class VarpsChangeDebug : DisposablePlugin<PluginSettings>() {
 

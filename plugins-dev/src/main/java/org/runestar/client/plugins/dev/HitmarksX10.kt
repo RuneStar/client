@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.XHitmarkType
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.access.XHitmarkType
+import org.runestar.client.api.plugins.PluginSettings
 
 class HitmarksX10 : DisposablePlugin<PluginSettings>() {
 

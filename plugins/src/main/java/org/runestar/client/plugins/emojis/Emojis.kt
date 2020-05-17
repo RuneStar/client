@@ -2,13 +2,13 @@ package org.runestar.client.plugins.emojis
 
 import io.reactivex.Observable
 import org.runestar.client.api.util.CyclicCache
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Sprite
-import org.runestar.client.game.api.appendImageTag
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XAbstractFont
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.Sprite
+import org.runestar.client.api.game.appendImageTag
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XAbstractFont
+import org.runestar.client.api.plugins.PluginSettings
 import javax.imageio.ImageIO
 
 class Emojis : DisposablePlugin<PluginSettings>() {

@@ -1,14 +1,14 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.Fonts
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.Actor
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Npcs
-import org.runestar.client.game.api.live.Players
-import org.runestar.client.game.raw.access.XActor
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.Actor
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Npcs
+import org.runestar.client.api.game.live.Players
+import org.runestar.client.raw.access.XActor
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
 

@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.antidrag
 
 import org.runestar.client.api.forms.KeyCodeForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Keyboard
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 
 class AntiDrag : DisposablePlugin<AntiDrag.Settings>() {
 

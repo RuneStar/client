@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.smoothanimations
 
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XAnimFrame
-import org.runestar.client.game.raw.access.XModel
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XAnimFrame
+import org.runestar.client.raw.access.XModel
 
 internal fun XModel.animateInterpolated(
         animation: XAnimFrame,

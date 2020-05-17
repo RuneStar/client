@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.Fonts
-import org.runestar.client.game.api.EnumId
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Enums
-import org.runestar.client.game.api.live.Prayers
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.EnumId
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Enums
+import org.runestar.client.api.game.live.Prayers
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class PrayerDebug : DisposablePlugin<PluginSettings>() {

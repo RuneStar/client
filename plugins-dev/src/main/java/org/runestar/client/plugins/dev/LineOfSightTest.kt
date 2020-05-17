@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.LineOfSight
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Players
-import org.runestar.client.game.api.live.VisibilityMap
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.LineOfSight
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Players
+import org.runestar.client.api.game.live.VisibilityMap
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class LineOfSightTest : DisposablePlugin<PluginSettings>() {

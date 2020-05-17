@@ -1,9 +1,14 @@
 package org.runestar.client.plugins.smoothanimations
 
 import io.reactivex.Observable
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.*
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.plugins.PluginSettings
+import org.runestar.client.raw.access.XComponent
+import org.runestar.client.raw.access.XDynamicObject
+import org.runestar.client.raw.access.XGraphicsObject
+import org.runestar.client.raw.access.XNpc
+import org.runestar.client.raw.access.XPlayer
+import org.runestar.client.raw.access.XSeqType
 
 class SmoothAnimations : DisposablePlugin<PluginSettings>() {
 

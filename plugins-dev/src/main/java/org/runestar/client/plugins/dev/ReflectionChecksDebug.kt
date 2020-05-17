@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.dev
 
 import io.reactivex.Observable
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.XIterableNodeDeque
-import org.runestar.client.game.raw.access.XReflectionCheck
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.access.XIterableNodeDeque
+import org.runestar.client.raw.access.XReflectionCheck
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 import java.lang.reflect.Modifier
 
 class ReflectionChecksDebug : DisposablePlugin<PluginSettings>() {

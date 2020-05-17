@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.plugins.PluginSettings
 
 class MessageLogger : DisposablePlugin<PluginSettings>() {
 

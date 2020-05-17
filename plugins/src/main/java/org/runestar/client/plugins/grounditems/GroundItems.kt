@@ -4,18 +4,18 @@ import org.runestar.client.api.Fonts
 import org.runestar.client.api.forms.FontForm
 import org.runestar.client.api.forms.RegexForm
 import org.runestar.client.api.forms.RgbaForm
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.util.drawStringShadowed
-import org.runestar.client.game.api.GroundItem
-import org.runestar.client.game.api.SceneElement
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Scene
-import org.runestar.client.game.api.live.Viewport
-import org.runestar.client.game.api.live.SceneElements
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XObjType
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.GroundItem
+import org.runestar.client.api.game.SceneElement
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Scene
+import org.runestar.client.api.game.live.Viewport
+import org.runestar.client.api.game.live.SceneElements
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XObjType
+import org.runestar.client.api.plugins.PluginSettings
 
 class GroundItems : DisposablePlugin<GroundItems.Settings>() {
 

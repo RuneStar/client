@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.api.live.GrandExchangeOffers
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.game.live.GrandExchangeOffers
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.plugins.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
 import java.awt.Color
 
 class GrandExchangeOfferDebug : DisposablePlugin<PluginSettings>() {

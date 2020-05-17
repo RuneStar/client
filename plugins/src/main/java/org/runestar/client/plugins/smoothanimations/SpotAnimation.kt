@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.smoothanimations
 
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XModel
-import org.runestar.client.game.raw.access.XSeqType
-import org.runestar.client.game.raw.base.MethodEvent
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XModel
+import org.runestar.client.raw.access.XSeqType
+import org.runestar.client.raw.base.MethodEvent
 
 internal fun animateSpotAnimationEnter(event: MethodEvent<XSeqType, XModel>) {
     val frameArg = event.arguments[1] as Int

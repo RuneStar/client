@@ -2,8 +2,8 @@ package org.runestar.client.plugins.notes
 
 import org.runestar.client.api.Application
 import org.runestar.client.api.TabButton
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.event.FocusAdapter
 import java.awt.event.FocusEvent
 import javax.imageio.ImageIO

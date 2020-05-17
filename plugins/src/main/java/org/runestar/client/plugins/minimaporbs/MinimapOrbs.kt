@@ -2,17 +2,17 @@ package org.runestar.client.plugins.minimaporbs
 
 import org.runestar.client.api.forms.BasicStrokeForm
 import org.runestar.client.api.forms.RgbaForm
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.cacheids.PrayerId
 import org.runestar.client.cacheids.StatId
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Prayers
-import org.runestar.client.game.api.live.Stats
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.GameState
+import org.runestar.client.api.game.ComponentId
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Prayers
+import org.runestar.client.api.game.live.Stats
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.RenderingHints
 import java.awt.Shape
 import java.awt.geom.Arc2D

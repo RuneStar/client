@@ -5,8 +5,8 @@ package org.runestar.client.api
 import io.reactivex.disposables.Disposable
 import org.runestar.client.api.util.Disposable
 import org.runestar.client.common.JAV_CONFIG
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.raw.CLIENT
+import org.runestar.client.api.game.GameState
+import org.runestar.client.raw.CLIENT
 import java.applet.Applet
 import java.awt.Dimension
 import java.awt.event.WindowAdapter

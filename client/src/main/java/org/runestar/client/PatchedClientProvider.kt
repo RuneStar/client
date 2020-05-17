@@ -7,8 +7,8 @@ import org.runestar.client.common.DIFF_NAME
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.common.REVISION
 import org.runestar.client.common.xorAssign
-import org.runestar.client.game.raw.ClientProvider
-import org.runestar.client.game.raw.access.XClient
+import org.runestar.client.raw.ClientProvider
+import org.runestar.client.raw.access.XClient
 import java.io.IOException
 import java.net.URL
 import java.net.URLClassLoader

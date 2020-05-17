@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.inventorygrid
 
 import org.runestar.client.api.forms.RgbaForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 
 class InventoryGrid : DisposablePlugin<InventoryGrid.Settings>() {
 

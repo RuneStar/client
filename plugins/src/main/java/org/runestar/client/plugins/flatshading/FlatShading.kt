@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.flatshading
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Scene
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XUnlitModel
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Scene
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XUnlitModel
+import org.runestar.client.api.plugins.PluginSettings
 
 class FlatShading : DisposablePlugin<PluginSettings>() {
 

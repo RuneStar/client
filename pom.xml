@@ -9,30 +9,25 @@
     <version>0.189.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
-
     <name>client parent</name>
 
     <modules>
-        <module>common</module>
-        <module>client</module>
         <module>api</module>
-        <module>game-api</module>
-        <module>game-raw-base</module>
-        <module>game-raw</module>
-        <module>game-raw-accessors-maven-plugin</module>
-        <module>plugins</module>
-        <module>plugins-dev</module>
-        <module>plugins-spi</module>
-        <module>patch-maven-plugin</module>
-        <module>updater</module>
-        <module>updater-common</module>
-        <module>updater-deob</module>
-        <module>updater-create-maven-plugin</module>
-        <module>updater-mapper</module>
-        <module>updater-mapper-standard</module>
         <module>cache-ids</module>
         <module>cache-ids-generate-maven-plugin</module>
-        <module>web</module>
+        <module>client</module>
+        <module>common</module>
+        <module>patch-maven-plugin</module>
+        <module>plugins</module>
+        <module>plugins-dev</module>
+        <module>raw</module>
+        <module>raw-accessors-maven-plugin</module>
+        <module>raw-base</module>
+        <module>updater</module>
+        <module>updater-common</module>
+        <module>updater-create-maven-plugin</module>
+        <module>updater-deob</module>
+        <module>updater-mapper</module>
     </modules>
 
     <repositories>

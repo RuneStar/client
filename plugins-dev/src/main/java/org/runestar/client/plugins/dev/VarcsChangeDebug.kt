@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.dev
 
 import org.kxtra.slf4j.debug
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.access.XVarcs
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.access.XVarcs
+import org.runestar.client.api.plugins.PluginSettings
 
 class VarcsChangeDebug : DisposablePlugin<PluginSettings>() {
 

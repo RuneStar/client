@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.chathistory
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.game.raw.access.XIterableDualNodeQueue
-import org.runestar.client.game.raw.access.XIterableNodeHashTable
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.raw.access.XIterableDualNodeQueue
+import org.runestar.client.raw.access.XIterableNodeHashTable
+import org.runestar.client.api.plugins.PluginSettings
 
 class ChatHistory : DisposablePlugin<PluginSettings>() {
 

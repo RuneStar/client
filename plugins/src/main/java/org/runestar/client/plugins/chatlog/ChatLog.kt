@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.chatlog
 
 import org.runestar.client.api.forms.DateTimeFormatterForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Message
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.game.api.unescapeAngleBrackets
-import org.runestar.client.game.api.unescapeSpaces
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.Message
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.game.unescapeAngleBrackets
+import org.runestar.client.api.game.unescapeSpaces
+import org.runestar.client.api.plugins.PluginSettings
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.time.Instant

@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.pinoverheadtext
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Players
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Players
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 
 class PinOverheadText : DisposablePlugin<PinOverheadText.Settings>() {
 

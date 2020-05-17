@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-updater-mapper</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/updater/mapper</name>
 
     <dependencies>
@@ -39,6 +37,11 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>client-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

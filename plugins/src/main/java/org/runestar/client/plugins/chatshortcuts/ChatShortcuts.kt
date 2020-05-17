@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.chatshortcuts
 
 import org.runestar.client.api.forms.KeyStrokeForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Chat
-import org.runestar.client.game.api.live.Keyboard
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Chat
+import org.runestar.client.api.game.live.Keyboard
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 
 class ChatShortcuts : DisposablePlugin<ChatShortcuts.Settings>() {
 

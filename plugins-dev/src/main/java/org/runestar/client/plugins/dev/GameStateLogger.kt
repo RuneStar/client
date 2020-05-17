@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.plugins.spi.PluginSettings
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.api.plugins.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
 
 class GameStateLogger : DisposablePlugin<PluginSettings>() {
 

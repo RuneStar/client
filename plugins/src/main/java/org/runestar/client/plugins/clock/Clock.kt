@@ -2,12 +2,12 @@ package org.runestar.client.plugins.clock
 
 import com.google.common.base.Stopwatch
 import org.runestar.client.api.forms.DateTimeFormatterForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.ComponentId
-import org.runestar.client.game.api.live.Components
-import org.runestar.client.game.api.live.Worlds
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.ComponentId
+import org.runestar.client.api.game.live.Components
+import org.runestar.client.api.game.live.Worlds
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginSettings
 import java.time.Duration
 import java.time.Instant
 

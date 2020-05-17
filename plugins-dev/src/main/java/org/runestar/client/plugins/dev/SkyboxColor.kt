@@ -1,10 +1,10 @@
 package org.runestar.client.plugins.dev
 
 import org.runestar.client.api.forms.RgbForm
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XScene
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XScene
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 
 class SkyboxColor : DisposablePlugin<SkyboxColor.Settings>() {

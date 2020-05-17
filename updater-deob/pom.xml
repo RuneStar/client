@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-updater-deob</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/updater/deob</name>
 
     <dependencies>

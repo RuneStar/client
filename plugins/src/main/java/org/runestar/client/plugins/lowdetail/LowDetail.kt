@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.lowdetail
 
-import org.runestar.client.game.api.live.Scene
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.live.Scene
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 
 class LowDetail : AbstractPlugin<PluginSettings>() {
 

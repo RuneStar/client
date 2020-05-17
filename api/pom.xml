@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-api</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/api</name>
 
     <dependencies>
@@ -27,17 +25,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>client-plugins-spi</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-game-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-game-raw</artifactId>
+            <artifactId>client-raw</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -76,6 +64,14 @@
         <dependency>
             <groupId>org.kxtra</groupId>
             <artifactId>kxtra-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.akarnokd</groupId>
+            <artifactId>rxjava2-swing</artifactId>
         </dependency>
     </dependencies>
 

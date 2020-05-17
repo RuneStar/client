@@ -1,11 +1,11 @@
 package org.runestar.client.plugins.dev
 
 import org.kxtra.swing.graphics.drawPoint
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.VisibilityMap
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.VisibilityMap
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.BasicStroke
 import java.awt.Color
 

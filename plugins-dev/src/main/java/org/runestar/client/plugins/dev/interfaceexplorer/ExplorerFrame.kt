@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.dev.interfaceexplorer
 
 import org.runestar.client.api.ICON
-import org.runestar.client.game.api.Component
+import org.runestar.client.api.game.Component
 import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.*

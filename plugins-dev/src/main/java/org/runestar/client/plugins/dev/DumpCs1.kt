@@ -1,9 +1,9 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XArchive
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XArchive
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 import java.nio.file.Files
 
 class DumpCs1 : AbstractPlugin<PluginSettings>() {

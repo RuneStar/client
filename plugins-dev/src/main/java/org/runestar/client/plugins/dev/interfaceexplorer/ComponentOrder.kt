@@ -1,8 +1,8 @@
 package org.runestar.client.plugins.dev.interfaceexplorer
 
-import org.runestar.client.game.api.ComponentType
-import org.runestar.client.game.api.live.Interfaces
-import org.runestar.client.game.api.live.Components
+import org.runestar.client.api.game.ComponentType
+import org.runestar.client.api.game.live.Interfaces
+import org.runestar.client.api.game.live.Components
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 

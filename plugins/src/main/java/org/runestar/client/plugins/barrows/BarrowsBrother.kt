@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.barrows
 
-import org.runestar.client.game.api.GlobalRectangle
+import org.runestar.client.api.game.GlobalRectangle
 
 enum class BarrowsBrother(val digArea: GlobalRectangle) {
 

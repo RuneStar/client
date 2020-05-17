@@ -2,10 +2,10 @@ package org.runestar.client.plugins.dev
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XFont
-import org.runestar.client.plugins.spi.AbstractPlugin
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XFont
+import org.runestar.client.api.plugins.AbstractPlugin
+import org.runestar.client.api.plugins.PluginSettings
 
 class DumpFonts : AbstractPlugin<PluginSettings>() {
 

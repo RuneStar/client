@@ -1,15 +1,15 @@
 package org.runestar.client.plugins.dev
 
-import org.runestar.client.api.util.DisposablePlugin
-import org.runestar.client.game.api.Model
-import org.runestar.client.game.api.SceneElement
-import org.runestar.client.game.api.SceneElementKind
-import org.runestar.client.game.api.live.Canvas
-import org.runestar.client.game.api.live.Scene
-import org.runestar.client.game.api.live.Viewport
-import org.runestar.client.game.api.live.SceneElements
-import org.runestar.client.game.api.live.VisibilityMap
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.plugins.DisposablePlugin
+import org.runestar.client.api.game.Model
+import org.runestar.client.api.game.SceneElement
+import org.runestar.client.api.game.SceneElementKind
+import org.runestar.client.api.game.live.Canvas
+import org.runestar.client.api.game.live.Scene
+import org.runestar.client.api.game.live.Viewport
+import org.runestar.client.api.game.live.SceneElements
+import org.runestar.client.api.game.live.VisibilityMap
+import org.runestar.client.api.plugins.PluginSettings
 import java.awt.Color
 import java.awt.Graphics2D
 

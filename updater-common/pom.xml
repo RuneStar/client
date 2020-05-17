@@ -11,8 +11,6 @@
     </parent>
 
     <artifactId>client-updater-common</artifactId>
-    <packaging>jar</packaging>
-
     <name>client/updater/common</name>
 
     <dependencies>

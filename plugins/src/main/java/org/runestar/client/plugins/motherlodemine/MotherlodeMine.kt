@@ -1,12 +1,12 @@
 package org.runestar.client.plugins.motherlodemine
 
-import org.runestar.client.api.util.DisposablePlugin
+import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.cacheids.LocId
-import org.runestar.client.game.api.HslColor
-import org.runestar.client.game.api.ObjectDefinition
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XLocType
-import org.runestar.client.plugins.spi.PluginSettings
+import org.runestar.client.api.game.HslColor
+import org.runestar.client.api.game.ObjectDefinition
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XLocType
+import org.runestar.client.api.plugins.PluginSettings
 
 class MotherlodeMine : DisposablePlugin<MotherlodeMine.Settings>() {
 

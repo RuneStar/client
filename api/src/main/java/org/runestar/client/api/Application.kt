@@ -12,11 +12,12 @@ import org.runestar.client.api.util.safeSetWindowProgressValue
 import org.runestar.client.api.util.safeTrayIcon
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.api.util.taskbar
-import org.runestar.client.game.api.GameState
-import org.runestar.client.game.api.live.Game
-import org.runestar.client.game.raw.CLIENT
-import org.runestar.client.game.raw.access.XClient
-import org.runestar.client.plugins.spi.PluginLoader
+import org.runestar.client.api.game.GameState
+import org.runestar.client.api.game.live.Game
+import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XClient
+import org.runestar.client.api.plugins.PluginLoader
+import org.runestar.client.api.plugins.PropertiesFileReadWriter
 import java.awt.Frame
 import java.awt.MenuItem
 import java.awt.PopupMenu
