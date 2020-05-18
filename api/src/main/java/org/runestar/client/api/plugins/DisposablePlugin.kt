@@ -1,8 +1,8 @@
 package org.runestar.client.api.plugins
 
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.disposables.DisposableContainer
-import io.reactivex.internal.disposables.ListCompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.DisposableContainer
+import io.reactivex.rxjava3.internal.disposables.ListCompositeDisposable
 import org.runestar.client.api.util.Disposable
 
 /**

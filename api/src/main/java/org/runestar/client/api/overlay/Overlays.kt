@@ -1,6 +1,6 @@
 package org.runestar.client.api.overlay
 
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import org.kxtra.swing.graphics.use
 import org.kxtra.swing.image.createGraphics
 import org.runestar.client.api.util.Disposable

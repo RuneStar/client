@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.emojis
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.api.util.CyclicCache
 import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.game.Sprite

@@ -50,11 +50,11 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
+            <groupId>io.reactivex.rxjava3</groupId>
             <artifactId>rxjava</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
+            <groupId>io.reactivex.rxjava3</groupId>
             <artifactId>rxkotlin</artifactId>
         </dependency>
         <dependency>
@@ -71,7 +71,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.akarnokd</groupId>
-            <artifactId>rxjava2-swing</artifactId>
+            <artifactId>rxjava3-swing</artifactId>
         </dependency>
     </dependencies>
 

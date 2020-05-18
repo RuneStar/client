@@ -16,7 +16,7 @@ class ChatColors : DisposablePlugin<ChatColors.Settings>() {
     override val name = "Chat Colors"
 
     override fun onStart() {
-        add(Chat.messageAdditions.startWith(Chat).subscribe { colorMessage(it) })
+        add(Chat.messageAdditions.startWithIterable(Chat).subscribe { colorMessage(it) })
     }
 
     override fun onStop() {

@@ -2,7 +2,7 @@
 
 package org.runestar.client.api
 
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import org.runestar.client.api.util.Disposable
 import org.runestar.client.common.JAV_CONFIG
 import org.runestar.client.api.game.GameState

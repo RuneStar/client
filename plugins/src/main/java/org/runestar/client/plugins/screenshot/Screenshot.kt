@@ -1,7 +1,7 @@
 package org.runestar.client.plugins.screenshot
 
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.kxtra.swing.image.BufferedImage
 import org.runestar.client.api.ActionButton
 import org.runestar.client.api.Application

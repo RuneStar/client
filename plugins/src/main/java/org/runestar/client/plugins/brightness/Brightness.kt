@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.brightness
 
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.runestar.client.api.game.VarpId
 import org.runestar.client.api.game.live.Vars
 import org.runestar.client.raw.CLIENT

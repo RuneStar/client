@@ -1,6 +1,6 @@
 package org.runestar.client.plugins.smoothanimations
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.api.plugins.DisposablePlugin
 import org.runestar.client.api.plugins.PluginSettings
 import org.runestar.client.raw.access.XComponent

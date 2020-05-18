@@ -1,8 +1,8 @@
 package org.runestar.client.api
 
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.blockingSubscribeBy
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.blockingSubscribeBy
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.kxtra.swing.input.isLeftButton
 import org.runestar.client.api.util.safeIconImage
 import org.runestar.client.api.util.safeMenu

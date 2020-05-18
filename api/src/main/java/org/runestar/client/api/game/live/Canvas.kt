@@ -1,7 +1,7 @@
 package org.runestar.client.api.game.live
 
-import hu.akarnokd.rxjava2.swing.SwingObservable
-import io.reactivex.Observable
+import hu.akarnokd.rxjava3.swing.SwingObservable
+import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.raw.CLIENT
 import org.runestar.client.raw.access.XGameShell
 import org.runestar.client.raw.access.XRasterProvider
@@ -35,7 +35,7 @@ object Canvas {
     }
 
     val canvasReplacements: Observable<java.awt.Canvas> get() = XGameShell.addCanvas.exit.map { CLIENT.canvas }
-            .startWith(CLIENT.canvas)
+            .startWithItem(CLIENT.canvas)
 
     /**
      * @see[java.awt.event.FocusListener]

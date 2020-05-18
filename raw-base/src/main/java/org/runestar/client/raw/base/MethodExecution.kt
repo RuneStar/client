@@ -1,7 +1,7 @@
 package org.runestar.client.raw.base
 
-import io.reactivex.Observable
-import io.reactivex.Observer
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
 
 /**
  * Wraps a method and provides access to the state of the method calls both before execution starts and after it ends.

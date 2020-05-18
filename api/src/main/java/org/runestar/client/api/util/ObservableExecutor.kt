@@ -1,7 +1,7 @@
 package org.runestar.client.api.util
 
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import java.util.concurrent.Executor
 
 class ObservableExecutor(private val observable: Observable<*>) : Executor {

@@ -1,6 +1,6 @@
 package org.runestar.client.api.overlay
 
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 enum class Anchor {
 

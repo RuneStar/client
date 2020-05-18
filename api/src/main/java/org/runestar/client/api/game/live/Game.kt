@@ -1,8 +1,8 @@
 package org.runestar.client.api.game.live
 
-import hu.akarnokd.rxjava2.swing.SwingObservable
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import hu.akarnokd.rxjava3.swing.SwingObservable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.kxtra.swing.component.window
 import org.runestar.client.api.game.ChunkTemplate
 import org.runestar.client.api.game.ClanChat

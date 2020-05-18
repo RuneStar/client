@@ -1,6 +1,6 @@
 package org.runestar.client.api.game.live
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.api.game.MiniMenuOption
 import org.runestar.client.raw.CLIENT
 import org.runestar.client.raw.access.XClient

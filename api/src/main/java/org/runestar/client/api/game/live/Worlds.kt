@@ -1,7 +1,7 @@
 package org.runestar.client.api.game.live
 
 import com.google.common.collect.Iterators
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.api.game.GameState
 import org.runestar.client.api.game.World
 import org.runestar.client.api.game.WorldProperty
