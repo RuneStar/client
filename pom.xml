@@ -63,11 +63,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.java>11</version.java>
-        <version.kotlin>1.3.71</version.kotlin>
-        <version.jackson>2.10.0</version.jackson>
+        <version.kotlin>1.3.72</version.kotlin>
+        <version.jackson>2.10.4</version.jackson>
         <version.logback>1.2.3</version.logback>
-        <version.asm>7.3.1</version.asm>
-        <version.slf4j>1.7.28</version.slf4j>
+        <version.asm>8.0.1</version.asm>
+        <version.slf4j>1.7.30</version.slf4j>
 
         <runescape.gamepack.revision>189</runescape.gamepack.revision>
     </properties>
@@ -112,7 +112,7 @@
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
                 <artifactId>rxjava</artifactId>
-                <version>2.2.14</version>
+                <version>2.2.19</version>
             </dependency>
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>com.github.akarnokd</groupId>
                 <artifactId>rxjava2-swing</artifactId>
-                <version>0.3.4</version>
+                <version>0.3.7</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
@@ -178,7 +178,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>28.1-jre</version>
+                <version>29.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -209,12 +209,12 @@
             <dependency>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>zt-zip</artifactId>
-                <version>1.13</version>
+                <version>1.14</version>
             </dependency>
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.10.2</version>
+                <version>1.10.10</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -261,7 +261,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.1</version>
+                    <version>3.2.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -294,7 +294,7 @@
                 <plugin>
                     <groupId>net.nicoulaj.maven.plugins</groupId>
                     <artifactId>checksum-maven-plugin</artifactId>
-                    <version>1.6</version>
+                    <version>1.8</version>
                     <executions>
                         <execution>
                             <goals>
