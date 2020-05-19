@@ -52,11 +52,6 @@
             <artifactId>client-updater-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>client-updater-mapper-standard</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
