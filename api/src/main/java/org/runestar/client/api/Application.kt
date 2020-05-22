@@ -1,6 +1,5 @@
 package org.runestar.client.api
 
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.blockingSubscribeBy
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.kxtra.swing.input.isLeftButton
@@ -12,7 +11,6 @@ import org.runestar.client.api.util.safeSetWindowProgressValue
 import org.runestar.client.api.util.safeTrayIcon
 import org.runestar.client.api.util.systemTray
 import org.runestar.client.api.util.taskbar
-import org.runestar.client.api.game.GameState
 import org.runestar.client.api.game.live.Game
 import org.runestar.client.raw.CLIENT
 import org.runestar.client.raw.access.XClient
@@ -26,7 +24,6 @@ import java.awt.TrayIcon
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.nio.file.Files
-import java.util.concurrent.TimeUnit
 import javax.swing.ImageIcon
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
@@ -68,14 +65,6 @@ object Application : AutoCloseable {
         setProfile(DEFAULT_PROFILE)
 
         buildTray()
-
-        Observable.interval(2, TimeUnit.SECONDS).subscribe {
-            val name = if (Game.state == GameState.TITLE) null else CLIENT.localPlayerName
-            if (name != rsn) {
-                rsn = name
-                setTitle()
-            }
-        }
     }
 
     private fun waitForTitle() {
@@ -152,12 +141,6 @@ object Application : AutoCloseable {
         frame.sidePanel.addFirst(PluginsTab(pl.plugins))
     }
 
-    private fun setTitle() {
-        val title = rsn?.let { "$TITLE - $it" } ?: TITLE
-        frame.title = title
-        trayIcon?.toolTip = title
-    }
-
     private fun buildTray() {
         val popMenu = PopupMenu(TITLE).apply {
             add(MenuItem("Change profile").apply {
@@ -172,6 +155,7 @@ object Application : AutoCloseable {
         }
 
         trayIcon?.apply {
+            toolTip = TITLE
             popupMenu = popMenu
             addMouseListener(object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent) {
