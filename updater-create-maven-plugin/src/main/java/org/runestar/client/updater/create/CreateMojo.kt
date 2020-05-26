@@ -153,8 +153,7 @@ class CreateMojo : AbstractMojo() {
         classNodes.forEach { c ->
             c.methods.forEach { m ->
                 if (m.name == "<init>") {
-                    val s = "${c.name}.${m.name}${m.desc}"
-                    val desc = opDescs[s] ?: m.desc
+                    val desc = opDescs["${c.name}.${m.name}${m.desc}:${m.access}"] ?: m.desc
                     constructors.put(c.name, ConstructorHook(m.access, desc))
                 }
             }
@@ -173,9 +172,8 @@ class CreateMojo : AbstractMojo() {
                 FieldHook(f.field, f.owner, f.name, f.access, f.descriptor, mults["${f.owner}.${f.name}"])
             }
             val methods = c.methods.map { m ->
-                val s = "${m.owner}.${m.name}${m.descriptor}"
-                val desc = opDescs[s] ?: m.descriptor
-                MethodHook(m.method, m.owner, m.name, m.access, m.parameters, desc, ops[s])
+                val desc = opDescs["${m.owner}.${m.name}${m.descriptor}:${m.access}"] ?: m.descriptor
+                MethodHook(m.method, m.owner, m.name, m.access, m.parameters, desc, ops["${m.owner}.${m.name}$desc"])
             }
             val cons = constructors[c.name].toList()
             ClassHook(c.`class`, c.name, c.`super`, c.access, c.interfaces, fields, methods, cons)

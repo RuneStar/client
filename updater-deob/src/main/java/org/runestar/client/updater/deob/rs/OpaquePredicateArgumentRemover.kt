@@ -72,7 +72,7 @@ object OpaquePredicateArgumentRemover : Transformer.Tree() {
             val oldDesc = m.desc
             val newDesc = dropLastArg(oldDesc)
             m.desc = newDesc
-            methodDescriptorsChanged["${c.name}.${m.name}$newDesc"] = oldDesc
+            methodDescriptorsChanged["${c.name}.${m.name}$newDesc:${m.access}"] = oldDesc
         }
 
         for (c in klasses) {

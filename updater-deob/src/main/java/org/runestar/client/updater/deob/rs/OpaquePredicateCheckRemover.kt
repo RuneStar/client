@@ -57,7 +57,7 @@ object OpaquePredicateCheckRemover : Transformer.Tree() {
                         instructions.remove()
                     }
                     instructions.add(JumpInsnNode(GOTO, LabelNode(label)))
-                    passingArgs[c.name + "." + m.name + m.desc] = passingVal(constantPushed, ifOpcode)
+                    passingArgs["${c.name}.${m.name}${m.desc}"] = passingVal(constantPushed, ifOpcode)
                 }
             }
         }
