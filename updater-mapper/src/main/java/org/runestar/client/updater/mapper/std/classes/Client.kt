@@ -3809,6 +3809,7 @@ class Client : IdentityMapper.Class() {
                 .and { it.instructions.any { it.opcode == GETSTATIC && it.fieldId == field<showLoadingMessages>().id } }
     }
 
+    @MethodParameters("f1", "f2", "f3")
     @DependsOn(Font::class)
     class drawTitle : IdentityMapper.StaticMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
@@ -4116,5 +4117,11 @@ class Client : IdentityMapper.Class() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(BOOLEAN_TYPE, type<PacketBit>()) }
                 .and { it.instructions.first().opcode == ICONST_0 }
+    }
+
+    @DependsOn(GameShell.render::class)
+    class renderCount : OrderMapper.InMethod.Field(GameShell.render::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == BIPUSH && it.intOperand == 50 }
+                .prev { it.opcode == GETSTATIC && it.fieldType == INT_TYPE }
     }
 }

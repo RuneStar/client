@@ -11,6 +11,8 @@ import org.runestar.client.updater.mapper.Field2
 import org.runestar.client.updater.mapper.Method2
 import org.objectweb.asm.Type.INT_TYPE
 import org.objectweb.asm.Type.VOID_TYPE
+import org.runestar.client.updater.mapper.mark
+import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 
 class MouseWheelHandler : IdentityMapper.Class() {
@@ -36,5 +38,10 @@ class MouseWheelHandler : IdentityMapper.Class() {
     class removeFrom : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.instructions.any { it.isMethod && it.methodName == "removeMouseWheelListener" } }
+    }
+
+    @MethodParameters("mouseWheelEvent")
+    class mouseWheelMoved : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == MouseWheelListener::mouseWheelMoved.mark }
     }
 }

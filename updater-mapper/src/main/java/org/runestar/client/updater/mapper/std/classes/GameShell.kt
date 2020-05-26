@@ -16,11 +16,13 @@ import org.runestar.client.updater.mapper.Class2
 import org.runestar.client.updater.mapper.Field2
 import org.runestar.client.updater.mapper.Instruction2
 import org.runestar.client.updater.mapper.Method2
+import org.runestar.client.updater.mapper.Predicate
 import org.runestar.client.updater.mapper.type
 import java.applet.Applet
 import java.awt.*
 import java.awt.Canvas
 import java.awt.datatransfer.Clipboard
+import java.lang.reflect.Modifier
 
 @DependsOn(Client::class)
 class GameShell : IdentityMapper.Class() {
@@ -235,5 +237,46 @@ class GameShell : IdentityMapper.Class() {
     class drawInitial : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
                 .and { it.arguments == listOf(INT_TYPE, String::class.type, BOOLEAN_TYPE) }
+    }
+
+    @MethodParameters("width", "height")
+    class setMaxCanvasSize : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { Modifier.isProtected(it.access) }
+                .and { it.arguments == listOf(INT_TYPE, INT_TYPE) }
+    }
+
+    @DependsOn(setMaxCanvasSize::class)
+    class maxCanvasWidth : OrderMapper.InMethod.Field(setMaxCanvasSize::class, 0) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(setMaxCanvasSize::class)
+    class maxCanvasHeight : OrderMapper.InMethod.Field(setMaxCanvasSize::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.opcode == GETFIELD && it.fieldType == INT_TYPE }
+    }
+
+    @DependsOn(replaceCanvas::class)
+    class render : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.returnType == VOID_TYPE }
+                .and { it.arguments.isEmpty() }
+                .and { it.instructions.any { it.isMethod && it.methodMark == method<replaceCanvas>().mark } }
+    }
+
+    @DependsOn(Client.draw::class)
+    class draw : IdentityMapper.InstanceMethod() {
+        override val predicate = predicateOf<Method2> { it.mark == method<Client.draw>().mark }
+    }
+
+    @MethodParameters()
+    @DependsOn(render::class)
+    class checkResize : OrderMapper.InMethod.Method(render::class, -2) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodType.argumentTypes.isEmpty() }
+    }
+
+    @MethodParameters()
+    @DependsOn(checkResize::class)
+    class onResize : OrderMapper.InMethod.Method(checkResize::class, 1) {
+        override val predicate = predicateOf<Instruction2> { it.isMethod }
     }
 }

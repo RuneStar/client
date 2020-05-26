@@ -54,6 +54,7 @@ class RasterProvider : IdentityMapper.Class() {
         override val predicate = predicateOf<Instruction2> { it.isMethod && it.methodOwner == type<RasterProvider>() }
     }
 
+    @MethodParameters("c")
     class setComponent : IdentityMapper.InstanceMethod() {
         override val predicate = predicateOf<Method2> { it.returnType == Type.VOID_TYPE }
                 .and { it.arguments.startsWith(Component::class.type) }
