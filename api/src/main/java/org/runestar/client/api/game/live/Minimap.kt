@@ -19,7 +19,7 @@ object Minimap : Projection {
     private val FIXED_CENTER = Point(641, RADIUS + PADDING)
 
     val center: Point get() = when(Game.windowMode) {
-        WindowMode.RESIZABLE -> Point(Canvas.shape.width - (RADIUS + PADDING), (RADIUS + PADDING))
+        WindowMode.RESIZABLE -> Point(Canvas.width - (RADIUS + PADDING), (RADIUS + PADDING))
         WindowMode.FIXED -> FIXED_CENTER
         else -> error(Game.windowMode)
     }

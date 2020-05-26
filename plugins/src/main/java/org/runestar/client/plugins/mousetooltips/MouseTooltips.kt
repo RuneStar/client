@@ -39,9 +39,8 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             val action = option.action
             val target = option.targetName
             if (action in settings.ignoredActions) return@subscribe
-            val canvas = Canvas.shape
             val mousePt = Mouse.location
-            if (mousePt !in canvas) return@subscribe
+            if (mousePt !in Canvas) return@subscribe
             val rawText = if (target.isEmpty()) {
                 action
             } else {
@@ -51,7 +50,7 @@ class MouseTooltips : DisposablePlugin<MouseTooltips.Settings>() {
             text.string = newString
             overlay.getSize(g, size)
 
-            val x = min(canvas.width - 1, mousePt.x + size.width + settings.offset.x) - size.width
+            val x = min(Canvas.width - 1, mousePt.x + size.width + settings.offset.x) - size.width
             val y = if (mousePt.y - size.height - settings.offset.y > 0) {
                 mousePt.y - settings.offset.y - size.height
             } else {

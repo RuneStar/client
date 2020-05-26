@@ -1,18 +1,22 @@
 package org.runestar.client.api.game.live
 
-import hu.akarnokd.rxjava3.swing.SwingObservable
 import io.reactivex.rxjava3.core.Observable
 import org.kxtra.swing.input.keyStroke
 import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XKeyHandler
+import org.runestar.client.raw.base.MethodEvent
 import java.awt.event.KeyEvent
 import javax.swing.KeyStroke
 
 object Keyboard {
 
-    /**
-     * @see[java.awt.event.KeyListener]
-     */
-    val events: Observable<KeyEvent> get() = Canvas.canvasReplacements.flatMap { SwingObservable.keyboard(it) }
+    val methods: Observable<MethodEvent<XKeyHandler, Void>> = Observable.mergeArray(
+            XKeyHandler.keyPressed.enter,
+            XKeyHandler.keyReleased.enter,
+            XKeyHandler.keyTyped.enter
+    )
+
+    val events: Observable<KeyEvent> = methods.map { it.arguments[0] as KeyEvent }
 
     val strokes: Observable<KeyStroke> get() = events.map { it.keyStroke }
 

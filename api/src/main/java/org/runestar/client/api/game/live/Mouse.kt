@@ -1,10 +1,10 @@
 package org.runestar.client.api.game.live
 
-import hu.akarnokd.rxjava3.swing.SwingObservable
 import io.reactivex.rxjava3.core.Observable
 import org.runestar.client.raw.CLIENT
+import org.runestar.client.raw.access.XMouseHandler
+import org.runestar.client.raw.base.MethodEvent
 import java.awt.Point
-import java.awt.event.MouseEvent
 
 object Mouse {
 
@@ -30,12 +30,15 @@ object Mouse {
 
     val crossState: Int get() = CLIENT.mouseCrossState
 
-    /**
-     * @see[java.awt.event.MouseListener]
-     * @see[java.awt.event.MouseMotionListener]
-     * @see[java.awt.event.MouseWheelListener]
-     */
-    val events: Observable<MouseEvent> get() = Canvas.canvasReplacements.flatMap { SwingObservable.mouse(it) }
+    val methods: Observable<MethodEvent<XMouseHandler, Void>> = Observable.mergeArray(
+            XMouseHandler.mouseClicked.enter,
+            XMouseHandler.mouseDragged.enter,
+            XMouseHandler.mouseEntered.enter,
+            XMouseHandler.mouseExited.enter,
+            XMouseHandler.mouseMoved.enter,
+            XMouseHandler.mousePressed.enter,
+            XMouseHandler.mouseReleased.enter
+    )
 
     override fun toString(): String {
         return "Mouse($location)"

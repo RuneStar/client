@@ -69,10 +69,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.akarnokd</groupId>
-            <artifactId>rxjava3-swing</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

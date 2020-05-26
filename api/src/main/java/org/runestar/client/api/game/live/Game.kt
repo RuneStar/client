@@ -1,9 +1,7 @@
 package org.runestar.client.api.game.live
 
-import hu.akarnokd.rxjava3.swing.SwingObservable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import org.kxtra.swing.component.window
 import org.runestar.client.api.game.ChunkTemplate
 import org.runestar.client.api.game.ClanChat
 import org.runestar.client.api.game.FriendsSystem
@@ -16,8 +14,6 @@ import org.runestar.client.api.game.VarpId
 import org.runestar.client.api.util.ObservableExecutor
 import org.runestar.client.raw.CLIENT
 import org.runestar.client.raw.access.XClient
-import java.awt.Component
-import java.awt.Container
 
 object Game {
 
@@ -39,20 +35,6 @@ object Game {
     val weight get() = CLIENT.weight
 
     val windowMode: Int get() = CLIENT.clientPreferences.windowMode
-
-    /**
-     * @see[java.awt.event.WindowListener]
-     * @see[java.awt.event.WindowStateListener]
-     * @see[java.awt.event.WindowFocusListener]
-     */
-    val windowEvents = SwingObservable.window(
-            checkNotNull((CLIENT as Component).window) { "Client has no window" }
-    )
-
-    /**
-     * @see[java.awt.event.ContainerListener]
-     */
-    val containerEvents = SwingObservable.container(CLIENT as Container)
 
     val clanChat: ClanChat? get() = CLIENT.clanChat?.let { ClanChat(it) }
 

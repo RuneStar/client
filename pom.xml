@@ -136,11 +136,6 @@
                 <version>bff81ab480</version>
             </dependency>
             <dependency>
-                <groupId>com.github.akarnokd</groupId>
-                <artifactId>rxjava3-swing</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-            <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-kotlin</artifactId>
                 <version>${version.jackson}</version>
