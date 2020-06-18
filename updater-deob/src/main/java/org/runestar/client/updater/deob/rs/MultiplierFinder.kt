@@ -242,12 +242,8 @@ object MultiplierFinder : Transformer.Tree() {
             if (pairs.isNotEmpty()) return pairs.single().decoder
             val fs = distinct.filter { f -> distinct.all { isFactor(it, f) } }
             if (fs.size == 1) return fs.single().decoder
-            check(fs.size == 2 && fs.size == distinct.size)
-            val counts = HashMultiset.create(ms)
-            val maxCount = counts.entrySet().maxBy { it.count }!!.count
-            val maxs = counts.entrySet().filter { it.count == maxCount }
-            if (maxs.size == 1) return maxs.single().element.decoder
-            return distinct.first { it.dec }.n
+            check(fs.size == 2 && fs[0].dec != fs[1].dec)
+            return fs.first { it.dec }.decoder
         }
 
         private fun isFactor(product: Mul, factor: Mul) = div(product, factor).toLong().absoluteValue <= 0xff
